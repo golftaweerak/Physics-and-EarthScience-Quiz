@@ -110,10 +110,10 @@ export function initializeMenu() {
         .slice(0, 3);
     const recentQuizIds = new Set(recentQuizzes.map(q => q.id || q.customId));
 
-    // --- Filter Remaining Quizzes ---
-    const remainingQuizzes = quizzesWithProgress.filter(q => !recentQuizIds.has(q.id || q.customId));
-    const standardQuizzes = remainingQuizzes.filter(q => q.id);
-    const customQuizzes = remainingQuizzes.filter(q => q.customId);
+    // --- Get ALL custom quizzes, regardless of recency ---
+    const customQuizzes = quizzesWithProgress.filter(q => q.customId);
+    // --- Get standard quizzes that are NOT recent ---
+    const standardQuizzes = quizzesWithProgress.filter(q => q.id && !recentQuizIds.has(q.id));
 
     // --- Group Standard Quizzes by Category ---
     const groupedByCategory = standardQuizzes.reduce((acc, quiz) => {
