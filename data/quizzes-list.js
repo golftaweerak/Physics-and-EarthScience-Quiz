@@ -1,12 +1,12 @@
 
 export const quizList = [
   {
-    "id": "phy_m4_ch3-1",
+    "id": "phy_m4_Ch3-1",
     "title": "แรงและกฎการเคลื่อนที่ (ชุดที่ 1)",
     "amount": 20,
     "description": "บทที่ 3: แรงและกฎการเคลื่อนที่ สำหรับชั้นมัธยมศึกษาปีที่ 4",
-    "url": "./quiz/index.html?id=phy_m4_ch3-1",
-    "storageKey": "quizState-phy_m4_ch3-1",
+    "url": "./quiz/index.html?id=phy_m4_Ch3-1",
+    "storageKey": "quizState-phy_m4_Ch3-1",
     "icon": "./assets/icons/friction.png",
     "altText": "ไอคอนฟิสิกส์",
     "category": "PhysicsM4",
@@ -73,6 +73,18 @@ export const quizList = [
     "subCategory": "โครงสร้างโลก"
   },
   {
+    "id": "ess_basic_m6_ch5-2",
+    "title": "โครงสร้างโลก (ชุดที่ 2)",
+    "amount": 40,
+    "description": "แบบทดสอบเน้นการวิเคราะห์โครงสร้างภายในของดาวเคราะห์อื่นโดยใช้ข้อมูลสมมติ",
+    "url": "./quiz/index.html?id=ess_basic_m6_ch5-2",
+    "storageKey": "quizState-ess_basic_m6_ch5-2",
+    "icon": "./assets/icons/geology.png",
+    "altText": "ไอคอนการวิเคราะห์ดาวเคราะห์",
+    "category": "EarthSpaceScienceBasic",
+    "subCategory": "โครงสร้างโลก"
+  },
+  {
     "id": "ess_basic_m6_ch4-1",
     "title": "เทคโนโลยีอวกาศ (ชุดที่ 1)",
     "amount": 30,
@@ -81,6 +93,18 @@ export const quizList = [
     "storageKey": "quizState-ess_basic_m6_ch4-1",
     "icon": "./assets/icons/space-exploration.png",
     "altText": "ไอคอนสำหรับ ess_basic_m6_ch4-1",
+    "category": "EarthSpaceScienceBasic",
+    "subCategory": "เทคโนโลยีอวกาศ"
+  },
+  {
+    "id": "ess_basic_m6_ch4-2",
+    "title": "เทคโนโลยีอวกาศ: ประวัติศาสตร์การสำรวจอวกาศ",
+    "amount": 40,
+    "description": "แบบทดสอบไทม์ไลน์การสำรวจอวกาศ ตั้งแต่ยุคเริ่มต้นจนถึงภารกิจในอนาคต",
+    "url": "./quiz/index.html?id=ess_basic_m6_ch4-2",
+    "storageKey": "quizState-ess_basic_m6_ch4-2",
+    "icon": "./assets/icons/space-exploration.png",
+    "altText": "ไอคอนประวัติศาสตร์อวกาศ",
     "category": "EarthSpaceScienceBasic",
     "subCategory": "เทคโนโลยีอวกาศ"
   },
