@@ -2,23 +2,24 @@ import { ModalHandler } from './modal-handler.js';
 import { getQuizProgress, categoryDetails as allCategoryDetails } from './data-manager.js';
 import { quizList } from '../data/quizzes-list.js';
 import { getSavedCustomQuizzes } from './custom-quiz-handler.js';
-
+import { getSyllabusForCategory } from './syllabus-manager.js';
 
 /**
  * Creates the HTML string for a single quiz menu item, including progress.
  * @param {object} quiz - The quiz data object (standard or custom).
  * @param {function} getQuizUrl - Function to generate the correct URL for the quiz.
  * @param {string|null} currentQuizId - The ID of the quiz currently being viewed, if any.
+ * @param {string} basePath - The base path for resolving assets (e.g., './' or '../').
  * @returns {string} The HTML string for the menu item.
  */
-function createMenuItemHTML(quiz, getQuizUrl, currentQuizId) {
+function createMenuItemHTML(quiz, getQuizUrl, currentQuizId, basePath = './') {
     const totalQuestions = quiz.amount || quiz.questions?.length || 0;
     if (totalQuestions === 0) return ''; // Don't render items with no questions
 
     const storageKey = quiz.storageKey || `quizState-${quiz.id || quiz.customId}`;
     const quizId = quiz.id || quiz.customId;
     const linkUrl = getQuizUrl(quizId); // This will be relative
-    const iconUrl = quiz.icon || './assets/icons/dices.png';
+    const iconUrl = (quiz.icon || './assets/icons/dices.png').replace(/^\.\//, basePath);
     const iconAlt = quiz.altText || 'ไอคอนแบบทดสอบ';
 
     const progress = getQuizProgress(storageKey, totalQuestions);
@@ -74,76 +75,58 @@ export function initializeMenu() {
     const menuDropdown = document.getElementById('main-menu-dropdown');
     const menuQuizListContainer = document.getElementById('menu-quiz-list');
 
-    if (!menuDropdown || !menuQuizListContainer || typeof quizList === 'undefined') {
+    if (!menuDropdown || !menuQuizListContainer) {
         return;
     }
 
-    // --- Modal Setup for Completed Quizzes ---
+    // --- Modal Setup & State ---
     const completedModal = new ModalHandler('completed-quiz-modal');
     const viewResultsBtn = document.getElementById('completed-view-results-btn');
     const startOverBtn = document.getElementById('completed-start-over-btn');
-
-    // --- JS Patch for Modal Styling ---
-    // This ensures the modal is always centered and looks correct. The ideal fix
-    // is to add these classes directly to the modal's HTML in components/modals_common.html,
-    // but this guarantees correct behavior on all pages.
-    if (completedModal.modal) {
-        completedModal.modal.classList.add('flex', 'items-center', 'justify-center', 'p-4');
-    }
-
     let activeQuizUrl = '';
     let activeStorageKey = '';
-
-    // Get current quiz ID from URL to highlight it
     const urlParams = new URLSearchParams(window.location.search);
     const currentQuizId = urlParams.get('id');
 
-    // --- Get all quizzes and their progress ---
+    // --- Pathing Logic ---
+    const isSubdirectory = window.location.pathname.includes('/quiz/');
+    const basePath = isSubdirectory ? '../' : './';
+    const getQuizUrl = (id) => `${isSubdirectory ? '.' : './quiz'}/index.html?id=${id}`;
+
+    // --- Get All Quizzes and Progress ---
     const allQuizzes = [...quizList, ...getSavedCustomQuizzes()];
     const quizzesWithProgress = allQuizzes.map(quiz => {
         const totalQuestions = quiz.amount || quiz.questions?.length || 0;
         if (totalQuestions === 0) return null;
         const storageKey = quiz.storageKey || `quizState-${quiz.id || quiz.customId}`;
         const progress = getQuizProgress(storageKey, totalQuestions);
-        return { ...quiz, ...progress };
-    }).filter(Boolean); // Filter out nulls
+        return { ...quiz, ...progress, storageKey };
+    }).filter(Boolean);
 
     // --- Identify and sort recent quizzes ---
     const recentQuizzes = quizzesWithProgress
-        .filter(q => q.hasProgress) // Only consider quizzes that have been started
-        .sort((a, b) => b.lastAttemptTimestamp - a.lastAttemptTimestamp) // Most recent first
-        .slice(0, 3); // Get top 3
-
+        .filter(q => q.hasProgress && q.answeredCount > 0)
+        .sort((a, b) => b.lastAttemptTimestamp - a.lastAttemptTimestamp)
+        .slice(0, 3);
     const recentQuizIds = new Set(recentQuizzes.map(q => q.id || q.customId));
 
-    // --- Pathing Logic: Use root-relative paths for consistency ---
-    const getQuizUrl = (id) => `./quiz/index.html?id=${id}`;
-
-    // --- Grouping and Sorting Logic ---
-    // Filter out recent quizzes from the main list to avoid duplication
+    // --- Filter Remaining Quizzes ---
     const remainingQuizzes = quizzesWithProgress.filter(q => !recentQuizIds.has(q.id || q.customId));
+    const standardQuizzes = remainingQuizzes.filter(q => q.id);
+    const customQuizzes = remainingQuizzes.filter(q => q.customId);
 
-    const groupedQuizzes = remainingQuizzes
-        .filter(q => q.id) // Filter for standard quizzes only
-        .reduce((acc, quiz) => {
+    // --- Group Standard Quizzes by Category ---
+    const groupedByCategory = standardQuizzes.reduce((acc, quiz) => {
         const category = quiz.category || "Uncategorized";
         if (!acc[category]) acc[category] = [];
         acc[category].push(quiz);
         return acc;
     }, {});
 
-    const sortedCategories = Object.keys(groupedQuizzes).sort((a, b) => {
+    const sortedCategories = Object.keys(groupedByCategory).sort((a, b) => {
         const orderA = allCategoryDetails[a]?.order || 99;
         const orderB = allCategoryDetails[b]?.order || 99;
         return orderA - orderB;
-    });
-
-    // Use Intl.Collator for natural sorting of numbers within strings (e.g., "ชุดที่ 1", "ชุดที่ 10")
-    const collator = new Intl.Collator('th', { numeric: true, sensitivity: 'base' });
-
-    // Sort quizzes within each category using natural sort
-    Object.keys(groupedQuizzes).forEach(categoryKey => {
-        groupedQuizzes[categoryKey].sort((a, b) => collator.compare(a.title, b.title));
     });
 
     // --- Build Menu HTML ---
@@ -158,34 +141,75 @@ export function initializeMenu() {
             </div>
         `;
         recentQuizzes.forEach(quiz => {
-            menuHTML += createMenuItemHTML(quiz, getQuizUrl, currentQuizId);
+            menuHTML += createMenuItemHTML(quiz, getQuizUrl, currentQuizId, basePath);
         });
         menuHTML += `<hr class="my-2 border-gray-200 dark:border-gray-600">`;
     }
 
-    // 2. Standard Quizzes
+    // 2. Standard Quizzes (with new chapter grouping)
     sortedCategories.forEach(categoryKey => {
-        const quizzes = groupedQuizzes[categoryKey];
+        const quizzesInCategory = groupedByCategory[categoryKey];
         const details = allCategoryDetails[categoryKey];
-        if (!details || !quizzes || quizzes.length === 0) return;
+        if (!details || !quizzesInCategory || quizzesInCategory.length === 0) return;
 
+        const categoryIconUrl = (details.icon || './assets/icons/study.png').replace(/^\.\//, basePath);
+        
+        // Start of <details> element for the main category
         menuHTML += `
-            <div class="px-4 pt-2 pb-1 flex items-center gap-2">
-                <img src="${details.icon}" class="h-4 w-4 opacity-70" alt="${details.title} icon">
-                <h4 class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">${details.title}</h4>
-            </div>
+            <details class="group menu-category-item">
+                <summary class="flex items-center justify-between p-2 rounded-md cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <div class="flex items-center gap-2">
+                        <img src="${categoryIconUrl}" alt="${details.title}" class="h-5 w-5">
+                        <span class="font-semibold text-sm text-gray-800 dark:text-gray-200">${details.title}</span>
+                    </div>
+                    <svg class="h-5 w-5 text-gray-500 dark:text-gray-400 transition-transform duration-200 group-open:rotate-90" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>
+                </summary>
+                <div class="pl-4 pt-1 pb-2 space-y-1">
         `;
 
-        quizzes.forEach(quiz => {
-            menuHTML += createMenuItemHTML(quiz, getQuizUrl, currentQuizId);
-        });
+        const syllabus = getSyllabusForCategory(categoryKey);
+
+        if (syllabus && Array.isArray(syllabus.chapters)) {
+            syllabus.chapters.forEach((chapter, index) => {
+                const chapterTitleFromSyllabus = chapter.title;
+                const chapterQuizzes = quizzesInCategory.filter(quiz => quiz.subCategory === chapterTitleFromSyllabus);
+
+                if (chapterQuizzes.length > 0) {
+                    let displayTitle = chapterTitleFromSyllabus;
+                    if (categoryKey === 'EarthSpaceScienceBasic') {
+                        displayTitle = `บทที่ ${index + 1}: ${chapterTitleFromSyllabus}`;
+                    } else if (categoryKey === 'EarthSpaceScienceAdvance') {
+                        const firstQuiz = chapterQuizzes[0];
+                        if (firstQuiz && firstQuiz.description) {
+                            const match = firstQuiz.description.match(/บทที่\s*(\d+)/);
+                            if (match && match[1]) {
+                                displayTitle = `บทที่ ${match[1]}: ${chapterTitleFromSyllabus}`;
+                            }
+                        }
+                    }
+                    
+                    menuHTML += `<p class="px-2 pt-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">${displayTitle}</p>`;
+                    
+                    const quizLinksContainerHTML = chapterQuizzes.map(quiz => createMenuItemHTML(quiz, getQuizUrl, currentQuizId, basePath)).join('');
+                    menuHTML += `<div class="space-y-px pl-2">${quizLinksContainerHTML}</div>`;
+                }
+            });
+        } else {
+            // Fallback for non-syllabus categories
+            quizzesInCategory.forEach(quiz => {
+                menuHTML += createMenuItemHTML(quiz, getQuizUrl, currentQuizId, basePath);
+            });
+        }
+
+        // End of <details> element
+        menuHTML += `
+                </div>
+            </details>
+        `;
     });
 
     // 3. Custom Quizzes
-    const savedQuizzes = remainingQuizzes
-        .filter(q => q.customId) // Filter for custom quizzes only
-        .sort((a, b) => collator.compare(a.title, b.title)); // Sort custom quizzes using natural sort
-    if (savedQuizzes.length > 0) {
+    if (customQuizzes.length > 0) {
         menuHTML += `<hr class="my-2 border-gray-200 dark:border-gray-600">`;
         menuHTML += `
             <div class="px-4 pt-2 pb-1 flex items-center gap-2">
@@ -193,18 +217,10 @@ export function initializeMenu() {
                 <h4 class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">แบบทดสอบที่สร้างเอง</h4>
             </div>
         `;
-
-        savedQuizzes.forEach((quiz) => {
-            menuHTML += createMenuItemHTML(quiz, getQuizUrl, currentQuizId);
+        customQuizzes.sort((a, b) => (b.lastAttemptTimestamp || 0) - (a.lastAttemptTimestamp || 0)).forEach(quiz => {
+            menuHTML += createMenuItemHTML(quiz, getQuizUrl, currentQuizId, basePath);
         });
     }
-
-  // 4. Always add the stats link at the end
- // menuHTML += `<hr class="my-2 border-gray-200 dark:border-gray-600">`;
-  //menuHTML += `
-  //    <a href="./stats.html" class="group block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md">
-  //        <div class="font-medium whitespace-normal group-hover:text-blue-600 dark:group-hover:text-blue-400">📊 ดูสถิติทั้งหมด</div>
-   //   </a>`; 
 
     menuQuizListContainer.innerHTML = menuHTML;
 
@@ -213,7 +229,6 @@ export function initializeMenu() {
         const link = event.target.closest('a');
         if (!link) return;
 
-        // Case 2: Quiz Item Link
         if (link.classList.contains('quiz-menu-item')) {
             const storageKey = link.dataset.storageKey;
             const totalQuestions = parseInt(link.dataset.totalQuestions, 10) || 0;
@@ -232,11 +247,8 @@ export function initializeMenu() {
                 activeStorageKey = storageKey;
                 completedModal.open(link);
             }
-            // If not finished, the default link behavior proceeds.
         }
     });
-
-             
 
     // --- Modal Button Listeners ---
     if (viewResultsBtn) {

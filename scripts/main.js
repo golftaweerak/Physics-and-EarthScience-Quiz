@@ -1,7 +1,7 @@
 import { ModalHandler } from "./modal-handler.js";
-import { getQuizProgress, categoryDetails } from "../scripts/data-manager.js";
+import { getQuizProgress, categoryDetails } from "./data-manager.js";
 import { quizList } from "../data/quizzes-list.js";
-import { PHYSICS_SYLLABUS, EARTH_SCIENCE_BASIC_SYLLABUS, EARTH_SCIENCE_ADVANCE_SYLLABUS } from "../data/sub-category-data.js";
+import { getSyllabusForCategory } from "./syllabus-manager.js";
 
 /**
  * Toggles the state of an accordion section (expands or collapses it).
@@ -58,23 +58,14 @@ export const toggleAccordion = (toggleElement, forceState) => {
  */
 function groupQuizzesForCategory(quizzes, categoryKey) {
   const groups = [];
-  let syllabus;
-
-  // Special handling for Physics categories
-  if (categoryKey.startsWith('PhysicsM')) {
-    const gradeKey = categoryKey.replace('PhysicsM', 'm'); // 'PhysicsM4' -> 'm4'
-    syllabus = PHYSICS_SYLLABUS[gradeKey];
-  } else if (categoryKey === 'EarthSpaceScienceBasic') {
-    syllabus = EARTH_SCIENCE_BASIC_SYLLABUS;
-  } else if (categoryKey === 'EarthSpaceScienceAdvance') {
-    syllabus = EARTH_SCIENCE_ADVANCE_SYLLABUS;
-  }
+  const syllabus = getSyllabusForCategory(categoryKey);
 
   // Common logic for all syllabus-based categories
   if (syllabus && Array.isArray(syllabus.chapters)) {
     // Iterate over each chapter object in the syllabus to maintain the correct order
     syllabus.chapters.forEach((chapter, index) => {
       const chapterTitle = chapter.title;
+      const shortTitle = chapter.shortTitle || chapterTitle.substring(0, 6); // Fallback for short title
 
       // Filter quizzes where the subCategory matches the chapter title
       const chapterQuizzes = quizzes.filter(quiz => quiz.subCategory === chapterTitle);
@@ -95,7 +86,7 @@ function groupQuizzesForCategory(quizzes, categoryKey) {
             }
           }
         }
-        groups.push({ title: displayTitle, quizzes: chapterQuizzes, level: 1 });
+        groups.push({ title: displayTitle, quizzes: chapterQuizzes, level: 1, shortTitle: shortTitle });
       }
     });
     return groups;
@@ -119,156 +110,6 @@ function groupQuizzesForCategory(quizzes, categoryKey) {
   return groups;
 }
 
-/**
- * Populates the main navigation menu with a structured list of quizzes,
- * grouped by main category and then by chapter.
- * This function should be called by a script that runs on every page (e.g., app-loader.js).
- */
-export function populateMenuQuizList() {
-    const menuQuizList = document.getElementById('menu-quiz-list');
-    if (!menuQuizList) return;
-
-    try {
-        // 1. Group quizzes by their main category
-        const groupedByCategory = quizList.reduce((acc, quiz) => {
-            const category = quiz.category || "Uncategorized";
-            if (!acc[category]) {
-                acc[category] = [];
-            }
-            acc[category].push(quiz);
-            return acc;
-        }, {});
-
-        // 2. Sort main categories based on the 'order' property from categoryDetails
-        const sortedCategories = Object.keys(groupedByCategory).sort((a, b) => {
-            const orderA = categoryDetails[a]?.order || 99;
-            const orderB = categoryDetails[b]?.order || 99;
-            return orderA - orderB;
-        });
-
-        const fragment = document.createDocumentFragment();
-
-        // 3. Create HTML for each category and its sub-grouped quizzes
-        sortedCategories.forEach(categoryKey => {
-            const category = categoryDetails[categoryKey];
-            if (!category) return;
-
-            const quizzesInCategory = groupedByCategory[categoryKey];
-
-            // Group quizzes within this category by their subCategory (chapter title)
-            const groupedByChapter = quizzesInCategory.reduce((acc, quiz) => {
-                const chapter = quiz.subCategory || 'บทอื่นๆ';
-                if (!acc[chapter]) {
-                    acc[chapter] = [];
-                }
-                acc[chapter].push(quiz);
-                return acc;
-            }, {});
-
-            const details = document.createElement('details');
-            details.className = 'group menu-category-item';
-
-            const summary = document.createElement('summary');
-            summary.className = 'flex items-center justify-between p-2 rounded-md cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors';
-            summary.innerHTML = `
-                <div class="flex items-center gap-2">
-                    <img src="${category.icon}" alt="${category.title}" class="h-5 w-5">
-                    <span class="font-semibold text-sm text-gray-800 dark:text-gray-200">${category.title}</span>
-                </div>
-                <svg class="h-5 w-5 text-gray-500 dark:text-gray-400 transition-transform duration-200 group-open:rotate-90" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>
-            `;
-            details.appendChild(summary);
-
-            const chapterContainer = document.createElement('div');
-            chapterContainer.className = 'pl-4 pt-1 pb-2 space-y-1';
-
-            // --- NEW LOGIC: Use syllabus to group and order chapters ---
-            let syllabus;
-            if (categoryKey.startsWith('PhysicsM')) {
-                const gradeKey = categoryKey.replace('PhysicsM', 'm');
-                syllabus = PHYSICS_SYLLABUS[gradeKey];
-            } else if (categoryKey === 'EarthSpaceScienceBasic') {
-                syllabus = EARTH_SCIENCE_BASIC_SYLLABUS;
-            } else if (categoryKey === 'EarthSpaceScienceAdvance') {
-                syllabus = EARTH_SCIENCE_ADVANCE_SYLLABUS;
-            }
-
-            if (syllabus && Array.isArray(syllabus.chapters)) {
-                // Iterate through syllabus chapters to maintain the correct order
-                syllabus.chapters.forEach((chapter, index) => {
-                    const chapterTitleFromSyllabus = chapter.title;
-                    const chapterQuizzes = quizzesInCategory.filter(quiz => quiz.subCategory === chapterTitleFromSyllabus);
-
-                    if (chapterQuizzes.length > 0) {
-                        let displayTitle = chapterTitleFromSyllabus;
-                        // For Earth Science, the subCategory in quizzes-list is just the title, so we add "บทที่" here.
-                        if (categoryKey === 'EarthSpaceScienceBasic') {
-                            displayTitle = `บทที่ ${index + 1}: ${chapterTitleFromSyllabus}`;
-                        } else if (categoryKey === 'EarthSpaceScienceAdvance') {
-                            const firstQuiz = chapterQuizzes[0];
-                            if (firstQuiz && firstQuiz.description) {
-                                const match = firstQuiz.description.match(/บทที่\s*(\d+)/);
-                                if (match && match[1]) {
-                                    displayTitle = `บทที่ ${match[1]}: ${chapterTitleFromSyllabus}`;
-                                }
-                            }
-                        }
-                        // For Physics, the subCategory already contains "บทที่", so no change is needed.
-
-                        const chapterHeader = document.createElement('p');
-                        chapterHeader.className = 'px-2 pt-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider';
-                        chapterHeader.textContent = displayTitle;
-                        chapterContainer.appendChild(chapterHeader);
-
-                        const quizLinksContainer = document.createElement('div');
-                        quizLinksContainer.className = 'space-y-px pl-2';
-                        chapterQuizzes.forEach(quiz => {
-                            const link = document.createElement('a');
-                            link.href = quiz.url;
-                            link.className = 'block text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700/50 p-2 rounded-md transition-colors';
-                            link.textContent = quiz.title;
-                            quizLinksContainer.appendChild(link);
-                        });
-                        chapterContainer.appendChild(quizLinksContainer);
-                    }
-                });
-            } else {
-                // Fallback for categories without a defined syllabus (e.g., 'Uncategorized')
-                // This part uses the old logic of grouping by the subCategory string directly.
-                Object.keys(groupedByChapter).sort((a, b) => a.localeCompare(b, 'th', { numeric: true })).forEach(chapterTitle => {
-                    const chapterHeader = document.createElement('p');
-                    chapterHeader.className = 'px-2 pt-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider';
-                    chapterHeader.textContent = chapterTitle;
-                    chapterContainer.appendChild(chapterHeader);
-
-                    const quizLinksContainer = document.createElement('div');
-                    quizLinksContainer.className = 'space-y-px pl-2';
-                    groupedByChapter[chapterTitle].forEach(quiz => {
-                        const link = document.createElement('a');
-                        link.href = quiz.url;
-                        link.className = 'block text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700/50 p-2 rounded-md transition-colors';
-                        link.textContent = quiz.title;
-                        quizLinksContainer.appendChild(link);
-                    });
-                    chapterContainer.appendChild(quizLinksContainer);
-                });
-            }
-            // --- END NEW LOGIC ---
-
-            details.appendChild(chapterContainer);
-            fragment.appendChild(details);
-        });
-
-        menuQuizList.innerHTML = '';
-        menuQuizList.appendChild(fragment);
-
-    } catch (error) {
-        console.error("Failed to populate quiz list in menu:", error);
-        if (menuQuizList) {
-            menuQuizList.innerHTML = '<p class="p-2 text-sm text-red-500">ไม่สามารถโหลดรายการแบบทดสอบได้</p>';
-        }
-    }
-}
 
 // A function to get all the toggles, so we don't expose the variable directly
 export const getSectionToggles = () =>
@@ -415,9 +256,9 @@ export function initializePage() {
    * @param {Array<object>} quizzes - An array of quiz objects for this sub-category.
    * @param {string} colorName - The base color name (e.g., 'blue') for styling.
    * @returns {HTMLElement} The created accordion element.
-   * @param {number} level - The nesting level of the accordion, for floating nav filtering.
+   * @param {object} groupData - The group object containing title, quizzes, level, and shortTitle.
    */
-  function createSubCategoryAccordion(subCategoryTitle, quizzes, colorName, level = 1) {
+  function createSubCategoryAccordion(groupData, colorName) {
     const accordion = document.createElement('div');
     accordion.className = 'sub-accordion py-1';
 
@@ -425,10 +266,11 @@ export function initializePage() {
     // A slightly different style for the sub-header
     toggleHeader.className = `sub-section-toggle flex justify-between items-center cursor-pointer p-3 rounded-lg bg-${colorName}-100/40 dark:bg-${colorName}-900/20 hover:bg-${colorName}-100/70 dark:hover:bg-${colorName}-900/40 transition-colors`;
     toggleHeader.setAttribute('aria-expanded', 'false');
-    toggleHeader.dataset.level = level;
+    toggleHeader.dataset.level = groupData.level;
+    toggleHeader.dataset.shortTitle = groupData.shortTitle; // Add short title to dataset
 
     toggleHeader.innerHTML = `
-        <h4 class="font-bold text-sm text-${colorName}-800 dark:text-${colorName}-300">${subCategoryTitle}</h4>
+        <h4 class="font-bold text-sm text-${colorName}-800 dark:text-${colorName}-300">${groupData.title}</h4>
         <svg class="chevron-icon h-5 w-5 text-gray-500 dark:text-gray-400 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
     `;
 
@@ -442,8 +284,8 @@ export function initializePage() {
     quizGrid.className = "quiz-grid-container pt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2";
 
     // Only create quiz cards if there are quizzes to display.
-    if (quizzes && quizzes.length > 0) {
-        quizzes.forEach((quiz, index) => {
+    if (groupData.quizzes && groupData.quizzes.length > 0) {
+        groupData.quizzes.forEach((quiz, index) => {
             const card = createQuizCard(quiz, index);
             quizGrid.appendChild(card);
         });
@@ -550,21 +392,21 @@ export function initializePage() {
 
       groupedData.forEach(group => {
         if (group.isNested) {
-          // Create a container accordion for nested groups (like "ทบทวนค่าย 1")
-          const containerAccordion = createSubCategoryAccordion(group.title, [], colorName, group.level);
+          // Create a container accordion for nested groups
+          const containerAccordion = createSubCategoryAccordion({ title: group.title, quizzes: [], level: group.level, shortTitle: group.shortTitle }, colorName);
           const contentWrapper = containerAccordion.querySelector('.inner-content-wrapper');
           contentWrapper.innerHTML = ''; // Clear default grid
           contentWrapper.classList.remove('quiz-grid-container');
           contentWrapper.classList.add('space-y-2', 'p-2');
 
           group.subGroups.forEach(subGroup => {
-            const nestedAccordion = createSubCategoryAccordion(subGroup.title, subGroup.quizzes, colorName, subGroup.level);
+            const nestedAccordion = createSubCategoryAccordion(subGroup, colorName);
             contentWrapper.appendChild(nestedAccordion);
           });
           subCategoryContainer.appendChild(containerAccordion);
         } else {
           // Create a standard sub-category accordion
-          const accordion = createSubCategoryAccordion(group.title, group.quizzes, colorName, group.level);
+          const accordion = createSubCategoryAccordion(group, colorName);
           subCategoryContainer.appendChild(accordion);
         }
       });
@@ -720,37 +562,12 @@ export function initializePage() {
       const subToggles = activeSection.querySelectorAll('.sub-section-toggle[data-level="1"]');
       if (subToggles.length > 0) {
         const subSeparator = document.createElement("hr");
-        subSeparator.className = `h-8 mx-1.5 border-l ${borderColor}`;
+        subSeparator.className = `h-6 mx-1.5 border-l ${borderColor}`;
         fragment.appendChild(subSeparator);
 
         subToggles.forEach(subToggle => {
           const subTitle = subToggle.querySelector('h4').textContent;
-          let shortTitle;
-          if (subTitle === 'ทบทวนค่าย 1') {
-            shortTitle = 'ค่าย 1';
-          } else if (subTitle.startsWith('ทบทวน ดาราศาสตร์')) {
-            shortTitle = 'ดาราฯ';
-          } else if (subTitle.startsWith('ทบทวน วิทยาศาสตร์โลก')) {
-            shortTitle = 'วิทย์โลก';
-          } else if (subTitle.includes('ม.ปลาย')) {
-            shortTitle = 'ม.ปลาย';
-          } else if (subTitle.includes('ม.ต้น')) {
-            shortTitle = 'ม.ต้น';
-          } else if (subTitle.includes('ธรณีวิทยา')) {
-            shortTitle = 'ธรณีฯ';
-          } else if (subTitle.includes('อุตุนิยมวิทยา')) {
-            shortTitle = 'อุตุฯ';
-          } else if (subTitle.includes('สมุทรศาสตร์')) {
-            shortTitle = 'สมุทรฯ';
-          } else if (subTitle.includes('ดาราศาสตร์')) { // For the sub-discipline
-            shortTitle = 'ดาราฯ';
-          } else if (subTitle.startsWith('บทที่')) {
-            // For Physics chapters, e.g., "บทที่ 1: ..." -> "บทที่ 1"
-            const match = subTitle.match(/บทที่\s*\d+/);
-            shortTitle = match ? match[0] : subTitle.substring(0, 6);
-          } else {
-            shortTitle = 'ทั่วไป';
-          }
+          const shortTitle = subToggle.dataset.shortTitle || subTitle.substring(0, 6); // Use data attribute
 
           const subButton = createFloatingButton({
             ariaLabel: `ไปที่ ${subTitle}`,
