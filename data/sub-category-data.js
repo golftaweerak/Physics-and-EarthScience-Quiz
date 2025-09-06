@@ -8,183 +8,283 @@
 /**
  * Constants for quiz levels to avoid magic strings and ensure consistency.
  */
-export const LEVELS = {
-  JUNIOR_AND_SENIOR: "ม.ต้น และ ม.ปลาย",
-  JUNIOR_ONLY: "ม.ต้น เท่านั้น",
-  SENIOR_ONLY: "ม.ปลาย เท่านั้น",
-};
 
 /**
  * Constants for main category keys.
  */
-export const MAIN_CATEGORIES = {
-  EARTH_SCIENCE: 'EarthScience',
-  ASTRONOMY_GENERAL: 'AstronomyGeneral', // Formerly ASTRONOMY_REVIEW
-  ASTRONOMY_OLYMPIAD: 'AstronomyOlympiad', // Formerly ASTRONOMY_POSN
-  GENERAL_KNOWLEDGE: 'GeneralKnowledge',
-  CHALLENGE: 'Challenge', // Formerly CHALLENGE_POSN
-  PHYSICS: 'Physics',
+ export const MAIN_CATEGORIES = {
   EARTH_SPACE_SCIENCE_BASIC: 'EarthSpaceScienceBasic',
   EARTH_SPACE_SCIENCE_ADVANCE: 'EarthSpaceScienceAdvance',
 };
 
 /**
- * Centralized constants for core astronomy topics to avoid duplication
- * and ensure consistency between EarthAndSpace and ASTRONOMY_POSN lists.
+ * Defines the physics syllabus structure by grade level and chapters.
+ * This aligns with the official curriculum and allows for nested categorization.
  */
-export const CORE_ASTRONOMY_TOPICS = Object.freeze({
-  SPHERICAL_ASTRONOMY: "ทรงกลมท้องฟ้าและระบบพิกัด",
-  CELESTIAL_MECHANICS: "กลศาสตร์ท้องฟ้าและกฎของเคปเลอร์",
-  SOLAR_SYSTEM: "ระบบสุริยะและองค์ประกอบ",
-  STARS: "สมบัติและวิวัฒนาการของดาวฤกษ์",
-  GALAXIES: "กาแล็กซีและเอกภพวิทยา",
-  TELESCOPES: "กล้องโทรทรรศน์และเทคโนโลยีอวกาศ",
+export const PHYSICS_SYLLABUS = Object.freeze({
+  m4: {
+    displayName: "ฟิสิกส์ ม.4",
+    chapters: [{
+      title: "บทที่ 1: ธรรมชาติทางฟิสิกส์และการวัด",
+      learningOutcomes: [
+        "1. สืบค้นและอธิบายการค้นหาความรู้ทางฟิสิกส์ ประวัติความเป็นมา รวมทั้งพัฒนาการของหลักการและแนวคิดทางฟิสิกส์ที่มีผลต่อการแสวงหาความรู้ใหม่และการพัฒนาเทคโนโลยี",
+        "2. วัดและรายงานผลการวัดปริมาณทางฟิสิกส์ได้ถูกต้องเหมาะสม โดยนำความคลาดเคลื่อนในการวัดมาพิจารณาในการนำเสนอผล รวมทั้งแสดงผลการทดลองในรูปของกราฟ วิเคราะห์และแปลความหมายจากกราฟเส้นตรง",
+      ]
+    }, {
+      title: "บทที่ 2: การเคลื่อนที่แนวตรง",
+      learningOutcomes: [
+        "3. ทดลองและอธิบายความสัมพันธ์ระหว่างตำแหน่ง การกระจัด ความเร็ว และความเร่งของการเคลื่อนที่ของวัตถุในแนวตรงที่มีความเร่งคงตัวจากกราฟและสมการ รวมทั้งทดลองหาค่าความเร่งโน้มถ่วงของโลก และคำนวณปริมาณต่างๆ ที่เกี่ยวข้อง",
+      ]
+    }, {
+      title: "บทที่ 3: แรงและกฎการเคลื่อนที่",
+      learningOutcomes: [
+        "4. ทดลองและอธิบายการหาแรงลัพธ์ของแรงสองแรงที่ทำมุมต่อกัน",
+        "5. เขียนแผนภาพของแรงที่กระทำต่อวัตถุอิสระ ทดลองและอธิบายกฎการเคลื่อนที่ของนิวตัน",
+        "6. อธิบายกฎความโน้มถ่วงสากลและผลของสนามโน้มถ่วงที่ทำให้วัตถุมีน้ำหนัก",
+        "7. วิเคราะห์ อธิบาย และคำนวณแรงเสียดทาน",
+      ]
+    }, {
+      title: "บทที่ 4: สมดุลกล",
+      learningOutcomes: [
+        "8. อธิบายสมดุลกลของวัตถุ โมเมนต์ แรงคู่ควบ และคำนวณปริมาณที่เกี่ยวข้อง",
+        "9. สังเกตและอธิบายสภาพการเคลื่อนที่ของวัตถุ และผลของศูนย์ถ่วงที่มีต่อเสถียรภาพ",
+      ]
+    }, {
+      title: "บทที่ 5: งานและพลังงาน",
+      learningOutcomes: [
+        "10. วิเคราะห์ และคำนวณงานของแรงคงตัว กำลังเฉลี่ย",
+        "11. อธิบายและคำนวณพลังงานจลน์ พลังงานศักย์ พลังงานกล",
+        "12. อธิบายกฎการอนุรักษ์พลังงานกล",
+        "13. อธิบายการทำงาน ประสิทธิภาพ และการได้เปรียบเชิงกลของเครื่องกลอย่างง่าย",
+      ]
+    }, {
+      title: "บทที่ 6: โมเมนตัมและการชน",
+      learningOutcomes: [
+        "14. อธิบายและคำนวณโมเมนตัมของวัตถุและการดล",
+        "15. ทดลอง อธิบาย และคำนวณปริมาณต่างๆ ที่เกี่ยวกับการชนของวัตถุในหนึ่งมิติ และการดีดตัวแยกจากกัน",
+      ]
+    }, {
+      title: "บทที่ 7: การเคลื่อนที่แนวโค้ง",
+      learningOutcomes: [
+        "16. อธิบาย วิเคราะห์ และคำนวณปริมาณต่างๆ ที่เกี่ยวข้องกับการเคลื่อนที่แบบโพรเจกไทล์",
+        "17. ทดลองและอธิบายความสัมพันธ์ในการเคลื่อนที่แบบวงกลม และประยุกต์ใช้อธิบายการโคจรของดาวเทียม",
+      ]
+    }, ]
+  },
+  m5: {
+    displayName: "ฟิสิกส์ ม.5",
+    chapters: [{
+      title: "บทที่ 8: การเคลื่อนที่แบบฮาร์มอนิกอย่างง่าย",
+      learningOutcomes: [
+        "1. ทดลอง และอธิบายการเคลื่อนที่แบบฮาร์มอนิกอย่างง่ายของวัตถุติดปลายสปริงและลูกตุ้มอย่างง่าย",
+        "2. อธิบายความถี่ธรรมชาติของวัตถุและการเกิดการสั่นพ้อง",
+      ]
+    }, {
+      title: "บทที่ 9: คลื่นกล",
+      learningOutcomes: [
+        "3. อธิบายปรากฏการณ์คลื่น ชนิดของคลื่น ส่วนประกอบของคลื่น และหลักการของฮอยเกนส์",
+        "4. สังเกต และอธิบายการสะท้อน การหักเห การแทรกสอด และการเลี้ยวเบนของคลื่นผิวน้ำ",
+      ]
+    }, {
+      title: "บทที่ 10: เสียง",
+      learningOutcomes: [
+        "5. อธิบายการเกิดเสียง การเคลื่อนที่ และสมบัติของคลื่นเสียง",
+        "6. อธิบายความเข้มเสียง ระดับเสียง และองค์ประกอบของการได้ยิน",
+        "7. ทดลองและอธิบายการสั่นพ้อง บีต คลื่นนิ่ง และปรากฏการณ์ดอปเพลอร์",
+      ]
+    }, {
+      title: "บทที่ 11: แสงและทัศนอุปกรณ์",
+      learningOutcomes: [
+        "8. ทดลองและอธิบายการสะท้อนของแสงที่กระจกเงาราบและกระจกเงาทรงกลม",
+        "9. ทดลองและอธิบายการหักเหของแสง มุมวิกฤต และการสะท้อนกลับหมด",
+        "10. ทดลองและเขียนรังสีของแสงเพื่อแสดงภาพที่เกิดจากเลนส์บาง",
+        "11. อธิบายปรากฏการณ์ธรรมชาติที่เกี่ยวกับแสง",
+        "12. สังเกตและอธิบายการมองเห็นแสงสี การผสมสารสี และการผสมแสงสี",
+        "13. ทดลอง และอธิบายการแทรกสอดของแสงผ่านสลิตคู่และเกรตติง การเลี้ยวเบนและการแทรกสอดของแสงผ่านสลิตเดี่ยว",
+      ]
+    }, {
+      title: "บทที่ 12: ไฟฟ้าสถิต",
+      learningOutcomes: [
+        "1. ทดลองและอธิบายการทำวัตถุให้มีประจุไฟฟ้า",
+        "2. อธิบายและคำนวณแรงไฟฟ้าตามกฎของคูลอมบ์",
+        "3. อธิบายและคำนวณสนามไฟฟ้าและแรงไฟฟ้า",
+        "4. อธิบายและคำนวณพลังงานศักย์ไฟฟ้าและศักย์ไฟฟ้า",
+        "5. อธิบายและคำนวณความจุและพลังงานสะสมในตัวเก็บประจุ",
+        "6. นำความรู้เรื่องไฟฟ้าสถิตไปอธิบายหลักการทำงานของอุปกรณ์ต่างๆ",
+      ]
+    }, {
+      title: "บทที่ 13: ไฟฟ้ากระแส",
+      learningOutcomes: [
+        "7. อธิบายการเคลื่อนที่ของอิเล็กตรอนและกระแสไฟฟ้าในตัวนำ",
+        "8. ทดลองและอธิบายกฎของโอห์มและความต้านทาน",
+        "9. ทดลอง อธิบาย และคำนวณอีเอ็มเอฟ พลังงานไฟฟ้า และกำลังไฟฟ้า",
+        "10. คำนวณปริมาณต่างๆ ในวงจรไฟฟ้ากระแสตรง",
+        "11. อธิบายการเปลี่ยนพลังงานทดแทนเป็นพลังงานไฟฟ้า",
+      ]
+    }, ]
+  },
+  m6: {
+    displayName: "ฟิสิกส์ ม.6",
+    chapters: [{
+      title: "บทที่ 14: แม่เหล็กไฟฟ้า",
+      learningOutcomes: [
+        "1. สังเกตและอธิบายสนามแม่เหล็กและฟลักซ์แม่เหล็ก",
+        "2. อธิบายและคำนวณแรงแม่เหล็กที่กระทำต่อประจุและกระแสไฟฟ้า",
+        "3. อธิบายหลักการทำงานของแกลแวนอมิเตอร์และมอเตอร์ไฟฟ้า",
+        "4. สังเกตและอธิบายการเกิดอีเอ็มเอฟเหนี่ยวนำและกฎของฟาราเดย์",
+        "5. อธิบายและคำนวณค่า rms ของไฟฟ้ากระแสสลับ",
+        "6. อธิบายหลักการทำงานของเครื่องกำเนิดไฟฟ้าและหม้อแปลง",
+      ]
+    }, {
+      title: "บทที่ 15: ของแข็งและของไหล",
+      learningOutcomes: [
+        "2. อธิบายสภาพยืดหยุ่น และคำนวณความเค้น ความเครียด และมอดุลัสของยัง",
+        "3. คำนวณความดันในของไหล และอธิบายหลักการของเครื่องอัดไฮดรอลิก",
+        "4. ทดลอง อธิบาย และคำนวณขนาดแรงพยุง (หลักของอาร์คิมีดีส)",
+        "5. ทดลอง อธิบาย และคำนวณความตึงผิวของของเหลว",
+        "6. อธิบายสมการความต่อเนื่องและสมการแบร์นูลลี",
+      ]
+    }, {
+      title: "บทที่ 16: ความร้อนและทฤษฎีจลน์ของแก๊ส",
+      learningOutcomes: [
+        "1. คำนวณความร้อนที่ทำให้สสารเปลี่ยนอุณหภูมิและสถานะ",
+        "7. อธิบายกฎของแก๊สอุดมคติ",
+        "8. อธิบายทฤษฎีจลน์ของแก๊ส และอัตราเร็ว rms",
+        "9. คำนวณงานที่ทำโดยแก๊ส และอธิบายกฎข้อที่หนึ่งของอุณหพลศาสตร์",
+      ]
+    }, {
+      title: "บทที่ 17: คลื่นแม่เหล็กไฟฟ้า",
+      learningOutcomes: [
+        "7. อธิบายการเกิดและลักษณะของคลื่นแม่เหล็กไฟฟ้า และโพลาไรเซชัน",
+        "8. สืบค้นและอธิบายการสื่อสารโดยอาศัยคลื่นแม่เหล็กไฟฟ้า",
+      ]
+    }, {
+      title: "บทที่ 18: ฟิสิกส์อะตอม",
+      learningOutcomes: [
+        "10. อธิบายทฤษฎีอะตอมของโบร์ และการเกิดเส้นสเปกตรัม",
+        "11. อธิบายปรากฏการณ์โฟโตอิเล็กทริก",
+        "12. อธิบายทวิภาวะของคลื่นและอนุภาค และความยาวคลื่นเดอบรอยล์",
+      ]
+    }, {
+      title: "บทที่ 19: ฟิสิกส์นิวเคลียร์",
+      learningOutcomes: [
+        "13. อธิบายกัมมันตภาพรังสี และความแตกต่างของรังสีแอลฟา บีตา และแกมมา",
+        "14. คำนวณกัมมันตภาพและครึ่งชีวิต",
+        "15. อธิบายแรงนิวเคลียร์และพลังงานยึดเหนี่ยว",
+        "16. อธิบายปฏิกิริยานิวเคลียร์: ฟิชชันและฟิวชัน",
+        "17. อธิบายประโยชน์และอันตรายของรังสี",
+        "18. อธิบายการค้นคว้าวิจัยด้านฟิสิกส์อนุภาค",
+      ]
+    }, ]
+  }
 });
 
-export const GEOLOGY_TOPICS = Object.freeze({
-  STRUCTURE_AND_TECTONICS: "โครงสร้างโลกและธรณีแปรสัณฐาน",
-  MINERALS_ROCKS_CYCLE: "แร่ หิน และวัฏจักรหิน",
-  GEOHISTORY_STRATIGRAPHY: "ธรณีประวัติและลำดับชั้นหิน",
-  GEOMORPHOLOGY_SURFACE_PROCESSES: "ธรณีสัณฐานและกระบวนการบนพื้นผิวโลก",
-  GEOHAZARDS: "ธรณีพิบัติภัย",
-  GEORESOURCES_ENVIRONMENT: "ทรัพยากรธรณีและธรณีวิทยาสิ่งแวดล้อม",
-  MAPS_SURVEYING: "แผนที่และการสำรวจทางธรณีวิทยา",
+export const EARTH_SCIENCE_BASIC_SYLLABUS = Object.freeze({
+  displayName: "วิทยาศาสตร์โลกและอวกาศ (พื้นฐาน)",
+  chapters: [{
+    title: "เอกภพและกาแล็กซี",
+    specificTopics: []
+  }, {
+    title: "ดาวฤกษ์",
+    specificTopics: []
+  }, {
+    title: "ระบบสุริยะ",
+    specificTopics: []
+  }, {
+    title: "เทคโนโลยีอวกาศ",
+    specificTopics: []
+  }, {
+    title: "โครงสร้างโลก",
+    specificTopics: []
+  }, {
+    title: "การแปรสัณฐานของแผนธรณี",
+    specificTopics: []
+  }, {
+    title: "ธรณีพิบัติภัย",
+    specificTopics: []
+  }, {
+    title: "ลมฟ้าอากาศและภูมิอากาศ",
+    specificTopics: []
+  }, {
+    title: "การเปลี่ยนแปลงภูมิอากาศ",
+    specificTopics: []
+  }, {
+    title: "ข้อมูลและสารสนเทศทางอุตุนิยมวิทยา",
+    specificTopics: []
+  }, ]
 });
 
-export const METEOROLOGY_TOPICS = Object.freeze({
-  COMPOSITION_LAYERS: "องค์ประกอบและชั้นบรรยากาศ",
-  ENERGY_BALANCE_RADIATION: "สมดุลพลังงานของโลกและรังสี",
-  TEMP_PRESSURE_WIND: "อุณหภูมิ ความกดอากาศ และลม",
-  HUMIDITY_CLOUDS_PRECIPITATION: "ความชื้น เมฆ และหยาดน้ำฟ้า",
-  AIR_MASSES_FRONTS: "มวลอากาศและแนวปะทะอากาศ",
-  STORMS_SEVERE_WEATHER: "พายุและสภาพอากาศรุนแรง",
-  WEATHER_MAPS_FORECASTING: "แผนที่อากาศและการพยากรณ์อากาศ",
-  CLIMATE_CHANGE: "ภูมิอากาศและการเปลี่ยนแปลง",
+export const EARTH_SCIENCE_ADVANCE_SYLLABUS = Object.freeze({
+  displayName: "วิทยาศาสตร์โลกและอวกาศ (เพิ่มเติม)",
+  chapters: [{
+    title: "โครงสร้างโลก",
+    specificTopics: ["การแบ่งโครงสร้างโลกตามองค์ประกอบทางเคมี (เปลือกโลก, เนื้อโลก, แก่นโลก)", "การแบ่งโครงสร้างโลกตามสมบัติเชิงกล (ธรณีภาค, ฐานธรณีภาค, มัชฌิมภาค, แก่นโลกชั้นนอก, แก่นโลกชั้นใน)", "ข้อมูลสนับสนุน เช่น คลื่นไหวสะเทือน, องค์ประกอบของอุกกาบาต"]
+  }, {
+    title: "ธรณีแปรสัณฐาน",
+    specificTopics: ["ทฤษฎีทวีปเลื่อนและทฤษฎีการแผ่ขยายพื้นสมุทร", "หลักฐานสนับสนุนการเคลื่อนที่ของแผ่นธรณี", "ทฤษฎีธรณีแปรสัณฐาน", "รูปแบบแนวรอยต่อของแผ่นธรณี (แยกตัว, เคลื่อนเข้าหากัน, ผ่านกันในแนวราบ) และธรณีสัณฐานที่เกี่ยวข้อง"]
+  }, {
+    title: "ธรณีพิบัติภัย",
+    specificTopics: ["ภูเขาไฟระเบิด: สาเหตุ, กระบวนการเกิด, พื้นที่เสี่ยงภัย และการปฏิบัติตน", "แผ่นดินไหว: สาเหตุ, กระบวนการเกิด, ขนาดและความรุนแรง, พื้นที่เสี่ยงภัย และการปฏิบัติตน", "สึนามิ: สาเหตุ, กระบวนการเกิด, ผลกระทบ, พื้นที่เสี่ยงภัย และการปฏิบัติตน"]
+  }, {
+    title: "ลำดับชั้นหิน",
+    specificTopics: ["การลำดับชั้นหินและธรณีประวัติ", "การหาอายุทางธรณีวิทยา: อายุเปรียบเทียบและอายุสัมบูรณ์", "มาตราธรณีกาล"]
+  }, {
+    title: "ทรัพยากรธรณี",
+    specificTopics: ["แร่: สมบัติทางกายภาพและทางเคมี, การระบุชนิด, การใช้ประโยชน์", "หิน: การจำแนก (อัคนี, ตะกอน, แปร), วัฏจักรหิน, การใช้ประโยชน์", "ปิโตรเลียมและถ่านหิน: กระบวนการเกิด, การสำรวจ, ผลิตภัณฑ์และการใช้ประโยชน์"]
+  }, {
+    title: "แผนที่",
+    specificTopics: ["แผนที่ภูมิประเทศ: องค์ประกอบ, เส้นชั้นความสูง, การแปลความหมาย", "แผนที่ธรณีวิทยา: การแสดงการกระจายตัวของหิน, การแปลความหมาย", "การประยุกต์ใช้ข้อมูลจากแผนที่"]
+  }, {
+    title: "อากาศ",
+    specificTopics: ["องค์ประกอบของอากาศ", "พลังงานจากดวงอาทิตย์และอุณหภูมิอากาศ", "ปัจจัยที่มีผลต่อการรับและคายพลังงานของโลก", "สมดุลพลังงานของโลก"]
+  }, {
+    title: "การหมุนเวียนของระบบลมของโลก",
+    specificTopics: ["การเกิดลมจากความแตกต่างของความกดอากาศ", "แรงที่มีผลต่อการเคลื่อนที่ของอากาศ (คอริออลิส, สู่ศูนย์กลาง, เสียดทาน)", "แบบจำลองการหมุนเวียนของอากาศ และการหมุนเวียนตามเขตละติจูด", "พายุหมุนเขตร้อนและมรสุม"]
+  }, {
+    title: "การหมุนเวียนของน้ำในมหาสมุทร",
+    specificTopics: ["การแบ่งชั้นน้ำในมหาสมุทรตามอุณหภูมิและความเค็ม", "การหมุนเวียนของกระแสน้ำผิวหน้าและกระแสน้ำลึก", "ผลจากการหมุนเวียนของน้ำในมหาสมุทรต่อสิ่งมีชีวิตและสิ่งแวดล้อม (น้ำผุด, เอลนีโญ, ลานีญา)"]
+  }, {
+    title: "เสถียรภาพอากาศและแนวปะทะอากาศ",
+    specificTopics: ["การเกิดเมฆและชนิดของเมฆ", "เสถียรภาพอากาศ (อากาศมีเสถียรภาพ, อากาศไม่มีเสถียรภาพ)", "แนวปะทะอากาศ (อุ่น, เย็น, รวม, คงที่) และลักษณะลมฟ้าอากาศ"]
+  }, {
+    title: "การเปลี่ยนแปลงภูมิอากาศของโลก",
+    specificTopics: ["ปัจจัยที่ส่งผลต่อการเปลี่ยนแปลงภูมิอากาศโลก (ธรรมชาติ, กิจกรรมมนุษย์)", "ปรากฏการณ์เอลนีโญและลานีญา", "ปรากฏการณ์เรือนกระจกและภาวะโลกร้อน", "คลื่นความร้อน", "แนวปฏิบัติเพื่อชะลอการเปลี่ยนแปลงภูมิอากาศ"]
+  }, {
+    title: "การพยากรณ์อากาศ",
+    specificTopics: ["การตรวจอากาศและเครื่องมือตรวจอากาศ", "ขั้นตอนและวิธีการพยากรณ์อากาศ", "แผนที่อากาศและการแปลความหมายสัญลักษณ์"]
+  }, {
+    title: "เอกภพและกาแล็กซี",
+    specificTopics: ["ทฤษฎีบิกแบงและวิวัฒนาการของเอกภพ", "หลักฐานสนับสนุนทฤษฎีบิกแบง: กฎของฮับเบิล, ไมโครเวฟพื้นหลัง", "โครงสร้างและองค์ประกอบของกาแล็กซีทางช้างเผือก"]
+  }, {
+    title: "ดาวฤกษ์",
+    specificTopics: ["กำเนิดดาวฤกษ์และสมดุลอุทกสถิต", "กระบวนการสร้างพลังงานของดาวฤกษ์", "สมบัติของดาวฤกษ์: ความส่องสว่าง, โชติมาตร, สี, อุณหภูมิผิว, สเปกตรัม", "การหาระยะทางด้วยวิธีแพรัลแลกซ์", "วิวัฒนาการของดาวฤกษ์และแผนภาพ H-R"]
+  }, {
+    title: "ระบบสุริยะ",
+    specificTopics: ["กำเนิดระบบสุริยะและการแบ่งเขตบริวาร", "กฎของเคพเลอร์และกฎความโน้มถ่วงของนิวตัน", "โครงสร้างและปรากฏการณ์บนดวงอาทิตย์"]
+  }, {
+    title: "ทรงกลมฟ้า",
+    specificTopics: ["ทรงกลมฟ้า, พิกัดขอบฟ้า, พิกัดศูนย์สูตร, พิกัดสุริยวิถี", "การเคลื่อนที่ปรากฏของดวงอาทิตย์และดาวฤกษ์", "เวลาสุริยคติและเวลาดาราคติ"]
+  }, {
+    title: "การเคลื่อนที่ปรากฏของดาวเคราะห์",
+    specificTopics: ["การเคลื่อนที่ปรากฏของดาวเคราะห์วงในและดาวเคราะห์วงนอก", "มุมห่างและคาบการโคจรของดาวเคราะห์ (คาบดาราคติและคาบซินอดิก)"]
+  }, {
+    title: "เทคโนโลยีอวกาศและการประยุกต์ใช้",
+    specificTopics: ["กล้องโทรทรรศน์และเครื่องบันทึกสัญญาณทางดาราศาสตร์", "การสำรวจอวกาศในช่วงความยาวคลื่นต่างๆ", "ดาวเทียม, ยานอวกาศ, สถานีอวกาศ และการประยุกต์ใช้"]
+  }, ]
 });
 
-export const OCEANOGRAPHY_TOPICS = Object.freeze({
-  PHYSICAL_CHEMICAL_PROPERTIES: "คุณสมบัติทางกายภาพและเคมีของน้ำทะเล",
-  WAVES_TIDES_CURRENTS: "คลื่น น้ำขึ้นน้ำลง และการหมุนเวียนของกระแสน้ำ",
-  OCEAN_ATMOSPHERE_INTERACTION: "ปฏิสัมพันธ์ระหว่างมหาสมุทรและบรรยากาศ",
-  MARINE_LIFE_ECOSYSTEMS: "สิ่งมีชีวิตและระบบนิเวศทางทะเล",
-  SEAFLOOR_GEOLOGY_MORPHOLOGY: "ธรณีวิทยาและสัณฐานพื้นสมุทร",
-  MARINE_RESOURCES_POLLUTION: "ทรัพยากรและมลพิษทางทะเล",
-});
-
-export const PHYSICS_TOPICS = Object.freeze({
-  MECHANICS_1: "กลศาสตร์ 1: ธรรมชาติของฟิสิกส์และการเคลื่อนที่",
-  MECHANICS_2: "กลศาสตร์ 2: สมดุล งาน และพลังงาน",
-  WAVES: "คลื่น",
-  ELECTRICITY: "ไฟฟ้า",
-  MAGNETISM_FLUIDS: "แม่เหล็กและของไหล",
-  MODERN_PHYSICS: "ฟิสิกส์ยุคใหม่",
-});
-
-export const EARTH_SPACE_SCIENCE_BASIC_TOPICS = Object.freeze({
-  UNIVERSE: "เอกภพ",
-  EARTH_PROCESSES: "กระบวนการเปลี่ยนแปลงภายในโลก",
-  WEATHER_CLIMATE: "ลมฟ้าอากาศและภูมิอากาศ",
-});
-
-export const EARTH_SPACE_SCIENCE_ADVANCE_TOPICS = Object.freeze({
-  EARTH_STRUCTURE: "โครงสร้างโลก",
-  PLATE_TECTONICS: "ธรณีแปรสัณฐาน",
-  GEOHAZARDS: "ธรณีพิบัติภัย",
-  STRATIGRAPHY: "ลำดับชั้นหิน",
-  GEOLOGICAL_RESOURCES: "ทรัพยากรธรณี",
-  MAPS: "แผนที่",
-  ATMOSPHERE: "อากาศ",
-  GLOBAL_WIND_SYSTEMS: "การหมุนเวียนของระบบลมของโลก",
-  OCEAN_CIRCULATION: "การหมุนเวียนของน้ำในมหาสมุทร",
-  ATMOSPHERIC_STABILITY_FRONTS: "เสถียรภาพอากาศและแนวปะทะอากาศ",
-  CLIMATE_CHANGE: "การเปลี่ยนแปลงภูมิอากาศของโลก",
-  WEATHER_FORECASTING: "การพยากรณ์อากาศ",
-  UNIVERSE_GALAXIES: "เอกภพและกาแล็กซี",
-  STARS: "ดาวฤกษ์",
-  SOLAR_SYSTEM: "ระบบสุริยะ",
-  CELESTIAL_SPHERE: "ทรงกลมฟ้า",
-  PLANETARY_MOTION: "การเคลื่อนที่ปรากฏของดาวเคราะห์",
-  SPACE_TECHNOLOGY: "เทคโนโลยีอวกาศและการประยุกต์ใช้",
-});
 
 export const subCategoryData = {
-  // Sub-categories for "วิทยาศาสตร์โลกและอวกาศ" (Earth & Space Science)
-  // These are grouped by main topic (Geology, Meteorology, Astronomy)
-  // and are typically used in the `specific` field of the subCategory object.
-  EarthAndSpace: {
-    Geology: [...Object.values(GEOLOGY_TOPICS)],
-    Meteorology: [...Object.values(METEOROLOGY_TOPICS)],
-    Astronomy: [
-      ...Object.values(CORE_ASTRONOMY_TOPICS)
-    ],
-    Oceanography: [...Object.values(OCEANOGRAPHY_TOPICS)],
-  },
-
-  /**
- * A combined and structured list of all astronomy topics for the "ดาราศาสตร์" category,
- * indicating which level (Junior, Senior, or both) and which camp (1 or 2)
- * each topic belongs to.
- *
- * REVISED BASED ON SYLLABUS DATED August 2025.
- * Key changes include:
- * - Added a 'camps' object to specify the introductory camp for junior and senior levels.
- * - { junior: 1, senior: 1 } means the topic is introduced in Camp 1 for both levels.
- * - { junior: 2, senior: 1 } means the topic is introduced in Camp 2 for juniors, but Camp 1 for seniors.
- * - Corrected the 'level' for several core topics to JUNIOR_AND_SENIOR.
- * - Added more specific topics for senior-only physics concepts.
- */
-  ASTRONOMY_POSN: [
-    // --- Foundational Mathematics & Physics ---
-    { topic: "คณิตศาสตร์สำหรับดาราศาสตร์ (พีชคณิต, เรขาคณิต, ตรีโกณมิติ)", level: LEVELS.JUNIOR_AND_SENIOR, camps: { junior: 1, senior: 1 } },
-    { topic: "กลศาสตร์พื้นฐาน (กฎของนิวตัน, งานและพลังงาน)", level: LEVELS.JUNIOR_AND_SENIOR, camps: { junior: 1, senior: 1 } },
-    { topic: "การแปลงหน่วยและสัญลักษณ์ทางวิทยาศาสตร์", level: LEVELS.JUNIOR_AND_SENIOR, camps: { junior: 1, senior: 1 } },
-    { topic: "คุณสมบัติของคลื่นแม่เหล็กไฟฟ้าและสเปกตรัม", level: LEVELS.JUNIOR_AND_SENIOR, camps: { junior: 1, senior: 1 } },
-    // Senior-only topics, introduced in their respective camps.
-    { topic: "แคลคูลัสเบื้องต้นสำหรับดาราศาสตร์", level: LEVELS.SENIOR_ONLY, camps: { senior: 1 } },
-
-    { topic: "ฟิสิกส์นิวเคลียร์และทฤษฎีสัมพัทธภาพเบื้องต้น", level: LEVELS.SENIOR_ONLY, camps: { senior: 2 } },
-
-    // --- Core Astronomy Topics ---
-    { topic: CORE_ASTRONOMY_TOPICS.SPHERICAL_ASTRONOMY, level: LEVELS.JUNIOR_AND_SENIOR, camps: { junior: 1, senior: 1 } },
-    { topic: CORE_ASTRONOMY_TOPICS.CELESTIAL_MECHANICS, level: LEVELS.JUNIOR_AND_SENIOR, camps: { junior: 1, senior: 1 } },
-    { topic: CORE_ASTRONOMY_TOPICS.SOLAR_SYSTEM, level: LEVELS.JUNIOR_AND_SENIOR, camps: { junior: 1, senior: 1 } },
-    { topic: CORE_ASTRONOMY_TOPICS.STARS, level: LEVELS.JUNIOR_AND_SENIOR, camps: { junior: 1, senior: 1 } },
-    { topic: CORE_ASTRONOMY_TOPICS.GALAXIES, level: LEVELS.JUNIOR_AND_SENIOR, camps: { junior: 1, senior: 1 } },
-    { topic: CORE_ASTRONOMY_TOPICS.TELESCOPES, level: LEVELS.JUNIOR_AND_SENIOR, camps: { junior: 1, senior: 1 } },
-
-    // --- Applied & Observational Topics ---
-    { topic: "เวลา ปฏิทิน และการใช้แผนที่ดาว", level: LEVELS.JUNIOR_AND_SENIOR, camps: { junior: 1, senior: 1 } },
-    { topic: "ปรากฏการณ์ในระบบสุริยะ (อุปราคา, น้ำขึ้นน้ำลง)", level: LEVELS.JUNIOR_AND_SENIOR, camps: { junior: 1, senior: 1 } },
-    // Note: Binary/Cluster stars are introduced later for Juniors than for Seniors.
-    { topic: "ระบบดาวคู่และกระจุกดาว", level: LEVELS.JUNIOR_AND_SENIOR, camps: { junior: 2, senior: 1 } },
-    { topic: "การวิเคราะห์ข้อมูลและการคำนวณทางดาราศาสตร์", level: LEVELS.JUNIOR_AND_SENIOR, camps: { junior: 1, senior: 1 } },
-    { topic: "ข่าวสารและความก้าวหน้าทางดาราศาสตร์", level: LEVELS.JUNIOR_AND_SENIOR, camps: { junior: 1, senior: 1 } },
-
-    { topic: "กลุ่มดาวฤกษ์และการใช้ประโยชน์", level: LEVELS.JUNIOR_AND_SENIOR, camps: { junior: 1, senior: 1} },
-  ],
-
   // Sub-categories for Physics
-  Physics: [
-    ...Object.values(PHYSICS_TOPICS)
-  ],
+  Physics: PHYSICS_SYLLABUS,
 
   // Sub-categories for Earth and Space Science (Basic)
-  EarthSpaceScienceBasic: [
-    ...Object.values(EARTH_SPACE_SCIENCE_BASIC_TOPICS)
-  ],
+  EarthSpaceScienceBasic: EARTH_SCIENCE_BASIC_SYLLABUS,
 
   // Sub-categories for Earth and Space Science (Advanced)
-  EarthSpaceScienceAdvance: [
-    ...Object.values(EARTH_SPACE_SCIENCE_ADVANCE_TOPICS)
-  ],
+  EarthSpaceScienceAdvance: EARTH_SCIENCE_ADVANCE_SYLLABUS,
 };
 
-/**
- * @deprecated This is for backward compatibility with modules that still import combinedAstronomyTopics.
- * Please update imports to use `subCategoryData.ASTRONOMY_POSN` instead.
- */
-export const combinedAstronomyTopics = subCategoryData.ASTRONOMY_POSN;
-/*
 /**
  * Maps filename prefixes to their corresponding main categories, icons, and sub-category validation keys.
  * - `es`, `esr`: Earth Science Olympiad (วิทยาศาสตร์โลกและอวกาศ), uses `EarthAndSpace` sub-categories.
@@ -193,105 +293,35 @@ export const combinedAstronomyTopics = subCategoryData.ASTRONOMY_POSN;
  * - `adv`: Advanced/Challenge quizzes, uses `EarthAndSpace` sub-categories.
  */
 export const quizPrefixInfo = {
-  // --- Earth Science Olympiad ---
-  es: {
-    mainCategory: MAIN_CATEGORIES.EARTH_SCIENCE, // วิทยาศาสตร์โลกและอวกาศ
-    icon: './assets/icons/geology.png',
-    subCategoryKey: 'EarthAndSpace',
-  },
-  esr: {
-    mainCategory: MAIN_CATEGORIES.ASTRONOMY_GENERAL, // ทบทวนดาราศาสตร์ (ส่วนหนึ่งของโลกและอวกาศ)
-    icon: './assets/icons/earth1.png',
-    subCategoryKey: 'EarthAndSpace',
-  },
-  // --- Astronomy Olympiad ---
-  junior: {
-    mainCategory: MAIN_CATEGORIES.ASTRONOMY_OLYMPIAD, // ดาราศาสตร์ สอวน.
-    icon: './assets/icons/astronomy1.png',
-    subCategoryKey: 'ASTRONOMY_POSN', // Uses the structured Astronomy list
-  },
-  senior: {
-    mainCategory: MAIN_CATEGORIES.ASTRONOMY_OLYMPIAD, // ดาราศาสตร์ สอวน.
-    icon: './assets/icons/black-hole.png',
-    subCategoryKey: 'ASTRONOMY_POSN', // Also uses the structured Astronomy list
-  },
-  adv_astro: {
-    mainCategory: MAIN_CATEGORIES.CHALLENGE, // ข้อสอบท้าทาย (ดาราศาสตร์)
-    icon: './assets/icons/galaxy.png',
-    subCategoryKey: 'ASTRONOMY_POSN',
-  },
-  adv_geology: {
-    mainCategory: MAIN_CATEGORIES.CHALLENGE, // ข้อสอบท้าทาย (ธรณีวิทยา)
-    icon: './assets/icons/rock.png',
-    subCategoryKey: 'EarthAndSpace',
-    inferredMainCategory: 'Geology', // For files that omit the main category
-  },
-  adv_meteorology: { // Corrected from adv_mete to match filenames
-    mainCategory: MAIN_CATEGORIES.CHALLENGE, // ข้อสอบท้าทาย (อุตุนิยมวิทยา)
-    icon: './assets/icons/cloud.png', // Changed icon
-    subCategoryKey: 'EarthAndSpace',
-    inferredMainCategory: 'Meteorology', // For files that omit the main category
-  },
-  adv_oceanography: { // Corrected from adv_ocean to match filenames
-    mainCategory: MAIN_CATEGORIES.CHALLENGE, // ข้อสอบท้าทาย (มหาสมุทรวิทยา)
-    icon: './assets/icons/wave.png', // Changed icon
-    subCategoryKey: 'EarthAndSpace',
-    inferredMainCategory: 'Oceanography', // For files that omit the main category
-  },
-  // --- General & Mixed Topics ---
-  astro: {
-    mainCategory: MAIN_CATEGORIES.ASTRONOMY_GENERAL, // ทบทวนดาราศาสตร์ (ทั่วไป)
-    icon: './assets/icons/space.png',
-    subCategoryKey: 'ASTRONOMY_POSN', // Review quizzes are validated against the ASTRONOMY_POSN list.
-  },
   // --- Physics ---
   phy_m4: {
-    mainCategory: MAIN_CATEGORIES.PHYSICS,
-    icon: './assets/icons/physics.png', // Assuming a physics icon exists or will be added
-    subCategoryKey: 'Physics',
-    inferredMainCategory: 'MECHANICS_1', // Default for M.4 Physics
+    mainCategory: 'PhysicsM4',
+    icon: './assets/icons/physicsm4.png', // Assuming a physics icon exists or will be added
   },
   phy_m5: {
-    mainCategory: MAIN_CATEGORIES.PHYSICS,
+    mainCategory: 'PhysicsM5',
     icon: './assets/icons/physics.png',
-    subCategoryKey: 'Physics',
-    inferredMainCategory: 'WAVES', // Default for M.5 Physics
   },
   phy_m6: {
-    mainCategory: MAIN_CATEGORIES.PHYSICS,
+    mainCategory: 'PhysicsM6',
     icon: './assets/icons/physics.png',
-    subCategoryKey: 'Physics',
-    inferredMainCategory: 'MAGNETISM_FLUIDS', // Default for M.6 Physics
   },
   // --- Earth and Space Science Basic ---
   ess_basic_m6: {
     mainCategory: MAIN_CATEGORIES.EARTH_SPACE_SCIENCE_BASIC,
     icon: './assets/icons/earth.png', // Reusing earth icon
-    subCategoryKey: 'EarthSpaceScienceBasic',
-    inferredMainCategory: 'UNIVERSE', // Default for M.6 Basic ESS
   },
   // --- Earth and Space Science Advanced ---
   ess_adv_m4: {
     mainCategory: MAIN_CATEGORIES.EARTH_SPACE_SCIENCE_ADVANCE,
     icon: './assets/icons/earth.png', // Reusing earth icon
-    subCategoryKey: 'EarthSpaceScienceAdvance',
-    inferredMainCategory: 'EARTH_STRUCTURE', // Default for M.4 Advanced ESS
   },
   ess_adv_m5: {
     mainCategory: MAIN_CATEGORIES.EARTH_SPACE_SCIENCE_ADVANCE,
     icon: './assets/icons/earth.png', // Reusing earth icon
-    subCategoryKey: 'EarthSpaceScienceAdvance',
-    inferredMainCategory: 'ATMOSPHERE', // Default for M.5 Advanced ESS
   },
   ess_adv_m6: {
     mainCategory: MAIN_CATEGORIES.EARTH_SPACE_SCIENCE_ADVANCE,
     icon: './assets/icons/earth.png', // Reusing earth icon
-    subCategoryKey: 'EarthSpaceScienceAdvance',
-    inferredMainCategory: 'UNIVERSE_GALAXIES', // Default for M.6 Advanced ESS
-  },
-  default: {
-    mainCategory: MAIN_CATEGORIES.GENERAL_KNOWLEDGE,
-    icon: './assets/icons/study.png',
-    subCategoryKey: null,
   },
 };

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="th" class="scroll-pt-20 scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สถิติของฉัน - Earth Science Quiz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;700&family=Sarabun:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="./styles/bundle.css">
+    <!-- Add Chart.js for data visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-300 font-sarabun">
+
+    <!-- Shared Sticky Header -->
+    <div id="main_header-placeholder"></div>
+
+    <div class="container mx-auto px-4 sm:px-8 pt-24 md:pt-28">
+        <header class="max-w-4xl mx-auto mb-8 pb-4 border-b border-gray-200 dark:border-gray-700">
+            <div class="flex flex-wrap justify-between items-center gap-4">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-100 font-kanit">สถิติของฉัน</h1>
+                    <p class="text-md text-gray-600 dark:text-gray-400 mt-1">ภาพรวมผลการทำแบบทดสอบทั้งหมดของคุณ</p>
+                </div>
+                <button id="clear-stats-btn"
+                    class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 text-sm font-bold transition shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline-block mr-1.5 -mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                    </svg>
+                    ล้างข้อมูลสถิติทั้งหมด
+                </button>
+            </div>
+        </header>
+
+        <!-- Main content area that will be shown after loading -->
+        <main id="stats-content" class="max-w-4xl mx-auto space-y-8 pb-8 sm:pb-12 opacity-0 transition-opacity duration-500">
+            <!-- Summary Cards Section -->
+            <section id="summary-cards-container"
+                class="space-y-4">
+                <h2 class="text-2xl font-bold font-kanit text-gray-800 dark:text-gray-100">ภาพรวม</h2>
+                <div id="summary-cards-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                    <!-- Summary cards will be injected here by stats.js -->
+                </div>
+            </section>
+
+            <!-- Main Chart and Details Section -->
+            <section class="bg-white dark:bg-gray-800/50 p-4 sm:p-6 rounded-xl shadow-md border border-gray-200 dark:border-gray-700">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <!-- Overall Donut Chart -->
+                    <div class="text-center">
+                        <h2 class="text-xl font-bold font-kanit mb-4">ภาพรวมทั้งหมด</h2>
+                        <div class="relative h-60 w-60 sm:h-64 sm:w-64 mx-auto">
+                            <canvas id="overall-chart"></canvas>
+                        </div>
+                    </div>
+                    <!-- Category & Sub-Category Scores List -->
+                    <div id="category-accordion-container" class="space-y-4">
+                        <!-- Category accordions will be injected here by stats.js -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Detailed List Section -->
+            <section class="bg-white dark:bg-gray-800/50 p-4 sm:p-6 rounded-xl shadow-md border border-gray-200 dark:border-gray-700">
+                <h2 class="text-xl font-bold font-kanit mb-4">ประวัติการทำแบบทดสอบ</h2>
+                <div id="detailed-stats-container" class="space-y-3 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar-menu">
+                    <!-- Detailed list of completed quizzes will be injected here -->
+                </div>
+            </section>
+        </main>
+
+        <!-- Elements for loading and empty states -->
+        <div id="stats-container" class="max-w-4xl mx-auto">
+            <!-- Stats content will be loaded here by stats-loader.js -->
+            <div id="loading-spinner" class="text-center py-16 text-gray-500 dark:text-gray-400">
+                <svg class="animate-spin h-8 w-8 mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none"
+                    viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                    </path>
+                </svg>
+                <p>กำลังโหลดข้อมูลสถิติ...</p>
+            </div>
+            <div id="no-stats-message" class="hidden text-center py-16 text-gray-500 dark:text-gray-400">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <p class="text-lg font-bold mb-2">ยังไม่มีข้อมูลสถิติ</p>
+                <p>เริ่มทำแบบทดสอบเพื่อดูสถิติของคุณที่นี่</p>
+            </div>
+        </div>
+
+        <div id="footer-placeholder" class="mt-12"></div>
+    </div>
+
+    <!-- Modals moved to the end of the body to ensure they are on top of all other content. -->
+    <div id="modals-placeholder"></div>
+    <!-- Modal for finished quiz action -->
+    <div id="finished-quiz-modal" class="modal hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-75" aria-labelledby="finished-quiz-modal-title" role="dialog"
+        aria-modal="true">
+        <div class="modal-content bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-md m-4 p-6 text-center">
+            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 dark:bg-blue-900/50 mb-4">
+                <svg class="h-6 w-6 text-blue-600 dark:text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none"
+                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </div>
+            <h3 id="finished-quiz-modal-title"
+                class="text-lg font-bold text-gray-900 dark:text-gray-100 font-kanit">
+                <!-- Title will be injected by JS -->
+            </h3>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">คุณต้องการเริ่มทำแบบทดสอบใหม่อีกครั้ง หรือดูผลคะแนนครั้งก่อน?</p>
+            <div class="mt-6 flex flex-col sm:flex-row justify-center gap-4">
+                <button id="view-results-btn"
+                    class="w-full sm:w-auto order-1 sm:order-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200 font-bold btn-press-anim">
+                    ดูผลคะแนน
+                </button>
+                <button id="restart-quiz-btn"
+                    class="w-full sm:w-auto order-2 sm:order-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all duration-200 font-bold btn-press-anim">
+                    เริ่มใหม่
+                </button>
+                <button data-modal-close
+                    class="w-full sm:w-auto order-3 sm:order-3 mt-2 sm:mt-0 px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-all duration-200 font-bold btn-press-anim">
+                    ยกเลิก
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="./scripts/stats-loader.js" type="module"></script>
+</body>
+
+</html>

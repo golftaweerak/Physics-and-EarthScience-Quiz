@@ -55,61 +55,55 @@ export const categoryDetails = {
     cardGlow: "hover:shadow-rose-400/30",
     logoGlow: "group-hover:shadow-rose-400/40",
   },
-  // สีแดง (Red): สื่อถึงพลังงานและความเข้มข้น เหมาะสำหรับฟิสิกส์
-  Physics: {
-    title: "ฟิสิกส์ (Physics)",
-    displayName: "ฟิสิกส์",
-    icon: "./assets/icons/physics.png", // Assuming a physics icon exists or will be added
+  // --- Physics Categories by Grade ---
+  PhysicsM4: {
+    title: "ฟิสิกส์ ม.4",
+    displayName: "ฟิสิกส์ ม.4",
+    icon: "./assets/icons/physicsm4.png", // Assuming a physics icon exists or will be added
     order: 6,
     color: "border-red-500",
     cardGlow: "hover:shadow-red-500/30",
     logoGlow: "group-hover:shadow-red-500/40",
   },
+  PhysicsM5: {
+    title: "ฟิสิกส์ ม.5",
+    displayName: "ฟิสิกส์ ม.5",
+    icon: "./assets/icons/electromagnetic.png",
+    order: 7,
+    color: "border-red-600", // Slightly different shade for distinction
+    cardGlow: "hover:shadow-red-600/30",
+    logoGlow: "group-hover:shadow-red-600/40",
+  },
+  PhysicsM6: {
+    title: "ฟิสิกส์ ม.6",
+    displayName: "ฟิสิกส์ ม.6",
+    icon: "./assets/icons/physics.png",
+    order: 8,
+    color: "border-red-700", // Slightly different shade for distinction
+    cardGlow: "hover:shadow-red-700/30",
+    logoGlow: "group-hover:shadow-red-700/40",
+  },
+  // --- End Physics ---
+
   // สีเขียวอ่อน (Light Green): สื่อถึงโลกและธรรมชาติ (พื้นฐาน)
   EarthSpaceScienceBasic: {
     title: "วิทยาศาสตร์โลกและอวกาศ (พื้นฐาน)",
     displayName: "วิทยาศาสตร์โลกและอวกาศ (พื้นฐาน)",
     icon: "./assets/icons/earth.png", // Reusing earth icon
-    order: 7,
+    order: 9,
     color: "border-green-400",
     cardGlow: "hover:shadow-green-400/30",
     logoGlow: "group-hover:shadow-green-400/40",
   },
   // สีน้ำเงินเข้ม (Dark Blue): สื่อถึงความลึกซึ้งและอวกาศ (เพิ่มเติม)
   EarthSpaceScienceAdvance: {
-    title: "วิทยาศาสตร์โลกและอวกาศ (เพิ่มเติม)",
-    displayName: "วิทยาศาสตร์โลกและอวกาศ (เพิ่มเติม)",
+    title: "โลก ดาราศาสตร์และอวกาศ (เพิ่มเติม)",
+    displayName: "โลก ดาราศาสตร์และอวกาศ (เพิ่มเติม)",
     icon: "./assets/icons/space.png", // Reusing space icon
-    order: 8,
+    order: 10,
     color: "border-blue-600",
     cardGlow: "hover:shadow-blue-600/30",
     logoGlow: "group-hover:shadow-blue-600/40",
-  },
-  // Categories used for custom quizzes and stats breakdown.
-  // These are conceptually sub-categories of Earth & Space Science.
-  Geology: {
-    title: "ธรณีวิทยา (Geology)",
-    displayName: "ธรณีวิทยา",
-    icon: "./assets/icons/geology.png",
-    color: "border-orange-600", // สีส้มเข้ม: สื่อถึงดินและหิน
-  },
-  Astronomy: {
-    title: "ดาราศาสตร์ (Astronomy)",
-    displayName: "ดาราศาสตร์",
-    icon: "./assets/icons/astronomy.png",
-    color: "border-sky-500", // สีฟ้า: สอดคล้องกับหมวดหลัก
-  },
-  Meteorology: {
-    title: "อุตุนิยมวิทยา (Meteorology)",
-    displayName: "อุตุนิยมวิทยา",
-    icon: "./assets/icons/meteorology.png",
-    color: "border-sky-500", // สีฟ้า (Sky): สื่อถึงท้องฟ้าและอากาศ
-  },
-  Oceanography: {
-    title: "สมุทรศาสตร์ (Oceanography)",
-    displayName: "สมุทรศาสตร์",
-    icon: "./assets/icons/ocean.png",
-    color: "border-teal-500", // สีเขียวน้ำทะเล (Teal): สื่อถึงมหาสมุทร
   },
   // This is a special category for the custom quiz creator.
   General: {
@@ -117,6 +111,8 @@ export const categoryDetails = {
     icon: "./assets/icons/study.png",
   },
 };
+
+
 
 /**
  * Retrieves the progress state of a quiz from localStorage.

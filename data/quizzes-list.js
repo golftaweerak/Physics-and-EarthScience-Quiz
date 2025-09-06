@@ -1,0 +1,135 @@
+
+export const quizList = [
+  {
+    "id": "phy_m4_ch3-1",
+    "title": "แรงและกฎการเคลื่อนที่ (ชุดที่ 1)",
+    "amount": 20,
+    "description": "บทที่ 3: แรงและกฎการเคลื่อนที่ สำหรับชั้นมัธยมศึกษาปีที่ 4",
+    "url": "./quiz/index.html?id=phy_m4_ch3-1",
+    "storageKey": "quizState-phy_m4_ch3-1",
+    "icon": "./assets/icons/friction.png",
+    "altText": "ไอคอนฟิสิกส์",
+    "category": "PhysicsM4",
+    "subCategory": "บทที่ 3: แรงและกฎการเคลื่อนที่"
+  },
+  {
+    "id": "phy_m4_Ch3-2",
+    "title": "แรงและกฎการเคลื่อนที่ (ชุดที่ 2)",
+    "amount": 20,
+    "description": "บทที่ 3: แรงและกฎการเคลื่อนที่ (เน้นการคำนวณและวิเคราะห์)",
+    "url": "./quiz/index.html?id=phy_m4_Ch3-2",
+    "storageKey": "quizState-phy_m4_Ch3-2",
+    "icon": "./assets/icons/friction.png",
+    "altText": "ไอคอนสำหรับ phy_m4_Ch3-2",
+    "category": "PhysicsM4",
+    "subCategory": "บทที่ 3: แรงและกฎการเคลื่อนที่"
+  },
+  {
+    "id": "phy_m4_ch4-1",
+    "title": "สมดุลกล: สมดุลต่อการเลื่อนที่ (ชุดที่ 1)",
+    "amount": 30,
+    "description": "บทที่ 4: สมดุลกล สมดุลต่อการเลื่อนที่ (เน้นการวิเคราะห์และคำนวณ)",
+    "url": "./quiz/index.html?id=phy_m4_ch4-1",
+    "storageKey": "quizState-phy_m4_ch4-1",
+    "icon": "./assets/icons/equilibrium.png",
+    "altText": "ไอคอนสำหรับ phy_m4_ch4-1",
+    "category": "PhysicsM4",
+    "subCategory": "บทที่ 4: สมดุลกล"
+  },
+  {
+    "id": "phy_m4_ch4-2",
+    "title": "สมดุลกล: สมดุลต่อการเลื่อนที่ (ชุดที่ 2)",
+    "description": "บทที่ 4: สมดุลกล (เน้นการวิเคราะห์และทฤษฎี)",
+    "amount": 30,
+    "url": "./quiz/index.html?id=phy_m4_ch4-2",
+    "storageKey": "quizState-phy_m4_ch4-2",
+    "icon": "./assets/icons/equilibrium.png",
+    "altText": "ไอคอนสำหรับ phy_m4_ch4-2",
+    "category": "PhysicsM4",
+    "subCategory": "บทที่ 4: สมดุลกล"
+  },
+  {
+    "id": "phy_m5_ch10-1",
+    "title": "เสียง (ชุดที่ 1)",
+    "amount": 30,
+    "description": "บทที่ 10: เสียง (เน้นการวิเคราะห์และคำนวณ)",
+    "url": "./quiz/index.html?id=phy_m5_ch10-1",
+    "storageKey": "quizState-phy_m5_ch10-1",
+    "icon": "./assets/icons/audio-waves.png",
+    "altText": "ไอคอนสำหรับ phy_m5_ch10-1",
+    "category": "PhysicsM5",
+    "subCategory": "บทที่ 10: เสียง"
+  },
+  {
+    "id": "ess_basic_m6_ch5-1",
+    "title": "โครงสร้างโลก (ชุดที่ 1)",
+    "amount": 30,
+    "description": "บทที่ 5: โครงสร้างโลก",
+    "url": "./quiz/index.html?id=ess_basic_m6_ch5-1",
+    "storageKey": "quizState-ess_basic_m6_ch5-1",
+    "icon": "./assets/icons/earth.png",
+    "altText": "ไอคอนสำหรับ ess_basic_m6_ch5-1",
+    "category": "EarthSpaceScienceBasic",
+    "subCategory": "โครงสร้างโลก"
+  },
+  {
+    "id": "ess_basic_m6_ch4-1",
+    "title": "เทคโนโลยีอวกาศ (ชุดที่ 1)",
+    "amount": 30,
+    "description": "บทที่ 4: เทคโนโลยีอวกาศ",
+    "url": "./quiz/index.html?id=ess_basic_m6_ch4-1",
+    "storageKey": "quizState-ess_basic_m6_ch4-1",
+    "icon": "./assets/icons/space-exploration.png",
+    "altText": "ไอคอนสำหรับ ess_basic_m6_ch4-1",
+    "category": "EarthSpaceScienceBasic",
+    "subCategory": "เทคโนโลยีอวกาศ"
+  },
+  {
+    "id": "ess_adv_m4_ch1-1",
+    "title": "โครงสร้างโลก (ชุดที่ 1)",
+    "amount": 30,
+    "description": "บทที่ 1: โครงสร้างโลก (ชุดที่ 1)",
+    "url": "./quiz/index.html?id=ess_adv_m4_ch1-1",
+    "storageKey": "quizState-ess_adv_m4_ch1-1",
+    "icon": "./assets/icons/geology2.png",
+    "altText": "ไอคอนสำหรับ ess_adv_m4_ch1-1",
+    "category": "EarthSpaceScienceAdvance",
+    "subCategory": "โครงสร้างโลก"
+  },
+  {
+    "id": "ess_adv_m4_ch1-2",
+    "title": "โครงสร้างโลก (ชุดที่ 2)",
+    "amount": 30,
+    "description": "บทที่ 1: โครงสร้างโลก (ชุดที่ 2)",
+    "url": "./quiz/index.html?id=ess_adv_m4_ch1-2",
+    "storageKey": "quizState-ess_adv_m4_ch1-2",
+    "icon": "./assets/icons/geology2.png",
+    "altText": "ไอคอนสำหรับ ess_adv_m4_ch1-2",
+    "category": "EarthSpaceScienceAdvance",
+    "subCategory": "โครงสร้างโลก"
+  },
+  {
+    "id": "ess_adv_m6_ch18-1",
+    "title": "เทคโนโลยีอวกาศและการประยุกต์ใช้ (ชุดที่ 1)",
+    "amount": 30,
+    "description": "บทที่ 18: เทคโนโลยีอวกาศและการประยุกต์ใช้ (ชุดที่ 1)",
+    "url": "./quiz/index.html?id=ess_adv_m6_ch18-1",
+    "storageKey": "quizState-ess_adv_m6_ch18-1",
+    "icon": "./assets/icons/space-exploration.png",
+    "altText": "ไอคอนสำหรับ ess_adv_m6_ch18-1",
+    "category": "EarthSpaceScienceAdvance",
+    "subCategory": "เทคโนโลยีอวกาศและการประยุกต์ใช้"
+  },
+  {
+    "id": "ess_adv_m6_ch18-2",
+    "title": "เทคโนโลยีอวกาศและการประยุกต์ใช้ (ชุดที่ 2)",
+    "amount": 30,
+    "description": "บทที่ 18: เทคโนโลยีอวกาศและการประยุกต์ใช้ (ชุดที่ 2)",
+    "url": "./quiz/index.html?id=ess_adv_m6_ch18-2",
+    "storageKey": "quizState-ess_adv_m6_ch18-2",
+    "icon": "./assets/icons/space-exploration.png",
+    "altText": "ไอคอนสำหรับ ess_adv_m6_ch18-2",
+    "category": "EarthSpaceScienceAdvance",
+    "subCategory": "เทคโนโลยีอวกาศและการประยุกต์ใช้"
+  }
+];

@@ -1,6 +1,7 @@
 import { ModalHandler } from "./modal-handler.js";
-import { getQuizProgress, categoryDetails } from "./data-manager.js";
+import { getQuizProgress, categoryDetails } from "../scripts/data-manager.js";
 import { quizList } from "../data/quizzes-list.js";
+import { PHYSICS_SYLLABUS, EARTH_SCIENCE_BASIC_SYLLABUS, EARTH_SCIENCE_ADVANCE_SYLLABUS } from "../data/sub-category-data.js";
 
 /**
  * Toggles the state of an accordion section (expands or collapses it).
@@ -57,91 +58,216 @@ export const toggleAccordion = (toggleElement, forceState) => {
  */
 function groupQuizzesForCategory(quizzes, categoryKey) {
   const groups = [];
-  const mainCategoryTitle = categoryDetails[categoryKey]?.title.split('(')[0].trim();
+  let syllabus;
 
-  if (categoryKey === 'AstronomyPOSN') {
-    const grouped = {
-      camp1_junior: quizzes.filter(q => q.id.startsWith('juniorC')),
-      camp1_senior: quizzes.filter(q => q.id.startsWith('seniorC')),
-      regular_junior: quizzes.filter(q => q.id.startsWith('junior') && !q.id.startsWith('juniorC')),
-      regular_senior: quizzes.filter(q => q.id.startsWith('senior') && !q.id.startsWith('seniorC')),
-      general: quizzes.filter(q => !q.id.startsWith('junior') && !q.id.startsWith('senior')),
-    };
-
-    if (grouped.regular_junior.length > 0) groups.push({ title: `${mainCategoryTitle} ม.ต้น (Junior)`, quizzes: grouped.regular_junior, level: 1 });
-    if (grouped.regular_senior.length > 0) groups.push({ title: `${mainCategoryTitle} ม.ปลาย (Senior)`, quizzes: grouped.regular_senior, level: 1 });
-    if (grouped.general.length > 0) groups.push({ title: `${mainCategoryTitle} ทั่วไป (General)`, quizzes: grouped.general, level: 1 });
-
-    const camp1SubGroups = [];
-    if (grouped.camp1_junior.length > 0) camp1SubGroups.push({ title: "ดาราศาสตร์ ม.ต้น ค่าย 1", quizzes: grouped.camp1_junior, level: 2 });
-    if (grouped.camp1_senior.length > 0) camp1SubGroups.push({ title: "ดาราศาสตร์ ม.ปลาย ค่าย 1", quizzes: grouped.camp1_senior, level: 2 });
-
-    if (camp1SubGroups.length > 0) {
-      groups.push({ title: "ทบทวนค่าย 1", isNested: true, subGroups: camp1SubGroups, level: 1 });
-    }
-  } else if (categoryKey === 'ChallengePOSN') {
-    const subGroupedQuizzes = quizzes.reduce((acc, quiz) => {
-      let subKey = Object.keys(categoryDetails).find(key => quiz.id.startsWith(`adv_${key.toLowerCase()}`)) || 'GeneralKnowledge';
-      if (!acc[subKey]) acc[subKey] = [];
-      acc[subKey].push(quiz);
-      return acc;
-    }, {});
-
-    Object.keys(subGroupedQuizzes).sort((a, b) => (categoryDetails[a]?.order || 99) - (categoryDetails[b]?.order || 99)).forEach(subKey => {
-      groups.push({ title: categoryDetails[subKey]?.title || subKey, quizzes: subGroupedQuizzes[subKey], level: 1 });
-    });
-  } else if (categoryKey === 'AstronomyReview') {
-    const subGroupedQuizzes = quizzes.reduce((acc, quiz) => {
-      let subKey = quiz.id.startsWith('Astro') ? 'Astronomy' : (quiz.id.startsWith('ESr') ? 'EarthScience' : 'GeneralKnowledge');
-      if (!acc[subKey]) acc[subKey] = [];
-      acc[subKey].push(quiz);
-      return acc;
-    }, {});
-
-    const reviewOrder = { Astronomy: 1, EarthScience: 2, GeneralKnowledge: 99 };
-    Object.keys(subGroupedQuizzes).sort((a, b) => (reviewOrder[a] || 99) - (reviewOrder[b] || 99)).forEach(subKey => {
-      const title = { Astronomy: "ทบทวน ดาราศาสตร์", EarthScience: "ทบทวน วิทยาศาสตร์โลกและอวกาศ" }[subKey] || categoryDetails[subKey]?.title || subKey;
-      groups.push({ title, quizzes: subGroupedQuizzes[subKey], level: 1 });
-    });
-  } else if (categoryKey === 'Physics') {
-    // Group Physics quizzes by inferredMainCategory (unit titles)
-    const groupedByUnit = quizzes.reduce((acc, quiz) => {
-      const unitTitle = quiz.inferredMainCategory || 'Uncategorized';
-      if (!acc[unitTitle]) acc[unitTitle] = [];
-      acc[unitTitle].push(quiz);
-      return acc;
-    }, {});
-
-    // Sort units by their appearance in the syllabus (or alphabetically if not specified)
-    Object.keys(groupedByUnit).sort().forEach(unitTitle => {
-      groups.push({ title: unitTitle, quizzes: groupedByUnit[unitTitle], level: 1 });
-    });
+  // Special handling for Physics categories
+  if (categoryKey.startsWith('PhysicsM')) {
+    const gradeKey = categoryKey.replace('PhysicsM', 'm'); // 'PhysicsM4' -> 'm4'
+    syllabus = PHYSICS_SYLLABUS[gradeKey];
   } else if (categoryKey === 'EarthSpaceScienceBasic') {
-    // Group EarthSpaceScienceBasic quizzes by inferredMainCategory (unit titles)
-    const groupedByUnit = quizzes.reduce((acc, quiz) => {
-      const unitTitle = quiz.inferredMainCategory || 'Uncategorized';
-      if (!acc[unitTitle]) acc[unitTitle] = [];
-      acc[unitTitle].push(quiz);
-      return acc;
-    }, {});
-
-    Object.keys(groupedByUnit).sort().forEach(unitTitle => {
-      groups.push({ title: unitTitle, quizzes: groupedByUnit[unitTitle], level: 1 });
-    });
+    syllabus = EARTH_SCIENCE_BASIC_SYLLABUS;
   } else if (categoryKey === 'EarthSpaceScienceAdvance') {
-    // Group EarthSpaceScienceAdvance quizzes by inferredMainCategory (unit titles)
-    const groupedByUnit = quizzes.reduce((acc, quiz) => {
-      const unitTitle = quiz.inferredMainCategory || 'Uncategorized';
-      if (!acc[unitTitle]) acc[unitTitle] = [];
-      acc[unitTitle].push(quiz);
-      return acc;
-    }, {});
-
-    Object.keys(groupedByUnit).sort().forEach(unitTitle => {
-      groups.push({ title: unitTitle, quizzes: groupedByUnit[unitTitle], level: 1 });
-    });
+    syllabus = EARTH_SCIENCE_ADVANCE_SYLLABUS;
   }
+
+  // Common logic for all syllabus-based categories
+  if (syllabus && Array.isArray(syllabus.chapters)) {
+    // Iterate over each chapter object in the syllabus to maintain the correct order
+    syllabus.chapters.forEach((chapter, index) => {
+      const chapterTitle = chapter.title;
+
+      // Filter quizzes where the subCategory matches the chapter title
+      const chapterQuizzes = quizzes.filter(quiz => quiz.subCategory === chapterTitle);
+
+      // Only add the chapter group if there are quizzes available for it
+      if (chapterQuizzes.length > 0) {
+        // Add "บทที่" prefix for EarthSpaceScienceBasic
+        let displayTitle = chapterTitle;
+        if (categoryKey === 'EarthSpaceScienceBasic') {
+          displayTitle = `บทที่ ${index + 1}: ${chapterTitle}`;
+        } else if (categoryKey === 'EarthSpaceScienceAdvance') {
+          // Try to extract chapter number from the first quiz's description
+          const firstQuiz = chapterQuizzes[0];
+          if (firstQuiz && firstQuiz.description) {
+            const match = firstQuiz.description.match(/บทที่\s*(\d+)/);
+            if (match && match[1]) {
+              displayTitle = `บทที่ ${match[1]}: ${chapterTitle}`;
+            }
+          }
+        }
+        groups.push({ title: displayTitle, quizzes: chapterQuizzes, level: 1 });
+      }
+    });
+    return groups;
+  }
+
+  // --- Default grouping logic for other categories ---
+
+  // Group quizzes by their specific subCategory (chapter/unit title)
+  const groupedBySpecificTopic = quizzes.reduce((acc, quiz) => {
+    const specificTopic = quiz.subCategory || 'Uncategorized'; // subCategory is now a string
+    if (!acc[specificTopic]) acc[specificTopic] = [];
+    acc[specificTopic].push(quiz);
+    return acc;
+  }, {});
+
+  // Sort topics alphabetically and create groups
+  Object.keys(groupedBySpecificTopic).sort().forEach(specificTopic => {
+    groups.push({ title: specificTopic, quizzes: groupedBySpecificTopic[specificTopic], level: 1 });
+  });
+
   return groups;
+}
+
+/**
+ * Populates the main navigation menu with a structured list of quizzes,
+ * grouped by main category and then by chapter.
+ * This function should be called by a script that runs on every page (e.g., app-loader.js).
+ */
+export function populateMenuQuizList() {
+    const menuQuizList = document.getElementById('menu-quiz-list');
+    if (!menuQuizList) return;
+
+    try {
+        // 1. Group quizzes by their main category
+        const groupedByCategory = quizList.reduce((acc, quiz) => {
+            const category = quiz.category || "Uncategorized";
+            if (!acc[category]) {
+                acc[category] = [];
+            }
+            acc[category].push(quiz);
+            return acc;
+        }, {});
+
+        // 2. Sort main categories based on the 'order' property from categoryDetails
+        const sortedCategories = Object.keys(groupedByCategory).sort((a, b) => {
+            const orderA = categoryDetails[a]?.order || 99;
+            const orderB = categoryDetails[b]?.order || 99;
+            return orderA - orderB;
+        });
+
+        const fragment = document.createDocumentFragment();
+
+        // 3. Create HTML for each category and its sub-grouped quizzes
+        sortedCategories.forEach(categoryKey => {
+            const category = categoryDetails[categoryKey];
+            if (!category) return;
+
+            const quizzesInCategory = groupedByCategory[categoryKey];
+
+            // Group quizzes within this category by their subCategory (chapter title)
+            const groupedByChapter = quizzesInCategory.reduce((acc, quiz) => {
+                const chapter = quiz.subCategory || 'บทอื่นๆ';
+                if (!acc[chapter]) {
+                    acc[chapter] = [];
+                }
+                acc[chapter].push(quiz);
+                return acc;
+            }, {});
+
+            const details = document.createElement('details');
+            details.className = 'group menu-category-item';
+
+            const summary = document.createElement('summary');
+            summary.className = 'flex items-center justify-between p-2 rounded-md cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors';
+            summary.innerHTML = `
+                <div class="flex items-center gap-2">
+                    <img src="${category.icon}" alt="${category.title}" class="h-5 w-5">
+                    <span class="font-semibold text-sm text-gray-800 dark:text-gray-200">${category.title}</span>
+                </div>
+                <svg class="h-5 w-5 text-gray-500 dark:text-gray-400 transition-transform duration-200 group-open:rotate-90" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>
+            `;
+            details.appendChild(summary);
+
+            const chapterContainer = document.createElement('div');
+            chapterContainer.className = 'pl-4 pt-1 pb-2 space-y-1';
+
+            // --- NEW LOGIC: Use syllabus to group and order chapters ---
+            let syllabus;
+            if (categoryKey.startsWith('PhysicsM')) {
+                const gradeKey = categoryKey.replace('PhysicsM', 'm');
+                syllabus = PHYSICS_SYLLABUS[gradeKey];
+            } else if (categoryKey === 'EarthSpaceScienceBasic') {
+                syllabus = EARTH_SCIENCE_BASIC_SYLLABUS;
+            } else if (categoryKey === 'EarthSpaceScienceAdvance') {
+                syllabus = EARTH_SCIENCE_ADVANCE_SYLLABUS;
+            }
+
+            if (syllabus && Array.isArray(syllabus.chapters)) {
+                // Iterate through syllabus chapters to maintain the correct order
+                syllabus.chapters.forEach((chapter, index) => {
+                    const chapterTitleFromSyllabus = chapter.title;
+                    const chapterQuizzes = quizzesInCategory.filter(quiz => quiz.subCategory === chapterTitleFromSyllabus);
+
+                    if (chapterQuizzes.length > 0) {
+                        let displayTitle = chapterTitleFromSyllabus;
+                        // For Earth Science, the subCategory in quizzes-list is just the title, so we add "บทที่" here.
+                        if (categoryKey === 'EarthSpaceScienceBasic') {
+                            displayTitle = `บทที่ ${index + 1}: ${chapterTitleFromSyllabus}`;
+                        } else if (categoryKey === 'EarthSpaceScienceAdvance') {
+                            const firstQuiz = chapterQuizzes[0];
+                            if (firstQuiz && firstQuiz.description) {
+                                const match = firstQuiz.description.match(/บทที่\s*(\d+)/);
+                                if (match && match[1]) {
+                                    displayTitle = `บทที่ ${match[1]}: ${chapterTitleFromSyllabus}`;
+                                }
+                            }
+                        }
+                        // For Physics, the subCategory already contains "บทที่", so no change is needed.
+
+                        const chapterHeader = document.createElement('p');
+                        chapterHeader.className = 'px-2 pt-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider';
+                        chapterHeader.textContent = displayTitle;
+                        chapterContainer.appendChild(chapterHeader);
+
+                        const quizLinksContainer = document.createElement('div');
+                        quizLinksContainer.className = 'space-y-px pl-2';
+                        chapterQuizzes.forEach(quiz => {
+                            const link = document.createElement('a');
+                            link.href = quiz.url;
+                            link.className = 'block text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700/50 p-2 rounded-md transition-colors';
+                            link.textContent = quiz.title;
+                            quizLinksContainer.appendChild(link);
+                        });
+                        chapterContainer.appendChild(quizLinksContainer);
+                    }
+                });
+            } else {
+                // Fallback for categories without a defined syllabus (e.g., 'Uncategorized')
+                // This part uses the old logic of grouping by the subCategory string directly.
+                Object.keys(groupedByChapter).sort((a, b) => a.localeCompare(b, 'th', { numeric: true })).forEach(chapterTitle => {
+                    const chapterHeader = document.createElement('p');
+                    chapterHeader.className = 'px-2 pt-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider';
+                    chapterHeader.textContent = chapterTitle;
+                    chapterContainer.appendChild(chapterHeader);
+
+                    const quizLinksContainer = document.createElement('div');
+                    quizLinksContainer.className = 'space-y-px pl-2';
+                    groupedByChapter[chapterTitle].forEach(quiz => {
+                        const link = document.createElement('a');
+                        link.href = quiz.url;
+                        link.className = 'block text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700/50 p-2 rounded-md transition-colors';
+                        link.textContent = quiz.title;
+                        quizLinksContainer.appendChild(link);
+                    });
+                    chapterContainer.appendChild(quizLinksContainer);
+                });
+            }
+            // --- END NEW LOGIC ---
+
+            details.appendChild(chapterContainer);
+            fragment.appendChild(details);
+        });
+
+        menuQuizList.innerHTML = '';
+        menuQuizList.appendChild(fragment);
+
+    } catch (error) {
+        console.error("Failed to populate quiz list in menu:", error);
+        if (menuQuizList) {
+            menuQuizList.innerHTML = '<p class="p-2 text-sm text-red-500">ไม่สามารถโหลดรายการแบบทดสอบได้</p>';
+        }
+    }
 }
 
 // A function to get all the toggles, so we don't expose the variable directly
@@ -414,7 +540,7 @@ export function initializePage() {
     contentDiv.id = `content-${categoryKey}`;
     contentDiv.setAttribute("role", "region");
 
-    const hasSubCategories = ['AstronomyPOSN', 'ChallengePOSN', 'AstronomyReview', 'Physics', 'EarthSpaceScienceBasic', 'EarthSpaceScienceAdvance'].includes(categoryKey);
+    const hasSubCategories = ['AstronomyPOSN', 'ChallengePOSN', 'AstronomyReview', 'PhysicsM4', 'PhysicsM5', 'PhysicsM6', 'EarthSpaceScienceBasic', 'EarthSpaceScienceAdvance'].includes(categoryKey);
 
     if (hasSubCategories) {
       const subCategoryContainer = document.createElement('div');
@@ -590,8 +716,7 @@ export function initializePage() {
     });
 
     // --- NEW: Add Sub-category buttons if applicable, AFTER main category buttons ---
-    const activeCategoryKey = activeSection ? activeSection.id.replace('category-', '') : null;
-    if (['AstronomyPOSN', 'ChallengePOSN', 'AstronomyReview', 'Physics', 'EarthSpaceScienceBasic', 'EarthSpaceScienceAdvance'].includes(activeCategoryKey) && activeSection) {
+    const activeCategoryKey = activeSection ? activeSection.id.replace('category-', '') : null;    if (['AstronomyPOSN', 'ChallengePOSN', 'AstronomyReview', 'PhysicsM4', 'PhysicsM5', 'PhysicsM6', 'EarthSpaceScienceBasic', 'EarthSpaceScienceAdvance'].includes(activeCategoryKey) && activeSection) {
       const subToggles = activeSection.querySelectorAll('.sub-section-toggle[data-level="1"]');
       if (subToggles.length > 0) {
         const subSeparator = document.createElement("hr");
@@ -619,6 +744,10 @@ export function initializePage() {
             shortTitle = 'สมุทรฯ';
           } else if (subTitle.includes('ดาราศาสตร์')) { // For the sub-discipline
             shortTitle = 'ดาราฯ';
+          } else if (subTitle.startsWith('บทที่')) {
+            // For Physics chapters, e.g., "บทที่ 1: ..." -> "บทที่ 1"
+            const match = subTitle.match(/บทที่\s*\d+/);
+            shortTitle = match ? match[0] : subTitle.substring(0, 6);
           } else {
             shortTitle = 'ทั่วไป';
           }
@@ -727,7 +856,7 @@ export function initializePage() {
   // Create and append the floating navigation container
   const floatingNavContainer = document.createElement('div');
   floatingNavContainer.id = 'floating-nav-container';
-  floatingNavContainer.className = 'fixed bottom-4 left-1/2 p-2 bg-white/60 dark:bg-gray-900/60 backdrop-blur-sm shadow-xl rounded-t-xl transform -translate-x-1/2 opacity-0 pointer-events-none translate-y-full transition-all duration-300 z-40 border border-gray-200 dark:border-gray-700';
+  floatingNavContainer.className = 'fixed bottom-4 left-1/2 p-2 bg-white/60 dark:bg-gray-900/60 backdrop-blur-sm shadow-xl rounded-t-xl transform -translate-x-1/2 opacity-0 pointer-events-none translate-y-full transition-all duration-300 z-40 border border-gray-200 dark:border-gray-700 max-w-[95vw] overflow-x-auto overflow-y-hidden modern-scrollbar';
   floatingNavContainer.innerHTML = `<div id="floating-nav-buttons" class="flex flex-row items-center gap-2"></div>`;
   document.body.appendChild(floatingNavContainer);
 

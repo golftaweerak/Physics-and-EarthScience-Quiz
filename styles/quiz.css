@@ -1,0 +1,50 @@
+/* Custom styles for the quiz page */
+
+/* 
+ * Apply Thai-style word wrapping to key text elements on the quiz page.
+ * - `word-break: keep-all;` prevents words from breaking in the middle.
+ * - `overflow-wrap: break-word;` allows long, unbreakable strings to wrap if they would overflow.
+*/
+#question, .option-btn, #feedback, #review-container {
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    /* text-align: justify; */
+    line-height: 1.75; /* เพิ่มระยะห่างระหว่างบรรทัดเพื่อให้อ่านง่ายขึ้น */
+}
+
+/* 
+ * Apply the same Thai justification to the preview pages (preview.html, preview-data.html)
+ * which use the .question-card and .prose classes for content.
+*/
+.question-card,
+.prose {
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    /* text-align: justify; */
+    line-height: 1.75; /* เพิ่มระยะห่างระหว่างบรรทัดเพื่อให้อ่านง่ายขึ้น */
+}
+
+.question-card h2,
+.question-card .font-semibold {
+    text-align: left; /* Reset alignment for headers and choice numerals */
+}
+
+/*
+ * Ensure images within question content are responsive.
+ * This prevents large images from overflowing their container on smaller screens (mobile).
+*/
+/* Target images on both the quiz page (#question) and the preview page (#preview-container) */
+#question img,
+#preview-container img,
+#review-container img { /* Add review container for responsive images on the review screen */
+    display: block; /* Ensure the image is a block element for proper sizing and margin */
+    /* Use !important to override any inline Tailwind classes (e.g., max-w-md) from the data files */
+    max-width: 100% !important;
+    width: auto !important;
+    height: auto !important;
+    margin-left: auto; /* Center the image within its container */
+    margin-right: auto; /* Center the image within its container */
+    margin-top: 0.75rem; /* my-3 */
+    margin-bottom: 0.75rem; /* my-3 */
+    border-radius: 0.5rem; /* rounded-lg */
+}
