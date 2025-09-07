@@ -45,45 +45,70 @@
             </div>
         </header>
 
-        <!-- Main content area that will be shown after loading -->
-        <main id="stats-content"
-            class="max-w-4xl mx-auto space-y-8 pb-8 sm:pb-12 opacity-0 transition-opacity duration-500">
-            <!-- Summary Cards Section -->
-            <section id="summary-cards-container" class="space-y-4">
-                <h2 class="text-2xl font-bold font-kanit text-gray-800 dark:text-gray-100">ภาพรวม</h2>
-                <div id="summary-cards-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                    <!-- Summary cards will be injected here by stats.js -->
-                </div>
-            </section>
+        <!-- Tab Navigation -->
+        <div class="max-w-4xl mx-auto mb-6 border-b border-gray-200 dark:border-gray-700">
+            <nav class="-mb-px flex space-x-4 sm:space-x-8" aria-label="Tabs">
+                <button id="tab-overview" role="tab" aria-controls="panel-overview" aria-selected="true"
+                    class="tab-btn border-blue-500 text-blue-600 dark:border-blue-400 dark:text-blue-400 whitespace-nowrap py-3 px-1 border-b-2 font-bold text-sm sm:text-base transition-colors duration-200">
+                    ภาพรวม
+                </button>
+                <button id="tab-topic-analysis" role="tab" aria-controls="panel-topic-analysis" aria-selected="false"
+                    class="tab-btn border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:border-gray-500 whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm sm:text-base transition-colors duration-200">
+                    วิเคราะห์รายหัวข้อ
+                </button>
+                <button id="tab-history" role="tab" aria-controls="panel-history" aria-selected="false"
+                    class="tab-btn border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:border-gray-500 whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm sm:text-base transition-colors duration-200">
+                    ประวัติการทำ
+                </button>
+            </nav>
+        </div>
 
-            <!-- Main Chart and Details Section -->
-            <section
-                class="bg-white dark:bg-gray-800/50 p-4 sm:p-6 rounded-xl shadow-md border border-gray-200 dark:border-gray-700">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                    <!-- Overall Donut Chart -->
-                    <div class="text-center">
-                        <h2 class="text-xl font-bold font-kanit mb-4">ภาพรวมทั้งหมด</h2>
-                        <div class="relative h-60 w-60 sm:h-64 sm:w-64 mx-auto">
-                            <canvas id="overall-chart"></canvas>
+        <!-- Tab Panels -->
+        <div id="stats-content" class="max-w-4xl mx-auto pb-8 sm:pb-12 opacity-0 transition-opacity duration-500">
+            <!-- Overview Panel -->
+            <div id="panel-overview" role="tabpanel" aria-labelledby="tab-overview" class="space-y-8">
+                <section id="summary-cards-container" class="space-y-4">
+                    <div id="summary-cards-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                        <!-- Summary cards will be injected here by stats.js -->
+                    </div>
+                </section>
+                <section
+                    class="bg-white dark:bg-gray-800/50 p-4 sm:p-6 rounded-xl shadow-md border border-gray-200 dark:border-gray-700">
+                    <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
+                        <div class="lg:col-span-2 text-center">
+                            <h2 class="text-xl font-bold font-kanit mb-4">ภาพรวมคำตอบทั้งหมด</h2>
+                            <div class="relative h-60 w-60 sm:h-64 sm:w-64 mx-auto">
+                                <canvas id="overall-chart"></canvas>
+                            </div>
+                        </div>
+                        <div class="lg:col-span-3">
+                            <h2 class="text-xl font-bold font-kanit mb-4 text-center lg:text-left">คะแนนเฉลี่ยรายวิชา</h2>
+                            <div class="relative h-64">
+                                <canvas id="subject-performance-chart"></canvas>
+                            </div>
                         </div>
                     </div>
-                </div>
-                </div>
-            <!-- Performance Accordions by Subject -->
-            <div id="subject-performance-container" class="space-y-4">
-                <!-- Performance accordions will be injected here by stats.js -->
+                </section>
             </div>
-            </section>
 
-            <!-- Detailed List Section -->
-            <section>
-                <h2 class="text-2xl font-bold font-kanit text-gray-800 dark:text-gray-100 mb-4">ประวัติการทำแบบทดสอบ
-                </h2>
-                <div id="detailed-stats-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Detailed list of quiz cards will be injected here -->
+            <!-- Topic Analysis Panel -->
+            <div id="panel-topic-analysis" role="tabpanel" aria-labelledby="tab-topic-analysis" class="hidden">
+                <div id="subject-performance-container" class="space-y-8">
+                    <!-- Performance accordions will be injected here by stats.js -->
                 </div>
-            </section>
-        </main>
+            </div>
+
+            <!-- History Panel -->
+            <div id="panel-history" role="tabpanel" aria-labelledby="tab-history" class="hidden">
+                <section>
+                    <h2 class="text-2xl font-bold font-kanit text-gray-800 dark:text-gray-100 mb-4">ประวัติการทำแบบทดสอบ
+                    </h2>
+                    <div id="detailed-stats-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Detailed list of quiz cards will be injected here -->
+                    </div>
+                </section>
+            </div>
+        </div>
 
         <!-- Elements for loading and empty states -->
         <div id="stats-container" class="max-w-4xl mx-auto">

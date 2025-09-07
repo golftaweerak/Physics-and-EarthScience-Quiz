@@ -471,15 +471,70 @@ export function initializeCustomQuizHandler() {
     }
 
     function updateTotalCount() {
+        const totalCountDisplay = document.getElementById("total-question-count");
         let total = 0;
         document.querySelectorAll('#custom-quiz-category-selection input[type="number"]').forEach(input => {
             total += parseInt(input.value, 10) || 0;
         });
-        if (totalQuestionCountDisplay) totalQuestionCountDisplay.textContent = total;
+        if (totalCountDisplay) totalCountDisplay.textContent = total;
+    }
+
+    /**
+     * Creates the HTML for the right-hand summary and actions panel in the custom quiz modal.
+     * @returns {string} The HTML string for the summary panel.
+     */
+    function createSummaryPanelHTML() {
+        return `
+            <div class="lg:sticky lg:top-24 space-y-6">
+                <!-- Summary Card -->
+                <div class="p-6 bg-gray-50 dark:bg-gray-900/50 rounded-xl border border-gray-200 dark:border-gray-700 text-center shadow-sm">
+                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">จำนวนข้อที่เลือก</p>
+                    <p id="total-question-count" class="text-5xl font-bold text-blue-600 dark:text-blue-400 transition-all duration-300">0</p>
+                </div>
+    
+                <!-- Timer Options -->
+                <fieldset class="p-4 bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm">
+                    <legend class="px-2 font-bold text-lg font-kanit text-gray-800 dark:text-gray-200">ตั้งค่าเวลา</legend>
+                    <div class="mt-4 space-y-4">
+                        <div class="flex items-center">
+                            <input id="timer-none" name="custom-timer-mode" type="radio" value="none" checked class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500">
+                            <label for="timer-none" class="ml-3 block text-sm font-medium text-gray-700 dark:text-gray-300">ไม่จับเวลา</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="timer-overall" name="custom-timer-mode" type="radio" value="overall" class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500">
+                            <label for="timer-overall" class="ml-3 block text-sm font-medium text-gray-700 dark:text-gray-300">จับเวลารวมทั้งชุด</label>
+                        </div>
+                        <div id="overall-time-input-container" class="hidden pl-7">
+                            <label for="custom-timer-overall-minutes" class="text-sm text-gray-500 dark:text-gray-400">เวลา (นาที):</label>
+                            <input type="number" id="custom-timer-overall-minutes" value="20" min="1" class="mt-1 w-24 p-1 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-center text-sm">
+                        </div>
+                        <div class="flex items-center">
+                            <input id="timer-per-question" name="custom-timer-mode" type="radio" value="perQuestion" class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500">
+                            <label for="timer-per-question" class="ml-3 block text-sm font-medium text-gray-700 dark:text-gray-300">จับเวลาเป็นรายข้อ</label>
+                        </div>
+                        <div id="per-question-time-input-container" class="hidden pl-7">
+                            <label for="custom-timer-per-question-seconds" class="text-sm text-gray-500 dark:text-gray-400">เวลา (วินาที):</label>
+                            <input type="number" id="custom-timer-per-question-seconds" value="90" min="10" step="5" class="mt-1 w-24 p-1 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-center text-sm">
+                        </div>
+                    </div>
+                </fieldset>
+    
+                <!-- Action Buttons -->
+                <div class="space-y-3 pt-4 border-t border-gray-200 dark:border-gray-700">
+                    <button id="custom-quiz-start-btn" class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-base font-bold transition shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z" clip-rule="evenodd" /></svg>
+                        เริ่มทำแบบทดสอบ
+                    </button>
+                    <button id="custom-quiz-clear-btn" class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition text-sm font-bold">
+                        ล้างค่าทั้งหมด
+                    </button>
+                </div>
+            </div>
+        `;
     }
 
     function setupCustomQuizInputListeners() {
-        const container = document.getElementById('custom-quiz-category-selection');
+        const container = customQuizModal.modal; // Listen on the whole modal for delegated events
         if (!container) return;
 
         // Initialize all sliders with the correct track fill on load
@@ -938,20 +993,6 @@ export function initializeCustomQuizHandler() {
                 }
                 // If not finished, the default 'a' tag behavior will handle navigation.
             }
-        });
-    }
-
-    // Listener for the "Clear All" button
-    if (customQuizClearBtn) {
-        customQuizClearBtn.addEventListener('click', () => {
-            const inputs = document.querySelectorAll('#custom-quiz-category-selection input[type="number"]');
-            const sliders = document.querySelectorAll('#custom-quiz-category-selection input[type="range"]');
-            inputs.forEach(input => { input.value = 0; });
-            sliders.forEach(slider => {
-                slider.value = 0;
-                updateSliderTrack(slider);
-            });
-            updateTotalCount();
         });
     }
 

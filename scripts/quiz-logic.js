@@ -90,6 +90,7 @@ export function init(quizData, storageKey, quizTitle, customTime) {
         quizNav: document.getElementById("quiz-nav"),
         // Buttons
         startBtn: document.getElementById("start-btn"),
+        skipBtn: document.getElementById("skip-btn"),
         nextBtn: document.getElementById("next-btn"),
         prevBtn: document.getElementById("prev-btn"),
         restartBtn: document.getElementById("restart-btn"),
@@ -116,6 +117,10 @@ export function init(quizData, storageKey, quizTitle, customTime) {
                 // Cache the container for the main action buttons (Next/Prev)
         actionContainer: document.getElementById("next-btn")?.parentElement,
         quizTitleDisplay: document.getElementById("quiz-title-display"),
+        // New hint elements
+        hintBtn: document.getElementById("hint-btn"),
+        hintContainer: document.getElementById("hint-container"),
+        hintSection: document.getElementById("hint-section"),
     };
     // --- 2. State Initialization ---
     state = {
@@ -386,6 +391,11 @@ function setFloatingNav(active) {
       showFeedback(previousAnswer.isCorrect, previousAnswer.explanation, previousAnswer.correctAnswer);
       updateNextButtonAppearance('next'); // Ensure button is in 'next' state
       elements.nextBtn.classList.remove("hidden");
+    } else {
+      // Only show the skip button for new, unanswered questions
+      if (elements.skipBtn) {
+        elements.skipBtn.classList.remove("hidden");
+      }
     }
 
     if (state.currentQuestionIndex > 0) {
@@ -403,9 +413,48 @@ function setFloatingNav(active) {
   }
 
   /**
+   * Skips the current question by moving it to the end of the quiz array.
+   * The user will encounter the question again later.
+   */
+  function skipQuestion() {
+    // Prevent skipping if it's the last unanswered question or if it's already answered.
+    const unansweredQuestions = state.shuffledQuestions.length - state.userAnswers.filter(a => a !== null).length;
+    if (unansweredQuestions <= 1) {
+      return;
+    }
+
+    const questionToSkip = state.shuffledQuestions[state.currentQuestionIndex];
+    const answerSlotToSkip = state.userAnswers[state.currentQuestionIndex];
+
+    // Remove from current position
+    state.shuffledQuestions.splice(state.currentQuestionIndex, 1);
+    state.userAnswers.splice(state.currentQuestionIndex, 1);
+
+    // Add to the end
+    state.shuffledQuestions.push(questionToSkip);
+    state.userAnswers.push(answerSlotToSkip); // This should be null
+
+    // Re-render the new question at the same index
+    showQuestion();
+    saveQuizState(); // Save the new order
+  }
+  /**
+   * Displays the hint for the current question.
+   */
+  function showHint() {
+    const currentQuestion = state.shuffledQuestions[state.currentQuestionIndex];
+    if (!currentQuestion || !currentQuestion.hint || !elements.hintContainer || !elements.hintBtn) return;
+
+    elements.hintContainer.innerHTML = currentQuestion.hint;
+    renderMath(elements.hintContainer);
+    elements.hintContainer.classList.remove('hidden');
+    elements.hintBtn.classList.add('hidden'); // Hide the button after it's clicked
+  }
+  /**
    * Evaluates the answer for a multiple-select question.
    */
   function evaluateMultipleAnswer() {
+    if (elements.skipBtn) elements.skipBtn.classList.add("hidden");
     if (state.timerMode === "perQuestion") {
       stopTimer();
     }
@@ -468,6 +517,7 @@ function setFloatingNav(active) {
   }
   function resetState() {
     elements.nextBtn.classList.add("hidden");
+    elements.skipBtn.classList.add("hidden");
     elements.feedback.classList.add("hidden");
     elements.feedbackContent.innerHTML = "";
     elements.feedback.className = "hidden mt-6 p-4 rounded-lg";
@@ -475,9 +525,14 @@ function setFloatingNav(active) {
     while (elements.options.firstChild) {
       elements.options.removeChild(elements.options.firstChild);
     }
+    // New: Hide hint section on reset
+    if (elements.hintSection) elements.hintSection.classList.add("hidden");
+    if (elements.hintContainer) elements.hintContainer.classList.add("hidden");
+    if (elements.hintBtn) elements.hintBtn.classList.remove("hidden");
   }
 
   function selectAnswer(e) {
+    if (elements.skipBtn) elements.skipBtn.classList.add("hidden");
     // Only stop the timer if it's a per-question timer.
     // The overall timer should keep running.
     if (state.timerMode === "perQuestion") {
@@ -843,6 +898,61 @@ function setFloatingNav(active) {
   }
 
   /**
+   * Renders a horizontal bar chart showing the score for each main category in the results.
+   * @param {object} categoryStats - The stats object grouped by category.
+   */
+  function renderResultCategoryChart(categoryStats) {
+      const chartCanvas = document.getElementById('result-category-chart');
+      if (!chartCanvas) return;
+      const ctx = chartCanvas.getContext('2d');
+
+      const sortedCategories = Object.entries(categoryStats).sort((a, b) => a[0].localeCompare(b[0], 'th'));
+
+      const labels = sortedCategories.map(([name, _]) => name);
+      const scores = sortedCategories.map(([_, data]) => data.total > 0 ? (data.correct / data.total) * 100 : 0);
+
+      new Chart(ctx, {
+          type: 'bar',
+          data: {
+              labels: labels,
+              datasets: [{
+                  label: 'คะแนน (%)',
+                  data: scores,
+                  backgroundColor: scores.map(score => score >= 75 ? 'rgba(34, 197, 94, 0.7)' : score >= 50 ? 'rgba(245, 158, 11, 0.7)' : 'rgba(239, 68, 68, 0.7)'),
+                  borderColor: scores.map(score => score >= 75 ? '#16a34a' : score >= 50 ? '#d97706' : '#dc2626'),
+                  borderWidth: 1,
+                  borderRadius: 4,
+              }]
+          },
+          options: {
+              indexAxis: 'y',
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                  x: {
+                      beginAtZero: true,
+                      max: 100,
+                      ticks: {
+                          color: document.documentElement.classList.contains('dark') ? '#d1d5db' : '#374151',
+                          callback: value => value + '%'
+                      }
+                  },
+                  y: {
+                      ticks: {
+                          color: document.documentElement.classList.contains('dark') ? '#d1d5db' : '#374151',
+                          font: { family: "'Kanit', sans-serif" }
+                      }
+                  }
+              },
+              plugins: {
+                  legend: { display: false },
+                  tooltip: { callbacks: { label: context => `คะแนน: ${context.raw.toFixed(1)}% (${categoryStats[context.label].correct}/${categoryStats[context.label].total} ข้อ)` } }
+              }
+          }
+      });
+  }
+
+  /**
    * Builds the modern, responsive layout for the result screen.
    * @param {object} resultInfo The object containing the title, message, and icon for the result.
    * @param {object} stats An object with all calculated statistics (scores, percentage, time).
@@ -850,9 +960,8 @@ function setFloatingNav(active) {
   function buildResultsLayout(resultInfo, stats) {
     const layoutContainer = document.createElement("div");
     layoutContainer.id = "modern-results-layout";
-    // A compact, centered layout that adapts for different screen sizes.
     layoutContainer.className = 
-      "w-full max-w-2xl mx-auto flex flex-col items-center gap-8 mt-8 mb-6 px-4";
+      "w-full max-w-4xl mx-auto flex flex-col items-center gap-8 mt-8 mb-6 px-4";
 
     // --- 1. Message Area (Icon, Title, Message) ---
     const messageContainer = document.createElement("div");
@@ -866,14 +975,13 @@ function setFloatingNav(active) {
     layoutContainer.appendChild(messageContainer);
 
     // --- 2. Data Container (for Circle + Stats) ---
-    // This container will be a flex row on medium screens and up, and a column on smaller screens.
     const dataContainer = document.createElement("div");
     dataContainer.className =
-      "w-full flex flex-col md:flex-row items-center justify-center gap-6 md:gap-8";
+      "w-full grid grid-cols-1 md:grid-cols-2 items-center gap-8 p-6 bg-white dark:bg-gray-800/50 rounded-xl shadow-md border border-gray-200 dark:border-gray-700";
 
     // --- 2a. Progress Circle ---
     const progressContainer = document.createElement("div");
-    progressContainer.className = "relative w-40 h-40 flex-shrink-0";
+    progressContainer.className = "relative w-40 h-40 mx-auto flex-shrink-0";
     progressContainer.innerHTML = `
         <svg class="w-full h-full" viewBox="0 0 36 36">
             <path class="text-gray-200 dark:text-gray-700"
@@ -885,8 +993,9 @@ function setFloatingNav(active) {
                 stroke-dasharray="0, 100"
                 d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
         </svg>
-        <div class="absolute inset-0 flex items-center justify-center">
-            <span class="text-3xl font-bold text-gray-700 dark:text-gray-200">${stats.percentage}%</span>
+        <div class="absolute inset-0 flex flex-col items-center justify-center">
+            <span class="text-4xl font-bold text-gray-700 dark:text-gray-200">${stats.percentage}%</span>
+            <span class="text-sm text-gray-500 dark:text-gray-400">คะแนนรวม</span>
         </div>
     `;
     dataContainer.appendChild(progressContainer);
@@ -902,8 +1011,7 @@ function setFloatingNav(active) {
 
     // --- 2b. Stats List ---
     const statsContainer = document.createElement("div");
-    // Use a grid layout to ensure two columns even on small screens.
-    statsContainer.className = "grid grid-cols-2 gap-4 w-full";
+    statsContainer.className = "grid grid-cols-2 gap-x-4 gap-y-5 w-full";
 
     // Define icons for stats
     const icons = {
@@ -918,9 +1026,6 @@ function setFloatingNav(active) {
       createStatItem(stats.correctAnswers, "คำตอบถูก", icons.correct, "green")
     );
     statsContainer.appendChild(
-      createStatItem(stats.totalScore, "คะแนนเต็ม", icons.total, "gray")
-    );    
-    statsContainer.appendChild(
       createStatItem(
         stats.incorrectAnswersCount,
         "คำตอบผิด",
@@ -929,7 +1034,6 @@ function setFloatingNav(active) {
       )
     );
 
-    // Always show time taken if available
     statsContainer.appendChild(
       createStatItem(stats.formattedTime, "เวลาที่ใช้", icons.time, "blue")
     );
@@ -940,86 +1044,17 @@ function setFloatingNav(active) {
     dataContainer.appendChild(statsContainer);
     layoutContainer.appendChild(dataContainer);
 
-    // --- 3. Category Breakdown ---
-    // This new section creates an accordion for main categories and their subcategories.
+    // --- 3. Category Performance Chart ---
     if (stats.categoryStats && Object.keys(stats.categoryStats).length > 0) {
-      const categoryContainer = document.createElement('div');
-      categoryContainer.className = 'w-full max-w-2xl mx-auto mt-8';
-      categoryContainer.innerHTML = `<h3 class="text-xl font-bold text-gray-700 dark:text-gray-300 mb-4">คะแนนตามหมวดหมู่</h3>`;
-      
-      const accordionContainer = document.createElement('div');
-      accordionContainer.className = 'space-y-2';
-
-      const sortedCategories = Object.entries(stats.categoryStats).sort((a, b) => a[0].localeCompare(b[0]));
-
-      for (const [mainCategory, data] of sortedCategories) {
-          const mainPercentage = data.total > 0 ? Math.round((data.correct / data.total) * 100) : 0;
-          
-          const accordionItem = document.createElement('div');
-          accordionItem.className = 'bg-gray-50 dark:bg-gray-800/50 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700';
-
-          const accordionHeader = document.createElement('div');
-          accordionHeader.className = 'p-4 cursor-pointer flex justify-between items-center hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors';
-          accordionHeader.innerHTML = `
-              <div>
-                  <span class="font-bold text-gray-800 dark:text-gray-200">${mainCategory}</span>
-                  <span class="ml-2 text-sm font-semibold text-gray-600 dark:text-gray-400">${data.correct} / ${data.total}</span>
-              </div>
-              <div class="flex items-center gap-3">
-                  <span class="font-bold text-blue-600 dark:text-blue-400">${mainPercentage}%</span>
-                  <svg class="accordion-icon h-5 w-5 text-gray-500 dark:text-gray-400 transition-transform" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
-              </div>
-          `;
-
-          const accordionContent = document.createElement('div');
-          accordionContent.className = 'accordion-content max-h-0 overflow-hidden transition-all duration-300 ease-in-out';
-          
-          const subcategoryList = document.createElement('div');
-          subcategoryList.className = 'p-4 border-t border-gray-200 dark:border-gray-700 space-y-3';
-
-          const sortedSubcategories = Object.entries(data.subcategories).sort((a, b) => a[0].localeCompare(b[0]));
-
-          for (const [specificCategory, subData] of sortedSubcategories) {
-              if (specificCategory === '—') continue; // Skip placeholder for old data format
-              const subPercentage = subData.total > 0 ? Math.round((subData.correct / subData.total) * 100) : 0;
-              const subItem = document.createElement('div');
-              subItem.innerHTML = `
-                  <div class="text-sm leading-tight">
-                      <p class="font-medium text-gray-700 dark:text-gray-300">${specificCategory}</p>
-                      <p class="font-semibold text-gray-500 dark:text-gray-400">${subData.correct} / ${subData.total} (${subPercentage}%)</p>
-                  </div>
-                  <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-1.5 mt-1.5">
-                      <div class="bg-blue-500 h-1.5 rounded-full" style="width: ${subPercentage}%"></div>
-                  </div>
-              `;
-              subcategoryList.appendChild(subItem);
-          }
-
-          accordionContent.appendChild(subcategoryList);
-          accordionItem.appendChild(accordionHeader);
-          if (subcategoryList.childElementCount > 0) {
-            accordionItem.appendChild(accordionContent);
-            accordionHeader.addEventListener('click', () => {
-                const icon = accordionHeader.querySelector('.accordion-icon');
-                if (accordionContent.style.maxHeight) {
-                    accordionContent.style.maxHeight = null;
-                    icon.classList.remove('rotate-180');
-                } else {
-                    accordionContent.style.maxHeight = accordionContent.scrollHeight + "px";
-                    icon.classList.add('rotate-180');
-                }
-            });
-          } else {
-            // If no subcategories, remove the chevron icon
-            accordionHeader.querySelector('.accordion-icon')?.remove();
-            accordionHeader.style.cursor = 'default';
-          }
-          
-          accordionContainer.appendChild(accordionItem);
-      }
-      
-      categoryContainer.appendChild(accordionContainer);
-      layoutContainer.appendChild(categoryContainer);
+        const chartContainer = document.createElement('div');
+        chartContainer.className = 'w-full p-6 bg-white dark:bg-gray-800/50 rounded-xl shadow-md border border-gray-200 dark:border-gray-700';
+        chartContainer.innerHTML = `
+            <h3 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4 font-kanit text-center">คะแนนตามหมวดหมู่</h3>
+            <div class="relative h-64">
+                <canvas id="result-category-chart"></canvas>
+            </div>
+        `;
+        layoutContainer.appendChild(chartContainer);
     }
 
     // --- 4. Performance Summary ---
@@ -1072,6 +1107,9 @@ function setFloatingNav(active) {
     // --- 6. Assemble and Inject ---
     // Prepend to the result screen so it appears before the buttons
     elements.resultScreen.prepend(layoutContainer);
+
+    // --- 7. Render Chart ---
+    renderResultCategoryChart(stats.categoryStats);
 
     // --- 8. Final UI Updates ---
     // Show or hide the review button based on incorrect answers
@@ -1597,6 +1635,9 @@ function setFloatingNav(active) {
 
   function bindEventListeners() {
     // The main action button now has a central handler.
+    if (elements.skipBtn) {
+      elements.skipBtn.addEventListener("click", skipQuestion);
+    }
     elements.nextBtn.addEventListener("click", handleNextButtonClick);
 
     // Keep other listeners as they are.
@@ -1607,5 +1648,9 @@ function setFloatingNav(active) {
     elements.backToResultBtn.addEventListener("click", backToResult);
     if (elements.soundToggleBtn) {
       elements.soundToggleBtn.addEventListener("click", toggleSound);
+    }
+    // New: Add listener for the hint button
+    if (elements.hintBtn) {
+        elements.hintBtn.addEventListener("click", showHint);
     }
   }

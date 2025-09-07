@@ -76,6 +76,35 @@ function calculateSummary(stats, totalAvailableQuizzes) {
 }
 
 /**
+ * Calculates the average score for each main subject category.
+ * @param {Array<object>} stats - The array of stats from getAllStats.
+ * @returns {Array<object>} A sorted array of objects, each containing subject name, score, and order.
+ */
+function calculateSubjectPerformance(stats) {
+    const performanceBySubject = {};
+
+    stats.forEach(stat => {
+        const subject = stat.category || 'Uncategorized';
+        if (!performanceBySubject[subject]) {
+            performanceBySubject[subject] = { correct: 0, total: 0 };
+        }
+        performanceBySubject[subject].correct += stat.score || 0;
+        performanceBySubject[subject].total += stat.shuffledQuestions?.length || 0;
+    });
+
+    return Object.entries(performanceBySubject)
+        .map(([subjectKey, data]) => {
+            const details = categoryDetails[subjectKey] || { displayName: subjectKey, order: 99 };
+            return {
+                subject: details.displayName,
+                score: data.total > 0 ? (data.correct / data.total) * 100 : 0,
+                order: details.order,
+            };
+        })
+        .filter(item => item.score > 0)
+        .sort((a, b) => a.order - b.order);
+}
+/**
  * Calculates performance metrics grouped by subject (category), then by chapter (main subCategory),
  * and finally by learning outcome/specific topic (specific subCategory).
  * @param {Array<object>} stats - The array of stats from getAllStats, which includes userAnswers.
@@ -262,6 +291,96 @@ function renderOverallChart(summary) {
 }
 
 /**
+ * Renders a horizontal bar chart showing the average score per subject.
+ * @param {Array<object>} subjectData - Data from calculateSubjectPerformance.
+ */
+function renderSubjectPerformanceChart(subjectData) {
+    const ctx = document.getElementById('subject-performance-chart')?.getContext('2d');
+    if (!ctx || subjectData.length === 0) return;
+
+    const labels = subjectData.map(d => d.subject);
+    const scores = subjectData.map(d => d.score);
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'คะแนนเฉลี่ย (%)',
+                data: scores,
+                backgroundColor: scores.map(score => score >= 75 ? 'rgba(34, 197, 94, 0.7)' : score >= 50 ? 'rgba(245, 158, 11, 0.7)' : 'rgba(239, 68, 68, 0.7)'),
+                borderColor: scores.map(score => score >= 75 ? '#16a34a' : score >= 50 ? '#d97706' : '#dc2626'),
+                borderWidth: 1,
+                borderRadius: 4,
+            }]
+        },
+        options: {
+            indexAxis: 'y', // Make it a horizontal bar chart
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    max: 100,
+                    ticks: {
+                        color: document.documentElement.classList.contains('dark') ? '#d1d5db' : '#374151',
+                        callback: function(value) {
+                            return value + '%'
+                        }
+                    }
+                },
+                y: {
+                    ticks: {
+                        color: document.documentElement.classList.contains('dark') ? '#d1d5db' : '#374151',
+                        font: { family: "'Kanit', sans-serif" }
+                    }
+                }
+            },
+            plugins: {
+                legend: { display: false },
+                tooltip: { callbacks: { label: context => `คะแนนเฉลี่ย: ${context.raw.toFixed(1)}%` } }
+            }
+        }
+    });
+}
+
+/**
+ * Initializes the tab navigation functionality.
+ */
+function initializeTabs() {
+    const tabContainer = document.querySelector('[aria-label="Tabs"]');
+    if (!tabContainer) return;
+
+    const tabs = tabContainer.querySelectorAll('[role="tab"]');
+    const panels = document.querySelectorAll('[role="tabpanel"]');
+
+    const activeTabClasses = ['border-blue-500', 'text-blue-600', 'dark:border-blue-400', 'dark:text-blue-400', 'font-bold'];
+    const inactiveTabClasses = ['border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300', 'dark:text-gray-400', 'dark:hover:text-gray-200', 'dark:hover:border-gray-500', 'font-medium'];
+
+    tabContainer.addEventListener('click', (e) => {
+        const clickedTab = e.target.closest('[role="tab"]');
+        if (!clickedTab) return;
+
+        // Deactivate all tabs and hide all panels
+        tabs.forEach(tab => {
+            tab.setAttribute('aria-selected', 'false');
+            tab.classList.remove(...activeTabClasses);
+            tab.classList.add(...inactiveTabClasses);
+            
+            const panelId = tab.getAttribute('aria-controls');
+            const panel = document.getElementById(panelId);
+            if (panel) panel.classList.add('hidden');
+        });
+
+        // Activate the clicked tab and show its panel
+        clickedTab.setAttribute('aria-selected', 'true');
+        clickedTab.classList.remove(...inactiveTabClasses);
+        clickedTab.classList.add(...activeTabClasses);
+        const activePanel = document.getElementById(clickedTab.getAttribute('aria-controls'));
+        if (activePanel) activePanel.classList.remove('hidden');
+    });
+}
+/**
  * Renders the performance data as a series of nested accordions, grouped by subject and then chapter.
  * @param {object} groupedData - Data from calculateGroupedCategoryPerformance.
  */
@@ -272,7 +391,7 @@ function renderPerformanceAccordions(groupedData) {
     if (!container) return;
 
     // Add the title here dynamically
-    container.innerHTML = `<h2 class="text-2xl font-bold font-kanit text-gray-800 dark:text-gray-100 mb-4">คะแนนเฉลี่ยตามรายวิชา</h2>`;
+    container.innerHTML = `<h2 class="text-2xl font-bold font-kanit text-gray-800 dark:text-gray-100 mb-4">วิเคราะห์คะแนนรายบทเรียน</h2>`;
 
     const sortedSubjects = Object.keys(groupedData).sort((a, b) => {
         const orderA = categoryDetails[a]?.order || 99;
@@ -562,12 +681,15 @@ export function buildStatsPage() {
     } else {
         const groupedData = calculateGroupedPerformance(allStats);
         const summary = calculateSummary(allStats, totalAvailableQuizzes);
+        const subjectPerformance = calculateSubjectPerformance(allStats);
         renderSummaryCards(summary);
         renderOverallChart(summary);
+        renderSubjectPerformanceChart(subjectPerformance);
         renderPerformanceAccordions(groupedData);
         renderDetailedList(allStats);
         finishedQuizModalHandler = new ModalHandler('finished-quiz-modal');
         setupActionListeners();
+        initializeTabs();
         statsContent.classList.add("anim-fade-in");
         statsContent.style.opacity = 1;
     }
