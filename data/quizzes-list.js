@@ -3,7 +3,7 @@ export const quizList = [
   {
     "id": "phy_m4_Ch3-1",
     "title": "แรงและกฎการเคลื่อนที่ (ชุดที่ 1)",
-    "amount": 20,
+    "amount": 40,
     "description": "บทที่ 3: แรงและกฎการเคลื่อนที่ สำหรับชั้นมัธยมศึกษาปีที่ 4",
     "url": "./quiz/index.html?id=phy_m4_Ch3-1",
     "storageKey": "quizState-phy_m4_Ch3-1",
@@ -75,7 +75,7 @@ export const quizList = [
   {
     "id": "ess_basic_m6_ch5-2",
     "title": "โครงสร้างโลก (ชุดที่ 2)",
-    "amount": 40,
+    "amount": 30,
     "description": "แบบทดสอบเน้นการวิเคราะห์โครงสร้างภายในของดาวเคราะห์อื่นโดยใช้ข้อมูลสมมติ",
     "url": "./quiz/index.html?id=ess_basic_m6_ch5-2",
     "storageKey": "quizState-ess_basic_m6_ch5-2",
@@ -109,6 +109,18 @@ export const quizList = [
     "subCategory": "เทคโนโลยีอวกาศ"
   },
   {
+    "id": "ess_adv_m6_ch17-1",
+    "title": "การเคลื่อนที่ปรากฏของดาวเคราะห์ (ชุดที่ 1)",
+    "amount": 30,
+    "description": "บทที่ 17: การเคลื่อนที่ปรากฏของดาวเคราะห์",
+    "url": "./quiz/index.html?id=ess_adv_m6_ch17-1",
+    "storageKey": "quizState-ess_adv_m6_ch17-1",
+    "icon": "./assets/icons/planetary-motion.png",
+    "altText": "ไอคอนสำหรับ ess_adv_m6_ch17-1",
+    "category": "EarthSpaceScienceAdvance",
+    "subCategory": "การเคลื่อนที่ปรากฏของดาวเคราะห์"
+  },
+  {
     "id": "ess_adv_m4_ch1-1",
     "title": "โครงสร้างโลก (ชุดที่ 1)",
     "amount": 30,
@@ -133,6 +145,30 @@ export const quizList = [
     "subCategory": "โครงสร้างโลก"
   },
   {
+    "id": "ess_adv_m6_ch14-1",
+    "title": "ดาวฤกษ์ (ชุดที่ 1)",
+    "amount": 30,
+    "description": "บทที่ 14: ดาวฤกษ์",
+    "url": "./quiz/index.html?id=ess_adv_m6_ch14-1",
+    "storageKey": "quizState-ess_adv_m6_ch14-1",
+    "icon": "./assets/icons/star.png",
+    "altText": "ไอคอนสำหรับ ess_adv_m6_ch14-1",
+    "category": "EarthSpaceScienceAdvance",
+    "subCategory": "ดาวฤกษ์"
+  },
+  {
+    "id": "ess_adv_m6_ch16-1",
+    "title": "ทรงกลมฟ้า (ชุดที่ 1)",
+    "amount": 30,
+    "description": "บทที่ 16: ทรงกลมฟ้า",
+    "url": "./quiz/index.html?id=ess_adv_m6_ch16-1",
+    "storageKey": "quizState-ess_adv_m6_ch16-1",
+    "icon": "./assets/icons/celestial-sphere.png",
+    "altText": "ไอคอนสำหรับ ess_adv_m6_ch16-1",
+    "category": "EarthSpaceScienceAdvance",
+    "subCategory": "ทรงกลมฟ้า"
+  },
+  {
     "id": "ess_adv_m6_ch18-1",
     "title": "เทคโนโลยีอวกาศและการประยุกต์ใช้ (ชุดที่ 1)",
     "amount": 30,
@@ -155,5 +191,29 @@ export const quizList = [
     "altText": "ไอคอนสำหรับ ess_adv_m6_ch18-2",
     "category": "EarthSpaceScienceAdvance",
     "subCategory": "เทคโนโลยีอวกาศและการประยุกต์ใช้"
+  },
+  {
+    "id": "ess_adv_m6_ch15-1",
+    "title": "ระบบสุริยะ (ชุดที่ 1)",
+    "amount": 30,
+    "description": "บทที่ 15: ระบบสุริยะ",
+    "url": "./quiz/index.html?id=ess_adv_m6_ch15-1",
+    "storageKey": "quizState-ess_adv_m6_ch15-1",
+    "icon": "./assets/icons/solar-system.png",
+    "altText": "ไอคอนสำหรับ ess_adv_m6_ch15-1",
+    "category": "EarthSpaceScienceAdvance",
+    "subCategory": "ระบบสุริยะ"
+  },
+  {
+    "id": "ess_adv_m6_ch13-1",
+    "title": "เอกภพและกาแล็กซี (ชุดที่ 1)",
+    "amount": 30,
+    "description": "บทที่ 13: เอกภพและกาแล็กซี",
+    "url": "./quiz/index.html?id=ess_adv_m6_ch13-1",
+    "storageKey": "quizState-ess_adv_m6_ch13-1",
+    "icon": "./assets/icons/galaxy.png",
+    "altText": "ไอคอนสำหรับ ess_adv_m6_ch13-1",
+    "category": "EarthSpaceScienceAdvance",
+    "subCategory": "เอกภพและกาแล็กซี"
   }
 ];

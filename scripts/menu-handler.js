@@ -168,34 +168,34 @@ export function initializeMenu() {
         `;
 
         const syllabus = getSyllabusForCategory(categoryKey);
+        const chapters = syllabus?.units 
+            ? syllabus.units.flatMap(unit => unit.chapters) 
+            : syllabus?.chapters;
 
-        if (syllabus && Array.isArray(syllabus.chapters)) {
-            syllabus.chapters.forEach((chapter, index) => {
+        if (Array.isArray(chapters)) {
+            chapters.forEach(chapter => {
                 const chapterTitleFromSyllabus = chapter.title;
                 const chapterQuizzes = quizzesInCategory.filter(quiz => quiz.subCategory === chapterTitleFromSyllabus);
 
                 if (chapterQuizzes.length > 0) {
                     let displayTitle = chapterTitleFromSyllabus;
                     if (categoryKey === 'EarthSpaceScienceBasic') {
-                        displayTitle = `บทที่ ${index + 1}: ${chapterTitleFromSyllabus}`;
+                        displayTitle = `บทที่ ${chapter.chapterId}: ${chapterTitleFromSyllabus}`;
                     } else if (categoryKey === 'EarthSpaceScienceAdvance') {
                         const firstQuiz = chapterQuizzes[0];
-                        if (firstQuiz && firstQuiz.description) {
+                        if (firstQuiz?.description) {
                             const match = firstQuiz.description.match(/บทที่\s*(\d+)/);
-                            if (match && match[1]) {
+                            if (match?.[1]) {
                                 displayTitle = `บทที่ ${match[1]}: ${chapterTitleFromSyllabus}`;
                             }
                         }
                     }
-                    
                     menuHTML += `<p class="px-2 pt-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">${displayTitle}</p>`;
-                    
                     const quizLinksContainerHTML = chapterQuizzes.map(quiz => createMenuItemHTML(quiz, getQuizUrl, currentQuizId, basePath)).join('');
                     menuHTML += `<div class="space-y-px pl-2">${quizLinksContainerHTML}</div>`;
                 }
             });
-        } else {
-            // Fallback for non-syllabus categories
+        } else { // Fallback for non-syllabus categories
             quizzesInCategory.forEach(quiz => {
                 menuHTML += createMenuItemHTML(quiz, getQuizUrl, currentQuizId, basePath);
             });

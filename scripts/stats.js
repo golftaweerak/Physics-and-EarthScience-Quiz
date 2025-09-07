@@ -54,7 +54,7 @@ function calculateSummary(stats, totalAvailableQuizzes) {
   let totalAnswered = 0;
 
   stats.forEach((stat) => {
-    totalCorrect += stat.score;
+    totalCorrect += stat.score || 0;
     // If userAnswers exists, count the non-null entries. Otherwise, it's 0.
     totalAnswered += stat.userAnswers?.filter((a) => a !== null).length || 0;
   });
@@ -76,65 +76,60 @@ function calculateSummary(stats, totalAvailableQuizzes) {
 }
 
 /**
- * Calculates performance metrics for each quiz category.
- * @param {Array<object>} stats - The array of stats from getAllStats.
- * @returns {Array<object>} An array of objects, each representing a category's performance.
+ * Calculates performance metrics grouped by subject (category), then by chapter (main subCategory),
+ * and finally by learning outcome/specific topic (specific subCategory).
+ * @param {Array<object>} stats - The array of stats from getAllStats, which includes userAnswers.
+ * @returns {object} A nested object representing the grouped performance data.
  */
-function calculateGroupedCategoryPerformance(stats) {
-    // This function aggregates performance data across all quizzes.
-    // It gives precedence to the more specific subCategory defined within a question's data
-    // over the general category of the quiz file itself. This allows for more granular stats.
-    const performanceByMain = {};
+function calculateGroupedPerformance(stats) {
+    const performanceBySubject = {};
 
     stats.forEach(stat => {
         if (!stat.userAnswers) return;
 
         stat.userAnswers.forEach(answer => {
-            if (!answer || !answer.subCategory) return;
-
-            let mainCategory = stat.category; // Use the quiz's main category
-            let subCategoryName = 'Uncategorized';
-
-            if (typeof answer.subCategory === 'object' && answer.subCategory.specific) {
-                // If the question itself defines a main category, use it. This is more specific.
-                mainCategory = answer.subCategory.main || mainCategory;
-                subCategoryName = answer.subCategory.specific;
-            } else if (typeof answer.subCategory === 'string') {
-                // If it's a string, treat it as the main category for grouping.
-                mainCategory = answer.subCategory;
-                subCategoryName = "อื่น ๆ"; // Use a generic name for the sub-item.
+            const subject = stat.category || 'Uncategorized';
+            if (!answer || typeof answer.subCategory !== 'object' || !answer.subCategory.main || !answer.subCategory.specific) {
+                return;
             }
 
-            if (!mainCategory) mainCategory = 'Uncategorized';
+            const chapter = answer.subCategory.main;
+            const learningOutcome = answer.subCategory.specific;
 
-            if (!performanceByMain[mainCategory]) {
-                performanceByMain[mainCategory] = {};
+            // Initialize structures
+            if (!performanceBySubject[subject]) {
+                performanceBySubject[subject] = {};
             }
-            if (!performanceByMain[mainCategory][subCategoryName]) {
-                performanceByMain[mainCategory][subCategoryName] = { correct: 0, total: 0 };
+            if (!performanceBySubject[subject][chapter]) {
+                performanceBySubject[subject][chapter] = {};
+            }
+            if (!performanceBySubject[subject][chapter][learningOutcome]) {
+                performanceBySubject[subject][chapter][learningOutcome] = { correct: 0, total: 0 };
             }
 
-            performanceByMain[mainCategory][subCategoryName].total++;
+            // Increment counts.
+            performanceBySubject[subject][chapter][learningOutcome].total++;
             if (answer.isCorrect) {
-                performanceByMain[mainCategory][subCategoryName].correct++;
+                performanceBySubject[subject][chapter][learningOutcome].correct++;
             }
         });
     });
 
-    // Convert the nested object into a more usable format for rendering
     const finalGroupedData = {};
-    for (const mainCat in performanceByMain) {
-        const subCategories = Object.entries(performanceByMain[mainCat])
-            .map(([name, data]) => ({
-                name,
-                ...data,
-                averageScore: data.total > 0 ? (data.correct / data.total) * 100 : 0,
-            }))
-            .filter(item => item.total > 0)
-            .sort((a, b) => b.averageScore - a.averageScore); // Sort sub-categories by score
-        
-        if (subCategories.length > 0) {
-            finalGroupedData[mainCat] = subCategories;
+    for (const subject in performanceBySubject) {
+        finalGroupedData[subject] = {};
+        for (const chapter in performanceBySubject[subject]) {
+            const outcomes = Object.entries(performanceBySubject[subject][chapter])
+                .map(([name, data]) => ({
+                    name, ...data,
+                    averageScore: data.total > 0 ? (data.correct / data.total) * 100 : 0,
+                }))
+                .filter(item => item.total > 0)
+                .sort((a, b) => a.name.localeCompare(b.name, 'th'));
+
+            if (outcomes.length > 0) {
+                finalGroupedData[subject][chapter] = outcomes;
+            }
         }
     }
 
@@ -235,7 +230,7 @@ function renderOverallChart(summary) {
         {
           data: [summary.totalCorrect, summary.totalIncorrect],
           backgroundColor: ["#22c55e", "#ef4444"],
-          borderColor: document.body.classList.contains("dark")
+          borderColor: document.documentElement.classList.contains("dark")
             ? "#1f2937" // Use gray-800 to match the card background in dark mode
             : "#ffffff",
           borderWidth: 4,
@@ -251,9 +246,9 @@ function renderOverallChart(summary) {
         legend: {
           position: "bottom",
           labels: {
-            color: document.body.classList.contains("dark")
-              ? "#525355ff" // gray-200 for better contrast in dark mode
-              : "#c8c8c8ff", // gray-700 for better readability
+            color: document.documentElement.classList.contains("dark")
+              ? "#d1d5db" // gray-300 for better contrast in dark mode
+              : "#374151", // gray-700 for better readability
             font: { family: "'Kanit', sans-serif", size: 14 },
           },
         },
@@ -267,96 +262,129 @@ function renderOverallChart(summary) {
 }
 
 /**
- * Renders the category and sub-category performance as a series of accordions.
+ * Renders the performance data as a series of nested accordions, grouped by subject and then chapter.
  * @param {object} groupedData - Data from calculateGroupedCategoryPerformance.
  */
 let isAccordionListenerAttached = false;
 
-function renderCategoryAccordions(groupedData) {
-    const container = document.getElementById("category-accordion-container");
+function renderPerformanceAccordions(groupedData) {
+    const container = document.getElementById("subject-performance-container");
     if (!container) return;
 
     // Add the title here dynamically
-    container.innerHTML = `<h2 class="text-xl font-bold font-kanit text-center md:text-left mb-4">คะแนนเฉลี่ยตามหมวดหมู่</h2>`;
+    container.innerHTML = `<h2 class="text-2xl font-bold font-kanit text-gray-800 dark:text-gray-100 mb-4">คะแนนเฉลี่ยตามรายวิชา</h2>`;
 
-    const sortedMainCategories = Object.keys(groupedData).sort((a, b) => {
+    const sortedSubjects = Object.keys(groupedData).sort((a, b) => {
         const orderA = categoryDetails[a]?.order || 99;
         const orderB = categoryDetails[b]?.order || 99;
         return orderA - orderB;
     });
 
-    if (sortedMainCategories.length === 0) {
-        container.innerHTML += `<p class="text-center text-gray-500 dark:text-gray-400">ไม่มีข้อมูลคะแนนตามหมวดหมู่</p>`;
+    if (sortedSubjects.length === 0) {
+        container.innerHTML += `<p class="text-center text-gray-500 dark:text-gray-400">ไม่มีข้อมูลคะแนน</p>`;
         return;
     }
 
-    sortedMainCategories.forEach(mainCategoryKey => {
-        const subCategories = groupedData[mainCategoryKey];
-        const mainCategoryDetails = categoryDetails[mainCategoryKey];
-        if (!mainCategoryDetails || subCategories.length === 0) return;
+    sortedSubjects.forEach(subjectKey => {
+        const chapters = groupedData[subjectKey];
+        const subjectDetails = categoryDetails[subjectKey] || { displayName: subjectKey, color: 'border-gray-500', icon: './assets/icons/study.png' };
 
-        // Calculate overall stats for the main category header
-        const mainCatStats = subCategories.reduce((acc, sub) => {
-            acc.correct += sub.correct;
-            acc.total += sub.total;
-            return acc;
-        }, { correct: 0, total: 0 });
-        const mainCatAvg = mainCatStats.total > 0 ? (mainCatStats.correct / mainCatStats.total) * 100 : 0;
-        const mainCatPercentage = mainCatAvg.toFixed(0);
-        const mainCatColorClass = mainCatAvg >= 75 ? 'bg-green-500' : mainCatAvg >= 50 ? 'bg-yellow-500' : 'bg-red-500';
+        const subjectAccordion = document.createElement('div');
+        subjectAccordion.className = 'bg-white dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden';
 
-        const accordion = document.createElement('div');
-        accordion.className = 'bg-white dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden';
+        let chapterAccordionsHTML = '';
+        const sortedChapters = Object.keys(chapters).sort((a, b) => a.localeCompare(b, 'th'));
 
-        const subCategoryItemsHTML = subCategories
-           // .filter(data => data.name !== "ภาพรวม")
-            .map(data => {
-            const percentage = data.averageScore.toFixed(0);
-            const colorClass = percentage >= 75 ? 'bg-green-500' : percentage >= 50 ? 'bg-yellow-500' : 'bg-red-500';
-            return `
-                <div class="p-3 border-t border-gray-200 dark:border-gray-700/50">
-                    <div class="flex justify-between items-center text-sm">
-                        <span class="font-medium text-gray-700 dark:text-gray-200">${data.name}</span>
-                        <span class="font-semibold text-gray-800 dark:text-gray-100">${data.correct}/${data.total} <span class="font-normal text-gray-500 dark:text-gray-400">(${percentage}%)</span></span>
+        sortedChapters.forEach(chapterTitle => {
+            const outcomes = chapters[chapterTitle];
+            if (!outcomes || outcomes.length === 0) return;
+
+            const chapterStats = outcomes.reduce((acc, sub) => {
+                acc.correct += sub.correct;
+                acc.total += sub.total;
+                return acc;
+            }, { correct: 0, total: 0 });
+            const chapterAvg = chapterStats.total > 0 ? (chapterStats.correct / chapterStats.total) * 100 : 0;
+            const chapterPercentage = chapterAvg.toFixed(0);
+            const chapterColorClass = chapterAvg >= 75 ? 'bg-green-500' : chapterAvg >= 50 ? 'bg-yellow-500' : 'bg-red-500';
+
+            const outcomeItemsHTML = outcomes.map(data => {
+                const percentage = data.averageScore.toFixed(0);
+                const colorClass = percentage >= 75 ? 'bg-green-500' : percentage >= 50 ? 'bg-yellow-500' : 'bg-red-500';
+                return `
+                    <div class="p-3 border-t border-gray-200 dark:border-gray-700/50">
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="font-medium text-gray-700 dark:text-gray-200">${data.name.replace(/^ว\s[\d\.]+\sม\.[\d\/]+\s/, '').replace(/^\d+\.\s/, '').trim()}</span>
+                            <span class="font-semibold text-gray-800 dark:text-gray-100">${data.correct}/${data.total} <span class="font-normal text-gray-500 dark:text-gray-400">(${percentage}%)</span></span>
+                        </div>
+                        <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mt-1.5">
+                            <div class="${colorClass} h-2 rounded-full" style="width: ${percentage}%"></div>
+                        </div>
                     </div>
-                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mt-1.5">
-                        <div class="${colorClass} h-2 rounded-full" style="width: ${percentage}%"></div>
+                `;
+            }).join('');
+
+            chapterAccordionsHTML += `
+                <div class="bg-gray-50 dark:bg-gray-800/30 rounded-lg mx-4 mb-2 border border-gray-200 dark:border-gray-700/50 overflow-hidden">
+                    <div class="category-accordion-toggle flex justify-between items-center cursor-pointer p-3 hover:bg-gray-100 dark:hover:bg-gray-700/40 transition-colors">
+                        <div class="flex-grow min-w-0">
+                            <div class="flex justify-between items-baseline mb-1">
+                                <h4 class="text-base font-bold text-gray-800 dark:text-gray-200 font-kanit truncate pr-2">${chapterTitle}</h4>
+                                <span class="font-kanit font-semibold text-gray-700 dark:text-gray-300 flex-shrink-0 text-sm sm:text-base">${chapterPercentage}%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                <div class="${chapterColorClass} h-2 rounded-full" style="width: ${chapterPercentage}%"></div>
+                            </div>
+                        </div>
+                        <svg class="chevron-icon h-5 w-5 text-gray-500 dark:text-gray-400 transition-transform duration-300 flex-shrink-0 ml-2 sm:ml-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                    </div>
+                    <div class="specific-categories-container grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-in-out">
+                        <div class="overflow-hidden">
+                            ${outcomeItemsHTML}
+                        </div>
                     </div>
                 </div>
             `;
-        }).join('');
+        });
 
-        accordion.innerHTML = `
-            <div class="category-accordion-toggle flex justify-between items-center cursor-pointer p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+        // Calculate overall stats for the subject header
+        const subjectTotal = Object.values(chapters).flat().reduce((sum, outcome) => sum + outcome.total, 0);
+        const subjectCorrect = Object.values(chapters).flat().reduce((sum, outcome) => sum + outcome.correct, 0);
+        const subjectAvg = subjectTotal > 0 ? (subjectCorrect / subjectTotal) * 100 : 0;
+        const subjectPercentage = subjectAvg.toFixed(0);
+        const subjectColorClass = subjectAvg >= 75 ? 'bg-green-500' : subjectAvg >= 50 ? 'bg-yellow-500' : 'bg-red-500';
+
+        subjectAccordion.innerHTML = `
+            <div class="subject-accordion-toggle flex justify-between items-center cursor-pointer p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                 <div class="flex items-center flex-grow min-w-0 gap-3 sm:gap-4">
-                    <div class="flex-shrink-0 h-10 w-10 sm:h-12 sm:w-12 rounded-full flex items-center justify-center border-4 ${mainCategoryDetails.color} bg-white p-1 sm:p-1.5">
-                        <img src="${mainCategoryDetails.icon}" alt="${mainCategoryDetails.displayName} Icon" class="h-full w-full object-contain">
+                    <div class="flex-shrink-0 h-10 w-10 sm:h-12 sm:w-12 rounded-full flex items-center justify-center border-4 ${subjectDetails.color} bg-white p-1 sm:p-1.5">
+                        <img src="${subjectDetails.icon}" alt="${subjectDetails.displayName} Icon" class="h-full w-full object-contain">
                     </div>
                     <div class="flex-grow min-w-0">
                         <div class="flex justify-between items-baseline mb-1">
-                            <h3 class="text-lg font-bold text-gray-800 dark:text-gray-200 font-kanit truncate pr-2">${mainCategoryDetails.displayName}</h3>
-                            <span class="font-kanit font-semibold text-gray-700 dark:text-gray-300 flex-shrink-0 text-base sm:text-lg">${mainCatPercentage}%</span>
+                            <h3 class="text-lg font-bold text-gray-800 dark:text-gray-200 font-kanit truncate pr-2">${subjectDetails.displayName}</h3>
+                            <span class="font-kanit font-semibold text-gray-700 dark:text-gray-300 flex-shrink-0 text-base sm:text-lg">${subjectPercentage}%</span>
                         </div>
                         <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
-                            <div class="${mainCatColorClass} h-2.5 rounded-full" style="width: ${mainCatPercentage}%"></div>
+                            <div class="${subjectColorClass} h-2.5 rounded-full" style="width: ${subjectPercentage}%"></div>
                         </div>
                     </div>
                 </div>
                 <svg class="chevron-icon h-6 w-6 text-gray-500 dark:text-gray-400 transition-transform duration-300 flex-shrink-0 ml-2 sm:ml-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
             </div>
-            <div class="specific-categories-container grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-in-out">
-                <div class="overflow-hidden">
-                    ${subCategoryItemsHTML}
+            <div class="chapters-container grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-in-out">
+                <div class="overflow-hidden pt-2">
+                    ${chapterAccordionsHTML}
                 </div>
             </div>
         `;
-        container.appendChild(accordion);
+        container.appendChild(subjectAccordion);
     });
 
     // Add event listener for the accordions, but only once.
-    if (!isAccordionListenerAttached && sortedMainCategories.length > 0) {
+    if (!isAccordionListenerAttached && sortedSubjects.length > 0) {
         container.addEventListener('click', (e) => {
-            const toggle = e.target.closest('.category-accordion-toggle');
+            const toggle = e.target.closest('.subject-accordion-toggle, .category-accordion-toggle');
             if (!toggle) return;
 
             const content = toggle.nextElementSibling;
@@ -371,59 +399,72 @@ function renderCategoryAccordions(groupedData) {
 }
 /**
  * Renders the detailed list of all quizzes taken, ensuring each item is a functional link
- * that allows the user to retake the quiz.
+ * that allows the user to retake the quiz, now displayed as info-rich cards.
  * @param {Array<object>} stats - The array of stats from getAllStats.
  */
 function renderDetailedList(stats) {
     const container = document.getElementById("detailed-stats-container");
     if (!container) return;
 
-    // Sort by finished status first, then by most recent activity
-    // In-progress quizzes (isFinished: false) will appear on top.
+    // The container is now a grid.
+    container.className = "grid grid-cols-1 md:grid-cols-2 gap-6";
+
     stats.sort((a, b) => {
         if (a.isFinished !== b.isFinished) {
-            return a.isFinished ? 1 : -1;
+            return a.isFinished ? 1 : -1; // In-progress quizzes first
         }
-        return (b.lastAttemptTimestamp || 0) - (a.lastAttemptTimestamp || 0);
+        return (b.lastAttemptTimestamp || 0) - (a.lastAttemptTimestamp || 0); // Then by most recent
     });
 
-    container.innerHTML = stats.map((stat) => {
+    if (stats.length === 0) {
+        container.innerHTML = `<p class="text-center text-gray-500 dark:text-gray-400 md:col-span-2">ไม่มีประวัติการทำแบบทดสอบ</p>`;
+        return;
+    }
+
+    container.innerHTML = stats.map((stat, index) => {
         const { title, url, isFinished, score, shuffledQuestions, userAnswers, icon, altText, category, storageKey } = stat;
         const totalQuestions = shuffledQuestions?.length || 0;
         const answeredCount = userAnswers?.filter((a) => a !== null).length || 0;
         const scorePercentage = totalQuestions > 0 ? ((score / totalQuestions) * 100).toFixed(0) : 0;
-        const progressPercentage = totalQuestions > 0 ? ((answeredCount / totalQuestions) * 100).toFixed(0) : 0;
 
         const categoryDetail = categoryDetails[category];
-        const borderColorClass = categoryDetail?.color || "border-gray-400";
+        const colorName = categoryDetail?.color?.split('-')[1] || 'gray';
 
-        const secondaryTextHtml = isFinished ?
-            `<p class="text-xs font-medium text-green-600 dark:text-green-400">ทำเสร็จแล้ว</p>` :
-            `<p class="text-xs text-gray-500 dark:text-gray-400">ทำไป ${answeredCount}/${totalQuestions} ข้อ (${progressPercentage}%)</p>`;
+        let statusText, statusColor, buttonText, buttonColor;
 
-        const scoreHtml = answeredCount > 0 ? `
-            <div class="flex-shrink-0 text-right w-14">
-                <p class="font-bold font-kanit text-base ${scorePercentage >= 50 ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-500"}">${scorePercentage}%</p>
-                <p class="text-xs text-gray-500 dark:text-gray-400">คะแนน</p>
-            </div>
-        ` : `<div class="flex-shrink-0 w-14"></div>`;
+        if (isFinished) {
+            statusText = `ทำเสร็จแล้ว - คะแนน ${scorePercentage}%`;
+            statusColor = 'text-green-600 dark:text-green-400';
+            buttonText = 'ดูผล / ทำใหม่';
+            buttonColor = `bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600`;
+        } else {
+            statusText = `ทำไป ${answeredCount}/${totalQuestions} ข้อ`;
+            statusColor = 'text-blue-600 dark:text-blue-400';
+            buttonText = 'ทำต่อ';
+            buttonColor = `bg-blue-600 hover:bg-blue-700 text-white`;
+        }
 
         return `
-            <a href="${url}" 
-               data-is-finished="${isFinished}"
-               data-storage-key="${storageKey}"
-               data-quiz-title="${title}"
-               class="quiz-stat-item flex items-center gap-3 p-2 rounded-lg bg-white dark:bg-gray-800/50 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors border border-gray-200 dark:border-gray-700"
-               aria-label="ทำแบบทดสอบ: ${title}">
-                <div class="flex-shrink-0 h-9 w-9 rounded-full flex items-center justify-center border-2 ${borderColorClass} bg-white p-1">
-                    <img src="${icon}" alt="${altText || title}" class="h-full w-full object-contain">
+            <div class="stat-quiz-card flex flex-col bg-white dark:bg-gray-800 p-4 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 transition-all duration-300 hover:shadow-lg hover:border-${colorName}-400 dark:hover:border-${colorName}-500 transform hover:-translate-y-1" style="animation-delay: ${index * 50}ms;">
+                <div class="flex items-start gap-4 flex-grow">
+                    <div class="flex-shrink-0 h-12 w-12 rounded-lg flex items-center justify-center bg-gray-100 dark:bg-gray-700 p-2">
+                        <img src="${icon || './assets/icons/dices.png'}" alt="${altText || title}" class="h-full w-full object-contain">
+                    </div>
+                    <div class="min-w-0">
+                        <h4 class="font-bold text-gray-800 dark:text-gray-100 truncate">${title}</h4>
+                        <p class="text-sm font-medium ${statusColor}">${statusText}</p>
+                    </div>
                 </div>
-                <div class="flex-grow min-w-0">
-                    <p class="font-bold text-sm text-gray-800 dark:text-gray-200">${title}</p>
-                    ${secondaryTextHtml}
+                <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                    <a href="${url}" 
+                       data-is-finished="${isFinished}"
+                       data-storage-key="${storageKey}"
+                       data-quiz-title="${title}"
+                       class="quiz-stat-item block w-full text-center px-4 py-2 rounded-lg text-sm font-bold transition ${buttonColor}">
+                        ${buttonText}
+                    </a>
                 </div>
-                ${scoreHtml}
-            </a>
+            </div>
         `;
     }).join("");
 }
@@ -434,6 +475,8 @@ function renderDetailedList(stats) {
  * @param {string} url - The base URL of the quiz.
  * @param {string} storageKey - The localStorage key for the quiz's progress.
  */
+let finishedQuizModalHandler;
+
 function showFinishedQuizModal(title, url, storageKey) {
     if (!finishedQuizModalHandler) return;
 
@@ -499,7 +542,6 @@ function setupActionListeners() {
     });
 }
 
-let finishedQuizModalHandler;
 /**
  * Main function to build the entire stats page.
  * It orchestrates fetching, calculating, and rendering all components.
@@ -518,14 +560,14 @@ export function buildStatsPage() {
         noStatsMessage.classList.remove("hidden");
         document.getElementById("clear-stats-btn").disabled = true;
     } else {
-        const groupedData = calculateGroupedCategoryPerformance(allStats);
+        const groupedData = calculateGroupedPerformance(allStats);
         const summary = calculateSummary(allStats, totalAvailableQuizzes);
         renderSummaryCards(summary);
         renderOverallChart(summary);
-        renderCategoryAccordions(groupedData);
+        renderPerformanceAccordions(groupedData);
         renderDetailedList(allStats);
-        setupActionListeners();
         finishedQuizModalHandler = new ModalHandler('finished-quiz-modal');
+        setupActionListeners();
         statsContent.classList.add("anim-fade-in");
         statsContent.style.opacity = 1;
     }

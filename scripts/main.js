@@ -57,39 +57,41 @@ export const toggleAccordion = (toggleElement, forceState) => {
  * @returns {Array<object>} A structured array of groups to be rendered.
  */
 function groupQuizzesForCategory(quizzes, categoryKey) {
-  const groups = [];
   const syllabus = getSyllabusForCategory(categoryKey);
 
-  // Common logic for all syllabus-based categories
-  if (syllabus && Array.isArray(syllabus.chapters)) {
-    // Iterate over each chapter object in the syllabus to maintain the correct order
-    syllabus.chapters.forEach((chapter, index) => {
-      const chapterTitle = chapter.title;
-      const shortTitle = chapter.shortTitle || chapterTitle.substring(0, 6); // Fallback for short title
+  // Determine if the syllabus is structured with units or a flat chapter list
+  // This flattens the structure for unified processing but preserves unit-specific data.
+  const chapters = syllabus?.units 
+    ? syllabus.units.flatMap(unit => 
+        unit.chapters.map(ch => ({ ...ch, standard: unit.standard }))
+      ) 
+    : syllabus?.chapters;
 
-      // Filter quizzes where the subCategory matches the chapter title
-      const chapterQuizzes = quizzes.filter(quiz => quiz.subCategory === chapterTitle);
+  if (Array.isArray(chapters)) {
+    return chapters.map(chapter => {
+      const chapterQuizzes = quizzes.filter(quiz => quiz.subCategory === chapter.title);
+      if (chapterQuizzes.length === 0) return null;
 
-      // Only add the chapter group if there are quizzes available for it
-      if (chapterQuizzes.length > 0) {
-        // Add "บทที่" prefix for EarthSpaceScienceBasic
-        let displayTitle = chapterTitle;
-        if (categoryKey === 'EarthSpaceScienceBasic') {
-          displayTitle = `บทที่ ${index + 1}: ${chapterTitle}`;
-        } else if (categoryKey === 'EarthSpaceScienceAdvance') {
-          // Try to extract chapter number from the first quiz's description
-          const firstQuiz = chapterQuizzes[0];
-          if (firstQuiz && firstQuiz.description) {
-            const match = firstQuiz.description.match(/บทที่\s*(\d+)/);
-            if (match && match[1]) {
-              displayTitle = `บทที่ ${match[1]}: ${chapterTitle}`;
-            }
+      let displayTitle = chapter.title;
+      if (categoryKey === 'EarthSpaceScienceBasic') {
+        displayTitle = `บทที่ ${chapter.chapterId}: ${chapter.title}`;
+      } else if (categoryKey === 'EarthSpaceScienceAdvance') {
+        const firstQuiz = chapterQuizzes[0];
+        if (firstQuiz?.description) {
+          const match = firstQuiz.description.match(/บทที่\s*(\d+)/);
+          if (match?.[1]) {
+            displayTitle = `บทที่ ${match[1]}: ${chapter.title}`;
           }
         }
-        groups.push({ title: displayTitle, quizzes: chapterQuizzes, level: 1, shortTitle: shortTitle });
       }
-    });
-    return groups;
+
+      return {
+        title: displayTitle,
+        quizzes: chapterQuizzes,
+        level: 1,
+        shortTitle: chapter.shortTitle || chapter.title.substring(0, 6)
+      };
+    }).filter(Boolean); // Filter out null entries for chapters with no quizzes
   }
 
   // --- Default grouping logic for other categories ---
@@ -258,7 +260,7 @@ export function initializePage() {
    * @returns {HTMLElement} The created accordion element.
    * @param {object} groupData - The group object containing title, quizzes, level, and shortTitle.
    */
-  function createSubCategoryAccordion(groupData, colorName) {
+  function createSubCategoryAccordion(groupData, colorName, categoryKey) {
     const accordion = document.createElement('div');
     accordion.className = 'sub-accordion py-1';
 
@@ -268,7 +270,6 @@ export function initializePage() {
     toggleHeader.setAttribute('aria-expanded', 'false');
     toggleHeader.dataset.level = groupData.level;
     toggleHeader.dataset.shortTitle = groupData.shortTitle; // Add short title to dataset
-
     toggleHeader.innerHTML = `
         <h4 class="font-bold text-sm text-${colorName}-800 dark:text-${colorName}-300">${groupData.title}</h4>
         <svg class="chevron-icon h-5 w-5 text-gray-500 dark:text-gray-400 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
@@ -281,7 +282,7 @@ export function initializePage() {
     innerContentWrapper.className = "inner-content-wrapper overflow-hidden";
 
     const quizGrid = document.createElement("div");
-    quizGrid.className = "quiz-grid-container pt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2";
+    quizGrid.className = `quiz-grid-container pt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2`;
 
     // Only create quiz cards if there are quizzes to display.
     if (groupData.quizzes && groupData.quizzes.length > 0) {
@@ -400,13 +401,13 @@ export function initializePage() {
           contentWrapper.classList.add('space-y-2', 'p-2');
 
           group.subGroups.forEach(subGroup => {
-            const nestedAccordion = createSubCategoryAccordion(subGroup, colorName);
+            const nestedAccordion = createSubCategoryAccordion(subGroup, colorName, categoryKey);
             contentWrapper.appendChild(nestedAccordion);
           });
           subCategoryContainer.appendChild(containerAccordion);
         } else {
           // Create a standard sub-category accordion
-          const accordion = createSubCategoryAccordion(group, colorName);
+          const accordion = createSubCategoryAccordion(group, colorName, categoryKey);
           subCategoryContainer.appendChild(accordion);
         }
       });

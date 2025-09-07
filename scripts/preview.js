@@ -1,8 +1,8 @@
 import { initializeMenu } from './menu-handler.js';
 import { ModalHandler } from './modal-handler.js';
-import { quizList } from '../data/quizzes-list.js';
+import { quizList } from '../data/quizzes-list.js'; // Import quizList
 import { fetchAllQuizData, categoryDetails as allCategoryDetails } from './data-manager.js';
-import { subCategoryData, } from '../data/sub-category-data.js';
+import { EARTH_SCIENCE_BASIC_SYLLABUS, EARTH_SCIENCE_ADVANCE_SYLLABUS, PHYSICS_SYLLABUS } from '../data/sub-category-data.js';
 import { initializeGenerator } from './generator.js';
 
 import { exportQuizToTxt } from './txt-exporter.js';
@@ -26,36 +26,59 @@ async function populateCategoryFilter() {
     const categorySelector = document.getElementById('category-selector');
     if (!categorySelector) return;
 
-    // Add a placeholder while loading
-    categorySelector.innerHTML = '<option>กำลังโหลดหมวดหมู่...</option>';
+    categorySelector.innerHTML = '<option>กำลังโหลดตัวเลือก...</option>';
     categorySelector.disabled = true;
 
     try {
-        const { allQuestions } = await fetchAllQuizData();
-        const categories = new Set();
- 
-        allQuestions.forEach(q => {
-            if (q.subCategory) {
-                const subCat = q.subCategory;
-                if (typeof subCat === 'object' && subCat.main) {
-                    // Handle both string and array for 'specific'
-                    const specifics = Array.isArray(subCat.specific) ? subCat.specific : [subCat.specific];
-                    specifics.forEach(specificCat => {
-                        if (specificCat && typeof specificCat === 'string') {
-                            categories.add(specificCat.trim());
-                        }
+        const fragment = document.createDocumentFragment();
+        const defaultOption = new Option("-- ค้นหาจากทุกตัวชี้วัด/ผลการเรียนรู้ --", "");
+        fragment.appendChild(defaultOption);
+
+        // Helper to clean up the text for display in the dropdown
+        const cleanText = (text) => text.replace(/^ว\s[\d\.]+\sม\.[\d\/]+\s/, '').replace(/^\d+\.\s/, '').trim();
+
+        // Process Physics Syllabus
+        Object.values(PHYSICS_SYLLABUS).forEach(grade => {
+            grade.chapters.forEach(chapter => {
+                if (chapter.learningOutcomes && chapter.learningOutcomes.length > 0) {
+                    const optgroup = document.createElement('optgroup');
+                    optgroup.label = `${grade.displayName} - ${chapter.title}`;
+                    chapter.learningOutcomes.forEach(lo => {
+                        optgroup.appendChild(new Option(cleanText(lo), lo));
                     });
-                } else if (typeof subCat === 'string') {
-                    // Handle legacy string format.
-                    categories.add(subCat.trim());
+                    fragment.appendChild(optgroup);
                 }
+            });
+        });
+
+        // Process Basic Earth Science Syllabus
+        EARTH_SCIENCE_BASIC_SYLLABUS.units.forEach(unit => {
+            unit.chapters.forEach(chapter => {
+                if (chapter.learningOutcomes && chapter.learningOutcomes.length > 0) {
+                    const optgroup = document.createElement('optgroup');
+                    optgroup.label = `ว.โลกฯ (พื้นฐาน) - บทที่ ${chapter.chapterId}: ${chapter.title}`;
+                    chapter.learningOutcomes.forEach(lo => {
+                        optgroup.appendChild(new Option(cleanText(lo), lo));
+                    });
+                    fragment.appendChild(optgroup);
+                }
+            });
+        });
+
+        // Process Advanced Earth Science Syllabus
+        EARTH_SCIENCE_ADVANCE_SYLLABUS.chapters.forEach(chapter => {
+            if (chapter.specificTopics && chapter.specificTopics.length > 0) {
+                const optgroup = document.createElement('optgroup');
+                optgroup.label = `ว.โลกฯ (เพิ่มเติม) - ${chapter.title}`;
+                chapter.specificTopics.forEach(topic => {
+                    optgroup.appendChild(new Option(topic, topic));
+                });
+                fragment.appendChild(optgroup);
             }
         });
- 
-        const sortedCategories = Array.from(categories).sort((a, b) => a.localeCompare(b, 'th'));
- 
-        categorySelector.innerHTML = '<option value="">-- ค้นหาจากทุกหมวดหมู่ --</option>'; // Reset and add default
-        sortedCategories.forEach(cat => categorySelector.add(new Option(cat, cat)));
+
+        categorySelector.innerHTML = ''; // Clear loading message
+        categorySelector.appendChild(fragment);
         categorySelector.disabled = false;
     } catch (error) {
         console.error("Failed to populate category filter:", error);
@@ -78,7 +101,6 @@ function highlightText(text, keyword) {
 
 // Helper function to create a single question element. This promotes reusability.
 function createQuestionElement(item, displayIndex, keyword) {
-    // Check the state of the "Show Answers" toggle
     const showAnswers = document.getElementById('show-answers-toggle')?.checked;
 
     // Replace newline characters with <br> tags for proper HTML rendering
@@ -133,6 +155,78 @@ function createQuestionElement(item, displayIndex, keyword) {
     questionHeader.appendChild(headerButtonsContainer);
 
     questionDiv.appendChild(questionHeader);
+
+    // NEW: Add syllabus info for Basic Earth Science and Physics quizzes
+    const quizInfo = quizList.find(q => q.title === item.sourceQuizTitle);
+    const categoryKey = quizInfo ? quizInfo.category : null;
+    
+    let standardInfo = '';
+    let learningOutcomeInfo = '';
+
+    if (item.subCategory && typeof item.subCategory === 'object') {
+        const { main: mainCat, specific: specificCat } = item.subCategory;
+
+        if (categoryKey === 'EarthSpaceScienceBasic') {
+            for (const unit of EARTH_SCIENCE_BASIC_SYLLABUS.units) {
+                const chapter = unit.chapters.find(ch => ch.title === mainCat);
+                // FIX: Check if the question's topic is in this chapter's list of topics
+                if (chapter && Array.isArray(chapter.specificTopics) && chapter.specificTopics.includes(specificCat)) {
+                    standardInfo = unit.standard;
+                    // If a match is found, we can display the learning outcomes for that chapter.
+                    // For simplicity, we'll display the first one as it's the most likely relevant one.
+                    if (chapter.learningOutcomes && chapter.learningOutcomes.length > 0) {
+                        // Find the specific learning outcome that matches the question's 'specific' property, if possible.
+                        // This handles cases where a topic might map to a specific outcome within a chapter.
+                        const matchedOutcome = chapter.learningOutcomes.find(lo => lo === specificCat);
+                        learningOutcomeInfo = matchedOutcome || chapter.learningOutcomes[0]; // Fallback to the first
+                    }
+                    break;
+                }
+            }
+        } else if (categoryKey && categoryKey.startsWith('PhysicsM')) {
+            const gradeKey = categoryKey.substring(categoryKey.length - 2).toLowerCase(); // 'm4', 'm5', 'm6'
+            const physicsGradeSyllabus = PHYSICS_SYLLABUS[gradeKey];
+            if (physicsGradeSyllabus) {
+                const chapter = physicsGradeSyllabus.chapters.find(ch => ch.title === mainCat);
+                if (chapter) {
+                    // This part is correct for Physics, as specificCat IS the learning outcome.
+                    const matchedOutcome = (chapter.learningOutcomes || []).find(lo => lo === specificCat);
+                    if (matchedOutcome) {
+                        learningOutcomeInfo = matchedOutcome;
+                    }
+                }
+            }
+        }
+        // NEW: Handle EarthSpaceScienceAdvance
+        else if (categoryKey === 'EarthSpaceScienceAdvance') {
+            const chapter = EARTH_SCIENCE_ADVANCE_SYLLABUS.chapters.find(ch => ch.title === mainCat);
+            // For advanced, we assume the 'specific' in the question data is a topic.
+            // We will display the main topic as the "ผลการเรียนรู้" for context.
+            if (chapter && Array.isArray(chapter.specificTopics) && chapter.specificTopics.includes(specificCat)) {
+                // No "standard" in the advance syllabus, so we'll just show the topic.
+                learningOutcomeInfo = specificCat;
+            }
+        }
+    }
+    
+        if (standardInfo || learningOutcomeInfo) {
+            const syllabusDiv = document.createElement('div');
+            syllabusDiv.className = 'mt-3 mb-4 p-3 bg-gray-50 dark:bg-gray-700/50 border-l-4 border-gray-300 dark:border-gray-600 rounded-r-lg text-xs';
+            let html = '<dl class="space-y-1">';
+            if (standardInfo) {
+                html += `<div class="flex items-start gap-2"><dt class="font-bold w-20 flex-shrink-0">มาตรฐาน:</dt><dd class="text-gray-600 dark:text-gray-400">${standardInfo}</dd></div>`;
+            }
+            if (learningOutcomeInfo) {
+                // Determine the correct label based on the category
+                const label = (categoryKey === 'EarthSpaceScienceBasic') ? 'ตัวชี้วัด:' : 'ผลการเรียนรู้:';
+                // Clean up prefixes for better readability
+                const cleanedOutcome = learningOutcomeInfo.replace(/^ว\s[\d\.]+\sม\.[\d\/]+\s/, '').replace(/^\d+\.\s/, '').trim();
+                html += `<div class="flex items-start gap-2"><dt class="font-bold w-20 flex-shrink-0">${label}</dt><dd class="text-gray-600 dark:text-gray-400">${cleanedOutcome}</dd></div>`;
+            }
+            html += '</dl>';
+            syllabusDiv.innerHTML = html;
+            questionDiv.appendChild(syllabusDiv);
+    }
 
     if (questionHtml) {
         const questionText = document.createElement('div');
@@ -508,15 +602,36 @@ svg" fill="none" viewBox="0 0 24 24">
 
         let dataToProcess = allQuestions;
 
-        // Filter by category FIRST, if one is selected
+        // Filter by learning outcome FIRST, if one is selected
         if (selectedCategory) {
+            const relevantTopics = new Set();
+
+            // For some subjects like Physics, the learning outcome string is used directly as the specific topic.
+            // So, we always add the selected item itself to the topics to check.
+            relevantTopics.add(selectedCategory);
+
+            // Now, search through all syllabi to find chapters that list the selected learning outcome.
+            // If found, add all 'specificTopics' from that chapter to our set of relevant topics.
+            const allChapters = [
+                ...Object.values(PHYSICS_SYLLABUS).flatMap(grade => grade.chapters),
+                ...EARTH_SCIENCE_BASIC_SYLLABUS.units.flatMap(unit => unit.chapters),
+                ...EARTH_SCIENCE_ADVANCE_SYLLABUS.chapters
+            ];
+
+            for (const chapter of allChapters) {
+                if (chapter.learningOutcomes && chapter.learningOutcomes.includes(selectedCategory)) {
+                    // If yes, add all associated specific topics to our set of relevant topics.
+                    if (Array.isArray(chapter.specificTopics)) {
+                        chapter.specificTopics.forEach(topic => relevantTopics.add(topic));
+                    }
+                }
+            }
+
+            // Finally, filter the questions. A question is a match if its 'specific' topic
+            // is in our set of relevant topics.
             dataToProcess = dataToProcess.filter(item => {
-                if (!item.subCategory) return false;
-                const subCat = item.subCategory;
-                const subCatDisplay = (typeof subCat === 'object' && subCat.main)
-                    ? (subCat.specific || subCat.main)
-                    : (typeof subCat === 'string' ? subCat : '');
-                return subCatDisplay === selectedCategory;
+                if (!item.subCategory || !item.subCategory.specific) return false;
+                return relevantTopics.has(item.subCategory.specific);
             });
         }
 
@@ -585,6 +700,8 @@ export function initializePreviewPage() {
             const selectedOption = quizSelector.options[quizSelector.selectedIndex];
             const quizTitle = selectedOption ? selectedOption.text : 'Exported Quiz';
             const quizId = selectedOption ? selectedOption.value.replace('-data.js', '') : 'custom-quiz';
+            const quizInfo = quizList.find(q => q.id === quizId); // Find quiz info
+            const category = quizInfo ? quizInfo.category : null; // Get category
 
             if (currentQuizData.length === 0) {
                 alert('ไม่มีข้อมูลคำถามให้ส่งออก');
@@ -598,7 +715,8 @@ export function initializePreviewPage() {
                     exportQuizToTxt({
                         id: quizId,
                         title: quizTitle,
-                        questions: currentQuizData
+                        questions: currentQuizData,
+                        category: category
                     });
                 } catch (error) {
                     console.error("Error during TXT export:", error);
@@ -615,6 +733,8 @@ export function initializePreviewPage() {
             const selectedOption = quizSelector.options[quizSelector.selectedIndex];
             const quizTitle = selectedOption ? selectedOption.text : 'Exported Quiz';
             const quizId = selectedOption ? selectedOption.value.replace('-data.js', '') : 'custom-quiz';
+            const quizInfo = quizList.find(q => q.id === quizId); // Find quiz info
+            const category = quizInfo ? quizInfo.category : null; // Get category
 
             if (currentQuizData.length === 0) {
                 alert('ไม่มีข้อมูลคำถามให้ส่งออก');
@@ -628,7 +748,8 @@ export function initializePreviewPage() {
                     exportQuizToTxt({
                         id: quizId,
                         title: quizTitle,
-                        questions: currentQuizData
+                        questions: currentQuizData,
+                        category: category
                     }, true); // Pass true for includeKeyInFilename
                 } catch (error) {
                     console.error("Error during TXT export:", error);

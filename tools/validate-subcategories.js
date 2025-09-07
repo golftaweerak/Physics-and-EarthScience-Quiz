@@ -40,9 +40,12 @@ function preprocessValidationData() {
 
   // Process Basic Earth Science Syllabus
   const basicEarthMap = new Map();
-  EARTH_SCIENCE_BASIC_SYLLABUS.chapters.forEach(chapter => {
-    const topics = new Set(chapter.specificTopics || []);
-    basicEarthMap.set(chapter.title, topics);
+  // The basic syllabus is nested under 'units', so we need to iterate through them first.
+  EARTH_SCIENCE_BASIC_SYLLABUS.units.forEach(unit => {
+    unit.chapters.forEach(chapter => {
+      const topics = new Set(chapter.specificTopics || []);
+      basicEarthMap.set(chapter.title, topics);
+    });
   });
   validationMap.set('EarthSpaceScienceBasic', basicEarthMap);
 
@@ -55,6 +58,12 @@ function preprocessValidationData() {
   validationMap.set('EarthSpaceScienceAdvance', advanceEarthMap);
 
   return validationMap;
+}
+
+/** Helper function to normalize topic strings by removing potential leading numbers like "1. " */
+function normalizeTopic(topic) {
+    if (typeof topic !== 'string') return '';
+    return topic.replace(/^\d+\.\s*/, '').trim();
 }
 
 /**
@@ -127,7 +136,7 @@ async function main() {
         }
 
         const chapterTitle = subCategory.main.trim();
-        const specificTopic = (subCategory.specific || '').trim();
+        const specificTopic = normalizeTopic(subCategory.specific);
 
         // Step 1: Validate the chapter (subCategory.main)
         if (!validChapters.has(chapterTitle)) {
@@ -136,8 +145,10 @@ async function main() {
         }
 
         // Step 2: Validate the specific topic (subCategory.specific)
-        const validTopics = validChapters.get(chapterTitle);
-        if (validTopics.size > 0 && !validTopics.has(specificTopic)) {
+        const validTopicsRaw = validChapters.get(chapterTitle);
+        const validTopicsNormalized = new Set(Array.from(validTopicsRaw).map(normalizeTopic));
+
+        if (validTopicsNormalized.size > 0 && !validTopicsNormalized.has(specificTopic)) {
           // Only report error if there are specific topics defined for this chapter.
           // If validTopics is empty, it means any specific topic is acceptable (or not defined).
           fileErrors.push({ File: fileName, ID: questionIdForTable, Error: `Invalid Topic (specific): "${specificTopic}" for chapter "${chapterTitle}"` });
