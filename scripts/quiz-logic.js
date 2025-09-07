@@ -365,6 +365,11 @@ function setFloatingNav(active) {
     } / ${state.shuffledQuestions.length}`;
     elements.question.innerHTML = questionHtml;
 
+    // Show the hint section container (which contains the button) if a hint exists.
+    if (currentQuestion.hint && elements.hintSection) {
+        elements.hintSection.classList.remove('hidden');
+    }
+
     const previousAnswer = state.userAnswers?.[state.currentQuestionIndex];
     // Ensure options is an array before spreading
     const shuffledOptions = shuffleArray([...(currentQuestion?.options || [])]);
@@ -375,6 +380,32 @@ function setFloatingNav(active) {
         elements.options.appendChild(createCheckboxOption(option, previousAnswer));
       });
       // For multi-select, show a "Submit" button immediately
+      if (!previousAnswer) {
+        updateNextButtonAppearance('submit');
+        elements.nextBtn.classList.remove('hidden');
+      }
+    } else if (currentQuestion.type === 'fill-in') {
+      const inputHtml = `
+        <div class="mt-4">
+            <label for="fill-in-answer" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">กรุณาพิมพ์คำตอบของคุณ:</label>
+            <input type="text" id="fill-in-answer" class="w-full p-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="พิมพ์คำตอบที่นี่...">
+        </div>
+      `;
+      elements.options.innerHTML = inputHtml;
+      if (!previousAnswer) {
+        updateNextButtonAppearance('submit');
+        elements.nextBtn.classList.remove('hidden');
+      }
+    } else if (currentQuestion.type === 'fill-in-number') {
+      const placeholderText = currentQuestion.decimalPlaces ? `ทศนิยม ${currentQuestion.decimalPlaces} ตำแหน่ง` : 'กรอกคำตอบตัวเลข';
+      const unitDisplay = currentQuestion.unit ? `<span class="ml-2 text-gray-600 dark:text-gray-400">${currentQuestion.unit}</span>` : '';
+      const inputHtml = `
+        <div class="mt-4 flex items-center">
+            <input type="number" id="fill-in-number-answer" step="any" class="w-full p-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="${placeholderText}">
+            ${unitDisplay}
+        </div>
+      `;
+      elements.options.innerHTML = inputHtml;
       if (!previousAnswer) {
         updateNextButtonAppearance('submit');
         elements.nextBtn.classList.remove('hidden');
@@ -641,11 +672,15 @@ function setFloatingNav(active) {
    */
   function handleNextButtonClick() {
     const currentQuestion = state.shuffledQuestions[state.currentQuestionIndex];
-    const isMultiSelect = currentQuestion.type === 'multiple-select';
+    const questionType = currentQuestion.type;
     const isAnswered = state.userAnswers[state.currentQuestionIndex] !== null;
 
-    if (isMultiSelect && !isAnswered) {
+    if (questionType === 'multiple-select' && !isAnswered) {
       evaluateMultipleAnswer();
+    } else if (questionType === 'fill-in' && !isAnswered) {
+      evaluateFillInAnswer();
+    } else if (questionType === 'fill-in-number' && !isAnswered) {
+      evaluateFillInNumberAnswer();
     } else {
       showNextQuestion();
     }
@@ -1560,10 +1595,9 @@ function setFloatingNav(active) {
         return;
       }
       const currentQuestion = state.shuffledQuestions[state.currentQuestionIndex];
-      const isMultiSelect = currentQuestion.type === 'multiple-select';
 
       // Handle multi-select timeout
-      if (isMultiSelect) {
+      if (currentQuestion.type === 'multiple-select') {
           const correctAnswers = (currentQuestion.answer || []).map(a => String(a).trim());
           state.userAnswers[state.currentQuestionIndex] = {
               question: currentQuestion.question,
@@ -1571,38 +1605,61 @@ function setFloatingNav(active) {
               correctAnswer: correctAnswers,
               isCorrect: false,
               explanation: currentQuestion.explanation,
+              subCategory: currentQuestion.subCategory || 'ไม่มีหมวดหมู่',
+              sourceQuizTitle: currentQuestion.sourceQuizTitle
           };
-          saveQuizState();
           showFeedback(false, "หมดเวลา! " + (currentQuestion.explanation || ""), correctAnswers);
           Array.from(elements.options.querySelectorAll('input[type="checkbox"]')).forEach(cb => cb.disabled = true);
-      updateNextButtonAppearance('next');
-          elements.nextBtn.classList.remove('hidden');
-          return; // End here for multi-select
+      } else if (currentQuestion.type === 'fill-in') {
+          const correctAnswers = currentQuestion.answer.map(a => String(a).trim());
+          state.userAnswers[state.currentQuestionIndex] = {
+              question: currentQuestion.question,
+              selectedAnswer: "ไม่ได้ตอบ (หมดเวลา)",
+              correctAnswer: correctAnswers,
+              isCorrect: false,
+              explanation: currentQuestion.explanation,
+              subCategory: currentQuestion.subCategory || 'ไม่มีหมวดหมู่',
+              sourceQuizTitle: currentQuestion.sourceQuizTitle
+          };
+          showFeedback(false, "หมดเวลา! " + (currentQuestion.explanation || ""), correctAnswers.join(' หรือ '));
+          const answerInput = document.getElementById('fill-in-answer');
+          if (answerInput) answerInput.disabled = true;
+      } else if (currentQuestion.type === 'fill-in-number') {
+        const correctAnswer = `${currentQuestion.answer} ${currentQuestion.unit || ''}`.trim();
+        state.userAnswers[state.currentQuestionIndex] = {
+            question: currentQuestion.question,
+            selectedAnswer: "ไม่ได้ตอบ (หมดเวลา)",
+            correctAnswer: correctAnswer,
+            isCorrect: false,
+            explanation: currentQuestion.explanation,
+            subCategory: currentQuestion.subCategory || 'ไม่มีหมวดหมู่',
+            sourceQuizTitle: currentQuestion.sourceQuizTitle
+        };
+        showFeedback(false, "หมดเวลา! " + (currentQuestion.explanation || ""), correctAnswer);
+        const answerInput = document.getElementById('fill-in-number-answer');
+        if (answerInput) answerInput.disabled = true;
+      } else {
+        // Default single-choice timeout
+        const correctAnswerValue = currentQuestion.answer;
+        const correctAnswer = (correctAnswerValue || "").toString().trim();
+        state.userAnswers[state.currentQuestionIndex] = {
+          question: currentQuestion.question,
+          selectedAnswer: "ไม่ได้ตอบ (หมดเวลา)",
+          correctAnswer: correctAnswer,
+          isCorrect: false,
+          explanation: currentQuestion.explanation,
+          subCategory: currentQuestion.subCategory || 'ไม่มีหมวดหมู่',
+          sourceQuizTitle: currentQuestion.sourceQuizTitle
+        };
+        const feedbackExplanation = "หมดเวลา! " + (currentQuestion.explanation || "");
+        showFeedback(false, feedbackExplanation, correctAnswer);
+        Array.from(elements.options.children).forEach((button) => (button.disabled = true));
       }
 
-      // Safely get and trim the correct answer
-      const correctAnswerValue = currentQuestion.answer;
-      const correctAnswer = (correctAnswerValue || "").toString().trim();
-
-      // Record the answer as incorrect due to time out
-      state.userAnswers[state.currentQuestionIndex] = {
-        question: currentQuestion.question,
-        selectedAnswer: "ไม่ได้ตอบ (หมดเวลา)",
-        correctAnswer: correctAnswer,
-        isCorrect: false,
-        explanation: currentQuestion.explanation,
-      };
-
-      // Gracefully handle a missing explanation when time is up
-      const feedbackExplanation =
-        "หมดเวลา! " + (currentQuestion.explanation || "");
-      showFeedback(false, feedbackExplanation, correctAnswer);
-      Array.from(elements.options.children).forEach(
-        (button) => (button.disabled = true)
-      );
+      // Common actions for any per-question timeout
+      saveQuizState();
       elements.nextBtn.classList.remove("hidden");
       updateNextButtonAppearance('next');
-      saveQuizState();
     } else if (state.timerMode === "overall") {
       showResults();
     }
