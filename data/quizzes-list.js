@@ -15,7 +15,7 @@ export const quizList = [
   {
     "id": "phy_m4_Ch3-2",
     "title": "แรงและกฎการเคลื่อนที่ (ชุดที่ 2)",
-    "amount": 20,
+    "amount": 40,
     "description": "บทที่ 3: แรงและกฎการเคลื่อนที่ (เน้นการคำนวณและวิเคราะห์)",
     "url": "./quiz/index.html?id=phy_m4_Ch3-2",
     "storageKey": "quizState-phy_m4_Ch3-2",
