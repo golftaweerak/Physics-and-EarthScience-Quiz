@@ -94,22 +94,23 @@ function groupQuizzesForCategory(quizzes, categoryKey) {
     }).filter(Boolean); // Filter out null entries for chapters with no quizzes
   }
 
-  // --- Default grouping logic for other categories ---
-
-  // Group quizzes by their specific subCategory (chapter/unit title)
-  const groupedBySpecificTopic = quizzes.reduce((acc, quiz) => {
-    const specificTopic = quiz.subCategory || 'Uncategorized'; // subCategory is now a string
-    if (!acc[specificTopic]) acc[specificTopic] = [];
-    acc[specificTopic].push(quiz);
+  // --- Fallback grouping logic for categories without a defined syllabus structure ---
+  const fallbackGroups = [];
+  const groupedBySubCategory = quizzes.reduce((acc, quiz) => {
+    // Use the quiz.subCategory as the grouping key.
+    const groupTitle = quiz.subCategory || 'บทเรียนทั่วไป';
+    if (!acc[groupTitle]) {
+      acc[groupTitle] = [];
+    }
+    acc[groupTitle].push(quiz);
     return acc;
   }, {});
 
-  // Sort topics alphabetically and create groups
-  Object.keys(groupedBySpecificTopic).sort().forEach(specificTopic => {
-    groups.push({ title: specificTopic, quizzes: groupedBySpecificTopic[specificTopic], level: 1 });
+  Object.keys(groupedBySubCategory).sort((a, b) => a.localeCompare(b, 'th')).forEach(groupTitle => {
+    fallbackGroups.push({ title: groupTitle, quizzes: groupedBySubCategory[groupTitle], level: 1, shortTitle: groupTitle.substring(0, 6) });
   });
 
-  return groups;
+  return fallbackGroups;
 }
 
 

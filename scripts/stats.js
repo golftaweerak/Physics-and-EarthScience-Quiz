@@ -1,6 +1,6 @@
 import { quizList } from "../data/quizzes-list.js";
 import { getSavedCustomQuizzes } from "./custom-quiz-handler.js";
-import { categoryDetails } from "./data-manager.js";
+import { categoryDetails, getCategoryDisplayName } from "./data-manager.js";
 import { ModalHandler } from "./modal-handler.js";
 
 /**
@@ -94,9 +94,9 @@ function calculateSubjectPerformance(stats) {
 
     return Object.entries(performanceBySubject)
         .map(([subjectKey, data]) => {
-            const details = categoryDetails[subjectKey] || { displayName: subjectKey, order: 99 };
+            const details = categoryDetails[subjectKey] || { order: 99 };
             return {
-                subject: details.displayName,
+                subject: getCategoryDisplayName(subjectKey),
                 score: data.total > 0 ? (data.correct / data.total) * 100 : 0,
                 order: details.order,
             };

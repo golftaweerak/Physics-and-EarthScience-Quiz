@@ -107,12 +107,24 @@ export const categoryDetails = {
   },
   // This is a special category for the custom quiz creator.
   General: {
+    title: "ทุกหมวดหมู่",
     displayName: "ทุกหมวดหมู่",
     icon: "./assets/icons/study.png",
   },
 };
 
-
+/**
+ * Gets the display-friendly name for a category.
+ * Falls back to the title if displayName is not specified.
+ * @param {string} categoryKey - The key of the category.
+ * @returns {string} The display name.
+ */
+export function getCategoryDisplayName(categoryKey) {
+    const details = categoryDetails[categoryKey];
+    if (!details) return categoryKey; // Fallback to the key itself
+    // Use displayName if it exists, otherwise use title.
+    return details.displayName || details.title;
+}
 
 /**
  * Retrieves the progress state of a quiz from localStorage.
@@ -139,6 +151,9 @@ export function getQuizProgress(storageKey, totalQuestions) {
     const savedState = JSON.parse(savedStateJSON);
     if (!savedState || typeof savedState.currentQuestionIndex !== "number")
       return defaultState;
+    // Use the length from the saved state if available, as it's the most accurate count
+    // for the session the user was in. Fallback to the static totalQuestions.
+    const actualTotalQuestions = savedState.shuffledQuestions?.length || totalQuestions;
 
     // A more robust way to count answered questions is to check the userAnswers array.
     // This avoids ambiguity with currentQuestionIndex, which points to the *next* question to be shown.
@@ -147,8 +162,8 @@ export function getQuizProgress(storageKey, totalQuestions) {
       : 0;
 
     const score = savedState.score || 0;
-    const isFinished = answeredCount >= totalQuestions; // A quiz is finished when all questions have been answered.
-    const percentage = Math.round((answeredCount / totalQuestions) * 100);
+    const isFinished = answeredCount >= actualTotalQuestions;
+    const percentage = actualTotalQuestions > 0 ? Math.round((answeredCount / actualTotalQuestions) * 100) : 0;
     const lastAttemptTimestamp = savedState.lastAttemptTimestamp || 0; // Get timestamp from saved state
 
     return {
@@ -157,7 +172,7 @@ export function getQuizProgress(storageKey, totalQuestions) {
       isFinished,
       hasProgress: true,
       answeredCount,
-      totalQuestions,
+      totalQuestions: actualTotalQuestions,
       lastAttemptTimestamp,
     };
   } catch (e) {
@@ -340,25 +355,25 @@ export async function fetchAllQuizData() {
     // Pre-process each question to create a single, lowercase, searchable text field.
     // This is done only once when the data is first loaded, making subsequent searches much faster.
     allQuestionsCache.forEach(q => {
-        const searchableParts = [
-            q.question,
-            q.explanation,
-            q.scenarioTitle,
-            q.scenarioDescription,
-            q.sourceQuizTitle,
-            ...(q.options || q.choices || []),
-        ];
-        // Handle both object and string formats for subCategory
-        if (q.subCategory) {
-            if (typeof q.subCategory === 'object' && q.subCategory.main) {
-                searchableParts.push(q.subCategory.main);
-                const specifics = Array.isArray(q.subCategory.specific) ? q.subCategory.specific : [q.subCategory.specific];
-                searchableParts.push(...specifics);
-            } else if (typeof q.subCategory === 'string') {
-                searchableParts.push(q.subCategory);
-            }
+      const searchableParts = [
+        q.question,
+        q.explanation,
+        q.scenarioTitle,
+        q.scenarioDescription,
+        q.sourceQuizTitle,
+        ...(q.options || q.choices || []),
+      ];
+      // Handle both object and string formats for subCategory
+      if (q.subCategory) {
+        if (typeof q.subCategory === 'object' && q.subCategory.main) {
+          searchableParts.push(q.subCategory.main);
+          const specifics = Array.isArray(q.subCategory.specific) ? q.subCategory.specific : [q.subCategory.specific];
+          searchableParts.push(...specifics);
+        } else if (typeof q.subCategory === 'string') {
+          searchableParts.push(q.subCategory);
         }
-        q.searchableText = searchableParts.filter(Boolean).join(' ').toLowerCase();
+      }
+      q.searchableText = searchableParts.filter(Boolean).join(' ').toLowerCase();
     });
   } catch (error) {
     // The error from a failing import will be caught here.

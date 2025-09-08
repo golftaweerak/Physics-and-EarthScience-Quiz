@@ -91,7 +91,7 @@ export function initializeMenu() {
     // --- Pathing Logic ---
     const isSubdirectory = window.location.pathname.includes('/quiz/');
     const basePath = isSubdirectory ? '../' : './';
-    const getQuizUrl = (id) => `${isSubdirectory ? '.' : './quiz'}/index.html?id=${id}`;
+    const getQuizUrl = (id) => `${isSubdirectory ? '' : './quiz/'}index.html?id=${id}`;
 
     // --- Get All Quizzes and Progress ---
     const allQuizzes = [...quizList, ...getSavedCustomQuizzes()];
