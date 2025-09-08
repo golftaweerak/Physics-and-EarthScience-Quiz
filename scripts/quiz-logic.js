@@ -38,9 +38,9 @@ const config = {
     },
   },
   icons: {
-    next: `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg>`,
-    prev: `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>`,
-    submit: `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>`,
+    next: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg>`,
+    prev: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>`,
+    submit: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>`,
   },
   timerDefaults: {
     perQuestion: 90, // 90 วินาทีต่อข้อ
@@ -179,7 +179,7 @@ function setFloatingNav(active) {
   state.isFloatingNav = active;
 
   const containerFloatingClasses = ['fixed', 'bottom-4', 'right-4', 'z-20', 'gap-3'];
-  const buttonFloatingClasses = ['w-14', 'h-14', 'rounded-full', 'flex', 'items-center', 'justify-center', 'shadow-lg', 'hover:shadow-xl', 'transition', 'p-0', 'border-0'];
+  const buttonFloatingClasses = ['w-16', 'h-16', 'rounded-full', 'flex', 'items-center', 'justify-center', 'shadow-lg', 'hover:shadow-xl', 'transition', 'p-0', 'border-0'];
 
   if (active) {
     // --- 1. Configure Container ---
@@ -1575,6 +1575,7 @@ function resumeQuiz(savedState) {
   state.sessionStartTime = Date.now(); // Start tracking time for the new session
 
   switchScreen(elements.quizScreen);
+  elements.quizTitleDisplay.textContent = state.quizTitle; // FIX: Set the title when resuming
   showQuestion();
 
   // If resuming a quiz with an overall timer, restart the countdown
