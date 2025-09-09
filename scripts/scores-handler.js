@@ -101,23 +101,42 @@ export function initializeScoreSearch() {
     const searchScores = () => {
         const query = studentIdInput.value.trim();
         if (query.length === 0) {
-            displayMessage('กรุณากรอกรหัสนักเรียนหรือชื่อเพื่อค้นหา', 'error');
+            displayMessage('กรุณากรอกรหัสนักเรียน, ชื่อ, หรือห้องเรียนเพื่อค้นหา', 'error');
             return;
         }
 
         const lowerCaseQuery = query.toLowerCase();
-        const results = studentScores.filter(s => 
-            s.id === query || 
-            s.name.toLowerCase().includes(lowerCaseQuery)
-        );
+        
+        // --- New hierarchical search logic ---
+        
+        // Priority 1: Exact ID match.
+        const idMatch = studentScores.find(s => s.id === query);
+        if (idMatch) {
+            displayResult(idMatch);
+            return;
+        }
 
-        if (results.length === 1) {
-            displayResult(results[0]);
-        } else if (results.length > 1) {
-            const studentListHtml = results
+        // Priority 2: Exact Room match.
+        // This is done only if no exact ID was found.
+        const roomMatches = studentScores.filter(s => s.room === query);
+        if (roomMatches.length > 0) {
+            const studentListHtml = roomMatches
                 .map(s => `<li class="py-1 text-left">${s.name} (รหัส: ${s.id})</li>`)
                 .join('');
-            displayMessage(`พบนักเรียนหลายคน:<ul class="list-disc list-inside mt-2">${studentListHtml}</ul><p class="mt-2">กรุณาระบุรหัส 5 หลักให้ชัดเจน หรือใช้ชื่อ-สกุลที่เจาะจงมากขึ้น</p>`, 'info');
+            displayMessage(`พบนักเรียน ${roomMatches.length} คนในห้อง ${query}:<ul class="list-disc list-inside mt-2">${studentListHtml}</ul>`, 'info');
+            return;
+        }
+
+        // Priority 3: Partial Name match.
+        // This is done only if no ID or room match was found.
+        const nameMatches = studentScores.filter(s => s.name.toLowerCase().includes(lowerCaseQuery));
+        if (nameMatches.length > 1) {
+            const studentListHtml = nameMatches
+                .map(s => `<li class="py-1 text-left">${s.name} (รหัส: ${s.id}, ห้อง: ${s.room})</li>`)
+                .join('');
+            displayMessage(`พบนักเรียนหลายคน:<ul class="list-disc list-inside mt-2">${studentListHtml}</ul><p class="mt-2">กรุณาระบุข้อมูลให้ชัดเจนมากขึ้น</p>`, 'info');
+        } else if (nameMatches.length === 1) {
+            displayResult(nameMatches[0]);
         } else {
             displayMessage(`ไม่พบข้อมูลสำหรับ "${query}"`, 'error');
         }

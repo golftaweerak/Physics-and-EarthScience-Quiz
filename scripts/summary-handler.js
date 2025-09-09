@@ -360,19 +360,23 @@ function renderSummary(summaryData) {
 
         <!-- Overall Stats Cards -->
         <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <div class="stats-card rounded-xl">
-                <div class="flex justify-between items-center">
-                    <span class="stats-card-label text-gray-500 dark:text-gray-400">จำนวนนักเรียนทั้งหมด</span>
-                    <svg class="h-8 w-8 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m-7.5-2.962A3.75 3.75 0 0112 15v-2.25m-3.75 0a3.75 3.75 0 017.5 0v2.25a3.75 3.75 0 01-7.5 0v-2.25z" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72M12 21A3.75 3.75 0 0012 15v-2.25m-3.75 0a3.75 3.75 0 017.5 0v2.25a3.75 3.75 0 01-7.5 0v-2.25z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>
+            <div class="bg-white dark:bg-gray-800/50 p-6 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 flex items-center gap-6">
+                <div class="flex-shrink-0 h-14 w-14 rounded-full flex items-center justify-center bg-blue-100 dark:bg-blue-900/50 text-blue-500 dark:text-blue-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.653-.124-1.283-.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
                 </div>
-                <div class="stats-card-value">${summaryData.totalStudents}</div>
+                <div>
+                    <div class="text-3xl font-bold text-gray-800 dark:text-gray-100 font-kanit">${summaryData.totalStudents}</div>
+                    <div class="text-sm font-medium text-gray-500 dark:text-gray-400">จำนวนนักเรียนทั้งหมด</div>
+                </div>
             </div>
-            <div class="stats-card rounded-xl">
-                <div class="flex justify-between items-center">
-                    <span class="stats-card-label text-gray-500 dark:text-gray-400">คะแนนเฉลี่ยรวม</span>
-                    <svg class="h-8 w-8 text-green-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0l-.07.002-.018.002-.006.001.01.001.01.001.007.001.006.001.018.002.07.002M12 12.75h.008v.008H12v-.008z" /></svg>
+            <div class="bg-white dark:bg-gray-800/50 p-6 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 flex items-center gap-6">
+                <div class="flex-shrink-0 h-14 w-14 rounded-full flex items-center justify-center bg-green-100 dark:bg-green-900/50 text-green-500 dark:text-green-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 14l9-5-9-5-9 5 9 5z" /><path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-5.998 12.078 12.078 0 01.665-6.479L12 14z" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-5.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" /></svg>
                 </div>
-                <div class="stats-card-value">${summaryData.averageScore}</div>
+                <div>
+                    <div class="text-3xl font-bold text-gray-800 dark:text-gray-100 font-kanit">${summaryData.averageScore}</div>
+                    <div class="text-sm font-medium text-gray-500 dark:text-gray-400">คะแนนเฉลี่ยรวม</div>
+                </div>
             </div>
         </div>
 
@@ -504,11 +508,25 @@ function initializeStudentSearch() {
             return;
         }
 
-        const results = studentScores.filter(student =>
-            student.name.toLowerCase().includes(query) ||
-            student.id.includes(query) ||
-            (student.room && student.room.includes(query))
-        );
+        // New hierarchical search logic
+        let results = [];
+        
+        // Priority 1: Exact ID match
+        const idMatch = studentScores.find(s => s.id.toLowerCase() === query);
+        if (idMatch) {
+            results = [idMatch];
+        } else {
+            // Priority 2: Exact Room match
+            const roomMatches = studentScores.filter(s => s.room && s.room.toLowerCase() === query);
+            if (roomMatches.length > 0) {
+                results = roomMatches;
+            } else {
+                // Priority 3: Partial Name match
+                results = studentScores.filter(student =>
+                    student.name.toLowerCase().includes(query)
+                );
+            }
+        }
 
         renderSearchResults(results, resultsContainer);
     };
