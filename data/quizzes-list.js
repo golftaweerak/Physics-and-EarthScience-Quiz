@@ -1,5 +1,4 @@
 export const quizList = [
-
   {
     id: "phy_m4_Ch3-1",
     title: "แรงและกฎการเคลื่อนที่ (ชุดที่ 1)",
@@ -24,12 +23,11 @@ export const quizList = [
     category: "PhysicsM4",
     subCategory: "บทที่ 3: แรงและกฎการเคลื่อนที่",
   },
-    {
+  {
     id: "phy_m4_ch3-3",
     title: "แรงและกฎการเคลื่อนที่ (ชุดที่ 3)",
     amount: 30,
-    description:
-      "บทที่ 3: แรงและกฎการเคลื่อนที่ (เน้นการประยุกต์และการคำนวณ)",
+    description: "บทที่ 3: แรงและกฎการเคลื่อนที่ (เน้นการประยุกต์และการคำนวณ)",
     url: "./quiz/index.html?id=phy_m4_ch3-3",
     storageKey: "quizState-phy_m4_ch3-3",
     icon: "./assets/icons/friction.png",
@@ -77,7 +75,8 @@ export const quizList = [
     id: "phy_m4_ch4-3",
     title: "สมดุลกล: สมดุลต่อการเลื่อนที่ (ชุดที่ 3)",
     amount: 20,
-    description: "บทที่ 4: สมดุลกล (เน้นคำนวณสมดุลต่อการเลื่อนที่, จุดศูนย์กลางมวล, และจุดศูนย์ถ่วง)",
+    description:
+      "บทที่ 4: สมดุลกล (เน้นคำนวณสมดุลต่อการเลื่อนที่, จุดศูนย์กลางมวล, และจุดศูนย์ถ่วง)",
     url: "./quiz/index.html?id=phy_m4_ch4-3",
     storageKey: "quizState-phy_m4_ch4-3",
     icon: "./assets/icons/equilibrium.png",
@@ -121,6 +120,30 @@ export const quizList = [
     altText: "ไอคอนการวิเคราะห์ดาวเคราะห์",
     category: "EarthSpaceScienceBasic",
     subCategory: "โครงสร้างโลก",
+  },
+  {
+    id: "ess_basic_m6_final-review-1",
+    title: "แนวข้อสอบปลายภาค เทอม 1 ชุดที่ 1",
+    amount: 20,
+    description: "ชุดที่ 1: ทบทวนการสอบปลายภาค เทอม 1",
+    url: "./quiz/index.html?id=ess_basic_m6_final-review-1",
+    storageKey: "quizState-ess_basic_m6_final-review-1",
+    icon: "./assets/icons/earth.png",
+    altText: "ไอคอนสำหรับ ess_basic_m6_final-review-1",
+    category: "EarthSpaceScienceBasic",
+    subCategory: "แนวข้อสอบปลายภาค",
+  },
+  {
+    id: "ess_basic_m6_final-review-2",
+    title: "แนวข้อสอบปลายภาค เทอม 1 ชุดที่ 2",
+    amount: 30,
+    description: "ชุดที่ 2: ทบทวนก่อนสอบปลายภาค เทอม 1",
+    url: "./quiz/index.html?id=ess_basic_m6_final-review-2",
+    storageKey: "quizState-ess_basic_m6_final-review-2",
+    icon: "./assets/icons/earth.png",
+    altText: "ไอคอนสำหรับ ess_basic_m6_final-review-2",
+    category: "EarthSpaceScienceBasic",
+    subCategory: "แนวข้อสอบปลายภาค",
   },
   {
     id: "ess_basic_m6_ch4-1",

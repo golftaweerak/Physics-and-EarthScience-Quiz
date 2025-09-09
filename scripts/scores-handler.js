@@ -46,12 +46,49 @@ export function initializeScoreSearch() {
     const resultContainer = document.getElementById('result-container');
     const clearBtn = document.getElementById('clear-btn');
     const defaultMessage = document.getElementById('default-message');
+
+    // Modal elements
+    const modal = document.getElementById('assignment-list-modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalContent = document.getElementById('modal-list-content');
+    const modalCloseBtn = document.getElementById('modal-close-btn');
     
-    if (!studentIdInput || !searchBtn || !resultContainer || !clearBtn) {
+    if (!studentIdInput || !searchBtn || !resultContainer || !clearBtn || !modal) {
         console.error("Required elements for score search are missing from the DOM.");
         return;
     }
 
+    // --- Modal Logic ---
+    if (modal && modalCloseBtn && modalTitle && modalContent) {
+        const closeModal = () => {
+            modal.classList.add('hidden');
+        };
+
+        modalCloseBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', (event) => {
+            // Close if clicked on the backdrop
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && !modal.classList.contains('hidden')) {
+                closeModal();
+            }
+        });
+    }
+
+    function showAssignmentListModal(title, assignments) {
+        if (!modal || !modalTitle || !modalContent) return;
+        modalTitle.textContent = title;
+        if (assignments.length === 0) {
+            modalContent.innerHTML = `<p class="text-gray-500 dark:text-gray-400 text-center py-8">ไม่มีรายการ</p>`;
+        } else {
+            const listHtml = assignments.map(createAssignmentItemHTML).join('');
+            modalContent.innerHTML = `<ul class="divide-y divide-gray-200 dark:divide-gray-700">${listHtml}</ul>`;
+        }
+        modal.classList.remove('hidden');
+    }
     // Defensive check: Ensure student data is available before enabling search.
     if (!Array.isArray(studentScores) || studentScores.length === 0) {
         console.error("Student scores data is missing or empty.");
@@ -169,6 +206,46 @@ export function initializeScoreSearch() {
         `;
     }
 
+    /**
+     * Creates the HTML for a single assignment list item, making it a clickable link.
+     * @param {object} assignment - The assignment object.
+     * @returns {string} The HTML string for the list item.
+     */
+    function createAssignmentItemHTML(assignment) {
+        const url = ASSIGNMENT_URL_MAP[assignment.name] || null;
+        const lowerCaseName = assignment.name.toLowerCase();
+        const displayName = ASSIGNMENT_DISPLAY_NAME_MAP[lowerCaseName] || assignment.name;
+        const score = assignment.score;
+        let statusHtml;
+
+        if (isNaN(parseFloat(score))) {
+            // Handle text-based scores like "ส่งแล้ว", "ยังไม่ส่ง"
+            const isSubmitted = score && score.toLowerCase() !== 'ยังไม่ส่ง';
+            const colorClass = isSubmitted 
+                ? 'text-green-800 bg-green-100 dark:text-green-200 dark:bg-green-900/50' 
+                : 'text-red-800 bg-red-100 dark:text-red-200 dark:bg-red-900/50';
+            statusHtml = `<span class="px-2 py-1 text-xs font-semibold ${colorClass} rounded-full">${score || 'ยังไม่ส่ง'}</span>`;
+        } else {
+            // Handle numeric scores
+            statusHtml = `<span class="font-mono font-bold text-gray-800 dark:text-gray-200">${score}</span>`;
+        }
+
+        const contentHtml = `
+            <div class="flex-grow min-w-0 pr-4">
+                <span class="text-gray-700 dark:text-gray-300 text-sm font-medium">${displayName}</span>
+            </div>
+            <div class="flex items-center gap-3 flex-shrink-0">
+                ${statusHtml}
+                ${url ? `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400 group-hover:text-blue-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>` : '<div class="w-4 h-4"></div>'}
+            </div>
+        `;
+        if (url) {
+            return `<li class="block"><a href="${url}" target="_blank" rel="noopener noreferrer" class="group flex justify-between items-center py-3 px-4 hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors duration-200">${contentHtml}</a></li>`;
+        } else {
+            return `<li class="flex justify-between items-center py-3 px-4 opacity-75">${contentHtml}</li>`;
+        }
+    }
+
     function displayResult(student) {
         if (defaultMessage) defaultMessage.classList.add('hidden');
 
@@ -260,8 +337,9 @@ export function initializeScoreSearch() {
         `;
 
         // 1. Filter out non-trackable assignments and calculate stats
-        const trackableAssignments = student.assignments.filter(assignment => 
-            !SUMMARY_ASSIGNMENT_PATTERNS.some(pattern => pattern.test(assignment.name.toLowerCase()))
+        const TRACKABLE_KEYWORDS = ['กิจกรรม', 'แบบฝึก', 'quiz', 'ท้ายบท'];
+        const trackableAssignments = student.assignments.filter(assignment =>
+            TRACKABLE_KEYWORDS.some(keyword => assignment.name.toLowerCase().includes(keyword))
         );
 
         const submittedCount = trackableAssignments.filter(a => a.score && a.score.toLowerCase() !== 'ยังไม่ส่ง').length;
@@ -274,114 +352,80 @@ export function initializeScoreSearch() {
         // 3. Build the HTML
         const summaryCardsHtml = `
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-                <div class="p-4 bg-green-100 dark:bg-green-900/50 rounded-lg text-center border border-green-200 dark:border-green-700">
-                    <div class="text-3xl font-bold text-green-600 dark:text-green-400">${submittedCount}</div>
+                <button id="show-submitted-btn" class="p-4 bg-green-100 dark:bg-green-900/50 rounded-lg text-center border border-green-200 dark:border-green-700 transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
+                    <div class="text-4xl font-bold text-green-600 dark:text-green-400">${submittedCount}</div>
                     <div class="text-sm font-medium text-green-800 dark:text-green-300">งานที่ส่งแล้ว</div>
-                </div>
-                <div class="p-4 bg-red-100 dark:bg-red-900/50 rounded-lg text-center border border-red-200 dark:border-red-700">
-                    <div class="text-3xl font-bold text-red-600 dark:text-red-400">${missingCount}</div>
+                </button>
+                <button id="show-missing-btn" class="p-4 bg-red-100 dark:bg-red-900/50 rounded-lg text-center border border-red-200 dark:border-red-700 transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
+                    <div class="text-4xl font-bold text-red-600 dark:text-red-400">${missingCount}</div>
                     <div class="text-sm font-medium text-red-800 dark:text-red-300">งานที่ค้างส่ง</div>
-                </div>
+                </button>
                 <div class="p-4 bg-blue-100 dark:bg-blue-900/50 rounded-lg text-center border border-blue-200 dark:border-blue-700">
                     <div class="text-3xl font-bold text-blue-600 dark:text-blue-400">${completionPercentage.toFixed(0)}%</div>
                     <div class="text-sm font-medium text-blue-800 dark:text-blue-300">ความสมบูรณ์</div>
                 </div>
             </div>
-            <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 mb-8">
-                <div class="bg-blue-600 h-2.5 rounded-full" style="width: ${completionPercentage}%"></div>
+            <div class="w-full bg-gray-200 rounded-full h-3 dark:bg-gray-700 mb-8 overflow-hidden">
+                <div class="bg-gradient-to-r from-blue-400 to-blue-600 h-3 rounded-full transition-all duration-500" style="width: ${completionPercentage}%"></div>
             </div>
         `;
 
         const assignmentsSection = Object.keys(groupedAssignments).length > 0 ? `
             <figure>
-                <figcaption class="p-3 text-lg font-semibold text-left text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-800 rounded-t-lg border-x border-t border-gray-200 dark:border-gray-700">
+                <figcaption class="p-4 text-lg font-semibold text-left text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-800">
                     รายการงานที่ต้องส่ง
                 </figcaption>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-b-lg border border-gray-200 dark:border-gray-700">
+                <div class="space-y-2 p-4 bg-gray-50 dark:bg-gray-900/30">
                     ${Object.entries(groupedAssignments).map(([chapter, chapterAssignments]) => `
-                        <div class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
-                            <h4 class="p-3 font-bold text-gray-800 dark:text-gray-200 font-kanit bg-gray-100 dark:bg-gray-900/50 border-b border-gray-200 dark:border-gray-700">${chapter}</h4>
-                            <ul class="divide-y divide-gray-200 dark:divide-gray-700">
-                                ${chapterAssignments.map(createAssignmentItemHTML).join('')}
-                            </ul>
-                        </div>
+                        <details class="group bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden transition-all duration-300 open:ring-2 open:ring-blue-500 open:shadow-lg">
+                            <summary class="flex justify-between items-center p-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                                <h4 class="font-bold text-gray-800 dark:text-gray-200 font-kanit">${chapter}</h4>
+                                <svg class="h-5 w-5 text-gray-500 dark:text-gray-400 transition-transform duration-300 group-open:rotate-90" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>
+                            </summary>
+                            <div class="border-t border-gray-200 dark:border-gray-700">
+                                <ul class="divide-y divide-gray-200 dark:divide-gray-700">
+                                    ${chapterAssignments.map(createAssignmentItemHTML).join('')}
+                                </ul>
+                            </div>
+                        </details>
                     `).join('')}
                 </div>
             </figure>
         ` : '';
 
         resultContainer.innerHTML = `
-            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden anim-card-pop-in">
-                <div class="p-5 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900/70 border-b border-gray-200 dark:border-gray-700 flex items-center gap-4">
-                    <div class="flex-shrink-0 h-12 w-12 rounded-full flex items-center justify-center bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+            <div class="bg-white dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden anim-card-pop-in">
+                <div class="p-6 bg-gradient-to-br from-blue-50 to-gray-100 dark:from-gray-900 dark:to-gray-800/50 border-b border-gray-200 dark:border-gray-700 flex items-center gap-4">
+                    <div class="flex-shrink-0 h-16 w-16 rounded-full flex items-center justify-center bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 border-4 border-white dark:border-gray-800 shadow-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                     </div>
                     <div class="min-w-0">
                         <h2 class="text-2xl font-bold text-gray-800 dark:text-white font-kanit truncate">${student.name}</h2>
-                        <div class="text-sm text-gray-600 dark:text-gray-300 mt-1 flex flex-wrap items-center gap-x-4 gap-y-1">
+                        <div class="text-sm text-gray-600 dark:text-gray-400 mt-1 flex flex-wrap items-center gap-x-4 gap-y-1 font-medium">
                             <span>รหัสนักเรียน: <strong class="font-semibold text-blue-600 dark:text-blue-400">${student.id}</strong></span>
                             ${student.room ? `<span class="border-l border-gray-300 dark:border-gray-600 pl-4">ห้อง: <strong class="font-semibold text-blue-600 dark:text-blue-400">${student.room}</strong></span>` : ''}
                             ${student.ordinal ? `<span class="border-l border-gray-300 dark:border-gray-600 pl-4">เลขที่: <strong class="font-semibold text-blue-600 dark:text-blue-400">${student.ordinal}</strong></span>` : ''}
                         </div>
                     </div>
                 </div>
-                <div class="p-5">
+                <div class="p-6 space-y-8">
                     ${summaryScoreSection}
                     ${summaryCardsHtml}
                     ${assignmentsSection}
                 </div>
             </div>
         `;
-    }
 
-    /**
-     * Creates the HTML for a single assignment list item, making it a clickable link.
-     * @param {object} assignment - The assignment object.
-     * @returns {string} The HTML string for the list item.
-     */
-    function createAssignmentItemHTML(assignment) {
-        const url = ASSIGNMENT_URL_MAP[assignment.name] || null;
-        const lowerCaseName = assignment.name.toLowerCase();
-        const displayName = ASSIGNMENT_DISPLAY_NAME_MAP[lowerCaseName] || assignment.name;
-        const score = assignment.score;
-        let statusHtml;
+        // Attach event listeners for the new modal buttons
+        document.getElementById('show-submitted-btn')?.addEventListener('click', () => {
+            const submittedAssignments = trackableAssignments.filter(a => a.score && a.score.toLowerCase() !== 'ยังไม่ส่ง');
+            showAssignmentListModal(`งานที่ส่งแล้ว (${submittedAssignments.length} รายการ)`, submittedAssignments);
+        });
 
-        if (isNaN(parseFloat(score))) {
-            // Handle text-based scores like "ส่งแล้ว", "ยังไม่ส่ง"
-            const isSubmitted = score && score.toLowerCase() !== 'ยังไม่ส่ง';
-            const colorClass = isSubmitted 
-                ? 'text-green-800 bg-green-100 dark:text-green-200 dark:bg-green-900/50' 
-                : 'text-red-800 bg-red-100 dark:text-red-200 dark:bg-red-900/50';
-            statusHtml = `<span class="px-2 py-1 text-xs font-semibold ${colorClass} rounded-full">${score}</span>`;
-        } else {
-            // Handle numeric scores
-            statusHtml = `<span class="font-mono font-bold text-gray-800 dark:text-gray-200">${score}</span>`;
-        }
-
-        const contentHtml = `
-            <div class="flex-grow min-w-0">
-                <span class="text-gray-700 dark:text-gray-300 text-sm font-medium">${displayName}</span>
-            </div>
-            <div class="flex items-center gap-2">
-                ${statusHtml}
-                ${url ? `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400 group-hover:text-blue-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>` : ''}
-            </div>
-        `;
-        if (url) {
-            return `
-                <li class="block">
-                    <a href="${url}" target="_blank" rel="noopener noreferrer" class="group flex justify-between items-center py-3 px-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-200">
-                        ${contentHtml}
-                    </a>
-                </li>
-            `;
-        } else {
-            return `
-                <li class="flex justify-between items-center py-3 px-4">
-                    ${contentHtml}
-                </li>
-            `;
-        }
+        document.getElementById('show-missing-btn')?.addEventListener('click', () => {
+            const missingAssignments = trackableAssignments.filter(a => !a.score || a.score.toLowerCase() === 'ยังไม่ส่ง');
+            showAssignmentListModal(`งานที่ค้างส่ง (${missingAssignments.length} รายการ)`, missingAssignments);
+        });
     }
 
     /**

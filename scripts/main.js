@@ -69,30 +69,50 @@ function groupQuizzesForCategory(quizzes, categoryKey) {
     : syllabus?.chapters;
 
   if (Array.isArray(chapters)) {
-    return chapters.map(chapter => {
-      const chapterQuizzes = quizzes.filter(quiz => quiz.subCategory === chapter.title);
-      if (chapterQuizzes.length === 0) return null;
+    // 1. Separate special categories like "Final Review" from regular chapter quizzes.
+    const specialCategoryName = "แนวข้อสอบปลายภาค";
+    const finalReviewQuizzes = quizzes.filter(quiz => quiz.subCategory === specialCategoryName);
+    const regularQuizzes = quizzes.filter(quiz => quiz.subCategory !== specialCategoryName);
 
-      let displayTitle = chapter.title;
-      if (categoryKey === 'EarthSpaceScienceBasic') {
-        displayTitle = `บทที่ ${chapter.chapterId}: ${chapter.title}`;
-      } else if (categoryKey === 'EarthSpaceScienceAdvance') {
-        const firstQuiz = chapterQuizzes[0];
-        if (firstQuiz?.description) {
-          const match = firstQuiz.description.match(/บทที่\s*(\d+)/);
-          if (match?.[1]) {
-            displayTitle = `บทที่ ${match[1]}: ${chapter.title}`;
+    // 2. Group the regular quizzes based on the syllabus structure.
+    const chapterGroups = chapters.map(chapter => {
+        const chapterQuizzes = regularQuizzes.filter(quiz => quiz.subCategory === chapter.title);
+        if (chapterQuizzes.length === 0) return null;
+
+        let displayTitle = chapter.title;
+        if (categoryKey === 'EarthSpaceScienceBasic') {
+            displayTitle = `บทที่ ${chapter.chapterId}: ${chapter.title}`;
+        } else if (categoryKey === 'EarthSpaceScienceAdvance') {
+            const firstQuiz = chapterQuizzes[0];
+            if (firstQuiz?.description) {
+                const match = firstQuiz.description.match(/บทที่\s*(\d+)/);
+                if (match?.[1]) {
+                    displayTitle = `บทที่ ${match[1]}: ${chapter.title}`;
+                }
           }
         }
-      }
 
-      return {
-        title: displayTitle,
-        quizzes: chapterQuizzes,
-        level: 1,
-        shortTitle: chapter.shortTitle || chapter.title.substring(0, 6)
-      };
-    }).filter(Boolean); // Filter out null entries for chapters with no quizzes
+        return {
+            title: displayTitle,
+            quizzes: chapterQuizzes,
+            level: 1,
+            shortTitle: chapter.shortTitle || chapter.title.substring(0, 6)
+        };
+    }).filter(Boolean);
+
+    // 3. Create a separate group for the final review quizzes if they exist.
+    let finalReviewGroup = null;
+    if (finalReviewQuizzes.length > 0) {
+        finalReviewGroup = {
+            title: "แนวข้อสอบปลายภาค",
+            quizzes: finalReviewQuizzes,
+            level: 1,
+            shortTitle: "ปลายภาค"
+        };
+    }
+
+    // 4. Combine the chapter groups and the special group, with the special group at the end.
+    return finalReviewGroup ? [...chapterGroups, finalReviewGroup] : chapterGroups;
   }
 
   // --- Fallback grouping logic for categories without a defined syllabus structure ---
