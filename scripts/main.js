@@ -293,8 +293,13 @@ export function initializePage() {
     toggleHeader.dataset.level = groupData.level;
     toggleHeader.dataset.shortTitle = groupData.shortTitle; // Add short title to dataset
     toggleHeader.innerHTML = `
-        <h4 class="font-bold text-sm text-${colorName}-800 dark:text-${colorName}-300">${groupData.title}</h4>
-        <svg class="chevron-icon h-5 w-5 text-gray-500 dark:text-gray-400 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+        <div class="flex-grow min-w-0">
+            <h4 class="font-bold text-sm text-${colorName}-800 dark:text-${colorName}-300 truncate pr-2">${groupData.title}</h4>
+        </div>
+        <div class="flex items-center gap-2 flex-shrink-0">
+            <span class="px-2 py-0.5 text-xs font-semibold text-${colorName}-700 bg-${colorName}-200/80 dark:text-${colorName}-200 dark:bg-${colorName}-800/60 rounded-full">${groupData.quizzes.length} ชุด</span>
+            <svg class="chevron-icon h-5 w-5 text-gray-500 dark:text-gray-400 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+        </div>
     `;
 
     const contentDiv = document.createElement("div");
