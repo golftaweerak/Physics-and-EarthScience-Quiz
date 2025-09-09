@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="th" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ภาพรวมนักเรียนทั้งหมด - สรุปคะแนน</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Enable class-based dark mode
+        tailwind.config = {
+            darkMode: 'class'
+        }
+    </script>
+    <link rel="stylesheet" href="./styles/bundle.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="./scripts/summary-loader.js" type="module"></script>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 font-sans">
+    <div id="main_header-placeholder"></div>
+    <div id="modals-placeholder"></div>
+
+    <main class="container mx-auto px-4 pt-24 md:pt-28 pb-8">
+        <header class="mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white font-kanit">ภาพรวมคะแนน: <br>รายวิชาวิทยาศาสตร์โลกและอวกาศ ม.4</h1>
+            <p class="mt-2 text-lg text-gray-600 dark:text-gray-400">แดชบอร์ดสรุปข้อมูลและสถิติสำคัญของนักเรียนในทุกห้องเรียน</p>
+        </header>
+
+        <!-- Container for summary content -->
+        <div id="summary-container" class="space-y-8">
+            <!-- Summary content will be rendered here by JavaScript -->
+            <div id="loading-spinner" class="text-center py-16">
+                <svg class="animate-spin h-8 w-8 text-blue-600 dark:text-blue-400 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <p class="mt-4 text-gray-500 dark:text-gray-400">กำลังโหลดข้อมูล...</p>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+</body>
+</html>
