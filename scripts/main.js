@@ -489,7 +489,6 @@ export function initializePage() {
     const hoverBgColor = colorName === 'default' ? 'hover:bg-gray-300 dark:hover:bg-gray-700/90' : `hover:bg-${colorName}-200/90 dark:hover:bg-${colorName}-800/70`;
     const borderColor = colorName === 'default' ? 'border-gray-300 dark:border-gray-700' : `border-${colorName}-300 dark:border-${colorName}-600`;
     const textColor = colorName === 'default' ? 'text-gray-800 dark:text-gray-200' : `text-${colorName}-800 dark:text-${colorName}-200`;
-
     // --- 4. Rebuild buttons with the new theme ---
     floatingNavButtons.innerHTML = ''; // Clear old buttons first
     const fragment = document.createDocumentFragment();
@@ -498,8 +497,10 @@ export function initializePage() {
 
     const createFloatingButton = (options) => {
       const button = document.createElement("button");
-      const classList = options.classList || `flex items-center justify-center h-8 w-8 rounded-full ${bgColor} ${hoverBgColor} transition-all duration-200 ${textColor} shadow-md border ${borderColor}`;
-      button.className = `floating-nav-btn-base anim-nav-btn-pop-in ${classList}`;
+      const baseClasses = 'floating-nav-btn-base anim-nav-btn-pop-in transform transition-all duration-200 hover:scale-110';
+      const layoutClasses = options.classList || `flex items-center justify-center h-8 w-8 rounded-full flex-shrink-0 ${bgColor} ${hoverBgColor} ${textColor} shadow-md border ${borderColor}`;
+      
+      button.className = `${baseClasses} ${layoutClasses}`;
       button.setAttribute("aria-label", options.ariaLabel);
       button.innerHTML = options.innerHTML;
       button.style.animationDelay = `${animationDelay}ms`;
@@ -526,8 +527,8 @@ export function initializePage() {
 
     // Add a separator if there are other buttons to navigate to.
     if (allToggles.length > 1) {
-      const separator = document.createElement("hr");
-      separator.className = `h-8 mx-1.5 border-l ${borderColor}`;
+      const separator = document.createElement("div");
+      separator.className = `h-6 w-px mx-1.5 bg-gray-300 dark:bg-gray-600`;
       fragment.appendChild(separator);
     }
 
@@ -561,21 +562,30 @@ export function initializePage() {
     });
 
     // --- NEW: Add Sub-category buttons if applicable, AFTER main category buttons ---
-    const activeCategoryKey = activeSection ? activeSection.id.replace('category-', '') : null;    if (['AstronomyPOSN', 'ChallengePOSN', 'AstronomyReview', 'PhysicsM4', 'PhysicsM5', 'PhysicsM6', 'EarthSpaceScienceBasic', 'EarthSpaceScienceAdvance'].includes(activeCategoryKey) && activeSection) {
+    const activeCategoryKey = activeSection ? activeSection.id.replace('category-', '') : null;
+    if (['AstronomyPOSN', 'ChallengePOSN', 'AstronomyReview', 'PhysicsM4', 'PhysicsM5', 'PhysicsM6', 'EarthSpaceScienceBasic', 'EarthSpaceScienceAdvance'].includes(activeCategoryKey) && activeSection) {
       const subToggles = activeSection.querySelectorAll('.sub-section-toggle[data-level="1"]');
       if (subToggles.length > 0) {
-        const subSeparator = document.createElement("hr");
-        subSeparator.className = `h-6 mx-1.5 border-l ${borderColor}`;
+        const subSeparator = document.createElement("div");
+        subSeparator.className = `h-5 w-px mx-1.5 bg-gray-300 dark:bg-gray-600`;
         fragment.appendChild(subSeparator);
 
         subToggles.forEach(subToggle => {
           const subTitle = subToggle.querySelector('h4').textContent;
-          const shortTitle = subToggle.dataset.shortTitle || subTitle.substring(0, 6); // Use data attribute
+          
+          // Extract "บทที่ X" for the button text, otherwise use a short title.
+          let buttonText;
+          const match = subTitle.match(/บทที่\s*([\d\.]+)/);
+          if (match && match[1]) {
+            buttonText = `บทที่ ${match[1]}`;
+          } else {
+            buttonText = subToggle.dataset.shortTitle || subTitle;
+          }
 
           const subButton = createFloatingButton({
             ariaLabel: `ไปที่ ${subTitle}`,
-            innerHTML: `<span class="text-xs font-bold">${shortTitle}</span>`,
-            classList: `flex items-center justify-center h-7 w-10 rounded-lg ${bgColor} ${hoverBgColor} transition-all duration-200 ${textColor} shadow-sm border ${borderColor}`,
+            innerHTML: `<span class="text-xs font-bold whitespace-nowrap">${buttonText}</span>`,
+            classList: `flex items-center justify-center h-7 px-3 rounded-lg ${bgColor} ${hoverBgColor} ${textColor} shadow-sm border ${borderColor}`,
             onClick: () => {
               const isAlreadyOpen = subToggle.getAttribute('aria-expanded') === 'true';
               if (!isAlreadyOpen) {
@@ -677,7 +687,7 @@ export function initializePage() {
   const floatingNavContainer = document.createElement('div');
   floatingNavContainer.id = 'floating-nav-container';
   floatingNavContainer.className = 'fixed bottom-4 left-1/2 p-2 bg-white/60 dark:bg-gray-900/60 backdrop-blur-sm shadow-xl rounded-t-xl transform -translate-x-1/2 opacity-0 pointer-events-none translate-y-full transition-all duration-300 z-40 border border-gray-200 dark:border-gray-700 max-w-[95vw] overflow-x-auto overflow-y-hidden modern-scrollbar';
-  floatingNavContainer.innerHTML = `<div id="floating-nav-buttons" class="flex flex-row items-center gap-2"></div>`;
+  floatingNavContainer.innerHTML = `<div id="floating-nav-buttons" class="flex flex-row flex-nowrap items-center gap-2"></div>`;
   document.body.appendChild(floatingNavContainer);
 
   // 4. Attach listeners and set initial state for accordions
