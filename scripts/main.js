@@ -1,6 +1,7 @@
 import { ModalHandler } from "./modal-handler.js";
 import { getQuizProgress, categoryDetails } from "./data-manager.js";
 import { quizList } from "../data/quizzes-list.js";
+//import { loadHeader } from "./header-loader.js";
 import { getSyllabusForCategory } from "./syllabus-manager.js";
 
 /**
@@ -614,7 +615,7 @@ export function initializePage() {
     if (totalQuizCount > 0) {
       quizCountDisplay.innerHTML = `
         <div>
-            <span class="text-base text-xs font-bold">แบบทดสอบทั้งหมด</span> 
+            <span class="text-base text-xs font-bold">แบบฝึกหัดทั้งหมด</span> 
             <span class="text-base text-xs font-bold text-teal-600 dark:text-teal-400 ml-2">${totalQuizCount} ชุด</span>
         </div>
         <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">จำนวนคำถามทั้งหมด ${totalQuestionsCount.toLocaleString()} ข้อ</div>
