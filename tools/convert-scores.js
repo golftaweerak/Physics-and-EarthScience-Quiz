@@ -21,11 +21,17 @@ const summaryColumnMapping = {
   'ก่อนกลางภาค [25]': 'ก่อนกลางภาค [25]',
   'กลางภาค [20]': 'กลางภาค [20]',
   'หลังกลางภาค [25]': 'หลังกลางภาค [25]',
-  'ปลายภาค [30]': 'ปลายภาค [30]',
+  'ปลายภาค': 'ปลายภาค [30]',
   'Grade': 'เกรด',
   'ซ่อมมั้ย': 'ซ่อมมั้ย',
   'ก่อนปลายภาค [70]': 'ก่อนปลายภาค [70]',
-  'รวม [100]': 'รวม [100]'
+  'รวม [100]': 'รวม [100]',
+  'บท 1 [10]': 'บท 1 [10]',
+  'บท 2 [10]': 'บท 2 [10]',
+  'บท 3 [5]': 'บท 3 [5]',
+  'บท 4 [10]': 'บท 4 [10]',
+  'นำเสนอ [5]': 'นำเสนอ [5]',
+  'บท 5 [10]': 'บท 5 [10]',
 };
 
 // Columns that are NOT assignments and should be completely ignored during processing.
@@ -33,13 +39,6 @@ const baseInfoColumns = [
   'sorder', 'room', 'ordinal', 'id', 'title', 'names', 'surname', 'email', 'ซ่อมมั้ย',
   // Add metadata columns from the end of the CSV that are not real assignments
   'ห้อง', 'n', 'ข้อกา [30]', 'ข้อเขียน [10]', 'ตก (คน)', 'ผ่าน (คน)',
-  // Add other summary-like columns that are not real assignments
-  'บท 1 [10]',
-  'บท 2 [10]',
-  'บท 3 [5]',
-  'บท 4 [10]',
-  'นำเสนอ [5]',
-  'บท 5 [10]',
 ];
 // --- End Configuration ---
 
@@ -77,7 +76,9 @@ try {
   // Create a case-insensitive map for headers: { lowercase_header: Original_Header }
   const headerMap = {};
   allHeaders.forEach(h => {
-    headerMap[h.toLowerCase().trim()] = h;
+    const key = h.toLowerCase().trim();
+    // Only map the first occurrence to avoid conflicts with summary columns at the end
+    if (!headerMap.hasOwnProperty(key)) headerMap[key] = h;
   });
 
   // Create a lowercase set of summary mapping keys for efficient filtering

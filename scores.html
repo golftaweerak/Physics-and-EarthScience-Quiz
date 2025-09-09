@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ตรวจสอบคะแนนเก็บ - วิชาวิทยาศาสตร์โลกและอวกาศ (ว30168)</title>
+    <title>แดชบอร์ดติดตามงาน - วิชาวิทยาศาสตร์โลกและอวกาศ (ว30161)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         // Enable class-based dark mode
@@ -30,23 +30,24 @@
     <main class="container mx-auto px-4 pb-8 pt-24 md:pt-28">
         <div class="max-w-2xl mx-auto">
             <div class="text-center mb-8 fade-in-up">
-                <h1 class="text-3xl font-bold text-gray-800 dark:text-white font-kanit">ตรวจสอบคะแนนเก็บ</h1>
-                <p class="text-gray-600 dark:text-gray-400 mt-2">วิชาวิทยาศาสตร์โลกและอวกาศ (ว30168)</p>
+                <h1 class="text-3xl font-bold text-gray-800 dark:text-white font-kanit">แดชบอร์ดติดตามงาน</h1>
+                <p class="text-gray-600 dark:text-gray-400 mt-2">วิชาวิทยาศาสตร์โลกและอวกาศ (ว30161)</p>
             </div>
 
             <div
                 class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 anim-card-pop-in">
-                <div class="flex flex-col sm:flex-row gap-3">
-                    <input type="text" id="student-id-input" placeholder="กรอกรหัสนักเรียน 5 หลัก"
-                        class="flex-grow w-full px-4 py-2 text-lg bg-gray-100 dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
-                        maxlength="5" inputmode="numeric">
-                    <button id="search-btn"
-                        class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg text-lg transition-transform transform hover:scale-105 flex items-center justify-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd"
-                                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                                clip-rule="evenodd" />
-                        </svg>
+                <div class="flex flex-col sm:flex-row gap-3 items-center">
+                    <div class="relative flex-grow w-full">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" /></svg>
+                        </div>
+                        <input type="text" id="student-id-input" placeholder="กรอกรหัสนักเรียน หรือชื่อ" class="w-full p-3 pl-10 pr-10 bg-gray-100 dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400">
+                        <button id="clear-btn" class="absolute inset-y-0 right-0 pr-3 flex items-center hidden" aria-label="ล้างการค้นหา">
+                            <svg class="h-5 w-5 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" /></svg>
+                        </button>
+                    </div>
+                    <button id="search-btn" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg text-lg transition-transform transform hover:scale-105 flex items-center justify-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" /></svg>
                         <span>ค้นหา</span>
                     </button>
                 </div>
@@ -60,9 +61,9 @@
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M15.75 15.75l-2.489-2.489m0 0a3.375 3.375 0 10-4.773-4.773 3.375 3.375 0 004.774 4.774zM21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    <h3 class="mt-4 text-xl font-semibold text-gray-700 dark:text-gray-300">กรุณาค้นหาด้วยรหัสนักเรียน
+                    <h3 class="mt-4 text-xl font-semibold text-gray-700 dark:text-gray-300">กรุณาค้นหาด้วยรหัสนักเรียนหรือชื่อ
                     </h3>
-                    <p class="mt-1 text-base text-gray-500 dark:text-gray-400">ผลการเรียนของคุณจะแสดงที่นี่</p>
+                    <p class="mt-1 text-base text-gray-500 dark:text-gray-400">สถานะการส่งงานของคุณจะแสดงที่นี่</p>
                 </div>
             </div>
         </div>

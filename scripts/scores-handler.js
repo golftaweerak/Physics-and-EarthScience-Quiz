@@ -1,5 +1,28 @@
 import { studentScores } from '../data/scores-data.js';
 
+/** A map of assignment names to their corresponding Microsoft Forms URL. */
+const ASSIGNMENT_URL_MAP = {
+    'กิจกรรม 1.1': 'https://forms.office.com/r/KFtWGZEb7S',
+    'แบบฝึก 1.1': 'https://forms.office.com/r/abX7Vtwtww',
+    'แบบฝึก 1.2': 'https://forms.office.com/r/Bsxg9Yx9JD',
+    'ท้ายบท 1': 'https://forms.office.com/r/AFG3Ymt4Ni',
+    'Quiz 1': 'https://forms.office.com/r/G4hdEDwbcX',
+    'แบบฝึก 2.1': 'https://forms.office.com/r/tYmRtd438x',
+    'แบบฝึก 2.2': 'https://forms.office.com/r/u785wcNf3X',
+    'ท้ายบท 2': 'https://forms.office.com/r/MF4mget9mY',
+    'Quiz 2': 'https://forms.office.com/r/a2AYEKGPPv',
+    'แบบฝึก 3.1': 'https://forms.office.com/r/ubX306JhHy',
+    'ท้ายบท 3': 'https://forms.office.com/r/VAic0B5szk',
+    'Quiz 3': 'https://forms.office.com/r/2zMb0Xzrc9',
+    'แบบฝึก 4.1': 'https://forms.office.com/r/ArkkdbnpXb',
+    'ท้ายบท 4': 'https://forms.office.com/r/L8BwGLdh4V',
+    'Quiz 4': 'https://forms.office.com/r/zfvAMhzHVq',
+    'แบบฝึก 5.1': 'https://forms.office.com/r/afG0eGdjH5',
+    'แบบฝึก 5.2': 'https://forms.office.com/r/mmB2LXmSNn',
+    'ท้ายบท 5': 'https://forms.office.com/r/1uf2B3y7sM',
+    'Quiz 5': 'https://forms.office.com/r/gMTxMUjiT6'
+};
+
 /** A map for renaming specific assignment names for display. */
 const ASSIGNMENT_DISPLAY_NAME_MAP = {
     'mid [20]': 'คะแนนข้อกา (30)',
@@ -21,10 +44,11 @@ export function initializeScoreSearch() {
     const studentIdInput = document.getElementById('student-id-input');
     const searchBtn = document.getElementById('search-btn');
     const resultContainer = document.getElementById('result-container');
+    const clearBtn = document.getElementById('clear-btn');
     const defaultMessage = document.getElementById('default-message');
     
-    if (!studentIdInput || !searchBtn || !resultContainer) {
-        console.error("Required elements for score search are missing.");
+    if (!studentIdInput || !searchBtn || !resultContainer || !clearBtn) {
+        console.error("Required elements for score search are missing from the DOM.");
         return;
     }
 
@@ -38,18 +62,27 @@ export function initializeScoreSearch() {
     }
 
     const searchScores = () => {
-        const studentId = studentIdInput.value.trim();
-        if (!/^\d{5}$/.test(studentId)) {
-            displayMessage('กรุณากรอกรหัสนักเรียน 5 หลักให้ถูกต้อง', 'error');
+        const query = studentIdInput.value.trim();
+        if (query.length === 0) {
+            displayMessage('กรุณากรอกรหัสนักเรียนหรือชื่อเพื่อค้นหา', 'error');
             return;
         }
 
-        const student = studentScores.find(s => s.id === studentId);
+        const lowerCaseQuery = query.toLowerCase();
+        const results = studentScores.filter(s => 
+            s.id === query || 
+            s.name.toLowerCase().includes(lowerCaseQuery)
+        );
 
-        if (student) {
-            displayResult(student);
+        if (results.length === 1) {
+            displayResult(results[0]);
+        } else if (results.length > 1) {
+            const studentListHtml = results
+                .map(s => `<li class="py-1 text-left">${s.name} (รหัส: ${s.id})</li>`)
+                .join('');
+            displayMessage(`พบนักเรียนหลายคน:<ul class="list-disc list-inside mt-2">${studentListHtml}</ul><p class="mt-2">กรุณาระบุรหัส 5 หลักให้ชัดเจน หรือใช้ชื่อ-สกุลที่เจาะจงมากขึ้น</p>`, 'info');
         } else {
-            displayMessage(`ไม่พบข้อมูลสำหรับรหัสนักเรียน ${studentId}`, 'error');
+            displayMessage(`ไม่พบข้อมูลสำหรับ "${query}"`, 'error');
         }
     };
 
@@ -67,7 +100,23 @@ export function initializeScoreSearch() {
     if (studentIdFromUrl && /^\d{5}$/.test(studentIdFromUrl)) {
         studentIdInput.value = studentIdFromUrl;
         searchScores(); // Automatically trigger search
+        clearBtn.classList.remove('hidden');
     }
+
+    clearBtn.addEventListener('click', () => {
+        studentIdInput.value = '';
+        if (defaultMessage) {
+            resultContainer.innerHTML = ''; // Clear previous results
+            resultContainer.appendChild(defaultMessage);
+            defaultMessage.classList.remove('hidden');
+        }
+        clearBtn.classList.add('hidden');
+        studentIdInput.focus();
+    });
+
+    studentIdInput.addEventListener('input', () => {
+        clearBtn.classList.toggle('hidden', studentIdInput.value.length === 0);
+    });
 
     function displayMessage(message, type = 'info') {
         if (defaultMessage) defaultMessage.classList.add('hidden');
@@ -97,9 +146,32 @@ export function initializeScoreSearch() {
         `;
     }
 
+    /**
+     * Creates the HTML for a score breakdown row.
+     * @param {object} student - The student data object.
+     * @param {string} label - The display label for the row.
+     * @param {string} scoreKey - The key to access the score in the student object.
+     * @returns {string} The HTML string for the table row.
+     */
+    function createBreakdownRow(student, label, scoreKey) {
+        if (!student.hasOwnProperty(scoreKey) || student[scoreKey] === null) return '';
+        const score = Math.round(student[scoreKey]);
+        return `
+            <tr class="bg-gray-50 dark:bg-gray-800/50">
+                <td class="py-2 px-4 pl-10 text-sm text-gray-500 dark:text-gray-400 flex items-center">
+                    <svg class="h-3 w-3 mr-2 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
+                    </svg>
+                    <span class="italic">${label}</span>
+                </td>
+                <td class="py-2 px-4 text-right font-mono text-sm text-gray-700 dark:text-gray-300">${score}</td>
+            </tr>
+        `;
+    }
+
     function displayResult(student) {
         if (defaultMessage) defaultMessage.classList.add('hidden');
-        
+
         const summaryOrder = [
             'ก่อนกลางภาค [25]',
             'กลางภาค [20]',
@@ -110,11 +182,42 @@ export function initializeScoreSearch() {
             'เกรด'
         ];
 
+        const breakdownMap = {
+            'ก่อนกลางภาค [25]': [
+                { label: 'บทที่ 1', key: 'บท 1 [10]' },
+                { label: 'บทที่ 2', key: 'บท 2 [10]' },
+                { label: 'บทที่ 3', key: 'บท 3 [5]' }
+            ],
+            'หลังกลางภาค [25]': [
+                { label: 'บทที่ 4', key: 'บท 4 [10]' },
+                { label: 'บทที่ 5', key: 'บท 5 [10]' },
+                { label: 'นำเสนอ', key: 'นำเสนอ [5]' }
+            ]
+        };
+
         const scoreRows = summaryOrder.map(key => {
             if (student.hasOwnProperty(key)) {
                 const value = student[key];
                 const isGrade = key === 'เกรด';
-                const valueClass = isGrade ? 'text-xl text-blue-600 dark:text-blue-400' : 'text-gray-900 dark:text-white';
+                const isTotal = key === 'รวม [100]';
+                const isMidterm = key === 'กลางภาค [20]';
+                const isFinal = key === 'ปลายภาค [30]';
+                const isImportant = isGrade || isTotal || isMidterm || isFinal;
+
+                // Define classes based on importance
+                const rowClass = isImportant ? 'bg-blue-50 dark:bg-gray-800/60' : '';
+                const labelClass = isImportant ? 'font-bold text-blue-900 dark:text-blue-300' : 'font-medium text-gray-700 dark:text-gray-300';
+                let valueClass = isImportant ? 'font-bold' : 'font-semibold';
+                if (isGrade) valueClass += ' text-2xl text-blue-600 dark:text-blue-400';
+                else if (isTotal) valueClass += ' text-xl text-green-600 dark:text-green-400';
+                else if (isMidterm || isFinal) valueClass += ' text-lg text-gray-900 dark:text-white';
+                else valueClass += ' text-gray-900 dark:text-white';
+                
+                let displayValue = (value !== null && value !== undefined) ? value : '-';
+                // Round numeric scores to the nearest integer, but not the 'เกรด' field.
+                if (typeof value === 'number' && !isGrade) {
+                    displayValue = Math.round(value);
+                }
 
                 let retestStatusHtml = '';
                 if (key === 'กลางภาค [20]' && student.ซ่อมมั้ย && student.ซ่อมมั้ย.trim() !== '-') {
@@ -122,25 +225,77 @@ export function initializeScoreSearch() {
                     retestStatusHtml = `<div class="text-xs font-normal ${statusColor} pt-1">สถานะการสอบซ่อม: ${student.ซ่อมมั้ย}</div>`;
                 }
 
-                return `
-                    <tr class="border-b border-gray-200 dark:border-gray-700 last:border-b-0">
-                        <td class="py-3 px-4 text-gray-700 dark:text-gray-300 font-medium">${key}</td>
+                let mainRowHtml = `
+                    <tr class="border-b border-gray-200 dark:border-gray-700 last:border-b-0 ${rowClass}">
+                        <td class="py-3 px-4 ${labelClass}">${key}</td>
                         <td class="py-3 px-4 text-right">
-                            <span class="font-semibold ${valueClass}">${value !== null && value !== undefined ? value : '-'}</span>
+                            <span class="${valueClass}">${displayValue}</span>
                             ${retestStatusHtml}
                         </td>
                     </tr>
                 `;
+
+                if (breakdownMap[key]) {
+                    mainRowHtml += breakdownMap[key].map(item => createBreakdownRow(student, item.label, item.key)).join('');
+                }
+
+                return mainRowHtml;
             }
             return '';
         }).join('');
 
-        const groupedAssignments = groupAssignments(student.assignments);
+        const summaryScoreSection = `
+            <figure class="mb-6">
+                <figcaption class="p-3 text-lg font-semibold text-left text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-800 rounded-t-lg border-x border-t border-gray-200 dark:border-gray-700">
+                    คะแนนสรุป
+                </figcaption>
+                <div class="border border-gray-200 dark:border-gray-700 rounded-b-lg overflow-hidden">
+                    <table class="w-full text-base">
+                        <tbody>
+                            ${scoreRows}
+                        </tbody>
+                    </table>
+                </div>
+            </figure>
+        `;
+
+        // 1. Filter out non-trackable assignments and calculate stats
+        const trackableAssignments = student.assignments.filter(assignment => 
+            !SUMMARY_ASSIGNMENT_PATTERNS.some(pattern => pattern.test(assignment.name.toLowerCase()))
+        );
+
+        const submittedCount = trackableAssignments.filter(a => a.score && a.score.toLowerCase() !== 'ยังไม่ส่ง').length;
+        const missingCount = trackableAssignments.length - submittedCount;
+        const completionPercentage = trackableAssignments.length > 0 ? (submittedCount / trackableAssignments.length) * 100 : 0;
+
+        // 2. Group assignments for display
+        const groupedAssignments = groupAssignments(trackableAssignments);
+
+        // 3. Build the HTML
+        const summaryCardsHtml = `
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+                <div class="p-4 bg-green-100 dark:bg-green-900/50 rounded-lg text-center border border-green-200 dark:border-green-700">
+                    <div class="text-3xl font-bold text-green-600 dark:text-green-400">${submittedCount}</div>
+                    <div class="text-sm font-medium text-green-800 dark:text-green-300">งานที่ส่งแล้ว</div>
+                </div>
+                <div class="p-4 bg-red-100 dark:bg-red-900/50 rounded-lg text-center border border-red-200 dark:border-red-700">
+                    <div class="text-3xl font-bold text-red-600 dark:text-red-400">${missingCount}</div>
+                    <div class="text-sm font-medium text-red-800 dark:text-red-300">งานที่ค้างส่ง</div>
+                </div>
+                <div class="p-4 bg-blue-100 dark:bg-blue-900/50 rounded-lg text-center border border-blue-200 dark:border-blue-700">
+                    <div class="text-3xl font-bold text-blue-600 dark:text-blue-400">${completionPercentage.toFixed(0)}%</div>
+                    <div class="text-sm font-medium text-blue-800 dark:text-blue-300">ความสมบูรณ์</div>
+                </div>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 mb-8">
+                <div class="bg-blue-600 h-2.5 rounded-full" style="width: ${completionPercentage}%"></div>
+            </div>
+        `;
 
         const assignmentsSection = Object.keys(groupedAssignments).length > 0 ? `
-            <figure class="mt-6">
+            <figure>
                 <figcaption class="p-3 text-lg font-semibold text-left text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-800 rounded-t-lg border-x border-t border-gray-200 dark:border-gray-700">
-                    คะแนนเก็บรายบท
+                    รายการงานที่ต้องส่ง
                 </figcaption>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-b-lg border border-gray-200 dark:border-gray-700">
                     ${Object.entries(groupedAssignments).map(([chapter, chapterAssignments]) => `
@@ -171,20 +326,62 @@ export function initializeScoreSearch() {
                     </div>
                 </div>
                 <div class="p-5">
-                    <div class="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
-                        <table class="w-full text-base">
-                            <caption class="p-3 text-lg font-semibold text-left text-gray-900 bg-gray-50 dark:text-white dark:bg-gray-700/50">
-                                คะแนนสรุป
-                            </caption>
-                            <tbody>
-                                ${scoreRows}
-                            </tbody>
-                        </table>
-                    </div>
+                    ${summaryScoreSection}
+                    ${summaryCardsHtml}
                     ${assignmentsSection}
                 </div>
             </div>
         `;
+    }
+
+    /**
+     * Creates the HTML for a single assignment list item, making it a clickable link.
+     * @param {object} assignment - The assignment object.
+     * @returns {string} The HTML string for the list item.
+     */
+    function createAssignmentItemHTML(assignment) {
+        const url = ASSIGNMENT_URL_MAP[assignment.name] || null;
+        const lowerCaseName = assignment.name.toLowerCase();
+        const displayName = ASSIGNMENT_DISPLAY_NAME_MAP[lowerCaseName] || assignment.name;
+        const score = assignment.score;
+        let statusHtml;
+
+        if (isNaN(parseFloat(score))) {
+            // Handle text-based scores like "ส่งแล้ว", "ยังไม่ส่ง"
+            const isSubmitted = score && score.toLowerCase() !== 'ยังไม่ส่ง';
+            const colorClass = isSubmitted 
+                ? 'text-green-800 bg-green-100 dark:text-green-200 dark:bg-green-900/50' 
+                : 'text-red-800 bg-red-100 dark:text-red-200 dark:bg-red-900/50';
+            statusHtml = `<span class="px-2 py-1 text-xs font-semibold ${colorClass} rounded-full">${score}</span>`;
+        } else {
+            // Handle numeric scores
+            statusHtml = `<span class="font-mono font-bold text-gray-800 dark:text-gray-200">${score}</span>`;
+        }
+
+        const contentHtml = `
+            <div class="flex-grow min-w-0">
+                <span class="text-gray-700 dark:text-gray-300 text-sm font-medium">${displayName}</span>
+            </div>
+            <div class="flex items-center gap-2">
+                ${statusHtml}
+                ${url ? `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400 group-hover:text-blue-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>` : ''}
+            </div>
+        `;
+        if (url) {
+            return `
+                <li class="block">
+                    <a href="${url}" target="_blank" rel="noopener noreferrer" class="group flex justify-between items-center py-3 px-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-200">
+                        ${contentHtml}
+                    </a>
+                </li>
+            `;
+        } else {
+            return `
+                <li class="flex justify-between items-center py-3 px-4">
+                    ${contentHtml}
+                </li>
+            `;
+        }
     }
 
     /**
@@ -234,32 +431,5 @@ export function initializeScoreSearch() {
         });
 
         return orderedGroups;
-    }
-
-    /**
-     * Creates the HTML for a single assignment list item.
-     * @param {object} assignment - The assignment object.
-     * @returns {string} The HTML string for the list item.
-     */
-    function createAssignmentItemHTML(assignment) {
-        const lowerCaseName = assignment.name.toLowerCase();
-        const displayName = ASSIGNMENT_DISPLAY_NAME_MAP[lowerCaseName] || assignment.name;
-
-        const score = assignment.score;
-        let scoreHtml;
-        if (isNaN(parseFloat(score))) {
-            const colorClass = score.includes('ไม่ส่ง') 
-                ? 'text-red-500 dark:text-red-400' 
-                : 'text-green-600 dark:text-green-500';
-            scoreHtml = `<span class="font-semibold ${colorClass}">${score}</span>`;
-        } else {
-            scoreHtml = `<span class="font-mono font-bold text-gray-800 dark:text-gray-200">${score}</span>`;
-        }
-        return `
-            <li class="flex justify-between items-center py-2 px-3">
-                <span class="text-gray-600 dark:text-gray-400 text-sm">${displayName}</span>
-                ${scoreHtml}
-            </li>
-        `;
     }
 }

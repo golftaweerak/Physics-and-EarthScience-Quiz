@@ -363,14 +363,14 @@ function renderSummary(summaryData) {
             <div class="stats-card rounded-xl">
                 <div class="flex justify-between items-center">
                     <span class="stats-card-label text-gray-500 dark:text-gray-400">จำนวนนักเรียนทั้งหมด</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-4.67c.12-.318.232-.656.328-1.003a9.38 9.38 0 002.625.372M16.5 7.5c0-2.485-2.015-4.5-4.5-4.5S7.5 5.015 7.5 7.5c0 2.485 2.015 4.5 4.5 4.5s4.5-2.015 4.5-4.5z" /></svg>
+                    <svg class="h-8 w-8 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m-7.5-2.962A3.75 3.75 0 0112 15v-2.25m-3.75 0a3.75 3.75 0 017.5 0v2.25a3.75 3.75 0 01-7.5 0v-2.25z" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72M12 21A3.75 3.75 0 0012 15v-2.25m-3.75 0a3.75 3.75 0 017.5 0v2.25a3.75 3.75 0 01-7.5 0v-2.25z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>
                 </div>
                 <div class="stats-card-value">${summaryData.totalStudents}</div>
             </div>
             <div class="stats-card rounded-xl">
                 <div class="flex justify-between items-center">
                     <span class="stats-card-label text-gray-500 dark:text-gray-400">คะแนนเฉลี่ยรวม</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 15.75V18m-7.5-6.75h.008v.008H8.25v-.008zm0 3h.008v.008H8.25v-.008zm0 3h.008v.008H8.25v-.008zm3-6h.008v.008H11.25v-.008zm0 3h.008v.008H11.25v-.008zm0 3h.008v.008H11.25v-.008zm3-6h.008v.008H14.25v-.008zm0 3h.008v.008H14.25v-.008zM4.5 21V5.75A2.25 2.25 0 016.75 3.5h10.5a2.25 2.25 0 012.25 2.25v12.75a2.25 2.25 0 01-2.25 2.25H6.75a2.25 2.25 0 01-2.25-2.25z" /></svg>
+                    <svg class="h-8 w-8 text-green-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0l-.07.002-.018.002-.006.001.01.001.01.001.007.001.006.001.018.002.07.002M12 12.75h.008v.008H12v-.008z" /></svg>
                 </div>
                 <div class="stats-card-value">${summaryData.averageScore}</div>
             </div>
