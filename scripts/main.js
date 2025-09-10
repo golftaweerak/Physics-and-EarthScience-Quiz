@@ -143,27 +143,30 @@ export function initializePage() {
   // Apply modern scrollbar styling to the main page body.
   document.body.classList.add('modern-scrollbar');
 
-  // Constants for animation timings to avoid "magic numbers"
-  const ACCORDION_ANIMATION_DURATION = 500; // Corresponds to `duration-500` in Tailwind
-  const SCROLL_DELAY = ACCORDION_ANIMATION_DURATION + 50; // Buffer for smooth scrolling after animation
+    // Constants for animation timings to avoid "magic numbers"
+    const ACCORDION_ANIMATION_DURATION = 500; // Corresponds to `duration-500` in Tailwind
+    const SCROLL_DELAY = ACCORDION_ANIMATION_DURATION + 50; // Buffer for smooth scrolling after animation
 
-  /**
-   * Sets a CSS custom property for the header's height plus a margin.
-   * This allows the CSS `scroll-padding-top` to be dynamic and responsive. It also positions the floating navigation bar.
-   */
-  function setHeaderHeightProperty() {
-    const header = document.getElementById("main_header-placeholder");    
-    if (header) {
-      const headerHeight = header.offsetHeight;
-      // Set the value to header height + 16px for a nice margin
-      document.documentElement.style.setProperty(
-        "--header-height-offset",
-        `${headerHeight + 16}px`
-      );
-    }
-  }
+    try {
+        // The rest of the function's logic will be wrapped in this try block.
+        // This ensures that if any part of the page initialization fails (e.g., data loading, element finding, rendering),
+        // a user-friendly error message is displayed instead of a blank or broken page.
 
-  // --- 0. Initialize Modals and Cache Elements ---
+        /**
+         * Sets a CSS custom property for the header's height plus a margin.
+         * This allows the CSS `scroll-padding-top` to be dynamic and responsive. It also positions the floating navigation bar.
+         */
+        function setHeaderHeightProperty() {
+            const header = document.getElementById("main_header-placeholder");
+            if (header) {
+                const headerHeight = header.offsetHeight;
+                // Set the value to header height + 16px for a nice margin
+                document.documentElement.style.setProperty(
+                    "--header-height-offset",
+                    `${headerHeight + 16}px`
+                );
+            }
+        }
 
   // Use the new ModalHandler for accessible, reusable modals.
   const confirmModal = new ModalHandler("confirm-action-modal");
@@ -909,4 +912,16 @@ export function initializePage() {
     });
   }
 
+    } catch (error) {
+        console.error("Failed to initialize main page:", error);
+        const container = document.getElementById('quiz-categories-container');
+        if (container) {
+            container.innerHTML = `
+                <div class="text-center py-16 px-6 bg-white dark:bg-gray-800/50 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700/60">
+                    <h3 class="text-xl font-semibold text-red-500 dark:text-red-400 font-kanit">เกิดข้อผิดพลาด</h3>
+                    <p class="mt-2 text-base text-gray-500 dark:text-gray-400">ไม่สามารถโหลดรายการแบบทดสอบได้ในขณะนี้<br>กรุณาลองรีเฟรชหน้าอีกครั้ง</p>
+                </div>
+            `;
+        }
+    }
 }

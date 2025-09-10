@@ -1,15 +1,9 @@
-import { loadComponent } from './component-loader.js';
-import { initializeCommonComponents } from './common-init.js';
-import { buildStatsPage } from './stats.js';
-import { ModalHandler } from './modal-handler.js';
-import { quizList } from '../data/quizzes-list.js'; // Standard quizzes
-import { getSavedCustomQuizzes } from './custom-quiz-handler.js'; // Custom quizzes
-
 /**
  * Initializes the stats page.
  */
 async function main() {
     try {
+        const { loadComponent } = await import('./component-loader.js');
         // Load shared HTML components like header, footer, and modals
         await Promise.all([
             loadComponent('#main_header-placeholder', './components/main_header.html'),
@@ -17,11 +11,17 @@ async function main() {
             loadComponent('#modals-placeholder', './components/modals_common.html')
         ]);
 
+        const { initializeCommonComponents } = await import('./common-init.js');
         // Initialize common functionalities like theme toggling
         initializeCommonComponents();
 
+        const { buildStatsPage } = await import('./stats.js');
         // Build the stats dashboard using the new logic from stats.js
         buildStatsPage();
+
+        const { ModalHandler } = await import('./modal-handler.js');
+        const { quizList } = await import('../data/quizzes-list.js');
+        const { getSavedCustomQuizzes } = await import('./custom-quiz-handler.js');
 
         // --- Event Listener for Clear Button ---
         const clearStatsBtn = document.getElementById('clear-stats-btn');

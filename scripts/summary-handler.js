@@ -62,7 +62,7 @@ function calculateOverallSummary(scores) {
     // For overall completion percentage
     let totalTrackableAssignments = 0;
     let totalSubmittedAssignments = 0;
-    const TRACKABLE_KEYWORDS = ['กิจกรรม', 'แบบฝึก', 'quiz', 'ท้ายบท'];
+    // const TRACKABLE_KEYWORDS = ['กิจกรรม', 'แบบฝึก', 'quiz', 'ท้ายบท']; // This is now defined inside calculateStudentCompletion
 
     scores.forEach(student => {
         // Overall average score
@@ -91,7 +91,9 @@ function calculateOverallSummary(scores) {
                 totalScoreSum: 0,
                 validScoresCount: 0,
                 totalGradeSum: 0,
-                validGradesCount: 0
+                validGradesCount: 0,
+                totalTrackable: 0,
+                totalSubmitted: 0
             };
         }
         summaryByRoom[room].studentCount++;
@@ -104,17 +106,14 @@ function calculateOverallSummary(scores) {
             summaryByRoom[room].validGradesCount++;
         }
 
-        // Calculate completion percentage for each student and add to total
-        if (student.assignments && Array.isArray(student.assignments)) {
-            const trackableAssignments = student.assignments.filter(assignment =>
-                TRACKABLE_KEYWORDS.some(keyword => assignment.name.toLowerCase().includes(keyword))
-            );
-            
-            const submittedCount = trackableAssignments.filter(a => a.score && String(a.score).toLowerCase() !== 'ยังไม่ส่ง').length;
+        // Per-room completion stats
+        const completion = calculateStudentCompletion(student);
+        summaryByRoom[room].totalTrackable += completion.total;
+        summaryByRoom[room].totalSubmitted += completion.submitted;
 
-            totalTrackableAssignments += trackableAssignments.length;
-            totalSubmittedAssignments += submittedCount;
-        }
+        // Update overall completion stats
+        totalTrackableAssignments += completion.total;
+        totalSubmittedAssignments += completion.submitted;
     });
 
     // Calculate averages for each room
@@ -126,6 +125,9 @@ function calculateOverallSummary(scores) {
         roomData.averageGrade = roomData.validGradesCount > 0
             ? (roomData.totalGradeSum / roomData.validGradesCount).toFixed(2)
             : 'N/A';
+        roomData.completionPercentage = roomData.totalTrackable > 0
+            ? ((roomData.totalSubmitted / roomData.totalTrackable) * 100).toFixed(0)
+            : '0';
     }
 
     const overallAverageScore = totalStudents > 0 ? (totalScoreSum / scores.filter(s => typeof s['รวม [100]'] === 'number').length).toFixed(2) : 0;
@@ -278,6 +280,19 @@ function createGradeDistributionChart(gradeDistribution) {
 }
 
 /**
+ * Returns a Tailwind CSS text color class based on the score.
+ * @param {number} score - The score to evaluate.
+ * @returns {string} The Tailwind CSS class string.
+ */
+function getScoreTextColor(score) {
+    if (isNaN(score)) return 'text-gray-500 dark:text-gray-400';
+    if (score >= 80) return 'text-teal-500 dark:text-teal-400';
+    if (score >= 70) return 'text-sky-500 dark:text-sky-400';
+    if (score >= 60) return 'text-green-500 dark:text-green-400';
+    if (score >= 50) return 'text-amber-500 dark:text-amber-400';
+    return 'text-red-500 dark:text-red-400';
+}
+/**
  * Sorts and renders the rows for the per-room summary table.
  * Also updates the sort indicator icon in the table header.
  */
@@ -286,6 +301,7 @@ function updateRoomSummaryTable() {
     const sortIndicatorRoom = document.getElementById('sort-indicator-room');
     const sortIndicatorScore = document.getElementById('sort-indicator-score');
     const sortIndicatorGrade = document.getElementById('sort-indicator-grade');
+    const sortIndicatorCompletion = document.getElementById('sort-indicator-completion');
     if (!tbody || !sortIndicatorRoom || !sortIndicatorScore || !sortIndicatorGrade || !summaryDataStore) return;
 
     // Sort the room keys based on the current sortConfig
@@ -317,20 +333,21 @@ function updateRoomSummaryTable() {
     tbody.innerHTML = sortedRooms.map(room => {
         const roomData = summaryDataStore.summaryByRoom[room];
 
-        // --- UI Enhancement Logic ---
-        // For Average Score Progress Bar
         const avgScore = parseFloat(roomData.averageScore);
-        let scoreBarColor = 'bg-gray-300 dark:bg-gray-600';
-        if (!isNaN(avgScore)) {
-            if (avgScore >= 80) scoreBarColor = 'bg-teal-500';
-            else if (avgScore >= 70) scoreBarColor = 'bg-sky-500';
-            else if (avgScore >= 60) scoreBarColor = 'bg-green-500';
-            else if (avgScore >= 50) scoreBarColor = 'bg-amber-500';
-            else scoreBarColor = 'bg-red-500';
+        const scoreTextColorClass = getScoreTextColor(avgScore);
+
+        // For Completion Percentage Progress Bar
+        const completionPercentage = parseFloat(roomData.completionPercentage);
+        let completionBarColor = 'bg-gray-300 dark:bg-gray-600';
+        if (!isNaN(completionPercentage)) {
+            if (completionPercentage >= 90) completionBarColor = 'bg-gradient-to-r from-teal-400 to-teal-500';
+            else if (completionPercentage >= 75) completionBarColor = 'bg-gradient-to-r from-sky-400 to-sky-500';
+            else if (completionPercentage >= 50) completionBarColor = 'bg-gradient-to-r from-amber-400 to-amber-500';
+            else completionBarColor = 'bg-gradient-to-r from-red-500 to-rose-500';
         }
-        const scoreBarHtml = !isNaN(avgScore) ? `
+        const completionBarHtml = !isNaN(completionPercentage) ? `
             <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2.5">
-                <div class="${scoreBarColor} h-2.5 rounded-full" style="width: ${avgScore}%"></div>
+                <div class="${completionBarColor} h-2.5 rounded-full transition-all duration-500" style="width: ${completionPercentage}%"></div>
             </div>
         ` : '<span class="text-xs text-gray-400">N/A</span>';
 
@@ -345,18 +362,23 @@ function updateRoomSummaryTable() {
         }
 
         return `
-            <tr class="border-b dark:border-gray-700 last:border-b-0 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150">
-                <th scope="row" class="px-6 py-4 font-bold text-gray-900 dark:text-white whitespace-nowrap">ห้อง ${room}</th>
-                <td class="px-6 py-4 text-center font-mono">${roomData.studentCount}</td>
-                <td class="px-6 py-4">
+            <tr class="border-b dark:border-gray-700 last:border-b-0 odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-800/50 dark:even:bg-gray-800/80 hover:bg-gray-100 dark:hover:bg-gray-700/60 transition-colors duration-150">
+                <th scope="row" class="px-4 py-2 font-bold text-gray-900 dark:text-white whitespace-nowrap">
+                    ห้อง ${room}
+                    <span class="ml-2 font-mono font-normal text-gray-500 dark:text-gray-400">(${roomData.studentCount} คน)</span>
+                </th>
+                <td class="px-4 py-2 text-center">
+                    <span class="font-bold text-base ${scoreTextColorClass}">${roomData.averageScore}</span>
+                </td>
+                <td class="px-4 py-2">
                     <div class="flex items-center gap-3 justify-center">
-                        <span class="font-semibold font-mono w-12 text-right">${roomData.averageScore}</span>
-                        <div class="w-full max-w-[120px]">
-                           ${scoreBarHtml}
+                        <span class="font-semibold font-mono w-12 text-right">${roomData.completionPercentage}%</span>
+                        <div class="w-full max-w-[100px]">
+                           ${completionBarHtml}
                         </div>
                     </div>
                 </td>
-                <td class="px-6 py-4 text-center font-bold text-lg ${gradeColorClass}">${roomData.averageGrade}</td>
+                <td class="px-4 py-2 text-center font-bold text-sm ${gradeColorClass}">${roomData.averageGrade}</td>
             </tr>
         `;
     }).join('');
@@ -370,6 +392,7 @@ function updateRoomSummaryTable() {
     sortIndicatorRoom.innerHTML = '';
     sortIndicatorScore.innerHTML = '';
     sortIndicatorGrade.innerHTML = '';
+    sortIndicatorCompletion.innerHTML = '';
 
     // Set the indicator on the active column
     if (roomSortConfig.key === 'room') {
@@ -378,6 +401,8 @@ function updateRoomSummaryTable() {
         sortIndicatorScore.innerHTML = sortArrow;
     } else if (roomSortConfig.key === 'averageGrade') {
         sortIndicatorGrade.innerHTML = sortArrow;
+    } else if (roomSortConfig.key === 'completionPercentage') {
+        sortIndicatorCompletion.innerHTML = sortArrow;
     }
 }
 
@@ -388,6 +413,7 @@ function initializeTableSorting() {
     const sortScoreBtn = document.getElementById('sort-avg-score-btn');
     const sortRoomBtn = document.getElementById('sort-room-btn');
     const sortGradeBtn = document.getElementById('sort-avg-grade-btn');
+    const sortCompletionBtn = document.getElementById('sort-completion-btn');
 
     if (sortScoreBtn) {
         sortScoreBtn.addEventListener('click', () => {
@@ -424,6 +450,18 @@ function initializeTableSorting() {
             updateRoomSummaryTable();
         });
     }
+
+    if (sortCompletionBtn) {
+        sortCompletionBtn.addEventListener('click', () => {
+            if (roomSortConfig.key === 'completionPercentage') {
+                roomSortConfig.direction = roomSortConfig.direction === 'desc' ? 'asc' : 'desc';
+            } else {
+                roomSortConfig.key = 'completionPercentage';
+                roomSortConfig.direction = 'desc'; // Default to descending
+            }
+            updateRoomSummaryTable();
+        });
+    }
 }
 
 /**
@@ -436,113 +474,112 @@ function renderSummary(summaryData) {
 
     const summaryHtml = `
         <!-- Student Search Section -->
-        <div class="bg-white dark:bg-gray-800/50 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden">
+        <div class="bg-white dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700/60 overflow-hidden">
             <h3 class="p-4 text-lg font-bold text-gray-800 dark:text-white font-kanit border-b border-gray-200 dark:border-gray-700">ค้นหานักเรียน</h3>
-            <div class="p-4">
+            <div class="p-4 sm:p-6">
                 <div class="flex flex-col sm:flex-row gap-3 items-center">
                     <div class="relative flex-grow w-full">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" /></svg>
                         </div>
-                        <input type="text" id="student-search-input" placeholder="พิมพ์ชื่อ, รหัส, หรือห้องเรียน..." class="w-full p-3 pl-10 pr-10 bg-gray-50 dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+                        <input type="text" id="student-search-input" placeholder="พิมพ์ชื่อ, รหัส, หรือห้องเรียน..." class="w-full p-3 pl-10 pr-10 bg-gray-100 dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400">
                         <button id="student-search-clear-btn" class="absolute inset-y-0 right-0 pr-3 flex items-center hidden" aria-label="ล้างการค้นหา">
                             <svg class="h-5 w-5 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" /></svg>
                         </button>
                     </div>
-                    <button id="student-search-btn" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg text-lg transition-transform transform hover:scale-105 flex items-center justify-center gap-2">
+                    <button id="student-search-btn" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg text-base transition-transform transform hover:scale-105 flex items-center justify-center gap-2 shadow-md hover:shadow-lg">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" /></svg>
                         <span>ค้นหา</span>
                     </button>
                 </div>
             </div>
-            <div id="student-search-results" class="px-4 pb-4 space-y-2">
+            <div id="student-search-results" class="px-4 sm:px-6 pb-4 space-y-2 max-h-96 overflow-y-auto modern-scrollbar">
                 <!-- Search results will be injected here -->
             </div>
         </div>
 
         <!-- Overall Stats Cards -->
-        <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
-            <div class="bg-white dark:bg-gray-800/50 p-6 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 flex items-center gap-6">
-                <div class="flex-shrink-0 h-14 w-14 rounded-full flex items-center justify-center bg-blue-100 dark:bg-blue-900/50 text-blue-500 dark:text-blue-400">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2h2.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293h3.172a2 2 0 002-2V9m-6 6v-6m-6 6v-6" /></svg>
+        <div class="mt-8 grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+            <div class="bg-white dark:bg-gray-800/50 p-3 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 flex items-center gap-3 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                <div class="flex-shrink-0 h-10 w-10 rounded-full flex items-center justify-center bg-blue-100 dark:bg-blue-900/50 text-blue-500 dark:text-blue-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2h2.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293h3.172a2 2 0 002-2V9m-6 6v-6m-6 6v-6" /></svg>
                 </div>
                 <div>
-                    <div class="text-3xl font-bold text-gray-800 dark:text-gray-100 font-kanit">${summaryData.totalStudents}</div>
-                    <div class="text-sm font-medium text-gray-500 dark:text-gray-400">จำนวนนักเรียนทั้งหมด</div>
+                    <div class="text-xl font-bold text-gray-800 dark:text-gray-100 font-kanit">${summaryData.totalStudents}</div>
+                    <div class="text-xs font-medium text-gray-500 dark:text-gray-400">จำนวนนักเรียนทั้งหมด</div>
                 </div>
             </div>
-            <div class="bg-white dark:bg-gray-800/50 p-6 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 flex items-center gap-6">
-                <div class="flex-shrink-0 h-14 w-14 rounded-full flex items-center justify-center bg-green-100 dark:bg-green-900/50 text-green-500 dark:text-green-400">
+            <div class="bg-white dark:bg-gray-800/50 p-3 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 flex items-center gap-3 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                <div class="flex-shrink-0 h-10 w-10 rounded-full flex items-center justify-center bg-green-100 dark:bg-green-900/50 text-green-500 dark:text-green-400">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 13v-1m4 1v-3m4 3V8M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" /></svg>
                 </div>
                 <div>
-                    <div class="text-3xl font-bold text-gray-800 dark:text-gray-100 font-kanit">${summaryData.averageScore}</div>
-                    <div class="text-sm font-medium text-gray-500 dark:text-gray-400">คะแนนเฉลี่ยรวม</div>
+                    <div class="text-xl font-bold text-gray-800 dark:text-gray-100 font-kanit">${summaryData.averageScore}</div>
+                    <div class="text-xs font-medium text-gray-500 dark:text-gray-400">คะแนนเฉลี่ยรวม</div>
                 </div>
             </div>
-            <div class="bg-white dark:bg-gray-800/50 p-6 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 flex items-center gap-6">
-                <div class="flex-shrink-0 h-14 w-14 rounded-full flex items-center justify-center bg-amber-100 dark:bg-amber-900/50 text-amber-500 dark:text-amber-400">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-                    </svg>
+            <div class="bg-white dark:bg-gray-800/50 p-3 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 flex items-center gap-3 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                <div class="flex-shrink-0 h-10 w-10 rounded-full flex items-center justify-center bg-amber-100 dark:bg-amber-900/50 text-amber-500 dark:text-amber-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>
                 </div>
                 <div>
-                    <div class="text-3xl font-bold text-gray-800 dark:text-gray-100 font-kanit">${summaryData.completionPercentage}%</div>
-                    <div class="text-sm font-medium text-gray-500 dark:text-gray-400">เปอร์เซ็นต์การส่งงาน</div>
+                    <div class="text-xl font-bold text-gray-800 dark:text-gray-100 font-kanit">${summaryData.completionPercentage}%</div>
+                    <div class="text-xs font-medium text-gray-500 dark:text-gray-400">เปอร์เซ็นต์การส่งงาน</div>
                 </div>
             </div>
-            <div class="bg-white dark:bg-gray-800/50 p-6 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 flex items-center gap-6">
-                <div class="flex-shrink-0 h-14 w-14 rounded-full flex items-center justify-center bg-yellow-100 dark:bg-yellow-900/50 text-yellow-500 dark:text-yellow-400">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                    </svg>
+            <div class="bg-white dark:bg-gray-800/50 p-3 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 flex items-center gap-3 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                <div class="flex-shrink-0 h-10 w-10 rounded-full flex items-center justify-center bg-yellow-100 dark:bg-yellow-900/50 text-yellow-500 dark:text-yellow-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
                 </div>
                 <div>
-                    <div class="text-3xl font-bold text-gray-800 dark:text-gray-100 font-kanit">${summaryData.highestScore}</div>
-                    <div class="text-sm font-medium text-gray-500 dark:text-gray-400">คะแนนสูงสุด</div>
+                    <div class="text-xl font-bold text-gray-800 dark:text-gray-100 font-kanit">${summaryData.highestScore}</div>
+                    <div class="text-xs font-medium text-gray-500 dark:text-gray-400">คะแนนสูงสุด</div>
                 </div>
             </div>
-            <div class="bg-white dark:bg-gray-800/50 p-6 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 flex items-center gap-6">
-                <div class="flex-shrink-0 h-14 w-14 rounded-full flex items-center justify-center bg-rose-100 dark:bg-rose-900/50 text-rose-500 dark:text-rose-400">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 17h8m0 0v-8m0 8l-8-8-4 4-6-6" />
-                    </svg>
+            <div class="bg-white dark:bg-gray-800/50 p-3 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 flex items-center gap-3 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                <div class="flex-shrink-0 h-10 w-10 rounded-full flex items-center justify-center bg-rose-100 dark:bg-rose-900/50 text-rose-500 dark:text-rose-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 17h8m0 0v-8m0 8l-8-8-4 4-6-6" /></svg>
                 </div>
                 <div>
-                    <div class="text-3xl font-bold text-gray-800 dark:text-gray-100 font-kanit">${summaryData.lowestScore}</div>
-                    <div class="text-sm font-medium text-gray-500 dark:text-gray-400">คะแนนต่ำสุด</div>
+                    <div class="text-xl font-bold text-gray-800 dark:text-gray-100 font-kanit">${summaryData.lowestScore}</div>
+                    <div class="text-xs font-medium text-gray-500 dark:text-gray-400">คะแนนต่ำสุด</div>
                 </div>
             </div>
         </div>
 
         <!-- Grade Distribution Chart -->
-        <div class="mt-8 bg-white dark:bg-gray-800/50 p-4 sm:p-6 rounded-xl shadow-md border border-gray-200 dark:border-gray-700">
+        <div class="mt-8 bg-white dark:bg-gray-800/80 backdrop-blur-sm p-4 sm:p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700/60">
             <div class="relative h-96">
                 <canvas id="grade-chart"></canvas>
             </div>
         </div>
 
         <!-- Per-Room Summary Table -->
-        <div class="mt-8 bg-white dark:bg-gray-800/50 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden">
+        <div class="mt-8 bg-white dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700/60 overflow-hidden">
             <h3 class="p-4 text-lg font-bold text-gray-800 dark:text-white font-kanit border-b border-gray-200 dark:border-gray-700">สรุปรายห้องเรียน</h3>
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto modern-scrollbar">
                 <table class="w-full text-left">
                     <thead class="bg-gray-50 dark:bg-gray-700/50 text-xs text-gray-700 dark:text-gray-300 uppercase">
                         <tr>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" class="px-4 py-2">
                                 <button id="sort-room-btn" class="inline-flex items-center gap-1 group font-bold focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-md px-1">
                                     <span>ห้องเรียน</span>
                                     <span id="sort-indicator-room" class="text-gray-500 dark:text-gray-400 transition-opacity"></span>
                                 </button>
                             </th>
-                            <th scope="col" class="px-6 py-3 text-center">จำนวนนักเรียน</th>
-                            <th scope="col" class="px-6 py-3 text-center">
+                            <th scope="col" class="px-4 py-2 text-center">
                                 <button id="sort-avg-score-btn" class="inline-flex items-center gap-1 group font-bold focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-md px-1">
                                     <span>คะแนนเฉลี่ย</span>
                                     <span id="sort-indicator-score" class="text-gray-500 dark:text-gray-400 transition-opacity"></span>
                                 </button>
                             </th>
-                            <th scope="col" class="px-6 py-3 text-center">
+                            <th scope="col" class="px-4 py-2 text-center">
+                                <button id="sort-completion-btn" class="inline-flex items-center gap-1 group font-bold focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-md px-1">
+                                    <span>การส่งงาน</span>
+                                    <span id="sort-indicator-completion" class="text-gray-500 dark:text-gray-400 transition-opacity"></span>
+                                </button>
+                            </th>
+                            <th scope="col" class="px-4 py-2 text-center">
                                 <button id="sort-avg-grade-btn" class="inline-flex items-center gap-1 group font-bold focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-md px-1">
                                     <span>เกรดเฉลี่ย</span>
                                     <span id="sort-indicator-grade" class="text-gray-500 dark:text-gray-400 transition-opacity"></span>
@@ -589,12 +626,12 @@ function renderSearchResults(results, container) {
         return;
     }
 
-    container.innerHTML = results.map(student => {
+    container.innerHTML = results.sort((a, b) => a.id.localeCompare(b.id)).map(student => {
         const grade = student['เกรด'] ?? 'N/A';
         let gradeColorClass = 'bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200';
         if (grade >= 4) gradeColorClass = 'bg-teal-100 dark:bg-teal-900/50 text-teal-700 dark:text-teal-300';
         else if (grade >= 3) gradeColorClass = 'bg-sky-100 dark:bg-sky-900/50 text-sky-700 dark:text-sky-300';
-        else if (grade >= 2) gradeColorClass = 'bg-yellow-100 dark:bg-yellow-900/50 text-yellow-700 dark:text-yellow-300';
+        else if (grade >= 2) gradeColorClass = 'bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300';
         else if (grade >= 1) gradeColorClass = 'bg-orange-100 dark:bg-orange-900/50 text-orange-700 dark:text-orange-300';
         else if (grade >= 0) gradeColorClass = 'bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300';
 
@@ -602,11 +639,11 @@ function renderSearchResults(results, container) {
         let completionColorClass = 'bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200';
         if (completion.percentage >= 90) completionColorClass = 'bg-teal-100 dark:bg-teal-900/50 text-teal-700 dark:text-teal-300';
         else if (completion.percentage >= 75) completionColorClass = 'bg-sky-100 dark:bg-sky-900/50 text-sky-700 dark:text-sky-300';
-        else if (completion.percentage >= 50) completionColorClass = 'bg-yellow-100 dark:bg-yellow-900/50 text-yellow-700 dark:text-yellow-300';
+        else if (completion.percentage >= 50) completionColorClass = 'bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300';
         else completionColorClass = 'bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300';
 
         return `
-            <a href="./scores.html?id=${student.id}" class="block p-3 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-700 transition-all duration-200 shadow-sm hover:shadow-md hover:border-blue-400 dark:hover:border-blue-500">
+            <a href="./scores.html?id=${student.id}" class="block p-3 bg-white dark:bg-gray-800/50 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-700 transition-all duration-200 shadow-sm hover:shadow-md hover:border-blue-400 dark:hover:border-blue-500">
                 <div class="flex justify-between items-center">
                     <div>
                         <p class="font-bold text-gray-800 dark:text-gray-100">${student.name}</p>
@@ -615,14 +652,14 @@ function renderSearchResults(results, container) {
                             ห้อง: <span class="font-semibold">${student.room || 'N/A'}</span>
                         </p>
                     </div>
-                    <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-2 sm:gap-4">
                         <div class="text-right">
                             <p class="text-xs text-gray-500 dark:text-gray-400">ส่งงาน</p>
-                            <p class="font-bold text-lg px-2 py-0.5 rounded ${completionColorClass}">${completion.percentage}%</p>
+                            <p class="font-bold text-base sm:text-lg px-2 py-0.5 rounded-md ${completionColorClass}">${completion.percentage}%</p>
                         </div>
                         <div class="text-right">
                             <p class="text-xs text-gray-500 dark:text-gray-400">เกรด</p>
-                            <p class="font-bold text-lg px-2 py-0.5 rounded ${gradeColorClass}">${grade}</p>
+                            <p class="font-bold text-base sm:text-lg px-2 py-0.5 rounded-md ${gradeColorClass}">${grade}</p>
                         </div>
                     </div>
                 </div>

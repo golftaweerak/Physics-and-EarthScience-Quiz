@@ -90,20 +90,10 @@
         </div>
     </div>
 
-    <script type="module">
-        import { loadComponent } from './scripts/component-loader.js';
-        import { initializeCommonComponents } from './scripts/common-init.js';
-        import { initializeScoreSearch } from './scripts/scores-handler.js';
+    <div id="footer-placeholder" class="mt-12"></div>
+    <div id="modals-placeholder"></div>
 
-        document.addEventListener('DOMContentLoaded', async () => {
-            // Load the main header, which is shared across the site
-            await loadComponent('#main_header-placeholder', './components/main_header.html');
-            // Initialize common components like the menu and dark mode toggle in the new header
-            initializeCommonComponents();
-            // Initialize the score search functionality specific to this page
-            initializeScoreSearch();
-        });
-    </script>
+    <script type="module" src="./scripts/scores-loader.js"></script>
 </body>
 
 </html>
