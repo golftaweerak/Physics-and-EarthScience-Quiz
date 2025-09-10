@@ -751,7 +751,7 @@ export function initializeCustomQuizHandler() {
 
                 let chapterAccordionsHTML = '';
                 chapters.forEach(chapter => {
-                    const topics = chapter.learningOutcomes || chapter.specificTopics || [];
+                    const topics = chapter.specificTopics || chapter.learningOutcomes || [];
                     const topicControlsHTML = topics.map(topic => {
                         const count = groupedQuestions[subjectKey]?.[chapter.title]?.[topic] || 0;
                         return createSpecificTopicControlHTML(chapter.title, topic, count);
