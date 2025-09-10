@@ -8,6 +8,32 @@ let roomSortConfig = {
 };
 
 /**
+ * Calculates the assignment completion percentage for a single student.
+ * @param {object} student - The student object.
+ * @returns {{submitted: number, total: number, percentage: string}} An object with completion stats.
+ */
+function calculateStudentCompletion(student) {
+    const TRACKABLE_KEYWORDS = ['กิจกรรม', 'แบบฝึก', 'quiz', 'ท้ายบท'];
+    if (!student.assignments || !Array.isArray(student.assignments)) {
+        return { submitted: 0, total: 0, percentage: '0' };
+    }
+
+    const trackableAssignments = student.assignments.filter(assignment =>
+        TRACKABLE_KEYWORDS.some(keyword => assignment.name.toLowerCase().includes(keyword))
+    );
+
+    const submittedCount = trackableAssignments.filter(a => a.score && String(a.score).toLowerCase() !== 'ยังไม่ส่ง').length;
+    const totalCount = trackableAssignments.length;
+    const percentage = totalCount > 0 ? (submittedCount / totalCount) * 100 : 0;
+
+    return {
+        submitted: submittedCount,
+        total: totalCount,
+        percentage: percentage.toFixed(0)
+    };
+}
+
+/**
  * Calculates summary statistics for all students.
  * @param {Array<object>} scores - The array of all student score objects.
  * @returns {object} An object containing various summary statistics.
@@ -566,11 +592,18 @@ function renderSearchResults(results, container) {
     container.innerHTML = results.map(student => {
         const grade = student['เกรด'] ?? 'N/A';
         let gradeColorClass = 'bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200';
-        if (grade >= 4) gradeColorClass = 'bg-teal-100 dark:bg-teal-800 text-teal-700 dark:text-teal-200';
-        else if (grade >= 3) gradeColorClass = 'bg-sky-100 dark:bg-sky-800 text-sky-700 dark:text-sky-200';
-        else if (grade >= 2) gradeColorClass = 'bg-yellow-100 dark:bg-yellow-800 text-yellow-700 dark:text-yellow-200';
-        else if (grade >= 1) gradeColorClass = 'bg-orange-100 dark:bg-orange-800 text-orange-700 dark:text-orange-200';
-        else if (grade >= 0) gradeColorClass = 'bg-red-100 dark:bg-red-800 text-red-700 dark:text-red-200';
+        if (grade >= 4) gradeColorClass = 'bg-teal-100 dark:bg-teal-900/50 text-teal-700 dark:text-teal-300';
+        else if (grade >= 3) gradeColorClass = 'bg-sky-100 dark:bg-sky-900/50 text-sky-700 dark:text-sky-300';
+        else if (grade >= 2) gradeColorClass = 'bg-yellow-100 dark:bg-yellow-900/50 text-yellow-700 dark:text-yellow-300';
+        else if (grade >= 1) gradeColorClass = 'bg-orange-100 dark:bg-orange-900/50 text-orange-700 dark:text-orange-300';
+        else if (grade >= 0) gradeColorClass = 'bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300';
+
+        const completion = calculateStudentCompletion(student);
+        let completionColorClass = 'bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200';
+        if (completion.percentage >= 90) completionColorClass = 'bg-teal-100 dark:bg-teal-900/50 text-teal-700 dark:text-teal-300';
+        else if (completion.percentage >= 75) completionColorClass = 'bg-sky-100 dark:bg-sky-900/50 text-sky-700 dark:text-sky-300';
+        else if (completion.percentage >= 50) completionColorClass = 'bg-yellow-100 dark:bg-yellow-900/50 text-yellow-700 dark:text-yellow-300';
+        else completionColorClass = 'bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300';
 
         return `
             <a href="./scores.html?id=${student.id}" class="block p-3 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-700 transition-all duration-200 shadow-sm hover:shadow-md hover:border-blue-400 dark:hover:border-blue-500">
@@ -582,9 +615,15 @@ function renderSearchResults(results, container) {
                             ห้อง: <span class="font-semibold">${student.room || 'N/A'}</span>
                         </p>
                     </div>
-                    <div class="text-right">
-                        <p class="text-sm text-gray-500 dark:text-gray-400">เกรด</p>
-                        <p class="font-bold text-lg px-2 py-0.5 rounded ${gradeColorClass}">${grade}</p>
+                    <div class="flex items-center gap-4">
+                        <div class="text-right">
+                            <p class="text-xs text-gray-500 dark:text-gray-400">ส่งงาน</p>
+                            <p class="font-bold text-lg px-2 py-0.5 rounded ${completionColorClass}">${completion.percentage}%</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xs text-gray-500 dark:text-gray-400">เกรด</p>
+                            <p class="font-bold text-lg px-2 py-0.5 rounded ${gradeColorClass}">${grade}</p>
+                        </div>
                     </div>
                 </div>
             </a>
