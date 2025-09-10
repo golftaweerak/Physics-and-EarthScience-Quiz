@@ -17,6 +17,9 @@ function calculateOverallSummary(scores) {
         return {
             totalStudents: 0,
             averageScore: 0,
+            completionPercentage: 0,
+            highestScore: 0,
+            lowestScore: 0,
             gradeDistribution: {},
             summaryByRoom: {}
         };
@@ -27,11 +30,26 @@ function calculateOverallSummary(scores) {
     const gradeDistribution = {};
     const summaryByRoom = {};
 
+    let highestScore = -Infinity;
+    let lowestScore = Infinity;
+
+    // For overall completion percentage
+    let totalTrackableAssignments = 0;
+    let totalSubmittedAssignments = 0;
+    const TRACKABLE_KEYWORDS = ['กิจกรรม', 'แบบฝึก', 'quiz', 'ท้ายบท'];
+
     scores.forEach(student => {
         // Overall average score
         const totalScore = student['รวม [100]'];
         if (typeof totalScore === 'number') {
             totalScoreSum += totalScore;
+            // Update highest and lowest scores
+            if (totalScore > highestScore) {
+                highestScore = totalScore;
+            }
+            if (totalScore < lowestScore) {
+                lowestScore = totalScore;
+            }
         }
 
         // Grade distribution
@@ -59,6 +77,18 @@ function calculateOverallSummary(scores) {
             summaryByRoom[room].totalGradeSum += numericGrade;
             summaryByRoom[room].validGradesCount++;
         }
+
+        // Calculate completion percentage for each student and add to total
+        if (student.assignments && Array.isArray(student.assignments)) {
+            const trackableAssignments = student.assignments.filter(assignment =>
+                TRACKABLE_KEYWORDS.some(keyword => assignment.name.toLowerCase().includes(keyword))
+            );
+            
+            const submittedCount = trackableAssignments.filter(a => a.score && String(a.score).toLowerCase() !== 'ยังไม่ส่ง').length;
+
+            totalTrackableAssignments += trackableAssignments.length;
+            totalSubmittedAssignments += submittedCount;
+        }
     });
 
     // Calculate averages for each room
@@ -74,10 +104,21 @@ function calculateOverallSummary(scores) {
 
     const overallAverageScore = totalStudents > 0 ? (totalScoreSum / scores.filter(s => typeof s['รวม [100]'] === 'number').length).toFixed(2) : 0;
 
+    const completionPercentage = totalTrackableAssignments > 0 
+        ? ((totalSubmittedAssignments / totalTrackableAssignments) * 100).toFixed(0) 
+        : 0;
+    
+    // Final check for highest/lowest scores
+    const finalHighestScore = highestScore === -Infinity ? 'N/A' : highestScore;
+    const finalLowestScore = lowestScore === Infinity ? 'N/A' : lowestScore;
+
     return {
         totalStudents,
         averageScore: overallAverageScore,
         gradeDistribution,
+        completionPercentage,
+        highestScore: finalHighestScore,
+        lowestScore: finalLowestScore,
         summaryByRoom
     };
 }
@@ -249,12 +290,47 @@ function updateRoomSummaryTable() {
     // Generate and inject the table rows
     tbody.innerHTML = sortedRooms.map(room => {
         const roomData = summaryDataStore.summaryByRoom[room];
+
+        // --- UI Enhancement Logic ---
+        // For Average Score Progress Bar
+        const avgScore = parseFloat(roomData.averageScore);
+        let scoreBarColor = 'bg-gray-300 dark:bg-gray-600';
+        if (!isNaN(avgScore)) {
+            if (avgScore >= 80) scoreBarColor = 'bg-teal-500';
+            else if (avgScore >= 70) scoreBarColor = 'bg-sky-500';
+            else if (avgScore >= 60) scoreBarColor = 'bg-green-500';
+            else if (avgScore >= 50) scoreBarColor = 'bg-amber-500';
+            else scoreBarColor = 'bg-red-500';
+        }
+        const scoreBarHtml = !isNaN(avgScore) ? `
+            <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2.5">
+                <div class="${scoreBarColor} h-2.5 rounded-full" style="width: ${avgScore}%"></div>
+            </div>
+        ` : '<span class="text-xs text-gray-400">N/A</span>';
+
+        // For Average Grade Color
+        const avgGrade = parseFloat(roomData.averageGrade);
+        let gradeColorClass = 'text-gray-800 dark:text-gray-200';
+        if (!isNaN(avgGrade)) {
+            if (avgGrade >= 3.5) gradeColorClass = 'text-teal-500';
+            else if (avgGrade >= 2.5) gradeColorClass = 'text-sky-500';
+            else if (avgGrade >= 1.5) gradeColorClass = 'text-amber-500';
+            else gradeColorClass = 'text-red-500';
+        }
+
         return `
-            <tr class="border-b dark:border-gray-700 last:border-b-0">
+            <tr class="border-b dark:border-gray-700 last:border-b-0 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150">
                 <th scope="row" class="px-6 py-4 font-bold text-gray-900 dark:text-white whitespace-nowrap">ห้อง ${room}</th>
-                <td class="px-6 py-4 text-center">${roomData.studentCount}</td>
-                <td class="px-6 py-4 text-center font-semibold">${roomData.averageScore}</td>
-                <td class="px-6 py-4 text-center font-semibold">${roomData.averageGrade}</td>
+                <td class="px-6 py-4 text-center font-mono">${roomData.studentCount}</td>
+                <td class="px-6 py-4">
+                    <div class="flex items-center gap-3 justify-center">
+                        <span class="font-semibold font-mono w-12 text-right">${roomData.averageScore}</span>
+                        <div class="w-full max-w-[120px]">
+                           ${scoreBarHtml}
+                        </div>
+                    </div>
+                </td>
+                <td class="px-6 py-4 text-center font-bold text-lg ${gradeColorClass}">${roomData.averageGrade}</td>
             </tr>
         `;
     }).join('');
@@ -359,10 +435,10 @@ function renderSummary(summaryData) {
         </div>
 
         <!-- Overall Stats Cards -->
-        <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
             <div class="bg-white dark:bg-gray-800/50 p-6 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 flex items-center gap-6">
                 <div class="flex-shrink-0 h-14 w-14 rounded-full flex items-center justify-center bg-blue-100 dark:bg-blue-900/50 text-blue-500 dark:text-blue-400">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.653-.124-1.283-.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2h2.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293h3.172a2 2 0 002-2V9m-6 6v-6m-6 6v-6" /></svg>
                 </div>
                 <div>
                     <div class="text-3xl font-bold text-gray-800 dark:text-gray-100 font-kanit">${summaryData.totalStudents}</div>
@@ -371,11 +447,44 @@ function renderSummary(summaryData) {
             </div>
             <div class="bg-white dark:bg-gray-800/50 p-6 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 flex items-center gap-6">
                 <div class="flex-shrink-0 h-14 w-14 rounded-full flex items-center justify-center bg-green-100 dark:bg-green-900/50 text-green-500 dark:text-green-400">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 14l9-5-9-5-9 5 9 5z" /><path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-5.998 12.078 12.078 0 01.665-6.479L12 14z" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-5.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" /></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 13v-1m4 1v-3m4 3V8M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" /></svg>
                 </div>
                 <div>
                     <div class="text-3xl font-bold text-gray-800 dark:text-gray-100 font-kanit">${summaryData.averageScore}</div>
                     <div class="text-sm font-medium text-gray-500 dark:text-gray-400">คะแนนเฉลี่ยรวม</div>
+                </div>
+            </div>
+            <div class="bg-white dark:bg-gray-800/50 p-6 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 flex items-center gap-6">
+                <div class="flex-shrink-0 h-14 w-14 rounded-full flex items-center justify-center bg-amber-100 dark:bg-amber-900/50 text-amber-500 dark:text-amber-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                    </svg>
+                </div>
+                <div>
+                    <div class="text-3xl font-bold text-gray-800 dark:text-gray-100 font-kanit">${summaryData.completionPercentage}%</div>
+                    <div class="text-sm font-medium text-gray-500 dark:text-gray-400">เปอร์เซ็นต์การส่งงาน</div>
+                </div>
+            </div>
+            <div class="bg-white dark:bg-gray-800/50 p-6 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 flex items-center gap-6">
+                <div class="flex-shrink-0 h-14 w-14 rounded-full flex items-center justify-center bg-yellow-100 dark:bg-yellow-900/50 text-yellow-500 dark:text-yellow-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                    </svg>
+                </div>
+                <div>
+                    <div class="text-3xl font-bold text-gray-800 dark:text-gray-100 font-kanit">${summaryData.highestScore}</div>
+                    <div class="text-sm font-medium text-gray-500 dark:text-gray-400">คะแนนสูงสุด</div>
+                </div>
+            </div>
+            <div class="bg-white dark:bg-gray-800/50 p-6 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 flex items-center gap-6">
+                <div class="flex-shrink-0 h-14 w-14 rounded-full flex items-center justify-center bg-rose-100 dark:bg-rose-900/50 text-rose-500 dark:text-rose-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 17h8m0 0v-8m0 8l-8-8-4 4-6-6" />
+                    </svg>
+                </div>
+                <div>
+                    <div class="text-3xl font-bold text-gray-800 dark:text-gray-100 font-kanit">${summaryData.lowestScore}</div>
+                    <div class="text-sm font-medium text-gray-500 dark:text-gray-400">คะแนนต่ำสุด</div>
                 </div>
             </div>
         </div>
