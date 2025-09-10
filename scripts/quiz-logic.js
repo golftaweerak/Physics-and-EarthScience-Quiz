@@ -155,16 +155,32 @@ export function init(quizData, storageKey, quizTitle, customTime, action) {
  * @param {'next' | 'submit'} action - The action the button should perform.
  */
 function updateNextButtonAppearance(action) {
-  if (!elements.nextBtn) return;
+    if (!elements.nextBtn) return;
 
-  if (state.isFloatingNav) {
-    const isSubmit = action === 'submit';
-    elements.nextBtn.innerHTML = isSubmit ? config.icons.submit : config.icons.next;
-    elements.nextBtn.title = isSubmit ? 'ส่งคำตอบ' : 'ข้อต่อไป';
-  } else {
-    elements.nextBtn.innerHTML = ''; // Clear icons
-    elements.nextBtn.textContent = action === 'submit' ? 'ส่งคำตอบ' : 'ข้อต่อไป';
-  }
+    const isLastQuestion = state.currentQuestionIndex === state.shuffledQuestions.length - 1;
+    const isAnswered = state.userAnswers[state.currentQuestionIndex] !== null;
+
+    let buttonText = 'ข้อต่อไป';
+    let buttonIcon = config.icons.next;
+    let buttonTitle = 'ข้อต่อไป';
+
+    if (action === 'submit') {
+        buttonText = 'ส่งคำตอบ';
+        buttonIcon = config.icons.submit;
+        buttonTitle = 'ส่งคำตอบ';
+    } else if (isLastQuestion && isAnswered) {
+        buttonText = 'ดูผลสรุป';
+        buttonIcon = config.icons.submit; // Using the submit icon for "finish" is fine.
+        buttonTitle = 'ดูผลสรุป';
+    }
+
+    if (state.isFloatingNav) {
+        elements.nextBtn.innerHTML = buttonIcon;
+        elements.nextBtn.title = buttonTitle;
+    } else {
+        elements.nextBtn.innerHTML = ''; // Clear icons
+        elements.nextBtn.textContent = buttonText;
+    }
 }
 
 /**
@@ -764,12 +780,14 @@ function showFeedback(isCorrect, explanation, correctAnswer) {
 }
 
 function showNextQuestion() {
-  state.currentQuestionIndex++;
-  if (state.currentQuestionIndex < state.shuffledQuestions.length) {
-    showQuestion();
-  } else {
-    showResults();
-  }
+    if (state.currentQuestionIndex >= state.shuffledQuestions.length - 1) {
+        // We are on or after the last question, so show results.
+        showResults();
+    } else {
+        // Not the last question, increment and show the next one.
+        state.currentQuestionIndex++;
+        showQuestion();
+    }
 }
 
 /**
