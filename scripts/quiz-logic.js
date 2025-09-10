@@ -780,54 +780,52 @@ function showFeedback(isCorrect, explanation, correctAnswer) {
 }
 
 function showNextQuestion() {
-    if (state.currentQuestionIndex >= state.shuffledQuestions.length - 1) {
-        // We are on or after the last question, so show results.
-        showResults();
-    } else {
-        // Not the last question, increment and show the next one.
-        state.currentQuestionIndex++;
-        showQuestion();
-    }
+  // This function is now only called when we are certain there IS a next question.
+  state.currentQuestionIndex++;
+  showQuestion();
 }
 
 /**
  * Central handler for the main action button (Next/Submit).
  */
 function handleNextButtonClick() {
-  const currentQuestion = state.shuffledQuestions[state.currentQuestionIndex];
-  // เพิ่มการป้องกันกรณีที่ไม่มีคำถามปัจจุบัน
-  if (!currentQuestion) {
-    console.error("handleNextButtonClick: No current question found. Index:", state.currentQuestionIndex);
-    showResults(); // ไปยังหน้าสรุปผลเพื่อป้องกันข้อผิดพลาด
-    return;
-  }
-
   const isAnswered = state.userAnswers[state.currentQuestionIndex] !== null;
 
-  // ถ้าตอบไปแล้ว ให้ไปข้อถัดไปเสมอ
-  if (isAnswered) {
-    showNextQuestion();
+  // If the current question is not answered, it must be a 'submit' action.
+  if (!isAnswered) {
+    const currentQuestion = state.shuffledQuestions[state.currentQuestionIndex];
+    if (!currentQuestion) {
+      showResults(); // Fallback
+      return;
+    }
+    // Evaluate the answer based on type
+    switch (currentQuestion.type) {
+      case 'multiple-select':
+        evaluateMultipleAnswer();
+        break;
+      case 'fill-in':
+        evaluateFillInAnswer();
+        break;
+      case 'fill-in-number':
+        evaluateFillInNumberAnswer();
+        break;
+      default:
+        // This case should not be reached for a 'submit' button.
+        // As a safe fallback, we'll just move on.
+        console.warn(`handleNextButtonClick called for an unanswered question of unhandled type: ${currentQuestion.type}`);
+        showNextQuestion();
+        break;
+    }
     return;
   }
 
-  // ถ้ายังไม่ได้ตอบ ให้ตรวจคำตอบตามประเภทของคำถาม
-  const questionType = currentQuestion.type;
-  switch (questionType) {
-    case 'multiple-select':
-      evaluateMultipleAnswer();
-      break;
-    case 'fill-in':
-      evaluateFillInAnswer();
-      break;
-    case 'fill-in-number':
-      evaluateFillInNumberAnswer();
-      break;
-    default:
-      // กรณีนี้ไม่ควรเกิดขึ้นกับปุ่ม "ส่งคำตอบ" แต่ใส่ไว้เพื่อความปลอดภัย
-      // สำหรับคำถามปรนัย (type: 'question') การตรวจคำตอบจะเกิดทันทีที่คลิกตัวเลือก
-      console.warn(`handleNextButtonClick called in 'submit' mode for an unhandled question type: ${questionType}`);
-      showNextQuestion();
-      break;
+  // If we reach here, the question has been answered.
+  const isLastQuestion = state.currentQuestionIndex === state.shuffledQuestions.length - 1;
+
+  if (isLastQuestion) {
+    showResults();
+  } else {
+    showNextQuestion();
   }
 }
 
@@ -1269,20 +1267,6 @@ function buildResultsLayout(resultInfo, stats) {
     summaryContainer.appendChild(summaryList);
     layoutContainer.appendChild(summaryContainer);
   }
-
-  // --- 5. Action Buttons ---
-  const actionsContainer = document.createElement('div');
-  actionsContainer.className = 'w-full max-w-2xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-3 mt-8';
-
-  // Restart Button
-  elements.restartBtn.className = 'w-full sm:w-auto flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg text-lg transition duration-300 shadow-md hover:shadow-lg';
-  actionsContainer.appendChild(elements.restartBtn);
-
-  // Review Button (will be shown/hidden later)
-  elements.reviewBtn.className = 'w-full sm:w-auto flex-1 bg-gray-700 hover:bg-gray-800 text-white font-bold py-3 px-6 rounded-lg text-lg transition duration-300 shadow-md hover:shadow-lg';
-  actionsContainer.appendChild(elements.reviewBtn);
-
-  layoutContainer.appendChild(actionsContainer);
 
   // --- 6. Assemble and Inject ---
   // Prepend to the result screen so it appears before the buttons
