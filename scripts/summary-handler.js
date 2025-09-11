@@ -293,6 +293,19 @@ function getScoreTextColor(score) {
     return 'text-red-500 dark:text-red-400';
 }
 /**
+ * Determines the Tailwind CSS text color class for a completion percentage.
+ * @param {number} percentage - The completion percentage (0-100).
+ * @returns {string} The Tailwind CSS class string for text color.
+ */
+function getCompletionTextColor(percentage) {
+    if (isNaN(percentage)) return 'text-gray-500 dark:text-gray-400';
+    if (percentage >= 90) return 'text-teal-500 dark:text-teal-400';
+    if (percentage >= 75) return 'text-sky-500 dark:text-sky-400';
+    if (percentage >= 50) return 'text-amber-500 dark:text-amber-400';
+    return 'text-red-500 dark:text-red-400';
+}
+
+/**
  * Sorts and renders the rows for the per-room summary table.
  * Also updates the sort indicator icon in the table header.
  */
@@ -336,20 +349,8 @@ function updateRoomSummaryTable() {
         const avgScore = parseFloat(roomData.averageScore);
         const scoreTextColorClass = getScoreTextColor(avgScore);
 
-        // For Completion Percentage Progress Bar
         const completionPercentage = parseFloat(roomData.completionPercentage);
-        let completionBarColor = 'bg-gray-300 dark:bg-gray-600';
-        if (!isNaN(completionPercentage)) {
-            if (completionPercentage >= 90) completionBarColor = 'bg-gradient-to-r from-teal-400 to-teal-500';
-            else if (completionPercentage >= 75) completionBarColor = 'bg-gradient-to-r from-sky-400 to-sky-500';
-            else if (completionPercentage >= 50) completionBarColor = 'bg-gradient-to-r from-amber-400 to-amber-500';
-            else completionBarColor = 'bg-gradient-to-r from-red-500 to-rose-500';
-        }
-        const completionBarHtml = !isNaN(completionPercentage) ? `
-            <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2.5">
-                <div class="${completionBarColor} h-2.5 rounded-full transition-all duration-500" style="width: ${completionPercentage}%"></div>
-            </div>
-        ` : '<span class="text-xs text-gray-400">N/A</span>';
+        const completionTextColorClass = getCompletionTextColor(completionPercentage);
 
         // For Average Grade Color
         const avgGrade = parseFloat(roomData.averageGrade);
@@ -370,13 +371,8 @@ function updateRoomSummaryTable() {
                 <td class="px-4 py-2 text-center">
                     <span class="font-bold text-base ${scoreTextColorClass}">${roomData.averageScore}</span>
                 </td>
-                <td class="px-4 py-2">
-                    <div class="flex items-center gap-3 justify-center">
-                        <span class="font-semibold font-mono w-12 text-right">${roomData.completionPercentage}%</span>
-                        <div class="w-full max-w-[100px]">
-                           ${completionBarHtml}
-                        </div>
-                    </div>
+                <td class="px-4 py-2 text-center">
+                    <span class="font-bold text-base ${completionTextColorClass}">${roomData.completionPercentage}%</span>
                 </td>
                 <td class="px-4 py-2 text-center font-bold text-sm ${gradeColorClass}">${roomData.averageGrade}</td>
             </tr>
