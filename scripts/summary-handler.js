@@ -626,7 +626,7 @@ function renderSearchResults(results, container) {
         return;
     }
 
-    container.innerHTML = results.sort((a, b) => a.id.localeCompare(b.id)).map(student => {
+    container.innerHTML = results.map(student => {
         const grade = student['เกรด'] ?? 'N/A';
         let gradeColorClass = 'bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200';
         if (grade >= 4) gradeColorClass = 'bg-teal-100 dark:bg-teal-900/50 text-teal-700 dark:text-teal-300';
@@ -649,7 +649,8 @@ function renderSearchResults(results, container) {
                         <p class="font-bold text-gray-800 dark:text-gray-100">${student.name}</p>
                         <p class="text-sm text-gray-500 dark:text-gray-400">
                             รหัส: <span class="font-mono">${student.id}</span> | 
-                            ห้อง: <span class="font-semibold">${student.room || 'N/A'}</span>
+                            ห้อง: <span class="font-semibold">${student.room || 'N/A'}</span> |
+                            เลขที่: <span class="font-semibold">${student.ordinal || 'N/A'}</span>
                         </p>
                     </div>
                     <div class="flex items-center gap-2 sm:gap-4">
@@ -704,12 +705,19 @@ function initializeStudentSearch() {
             // Priority 2: Exact Room match
             const roomMatches = studentScores.filter(s => s.room && s.room.toLowerCase() === query);
             if (roomMatches.length > 0) {
-                results = roomMatches;
+                // Sort by ordinal number for room searches
+                results = roomMatches.sort((a, b) => {
+                    const ordinalA = parseInt(a.ordinal, 10) || 999;
+                    const ordinalB = parseInt(b.ordinal, 10) || 999;
+                    return ordinalA - ordinalB;
+                });
             } else {
                 // Priority 3: Partial Name match
-                results = studentScores.filter(student =>
+                const nameMatches = studentScores.filter(student =>
                     student.name.toLowerCase().includes(query)
                 );
+                // Sort by ID for name searches
+                results = nameMatches.sort((a, b) => a.id.localeCompare(b.id));
             }
         }
 
