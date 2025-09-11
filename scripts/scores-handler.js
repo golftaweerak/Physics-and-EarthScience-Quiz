@@ -23,6 +23,31 @@ const ASSIGNMENT_URL_MAP = {
     'Quiz 5': 'https://forms.office.com/r/gMTxMUjiT6'
 };
 
+/**
+ * Calculates the assignment completion percentage for a single student.
+ * @param {object} student - The student object.
+ * @returns {{submitted: number, total: number, percentage: string}} An object with completion stats.
+ */
+function calculateStudentCompletion(student) {
+    const TRACKABLE_KEYWORDS = ['กิจกรรม', 'แบบฝึก', 'quiz', 'ท้ายบท'];
+    if (!student.assignments || !Array.isArray(student.assignments)) {
+        return { submitted: 0, total: 0, percentage: '0' };
+    }
+
+    const trackableAssignments = student.assignments.filter(assignment =>
+        TRACKABLE_KEYWORDS.some(keyword => assignment.name.toLowerCase().includes(keyword))
+    );
+
+    const submittedCount = trackableAssignments.filter(a => a.score && String(a.score).toLowerCase() !== 'ยังไม่ส่ง').length;
+    const totalCount = trackableAssignments.length;
+    const percentage = totalCount > 0 ? (submittedCount / totalCount) * 100 : 0;
+
+    return {
+        submitted: submittedCount,
+        total: totalCount,
+        percentage: percentage.toFixed(0)
+    };
+}
 /** A map for renaming specific assignment names for display. */
 const ASSIGNMENT_DISPLAY_NAME_MAP = {
     'mid [20]': 'คะแนนข้อกา (30)',
@@ -90,6 +115,57 @@ export function initializeScoreSearch() {
         modal.classList.remove('hidden');
     }
     // Defensive check: Ensure student data is available before enabling search.
+
+    function renderSearchResults(results, container) {
+        if (defaultMessage) defaultMessage.classList.add('hidden');
+        if (results.length === 0) {
+            container.innerHTML = `<p class="text-center text-gray-500 dark:text-gray-400 py-4">ไม่พบนักเรียนที่ตรงกับคำค้นหา</p>`;
+            return;
+        }
+
+        const resultsHtml = results.map(student => {
+            const grade = student['เกรด'] ?? 'N/A';
+            let gradeColorClass = 'bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200';
+            if (grade >= 4) gradeColorClass = 'bg-teal-100 dark:bg-teal-900/50 text-teal-700 dark:text-teal-300';
+            else if (grade >= 3) gradeColorClass = 'bg-sky-100 dark:bg-sky-900/50 text-sky-700 dark:text-sky-300';
+            else if (grade >= 2) gradeColorClass = 'bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300';
+            else if (grade >= 1) gradeColorClass = 'bg-orange-100 dark:bg-orange-900/50 text-orange-700 dark:text-orange-300';
+            else if (grade >= 0) gradeColorClass = 'bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300';
+
+            const completion = calculateStudentCompletion(student);
+            let completionColorClass = 'bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200';
+            if (completion.percentage >= 90) completionColorClass = 'bg-teal-100 dark:bg-teal-900/50 text-teal-700 dark:text-teal-300';
+            else if (completion.percentage >= 75) completionColorClass = 'bg-sky-100 dark:bg-sky-900/50 text-sky-700 dark:text-sky-300';
+            else if (completion.percentage >= 50) completionColorClass = 'bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300';
+            else completionColorClass = 'bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300';
+
+            return `
+                <button data-student-id="${student.id}" class="student-card-btn block w-full text-left p-3 bg-white dark:bg-gray-800/50 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-700 transition-all duration-200 shadow-sm hover:shadow-md hover:border-blue-400 dark:hover:border-blue-500">
+                    <div class="flex justify-between items-center pointer-events-none">
+                        <div>
+                            <p class="font-bold text-gray-800 dark:text-gray-100">${student.name}</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">
+                                รหัส: <span class="font-mono">${student.id}</span> | 
+                                ห้อง: <span class="font-semibold">${student.room || 'N/A'}</span> |
+                                เลขที่: <span class="font-semibold">${student.ordinal || 'N/A'}</span>
+                            </p>
+                        </div>
+                        <div class="flex items-center gap-2 sm:gap-4">
+                            <div class="text-right">
+                                <p class="text-xs text-gray-500 dark:text-gray-400">ส่งงาน</p>
+                                <p class="font-bold text-base sm:text-lg px-2 py-0.5 rounded-md ${completionColorClass}">${completion.percentage}%</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-xs text-gray-500 dark:text-gray-400">เกรด</p>
+                                <p class="font-bold text-base sm:text-lg px-2 py-0.5 rounded-md ${gradeColorClass}">${grade}</p>
+                            </div>
+                        </div>
+                    </div>
+                </button>
+            `;
+        }).join('');
+        container.innerHTML = `<div class="space-y-2">${resultsHtml}</div>`;
+    }
     if (!Array.isArray(studentScores) || studentScores.length === 0) {
         console.error("Student scores data is missing or empty.");
         studentIdInput.disabled = true;
@@ -98,43 +174,53 @@ export function initializeScoreSearch() {
         return;
     }
 
+    resultContainer.addEventListener('click', (event) => {
+        const card = event.target.closest('.student-card-btn');
+        if (!card) return;
+
+        const studentId = card.dataset.studentId;
+        if (!studentId) return;
+
+        const student = studentScores.find(s => s.id === studentId);
+        if (student) {
+            displayResult(student);
+        }
+    });
+
     const searchScores = () => {
         const query = studentIdInput.value.trim();
         if (query.length === 0) {
             displayMessage('กรุณากรอกรหัสนักเรียน, ชื่อ, หรือห้องเรียนเพื่อค้นหา', 'error');
             return;
         }
-
         const lowerCaseQuery = query.toLowerCase();
         
-        // --- New hierarchical search logic ---
+        let results = [];
         
         // Priority 1: Exact ID match.
-        const idMatch = studentScores.find(s => s.id === query);
+        const idMatch = studentScores.find(s => s.id.toLowerCase() === lowerCaseQuery);
         if (idMatch) {
             displayResult(idMatch);
             return;
         }
 
         // Priority 2: Exact Room match.
-        // This is done only if no exact ID was found.
-        const roomMatches = studentScores.filter(s => s.room === query);
+        const roomMatches = studentScores.filter(s => s.room && s.room.toLowerCase() === lowerCaseQuery);
         if (roomMatches.length > 0) {
-            const studentListHtml = roomMatches
-                .map(s => `<li class="py-1 text-left">${s.name} (รหัส: ${s.id})</li>`)
-                .join('');
-            displayMessage(`พบนักเรียน ${roomMatches.length} คนในห้อง ${query}:<ul class="list-disc list-inside mt-2">${studentListHtml}</ul>`, 'info');
+            results = roomMatches.sort((a, b) => {
+                const ordinalA = parseInt(a.ordinal, 10) || 999;
+                const ordinalB = parseInt(b.ordinal, 10) || 999;
+                return ordinalA - ordinalB;
+            });
+            renderSearchResults(results, resultContainer);
             return;
         }
 
         // Priority 3: Partial Name match.
-        // This is done only if no ID or room match was found.
         const nameMatches = studentScores.filter(s => s.name.toLowerCase().includes(lowerCaseQuery));
         if (nameMatches.length > 1) {
-            const studentListHtml = nameMatches
-                .map(s => `<li class="py-1 text-left">${s.name} (รหัส: ${s.id}, ห้อง: ${s.room})</li>`)
-                .join('');
-            displayMessage(`พบนักเรียนหลายคน:<ul class="list-disc list-inside mt-2">${studentListHtml}</ul><p class="mt-2">กรุณาระบุข้อมูลให้ชัดเจนมากขึ้น</p>`, 'info');
+            results = nameMatches.sort((a, b) => a.id.localeCompare(b.id));
+            renderSearchResults(results, resultContainer);
         } else if (nameMatches.length === 1) {
             displayResult(nameMatches[0]);
         } else {
@@ -317,8 +403,10 @@ export function initializeScoreSearch() {
 
                 let retestStatusHtml = '';
                 if (key === 'กลางภาค [20]' && student.ซ่อมมั้ย && student.ซ่อมมั้ย.trim() !== '-') {
-                    const statusColor = student.ซ่อมมั้ย.includes('ไม่ต้อง') ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400';
-                    retestStatusHtml = `<div class="text-xs font-normal ${statusColor} pt-1">สถานะการสอบซ่อม: ${student.ซ่อมมั้ย}</div>`;
+                    const retestStatus = student.ซ่อมมั้ย.trim();
+                    const isPositiveStatus = retestStatus.includes('ไม่ต้อง') || retestStatus.includes('ซ่อมแล้ว');
+                    const statusColor = isPositiveStatus ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400';
+                    retestStatusHtml = `<div class="text-xs font-normal ${statusColor} pt-1">สถานะการสอบซ่อม: ${retestStatus}</div>`;
                 }
 
                 let mainRowHtml = `
