@@ -14,7 +14,7 @@ async function main() {
 
         const { initializeScoreSearch } = await import('./scores-handler.js');
         // Initialize the score search functionality specific to this page
-        initializeScoreSearch();
+        await initializeScoreSearch();
 
     } catch (error) {
         console.error("Failed to initialize scores page:", error);

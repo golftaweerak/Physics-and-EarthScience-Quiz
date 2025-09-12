@@ -126,6 +126,57 @@ export function getCategoryDisplayName(categoryKey) {
     return details.displayName || details.title;
 }
 
+let mergedScoresCache = null;
+
+/**
+ * Fetches base scores and manual overrides, merges them, and caches the result.
+ * This ensures that overrides are applied consistently across the application.
+ * @returns {Promise<Array<object>>} A promise that resolves to the merged student scores.
+ */
+export async function getStudentScores() {
+    if (mergedScoresCache) {
+        return mergedScoresCache;
+    }
+
+    try {
+        // Dynamically import base scores to ensure freshness if the file changes.
+        const { studentScores: baseScores } = await import(`../data/scores-data.js?v=${Date.now()}`);
+
+        // Dynamically and safely import overrides.
+        let scoreOverrides = {};
+        try { // This outer try-catch handles if the file doesn't exist at all.
+            const overrideModule = await import(`../data/score-overrides.js?v=${Date.now()}`);
+            if (overrideModule.encryptedScoreOverrides && overrideModule.encryptedScoreOverrides.trim() !== "") {
+                try { // This inner try-catch handles potential decoding/parsing errors.
+                    const decodedString = atob(overrideModule.encryptedScoreOverrides);
+                    scoreOverrides = JSON.parse(decodedString);
+                } catch (parseError) {
+                    console.error("Failed to decode or parse score-overrides.js. The data might be corrupt.", parseError);
+                    scoreOverrides = {}; // Reset to empty on error to prevent crashes.
+                }
+            }
+        } catch (e) {
+            console.log("Info: score-overrides.js not found. Using base scores.");
+        }
+
+        if (Object.keys(scoreOverrides).length === 0) {
+            mergedScoresCache = baseScores;
+            return baseScores;
+        }
+
+        // Perform a merge. Create new student objects for those with overrides.
+        const mergedScores = baseScores.map(student => 
+            scoreOverrides[student.id] ? { ...student, ...scoreOverrides[student.id] } : student
+        );
+
+        mergedScoresCache = mergedScores;
+        return mergedScores;
+    } catch (error) {
+        console.error("Failed to load or merge student scores:", error);
+        return []; // Return an empty array on failure.
+    }
+}
+
 /**
  * Retrieves the progress state of a quiz from localStorage.
  * @param {string} storageKey - The key for the quiz in localStorage.

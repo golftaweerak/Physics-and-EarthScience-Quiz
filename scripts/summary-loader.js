@@ -14,7 +14,7 @@ async function main() {
 
         const { initializeSummaryPage } = await import('./summary-handler.js');
         // Build the summary page content
-        initializeSummaryPage();
+        await initializeSummaryPage();
 
     } catch (error) {
         console.error("Failed to initialize summary page:", error);

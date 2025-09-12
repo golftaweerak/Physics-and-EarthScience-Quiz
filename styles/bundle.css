@@ -289,6 +289,10 @@ body.dark {
   animation: screenFadeOut 0.3s ease-in forwards;
 }
 
+.anim-shake {
+  animation: shake-horizontal 0.5s cubic-bezier(.36,.07,.19,.97) both;
+}
+
 /* --- Enhanced Modal Animations --- */
 
 @keyframes backdrop-fade-in {

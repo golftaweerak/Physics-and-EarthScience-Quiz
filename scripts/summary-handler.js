@@ -1,4 +1,4 @@
-import { studentScores } from '../data/scores-data.js';
+import { getStudentScores } from './data-manager.js';
 import { renderStudentSearchResultCards, calculateStudentCompletion } from './student-card-renderer.js';
 
 // Module-level state for summary data and sorting configuration
@@ -350,6 +350,9 @@ function updateRoomSummaryTable() {
                     <span class="font-bold text-base ${completionTextColorClass}">${roomData.completionPercentage}%</span>
                 </td>
                 <td class="px-4 py-2 text-center font-bold text-sm ${gradeColorClass}">${roomData.averageGrade}</td>
+                <!-- <td class="px-4 py-2 text-center">
+                    <a href="./edit-scores.html?room=${room}" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-bold text-sm transition-colors no-underline hover:underline">แก้ไข</a>
+                </td> -->
             </tr>
         `;
     }).join('');
@@ -556,6 +559,9 @@ function renderSummary(summaryData) {
                                     <span id="sort-indicator-grade" class="text-gray-500 dark:text-gray-400 transition-opacity"></span>
                                 </button>
                             </th>
+                            <!-- <th scope="col" class="px-4 py-2 text-center">
+                                <span class="font-bold">จัดการ</span>
+                            </th> -->
                         </tr>
                     </thead>
                     <tbody id="room-summary-tbody">
@@ -580,7 +586,8 @@ function renderSummary(summaryData) {
 /**
  * Main function to initialize the summary page.
  */
-export function initializeSummaryPage() {
+export async function initializeSummaryPage() {
+    const studentScores = await getStudentScores();
     summaryDataStore = calculateOverallSummary(studentScores);
     renderSummary(summaryDataStore);
     initializeTableSorting();
@@ -603,13 +610,14 @@ function initializeStudentSearch() {
     // Set initial message
     resultsContainer.innerHTML = `<p class="text-center text-gray-500 dark:text-gray-400 py-4">กรุณาพิมพ์คำค้นหาแล้วกด Enter หรือปุ่มค้นหา</p>`;
 
-    const performSearch = () => {
+    const performSearch = async () => {
         const query = searchInput.value.trim().toLowerCase();
 
         if (query.length === 0) {
             resultsContainer.innerHTML = `<p class="text-center text-gray-500 dark:text-gray-400 py-4">กรุณาพิมพ์คำค้นหา</p>`;
             return;
         }
+        const studentScores = await getStudentScores();
 
         // New hierarchical search logic
         let results = [];
@@ -631,7 +639,7 @@ function initializeStudentSearch() {
             } else {
                 // Priority 3: Partial Name match
                 const nameMatches = studentScores.filter(student =>
-                    student.name.toLowerCase().includes(query)
+                    student.name && student.name.toLowerCase().includes(query)
                 );
                 // Sort by ID for name searches
                 results = nameMatches.sort((a, b) => a.id.localeCompare(b.id));

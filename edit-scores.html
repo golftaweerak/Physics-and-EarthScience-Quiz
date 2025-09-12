@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="th" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แก้ไขคะแนนรายห้อง</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Enable class-based dark mode
+        tailwind.config = {
+            darkMode: 'class'
+        }
+    </script>
+    <link rel="stylesheet" href="./styles/bundle.css">
+    <link rel="icon" href="./assets/icons/edit-scores.png" type="image/png">
+</head>
+
+<body class="bg-gray-50 dark:bg-gray-950 font-sarabun transition-colors duration-300">
+    <!-- Load shared header -->
+    <div id="main_header-placeholder"></div>
+
+    <main class="container mx-auto px-4 pb-8 pt-24 md:pt-28">
+        <div class="max-w-7xl mx-auto">
+            <div class="relative text-center mb-8">
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white font-kanit">
+                    แก้ไขคะแนนรายห้อง</h1>
+                <p class="text-gray-600 dark:text-gray-400 mt-2">เลือกห้องเรียนเพื่อแสดงและแก้ไขคะแนนของนักเรียนทั้งหมดในตาราง</p>
+            </div>
+
+            <div
+                class="bg-white dark:bg-gray-800/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
+                <label for="room-selector"
+                    class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">เลือกห้องเรียน:</label>
+                <select id="room-selector"
+                    class="w-full max-w-xs p-3 bg-gray-100 dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition text-gray-900 dark:text-white">
+                    <option value="">-- กรุณาเลือกห้องเรียน --</option>
+                </select>
+            </div>
+
+            <div id="table-container" class="mt-8 min-h-[400px]">
+                <!-- Table will be injected here -->
+                <div id="table-placeholder"
+                    class="text-center py-16 px-6 bg-white dark:bg-gray-800/50 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700/60">
+                    <svg class="mx-auto h-12 w-12 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                    </svg>
+                    <h3 class="mt-4 text-xl font-semibold text-gray-700 dark:text-gray-300 font-kanit">กรุณาเลือกห้องเรียน
+                    </h3>
+                    <p class="mt-1 text-base text-gray-500 dark:text-gray-400">ตารางคะแนนของนักเรียนจะแสดงที่นี่</p>
+                </div>
+            </div>
+
+            <div id="action-buttons-container" class="mt-8 text-right hidden">
+                <button id="generate-overrides-btn"
+                    class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg text-base transition-transform transform hover:scale-105 shadow-md hover:shadow-lg">
+                    สร้างโค้ดสำหรับบันทึกการแก้ไข
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal for showing generated override and log code (copied from scores.html) -->
+    <div id="override-code-modal" class="fixed inset-0 bg-gray-900 bg-opacity-60 backdrop-blur-sm flex items-center justify-center z-50 hidden" aria-labelledby="override-code-modal-title" role="dialog" aria-modal="true">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-3xl m-4 transform transition-all opacity-0 scale-95 max-h-[90vh] flex flex-col">
+            <div class="flex justify-between items-center p-4 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
+                <h2 id="override-code-modal-title" class="text-lg font-bold text-gray-900 dark:text-white">โค้ดและข้อมูลสำหรับบันทึกการแก้ไข</h2>
+                <button data-modal-close class="text-gray-400 hover:text-gray-600 dark:hover:text-white transition-colors" aria-label="Close modal">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
+            <div class="p-6 flex-grow overflow-y-auto space-y-6 modern-scrollbar">
+                <div>
+                    <h3 class="font-semibold text-gray-800 dark:text-gray-200 mb-2">1. โค้ดสำหรับ Override</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">คัดลอกโค้ดด้านล่างนี้ไปวางทับในไฟล์ <code class="bg-gray-200 dark:bg-gray-700 px-1.5 py-1 rounded-md text-red-600 dark:text-red-400 font-mono">data/score-overrides.js</code></p>
+                    <textarea id="override-code-content" readonly class="w-full h-48 p-3 font-mono text-sm bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500"></textarea>
+                    <div class="mt-2 text-right"><button id="copy-override-code-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition text-sm">คัดลอกโค้ด</button></div>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-gray-800 dark:text-gray-200 mb-2">2. ข้อมูลสำหรับ Log (CSV Format)</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">คัดลอกข้อมูลนี้ไปวางในไฟล์ log ใหม่ในโฟลเดอร์ <code class="bg-gray-200 dark:bg-gray-700 px-1.5 py-1 rounded-md text-red-600 dark:text-red-400 font-mono">xlsx/</code> (เช่น <code class="font-mono">edit_log.csv</code>)</p>
+                    <textarea id="log-data-content" readonly class="w-full h-48 p-3 font-mono text-sm bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500"></textarea>
+                    <div class="mt-2 text-right"><button id="copy-log-data-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition text-sm">คัดลอกข้อมูล Log</button></div>
+                </div>
+            </div>
+            <div class="p-4 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-200 dark:border-gray-700 flex justify-end flex-shrink-0">
+                <button data-modal-close class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg transition">เสร็จสิ้น</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-placeholder" class="mt-12"></div>
+    <div id="modals-placeholder"></div>
+
+    <script type="module" src="./scripts/edit-scores-loader.js"></script>
+</body>
+
+</html>

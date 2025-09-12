@@ -1,5 +1,6 @@
-import { studentScores } from '../data/scores-data.js';
+import { getStudentScores } from './data-manager.js';
 import { renderStudentSearchResultCards } from './student-card-renderer.js';
+import { ModalHandler } from './modal-handler.js';
 
 /** A map of assignment names to their corresponding Microsoft Forms URL. */
 const ASSIGNMENT_URL_MAP = {
@@ -41,7 +42,11 @@ const SUMMARY_ASSIGNMENT_PATTERNS = [
 /** The desired display order for assignment groups. */
 const CHAPTER_ORDER = ['บทที่ 1', 'บทที่ 2', 'บทที่ 3', 'กลางภาค', 'บทที่ 4', 'บทที่ 5', 'อื่นๆ'];
 
-export function initializeScoreSearch() {
+let isEditMode = false;
+let originalScoresData = []; // To store the pristine data for comparison
+let currentOverrides = {}; // To store unsaved changes
+
+export async function initializeScoreSearch() {
     const studentIdInput = document.getElementById('student-id-input');
     const searchBtn = document.getElementById('search-btn');
     const resultContainer = document.getElementById('result-container');
@@ -53,11 +58,27 @@ export function initializeScoreSearch() {
     const modalTitle = document.getElementById('modal-title');
     const modalContent = document.getElementById('modal-list-content');
     const modalCloseBtn = document.getElementById('modal-close-btn');
-    
+
+    // Edit Mode Elements
+    const devPasswordModal = new ModalHandler('dev-password-modal');
+    const devPasswordForm = document.getElementById('dev-password-form');
+    const devPasswordInput = document.getElementById('dev-password-input');
+    const devPasswordError = document.getElementById('dev-password-error');
+    const overrideCodeModal = new ModalHandler('override-code-modal');
+    const overrideCodeContent = document.getElementById('override-code-content');
+    const copyOverrideCodeBtn = document.getElementById('copy-override-code-btn');
+    const logDataContent = document.getElementById('log-data-content');
+    const copyLogDataBtn = document.getElementById('copy-log-data-btn');
+
     if (!studentIdInput || !searchBtn || !resultContainer || !clearBtn || !modal) {
         console.error("Required elements for score search are missing from the DOM.");
         return;
     }
+
+    // Fetch both original and potentially merged scores
+    const { studentScores: baseScores } = await import(`../data/scores-data.js?v=${Date.now()}`);
+    originalScoresData = baseScores;
+    const studentScores = await getStudentScores();
 
     // --- Modal Logic ---
     if (modal && modalCloseBtn && modalTitle && modalContent) {
@@ -90,6 +111,49 @@ export function initializeScoreSearch() {
         }
         modal.classList.remove('hidden');
     }
+
+    // --- Edit Mode Logic ---
+    function enableEditMode() {
+        isEditMode = true;
+        const currentStudentId = document.querySelector('.student-card-container')?.dataset.studentId;
+        if (currentStudentId) {
+            const student = studentScores.find(s => s.id === currentStudentId);
+            if (student) displayResult(student); // Re-render the current student in edit mode
+        }
+        document.getElementById('edit-mode-btn')?.classList.add('bg-green-600', 'text-white');
+        document.getElementById('edit-mode-btn')?.classList.remove('bg-gray-200', 'text-gray-700');
+    }
+
+    if (devPasswordForm) {
+        devPasswordForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (devPasswordInput.value === "promma_dev") {
+                devPasswordModal.close();
+                enableEditMode();
+            } else {
+                if (devPasswordError) devPasswordError.textContent = "รหัสผ่านไม่ถูกต้อง";
+            }
+        });
+    }
+
+    if (copyOverrideCodeBtn) {
+        copyOverrideCodeBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(overrideCodeContent.value).then(() => {
+                copyOverrideCodeBtn.textContent = 'คัดลอกแล้ว!';
+                setTimeout(() => { copyOverrideCodeBtn.textContent = 'คัดลอกโค้ด'; }, 2000);
+            });
+        });
+    }
+
+    if (copyLogDataBtn) {
+        copyLogDataBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(logDataContent.value).then(() => {
+                copyLogDataBtn.textContent = 'คัดลอกแล้ว!';
+                setTimeout(() => { copyLogDataBtn.textContent = 'คัดลอกข้อมูล Log'; }, 2000);
+            });
+        });
+    }
+
     // Defensive check: Ensure student data is available before enabling search.
     if (!Array.isArray(studentScores) || studentScores.length === 0) {
         console.error("Student scores data is missing or empty.");
@@ -221,8 +285,16 @@ export function initializeScoreSearch() {
      * @returns {string} The HTML string for the table row.
      */
     function createBreakdownRow(student, label, scoreKey) {
-        if (!student.hasOwnProperty(scoreKey) || student[scoreKey] === null) return '';
-        const score = Math.round(student[scoreKey]);
+        const scoreValue = student[scoreKey];
+        if (!student.hasOwnProperty(scoreKey) || scoreValue === null) return '';
+
+        let scoreDisplay;
+        if (isEditMode) {
+            scoreDisplay = `<input type="number" data-key="${scoreKey}" class="score-input w-20 text-right p-1 rounded bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600" value="${scoreValue ?? ''}">`;
+        } else {
+            scoreDisplay = `<span class="font-mono text-sm text-gray-700 dark:text-gray-300">${Math.round(scoreValue)}</span>`;
+        }
+
         return `
             <tr class="bg-gray-50 dark:bg-gray-800/50">
                 <td class="py-2 px-4 pl-10 text-sm text-gray-500 dark:text-gray-400 flex items-center">
@@ -231,7 +303,9 @@ export function initializeScoreSearch() {
                     </svg>
                     <span class="italic">${label}</span>
                 </td>
-                <td class="py-2 px-4 text-right font-mono text-sm text-gray-700 dark:text-gray-300">${score}</td>
+                <td class="py-2 px-4 text-right">
+                    ${scoreDisplay}
+                </td>
             </tr>
         `;
     }
@@ -289,6 +363,7 @@ export function initializeScoreSearch() {
             'เกรด'
         ];
 
+
         const breakdownMap = {
             'ก่อนกลางภาค [25]': [
                 { label: 'บทที่ 1', key: 'บท 1 [10]' },
@@ -320,10 +395,16 @@ export function initializeScoreSearch() {
                 else if (isMidterm || isFinal) valueClass += ' text-lg text-gray-900 dark:text-white';
                 else valueClass += ' text-gray-900 dark:text-white';
                 
-                let displayValue = (value !== null && value !== undefined) ? value : '-';
-                // Round numeric scores to the nearest integer, but not the 'เกรด' field.
-                if (typeof value === 'number' && !isGrade) {
-                    displayValue = Math.round(value);
+                let valueDisplay;
+                if (isEditMode) {
+                    const inputType = (typeof value === 'number' && !isGrade) ? 'number' : 'text';
+                    valueDisplay = `<input type="${inputType}" data-key="${key}" class="score-input w-24 text-right p-1 rounded bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600" value="${value ?? ''}">`;
+                } else {
+                    let displayValue = (value !== null && value !== undefined) ? value : '-';
+                    if (typeof value === 'number' && !isGrade) {
+                        displayValue = Math.round(value);
+                    }
+                    valueDisplay = `<span class="${valueClass}">${displayValue}</span>`;
                 }
 
                 let retestStatusHtml = '';
@@ -338,7 +419,7 @@ export function initializeScoreSearch() {
                     <tr class="border-b border-gray-200 dark:border-gray-700 last:border-b-0 ${rowClass}">
                         <td class="py-3 px-4 ${labelClass}">${key}</td>
                         <td class="py-3 px-4 text-right">
-                            <span class="${valueClass}">${displayValue}</span>
+                            ${valueDisplay}
                             ${retestStatusHtml}
                         </td>
                     </tr>
@@ -426,7 +507,7 @@ export function initializeScoreSearch() {
         ` : '';
 
         resultContainer.innerHTML = `
-            <div class="bg-white dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden anim-card-pop-in">
+            <div class="student-card-container bg-white dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden anim-card-pop-in" data-student-id="${student.id}">
                 <div class="p-6 bg-gradient-to-br from-blue-50 to-gray-100 dark:from-gray-900 dark:to-gray-800/50 border-b border-gray-200 dark:border-gray-700 flex items-center gap-4">
                     <div class="flex-shrink-0 h-16 w-16 rounded-full flex items-center justify-center bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 border-4 border-white dark:border-gray-800 shadow-md">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
@@ -439,11 +520,21 @@ export function initializeScoreSearch() {
                             ${student.ordinal ? `<span class="border-l border-gray-300 dark:border-gray-600 pl-4">เลขที่: <strong class="font-semibold text-blue-600 dark:text-blue-400">${student.ordinal}</strong></span>` : ''}
                         </div>
                     </div>
+                    <!-- <div class="ml-auto">
+                        <button id="edit-mode-btn" class="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-bold py-2 px-4 rounded-lg transition-colors duration-200 hover:bg-gray-300 dark:hover:bg-gray-600">
+                            แก้ไขคะแนน
+                        </button>
+                    </div> -->
                 </div>
                 <div class="p-6 space-y-8">
                     ${summaryScoreSection}
                     ${summaryCardsHtml}
                     ${assignmentsSection}
+                </div>
+                <div id="edit-controls-container" class="p-4 bg-gray-100 dark:bg-gray-900/50 border-t border-gray-200 dark:border-gray-700 ${isEditMode ? '' : 'hidden'}">
+                    <button id="save-overrides-btn" data-studentid="${student.id}" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg transition-transform transform hover:scale-105">
+                        สร้างโค้ดสำหรับบันทึกการแก้ไข
+                    </button>
                 </div>
             </div>
         `;
@@ -457,6 +548,97 @@ export function initializeScoreSearch() {
         document.getElementById('show-missing-btn')?.addEventListener('click', () => {
             const missingAssignments = trackableAssignments.filter(a => !a.score || a.score.toLowerCase() === 'ยังไม่ส่ง');
             showAssignmentListModal(`งานที่ค้างส่ง (${missingAssignments.length} รายการ)`, missingAssignments);
+        });
+
+        document.getElementById('edit-mode-btn')?.addEventListener('click', () => {
+            if (isEditMode) {
+                isEditMode = false;
+                displayResult(student); // Re-render in view mode
+            } else {
+                devPasswordModal.open();
+            }
+        });
+
+        document.getElementById('save-overrides-btn')?.addEventListener('click', async (e) => {
+            const studentId = e.target.dataset.studentid;
+            const student = studentScores.find(s => s.id === studentId);
+            const originalStudent = originalScoresData.find(s => s.id === studentId);
+            if (!originalStudent || !student) {
+                alert('Error: Could not find student data to compare.');
+                return;
+            }
+
+            const studentOverrides = {};
+            const logEntries = [];
+            let hasChanges = false;
+
+            document.querySelectorAll('.score-input').forEach(input => {
+                const key = input.dataset.key;
+                const originalValue = originalStudent[key];
+                let newValue = input.value;
+
+                // Coerce types for comparison
+                if (typeof originalValue === 'number') {
+                    // Allow empty string to become null
+                    newValue = (newValue === '') ? null : parseFloat(newValue);
+                    if (isNaN(newValue)) newValue = null;
+                }
+
+                // Check if the value has actually changed
+                const originalExists = originalValue !== null && originalValue !== undefined;
+                const newExists = newValue !== null && newValue !== undefined;
+
+                if ((originalExists !== newExists) || (originalExists && newExists && newValue !== originalValue)) {
+                    studentOverrides[key] = newValue;
+                    hasChanges = true;
+
+                    // Prepare data for the log entry
+                    logEntries.push({
+                        timestamp: new Date().toISOString(),
+                        student_id: studentId,
+                        student_name: student.name,
+                        score_key: key,
+                        original_value: originalValue ?? 'N/A',
+                        new_value: newValue ?? 'N/A'
+                    });
+                }
+            });
+
+            if (hasChanges) {
+                // 1. Generate JS override code
+                let existingOverrides = {};
+                try {
+                    const overrideModule = await import(`../data/score-overrides.js?v=${Date.now()}`);
+                    if (overrideModule.encryptedScoreOverrides && overrideModule.encryptedScoreOverrides.trim() !== "") {
+                        existingOverrides = JSON.parse(atob(overrideModule.encryptedScoreOverrides));
+                    }
+                } catch (e) {
+                    console.log("No existing score-overrides.js found or it's empty, creating new one.");
+                }
+
+                const newOverrides = { ...existingOverrides };
+                newOverrides[studentId] = { ...(existingOverrides[studentId] || {}), ...studentOverrides };
+
+                const encryptedString = btoa(JSON.stringify(newOverrides, null, 2));
+                overrideCodeContent.value = `export const encryptedScoreOverrides = "${encryptedString}";`;
+
+                // 2. Generate CSV log data
+                const csvHeader = "timestamp,student_id,student_name,score_key,original_value,new_value\n";
+                const csvRows = logEntries.map(entry => {
+                    // Escape commas and quotes in values by wrapping in double quotes
+                    const escape = (val) => `"${String(val ?? '').replace(/"/g, '""')}"`;
+                    return [
+                        escape(entry.timestamp), escape(entry.student_id), escape(entry.student_name),
+                        escape(entry.score_key), escape(entry.original_value), escape(entry.new_value)
+                    ].join(',');
+                }).join('\n');
+                logDataContent.value = csvHeader + csvRows;
+
+                // 3. Show the modal
+                overrideCodeModal.open();
+            } else {
+                alert('ไม่มีการเปลี่ยนแปลงคะแนน');
+            }
         });
     }
 
