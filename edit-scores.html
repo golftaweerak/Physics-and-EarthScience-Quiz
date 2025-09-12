@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>แก้ไขคะแนนรายห้อง</title>
+    <title>เครื่องมือสำหรับผู้สอน</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         // Enable class-based dark mode
@@ -23,41 +23,103 @@
     <main class="container mx-auto px-4 pb-8 pt-24 md:pt-28">
         <div class="max-w-7xl mx-auto">
             <div class="relative text-center mb-8">
-                <h1 class="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white font-kanit">
-                    แก้ไขคะแนนรายห้อง</h1>
-                <p class="text-gray-600 dark:text-gray-400 mt-2">เลือกห้องเรียนเพื่อแสดงและแก้ไขคะแนนของนักเรียนทั้งหมดในตาราง</p>
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white font-kanit">เครื่องมือสำหรับผู้สอน</h1>
+                <p class="text-gray-600 dark:text-gray-400 mt-2">ค้นหานักเรียนรายบุคคล หรือแก้ไขคะแนนนักเรียนในตารางรายห้อง</p>
             </div>
 
-            <div
-                class="bg-white dark:bg-gray-800/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
-                <label for="room-selector"
-                    class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">เลือกห้องเรียน:</label>
-                <select id="room-selector"
-                    class="w-full max-w-xs p-3 bg-gray-100 dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition text-gray-900 dark:text-white">
-                    <option value="">-- กรุณาเลือกห้องเรียน --</option>
-                </select>
-            </div>
-
-            <div id="table-container" class="mt-8 min-h-[400px]">
-                <!-- Table will be injected here -->
-                <div id="table-placeholder"
-                    class="text-center py-16 px-6 bg-white dark:bg-gray-800/50 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700/60">
-                    <svg class="mx-auto h-12 w-12 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none"
-                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                    </svg>
-                    <h3 class="mt-4 text-xl font-semibold text-gray-700 dark:text-gray-300 font-kanit">กรุณาเลือกห้องเรียน
-                    </h3>
-                    <p class="mt-1 text-base text-gray-500 dark:text-gray-400">ตารางคะแนนของนักเรียนจะแสดงที่นี่</p>
+            <!-- Login Prompt -->
+            <div id="login-prompt" class="text-center py-16 px-6 bg-white dark:bg-gray-800/50 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700/60 backdrop-blur-sm">
+                <svg class="mx-auto h-12 w-12 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                </svg>
+                <h3 class="mt-4 text-xl font-semibold text-gray-700 dark:text-gray-300 font-kanit">ต้องใช้รหัสผ่าน</h3>
+                <p class="mt-1 text-base text-gray-500 dark:text-gray-400">
+                    กรุณาใส่รหัสผ่านเพื่อเข้าสู่เครื่องมือสำหรับผู้สอน
+                </p>
+                <div class="mt-6">
+                    <button id="enter-edit-mode-btn" class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-base transition-transform transform hover:scale-105 shadow-md hover:shadow-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" /></svg>
+                        <span>ใส่รหัสผ่าน</span>
+                    </button>
                 </div>
             </div>
 
-            <div id="action-buttons-container" class="mt-8 text-right hidden">
-                <button id="generate-overrides-btn"
-                    class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg text-base transition-transform transform hover:scale-105 shadow-md hover:shadow-lg">
-                    สร้างโค้ดสำหรับบันทึกการแก้ไข
-                </button>
+            <!-- Main Editor Content (hidden by default) -->
+            <div id="editor-content" class="hidden">
+                <!-- Student Search Section -->
+                <div class="bg-white dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700/60 overflow-hidden mb-8">
+                    <h3 class="p-4 text-lg font-bold text-gray-800 dark:text-white font-kanit border-b border-gray-200 dark:border-gray-700">ค้นหานักเรียนรายบุคคล</h3>
+                    <div class="p-4 sm:p-6">
+                        <div class="flex flex-col sm:flex-row gap-3 items-center">
+                            <div class="relative flex-grow w-full">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" /></svg>
+                                </div>
+                                <input type="text" id="student-search-input" placeholder="พิมพ์ชื่อ, รหัส, หรือห้องเรียน..." class="w-full p-3 pl-10 pr-10 bg-gray-100 dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400">
+                                <button id="student-search-clear-btn" class="absolute inset-y-0 right-0 pr-3 flex items-center hidden" aria-label="ล้างการค้นหา">
+                                    <svg class="h-5 w-5 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" /></svg>
+                                </button>
+                            </div>
+                            <button id="student-search-btn" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg text-base transition-transform transform hover:scale-105 flex items-center justify-center gap-2 shadow-md hover:shadow-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" /></svg>
+                                <span>ค้นหา</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="student-search-results" class="px-4 sm:px-6 pb-4 space-y-2 max-h-96 overflow-y-auto modern-scrollbar">
+                        <!-- Search results will be injected here -->
+                    </div>
+                </div>
+
+                <!-- Divider -->
+                <div class="relative my-8">
+                    <div class="absolute inset-0 flex items-center" aria-hidden="true">
+                        <div class="w-full border-t border-gray-300 dark:border-gray-600"></div>
+                    </div>
+                    <div class="relative flex justify-center">
+                        <span class="bg-gray-50 dark:bg-gray-950 px-4 text-sm text-gray-500 dark:text-gray-400">หรือ</span>
+                    </div>
+                </div>
+
+                <div
+                    class="bg-white dark:bg-gray-800/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
+                    <div class="flex flex-wrap items-end justify-between gap-4">
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-800 dark:text-white font-kanit mb-2">แก้ไขคะแนนรายห้อง</h3>
+                            <label for="room-selector" class="block text-sm font-medium text-gray-700 dark:text-gray-300">เลือกห้องเรียน:</label>
+                            <select id="room-selector"
+                                class="mt-1 w-full max-w-xs p-3 bg-gray-100 dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition text-gray-900 dark:text-white">
+                                <option value="">-- กรุณาเลือกห้องเรียน --</option>
+                            </select>
+                        </div>
+                        <button id="export-csv-btn" class="hidden px-4 py-2.5 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 transition shadow-sm hover:shadow-md flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+                            <span>Export to CSV</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="table-container" class="mt-8 min-h-[400px]">
+                    <!-- Table will be injected here -->
+                    <div id="table-placeholder"
+                        class="text-center py-16 px-6 bg-white dark:bg-gray-800/50 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700/60">
+                        <svg class="mx-auto h-12 w-12 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                        </svg>
+                        <h3 class="mt-4 text-xl font-semibold text-gray-700 dark:text-gray-300 font-kanit">กรุณาเลือกห้องเรียน
+                        </h3>
+                        <p class="mt-1 text-base text-gray-500 dark:text-gray-400">ตารางคะแนนของนักเรียนจะแสดงที่นี่</p>
+                    </div>
+                </div>
+
+                <div id="action-buttons-container" class="mt-8 text-right hidden">
+                    <button id="generate-overrides-btn"
+                        class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg text-base transition-transform transform hover:scale-105 shadow-md hover:shadow-lg">
+                        สร้างโค้ดสำหรับบันทึกการแก้ไข
+                    </button>
+                </div>
             </div>
         </div>
     </main>
@@ -74,9 +136,12 @@
             <div class="p-6 flex-grow overflow-y-auto space-y-6 modern-scrollbar">
                 <div>
                     <h3 class="font-semibold text-gray-800 dark:text-gray-200 mb-2">1. โค้ดสำหรับ Override</h3>
-                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">คัดลอกโค้ดด้านล่างนี้ไปวางทับในไฟล์ <code class="bg-gray-200 dark:bg-gray-700 px-1.5 py-1 rounded-md text-red-600 dark:text-red-400 font-mono">data/score-overrides.js</code></p>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">กดปุ่ม <strong>"ดาวน์โหลดไฟล์"</strong> เพื่อบันทึกไฟล์ <code class="bg-gray-200 dark:bg-gray-700 px-1.5 py-1 rounded-md text-red-600 dark:text-red-400 font-mono">score-overrides.js</code> จากนั้นนำไฟล์ที่ดาวน์โหลดไปวางทับไฟล์เดิมในโฟลเดอร์ <code class="font-mono">data/</code> ของโปรเจกต์</p>
                     <textarea id="override-code-content" readonly class="w-full h-48 p-3 font-mono text-sm bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500"></textarea>
-                    <div class="mt-2 text-right"><button id="copy-override-code-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition text-sm">คัดลอกโค้ด</button></div>
+                    <div class="mt-2 flex justify-end gap-2">
+                        <button id="download-override-file-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition text-sm shadow-sm hover:shadow-md">ดาวน์โหลดไฟล์</button>
+                        <button id="copy-override-code-btn" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg transition text-sm">คัดลอกโค้ด</button>
+                    </div>
                 </div>
                 <div>
                     <h3 class="font-semibold text-gray-800 dark:text-gray-200 mb-2">2. ข้อมูลสำหรับ Log (CSV Format)</h3>
@@ -87,6 +152,29 @@
             </div>
             <div class="p-4 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-200 dark:border-gray-700 flex justify-end flex-shrink-0">
                 <button data-modal-close class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg transition">เสร็จสิ้น</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Assignment List (copied from scores.html) -->
+    <div id="assignment-list-modal"
+        class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-60 backdrop-blur-sm anim-backdrop-fade-in">
+        <div
+            class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-lg m-4 max-h-[90vh] flex flex-col anim-modal-pop-in">
+            <header
+                class="flex justify-between items-center p-4 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
+                <h3 id="modal-title" class="text-xl font-bold text-gray-900 dark:text-gray-100 font-kanit">รายการ</h3>
+                <button id="modal-close-btn"
+                    class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                    aria-label="ปิด">
+                    <svg class="h-6 w-6 text-gray-600 dark:text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </header>
+            <div id="modal-list-content" class="p-2 sm:p-4 overflow-y-auto modern-scrollbar">
+                <!-- Assignment list will be injected here -->
             </div>
         </div>
     </div>

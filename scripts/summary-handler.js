@@ -8,6 +8,7 @@ let roomSortConfig = {
     key: 'room', // 'room' or 'averageScore'
     direction: 'asc' // 'asc' or 'desc'
 };
+let selectedRoomForDetails = null;
 
 /**
  * Calculates summary statistics for all students.
@@ -339,7 +340,7 @@ function updateRoomSummaryTable() {
         }
 
         return `
-            <tr class="border-b dark:border-gray-700 last:border-b-0 odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-800/50 dark:even:bg-gray-800/80 hover:bg-gray-100 dark:hover:bg-gray-700/60 transition-colors duration-150">
+            <tr data-room="${room}" class="room-detail-trigger border-b dark:border-gray-700 last:border-b-0 odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-800/50 dark:even:bg-gray-800/80 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors duration-150 cursor-pointer">
                 <th scope="row" class="px-4 py-2 font-bold text-gray-900 dark:text-white whitespace-nowrap">
                     ห้อง ${room}
                     <span class="ml-2 font-mono font-normal text-gray-500 dark:text-gray-400">(${roomData.studentCount} คน)</span>
@@ -583,6 +584,11 @@ function renderSummary(summaryData) {
                 </table>
             </div>
         </div>
+
+        <!-- Container for detailed student table per room -->
+        <div id="room-detail-container" class="mt-8">
+            <!-- Detailed table will be rendered here -->
+        </div>
     `;
 
     // Clear loading spinner and render the new content
@@ -600,10 +606,31 @@ function renderSummary(summaryData) {
  * Main function to initialize the summary page.
  */
 export async function initializeSummaryPage() {
-    const studentScores = await getStudentScores();
-    summaryDataStore = calculateOverallSummary(studentScores);
-    renderSummary(summaryDataStore);
-    initializeTableSorting();
+    try {
+        const studentScores = await getStudentScores();
+        summaryDataStore = calculateOverallSummary(studentScores);
+        renderSummary(summaryDataStore);
+        initializeTableSorting();
+
+        // Add listener for room detail view
+        const roomSummaryTbody = document.getElementById('room-summary-tbody');
+        if (roomSummaryTbody) {
+            roomSummaryTbody.addEventListener('click', (event) => {
+                const row = event.target.closest('.room-detail-trigger');
+                if (row) {
+                    const room = row.dataset.room;
+                    selectedRoomForDetails = room; // Store the selected room
+                    renderStudentTableForRoom(room, studentScores);
+                }
+            });
+        }
+    } catch (error) {
+        console.error("Failed to initialize summary page:", error);
+        const container = document.getElementById('summary-container');
+        if (container) {
+            container.innerHTML = `<div class="text-center py-16 text-red-500"><h3>เกิดข้อผิดพลาดในการโหลดข้อมูลสรุปคะแนน</h3><p>กรุณาลองใหม่อีกครั้งในภายหลัง</p></div>`;
+        }
+    }
 }
 
 /**
@@ -683,4 +710,168 @@ function initializeStudentSearch() {
             performSearch();
         }
     });
+}
+
+/**
+ * Extracts the first name from a full Thai name string.
+ * @param {string} fullName The full name (e.g., "นายนันทิวรรธน์ ปิ่นทอง").
+ * @returns {string} The extracted first name.
+ */
+function getFirstName(fullName) {
+    if (!fullName) return '';
+    const titles = ['นาย', 'นางสาว', 'เด็กชาย', 'เด็กหญิง'];
+    let nameWithoutTitle = fullName.trim();
+    for (const title of titles) {
+        if (nameWithoutTitle.startsWith(title)) {
+            nameWithoutTitle = nameWithoutTitle.substring(title.length);
+            break;
+        }
+    }
+    const parts = nameWithoutTitle.trim().split(' ');
+    return parts[0] || fullName; // Return the first part, or the original name if split fails
+}
+
+/**
+ * Renders a read-only table of students for a specific room.
+ * @param {string} room The room number to render.
+ * @param {Array<object>} studentScores The full list of student scores.
+ */
+function renderStudentTableForRoom(room, studentScores) {
+    const container = document.getElementById('room-detail-container');
+    if (!container) return;
+
+    const studentsInRoom = studentScores.filter(s => s.room === room).sort((a, b) => (parseInt(a.ordinal, 10) || 999) - (parseInt(b.ordinal, 10) || 999));
+
+    if (studentsInRoom.length === 0) {
+        container.innerHTML = ''; // Clear if no students
+        return;
+    }
+
+    const desiredOrder = [
+        'id', 'ordinal', 'name', 'บท 1 [10]', 'บท 2 [10]', 'บท 3 [5]',
+        'ก่อนกลางภาค [25]', 'กลางภาค [20]', 'บท 4 [10]', 'นำเสนอ [5]', 'บท 5 [10]',
+        'หลังกลางภาค [25]', 'ก่อนปลายภาค [70]', 'ปลายภาค [30]', 'รวม [100]', 'เกรด'
+    ];
+
+    const allKeys = new Set();
+    studentsInRoom.forEach(student => {
+        Object.keys(student).forEach(key => allKeys.add(key));
+    });
+
+    const orderedKeys = desiredOrder.filter(key => allKeys.has(key));
+    const remainingKeys = Array.from(allKeys).filter(key => !desiredOrder.includes(key) && key !== 'assignments' && key !== 'room').sort();
+    const scoreKeys = [...orderedKeys, ...remainingKeys];
+
+    const stickyColumnStyles = {
+        'id': 'sticky left-0 z-10 w-16 min-w-[4rem]',
+        'ordinal': 'sticky left-[4rem] z-10 w-16 min-w-[4rem]',
+        'name': 'sticky left-[8rem] z-10 w-32 sm:w-48 min-w-[8rem] sm:min-w-[12rem] shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)] dark:shadow-[2px_0_5px_-2px_rgba(255,255,255,0.05)]'
+    };
+
+    const headHtml = `<tr>${scoreKeys.map(key => {
+        const isSticky = ['id', 'name', 'ordinal'].includes(key);
+        const stickyClasses = isSticky ? stickyColumnStyles[key] : '';
+        const zIndexClass = isSticky ? 'z-20' : 'z-10';
+        const thClasses = `sticky top-0 px-2 py-2 bg-gray-100 dark:bg-gray-900 text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider ${zIndexClass}`;
+        return `<th class="${thClasses} ${stickyClasses}">${key}</th>`;
+    }).join('')}</tr>`;
+
+    const bodyHtml = studentsInRoom.map(student => {
+        return `<tr class="border-b dark:border-gray-700">
+            ${scoreKeys.map(key => {
+            const isSticky = ['id', 'name', 'ordinal'].includes(key);
+            const stickyClasses = isSticky ? stickyColumnStyles[key] : '';
+            const tdClasses = `px-2 py-2 text-xs sm:text-sm whitespace-nowrap ${isSticky ? 'bg-white dark:bg-gray-800' : ''}`;
+            const value = student[key] ?? '-';
+
+            if (key === 'name') {
+                const fullName = student.name ?? '';
+                const firstName = getFirstName(fullName);
+                return `<td class="${tdClasses} ${stickyClasses} text-left" title="${fullName}">
+                            <span class="hidden sm:inline">${fullName}</span>
+                            <span class="sm:hidden">${firstName}</span>
+                        </td>`;
+            }
+
+            return `<td class="${tdClasses} ${stickyClasses} text-center">${value}</td>`;
+        }).join('')}
+        </tr>`;
+    }).join('');
+
+    container.innerHTML = `
+        <div class="bg-white dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700/60 overflow-hidden">
+            <div class="p-4 flex flex-wrap items-center justify-between gap-4 border-b border-gray-200 dark:border-gray-700">
+                <h3 class="text-lg font-bold text-gray-800 dark:text-white font-kanit">รายละเอียดคะแนนห้อง ${room}</h3>
+                <button id="export-csv-btn" class="px-4 py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 transition shadow-sm hover:shadow-md flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+                    <span>Export to CSV</span>
+                </button>
+            </div>
+            <div class="overflow-auto modern-scrollbar border-t border-gray-200 dark:border-gray-700 max-h-[70vh]">
+                <table class="w-full text-left text-sm whitespace-nowrap">
+                    <thead class="bg-gray-100 dark:bg-gray-900">${headHtml}</thead>
+                    <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">${bodyHtml}</tbody>
+                </table>
+            </div>
+        </div>
+    `;
+
+    // Add event listener for the new button
+    document.getElementById('export-csv-btn').addEventListener('click', () => handleExportCSV(studentScores));
+    
+    // Scroll to the newly created table
+    container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/**
+ * Handles exporting the current room's data to a CSV file.
+ * @param {Array<object>} studentScores The full list of student scores.
+ */
+function handleExportCSV(studentScores) {
+    const selectedRoom = selectedRoomForDetails;
+    if (!selectedRoom) {
+        alert('กรุณาเลือกห้องเรียนก่อนทำการ Export');
+        return;
+    }
+
+    const studentsInRoom = studentScores.filter(s => s.room === selectedRoom).sort((a, b) => (parseInt(a.ordinal, 10) || 999) - (parseInt(b.ordinal, 10) || 999));
+    if (studentsInRoom.length === 0) {
+        alert('ไม่พบข้อมูลนักเรียนในห้องที่เลือก');
+        return;
+    }
+
+    const exportHeaderMap = {
+        'room': 'ห้อง', 'id': 'เลขประจำตัว', 'ordinal': 'เลขที่', 'name': 'ชื่อ-นามสกุล',
+        'บท 1 [10]': 'บทที่ 1', 'บท 2 [10]': 'บทที่ 2', 'บท 3 [5]': 'บทที่ 3',
+        'ก่อนกลางภาค [25]': 'ก่อนกลางภาค', 'กลางภาค [20]': 'กลางภาค', 'บท 4 [10]': 'บทที่ 4',
+        'นำเสนอ [5]': 'นำเสนอ', 'บท 5 [10]': 'บทที่ 5', 'หลังกลางภาค [25]': 'หลังกลางภาค',
+        'ก่อนปลายภาค [70]': 'ก่อนปลายภาค', 'ปลายภาค [30]': 'ปลายภาค', 'รวม [100]': 'รวม', 'เกรด': 'เกรด'
+    };
+
+    const exportKeys = Object.keys(exportHeaderMap);
+    const csvHeaders = Object.values(exportHeaderMap);
+
+    const rows = studentsInRoom.map(student => {
+        return exportKeys.map(key => student[key] ?? '');
+    });
+
+    const escapeCsvCell = (cell) => {
+        const strCell = String(cell ?? '');
+        if (strCell.includes(',') || strCell.includes('"') || strCell.includes('\n')) {
+            return `"${strCell.replace(/"/g, '""')}"`;
+        }
+        return strCell;
+    };
+
+    const csvContent = [
+        csvHeaders.map(escapeCsvCell).join(','),
+        ...rows.map(row => row.map(escapeCsvCell).join(','))
+    ].join('\n');
+    const blob = new Blob([`\uFEFF${csvContent}`], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `scores-summary-room-${selectedRoom}-${new Date().toISOString().slice(0,10)}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 }

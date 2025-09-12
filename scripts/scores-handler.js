@@ -89,6 +89,7 @@ export async function initializeScoreSearch() {
     const copyOverrideCodeBtn = document.getElementById('copy-override-code-btn');
     const logDataContent = document.getElementById('log-data-content');
     const copyLogDataBtn = document.getElementById('copy-log-data-btn');
+    const downloadOverrideFileBtn = document.getElementById('download-override-file-btn');
 
     if (!studentIdInput || !searchBtn || !resultContainer || !clearBtn || !modal) {
         console.error("Required elements for score search are missing from the DOM.");
@@ -171,6 +172,19 @@ export async function initializeScoreSearch() {
                 copyLogDataBtn.textContent = 'คัดลอกแล้ว!';
                 setTimeout(() => { copyLogDataBtn.textContent = 'คัดลอกข้อมูล Log'; }, 2000);
             });
+        });
+    }
+
+    if (downloadOverrideFileBtn) {
+        downloadOverrideFileBtn.addEventListener('click', () => {
+            const content = overrideCodeContent.value;
+            const blob = new Blob([content], { type: 'text/javascript;charset=utf-8;' });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "score-overrides.js";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         });
     }
 
