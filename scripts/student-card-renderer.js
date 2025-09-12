@@ -1,12 +1,12 @@
 /**
  * Calculates the assignment completion percentage for a single student.
  * @param {object} student - The student object.
- * @returns {{submitted: number, total: number, percentage: string}} An object with completion stats.
+ * @returns {{submitted: number, total: number, percentage: string, missing: number}} An object with completion stats.
  */
 export function calculateStudentCompletion(student) {
     const TRACKABLE_KEYWORDS = ['กิจกรรม', 'แบบฝึก', 'quiz', 'ท้ายบท'];
     if (!student.assignments || !Array.isArray(student.assignments)) {
-        return { submitted: 0, total: 0, percentage: '0' };
+        return { submitted: 0, total: 0, percentage: '0', missing: 0 };
     }
 
     const trackableAssignments = student.assignments.filter(assignment =>
@@ -16,11 +16,13 @@ export function calculateStudentCompletion(student) {
     const submittedCount = trackableAssignments.filter(a => a.score && String(a.score).toLowerCase() !== 'ยังไม่ส่ง').length;
     const totalCount = trackableAssignments.length;
     const percentage = totalCount > 0 ? (submittedCount / totalCount) * 100 : 0;
+    const missingCount = totalCount - submittedCount;
 
     return {
         submitted: submittedCount,
         total: totalCount,
-        percentage: percentage.toFixed(0)
+        percentage: percentage.toFixed(0),
+        missing: missingCount
     };
 }
 
@@ -56,6 +58,8 @@ export function renderStudentSearchResultCards(results, container, options) {
         else if (completion.percentage >= 50) completionColorClass = 'bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300';
         else completionColorClass = 'bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300';
 
+        const missingColorClass = completion.missing > 0 ? 'bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300' : 'bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300';
+
         const cardInnerHtml = `
             <div class="flex justify-between items-center ${cardType === 'button' ? 'pointer-events-none' : ''}">
                 <div>
@@ -67,6 +71,10 @@ export function renderStudentSearchResultCards(results, container, options) {
                     </p>
                 </div>
                 <div class="flex items-center gap-2 sm:gap-4">
+                    <div class="text-right">
+                        <p class="text-xs text-gray-500 dark:text-gray-400">ค้างส่ง</p>
+                        <p class="font-bold text-base sm:text-lg px-2 py-0.5 rounded-md ${missingColorClass}">${completion.missing}</p>
+                    </div>
                     <div class="text-right">
                         <p class="text-xs text-gray-500 dark:text-gray-400">ส่งงาน</p>
                         <p class="font-bold text-base sm:text-lg px-2 py-0.5 rounded-md ${completionColorClass}">${completion.percentage}%</p>
