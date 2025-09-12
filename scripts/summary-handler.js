@@ -1,5 +1,6 @@
 import { getStudentScores } from './data-manager.js';
 import { renderStudentSearchResultCards, calculateStudentCompletion } from './student-card-renderer.js';
+import { lastUpdated as scoresLastUpdated } from '../data/scores-data.js';
 
 // Module-level state for summary data and sorting configuration
 let summaryDataStore = null;
@@ -446,8 +447,20 @@ function renderSummary(summaryData) {
     const container = document.getElementById('summary-container');
     if (!container) return;
 
+    const lastUpdatedDate = new Date(scoresLastUpdated);
+    const formattedDate = lastUpdatedDate.toLocaleString('th-TH', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZone: 'Asia/Bangkok'
+    });
+
     const summaryHtml = `
         <!-- Student Search Section -->
+        <div class="text-center text-sm text-gray-500 dark:text-gray-400 mb-6 -mt-4">อัปเดตข้อมูลล่าสุด: ${formattedDate} น.</div>
+
         <div class="bg-white dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700/60 overflow-hidden">
             <h3 class="p-4 text-lg font-bold text-gray-800 dark:text-white font-kanit border-b border-gray-200 dark:border-gray-700">ค้นหานักเรียน</h3>
             <div class="p-4 sm:p-6">

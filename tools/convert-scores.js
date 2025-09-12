@@ -141,11 +141,13 @@ try {
   }
 
   // 3. Generate JS file content
+  const timestamp = new Date().toISOString();
   const fileContent = `/**
  * @fileoverview ข้อมูลคะแนนเก็บของนักเรียน (สร้างโดยสคริปต์อัตโนมัติ)
  * @description This file is auto-generated. Do not edit directly.
  *              Modify xlsx/68-EarthScience.xlsx and run 'node tools/convert-scores.js' instead.
  */
+export const lastUpdated = "${timestamp}";
 export const studentScores = ${JSON.stringify(scores, null, 2)};
 `;
 

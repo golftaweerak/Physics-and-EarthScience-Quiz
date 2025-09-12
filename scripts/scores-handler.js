@@ -1,6 +1,7 @@
 import { getStudentScores } from './data-manager.js';
 import { renderStudentSearchResultCards } from './student-card-renderer.js';
 import { ModalHandler } from './modal-handler.js';
+import { lastUpdated as scoresLastUpdated } from '../data/scores-data.js';
 
 /** A map of assignment names to their corresponding Microsoft Forms URL. */
 const ASSIGNMENT_URL_MAP = {
@@ -58,6 +59,25 @@ export async function initializeScoreSearch() {
     const modalTitle = document.getElementById('modal-title');
     const modalContent = document.getElementById('modal-list-content');
     const modalCloseBtn = document.getElementById('modal-close-btn');
+
+    // --- Render Last Updated Timestamp ---
+    const mainContentContainer = document.querySelector('.max-w-3xl.mx-auto');
+    const searchBoxContainer = document.querySelector('#student-id-input')?.closest('.bg-white');
+    if (mainContentContainer && searchBoxContainer && scoresLastUpdated) {
+        const lastUpdatedDate = new Date(scoresLastUpdated);
+        const formattedDate = lastUpdatedDate.toLocaleString('th-TH', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            timeZone: 'Asia/Bangkok'
+        });
+        const timestampDiv = document.createElement('div');
+        timestampDiv.className = 'text-center text-sm text-gray-500 dark:text-gray-400 mb-4 -mt-4';
+        timestampDiv.textContent = `อัปเดตข้อมูลล่าสุด: ${formattedDate} น.`;
+        mainContentContainer.insertBefore(timestampDiv, searchBoxContainer);
+    }
 
     // Edit Mode Elements
     const devPasswordModal = new ModalHandler('dev-password-modal');
