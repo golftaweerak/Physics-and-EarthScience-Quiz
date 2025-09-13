@@ -137,9 +137,9 @@ async function checkDuplicatesAndSimilarities() {
             const subCategoryDataPath = path.join(dataDir, "sub-category-data.js");
             const subCategoryFileUrl = `${pathToFileURL(subCategoryDataPath).href}?v=${Date.now()}`;
             const subCategoryModule = await import(subCategoryFileUrl);
-            // Correctly target the 'quizPrefixInfo' array which contains the prefixes.
-            if (subCategoryModule.quizPrefixInfo && Array.isArray(subCategoryModule.quizPrefixInfo)) {
-                validPrefixes = new Set(subCategoryModule.quizPrefixInfo.map(item => item.prefix));
+            // Correctly target the 'quizPrefixInfo' object which contains the prefixes as keys.
+            if (subCategoryModule.quizPrefixInfo && typeof subCategoryModule.quizPrefixInfo === 'object' && !Array.isArray(subCategoryModule.quizPrefixInfo)) {
+                validPrefixes = new Set(Object.keys(subCategoryModule.quizPrefixInfo));
                 console.log(chalk.blue(`ℹ️  Loaded ${validPrefixes.size} valid prefixes. Will only check files matching these prefixes.`));
             } else {
                 console.warn(chalk.yellow("⚠️  Could not find 'quizPrefixInfo' array in sub-category-data.js. Checking all files."));
