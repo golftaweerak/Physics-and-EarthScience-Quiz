@@ -7,7 +7,7 @@ export const quizList = [
     "description": "บทที่ 5: งานและพลังงาน (ชุดที่ 1)",
     "url": "./quiz/index.html?id=phy_m4_ch5-1",
     "storageKey": "quizState-phy_m4_ch5-1",
-    "icon": "./assets/icons/work.png",
+    "icon": "./assets/icons/kinetic-energy.png",
     "altText": "ไอคอนสำหรับ phy_m4_ch5-1",
     "category": "PhysicsM4",
     "subCategory": "บทที่ 5: งานและพลังงาน"
@@ -122,7 +122,7 @@ export const quizList = [
   },
   {
     "id": "phy_m4_ch4-4",
-    "title": "สมดุลกล: สมดุลต่อการหมุน (ชุดที่ 4)",
+    "title": "สมดุลกล: สมดุลต่อการหมุน (ชุดที่ 1)",
     "amount": 20,
     "description": "บทที่ 4: สมดุลกล (เน้นโมเมนต์, แรงคู่ควบ, และสมดุลต่อการหมุน)",
     "url": "./quiz/index.html?id=phy_m4_ch4-4",
@@ -134,7 +134,7 @@ export const quizList = [
   },
   {
     "id": "phy_m4_ch4-5",
-    "title": "สมดุลกล: สมดุลต่อการหมุน (ชุดที่ 5)",
+    "title": "สมดุลกล: สมดุลต่อการหมุน (ชุดที่ 2)",
     "amount": 20,
     "description": "บทที่ 4: สมดุลกล (เน้นการคำนวณโมเมนต์, สมดุลของคาน, และเสถียรภาพ)",
     "url": "./quiz/index.html?id=phy_m4_ch4-5",
@@ -187,7 +187,7 @@ export const quizList = [
     "description": "บทที่ 5: โครงสร้างโลก",
     "url": "./quiz/index.html?id=ess_basic_m6_ch5-1",
     "storageKey": "quizState-ess_basic_m6_ch5-1",
-    "icon": "./assets/icons/earth.png",
+    "icon": "./assets/icons/geology.png",
     "altText": "ไอคอนสำหรับ ess_basic_m6_ch5-1",
     "category": "EarthSpaceScienceBasic",
     "subCategory": "โครงสร้างโลก"
@@ -203,6 +203,30 @@ export const quizList = [
     "altText": "ไอคอนการวิเคราะห์ดาวเคราะห์",
     "category": "EarthSpaceScienceBasic",
     "subCategory": "โครงสร้างโลก"
+  },
+  {
+    "id": "ess_basic_m6_ch6-1",
+    "title": "การแปรสัณฐานของแผ่นธรณี (ชุดที่ 1)",
+    "amount": 30,
+    "description": "บทที่ 6: การแปรสัณฐานของแผ่นธรณี (เน้นการวิเคราะห์และเชื่อมโยง)",
+    "url": "./quiz/index.html?id=ess_basic_m6_ch6-1",
+    "storageKey": "quizState-ess_basic_m6_ch6-1",
+    "icon": "./assets/icons/plate.png",
+    "altText": "ไอคอนสำหรับ ess_basic_m6_ch6-1",
+    "category": "EarthSpaceScienceBasic",
+    "subCategory": "การแปรสัณฐานของแผ่นธรณี"
+  },
+  {
+    "id": "ess_basic_m6_ch6-2",
+    "title": "การแปรสัณฐานของแผ่นธรณี (ชุดที่ 2)",
+    "amount": 30,
+    "description": "บทที่ 6: การแปรสัณฐานของแผ่นธรณี (เน้นการวิเคราะห์และเชื่อมโยงความสัมพันธ์)",
+    "url": "./quiz/index.html?id=ess_basic_m6_ch6-2",
+    "storageKey": "quizState-ess_basic_m6_ch6-2",
+    "icon": "./assets/icons/plate.png",
+    "altText": "ไอคอนสำหรับ ess_basic_m6_ch6-2",
+    "category": "EarthSpaceScienceBasic",
+    "subCategory": "การแปรสัณฐานของแผ่นธรณี"
   },
   {
     "id": "ess_basic_m6_ch4-1",
@@ -259,7 +283,7 @@ export const quizList = [
     "description": "บทที่ 17: การเคลื่อนที่ปรากฏของดาวเคราะห์",
     "url": "./quiz/index.html?id=ess_adv_m6_ch17-1",
     "storageKey": "quizState-ess_adv_m6_ch17-1",
-    "icon": "./assets/icons/planetary-motion.png",
+    "icon": "./assets/icons/solar-system.png",
     "altText": "ไอคอนสำหรับ ess_adv_m6_ch17-1",
     "category": "EarthSpaceScienceAdvance",
     "subCategory": "การเคลื่อนที่ปรากฏของดาวเคราะห์"
@@ -307,7 +331,7 @@ export const quizList = [
     "description": "บทที่ 16: ทรงกลมฟ้า",
     "url": "./quiz/index.html?id=ess_adv_m6_ch16-1",
     "storageKey": "quizState-ess_adv_m6_ch16-1",
-    "icon": "./assets/icons/celestial-sphere.png",
+    "icon": "./assets/icons/constellation.png",
     "altText": "ไอคอนสำหรับ ess_adv_m6_ch16-1",
     "category": "EarthSpaceScienceAdvance",
     "subCategory": "ทรงกลมฟ้า"
@@ -343,7 +367,7 @@ export const quizList = [
     "description": "บทที่ 15: ระบบสุริยะ",
     "url": "./quiz/index.html?id=ess_adv_m6_ch15-1",
     "storageKey": "quizState-ess_adv_m6_ch15-1",
-    "icon": "./assets/icons/solar-system.png",
+    "icon": "./assets/icons/astronomy1.png",
     "altText": "ไอคอนสำหรับ ess_adv_m6_ch15-1",
     "category": "EarthSpaceScienceAdvance",
     "subCategory": "ระบบสุริยะ"
@@ -355,7 +379,7 @@ export const quizList = [
     "description": "บทที่ 13: เอกภพและกาแล็กซี",
     "url": "./quiz/index.html?id=ess_adv_m6_ch13-1",
     "storageKey": "quizState-ess_adv_m6_ch13-1",
-    "icon": "./assets/icons/galaxy.png",
+    "icon": "./assets/icons/galaxy (1).png",
     "altText": "ไอคอนสำหรับ ess_adv_m6_ch13-1",
     "category": "EarthSpaceScienceAdvance",
     "subCategory": "เอกภพและกาแล็กซี"
