@@ -588,22 +588,25 @@ function updateRoomSummaryTable() {
     }).join('');
 
     // Update the sort indicator icons
-    const indicators = {
-        room: sortIndicatorRoom,
-        averageScore: sortIndicatorScore,
-        averageGrade: sortIndicatorGrade,
-        completionPercentage: sortIndicatorCompletion
-    };
+    const downArrow = `<svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>`;
+    const upArrow = `<svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd" /></svg>`;
+    const sortArrow = roomSortConfig.direction === 'desc' ? downArrow : upArrow;
 
-    // Clear all indicators
-    Object.values(indicators).forEach(indicator => { if (indicator) indicator.innerHTML = ''; });
+    // Clear both indicators first
+    sortIndicatorRoom.innerHTML = '';
+    sortIndicatorScore.innerHTML = '';
+    sortIndicatorGrade.innerHTML = '';
+    sortIndicatorCompletion.innerHTML = '';
 
-    // Set the active indicator
-    const activeIndicator = indicators[roomSortConfig.key];
-    if (activeIndicator) {
-        const downArrow = `<svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>`;
-        const upArrow = `<svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd" /></svg>`;
-        activeIndicator.innerHTML = roomSortConfig.direction === 'desc' ? downArrow : upArrow;
+    // Set the indicator on the active column
+    if (roomSortConfig.key === 'room') {
+        sortIndicatorRoom.innerHTML = sortArrow;
+    } else if (roomSortConfig.key === 'averageScore') {
+        sortIndicatorScore.innerHTML = sortArrow;
+    } else if (roomSortConfig.key === 'averageGrade') {
+        sortIndicatorGrade.innerHTML = sortArrow;
+    } else if (roomSortConfig.key === 'completionPercentage') {
+        sortIndicatorCompletion.innerHTML = sortArrow;
     }
 }
 
