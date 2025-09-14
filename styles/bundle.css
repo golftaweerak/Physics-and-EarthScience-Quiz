@@ -525,12 +525,12 @@ body.dark {
 .modal.is-open {
     opacity: 1;
 }
-.modal .modal-content {
+.modal .modal-container {
     opacity: 0;
     transform: scale(0.95) translateY(1rem);
     transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
 }
-.modal.is-open .modal-content {
+.modal.is-open .modal-container {
     opacity: 1;
     transform: scale(1) translateY(0);
 }
@@ -564,7 +564,6 @@ body.dark {
 .dark .modern-scrollbar {
     scrollbar-color: #4b5563 transparent; /* thumb track */
 }
-
 /* Animation for quiz cards appearing in the hub */
 @keyframes card-appear {
     from {

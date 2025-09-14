@@ -1,4 +1,5 @@
 import { getStudentScores } from './data-manager.js';
+import { ModalHandler } from './modal-handler.js';
 import { renderStudentSearchResultCards, calculateStudentCompletion } from './student-card-renderer.js';
 import { lastUpdated as scoresLastUpdated } from '../data/scores-data.js';
 
@@ -30,6 +31,7 @@ function calculateOverallSummary(scores) {
 
     const totalStudents = scores.length;
     let totalScoreSum = 0;
+    let validScoresCount = 0;
     const gradeDistribution = {};
     const summaryByRoom = {};
 
@@ -40,12 +42,14 @@ function calculateOverallSummary(scores) {
     let totalTrackableAssignments = 0;
     let totalSubmittedAssignments = 0;
     // const TRACKABLE_KEYWORDS = ['กิจกรรม', 'แบบฝึก', 'quiz', 'ท้ายบท']; // This is now defined inside calculateStudentCompletion
+    let studentsWithNoMissing = 0, studentsWithMissing = 0;
 
     scores.forEach(student => {
         // Overall average score
         const totalScore = student['รวม [100]'];
         if (typeof totalScore === 'number') {
             totalScoreSum += totalScore;
+            validScoresCount++;
             // Update highest and lowest scores
             if (totalScore > highestScore) {
                 highestScore = totalScore;
@@ -91,6 +95,13 @@ function calculateOverallSummary(scores) {
         // Update overall completion stats
         totalTrackableAssignments += completion.total;
         totalSubmittedAssignments += completion.submitted;
+
+        // Count students with no missing assignments (and have at least one trackable assignment)
+        if (completion.missing > 0) {
+            studentsWithMissing++;
+        } else if (completion.total > 0) { // Implies missing is 0
+            studentsWithNoMissing++;
+        }
     });
 
     // Calculate averages for each room
@@ -107,7 +118,7 @@ function calculateOverallSummary(scores) {
             : '0';
     }
 
-    const overallAverageScore = totalStudents > 0 ? (totalScoreSum / scores.filter(s => typeof s['รวม [100]'] === 'number').length).toFixed(2) : 0;
+    const overallAverageScore = validScoresCount > 0 ? (totalScoreSum / validScoresCount).toFixed(2) : 0;
 
     const completionPercentage = totalTrackableAssignments > 0 
         ? ((totalSubmittedAssignments / totalTrackableAssignments) * 100).toFixed(0) 
@@ -124,6 +135,8 @@ function calculateOverallSummary(scores) {
         completionPercentage,
         highestScore: finalHighestScore,
         lowestScore: finalLowestScore,
+        studentsWithMissing,
+        studentsWithNoMissing,
         summaryByRoom
     };
 }
@@ -132,25 +145,30 @@ function calculateOverallSummary(scores) {
  * Creates and renders the grade distribution bar chart.
  * @param {object} gradeDistribution - An object with grades as keys and counts as values.
  */
-function createGradeDistributionChart(gradeDistribution) {
+function createGradeDistributionChart(gradeDistribution, allStudents) {
     const ctx = document.getElementById('grade-chart')?.getContext('2d');
     if (!ctx) {
         console.error('Chart canvas element not found');
         return;
     }
 
+    // Unregister the datalabels plugin if it was registered, to prevent errors.
+    if (window.ChartDataLabels) {
+        Chart.unregister(window.ChartDataLabels);
+    }
+
     // Define a logical order for grades and a color palette that matches the site's theme.
     const gradeOrder = ['4', '3.5', '3', '2.5', '2', '1.5', '1', '0', 'N/A'];
     const backgroundColors = [
-        '#14b8a6', // teal-500
-        '#06b6d4', // cyan-500
-        '#0ea5e9', // sky-500
-        '#facc15', // yellow-400
-        '#f59e0b', // amber-500
-        '#f97316', // orange-500
-        '#ef4444', // red-500
-        '#b91c1c', // red-700
-        '#6b7280'  // gray-500
+        'rgba(20, 184, 166, 0.7)', // teal-500
+        'rgba(6, 182, 212, 0.7)', // cyan-500
+        'rgba(14, 165, 233, 0.7)', // sky-500
+        'rgba(250, 204, 21, 0.7)', // yellow-400
+        'rgba(245, 158, 11, 0.7)', // amber-500
+        'rgba(249, 115, 22, 0.7)', // orange-500
+        'rgba(239, 68, 68, 0.7)', // red-500
+        'rgba(185, 28, 28, 0.7)', // red-700
+        'rgba(107, 114, 128, 0.7)'  // gray-500
     ];
     const borderColors = [
         '#0d9488', // teal-600
@@ -180,7 +198,12 @@ function createGradeDistributionChart(gradeDistribution) {
 
     const isDarkMode = document.documentElement.classList.contains('dark');
     const gridColor = isDarkMode ? 'rgba(173, 173, 173, 0.1)' : 'rgba(0, 0, 0, 0.1)';
-    const textColor = isDarkMode ? '#787878ff' : '#010203ff'; // Use gray-100 for dark and gray-900 for light for max contrast
+    const textColor = isDarkMode ? '#e5e7eb' : '#1f2937'; // gray-200 for dark, gray-800 for light
+
+    // Destroy previous chart instance if it exists to prevent conflicts
+    if (Chart.getChart(ctx)) {
+        Chart.getChart(ctx).destroy();
+    }
 
     new Chart(ctx, {
         type: 'bar',
@@ -214,6 +237,30 @@ function createGradeDistributionChart(gradeDistribution) {
                     padding: {
                         bottom: 20
                     }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.dataset.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            if (context.parsed.y !== null) {
+                                label += `${context.parsed.y} คน`;
+                            }
+                            return label;
+                        }
+                    }
+                }
+            },
+            onClick: (event, elements) => {
+                if (elements.length === 0) return;
+                const chart = elements[0].chart;
+                const elementIndex = elements[0].index;
+                const gradeLabel = chart.data.labels[elementIndex].replace('เกรด ', '');
+                const filteredStudents = allStudents.filter(student => String(student['เกรด'] ?? 'N/A') === String(gradeLabel));
+                if (filteredStudents.length > 0) {
+                    createGradeDetailModal(gradeLabel, filteredStudents);
                 }
             },
             scales: {
@@ -250,36 +297,220 @@ function createGradeDistributionChart(gradeDistribution) {
                     grid: {
                         display: false
                     }
-                }
-            }
-        }
+                },
+            },
+            onHover: (event, chartElement) => {
+                event.native.target.style.cursor = chartElement[0] ? 'pointer' : 'default';
+            },
+        },
     });
 }
 
 /**
- * Returns a Tailwind CSS text color class based on the score.
- * @param {number} score - The score to evaluate.
+ * A generic function to get a Tailwind CSS text color class based on a value and a set of thresholds.
+ * @param {number} value - The value to evaluate.
+ * @param {Array<{limit: number, colorClass: string}>} thresholds - An array of threshold objects, sorted from highest to lowest limit.
  * @returns {string} The Tailwind CSS class string.
  */
-function getScoreTextColor(score) {
-    if (isNaN(score)) return 'text-gray-500 dark:text-gray-400';
-    if (score >= 80) return 'text-teal-500 dark:text-teal-400';
-    if (score >= 70) return 'text-sky-500 dark:text-sky-400';
-    if (score >= 60) return 'text-green-500 dark:text-green-400';
-    if (score >= 50) return 'text-amber-500 dark:text-amber-400';
+function getDynamicTextColor(value, thresholds) {
+    if (isNaN(value)) return 'text-gray-500 dark:text-gray-400';
+    for (const { limit, colorClass } of thresholds) {
+        if (value >= limit) {
+            return colorClass;
+        }
+    }
     return 'text-red-500 dark:text-red-400';
 }
+
+const SCORE_THRESHOLDS = [
+    { limit: 80, colorClass: 'text-teal-500 dark:text-teal-400' },
+    { limit: 70, colorClass: 'text-sky-500 dark:text-sky-400' },
+    { limit: 60, colorClass: 'text-green-500 dark:text-green-400' },
+    { limit: 50, colorClass: 'text-amber-500 dark:text-amber-400' },
+];
+
+const COMPLETION_THRESHOLDS = [
+    { limit: 90, colorClass: 'text-teal-500 dark:text-teal-400' },
+    { limit: 75, colorClass: 'text-sky-500 dark:text-sky-400' },
+    { limit: 50, colorClass: 'text-amber-500 dark:text-amber-400' },
+];
+
+function getScoreTextColor(score) {
+    return getDynamicTextColor(score, SCORE_THRESHOLDS);
+}
+
 /**
  * Determines the Tailwind CSS text color class for a completion percentage.
  * @param {number} percentage - The completion percentage (0-100).
  * @returns {string} The Tailwind CSS class string for text color.
  */
 function getCompletionTextColor(percentage) {
-    if (isNaN(percentage)) return 'text-gray-500 dark:text-gray-400';
-    if (percentage >= 90) return 'text-teal-500 dark:text-teal-400';
-    if (percentage >= 75) return 'text-sky-500 dark:text-sky-400';
-    if (percentage >= 50) return 'text-amber-500 dark:text-amber-400';
-    return 'text-red-500 dark:text-red-400';
+    return getDynamicTextColor(percentage, COMPLETION_THRESHOLDS);
+}
+
+/**
+ * Creates and displays a modal with a filterable, sortable list of students.
+ * @param {string} modalIdentifier - A unique string for the modal ID (e.g., 'grade-4', 'missing-work').
+ * @param {string} title - The title to display in the modal header.
+ * @param {Array<object>} students - The list of students to display.
+ */
+function createStudentListModal(modalIdentifier, title, students) {
+    const modalId = `student-list-modal-${modalIdentifier}`;
+
+    // Remove old modal if it exists to prevent duplicates
+    const existingModal = document.getElementById(modalId);
+    if (existingModal) {
+        existingModal.remove();
+    }
+
+    // Get unique rooms for the filter dropdown
+    const rooms = [...new Set(students.map(s => s.room).filter(Boolean))].sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+    let roomOptionsHtml = `<option value="all">ทุกห้อง</option>`;
+    rooms.forEach(room => {
+        roomOptionsHtml += `<option value="${room}">ห้อง ${room}</option>`;
+    });
+
+    const modalContentContainerId = `student-list-content-container-${modalIdentifier}`;
+
+    const controlsHtml = `
+        <div class="p-3 sm:p-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 space-y-3">
+            <div class="flex flex-wrap items-center gap-2">
+                <span class="text-sm font-medium text-gray-600 dark:text-gray-400 mr-2">เรียงตาม:</span>
+                <button data-sort-key="room" data-sort-label="ห้อง" class="sort-btn text-sm font-semibold py-1.5 px-3 rounded-full transition-colors duration-200 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600">ห้อง</button>                
+                <button data-sort-key="name" data-sort-label="ชื่อ" class="sort-btn text-sm font-semibold py-1.5 px-3 rounded-full transition-colors duration-200 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600">ชื่อ</button>
+                <button data-sort-key="score" data-sort-label="คะแนน" class="sort-btn text-sm font-semibold py-1.5 px-3 rounded-full transition-colors duration-200 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600">คะแนน</button>
+                <button data-sort-key="missing" data-sort-label="งานค้างส่ง" class="sort-btn text-sm font-semibold py-1.5 px-3 rounded-full transition-colors duration-200 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600">งานค้างส่ง</button>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" /></svg>
+                    </div>
+                    <input type="text" id="modal-search-input-${modalIdentifier}" placeholder="ค้นหาจากชื่อ หรือรหัสนักเรียน..." class="w-full p-2 pl-10 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+                </div>
+                <div class="relative">
+                    <select id="modal-room-filter-${modalIdentifier}" class="w-full p-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition appearance-none pr-8 bg-no-repeat" style="background-image: url('data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 20 20%27%3e%3cpath stroke=%27%236b7280%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%271.5%27 d=%27M6 8l4 4 4-4%27/%3e%3c/svg%3e'); background-position: right 0.5rem center; background-size: 1.5em 1.5em;">
+                        ${roomOptionsHtml}
+                    </select>
+                </div>
+            </div>
+        </div>
+    `;
+
+    const modalHtml = `
+        <div id="${modalId}" class="modal fixed inset-0 flex items-center justify-center z-[9999] hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title-${modalId}">
+            <div data-modal-overlay class="absolute inset-0 bg-gray-900 bg-opacity-60 backdrop-blur-sm" aria-hidden="true"></div>
+            <div class="modal-container relative bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-4xl m-4 max-h-[90vh] flex flex-col">
+                <div class="flex justify-between items-center p-4 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
+                    <h2 id="modal-title-${modalId}" class="text-xl font-bold text-gray-900 dark:text-white font-kanit">${title}</h2>
+                    <button data-modal-close class="text-gray-400 hover:text-gray-600 dark:hover:text-white transition-colors" aria-label="Close modal">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
+                </div>
+                ${controlsHtml}
+                <div id="${modalContentContainerId}" class="p-4 sm:p-6 flex-grow overflow-y-auto modern-scrollbar">
+                    <!-- Student cards will be rendered here -->
+                </div>
+        </div>
+    `;
+
+    document.getElementById('modals-placeholder').insertAdjacentHTML('beforeend', modalHtml);
+
+    const modalElement = document.getElementById(modalId);
+    const contentElement = document.getElementById(modalContentContainerId);
+    const sortButtons = modalElement.querySelectorAll('.sort-btn');
+    const searchInput = document.getElementById(`modal-search-input-${modalIdentifier}`);
+    const roomFilterSelect = document.getElementById(`modal-room-filter-${modalIdentifier}`);
+
+    let currentSort = { key: 'name', direction: 'asc' };
+    let currentFilter = '';
+    let currentRoomFilter = 'all';
+
+    const filterAndSortAndRender = () => {
+        const filteredStudents = students.filter(student => {
+            const roomMatch = currentRoomFilter === 'all' || student.room === currentRoomFilter;
+            if (!roomMatch) return false;
+
+            if (!currentFilter) {
+                return true; // Pass room filter and no text filter
+            }
+
+            const query = currentFilter.toLowerCase();
+            const nameMatch = student.name && student.name.toLowerCase().includes(query);
+            const idMatch = student.id && student.id.toLowerCase().includes(query);
+            return nameMatch || idMatch;
+        });
+
+        const sortedStudents = [...filteredStudents].sort((a, b) => {
+            const completionA = calculateStudentCompletion(a);
+            const completionB = calculateStudentCompletion(b);
+            let valA, valB;
+            switch (currentSort.key) {
+                case 'name': return currentSort.direction === 'asc' ? a.name.localeCompare(b.name, 'th') : b.name.localeCompare(a.name, 'th');
+                case 'room': {
+                    const roomA = a.room || '999'; // Treat missing rooms as last
+                    const roomB = b.room || '999';
+                    return currentSort.direction === 'asc' ? roomA.localeCompare(roomB, undefined, { numeric: true }) : roomB.localeCompare(roomA, undefined, { numeric: true });
+                }
+                case 'score': valA = a['รวม [100]'] ?? -1; valB = b['รวม [100]'] ?? -1; return currentSort.direction === 'asc' ? valA - valB : valB - valA;
+                case 'missing': valA = completionA.missing; valB = completionB.missing; return currentSort.direction === 'asc' ? valA - valB : valB - valA;
+                default: return 0;
+            }
+        });
+
+        renderStudentSearchResultCards(sortedStudents, contentElement, { cardType: 'link', basePath: './' });
+
+        sortButtons.forEach(btn => {
+            const key = btn.dataset.sortKey;
+            const label = btn.dataset.sortLabel;
+            if (key === currentSort.key) {
+                btn.classList.add('bg-blue-600', 'text-white');
+                btn.classList.remove('bg-gray-200', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+                btn.innerHTML = `${label} <span class="ml-1">${currentSort.direction === 'asc' ? '▲' : '▼'}</span>`;
+            } else {
+                btn.classList.remove('bg-blue-600', 'text-white');
+                btn.classList.add('bg-gray-200', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+                btn.textContent = label;
+            }
+        });
+    };
+
+    sortButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const sortKey = button.dataset.sortKey;
+            if (currentSort.key === sortKey) {
+                currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSort.key = sortKey;
+                currentSort.direction = (sortKey === 'name' || sortKey === 'room') ? 'asc' : 'desc';
+            }
+            filterAndSortAndRender();
+        });
+    });
+
+    searchInput.addEventListener('input', () => {
+        currentFilter = searchInput.value;
+        filterAndSortAndRender();
+    });
+
+    roomFilterSelect.addEventListener('change', () => {
+        currentRoomFilter = roomFilterSelect.value;
+        filterAndSortAndRender();
+    });
+
+    filterAndSortAndRender();
+    new ModalHandler(modalId).open();
+}
+
+/**
+ * Creates and displays a modal with a list of students for a specific grade.
+ * @param {string} grade - The grade to display.
+ * @param {Array<object>} students - The list of students who achieved that grade.
+ */
+function createGradeDetailModal(grade, students) {
+    const title = `นักเรียนที่ได้เกรด ${grade} (${students.length} คน)`;
+    const identifier = `grade-${String(grade).replace('.', '-')}`;
+    createStudentListModal(identifier, title, students);
 }
 
 /**
@@ -352,9 +583,6 @@ function updateRoomSummaryTable() {
                     <span class="font-bold text-base ${completionTextColorClass}">${roomData.completionPercentage}%</span>
                 </td>
                 <td class="px-4 py-2 text-center font-bold text-sm ${gradeColorClass}">${roomData.averageGrade}</td>
-                <!-- <td class="px-4 py-2 text-center">
-                    <a href="./edit-scores.html?room=${room}" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-bold text-sm transition-colors no-underline hover:underline">แก้ไข</a>
-                </td> -->
             </tr>
         `;
     }).join('');
@@ -444,7 +672,7 @@ function initializeTableSorting() {
  * Renders the summary data into HTML and injects it into the page.
  * @param {object} summaryData - The calculated summary data.
  */
-function renderSummary(summaryData) {
+function renderSummary(summaryData, studentScores) {
     const container = document.getElementById('summary-container');
     if (!container) return;
 
@@ -487,50 +715,46 @@ function renderSummary(summaryData) {
         </div>
 
         <!-- Overall Stats Cards -->
-        <div class="mt-8 grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-            <div class="bg-white dark:bg-gray-800/50 p-3 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 flex items-center gap-3 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                <div class="flex-shrink-0 h-10 w-10 rounded-full flex items-center justify-center bg-blue-100 dark:bg-blue-900/50 text-blue-500 dark:text-blue-400">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2h2.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293h3.172a2 2 0 002-2V9m-6 6v-6m-6 6v-6" /></svg>
-                </div>
-                <div>
-                    <div class="text-xl font-bold text-gray-800 dark:text-gray-100 font-kanit">${summaryData.totalStudents}</div>
-                    <div class="text-xs font-medium text-gray-500 dark:text-gray-400">จำนวนนักเรียนทั้งหมด</div>
-                </div>
-            </div>
-            <div class="bg-white dark:bg-gray-800/50 p-3 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 flex items-center gap-3 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                <div class="flex-shrink-0 h-10 w-10 rounded-full flex items-center justify-center bg-green-100 dark:bg-green-900/50 text-green-500 dark:text-green-400">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 13v-1m4 1v-3m4 3V8M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" /></svg>
-                </div>
-                <div>
-                    <div class="text-xl font-bold text-gray-800 dark:text-gray-100 font-kanit">${summaryData.averageScore}</div>
-                    <div class="text-xs font-medium text-gray-500 dark:text-gray-400">คะแนนเฉลี่ยรวม</div>
-                </div>
-            </div>
-            <div class="bg-white dark:bg-gray-800/50 p-3 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 flex items-center gap-3 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                <div class="flex-shrink-0 h-10 w-10 rounded-full flex items-center justify-center bg-amber-100 dark:bg-amber-900/50 text-amber-500 dark:text-amber-400">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>
-                </div>
-                <div>
-                    <div class="text-xl font-bold text-gray-800 dark:text-gray-100 font-kanit">${summaryData.completionPercentage}%</div>
-                    <div class="text-xs font-medium text-gray-500 dark:text-gray-400">เปอร์เซ็นต์การส่งงาน</div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
+            <!-- Student Counts Box -->
+            <div class="bg-white dark:bg-gray-800/50 p-4 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 flex flex-col">
+                <h3 class="text-lg font-bold text-gray-800 dark:text-white font-kanit mb-4">ภาพรวมนักเรียน</h3>
+                <div class="grid grid-cols-3 gap-4 flex-grow">
+                    <div id="card-all-students" class="p-4 bg-blue-50 dark:bg-blue-900/30 rounded-lg text-center flex flex-col justify-center transition-all duration-300 hover:shadow-lg hover:-translate-y-1 cursor-pointer">
+                        <div class="text-4xl font-bold text-blue-600 dark:text-blue-400 font-kanit">${summaryData.totalStudents}</div>
+                        <div class="text-xs font-medium text-gray-600 dark:text-gray-400 mt-1">นักเรียนทั้งหมด</div>
+                    </div>
+                    <div id="card-complete-students" class="p-4 bg-green-50 dark:bg-green-900/30 rounded-lg text-center flex flex-col justify-center transition-all duration-300 hover:shadow-lg hover:-translate-y-1 cursor-pointer">
+                        <div class="text-4xl font-bold text-green-600 dark:text-green-400 font-kanit">${summaryData.studentsWithNoMissing}</div>
+                        <div class="text-xs font-medium text-gray-600 dark:text-gray-400 mt-1">ส่งงานครบ</div>
+                    </div>
+                    <div id="card-missing-students" class="p-4 bg-red-50 dark:bg-red-900/30 rounded-lg text-center flex flex-col justify-center transition-all duration-300 hover:shadow-lg hover:-translate-y-1 cursor-pointer">
+                        <div class="text-4xl font-bold text-red-600 dark:text-red-400 font-kanit">${summaryData.studentsWithMissing}</div>
+                        <div class="text-xs font-medium text-gray-600 dark:text-gray-400 mt-1">ยังส่งงานไม่ครบ</div>
+                    </div>
                 </div>
             </div>
-            <div class="bg-white dark:bg-gray-800/50 p-3 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 flex items-center gap-3 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                <div class="flex-shrink-0 h-10 w-10 rounded-full flex items-center justify-center bg-yellow-100 dark:bg-yellow-900/50 text-yellow-500 dark:text-yellow-400">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
-                </div>
-                <div>
-                    <div class="text-xl font-bold text-gray-800 dark:text-gray-100 font-kanit">${summaryData.highestScore}</div>
-                    <div class="text-xs font-medium text-gray-500 dark:text-gray-400">คะแนนสูงสุด</div>
-                </div>
-            </div>
-            <div class="bg-white dark:bg-gray-800/50 p-3 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 flex items-center gap-3 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                <div class="flex-shrink-0 h-10 w-10 rounded-full flex items-center justify-center bg-rose-100 dark:bg-rose-900/50 text-rose-500 dark:text-rose-400">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 17h8m0 0v-8m0 8l-8-8-4 4-6-6" /></svg>
-                </div>
-                <div>
-                    <div class="text-xl font-bold text-gray-800 dark:text-gray-100 font-kanit">${summaryData.lowestScore}</div>
-                    <div class="text-xs font-medium text-gray-500 dark:text-gray-400">คะแนนต่ำสุด</div>
+
+            <!-- Other Stats Box -->
+            <div class="bg-white dark:bg-gray-800/50 p-4 rounded-xl shadow-md border border-gray-200 dark:border-gray-700">
+                <h3 class="text-lg font-bold text-gray-800 dark:text-white font-kanit mb-4">ภาพรวมคะแนนและงาน</h3>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <div class="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg text-center">
+                        <div class="text-2xl font-bold text-gray-800 dark:text-gray-100 font-kanit">${summaryData.averageScore}</div>
+                        <div class="text-sm font-medium text-gray-500 dark:text-gray-400">คะแนนเฉลี่ย</div>
+                    </div>
+                    <div class="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg text-center">
+                        <div class="text-2xl font-bold text-gray-800 dark:text-gray-100 font-kanit">${summaryData.completionPercentage}%</div>
+                        <div class="text-sm font-medium text-gray-500 dark:text-gray-400">การส่งงาน</div>
+                    </div>
+                    <div class="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg text-center">
+                        <div class="text-2xl font-bold text-green-600 dark:text-green-400 font-kanit">${summaryData.highestScore}</div>
+                        <div class="text-sm font-medium text-gray-500 dark:text-gray-400">คะแนนสูงสุด</div>
+                    </div>
+                    <div class="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg text-center">
+                        <div class="text-2xl font-bold text-red-600 dark:text-red-400 font-kanit">${summaryData.lowestScore}</div>
+                        <div class="text-sm font-medium text-gray-500 dark:text-gray-400">คะแนนต่ำสุด</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -573,9 +797,6 @@ function renderSummary(summaryData) {
                                     <span id="sort-indicator-grade" class="text-gray-500 dark:text-gray-400 transition-opacity"></span>
                                 </button>
                             </th>
-                            <!-- <th scope="col" class="px-4 py-2 text-center">
-                                <span class="font-bold">จัดการ</span>
-                            </th> -->
                         </tr>
                     </thead>
                     <tbody id="room-summary-tbody">
@@ -598,8 +819,8 @@ function renderSummary(summaryData) {
     updateRoomSummaryTable();
 
     // Now that the canvas element exists in the DOM, create the chart
-    createGradeDistributionChart(summaryData.gradeDistribution);
-    initializeStudentSearch();
+    createGradeDistributionChart(summaryData.gradeDistribution, studentScores);
+    initializeStudentSearch(studentScores);
 }
 
 /**
@@ -609,34 +830,72 @@ export async function initializeSummaryPage() {
     try {
         const studentScores = await getStudentScores();
         summaryDataStore = calculateOverallSummary(studentScores);
-        renderSummary(summaryDataStore);
+        renderSummary(summaryDataStore, studentScores);
         initializeTableSorting();
 
-        // Add listener for room detail view
+        // --- Event Listeners for Summary Cards ---
+        const clickableCards = [
+            { id: 'card-all-students', filter: () => true, title: count => `นักเรียนทั้งหมด (${count} คน)` },
+            { id: 'card-complete-students', filter: student => calculateStudentCompletion(student).missing === 0 && calculateStudentCompletion(student).total > 0, title: count => `นักเรียนที่ส่งงานครบ (${count} คน)` },
+            { id: 'card-missing-students', filter: student => calculateStudentCompletion(student).missing > 0, title: count => `นักเรียนที่ยังส่งงานไม่ครบ (${count} คน)` }
+        ];
+
+        clickableCards.forEach(cardInfo => {
+            const cardElement = document.getElementById(cardInfo.id);
+            if (cardElement) {
+                cardElement.addEventListener('click', () => {
+                    const filteredStudents = studentScores.filter(cardInfo.filter);
+                    if (filteredStudents.length > 0) {
+                        const modalTitle = cardInfo.title(filteredStudents.length);
+                        createStudentListModal(cardInfo.id, modalTitle, filteredStudents);
+                    }
+                });
+            }
+        });
+
+        // Add listener for room detail view and export button using event delegation
         const roomSummaryTbody = document.getElementById('room-summary-tbody');
+        const roomDetailContainer = document.getElementById('room-detail-container');
+
         if (roomSummaryTbody) {
             roomSummaryTbody.addEventListener('click', (event) => {
                 const row = event.target.closest('.room-detail-trigger');
-                if (row) {
-                    const room = row.dataset.room;
-                    selectedRoomForDetails = room; // Store the selected room
-                    renderStudentTableForRoom(room, studentScores);
+                if (!row) return;
+
+                const room = row.dataset.room;
+                selectedRoomForDetails = room; // Set the selected room for CSV export
+                renderStudentTableForRoom(room, studentScores);
+            });
+        }
+
+        if (roomDetailContainer) {
+            roomDetailContainer.addEventListener('click', event => {
+                if (event.target.id === 'export-csv-btn') {
+                    handleExportCSV(studentScores);
                 }
             });
         }
+
     } catch (error) {
         console.error("Failed to initialize summary page:", error);
         const container = document.getElementById('summary-container');
         if (container) {
-            container.innerHTML = `<div class="text-center py-16 text-red-500"><h3>เกิดข้อผิดพลาดในการโหลดข้อมูลสรุปคะแนน</h3><p>กรุณาลองใหม่อีกครั้งในภายหลัง</p></div>`;
+            container.innerHTML = `
+                <div class="text-center py-16 text-red-500 dark:text-red-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    <h3 class="text-xl font-bold font-kanit">เกิดข้อผิดพลาด</h3>
+                    <p class="mt-2">ไม่สามารถโหลดข้อมูลสรุปคะแนนได้<br>กรุณาลองใหม่อีกครั้งในภายหลัง</p>
+                    <a href="./index.html" class="mt-6 inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-5 rounded-lg transition duration-300 no-transition">กลับไปหน้าหลัก</a>
+                </div>`;
         }
     }
 }
 
 /**
  * Initializes the student search functionality.
+ * @param {Array<object>} studentScores The array of all student score objects.
  */
-function initializeStudentSearch() {
+function initializeStudentSearch(studentScores) {
     const searchInput = document.getElementById('student-search-input');
     const searchBtn = document.getElementById('student-search-btn');
     const clearBtn = document.getElementById('student-search-clear-btn');
@@ -650,14 +909,13 @@ function initializeStudentSearch() {
     // Set initial message
     resultsContainer.innerHTML = `<p class="text-center text-gray-500 dark:text-gray-400 py-4">กรุณาพิมพ์คำค้นหาแล้วกด Enter หรือปุ่มค้นหา</p>`;
 
-    const performSearch = async () => {
+    const performSearch = () => {
         const query = searchInput.value.trim().toLowerCase();
 
         if (query.length === 0) {
             resultsContainer.innerHTML = `<p class="text-center text-gray-500 dark:text-gray-400 py-4">กรุณาพิมพ์คำค้นหา</p>`;
             return;
         }
-        const studentScores = await getStudentScores();
 
         // New hierarchical search logic
         let results = [];
@@ -777,7 +1035,7 @@ function renderStudentTableForRoom(room, studentScores) {
     }).join('')}</tr>`;
 
     const bodyHtml = studentsInRoom.map(student => {
-        return `<tr class="border-b dark:border-gray-700">
+        return `<tr>
             ${scoreKeys.map(key => {
             const isSticky = ['id', 'name', 'ordinal'].includes(key);
             const stickyClasses = isSticky ? stickyColumnStyles[key] : '';
@@ -807,7 +1065,7 @@ function renderStudentTableForRoom(room, studentScores) {
                     <span>Export to CSV</span>
                 </button>
             </div>
-            <div class="overflow-auto modern-scrollbar border-t border-gray-200 dark:border-gray-700 max-h-[70vh]">
+            <div class="overflow-auto modern-scrollbar max-h-[70vh]">
                 <table class="w-full text-left text-sm whitespace-nowrap">
                     <thead class="bg-gray-100 dark:bg-gray-900">${headHtml}</thead>
                     <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">${bodyHtml}</tbody>
@@ -815,9 +1073,6 @@ function renderStudentTableForRoom(room, studentScores) {
             </div>
         </div>
     `;
-
-    // Add event listener for the new button
-    document.getElementById('export-csv-btn').addEventListener('click', () => handleExportCSV(studentScores));
     
     // Scroll to the newly created table
     container.scrollIntoView({ behavior: 'smooth', block: 'start' });

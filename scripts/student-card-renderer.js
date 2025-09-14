@@ -43,6 +43,7 @@ export function renderStudentSearchResultCards(results, container, options) {
     }
 
     const resultsHtml = results.map(student => {
+        const totalScore = student['รวม [100]'] !== undefined ? student['รวม [100]'] : null;
         const grade = student['เกรด'] ?? 'N/A';
         let gradeColorClass = 'bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200';
         if (grade >= 4) gradeColorClass = 'bg-teal-100 dark:bg-teal-900/50 text-teal-700 dark:text-teal-300';
@@ -60,6 +61,13 @@ export function renderStudentSearchResultCards(results, container, options) {
 
         const missingColorClass = completion.missing > 0 ? 'bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300' : 'bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300';
 
+        const scoreHtml = totalScore !== null ? `
+                    <div class="text-right">
+                        <p class="text-xs text-gray-500 dark:text-gray-400">คะแนนรวม</p>
+                        <p class="font-bold text-base sm:text-lg">${Number(totalScore).toFixed(2)}</p>
+                    </div>
+        ` : '';
+
         const cardInnerHtml = `
             <div class="flex justify-between items-center ${cardType === 'button' ? 'pointer-events-none' : ''}">
                 <div>
@@ -70,7 +78,8 @@ export function renderStudentSearchResultCards(results, container, options) {
                         เลขที่: <span class="font-semibold">${student.ordinal || 'N/A'}</span>
                     </p>
                 </div>
-                <div class="flex items-center gap-2 sm:gap-4">
+                <div class="flex items-center gap-2 sm:gap-3 text-center">
+                    ${scoreHtml}
                     <div class="text-right">
                         <p class="text-xs text-gray-500 dark:text-gray-400">ค้างส่ง</p>
                         <p class="font-bold text-base sm:text-lg px-2 py-0.5 rounded-md ${missingColorClass}">${completion.missing}</p>

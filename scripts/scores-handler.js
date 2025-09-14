@@ -54,11 +54,17 @@ export async function initializeScoreSearch() {
     const clearBtn = document.getElementById('clear-btn');
     const defaultMessage = document.getElementById('default-message');
 
-    // Modal elements
-    const modal = document.getElementById('assignment-list-modal');
-    const modalTitle = document.getElementById('modal-title');
-    const modalContent = document.getElementById('modal-list-content');
-    const modalCloseBtn = document.getElementById('modal-close-btn');
+    // Edit Mode Elements
+    const devPasswordModal = new ModalHandler('dev-password-modal');
+    const devPasswordForm = document.getElementById('dev-password-form');
+    const devPasswordInput = document.getElementById('dev-password-input');
+    const devPasswordError = document.getElementById('dev-password-error');
+    const overrideCodeModal = new ModalHandler('override-code-modal');
+    const overrideCodeContent = document.getElementById('override-code-content');
+    const copyOverrideCodeBtn = document.getElementById('copy-override-code-btn');
+    const logDataContent = document.getElementById('log-data-content');
+    const copyLogDataBtn = document.getElementById('copy-log-data-btn');
+    const downloadOverrideFileBtn = document.getElementById('download-override-file-btn');
 
     // --- Render Last Updated Timestamp ---
     const mainContentContainer = document.querySelector('.max-w-3xl.mx-auto');
@@ -79,19 +85,10 @@ export async function initializeScoreSearch() {
         mainContentContainer.insertBefore(timestampDiv, searchBoxContainer);
     }
 
-    // Edit Mode Elements
-    const devPasswordModal = new ModalHandler('dev-password-modal');
-    const devPasswordForm = document.getElementById('dev-password-form');
-    const devPasswordInput = document.getElementById('dev-password-input');
-    const devPasswordError = document.getElementById('dev-password-error');
-    const overrideCodeModal = new ModalHandler('override-code-modal');
-    const overrideCodeContent = document.getElementById('override-code-content');
-    const copyOverrideCodeBtn = document.getElementById('copy-override-code-btn');
-    const logDataContent = document.getElementById('log-data-content');
-    const copyLogDataBtn = document.getElementById('copy-log-data-btn');
-    const downloadOverrideFileBtn = document.getElementById('download-override-file-btn');
 
-    if (!studentIdInput || !searchBtn || !resultContainer || !clearBtn || !modal) {
+
+
+    if (!studentIdInput || !searchBtn || !resultContainer || !clearBtn) {
         console.error("Required elements for score search are missing from the DOM.");
         return;
     }
@@ -100,38 +97,6 @@ export async function initializeScoreSearch() {
     const { studentScores: baseScores } = await import(`../data/scores-data.js?v=${Date.now()}`);
     originalScoresData = baseScores;
     const studentScores = await getStudentScores();
-
-    // --- Modal Logic ---
-    if (modal && modalCloseBtn && modalTitle && modalContent) {
-        const closeModal = () => {
-            modal.classList.add('hidden');
-        };
-
-        modalCloseBtn.addEventListener('click', closeModal);
-        modal.addEventListener('click', (event) => {
-            // Close if clicked on the backdrop
-            if (event.target === modal) {
-                closeModal();
-            }
-        });
-        document.addEventListener('keydown', (event) => {
-            if (event.key === 'Escape' && !modal.classList.contains('hidden')) {
-                closeModal();
-            }
-        });
-    }
-
-    function showAssignmentListModal(title, assignments) {
-        if (!modal || !modalTitle || !modalContent) return;
-        modalTitle.textContent = title;
-        if (assignments.length === 0) {
-            modalContent.innerHTML = `<p class="text-gray-500 dark:text-gray-400 text-center py-8">ไม่มีรายการ</p>`;
-        } else {
-            const listHtml = assignments.map(createAssignmentItemHTML).join('');
-            modalContent.innerHTML = `<ul class="divide-y divide-gray-200 dark:divide-gray-700">${listHtml}</ul>`;
-        }
-        modal.classList.remove('hidden');
-    }
 
     // --- Edit Mode Logic ---
     function enableEditMode() {
@@ -576,12 +541,11 @@ export async function initializeScoreSearch() {
         // Attach event listeners for the new modal buttons
         document.getElementById('show-submitted-btn')?.addEventListener('click', () => {
             const submittedAssignments = trackableAssignments.filter(a => a.score && a.score.toLowerCase() !== 'ยังไม่ส่ง');
-            showAssignmentListModal(`งานที่ส่งแล้ว (${submittedAssignments.length} รายการ)`, submittedAssignments);
+            createInteractiveAssignmentModal('submitted', `งานที่ส่งแล้ว (${submittedAssignments.length} รายการ)`, submittedAssignments);
         });
-
         document.getElementById('show-missing-btn')?.addEventListener('click', () => {
             const missingAssignments = trackableAssignments.filter(a => !a.score || a.score.toLowerCase() === 'ยังไม่ส่ง');
-            showAssignmentListModal(`งานที่ค้างส่ง (${missingAssignments.length} รายการ)`, missingAssignments);
+            createInteractiveAssignmentModal('missing', `งานที่ค้างส่ง (${missingAssignments.length} รายการ)`, missingAssignments);
         });
 
         document.getElementById('edit-mode-btn')?.addEventListener('click', () => {
@@ -724,4 +688,74 @@ export async function initializeScoreSearch() {
 
         return orderedGroups;
     }
+}
+
+/**
+ * Creates and displays a modal with a filterable list of assignments.
+ * @param {string} modalIdentifier - A unique string for the modal ID.
+ * @param {string} title - The title to display in the modal header.
+ * @param {Array<object>} assignments - The list of assignments to display.
+ */
+function createInteractiveAssignmentModal(modalIdentifier, title, assignments) {
+    const modalId = `interactive-assignment-modal-${modalIdentifier}`;
+
+    // Remove old modal if it exists
+    const existingModal = document.getElementById(modalId);
+    if (existingModal) {
+        existingModal.remove();
+    }
+
+    const modalContentContainerId = `interactive-assignment-content-${modalIdentifier}`;
+
+    const controlsHtml = `
+        <div class="p-3 sm:p-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 space-y-3">
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" /></svg>
+                </div>
+                <input type="text" id="modal-search-input-${modalIdentifier}" placeholder="ค้นหาชื่องาน..." class="w-full p-2 pl-10 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400">
+            </div>
+        </div>
+    `;
+
+    const modalHtml = `
+        <div id="${modalId}" class="modal fixed inset-0 flex items-center justify-center z-[9999] hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title-${modalId}">
+            <div data-modal-overlay class="absolute inset-0 bg-gray-900 bg-opacity-60 backdrop-blur-sm" aria-hidden="true"></div>
+            <div class="modal-container relative bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-2xl m-4 max-h-[90vh] flex flex-col">
+                <div class="flex justify-between items-center p-4 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
+                    <h2 id="modal-title-${modalId}" class="text-xl font-bold text-gray-900 dark:text-white font-kanit">${title}</h2>
+                    <button data-modal-close class="text-gray-400 hover:text-gray-600 dark:hover:text-white transition-colors" aria-label="Close modal">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
+                </div>
+                ${controlsHtml}
+                <div id="${modalContentContainerId}" class="p-4 sm:p-6 flex-grow overflow-y-auto modern-scrollbar">
+                    <!-- Assignment list will be rendered here -->
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.getElementById('modals-placeholder').insertAdjacentHTML('beforeend', modalHtml);
+
+    const modalElement = document.getElementById(modalId);
+    const contentElement = document.getElementById(modalContentContainerId);
+    const searchInput = document.getElementById(`modal-search-input-${modalIdentifier}`);
+
+    const filterAndRender = () => {
+        const query = searchInput.value.toLowerCase();
+        const filteredAssignments = assignments.filter(assignment => !query || (assignment.name && assignment.name.toLowerCase().includes(query)));
+
+        if (filteredAssignments.length === 0) {
+            contentElement.innerHTML = `<p class="text-center text-gray-500 dark:text-gray-400 py-8">ไม่พบรายการที่ตรงกับคำค้นหา</p>`;
+        } else {
+            const listHtml = filteredAssignments.map(createAssignmentItemHTML).join('');
+            contentElement.innerHTML = `<ul class="divide-y divide-gray-200 dark:divide-gray-700">${listHtml}</ul>`;
+        }
+    };
+
+    searchInput.addEventListener('input', filterAndRender);
+
+    filterAndRender(); // Initial render
+    new ModalHandler(modalId).open();
 }
