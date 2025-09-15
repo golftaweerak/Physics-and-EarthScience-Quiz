@@ -2,6 +2,7 @@ import { getStudentScores } from './data-manager.js';
 import { ModalHandler } from './modal-handler.js';
 import { renderStudentSearchResultCards, calculateStudentCompletion } from './student-card-renderer.js';
 import { lastUpdated as scoresLastUpdated } from '../data/scores-data.js';
+import { DATA_KEYS } from './constants.js'; // สมมติว่าสร้างไฟล์ constants.js
 
 // Module-level state for summary data and sorting configuration
 let summaryDataStore = null;
@@ -46,7 +47,7 @@ function calculateOverallSummary(scores) {
 
     scores.forEach(student => {
         // Overall average score
-        const totalScore = student['รวม [100]'];
+        const totalScore = student[DATA_KEYS.TOTAL_SCORE];
         if (typeof totalScore === 'number') {
             totalScoreSum += totalScore;
             validScoresCount++;
@@ -60,12 +61,12 @@ function calculateOverallSummary(scores) {
         }
 
         // Grade distribution
-        const grade = student['เกรด'] ?? 'N/A';
+        const grade = student[DATA_KEYS.GRADE] ?? 'N/A';
         gradeDistribution[grade] = (gradeDistribution[grade] || 0) + 1;
         const numericGrade = parseFloat(grade);
 
         // Per-room stats
-        const room = student.room || 'N/A';
+        const room = student[DATA_KEYS.ROOM] || 'N/A';
         if (!summaryByRoom[room]) {
             summaryByRoom[room] = {
                 studentCount: 0,
@@ -145,7 +146,7 @@ function calculateOverallSummary(scores) {
  * Creates and renders the grade distribution bar chart.
  * @param {object} gradeDistribution - An object with grades as keys and counts as values.
  */
-function createGradeDistributionChart(gradeDistribution, studentsForThisChart) {
+function createGradeDistributionChart(gradeDistribution, allStudentScores) {
     const ctx = document.getElementById('grade-chart')?.getContext('2d');
     if (!ctx) {
         console.error('Chart canvas element not found');
@@ -243,22 +244,32 @@ function createGradeDistributionChart(gradeDistribution, studentsForThisChart) {
                 const chart = elements[0].chart;
                 const elementIndex = elements[0].index;
                 const gradeLabel = chart.data.labels[elementIndex].replace('เกรด ', '');
-                let filteredStudents;
 
+                // Get the currently selected room from the dropdown to ensure context is correct
+                const roomFilterEl = document.getElementById('grade-chart-room-filter');
+                const selectedRoom = roomFilterEl ? roomFilterEl.value : 'all';
+
+                // Filter the master list of students by the currently selected room
+                const studentsInScope = selectedRoom === 'all'
+                    ? allStudentScores
+                    : allStudentScores.filter(student => String(student.room) === selectedRoom);
+
+                // Now, filter that group by the clicked grade
+                let filteredStudents;
                 if (gradeLabel === 'N/A') {
                     // Handles null, undefined, or the literal string 'N/A'
-                    filteredStudents = studentsForThisChart.filter(student => (student['เกรด'] == null || String(student['เกรด']) === 'N/A'));
+                    filteredStudents = studentsInScope.filter(student => (student['เกรด'] == null || String(student['เกรด']) === 'N/A'));
                 } else {
                     const gradeToFindNum = parseFloat(gradeLabel);
                     if (!isNaN(gradeToFindNum)) {
                         // It's a numeric grade, use float comparison for safety
-                        filteredStudents = studentsForThisChart.filter(student => {
+                        filteredStudents = studentsInScope.filter(student => {
                             const studentGrade = parseFloat(student['เกรด']);
                             return !isNaN(studentGrade) && Math.abs(studentGrade - gradeToFindNum) < 0.01;
                         });
                     } else {
                         // It's a non-numeric string grade like "รอ" or "มส". Use direct string comparison.
-                        filteredStudents = studentsForThisChart.filter(student => String(student['เกรด']) === gradeLabel);
+                        filteredStudents = studentsInScope.filter(student => String(student['เกรด']) === gradeLabel);
                     }
                 }
 
@@ -322,12 +333,12 @@ function updateAndRenderGradeChart(selectedRoom, allStudentScores) {
         : allStudentScores.filter(s => String(s.room) === selectedRoom);
 
     const gradeDistribution = filteredScores.reduce((acc, student) => {
-        const grade = student['เกรด'] ?? 'N/A';
+        const grade = student['เกรด'] ?? 'N/A'; // Use ?? to correctly handle grade 0
         acc[grade] = (acc[grade] || 0) + 1;
         return acc;
     }, {});
 
-    createGradeDistributionChart(gradeDistribution, filteredScores);
+    createGradeDistributionChart(gradeDistribution, allStudentScores);
 }
 
 /**
@@ -875,11 +886,11 @@ export async function initializeSummaryPage() {
         const gradeChartFilter = document.getElementById('grade-chart-room-filter');
         if (gradeChartFilter) {
             gradeChartFilter.addEventListener('change', (e) => {
-                updateAndRenderGradeChart(e.target.value, studentScores);
+                updateAndRenderGradeChart(e.target.value, studentScores); // Pass master list
             });
         }
         // Initial render of the chart for all students
-        updateAndRenderGradeChart('all', studentScores);
+        updateAndRenderGradeChart('all', studentScores); // Pass master list
 
         // --- Event Listeners for Summary Cards ---
         const clickableCards = [
