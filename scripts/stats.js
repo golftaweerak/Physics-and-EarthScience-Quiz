@@ -89,6 +89,84 @@ function getAllStats() {
 }
 
 /**
+ * NEW: Calculates the score trend over time for completed quizzes.
+ * @param {Array<object>} stats - The array of stats from getAllStats.
+ * @returns {{labels: Array<string>, data: Array<number>}} An object for Chart.js.
+ */
+function calculateScoreTrend(stats) {
+    const finishedQuizzes = stats
+        .filter(stat => stat.isFinished && stat.lastAttemptTimestamp)
+        .map(stat => {
+            const totalQuestions = stat.shuffledQuestions?.length || 0;
+            const score = stat.score || 0;
+            const percentage = totalQuestions > 0 ? (score / totalQuestions) * 100 : 0;
+            return {
+                date: new Date(stat.lastAttemptTimestamp),
+                score: percentage
+            };
+        })
+        .sort((a, b) => a.date - b.date); // Sort by date ascending
+
+    const labels = finishedQuizzes.map(item => item.date.toLocaleDateString('th-TH', { day: 'numeric', month: 'short' }));
+    const data = finishedQuizzes.map(item => item.score);
+
+    return { labels, data };
+}
+
+/**
+ * NEW: Renders the score trend line chart.
+ * @param {object} trendData - Data from calculateScoreTrend.
+ */
+function renderScoreTrendChart(trendData) {
+    const chartContainer = document.getElementById('score-trend-chart')?.closest('section');
+    const ctx = document.getElementById('score-trend-chart')?.getContext('2d');
+
+    if (!ctx || !chartContainer) return;
+
+    // If there's not enough data to show a meaningful trend, display a message instead.
+    if (trendData.labels.length < 2) {
+        chartContainer.innerHTML = `
+            <h2 class="text-xl font-bold font-kanit mb-4 text-center">แนวโน้มคะแนน (Score Trend)</h2>
+            <div class="flex items-center justify-center h-56">
+                <p class="text-center text-gray-500 dark:text-gray-400">ทำแบบทดสอบให้เสร็จอย่างน้อย 2 ชุด<br>เพื่อดูแนวโน้มคะแนนของคุณที่นี่</p>
+            </div>
+        `;
+        return;
+    }
+
+    const isDarkMode = document.documentElement.classList.contains('dark');
+    const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+    const textColor = isDarkMode ? '#e5e7eb' : '#1f2937';
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: trendData.labels,
+            datasets: [{
+                label: 'คะแนน (%)',
+                data: trendData.data,
+                fill: true,
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                borderColor: 'rgba(59, 130, 246, 1)',
+                tension: 0.3,
+                pointBackgroundColor: 'rgba(59, 130, 246, 1)',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: 'rgba(59, 130, 246, 1)',
+                pointRadius: 4,
+                pointHoverRadius: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: { y: { beginAtZero: true, max: 100, ticks: { color: textColor, callback: value => value + '%' }, grid: { color: gridColor } }, x: { ticks: { color: textColor }, grid: { display: false } } },
+            plugins: { legend: { display: false }, tooltip: { callbacks: { label: context => ` คะแนน: ${context.raw.toFixed(1)}%` } } }
+        }
+    });
+}
+
+/**
  * Calculates aggregate summary statistics from all completed quizzes.
  * @param {Array<object>} stats - The array of stats from getAllStats.
  * @param {number} totalAvailableQuizzes - The total number of quizzes available (static + custom).
@@ -739,6 +817,11 @@ export function buildStatsPage() {
         renderSubjectPerformanceChart(subjectPerformance);
         renderPerformanceAccordions(groupedData);
         renderDetailedList(allStats);
+
+        // NEW calls for trend chart
+        const trendData = calculateScoreTrend(allStats);
+        renderScoreTrendChart(trendData);
+
         finishedQuizModalHandler = new ModalHandler('finished-quiz-modal');
         setupActionListeners();
         initializeTabs();
