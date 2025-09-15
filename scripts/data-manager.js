@@ -88,7 +88,7 @@ export const categoryDetails = {
   // สีเขียวอ่อน (Light Green): สื่อถึงโลกและธรรมชาติ (พื้นฐาน)
   EarthSpaceScienceBasic: {
     title: "วิทยาศาสตร์โลกและอวกาศ (พื้นฐาน)",
-    displayName: "วิทยาศาสตร์โลกและอวกาศ (พื้นฐาน)",
+    displayName: "วิทย์โลก (พื้นฐาน)",
     icon: "./assets/icons/earth.png", // Reusing earth icon
     order: 9,
     color: "border-green-400",
@@ -98,7 +98,7 @@ export const categoryDetails = {
   // สีน้ำเงินเข้ม (Dark Blue): สื่อถึงความลึกซึ้งและอวกาศ (เพิ่มเติม)
   EarthSpaceScienceAdvance: {
     title: "โลก ดาราศาสตร์และอวกาศ (เพิ่มเติม)",
-    displayName: "โลก ดาราศาสตร์และอวกาศ (เพิ่มเติม)",
+    displayName: "วิทย์โลก (เพิ่มเติม)",
     icon: "./assets/icons/space.png", // Reusing space icon
     order: 10,
     color: "border-indigo-600",
