@@ -758,13 +758,12 @@ function renderSummary(summaryData, studentScores) {
             <div class="relative h-96">
                 <canvas id="grade-chart"></canvas>
             </div>
-        </div>
-
-        <!-- Grade Summary Cards Section -->
-        <div class="mt-8">
-            <h3 class="text-xl font-bold text-gray-800 dark:text-white font-kanit mb-4">สรุปตามเกรด</h3>
-            <div id="grade-summary-cards-container" class="flex flex-wrap gap-3 items-center">
-                <!-- Grade summary cards will be injected here by the script -->
+            <!-- Grade Summary Chips Section (moved inside) -->
+            <div class="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+                <h3 class="text-lg font-bold text-gray-800 dark:text-white font-kanit mb-4">สรุปตามเกรด</h3>
+                <div id="grade-summary-cards-container" class="flex flex-wrap gap-3 items-center">
+                    <!-- Grade summary cards will be injected here by the script -->
+                </div>
             </div>
         </div>
 
