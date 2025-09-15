@@ -249,13 +249,14 @@ function createGradeDistributionChart(gradeDistribution, allStudentScores) {
                 const roomFilterEl = document.getElementById('grade-chart-room-filter');
                 const selectedRoom = roomFilterEl ? roomFilterEl.value : 'all';
 
-                // Filter the master list of students by the currently selected room
+                // Filter the master list of students by the currently selected room, just like the summary cards do.
                 const studentsInScope = selectedRoom === 'all'
                     ? allStudentScores
                     : allStudentScores.filter(student => String(student.room) === selectedRoom);
 
                 // Now, filter that group by the clicked grade
                 let filteredStudents;
+
                 if (gradeLabel === 'N/A') {
                     // Handles null, undefined, or the literal string 'N/A'
                     filteredStudents = studentsInScope.filter(student => (student['เกรด'] == null || String(student['เกรด']) === 'N/A'));
