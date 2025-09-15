@@ -15,15 +15,12 @@ async function main() {
         // Initialize common functionalities like theme toggling
         initializeCommonComponents();
 
-        const { buildStatsPage } = await import('./stats.js');
-        // Build the stats dashboard using the new logic from stats.js
-        buildStatsPage();
-
+        // --- Initialize Clear Button First ---
+        // This ensures the user can always clear their data, even if the main stats page fails to render.
         const { ModalHandler } = await import('./modal-handler.js');
         const { quizList } = await import('../data/quizzes-list.js');
         const { getSavedCustomQuizzes } = await import('./custom-quiz-handler.js');
 
-        // --- Event Listener for Clear Button ---
         const clearStatsBtn = document.getElementById('clear-stats-btn');
         const confirmModal = new ModalHandler('confirm-action-modal');
         const confirmActionBtn = document.getElementById('confirm-action-btn');
@@ -32,7 +29,6 @@ async function main() {
 
         if (clearStatsBtn) {
             clearStatsBtn.addEventListener('click', (e) => {
-                // Don't open modal if the button is disabled
                 if (e.currentTarget.disabled) return;
 
                 if (confirmModalTitle) confirmModalTitle.textContent = 'ยืนยันการล้างข้อมูลทั้งหมด';
@@ -43,12 +39,9 @@ async function main() {
 
         if (confirmActionBtn) {
             confirmActionBtn.addEventListener('click', () => {
-                // Clear standard quizzes from the static list
                 quizList.forEach(quiz => {
                     if (quiz.storageKey) localStorage.removeItem(quiz.storageKey);
                 });
-
-                // Clear custom quizzes retrieved from localStorage
                 const customQuizzes = getSavedCustomQuizzes();
                 customQuizzes.forEach(quiz => {
                     if (quiz.storageKey) localStorage.removeItem(quiz.storageKey);
@@ -56,10 +49,14 @@ async function main() {
                 localStorage.removeItem('customQuizzesList'); // Also remove the list of custom quizzes
 
                 confirmModal.close();
-                // Reload the page to reflect the cleared stats
                 window.location.reload();
             });
         }
+
+        // --- Build the main stats page content ---
+        const { buildStatsPage } = await import('./stats.js');
+        buildStatsPage();
+
     } catch (error) {
         console.error("Failed to initialize stats page:", error);
         const container = document.getElementById('stats-container');

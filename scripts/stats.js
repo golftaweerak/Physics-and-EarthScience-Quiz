@@ -54,28 +54,33 @@ function getAllStats() {
   for (const quiz of allQuizzes) {
     const data = localStorage.getItem(quiz.storageKey);
     if (data) {
-      try {
+      try { // Wrap the entire processing of a single item in a try-catch
         const progress = JSON.parse(data);
+
+        // Add a more robust check for a valid progress object.
+        // Old data might be malformed or incomplete.
+        if (!progress || typeof progress !== 'object' || !Array.isArray(progress.userAnswers)) {
+            console.warn(`Skipping invalid or incomplete stats for ${quiz.storageKey}`);
+            continue; // Skip this item and move to the next one
+        }
+
         const totalQuestions = progress.shuffledQuestions?.length || 0;
-        const answeredCount = progress.userAnswers?.filter((a) => a !== null).length || 0;
+        const answeredCount = progress.userAnswers.filter((a) => a !== null).length;
         const isFinished = totalQuestions > 0 && answeredCount >= totalQuestions;
 
-        // Ensure a valid URL exists. Standard quizzes have a `url` property.
-        // Custom quizzes do not, so we must construct it.
         let finalUrl = quiz.url;
         if (!finalUrl && quiz.customId) {
-          // The path is relative to the root where stats.html is located.
           finalUrl = `./quiz/index.html?id=${quiz.customId}`;
         }
 
         allStats.push({
           ...quiz, // title, category, url, icon etc.
           ...progress, // score, userAnswers, etc.
-          url: finalUrl, // Use the canonical or constructed URL
-          isFinished: isFinished, // Add the calculated property
+          url: finalUrl,
+          isFinished: isFinished,
         });
       } catch (e) {
-        console.error(`Failed to parse stats for ${quiz.storageKey}`, e);
+        console.error(`Failed to process stats for ${quiz.storageKey}. Data might be corrupted.`, e);
       }
     }
   }
