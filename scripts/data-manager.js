@@ -111,6 +111,16 @@ export const categoryDetails = {
     displayName: "ทุกหมวดหมู่",
     icon: "./assets/icons/study.png",
   },
+  // A special category for user-created quizzes that mix subjects.
+  Custom: {
+    title: "แบบทดสอบที่สร้างเอง",
+    displayName: "แบบทดสอบที่สร้างเอง",
+    icon: "./assets/icons/dices.png",
+    order: 99, // Ensure it appears last in sorted lists
+    color: "border-purple-500",
+    cardGlow: "hover:shadow-purple-500/30",
+    logoGlow: "group-hover:shadow-purple-500/40",
+  },
 };
 
 /**
@@ -380,6 +390,7 @@ export async function fetchAllQuizData() {
               ...q,
               // Use the question's subCategory, fall back to the scenario's, then to the quiz's main category.
               subCategory: q.subCategory || item.subCategory || quiz.category,
+              sourceQuizCategory: quiz.category,
               sourceQuizTitle: quiz.title, // Add source quiz title
               scenarioId: scenarioId, // Link question back to its scenario
             }));
@@ -388,6 +399,7 @@ export async function fetchAllQuizData() {
         return {
           ...item,
           subCategory: item.subCategory || quiz.category,
+          sourceQuizCategory: quiz.category,
           sourceQuizTitle: quiz.title,
         };
       });

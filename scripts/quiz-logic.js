@@ -528,7 +528,8 @@ function evaluateMultipleAnswer() {
     isCorrect: isCorrect,
     explanation: currentQuestion.explanation || "",
     subCategory: currentQuestion.subCategory || 'ไม่มีหมวดหมู่',
-    sourceQuizTitle: currentQuestion.sourceQuizTitle
+    sourceQuizTitle: currentQuestion.sourceQuizTitle,
+    sourceQuizCategory: currentQuestion.sourceQuizCategory
   };
   saveQuizState();
 
@@ -589,7 +590,8 @@ function evaluateFillInAnswer() {
     isCorrect: isCorrect,
     explanation: currentQuestion.explanation || "",
     subCategory: currentQuestion.subCategory || 'ไม่มีหมวดหมู่',
-    sourceQuizTitle: currentQuestion.sourceQuizTitle
+    sourceQuizTitle: currentQuestion.sourceQuizTitle,
+    sourceQuizCategory: currentQuestion.sourceQuizCategory
   };
   saveQuizState();
 
@@ -648,7 +650,8 @@ function evaluateFillInNumberAnswer() {
     isCorrect: isCorrect,
     explanation: currentQuestion.explanation || "",
     subCategory: currentQuestion.subCategory || 'ไม่มีหมวดหมู่',
-    sourceQuizTitle: currentQuestion.sourceQuizTitle
+    sourceQuizTitle: currentQuestion.sourceQuizTitle,
+    sourceQuizCategory: currentQuestion.sourceQuizCategory
   };
   saveQuizState();
 
@@ -707,7 +710,8 @@ function selectAnswer(e) {
     isCorrect: correct,
     explanation: state.shuffledQuestions[state.currentQuestionIndex]?.explanation || "",
     subCategory: state.shuffledQuestions[state.currentQuestionIndex]?.subCategory || 'ไม่มีหมวดหมู่',
-    sourceQuizTitle: state.shuffledQuestions[state.currentQuestionIndex]?.sourceQuizTitle
+    sourceQuizTitle: state.shuffledQuestions[state.currentQuestionIndex]?.sourceQuizTitle,
+    sourceQuizCategory: state.shuffledQuestions[state.currentQuestionIndex]?.sourceQuizCategory
   };
 
   // Save state immediately after an answer is recorded for better data persistence.
@@ -1749,7 +1753,8 @@ function handleTimeUp() {
         isCorrect: false,
         explanation: currentQuestion.explanation,
         subCategory: currentQuestion.subCategory || 'ไม่มีหมวดหมู่',
-        sourceQuizTitle: currentQuestion.sourceQuizTitle
+        sourceQuizTitle: currentQuestion.sourceQuizTitle,
+        sourceQuizCategory: currentQuestion.sourceQuizCategory
       };
       showFeedback(false, "หมดเวลา! " + (currentQuestion.explanation || ""), correctAnswers);
       Array.from(elements.options.querySelectorAll('input[type="checkbox"]')).forEach(cb => cb.disabled = true);
@@ -1762,7 +1767,8 @@ function handleTimeUp() {
         isCorrect: false,
         explanation: currentQuestion.explanation,
         subCategory: currentQuestion.subCategory || 'ไม่มีหมวดหมู่',
-        sourceQuizTitle: currentQuestion.sourceQuizTitle
+        sourceQuizTitle: currentQuestion.sourceQuizTitle,
+        sourceQuizCategory: currentQuestion.sourceQuizCategory
       };
       showFeedback(false, "หมดเวลา! " + (currentQuestion.explanation || ""), correctAnswers.join(' หรือ '));
       const answerInput = document.getElementById('fill-in-answer');
@@ -1776,7 +1782,8 @@ function handleTimeUp() {
         isCorrect: false,
         explanation: currentQuestion.explanation,
         subCategory: currentQuestion.subCategory || 'ไม่มีหมวดหมู่',
-        sourceQuizTitle: currentQuestion.sourceQuizTitle
+        sourceQuizTitle: currentQuestion.sourceQuizTitle,
+        sourceQuizCategory: currentQuestion.sourceQuizCategory
       };
       showFeedback(false, "หมดเวลา! " + (currentQuestion.explanation || ""), correctAnswer);
       const answerInput = document.getElementById('fill-in-number-answer');
@@ -1792,7 +1799,8 @@ function handleTimeUp() {
         isCorrect: false,
         explanation: currentQuestion.explanation,
         subCategory: currentQuestion.subCategory || 'ไม่มีหมวดหมู่',
-        sourceQuizTitle: currentQuestion.sourceQuizTitle
+        sourceQuizTitle: currentQuestion.sourceQuizTitle,
+        sourceQuizCategory: currentQuestion.sourceQuizCategory
       };
       const feedbackExplanation = "หมดเวลา! " + (currentQuestion.explanation || "");
       showFeedback(false, feedbackExplanation, correctAnswer);

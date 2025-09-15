@@ -444,7 +444,7 @@ export function initializeCustomQuizHandler() {
      * @param {number} maxCount - The number of questions available for this topic.
      * @returns {string} The HTML string for the control row.
      */
-    function createSpecificTopicControlHTML(chapterTitle, specificTopic, maxCount) {
+    function createSpecificTopicControlHTML(subjectKey, chapterTitle, specificTopic, maxCount) {
         const disabled = maxCount === 0;
         const cleanTopic = specificTopic.replace(/^ว\s[\d\.]+\sม\.[\d\/]+\s/, '').replace(/^\d+\.\s/, '').trim();
 
@@ -455,10 +455,10 @@ export function initializeCustomQuizHandler() {
                         <label class="font-medium text-gray-700 dark:text-gray-200 text-sm">${cleanTopic}</label>
                         <p class="text-xs text-gray-500 dark:text-gray-400">มี ${maxCount} ข้อ</p>
                     </div>
-                    <input data-chapter="${chapterTitle}" data-specific="${specificTopic}" type="number" min="0" max="${maxCount}" value="0" class="w-16 py-1 px-1 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900/50 text-center font-semibold text-sm text-blue-600 dark:text-blue-400 focus:ring-blue-500 focus:border-blue-500 flex-shrink-0">
+                    <input data-subject="${subjectKey}" data-chapter="${chapterTitle}" data-specific="${specificTopic}" type="number" min="0" max="${maxCount}" value="0" class="w-16 py-1 px-1 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900/50 text-center font-semibold text-sm text-blue-600 dark:text-blue-400 focus:ring-blue-500 focus:border-blue-500 flex-shrink-0">
                 </div>
                 <div class="flex items-center gap-3 mt-2">
-                    <input data-slider-chapter="${chapterTitle}" data-slider-specific="${specificTopic}" type="range" min="0" max="${maxCount}" value="0" class="flex-grow h-2 rounded-lg appearance-none cursor-pointer" ${disabled ? "disabled" : ""}>
+                    <input data-slider-subject="${subjectKey}" data-slider-chapter="${chapterTitle}" data-slider-specific="${specificTopic}" type="range" min="0" max="${maxCount}" value="0" class="flex-grow h-2 rounded-lg appearance-none cursor-pointer" ${disabled ? "disabled" : ""}>
                     <div class="flex items-center gap-2 flex-shrink-0 quick-select-buttons">
                         <button type="button" data-value="5" class="px-2 py-0.5 text-xs font-medium text-gray-700 bg-gray-100 dark:text-gray-300 dark:bg-gray-700/60 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors ${maxCount < 5 ? 'hidden' : ''}">5</button>
                         <button type="button" data-value="10" class="px-2 py-0.5 text-xs font-medium text-gray-700 bg-gray-100 dark:text-gray-300 dark:bg-gray-700/60 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors ${maxCount < 10 ? 'hidden' : ''}">10</button>
@@ -546,11 +546,12 @@ export function initializeCustomQuizHandler() {
 
             // Then, handle the value synchronization for the interacted control
             if (target.matches('input[type="range"]') || target.matches('input[type="number"]')) {
+                const subject = target.dataset.sliderSubject || target.dataset.subject;
                 const chapter = target.dataset.sliderChapter || target.dataset.chapter;
                 const specific = target.dataset.sliderSpecific || target.dataset.specific;
                 let value = target.value;
-                const slider = document.querySelector(`input[data-slider-chapter="${chapter}"][data-slider-specific="${specific}"]`);
-                const input = document.querySelector(`input[data-chapter="${chapter}"][data-specific="${specific}"]`);
+                const slider = document.querySelector(`input[data-slider-subject="${subject}"][data-slider-chapter="${chapter}"][data-slider-specific="${specific}"]`);
+                const input = document.querySelector(`input[data-subject="${subject}"][data-chapter="${chapter}"][data-specific="${specific}"]`);
 
                 // Clamp value for number inputs
                 if (target.type === 'number') {
@@ -754,7 +755,7 @@ export function initializeCustomQuizHandler() {
                     const topics = chapter.specificTopics || chapter.learningOutcomes || [];
                     const topicControlsHTML = topics.map(topic => {
                         const count = groupedQuestions[subjectKey]?.[chapter.title]?.[topic] || 0;
-                        return createSpecificTopicControlHTML(chapter.title, topic, count);
+                        return createSpecificTopicControlHTML(subjectKey, chapter.title, topic, count);
                     }).join('');
 
                     if (topicControlsHTML) {
@@ -824,13 +825,20 @@ export function initializeCustomQuizHandler() {
      */
     async function handleStartCustomQuiz() {
         const counts = {};
+        const subjectsInQuiz = new Set();
+
         document.querySelectorAll('#custom-quiz-category-selection input[type="number"][data-chapter]').forEach(input => {
             const count = parseInt(input.value, 10) || 0;
             if (count > 0) {
+                const subject = input.dataset.subject;
                 const chapter = input.dataset.chapter;
                 const specific = input.dataset.specific;
-                if (!counts[chapter]) counts[chapter] = {};
-                counts[chapter][specific] = count;
+
+                if (!counts[subject]) counts[subject] = {};
+                if (!counts[subject][chapter]) counts[subject][chapter] = {};
+                counts[subject][chapter][specific] = count;
+
+                subjectsInQuiz.add(subject);
             }
         });
 
@@ -842,23 +850,25 @@ export function initializeCustomQuizHandler() {
         const { allQuestions, scenarios } = quizDataCache;
         let selectedQuestions = [];
 
-        for (const [chapter, specifics] of Object.entries(counts)) {
-            for (const [specific, count] of Object.entries(specifics)) {
-                const sourcePool = allQuestions.filter(q => q.subCategory?.main === chapter && q.subCategory?.specific === specific);
-                const shuffledPool = [...sourcePool].sort(() => 0.5 - Math.random());
-                const chosen = shuffledPool.slice(0, count);
-                const reconstructed = chosen.map(q => {
-                    if (q.scenarioId && scenarios && scenarios.has(q.scenarioId)) {
-                        const scenario = scenarios.get(q.scenarioId);
-                        const description = (scenario.description || '').replace(/\n/g, '<br>');
-                        return {
-                            ...q,
-                            question: `<div class="p-4 mb-4 bg-gray-100 dark:bg-gray-800 border-l-4 border-blue-500 rounded-r-lg"><p class="font-bold text-lg">${scenario.title}</p><div class="mt-2 text-gray-700 dark:text-gray-300">${description}</div></div>${q.question}`,
-                        };
-                    }
-                    return q;
-                });
-                selectedQuestions.push(...reconstructed);
+        for (const [subject, chapters] of Object.entries(counts)) {
+            for (const [chapter, specifics] of Object.entries(chapters)) {
+                for (const [specific, count] of Object.entries(specifics)) {
+                    const sourcePool = allQuestions.filter(q => q.subCategory?.main === chapter && q.subCategory?.specific === specific);
+                    const shuffledPool = [...sourcePool].sort(() => 0.5 - Math.random());
+                    const chosen = shuffledPool.slice(0, count);
+                    const reconstructed = chosen.map(q => {
+                        if (q.scenarioId && scenarios && scenarios.has(q.scenarioId)) {
+                            const scenario = scenarios.get(q.scenarioId);
+                            const description = (scenario.description || '').replace(/\n/g, '<br>');
+                            return {
+                                ...q,
+                                question: `<div class="p-4 mb-4 bg-gray-100 dark:bg-gray-800 border-l-4 border-blue-500 rounded-r-lg"><p class="font-bold text-lg">${scenario.title}</p><div class="mt-2 text-gray-700 dark:text-gray-300">${description}</div></div>${q.question}`,
+                            };
+                        }
+                        return q;
+                    });
+                    selectedQuestions.push(...reconstructed);
+                }
             }
         }
 
@@ -876,15 +886,25 @@ export function initializeCustomQuizHandler() {
             customTime = parseInt(document.getElementById('custom-timer-per-question-seconds').value, 10);
         }
 
-        const descriptionParts = Object.entries(counts).reduce((acc, [chapter, specifics]) => {
-            const totalInChapter = Object.values(specifics).reduce((sum, count) => sum + count, 0);
-            acc[chapter] = (acc[chapter] || 0) + totalInChapter;
+        const descriptionParts = Object.values(counts).reduce((acc, chapters) => {
+            for (const [chapterTitle, specifics] of Object.entries(chapters)) {
+                const totalInChapter = Object.values(specifics).reduce((sum, count) => sum + count, 0);
+                acc[chapterTitle] = (acc[chapterTitle] || 0) + totalInChapter;
+            }
             return acc;
         }, {});
 
         const detailedDescription = Object.entries(descriptionParts).map(([title, count]) => {
             return `${title}: ${count} ข้อ`;
         }).join(' | ');
+
+        let quizCategory = 'Custom';
+        let quizCategoryDisplay = 'แบบทดสอบที่สร้างเอง';
+        const subjectArray = Array.from(subjectsInQuiz);
+        if (subjectArray.length === 1) {
+            quizCategory = subjectArray[0];
+            quizCategoryDisplay = allCategoryDetails[quizCategory]?.displayName || 'ทั่วไป';
+        }
 
         const timestamp = Date.now();
         const customQuiz = {
@@ -896,6 +916,8 @@ export function initializeCustomQuizHandler() {
             timerMode: timerMode,
             customTime: customTime,
             icon: "./assets/icons/dices.png",
+            category: quizCategory,
+            categoryDisplay: quizCategoryDisplay
         };
 
         const savedQuizzes = getSavedCustomQuizzes();
