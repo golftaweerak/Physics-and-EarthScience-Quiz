@@ -170,9 +170,15 @@ function calculateGroupedPerformance(stats) {
         if (!stat.userAnswers) return;
 
         stat.userAnswers.forEach(answer => {
+            // Defensive check: Ensure 'answer' is not null before accessing its properties.
+            // This handles old data formats and prevents crashes from skipped questions.
+            if (!answer) {
+                return;
+            }
+
             // Use the question's own original category if available, otherwise fall back to the quiz's category.
             const subject = answer.sourceQuizCategory || stat.category || 'Uncategorized';
-            if (!answer || typeof answer.subCategory !== 'object' || !answer.subCategory.main || !answer.subCategory.specific) {
+            if (typeof answer.subCategory !== 'object' || !answer.subCategory.main || !answer.subCategory.specific) {
                 return;
             }
 
