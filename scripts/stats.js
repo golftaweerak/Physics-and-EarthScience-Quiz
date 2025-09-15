@@ -4,6 +4,45 @@ import { categoryDetails, getCategoryDisplayName } from "./data-manager.js";
 import { ModalHandler } from "./modal-handler.js";
 
 /**
+ * Converts a Tailwind CSS border color class to an RGBA string.
+ * @param {string} tailwindClass - The Tailwind class (e.g., 'border-red-500').
+ * @param {number} [opacity=0.7] - The desired opacity.
+ * @returns {string} The RGBA color string.
+ */
+function tailwindBorderToRgba(tailwindClass, opacity = 0.7) {
+    const colorMap = {
+        'border-gray-500': '107, 114, 128',
+        'border-indigo-500': '99, 102, 241',
+        'border-teal-500': '20, 184, 166',
+        'border-orange-500': '249, 115, 22',
+        'border-rose-400': '251, 113, 133',
+        'border-red-500': '239, 68, 68',
+        'border-red-600': '220, 38, 38',
+        'border-red-700': '185, 28, 28',
+        'border-green-400': '74, 222, 128',
+        'border-blue-600': '37, 99, 235',
+        'border-purple-500': '168, 85, 247',
+    };
+    const rgb = colorMap[tailwindClass] || '107, 114, 128'; // Default to gray
+    return `rgba(${rgb}, ${opacity})`;
+}
+
+/**
+ * Converts a Tailwind CSS border color class to a HEX string.
+ * @param {string} tailwindClass - The Tailwind class (e.g., 'border-red-500').
+ * @returns {string} The HEX color string.
+ */
+function tailwindBorderToHex(tailwindClass) {
+    const colorMap = {
+        'border-gray-500': '#6b7280', 'border-indigo-500': '#6366f1', 'border-teal-500': '#14b8a6',
+        'border-orange-500': '#f97316', 'border-rose-400': '#fb7185', 'border-red-500': '#ef4444',
+        'border-red-600': '#dc2626', 'border-red-700': '#b91c1c', 'border-green-400': '#4ade80',
+        'border-blue-600': '#2563eb', 'border-purple-500': '#a855f7',
+    };
+    return colorMap[tailwindClass] || '#6b7280'; // Default to gray
+}
+
+/**
  * Retrieves all finished quiz stats from localStorage.
  * @returns {Array<object>} An array of quiz objects merged with their progress.
  */
@@ -108,6 +147,7 @@ function calculateSubjectPerformance(stats) {
         .map(([subjectKey, data]) => {
             const details = categoryDetails[subjectKey] || { order: 99 };
             return {
+                subjectKey: subjectKey,
                 subject: getCategoryDisplayName(subjectKey),
                 score: data.total > 0 ? (data.correct / data.total) * 100 : 0,
                 order: details.order,
@@ -248,7 +288,7 @@ function renderSummaryCards(summary) {
             <div>
                 <span class="font-bold text-2xl text-gray-800 dark:text-gray-100">${card.value}</span>
                 <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mt-1">
-                            <div class="${card.color} h-2 rounded-full" style="width: ${percentage}%"></div>
+                    <div class="${card.color} h-2 rounded-full progress-bar-animated" style="width: ${percentage}%"></div>
                         </div>
                     </div>
                 </div>
@@ -314,6 +354,14 @@ function renderSubjectPerformanceChart(subjectData) {
 
     const labels = subjectData.map(d => d.subject);
     const scores = subjectData.map(d => d.score);
+    const backgroundColors = subjectData.map(d => {
+        const details = categoryDetails[d.subjectKey] || {};
+        return tailwindBorderToRgba(details.color || 'border-gray-500', 0.7);
+    });
+    const borderColors = subjectData.map(d => {
+        const details = categoryDetails[d.subjectKey] || {};
+        return tailwindBorderToHex(details.color || 'border-gray-500');
+    });
 
     new Chart(ctx, {
         type: 'bar',
@@ -322,8 +370,8 @@ function renderSubjectPerformanceChart(subjectData) {
             datasets: [{
                 label: 'คะแนนเฉลี่ย (%)',
                 data: scores,
-                backgroundColor: scores.map(score => score >= 75 ? 'rgba(34, 197, 94, 0.7)' : score >= 50 ? 'rgba(245, 158, 11, 0.7)' : 'rgba(239, 68, 68, 0.7)'),
-                borderColor: scores.map(score => score >= 75 ? '#16a34a' : score >= 50 ? '#d97706' : '#dc2626'),
+                backgroundColor: backgroundColors,
+                borderColor: borderColors,
                 borderWidth: 1,
                 borderRadius: 4,
             }]
