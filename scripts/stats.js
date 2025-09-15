@@ -17,11 +17,10 @@ function tailwindBorderToRgba(tailwindClass, opacity = 0.7) {
         'border-orange-500': '249, 115, 22',
         'border-rose-400': '251, 113, 133',
         'border-red-500': '239, 68, 68',
-        'border-red-600': '220, 38, 38',
-        'border-red-700': '185, 28, 28',
-        'border-green-400': '74, 222, 128',
-        'border-blue-600': '37, 99, 235',
-        'border-purple-500': '168, 85, 247',
+        'border-amber-500': '245, 158, 11',
+        'border-green-400': '74, 222, 128',        
+        'border-purple-500': '168, 85, 247',        
+        'border-indigo-600': '79, 70, 229', // Dark Indigo
     };
     const rgb = colorMap[tailwindClass] || '107, 114, 128'; // Default to gray
     return `rgba(${rgb}, ${opacity})`;
@@ -35,9 +34,11 @@ function tailwindBorderToRgba(tailwindClass, opacity = 0.7) {
 function tailwindBorderToHex(tailwindClass) {
     const colorMap = {
         'border-gray-500': '#6b7280', 'border-indigo-500': '#6366f1', 'border-teal-500': '#14b8a6',
-        'border-orange-500': '#f97316', 'border-rose-400': '#fb7185', 'border-red-500': '#ef4444',
-        'border-red-600': '#dc2626', 'border-red-700': '#b91c1c', 'border-green-400': '#4ade80',
-        'border-blue-600': '#2563eb', 'border-purple-500': '#a855f7',
+        'border-orange-500': '#f97316', 'border-rose-400': '#fb7185', 'border-green-400': '#4ade80',
+        'border-purple-500': '#a855f7',
+        'border-red-500': '#ef4444',
+        'border-amber-500': '#f59e0b',
+        'border-indigo-600': '#4f46e5', // Dark Indigo
     };
     return colorMap[tailwindClass] || '#6b7280'; // Default to gray
 }

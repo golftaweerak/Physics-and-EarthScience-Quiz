@@ -70,18 +70,18 @@ export const categoryDetails = {
     displayName: "ฟิสิกส์ ม.5",
     icon: "./assets/icons/electromagnetic.png",
     order: 7,
-    color: "border-red-600", // Slightly different shade for distinction
-    cardGlow: "hover:shadow-red-600/30",
-    logoGlow: "group-hover:shadow-red-600/40",
+    color: "border-orange-500",
+    cardGlow: "hover:shadow-orange-500/30",
+    logoGlow: "group-hover:shadow-orange-500/40",
   },
   PhysicsM6: {
     title: "ฟิสิกส์ ม.6",
     displayName: "ฟิสิกส์ ม.6",
     icon: "./assets/icons/physics.png",
     order: 8,
-    color: "border-red-700", // Slightly different shade for distinction
-    cardGlow: "hover:shadow-red-700/30",
-    logoGlow: "group-hover:shadow-red-700/40",
+    color: "border-amber-500",
+    cardGlow: "hover:shadow-amber-500/30",
+    logoGlow: "group-hover:shadow-amber-500/40",
   },
   // --- End Physics ---
 
@@ -101,9 +101,9 @@ export const categoryDetails = {
     displayName: "โลก ดาราศาสตร์และอวกาศ (เพิ่มเติม)",
     icon: "./assets/icons/space.png", // Reusing space icon
     order: 10,
-    color: "border-blue-600",
-    cardGlow: "hover:shadow-blue-600/30",
-    logoGlow: "group-hover:shadow-blue-600/40",
+    color: "border-indigo-600",
+    cardGlow: "hover:shadow-indigo-600/30",
+    logoGlow: "group-hover:shadow-indigo-600/40",
   },
   // This is a special category for the custom quiz creator.
   General: {
