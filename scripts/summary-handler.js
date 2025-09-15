@@ -60,7 +60,7 @@ function calculateOverallSummary(scores) {
         }
 
         // Grade distribution
-        const grade = student['เกรด'] || 'N/A';
+        const grade = student['เกรด'] ?? 'N/A';
         gradeDistribution[grade] = (gradeDistribution[grade] || 0) + 1;
         const numericGrade = parseFloat(grade);
 
@@ -107,8 +107,8 @@ function calculateOverallSummary(scores) {
     // Calculate averages for each room
     for (const room in summaryByRoom) {
         const roomData = summaryByRoom[room];
-        roomData.averageScore = roomData.validScoresCount > 0 
-            ? (roomData.totalScoreSum / roomData.validScoresCount).toFixed(2) 
+        roomData.averageScore = roomData.validScoresCount > 0
+            ? (roomData.totalScoreSum / roomData.validScoresCount).toFixed(2)
             : 'N/A';
         roomData.averageGrade = roomData.validGradesCount > 0
             ? (roomData.totalGradeSum / roomData.validGradesCount).toFixed(2)
@@ -120,10 +120,10 @@ function calculateOverallSummary(scores) {
 
     const overallAverageScore = validScoresCount > 0 ? (totalScoreSum / validScoresCount).toFixed(2) : 0;
 
-    const completionPercentage = totalTrackableAssignments > 0 
-        ? ((totalSubmittedAssignments / totalTrackableAssignments) * 100).toFixed(0) 
+    const completionPercentage = totalTrackableAssignments > 0
+        ? ((totalSubmittedAssignments / totalTrackableAssignments) * 100).toFixed(0)
         : 0;
-    
+
     // Final check for highest/lowest scores
     const finalHighestScore = highestScore === -Infinity ? 'N/A' : highestScore;
     const finalLowestScore = lowestScore === Infinity ? 'N/A' : lowestScore;
@@ -145,7 +145,7 @@ function calculateOverallSummary(scores) {
  * Creates and renders the grade distribution bar chart.
  * @param {object} gradeDistribution - An object with grades as keys and counts as values.
  */
-function createGradeDistributionChart(gradeDistribution, allStudents) {
+function createGradeDistributionChart(gradeDistribution, studentsForThisChart) {
     const ctx = document.getElementById('grade-chart')?.getContext('2d');
     if (!ctx) {
         console.error('Chart canvas element not found');
@@ -222,25 +222,10 @@ function createGradeDistributionChart(gradeDistribution, allStudents) {
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-                legend: {
-                    display: false
-                },
-                title: {
-                    display: true,
-                    text: 'การกระจายของเกรดนักเรียนทั้งหมด',
-                    color: textColor,
-                    font: {
-                        size: 18,
-                        family: "'Kanit', sans-serif",
-                        weight: 'bold'
-                    },
-                    padding: {
-                        bottom: 20
-                    }
-                },
+                legend: { display: false },
                 tooltip: {
                     callbacks: {
-                        label: function(context) {
+                        label: function (context) {
                             let label = context.dataset.label || '';
                             if (label) {
                                 label += ': ';
@@ -258,7 +243,25 @@ function createGradeDistributionChart(gradeDistribution, allStudents) {
                 const chart = elements[0].chart;
                 const elementIndex = elements[0].index;
                 const gradeLabel = chart.data.labels[elementIndex].replace('เกรด ', '');
-                const filteredStudents = allStudents.filter(student => String(student['เกรด'] ?? 'N/A') === String(gradeLabel));
+                let filteredStudents;
+
+                if (gradeLabel === 'N/A') {
+                    // Handles null, undefined, or the literal string 'N/A'
+                    filteredStudents = studentsForThisChart.filter(student => (student['เกรด'] == null || String(student['เกรด']) === 'N/A'));
+                } else {
+                    const gradeToFindNum = parseFloat(gradeLabel);
+                    if (!isNaN(gradeToFindNum)) {
+                        // It's a numeric grade, use float comparison for safety
+                        filteredStudents = studentsForThisChart.filter(student => {
+                            const studentGrade = parseFloat(student['เกรด']);
+                            return !isNaN(studentGrade) && Math.abs(studentGrade - gradeToFindNum) < 0.01;
+                        });
+                    } else {
+                        // It's a non-numeric string grade like "รอ" or "มส". Use direct string comparison.
+                        filteredStudents = studentsForThisChart.filter(student => String(student['เกรด']) === gradeLabel);
+                    }
+                }
+
                 if (filteredStudents.length > 0) {
                     createGradeDetailModal(gradeLabel, filteredStudents);
                 }
@@ -267,13 +270,8 @@ function createGradeDistributionChart(gradeDistribution, allStudents) {
                 y: {
                     beginAtZero: true,
                     title: {
-                        display: true,
-                        text: 'จำนวนนักเรียน (คน)',
-                        color: textColor,
-                        font: {
-                            family: "'Kanit', sans-serif",
-                            weight: '600'
-                        }
+                        display: true, text: 'จำนวนนักเรียน (คน)', color: textColor,
+                        font: { family: "'Kanit', sans-serif", weight: '600' }
                     },
                     ticks: {
                         color: textColor,
@@ -307,45 +305,29 @@ function createGradeDistributionChart(gradeDistribution, allStudents) {
 }
 
 /**
- * A generic function to get a Tailwind CSS text color class based on a value and a set of thresholds.
- * @param {number} value - The value to evaluate.
- * @param {Array<{limit: number, colorClass: string}>} thresholds - An array of threshold objects, sorted from highest to lowest limit.
- * @returns {string} The Tailwind CSS class string.
+ * Filters student scores by room, recalculates grade distribution, and re-renders the chart.
+ * @param {string} selectedRoom - The room to filter by, or 'all'.
+ * @param {Array<object>} allStudentScores - The complete list of all student scores.
  */
-function getDynamicTextColor(value, thresholds) {
-    if (isNaN(value)) return 'text-gray-500 dark:text-gray-400';
-    for (const { limit, colorClass } of thresholds) {
-        if (value >= limit) {
-            return colorClass;
-        }
+function updateAndRenderGradeChart(selectedRoom, allStudentScores) {
+    const chartTitleEl = document.getElementById('grade-chart-title');
+    if (chartTitleEl) {
+        chartTitleEl.textContent = selectedRoom === 'all'
+            ? 'การกระจายของเกรดนักเรียนทั้งหมด'
+            : `การกระจายของเกรด (ห้อง ${selectedRoom})`;
     }
-    return 'text-red-500 dark:text-red-400';
-}
 
-const SCORE_THRESHOLDS = [
-    { limit: 80, colorClass: 'text-teal-500 dark:text-teal-400' },
-    { limit: 70, colorClass: 'text-sky-500 dark:text-sky-400' },
-    { limit: 60, colorClass: 'text-green-500 dark:text-green-400' },
-    { limit: 50, colorClass: 'text-amber-500 dark:text-amber-400' },
-];
+    const filteredScores = selectedRoom === 'all'
+        ? allStudentScores
+        : allStudentScores.filter(s => String(s.room) === selectedRoom);
 
-const COMPLETION_THRESHOLDS = [
-    { limit: 90, colorClass: 'text-teal-500 dark:text-teal-400' },
-    { limit: 75, colorClass: 'text-sky-500 dark:text-sky-400' },
-    { limit: 50, colorClass: 'text-amber-500 dark:text-amber-400' },
-];
+    const gradeDistribution = filteredScores.reduce((acc, student) => {
+        const grade = student['เกรด'] ?? 'N/A';
+        acc[grade] = (acc[grade] || 0) + 1;
+        return acc;
+    }, {});
 
-function getScoreTextColor(score) {
-    return getDynamicTextColor(score, SCORE_THRESHOLDS);
-}
-
-/**
- * Determines the Tailwind CSS text color class for a completion percentage.
- * @param {number} percentage - The completion percentage (0-100).
- * @returns {string} The Tailwind CSS class string for text color.
- */
-function getCompletionTextColor(percentage) {
-    return getDynamicTextColor(percentage, COMPLETION_THRESHOLDS);
+    createGradeDistributionChart(gradeDistribution, filteredScores);
 }
 
 /**
@@ -364,7 +346,7 @@ function createStudentListModal(modalIdentifier, title, students) {
     }
 
     // Get unique rooms for the filter dropdown
-    const rooms = [...new Set(students.map(s => s.room).filter(Boolean))].sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+    const rooms = [...new Set(students.map(s => s.room).filter(Boolean).map(String))].sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
     let roomOptionsHtml = `<option value="all">ทุกห้อง</option>`;
     rooms.forEach(room => {
         roomOptionsHtml += `<option value="${room}">ห้อง ${room}</option>`;
@@ -446,10 +428,14 @@ function createStudentListModal(modalIdentifier, title, students) {
             const completionB = calculateStudentCompletion(b);
             let valA, valB;
             switch (currentSort.key) {
-                case 'name': return currentSort.direction === 'asc' ? a.name.localeCompare(b.name, 'th') : b.name.localeCompare(a.name, 'th');
+                case 'name': {
+                    const nameA = a.name || '';
+                    const nameB = b.name || '';
+                    return currentSort.direction === 'asc' ? nameA.localeCompare(nameB, 'th') : nameB.localeCompare(nameA, 'th');
+                }
                 case 'room': {
-                    const roomA = a.room || '999'; // Treat missing rooms as last
-                    const roomB = b.room || '999';
+                    const roomA = String(a.room || '999'); // Treat missing rooms as last
+                    const roomB = String(b.room || '999');
                     return currentSort.direction === 'asc' ? roomA.localeCompare(roomB, undefined, { numeric: true }) : roomB.localeCompare(roomA, undefined, { numeric: true });
                 }
                 case 'score': valA = a['รวม [100]'] ?? -1; valB = b['รวม [100]'] ?? -1; return currentSort.direction === 'asc' ? valA - valB : valB - valA;
@@ -503,6 +489,48 @@ function createStudentListModal(modalIdentifier, title, students) {
 }
 
 /**
+ * A generic function to get a Tailwind CSS text color class based on a value and a set of thresholds.
+ * @param {number} value - The value to evaluate.
+ * @param {Array<{limit: number, colorClass: string}>} thresholds - An array of threshold objects, sorted from highest to lowest limit.
+ * @returns {string} The Tailwind CSS class string.
+ */
+function getDynamicTextColor(value, thresholds) {
+    if (isNaN(value)) return 'text-gray-500 dark:text-gray-400';
+    for (const { limit, colorClass } of thresholds) {
+        if (value >= limit) {
+            return colorClass;
+        }
+    }
+    return 'text-red-500 dark:text-red-400';
+}
+
+const SCORE_THRESHOLDS = [
+    { limit: 80, colorClass: 'text-teal-500 dark:text-teal-400' },
+    { limit: 70, colorClass: 'text-sky-500 dark:text-sky-400' },
+    { limit: 60, colorClass: 'text-green-500 dark:text-green-400' },
+    { limit: 50, colorClass: 'text-amber-500 dark:text-amber-400' },
+];
+
+const COMPLETION_THRESHOLDS = [
+    { limit: 90, colorClass: 'text-teal-500 dark:text-teal-400' },
+    { limit: 75, colorClass: 'text-sky-500 dark:text-sky-400' },
+    { limit: 50, colorClass: 'text-amber-500 dark:text-amber-400' },
+];
+
+function getScoreTextColor(score) {
+    return getDynamicTextColor(score, SCORE_THRESHOLDS);
+}
+
+/**
+ * Determines the Tailwind CSS text color class for a completion percentage.
+ * @param {number} percentage - The completion percentage (0-100).
+ * @returns {string} The Tailwind CSS class string for text color.
+ */
+function getCompletionTextColor(percentage) {
+    return getDynamicTextColor(percentage, COMPLETION_THRESHOLDS);
+}
+
+/**
  * Creates and displays a modal with a list of students for a specific grade.
  * @param {string} grade - The grade to display.
  * @param {Array<object>} students - The list of students who achieved that grade.
@@ -529,8 +557,8 @@ function updateRoomSummaryTable() {
     const sortedRooms = Object.keys(summaryDataStore.summaryByRoom).sort((a, b) => {
         if (roomSortConfig.key === 'room') {
             // Use localeCompare with numeric option for natural sorting (e.g., '2' before '10')
-            return roomSortConfig.direction === 'asc' 
-                ? a.localeCompare(b, undefined, { numeric: true }) 
+            return roomSortConfig.direction === 'asc'
+                ? a.localeCompare(b, undefined, { numeric: true })
                 : b.localeCompare(a, undefined, { numeric: true });
         } else { // Sort by averageScore
             const roomA = summaryDataStore.summaryByRoom[a];
@@ -686,6 +714,10 @@ function renderSummary(summaryData, studentScores) {
         timeZone: 'Asia/Bangkok'
     });
 
+    // Get unique rooms for the filter dropdown
+    const rooms = [...new Set(studentScores.map(s => s.room).filter(Boolean).map(String))].sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+    const roomOptions = `<option value="all">นักเรียนทั้งหมด</option>` + rooms.map(r => `<option value="${r}">ห้อง ${r}</option>`).join('');
+
     const summaryHtml = `
         <!-- Student Search Section -->
         <div class="text-center text-sm text-gray-500 dark:text-gray-400 mb-6 -mt-4">อัปเดตข้อมูลล่าสุด: ${formattedDate} น.</div>
@@ -761,6 +793,14 @@ function renderSummary(summaryData, studentScores) {
 
         <!-- Grade Distribution Chart -->
         <div class="mt-8 bg-white dark:bg-gray-800/80 backdrop-blur-sm p-4 sm:p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700/60">
+            <div class="flex flex-wrap justify-between items-center gap-4 mb-4">
+                <h3 id="grade-chart-title" class="text-lg font-bold text-gray-800 dark:text-white font-kanit">การกระจายของเกรด</h3>
+                <div>
+                    <select id="grade-chart-room-filter" class="mt-1 p-2 bg-gray-100 dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition text-sm">
+                        ${roomOptions}
+                    </select>
+                </div>
+            </div>
             <div class="relative h-96">
                 <canvas id="grade-chart"></canvas>
             </div>
@@ -818,8 +858,6 @@ function renderSummary(summaryData, studentScores) {
     // Perform the initial render of the sortable table
     updateRoomSummaryTable();
 
-    // Now that the canvas element exists in the DOM, create the chart
-    createGradeDistributionChart(summaryData.gradeDistribution, studentScores);
     initializeStudentSearch(studentScores);
 }
 
@@ -832,6 +870,16 @@ export async function initializeSummaryPage() {
         summaryDataStore = calculateOverallSummary(studentScores);
         renderSummary(summaryDataStore, studentScores);
         initializeTableSorting();
+
+        // --- Grade Chart Filtering Logic ---
+        const gradeChartFilter = document.getElementById('grade-chart-room-filter');
+        if (gradeChartFilter) {
+            gradeChartFilter.addEventListener('change', (e) => {
+                updateAndRenderGradeChart(e.target.value, studentScores);
+            });
+        }
+        // Initial render of the chart for all students
+        updateAndRenderGradeChart('all', studentScores);
 
         // --- Event Listeners for Summary Cards ---
         const clickableCards = [
@@ -919,7 +967,7 @@ function initializeStudentSearch(studentScores) {
 
         // New hierarchical search logic
         let results = [];
-        
+
         // Priority 1: Exact ID match
         const idMatch = studentScores.find(s => s.id.toLowerCase() === query);
         if (idMatch) {
@@ -1073,7 +1121,7 @@ function renderStudentTableForRoom(room, studentScores) {
             </div>
         </div>
     `;
-    
+
     // Scroll to the newly created table
     container.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
@@ -1125,7 +1173,7 @@ function handleExportCSV(studentScores) {
     const blob = new Blob([`\uFEFF${csvContent}`], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.download = `scores-summary-room-${selectedRoom}-${new Date().toISOString().slice(0,10)}.csv`;
+    link.download = `scores-summary-room-${selectedRoom}-${new Date().toISOString().slice(0, 10)}.csv`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

@@ -10,10 +10,22 @@ export function calculateStudentCompletion(student) {
     }
 
     const trackableAssignments = student.assignments.filter(assignment =>
-        TRACKABLE_KEYWORDS.some(keyword => assignment.name.toLowerCase().includes(keyword))
+        assignment && typeof assignment.name === 'string' && TRACKABLE_KEYWORDS.some(keyword => assignment.name.toLowerCase().includes(keyword))
     );
 
-    const submittedCount = trackableAssignments.filter(a => a.score && String(a.score).toLowerCase() !== 'ยังไม่ส่ง').length;
+    /**
+     * Determines if a score represents a submitted assignment.
+     * A score is "not submitted" if it is null, undefined, an empty string, a hyphen, or the specific text 'ยังไม่ส่ง'.
+     * @param {any} score The score value to check.
+     * @returns {boolean} True if the assignment is considered submitted.
+     */
+    const isSubmitted = (score) => {
+        if (score === null || score === undefined) return false;
+        const scoreStr = String(score).trim().toLowerCase();
+        // Any other value (including '0') is considered submitted.
+        return scoreStr !== '' && scoreStr !== '-' && scoreStr !== 'ยังไม่ส่ง';
+    };
+    const submittedCount = trackableAssignments.filter(a => isSubmitted(a.score)).length;
     const totalCount = trackableAssignments.length;
     const percentage = totalCount > 0 ? (submittedCount / totalCount) * 100 : 0;
     const missingCount = totalCount - submittedCount;
