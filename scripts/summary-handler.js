@@ -541,6 +541,9 @@ function updateRoomSummaryTable() {
 
         const completionPercentage = parseFloat(roomData.completionPercentage);
         const completionTextColorClass = getCompletionTextColor(completionPercentage);
+        const completionBarColorClass = completionPercentage >= 90 ? 'bg-teal-500' :
+                                      completionPercentage >= 75 ? 'bg-sky-500' :
+                                      completionPercentage >= 50 ? 'bg-amber-500' : 'bg-red-500';
 
         // For Average Grade Color
         const avgGrade = parseFloat(roomData.averageGrade);
@@ -553,18 +556,26 @@ function updateRoomSummaryTable() {
         }
 
         return `
-            <tr data-room="${room}" class="room-detail-trigger border-b dark:border-gray-700 last:border-b-0 odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-800/50 dark:even:bg-gray-800/80 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors duration-150 cursor-pointer">
-                <th scope="row" class="px-4 py-2 font-bold text-gray-900 dark:text-white whitespace-nowrap">
-                    ห้อง ${room}
-                    <span class="ml-2 font-mono font-normal text-gray-500 dark:text-gray-400">(${roomData.studentCount} คน)</span>
-                </th>
-                <td class="px-4 py-2 text-center">
-                    <span class="font-bold text-base ${scoreTextColorClass}">${roomData.averageScore}</span>
+            <tr data-room="${room}" class="room-detail-trigger border-b dark:border-gray-700 last:border-b-0 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors duration-150 cursor-pointer">
+                <td class="px-4 py-3 align-middle">
+                    <div class="font-bold text-lg text-gray-900 dark:text-white">ห้อง ${room}</div>
+                    <div class="text-sm text-gray-500 dark:text-gray-400">${roomData.studentCount} คน</div>
                 </td>
-                <td class="px-4 py-2 text-center">
-                    <span class="font-bold text-base ${completionTextColorClass}">${roomData.completionPercentage}%</span>
+                <td class="px-4 py-3 text-center align-middle">
+                    <div class="font-bold text-xl ${scoreTextColorClass}">${roomData.averageScore}</div>
                 </td>
-                <td class="px-4 py-2 text-center font-bold text-sm ${gradeColorClass}">${roomData.averageGrade}</td>
+                <td class="px-4 py-3 align-middle">
+                    <div class="flex items-center justify-between text-xs mb-1">
+                        
+                        <span class="font-semibold ${completionTextColorClass}">${roomData.completionPercentage}%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                        <div class="${completionBarColorClass} h-2.5 rounded-full" style="width: ${roomData.completionPercentage}%"></div>
+                    </div>
+                </td>
+                <td class="px-4 py-3 text-center align-middle">
+                    <div class="font-bold text-xl ${gradeColorClass}">${roomData.averageGrade}</div>
+                </td>
             </tr>
         `;
     }).join('');
@@ -772,27 +783,27 @@ function renderSummary(summaryData, studentScores) {
             <h3 class="p-4 text-lg font-bold text-gray-800 dark:text-white font-kanit border-b border-gray-200 dark:border-gray-700">สรุปรายห้องเรียน</h3>
             <div class="overflow-x-auto modern-scrollbar">
                 <table class="w-full text-left">
-                    <thead class="bg-gray-50 dark:bg-gray-700/50 text-xs text-gray-700 dark:text-gray-300 uppercase">
+                    <thead class="bg-gray-50 dark:bg-gray-700/50 text-xs text-gray-700 dark:text-gray-400 uppercase">
                         <tr>
-                            <th scope="col" class="px-4 py-2">
+                            <th scope="col" class="px-4 py-3 text-left">
                                 <button id="sort-room-btn" class="inline-flex items-center gap-1 group font-bold focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-md px-1">
                                     <span>ห้องเรียน</span>
                                     <span id="sort-indicator-room" class="text-gray-500 dark:text-gray-400 transition-opacity"></span>
                                 </button>
                             </th>
-                            <th scope="col" class="px-4 py-2 text-center">
+                            <th scope="col" class="px-4 py-3 text-center">
                                 <button id="sort-avg-score-btn" class="inline-flex items-center gap-1 group font-bold focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-md px-1">
-                                    <span>คะแนนเฉลี่ย</span>
+                                    <span>คะแนนรวมเฉลี่ย</span>
                                     <span id="sort-indicator-score" class="text-gray-500 dark:text-gray-400 transition-opacity"></span>
                                 </button>
                             </th>
-                            <th scope="col" class="px-4 py-2 text-center">
+                            <th scope="col" class="px-4 py-3 text-center w-1/4">
                                 <button id="sort-completion-btn" class="inline-flex items-center gap-1 group font-bold focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-md px-1">
                                     <span>การส่งงาน</span>
                                     <span id="sort-indicator-completion" class="text-gray-500 dark:text-gray-400 transition-opacity"></span>
                                 </button>
                             </th>
-                            <th scope="col" class="px-4 py-2 text-center">
+                            <th scope="col" class="px-4 py-3 text-center">
                                 <button id="sort-avg-grade-btn" class="inline-flex items-center gap-1 group font-bold focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-md px-1">
                                     <span>เกรดเฉลี่ย</span>
                                     <span id="sort-indicator-grade" class="text-gray-500 dark:text-gray-400 transition-opacity"></span>
