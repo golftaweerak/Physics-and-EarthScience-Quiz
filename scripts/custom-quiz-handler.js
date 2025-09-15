@@ -614,23 +614,45 @@ export function initializeCustomQuizHandler() {
                     }
 
                     if (totalMax > 0) { // Check again to prevent division by zero
-                        // Distribute the targetTotal proportionally
-                        let distributedCount = 0;
-                        allInputs.forEach((input, index) => {
-                            const max = parseInt(input.max, 10);
-                            const proportion = max / totalMax;
-                            let desiredCount = Math.round(targetTotal * proportion);
+                        // A more robust proportional distribution using the Largest Remainder Method
+                        const maxValues = allInputs.map(input => parseInt(input.max, 10));
 
-                            // Adjust for last item to match the exact total
-                            if (index === allInputs.length - 1) {
-                                desiredCount = targetTotal - distributedCount;
+                        // 1. Calculate ideal (float) values and their remainders
+                        const idealValues = maxValues.map(max => targetTotal * (max / totalMax));
+                        const remainders = [];
+                        let currentSum = 0;
+                        const flooredValues = idealValues.map((val, i) => {
+                            const floored = Math.floor(val);
+                            remainders.push({ index: i, remainder: val - floored });
+                            currentSum += floored;
+                            return floored;
+                        });
+
+                        // 2. Distribute the remaining difference based on largest remainders
+                        let remainingDiff = targetTotal - currentSum;
+                        remainders.sort((a, b) => b.remainder - a.remainder);
+
+                        for (let i = 0; i < remainingDiff; i++) {
+                            const itemToIncrement = remainders[i];
+                            if (itemToIncrement) {
+                                // Ensure we don't increment past the max value for that input
+                                if (flooredValues[itemToIncrement.index] < maxValues[itemToIncrement.index]) {
+                                    flooredValues[itemToIncrement.index]++;
+                                } else {
+                                    // If we can't increment the one with the highest remainder, try the next one.
+                                    // This is a simple fallback; a more complex one would re-sort and try again.
+                                    remainingDiff++; 
+                                }
                             }
-
-                            input.value = Math.min(max, desiredCount);
-                            distributedCount += parseInt(input.value, 10);
-                            input.dispatchEvent(new Event('input', { bubbles: true }));
                         }
-                        );
+
+                        // 3. Final assignment to the inputs
+                        allInputs.forEach((input, index) => {
+                            // Final cap just in case, though it should not be necessary with the check above.
+                            const finalValue = Math.min(maxValues[index], flooredValues[index]);
+                            input.value = finalValue;
+                            input.dispatchEvent(new Event('input', { bubbles: true }));
+                        });
                     }
                 }
             }
