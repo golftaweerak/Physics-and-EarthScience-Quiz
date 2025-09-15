@@ -12,6 +12,21 @@ let roomSortConfig = {
 };
 let selectedRoomForDetails = null;
 
+// Centralized theme for grades to ensure consistency between chart and chips
+const GRADE_THEME = {
+    '4': { chart: 'rgba(20, 184, 166, 0.7)', border: '#0d9488', chip: 'bg-teal-500/20 text-teal-800 dark:text-teal-200 border-teal-500/30' },
+    '3.5': { chart: 'rgba(6, 182, 212, 0.7)', border: '#0891b2', chip: 'bg-cyan-500/20 text-cyan-800 dark:text-cyan-200 border-cyan-500/30' },
+    '3': { chart: 'rgba(14, 165, 233, 0.7)', border: '#0284c7', chip: 'bg-sky-500/20 text-sky-800 dark:text-sky-200 border-sky-500/30' },
+    '2.5': { chart: 'rgba(250, 204, 21, 0.7)', border: '#eab308', chip: 'bg-yellow-400/20 text-yellow-800 dark:text-yellow-200 border-yellow-400/30' },
+    '2': { chart: 'rgba(245, 158, 11, 0.7)', border: '#d97706', chip: 'bg-amber-500/20 text-amber-800 dark:text-amber-200 border-amber-500/30' },
+    '1.5': { chart: 'rgba(249, 115, 22, 0.7)', border: '#ea580c', chip: 'bg-orange-500/20 text-orange-800 dark:text-orange-200 border-orange-500/30' },
+    '1': { chart: 'rgba(239, 68, 68, 0.7)', border: '#dc2626', chip: 'bg-red-500/20 text-red-800 dark:text-red-200 border-red-500/30' },
+    '0': { chart: 'rgba(185, 28, 28, 0.7)', border: '#991b1b', chip: 'bg-red-700/20 text-red-800 dark:text-red-200 border-red-700/30' },
+    'รอ': { chart: 'rgba(168, 85, 247, 0.7)', border: '#9333ea', chip: 'bg-purple-500/20 text-purple-800 dark:text-purple-200 border-purple-500/30' },
+    'มส': { chart: 'rgba(236, 72, 153, 0.7)', border: '#db2777', chip: 'bg-pink-500/20 text-pink-800 dark:text-pink-200 border-pink-500/30' },
+    'N/A': { chart: 'rgba(107, 114, 128, 0.7)', border: '#4b5563', chip: 'bg-gray-500/20 text-gray-800 dark:text-gray-200 border-gray-500/30' }
+};
+
 /**
  * Calculates summary statistics for all students.
  * @param {Array<object>} scores - The array of all student score objects.
@@ -153,47 +168,21 @@ function createGradeDistributionChart(gradeDistribution, allStudentScores) {
         return;
     }
 
-    // Unregister the datalabels plugin if it was registered, to prevent errors.
-    if (window.ChartDataLabels) {
-        Chart.unregister(window.ChartDataLabels);
-    }
-
     // Define a logical order for grades and a color palette that matches the site's theme.
-    const gradeOrder = ['4', '3.5', '3', '2.5', '2', '1.5', '1', '0', 'N/A'];
-    const backgroundColors = [
-        'rgba(20, 184, 166, 0.7)', // teal-500
-        'rgba(6, 182, 212, 0.7)', // cyan-500
-        'rgba(14, 165, 233, 0.7)', // sky-500
-        'rgba(250, 204, 21, 0.7)', // yellow-400
-        'rgba(245, 158, 11, 0.7)', // amber-500
-        'rgba(249, 115, 22, 0.7)', // orange-500
-        'rgba(239, 68, 68, 0.7)', // red-500
-        'rgba(185, 28, 28, 0.7)', // red-700
-        'rgba(107, 114, 128, 0.7)'  // gray-500
-    ];
-    const borderColors = [
-        '#0d9488', // teal-600
-        '#0891b2', // cyan-600
-        '#0284c7', // sky-600
-        '#eab308', // yellow-500
-        '#d97706', // amber-600
-        '#ea580c', // orange-600
-        '#dc2626', // red-600
-        '#991b1b', // red-800
-        '#4b5563'  // gray-600
-    ];
+    const gradeOrder = ['4', '3.5', '3', '2.5', '2', '1.5', '1', '0', 'รอ', 'มส', 'N/A'];
 
     const labels = [];
     const data = [];
     const chartColors = [];
     const chartBorderColors = [];
 
-    gradeOrder.forEach((grade, index) => {
+    gradeOrder.forEach(grade => {
         if (gradeDistribution[grade] !== undefined && gradeDistribution[grade] > 0) {
             labels.push(`เกรด ${grade}`);
             data.push(gradeDistribution[grade]);
-            chartColors.push(backgroundColors[index]);
-            chartBorderColors.push(borderColors[index]);
+            const theme = GRADE_THEME[grade] || GRADE_THEME['N/A'];
+            chartColors.push(theme.chart);
+            chartBorderColors.push(theme.border);
         }
     });
 
@@ -239,45 +228,8 @@ function createGradeDistributionChart(gradeDistribution, allStudentScores) {
                     }
                 }
             },
-            onClick: (event, elements) => {
-                if (elements.length === 0) return;
-                const chart = elements[0].chart;
-                const elementIndex = elements[0].index;
-                const gradeLabel = chart.data.labels[elementIndex].replace('เกรด ', '');
-
-                // Get the currently selected room from the dropdown to ensure context is correct
-                const roomFilterEl = document.getElementById('grade-chart-room-filter');
-                const selectedRoom = roomFilterEl ? roomFilterEl.value : 'all';
-
-                // Filter the master list of students by the currently selected room, just like the summary cards do.
-                const studentsInScope = selectedRoom === 'all'
-                    ? allStudentScores
-                    : allStudentScores.filter(student => String(student.room) === selectedRoom);
-
-                // Now, filter that group by the clicked grade
-                let filteredStudents;
-
-                if (gradeLabel === 'N/A') {
-                    // Handles null, undefined, or the literal string 'N/A'
-                    filteredStudents = studentsInScope.filter(student => (student['เกรด'] == null || String(student['เกรด']) === 'N/A'));
-                } else {
-                    const gradeToFindNum = parseFloat(gradeLabel);
-                    if (!isNaN(gradeToFindNum)) {
-                        // It's a numeric grade, use float comparison for safety
-                        filteredStudents = studentsInScope.filter(student => {
-                            const studentGrade = parseFloat(student['เกรด']);
-                            return !isNaN(studentGrade) && Math.abs(studentGrade - gradeToFindNum) < 0.01;
-                        });
-                    } else {
-                        // It's a non-numeric string grade like "รอ" or "มส". Use direct string comparison.
-                        filteredStudents = studentsInScope.filter(student => String(student['เกรด']) === gradeLabel);
-                    }
-                }
-
-                if (filteredStudents.length > 0) {
-                    createGradeDetailModal(gradeLabel, filteredStudents);
-                }
-            },
+            // Disable click events on the chart bars as per the new design with summary cards.
+            onClick: null,
             scales: {
                 y: {
                     beginAtZero: true,
@@ -331,15 +283,16 @@ function updateAndRenderGradeChart(selectedRoom, allStudentScores) {
 
     const filteredScores = selectedRoom === 'all'
         ? allStudentScores
-        : allStudentScores.filter(s => String(s.room) === selectedRoom);
+        : allStudentScores.filter(s => String(s[DATA_KEYS.ROOM]) === selectedRoom);
 
     const gradeDistribution = filteredScores.reduce((acc, student) => {
-        const grade = student['เกรด'] ?? 'N/A'; // Use ?? to correctly handle grade 0
+        const grade = student[DATA_KEYS.GRADE] ?? 'N/A'; // Use ?? to correctly handle grade 0
         acc[grade] = (acc[grade] || 0) + 1;
         return acc;
     }, {});
 
     createGradeDistributionChart(gradeDistribution, allStudentScores);
+    createGradeSummaryCards(gradeDistribution, filteredScores);
 }
 
 /**
@@ -358,7 +311,7 @@ function createStudentListModal(modalIdentifier, title, students) {
     }
 
     // Get unique rooms for the filter dropdown
-    const rooms = [...new Set(students.map(s => s.room).filter(Boolean).map(String))].sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+    const rooms = [...new Set(students.map(s => s[DATA_KEYS.ROOM]).filter(Boolean).map(String))].sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
     let roomOptionsHtml = `<option value="all">ทุกห้อง</option>`;
     rooms.forEach(room => {
         roomOptionsHtml += `<option value="${room}">ห้อง ${room}</option>`;
@@ -422,7 +375,7 @@ function createStudentListModal(modalIdentifier, title, students) {
 
     const filterAndSortAndRender = () => {
         const filteredStudents = students.filter(student => {
-            const roomMatch = currentRoomFilter === 'all' || student.room === currentRoomFilter;
+            const roomMatch = currentRoomFilter === 'all' || String(student[DATA_KEYS.ROOM]) === currentRoomFilter;
             if (!roomMatch) return false;
 
             if (!currentFilter) {
@@ -430,8 +383,8 @@ function createStudentListModal(modalIdentifier, title, students) {
             }
 
             const query = currentFilter.toLowerCase();
-            const nameMatch = student.name && student.name.toLowerCase().includes(query);
-            const idMatch = student.id && student.id.toLowerCase().includes(query);
+            const nameMatch = student[DATA_KEYS.NAME] && student[DATA_KEYS.NAME].toLowerCase().includes(query);
+            const idMatch = student[DATA_KEYS.ID] && student[DATA_KEYS.ID].toLowerCase().includes(query);
             return nameMatch || idMatch;
         });
 
@@ -441,16 +394,16 @@ function createStudentListModal(modalIdentifier, title, students) {
             let valA, valB;
             switch (currentSort.key) {
                 case 'name': {
-                    const nameA = a.name || '';
-                    const nameB = b.name || '';
+                    const nameA = a[DATA_KEYS.NAME] || '';
+                    const nameB = b[DATA_KEYS.NAME] || '';
                     return currentSort.direction === 'asc' ? nameA.localeCompare(nameB, 'th') : nameB.localeCompare(nameA, 'th');
                 }
                 case 'room': {
-                    const roomA = String(a.room || '999'); // Treat missing rooms as last
-                    const roomB = String(b.room || '999');
+                    const roomA = String(a[DATA_KEYS.ROOM] || '999'); // Treat missing rooms as last
+                    const roomB = String(b[DATA_KEYS.ROOM] || '999');
                     return currentSort.direction === 'asc' ? roomA.localeCompare(roomB, undefined, { numeric: true }) : roomB.localeCompare(roomA, undefined, { numeric: true });
                 }
-                case 'score': valA = a['รวม [100]'] ?? -1; valB = b['รวม [100]'] ?? -1; return currentSort.direction === 'asc' ? valA - valB : valB - valA;
+                case 'score': valA = a[DATA_KEYS.TOTAL_SCORE] ?? -1; valB = b[DATA_KEYS.TOTAL_SCORE] ?? -1; return currentSort.direction === 'asc' ? valA - valB : valB - valA;
                 case 'missing': valA = completionA.missing; valB = completionB.missing; return currentSort.direction === 'asc' ? valA - valB : valB - valA;
                 default: return 0;
             }
@@ -540,17 +493,6 @@ function getScoreTextColor(score) {
  */
 function getCompletionTextColor(percentage) {
     return getDynamicTextColor(percentage, COMPLETION_THRESHOLDS);
-}
-
-/**
- * Creates and displays a modal with a list of students for a specific grade.
- * @param {string} grade - The grade to display.
- * @param {Array<object>} students - The list of students who achieved that grade.
- */
-function createGradeDetailModal(grade, students) {
-    const title = `นักเรียนที่ได้เกรด ${grade} (${students.length} คน)`;
-    const identifier = `grade-${String(grade).replace('.', '-')}`;
-    createStudentListModal(identifier, title, students);
 }
 
 /**
@@ -818,6 +760,14 @@ function renderSummary(summaryData, studentScores) {
             </div>
         </div>
 
+        <!-- Grade Summary Cards Section -->
+        <div class="mt-8">
+            <h3 class="text-xl font-bold text-gray-800 dark:text-white font-kanit mb-4">สรุปตามเกรด</h3>
+            <div id="grade-summary-cards-container" class="flex flex-wrap gap-3 items-center">
+                <!-- Grade summary cards will be injected here by the script -->
+            </div>
+        </div>
+
         <!-- Per-Room Summary Table -->
         <div class="mt-8 bg-white dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700/60 overflow-hidden">
             <h3 class="p-4 text-lg font-bold text-gray-800 dark:text-white font-kanit border-b border-gray-200 dark:border-gray-700">สรุปรายห้องเรียน</h3>
@@ -952,6 +902,50 @@ export async function initializeSummaryPage() {
 }
 
 /**
+ * Creates and appends grade summary cards to a container.
+ * @param {object} gradeDistribution - An object with grades as keys and counts as values for the current scope.
+ * @param {Array<object>} studentsInScope - The list of students for the current scope (all or a specific room).
+ */
+function createGradeSummaryCards(gradeDistribution, studentsInScope) {
+    const container = document.getElementById('grade-summary-cards-container');
+    if (!container) {
+        return; // Silently fail if container is not on the page
+    }
+
+    container.innerHTML = ''; // Clear existing cards
+
+    const gradeOrder = ['4', '3.5', '3', '2.5', '2', '1.5', '1', '0', 'รอ', 'มส', 'N/A'];
+
+    gradeOrder.forEach(grade => {
+        const gradeCount = gradeDistribution[grade] || 0;
+
+        if (gradeCount > 0) {
+            const filteredStudents = studentsInScope.filter(student => {
+                if (grade === 'N/A') {
+                    return student[DATA_KEYS.GRADE] == null || String(student[DATA_KEYS.GRADE]) === 'N/A';
+                }
+                return String(student[DATA_KEYS.GRADE]) === grade;
+            });
+
+            const chip = document.createElement('div');
+            const theme = GRADE_THEME[grade] || GRADE_THEME['N/A'];
+            // Reverted to a single-line chip with a circular icon for the grade number for a clean, iconic look.
+            // Made the chip even more compact by reducing padding, font size, and removing the "คน" unit.
+            chip.className = `inline-flex items-center gap-x-2 py-1.5 px-3 rounded-full text-xs font-medium border cursor-pointer transition-transform transform hover:scale-105 ${theme.chip}`;
+            chip.innerHTML = `<span class="flex-shrink-0 inline-flex items-center justify-center h-6 w-6 rounded-full bg-white/80 dark:bg-black/30 font-kanit font-bold text-sm">${grade}</span><span class="font-semibold">${gradeCount}</span>`;
+
+            chip.addEventListener('click', () => {
+                const title = `นักเรียนที่ได้เกรด ${grade} (${filteredStudents.length} คน)`;
+                const identifier = `grade-${String(grade).replace(/[.\s]/g, '-')}`;
+                createStudentListModal(identifier, title, filteredStudents);
+            });
+            container.appendChild(chip);
+        }
+    });
+}
+
+
+/**
  * Initializes the student search functionality.
  * @param {Array<object>} studentScores The array of all student score objects.
  */
@@ -962,7 +956,7 @@ function initializeStudentSearch(studentScores) {
     const resultsContainer = document.getElementById('student-search-results');
 
     if (!searchInput || !resultsContainer || !searchBtn || !clearBtn) {
-        console.error('Student search elements not found.');
+        // console.error('Student search elements not found.'); // Comment out to reduce console noise if elements are optional
         return;
     }
 
@@ -981,26 +975,26 @@ function initializeStudentSearch(studentScores) {
         let results = [];
 
         // Priority 1: Exact ID match
-        const idMatch = studentScores.find(s => s.id.toLowerCase() === query);
+        const idMatch = studentScores.find(s => s[DATA_KEYS.ID].toLowerCase() === query);
         if (idMatch) {
             results = [idMatch];
         } else {
             // Priority 2: Exact Room match
-            const roomMatches = studentScores.filter(s => s.room && s.room.toLowerCase() === query);
+            const roomMatches = studentScores.filter(s => s[DATA_KEYS.ROOM] && String(s[DATA_KEYS.ROOM]).toLowerCase() === query);
             if (roomMatches.length > 0) {
                 // Sort by ordinal number for room searches
                 results = roomMatches.sort((a, b) => {
-                    const ordinalA = parseInt(a.ordinal, 10) || 999;
-                    const ordinalB = parseInt(b.ordinal, 10) || 999;
+                    const ordinalA = parseInt(a[DATA_KEYS.ORDINAL], 10) || 999;
+                    const ordinalB = parseInt(b[DATA_KEYS.ORDINAL], 10) || 999;
                     return ordinalA - ordinalB;
                 });
             } else {
                 // Priority 3: Partial Name match
                 const nameMatches = studentScores.filter(student =>
-                    student.name && student.name.toLowerCase().includes(query)
+                    student[DATA_KEYS.NAME] && student[DATA_KEYS.NAME].toLowerCase().includes(query)
                 );
                 // Sort by ID for name searches
-                results = nameMatches.sort((a, b) => a.id.localeCompare(b.id));
+                results = nameMatches.sort((a, b) => a[DATA_KEYS.ID].localeCompare(b[DATA_KEYS.ID]));
             }
         }
 
@@ -1058,7 +1052,7 @@ function renderStudentTableForRoom(room, studentScores) {
     const container = document.getElementById('room-detail-container');
     if (!container) return;
 
-    const studentsInRoom = studentScores.filter(s => s.room === room).sort((a, b) => (parseInt(a.ordinal, 10) || 999) - (parseInt(b.ordinal, 10) || 999));
+    const studentsInRoom = studentScores.filter(s => String(s[DATA_KEYS.ROOM]) === room).sort((a, b) => (parseInt(a[DATA_KEYS.ORDINAL], 10) || 999) - (parseInt(b[DATA_KEYS.ORDINAL], 10) || 999));
 
     if (studentsInRoom.length === 0) {
         container.innerHTML = ''; // Clear if no students
@@ -1066,9 +1060,9 @@ function renderStudentTableForRoom(room, studentScores) {
     }
 
     const desiredOrder = [
-        'id', 'ordinal', 'name', 'บท 1 [10]', 'บท 2 [10]', 'บท 3 [5]',
+        DATA_KEYS.ID, DATA_KEYS.ORDINAL, DATA_KEYS.NAME, 'บท 1 [10]', 'บท 2 [10]', 'บท 3 [5]',
         'ก่อนกลางภาค [25]', 'กลางภาค [20]', 'บท 4 [10]', 'นำเสนอ [5]', 'บท 5 [10]',
-        'หลังกลางภาค [25]', 'ก่อนปลายภาค [70]', 'ปลายภาค [30]', 'รวม [100]', 'เกรด'
+        'หลังกลางภาค [25]', 'ก่อนปลายภาค [70]', 'ปลายภาค [30]', DATA_KEYS.TOTAL_SCORE, DATA_KEYS.GRADE
     ];
 
     const allKeys = new Set();
@@ -1077,17 +1071,17 @@ function renderStudentTableForRoom(room, studentScores) {
     });
 
     const orderedKeys = desiredOrder.filter(key => allKeys.has(key));
-    const remainingKeys = Array.from(allKeys).filter(key => !desiredOrder.includes(key) && key !== 'assignments' && key !== 'room').sort();
+    const remainingKeys = Array.from(allKeys).filter(key => !desiredOrder.includes(key) && key !== 'assignments' && key !== DATA_KEYS.ROOM).sort();
     const scoreKeys = [...orderedKeys, ...remainingKeys];
 
     const stickyColumnStyles = {
-        'id': 'sticky left-0 z-10 w-16 min-w-[4rem]',
-        'ordinal': 'sticky left-[4rem] z-10 w-16 min-w-[4rem]',
-        'name': 'sticky left-[8rem] z-10 w-32 sm:w-48 min-w-[8rem] sm:min-w-[12rem] shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)] dark:shadow-[2px_0_5px_-2px_rgba(255,255,255,0.05)]'
+        [DATA_KEYS.ID]: 'sticky left-0 z-10 w-16 min-w-[4rem]',
+        [DATA_KEYS.ORDINAL]: 'sticky left-[4rem] z-10 w-16 min-w-[4rem]',
+        [DATA_KEYS.NAME]: 'sticky left-[8rem] z-10 w-32 sm:w-48 min-w-[8rem] sm:min-w-[12rem] shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)] dark:shadow-[2px_0_5px_-2px_rgba(255,255,255,0.05)]'
     };
 
     const headHtml = `<tr>${scoreKeys.map(key => {
-        const isSticky = ['id', 'name', 'ordinal'].includes(key);
+        const isSticky = [DATA_KEYS.ID, DATA_KEYS.NAME, DATA_KEYS.ORDINAL].includes(key);
         const stickyClasses = isSticky ? stickyColumnStyles[key] : '';
         const zIndexClass = isSticky ? 'z-20' : 'z-10';
         const thClasses = `sticky top-0 px-2 py-2 bg-gray-100 dark:bg-gray-900 text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider ${zIndexClass}`;
@@ -1097,13 +1091,12 @@ function renderStudentTableForRoom(room, studentScores) {
     const bodyHtml = studentsInRoom.map(student => {
         return `<tr>
             ${scoreKeys.map(key => {
-            const isSticky = ['id', 'name', 'ordinal'].includes(key);
+            const isSticky = [DATA_KEYS.ID, DATA_KEYS.NAME, DATA_KEYS.ORDINAL].includes(key);
             const stickyClasses = isSticky ? stickyColumnStyles[key] : '';
             const tdClasses = `px-2 py-2 text-xs sm:text-sm whitespace-nowrap ${isSticky ? 'bg-white dark:bg-gray-800' : ''}`;
             const value = student[key] ?? '-';
-
-            if (key === 'name') {
-                const fullName = student.name ?? '';
+            if (key === DATA_KEYS.NAME) {
+                const fullName = student[DATA_KEYS.NAME] ?? '';
                 const firstName = getFirstName(fullName);
                 return `<td class="${tdClasses} ${stickyClasses} text-left" title="${fullName}">
                             <span class="hidden sm:inline">${fullName}</span>
@@ -1149,18 +1142,18 @@ function handleExportCSV(studentScores) {
         return;
     }
 
-    const studentsInRoom = studentScores.filter(s => s.room === selectedRoom).sort((a, b) => (parseInt(a.ordinal, 10) || 999) - (parseInt(b.ordinal, 10) || 999));
+    const studentsInRoom = studentScores.filter(s => String(s[DATA_KEYS.ROOM]) === selectedRoom).sort((a, b) => (parseInt(a[DATA_KEYS.ORDINAL], 10) || 999) - (parseInt(b[DATA_KEYS.ORDINAL], 10) || 999));
     if (studentsInRoom.length === 0) {
         alert('ไม่พบข้อมูลนักเรียนในห้องที่เลือก');
         return;
     }
 
     const exportHeaderMap = {
-        'room': 'ห้อง', 'id': 'เลขประจำตัว', 'ordinal': 'เลขที่', 'name': 'ชื่อ-นามสกุล',
+        [DATA_KEYS.ROOM]: 'ห้อง', [DATA_KEYS.ID]: 'เลขประจำตัว', [DATA_KEYS.ORDINAL]: 'เลขที่', [DATA_KEYS.NAME]: 'ชื่อ-นามสกุล',
         'บท 1 [10]': 'บทที่ 1', 'บท 2 [10]': 'บทที่ 2', 'บท 3 [5]': 'บทที่ 3',
         'ก่อนกลางภาค [25]': 'ก่อนกลางภาค', 'กลางภาค [20]': 'กลางภาค', 'บท 4 [10]': 'บทที่ 4',
         'นำเสนอ [5]': 'นำเสนอ', 'บท 5 [10]': 'บทที่ 5', 'หลังกลางภาค [25]': 'หลังกลางภาค',
-        'ก่อนปลายภาค [70]': 'ก่อนปลายภาค', 'ปลายภาค [30]': 'ปลายภาค', 'รวม [100]': 'รวม', 'เกรด': 'เกรด'
+        'ก่อนปลายภาค [70]': 'ก่อนปลายภาค', 'ปลายภาค [30]': 'ปลายภาค', [DATA_KEYS.TOTAL_SCORE]: 'รวม', [DATA_KEYS.GRADE]: 'เกรด'
     };
 
     const exportKeys = Object.keys(exportHeaderMap);
