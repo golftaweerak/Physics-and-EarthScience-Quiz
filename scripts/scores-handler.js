@@ -352,6 +352,17 @@ export async function initializeScoreSearch() {
     function displayResult(student) {
         if (defaultMessage) defaultMessage.classList.add('hidden');
 
+        // Promote final exam score from assignments to a top-level property if it doesn't exist.
+        // This ensures it's available for the summary table rendering logic below.
+        if (!student.hasOwnProperty('ปลายภาค [30]') && student.assignments) {
+            const finalAssignment = student.assignments.find(a => a.name === 'ปลายภาค [30]');
+            if (finalAssignment && finalAssignment.score !== null && finalAssignment.score !== undefined) {
+                const score = parseFloat(finalAssignment.score);
+                // Use the raw score (can be text like "ขาดสอบ") if it's not a valid number
+                student['ปลายภาค [30]'] = isNaN(score) ? finalAssignment.score : score;
+            }
+        }
+
         const summaryOrder = [
             'ก่อนกลางภาค [25]',
             'กลางภาค [20]',
@@ -436,7 +447,7 @@ export async function initializeScoreSearch() {
         const summaryScoreSection = `
             <figure class="mb-6">
                 <figcaption class="p-3 text-lg font-semibold text-left text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-800 rounded-t-lg border-x border-t border-gray-200 dark:border-gray-700">
-                    คะแนนสรุป
+                    สรุปคะแนน
                 </figcaption>
                 <div class="border border-gray-200 dark:border-gray-700 rounded-b-lg overflow-hidden">
                     <table class="w-full text-base">

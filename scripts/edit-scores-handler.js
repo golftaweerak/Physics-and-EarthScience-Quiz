@@ -558,8 +558,8 @@ function initializeStudentSearch(studentScores) {
 function createBreakdownRow(student, label, scoreKey) {
     const scoreValue = student[scoreKey];
     if (!student.hasOwnProperty(scoreKey) || scoreValue === null) return '';
-
-    const scoreDisplay = `<input type="number" data-key="${scoreKey}" class="score-input w-20 text-right p-1 rounded bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600" value="${scoreValue ?? ''}">`;
+ 
+    const scoreDisplay = `<span class="font-semibold text-gray-800 dark:text-gray-200">${scoreValue ?? '-'}</span>`;
 
     return `
         <tr class="bg-gray-50 dark:bg-gray-800/50">
@@ -615,10 +615,22 @@ function groupAssignments(assignments) {
  * @param {HTMLElement} container - The container element to render the result into.
  */
 function displayStudentDetails(student, container) {
+    // Promote final exam score from assignments to a top-level property if it doesn't exist.
+    // This ensures it's available for the summary table rendering logic below.
+    if (!student.hasOwnProperty('ปลายภาค [30]') && student.assignments) {
+        const finalAssignment = student.assignments.find(a => a.name === 'ปลายภาค [30]');
+        if (finalAssignment && finalAssignment.score !== null && finalAssignment.score !== undefined) {
+            const score = parseFloat(finalAssignment.score);
+            // Use the raw score (can be text like "ขาดสอบ") if it's not a valid number
+            student['ปลายภาค [30]'] = isNaN(score) ? finalAssignment.score : score;
+        }
+    }
+
     const summaryOrder = ['ก่อนกลางภาค [25]', 'กลางภาค [20]', 'หลังกลางภาค [25]', 'ก่อนปลายภาค [70]', 'ปลายภาค [30]', 'รวม [100]', 'เกรด'];
     const breakdownMap = {
         'ก่อนกลางภาค [25]': [{ label: 'บทที่ 1', key: 'บท 1 [10]' }, { label: 'บทที่ 2', key: 'บท 2 [10]' }, { label: 'บทที่ 3', key: 'บท 3 [5]' }],
-        'หลังกลางภาค [25]': [{ label: 'บทที่ 4', key: 'บท 4 [10]' }, { label: 'บทที่ 5', key: 'บท 5 [10]' }, { label: 'นำเสนอ', key: 'นำเสนอ [5]' }]
+        'หลังกลางภาค [25]': [{ label: 'บทที่ 4', key: 'บท 4 [10]' }, { label: 'บทที่ 5', key: 'บท 5 [10]' }, { label: 'นำเสนอ', key: 'นำเสนอ [5]' }],
+        'รวม [100]': [{ label: 'คะแนนก่อนสอบปลายภาค', key: 'ก่อนปลายภาค [70]' }, { label: 'คะแนนสอบปลายภาค', key: 'ปลายภาค [30]' }]
     };
 
     const scoreRows = summaryOrder.map(key => {
