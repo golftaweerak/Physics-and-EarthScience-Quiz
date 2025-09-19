@@ -3,7 +3,7 @@
  * @description This file is auto-generated. Do not edit directly.
  *              Modify xlsx/68-EarthScience.xlsx and run 'node tools/convert-scores.js' instead.
  */
-export const lastUpdated = "2025-09-19T10:27:13.561Z";
+export const lastUpdated = "2025-09-19T10:48:56.048Z";
 export const studentScores = [
   {
     "assignments": [
@@ -12350,7 +12350,7 @@ export const studentScores = [
       },
       {
         "name": "แบบฝึก 2.1",
-        "score": "ยังไม่ส่ง"
+        "score": "ส่งแล้ว"
       },
       {
         "name": "แบบฝึก 2.2",
@@ -12362,7 +12362,7 @@ export const studentScores = [
       },
       {
         "name": "Quiz 2",
-        "score": "ยังไม่ส่ง"
+        "score": "8"
       },
       {
         "name": "แบบฝึก 3.1",
@@ -12370,7 +12370,7 @@ export const studentScores = [
       },
       {
         "name": "ท้ายบท 3",
-        "score": "ยังไม่ส่ง"
+        "score": "8"
       },
       {
         "name": "Quiz 3",
@@ -12390,19 +12390,19 @@ export const studentScores = [
       },
       {
         "name": "แบบฝึก 4.1",
-        "score": "ยังไม่ส่ง"
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 4",
-        "score": "ยังไม่ส่ง"
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 4",
-        "score": "ยังไม่ส่ง"
+        "score": "8"
       },
       {
         "name": "แบบฝึก 5.1",
-        "score": "ยังไม่ส่ง"
+        "score": "ส่งแล้ว"
       },
       {
         "name": "แบบฝึก 5.2",
@@ -12414,24 +12414,24 @@ export const studentScores = [
       },
       {
         "name": "Quiz 5",
-        "score": "ยังไม่ส่ง"
+        "score": "6"
       }
     ],
     "room": "4",
     "ordinal": "8",
-    "ก่อนกลางภาค [25]": 18,
+    "ก่อนกลางภาค [25]": 24,
     "กลางภาค [20]": 15,
-    "หลังกลางภาค [25]": 10,
-    "เกรด": "2",
+    "หลังกลางภาค [25]": 24,
+    "เกรด": "4",
     "ซ่อมมั้ย": "ไม่ต้องซ่อม",
-    "ก่อนปลายภาค [70]": 43,
-    "รวม [100]": 61,
+    "ก่อนปลายภาค [70]": 63,
+    "รวม [100]": 81,
     "บท 1 [10]": 10,
-    "บท 2 [10]": 5,
-    "บท 3 [5]": 3,
-    "บท 4 [10]": 0,
+    "บท 2 [10]": 10,
+    "บท 3 [5]": 4,
+    "บท 4 [10]": 10,
     "นำเสนอ [5]": 5,
-    "บท 5 [10]": 5,
+    "บท 5 [10]": 9,
     "id": "42261",
     "name": "เด็กชายณัฐทพนธ์ ทองสุข"
   },
@@ -46879,7 +46879,7 @@ export const studentScores = [
       },
       {
         "name": "Quiz 5",
-        "score": "5"
+        "score": "6"
       }
     ],
     "room": "11",
