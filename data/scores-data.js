@@ -3,7 +3,7 @@
  * @description This file is auto-generated. Do not edit directly.
  *              Modify xlsx/68-EarthScience.xlsx and run 'node tools/convert-scores.js' instead.
  */
-export const lastUpdated = "2025-09-19T10:48:56.048Z";
+export const lastUpdated = "2025-09-19T10:57:34.370Z";
 export const studentScores = [
   {
     "assignments": [
@@ -60690,7 +60690,7 @@ export const studentScores = [
     "assignments": [
       {
         "name": "ปลายภาค [30]",
-        "score": "ขาดสอบ"
+        "score": "15"
       },
       {
         "name": "กิจกรรม 1.1",
@@ -60786,10 +60786,10 @@ export const studentScores = [
     "ก่อนกลางภาค [25]": 24,
     "กลางภาค [20]": 10,
     "หลังกลางภาค [25]": 24,
-    "เกรด": "1.5",
+    "เกรด": "3",
     "ซ่อมมั้ย": "ซ่อมแล้ว",
     "ก่อนปลายภาค [70]": 58,
-    "รวม [100]": 58,
+    "รวม [100]": 73,
     "บท 1 [10]": 10,
     "บท 2 [10]": 10,
     "บท 3 [5]": 4,
