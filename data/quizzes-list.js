@@ -1,6 +1,28 @@
 
 export const quizList = [
   {
+    "id": "phy_m4_ch5-3",
+    "title": "งานและพลังงาน (ชุดที่ 3)",
+    "amount": 40,
+    "description": "บทที่ 5: งานและพลังงาน (เน้นทฤษฎีบทงาน-พลังงาน)",
+    "url": "./quiz/index.html?id=phy_m4_ch5-3",
+    "storageKey": "quizState-phy_m4_ch5-3",
+    "icon": "./assets/icons/kinetic-energy.png",
+    "category": "PhysicsM4",
+    "subCategory": "บทที่ 5: งานและพลังงาน"
+  },
+  {
+    "id": "phy_m4_ch5-2",
+    "title": "งานและพลังงาน (ชุดที่ 2)",
+    "amount": 40,
+    "description": "บทที่ 5: งานและพลังงาน (เน้นทฤษฎี, การคำนวณ, และการวิเคราะห์กราฟ)",
+    "url": "./quiz/index.html?id=phy_m4_ch5-2",
+    "storageKey": "quizState-phy_m4_ch5-2",
+    "icon": "./assets/icons/kinetic-energy.png",
+    "category": "PhysicsM4",
+    "subCategory": "บทที่ 5: งานและพลังงาน"
+  },
+  {
     "id": "phy_m4_ch5-1",
     "title": "งานและพลังงาน (ชุดที่ 1)",
     "amount": 40,
@@ -111,7 +133,7 @@ export const quizList = [
   {
     "id": "phy_m4_ch4-3",
     "title": "สมดุลกล: สมดุลต่อการเลื่อนที่ (ชุดที่ 3)",
-    "amount": 20,
+    "amount": 30,
     "description": "บทที่ 4: สมดุลกล (เน้นสมดุลต่อการเลื่อนที่และสภาพสมดุล)",
     "url": "./quiz/index.html?id=phy_m4_ch4-3",
     "storageKey": "quizState-phy_m4_ch4-3",
