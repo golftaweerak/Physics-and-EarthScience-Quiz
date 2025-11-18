@@ -1,6 +1,28 @@
 
 export const quizList = [
   {
+    "id": "phy_m4_ch5-5",
+    "title": "งานและพลังงาน (ชุดที่ 5)",
+    "amount": 30,
+    "description": "บทที่ 5: งานและพลังงาน (เน้นนิยามและการคำนวณพลังงานจลน์และพลังงานศักย์)",
+    "url": "./quiz/index.html?id=phy_m4_ch5-5",
+    "storageKey": "quizState-phy_m4_ch5-5",
+    "icon": "./assets/icons/kinetic-energy.png",
+    "category": "PhysicsM4",
+    "subCategory": "บทที่ 5: งานและพลังงาน"
+  },
+  {
+    "id": "phy_m4_ch5-4",
+    "title": "งานและพลังงาน (ชุดที่ 4)",
+    "amount": 40,
+    "description": "บทที่ 5: งานและพลังงาน (เน้นพลังงานกลและทฤษฎีบทงาน-พลังงาน)",
+    "url": "./quiz/index.html?id=phy_m4_ch5-4",
+    "storageKey": "quizState-phy_m4_ch5-4",
+    "icon": "./assets/icons/kinetic-energy.png",
+    "category": "PhysicsM4",
+    "subCategory": "บทที่ 5: งานและพลังงาน"
+  },
+  {
     "id": "phy_m4_ch5-3",
     "title": "งานและพลังงาน (ชุดที่ 3)",
     "amount": 40,
@@ -163,6 +185,18 @@ export const quizList = [
     "storageKey": "quizState-phy_m4_ch4-5",
     "icon": "./assets/icons/equilibrium.png",
     "altText": "ไอคอนสำหรับ phy_m4_ch4-5",
+    "category": "PhysicsM4",
+    "subCategory": "บทที่ 4: สมดุลกล"
+  },
+    {
+    "id": "phy_m4_ch4-6",
+    "title": "สมดุลกล: สมดุลต่อการหมุน (ชุดที่ 3)",
+    "amount": 20,
+    "description": "บทที่ 4: สมดุลกล (เน้นการคำนวณโมเมนต์, สมดุลของคาน, และเสถียรภาพ)",
+    "url": "./quiz/index.html?id=phy_m4_ch4-6",
+    "storageKey": "quizState-phy_m4_ch4-6",
+    "icon": "./assets/icons/equilibrium.png",
+    "altText": "ไอคอนสำหรับ phy_m4_ch4-6",
     "category": "PhysicsM4",
     "subCategory": "บทที่ 4: สมดุลกล"
   },
