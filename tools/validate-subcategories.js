@@ -27,34 +27,40 @@ function preprocessValidationData() {
   const validationMap = new Map();
 
   // Process Physics Syllabus
-  for (const gradeKey in PHYSICS_SYLLABUS) { // m4, m5, m6
-    const categoryKey = `PhysicsM${gradeKey.substring(1)}`; // 'm4' -> 'PhysicsM4'
-    const gradeSyllabus = PHYSICS_SYLLABUS[gradeKey];
-    const chapterMap = new Map();
-    gradeSyllabus.chapters.forEach(chapter => {
-      const topics = new Set(chapter.learningOutcomes || []);
-      chapterMap.set(chapter.title, topics);
-    });
-    validationMap.set(categoryKey, chapterMap);
-  }
+  Object.keys(PHYSICS_SYLLABUS).forEach(gradeKey => { // m4, m5, m6
+    const categoryKey = `PhysicsM${gradeKey.substring(1)}`;
+    const gradeData = PHYSICS_SYLLABUS[gradeKey];
+    const syllabusMap = new Map();
+    // Corrected: Physics syllabus has a direct 'chapters' array under each grade.
+    if (gradeData && Array.isArray(gradeData.chapters)) {
+      gradeData.chapters.forEach(chapter => {
+        syllabusMap.set(chapter.title, new Set(chapter.learningOutcomes || []));
+      });
+    }
+    validationMap.set(categoryKey, syllabusMap);
+  });
 
   // Process Basic Earth Science Syllabus
   const basicEarthMap = new Map();
-  // The basic syllabus is nested under 'units', so we need to iterate through them first.
-  EARTH_SCIENCE_BASIC_SYLLABUS.units.forEach(unit => {
-    unit.chapters.forEach(chapter => {
-      const topics = new Set(chapter.specificTopics || []);
-      basicEarthMap.set(chapter.title, topics);
-    });
-  });
+  // The basic syllabus is nested under a single grade key (e.g., 'm6') which contains 'units'.
+  // Corrected: The structure has a 'units' array at the top level.
+  if (EARTH_SCIENCE_BASIC_SYLLABUS && Array.isArray(EARTH_SCIENCE_BASIC_SYLLABUS.units)) {
+      EARTH_SCIENCE_BASIC_SYLLABUS.units.forEach(unit => {
+          unit.chapters.forEach(chapter => {
+              basicEarthMap.set(chapter.title, new Set(chapter.learningOutcomes || []));
+          });
+      });
+  }
   validationMap.set('EarthSpaceScienceBasic', basicEarthMap);
 
   // Process Advanced Earth Science Syllabus
   const advanceEarthMap = new Map();
-  EARTH_SCIENCE_ADVANCE_SYLLABUS.chapters.forEach(chapter => {
-    const topics = new Set(chapter.specificTopics || []);
-    advanceEarthMap.set(chapter.title, topics);
-  });
+  // The advanced syllabus has a direct 'chapters' array.
+  if (EARTH_SCIENCE_ADVANCE_SYLLABUS && Array.isArray(EARTH_SCIENCE_ADVANCE_SYLLABUS.chapters)) {
+    EARTH_SCIENCE_ADVANCE_SYLLABUS.chapters.forEach(chapter => {
+      advanceEarthMap.set(chapter.title, new Set(chapter.specificTopics || []));
+    });
+  }
   validationMap.set('EarthSpaceScienceAdvance', advanceEarthMap);
 
   return validationMap;
@@ -63,7 +69,10 @@ function preprocessValidationData() {
 /** Helper function to normalize topic strings by removing potential leading numbers like "1. " */
 function normalizeTopic(topic) {
     if (typeof topic !== 'string') return '';
-    return topic.replace(/^\d+\.\s*/, '').trim();
+    // Normalize by removing extra whitespace, newlines, and standardizing spaces.
+    // This handles both "1. Topic" and "ว 3.1 ม.6/1 Topic" formats by cleaning them up
+    // for a more reliable comparison.
+    return topic.replace(/\s+/g, ' ').trim();
 }
 
 /**

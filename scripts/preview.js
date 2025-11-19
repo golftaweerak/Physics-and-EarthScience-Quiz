@@ -169,14 +169,12 @@ function createQuestionElement(item, displayIndex, keyword) {
         if (categoryKey === 'EarthSpaceScienceBasic') {
             for (const unit of EARTH_SCIENCE_BASIC_SYLLABUS.units) {
                 const chapter = unit.chapters.find(ch => ch.title === mainCat);
-                // FIX: Check if the question's topic is in this chapter's list of topics
-                if (chapter && Array.isArray(chapter.specificTopics) && chapter.specificTopics.includes(specificCat)) {
+                // For Basic Earth Science, the 'specific' field IS the learning outcome.
+                if (chapter && Array.isArray(chapter.learningOutcomes) && chapter.learningOutcomes.includes(specificCat)) {
                     standardInfo = unit.standard;
                     // If a match is found, we can display the learning outcomes for that chapter.
                     // For simplicity, we'll display the first one as it's the most likely relevant one.
                     if (chapter.learningOutcomes && chapter.learningOutcomes.length > 0) {
-                        // Find the specific learning outcome that matches the question's 'specific' property, if possible.
-                        // This handles cases where a topic might map to a specific outcome within a chapter.
                         const matchedOutcome = chapter.learningOutcomes.find(lo => lo === specificCat);
                         learningOutcomeInfo = matchedOutcome || chapter.learningOutcomes[0]; // Fallback to the first
                     }
@@ -620,9 +618,10 @@ svg" fill="none" viewBox="0 0 24 24">
 
             for (const chapter of allChapters) {
                 if (chapter.learningOutcomes && chapter.learningOutcomes.includes(selectedCategory)) {
-                    // If yes, add all associated specific topics to our set of relevant topics.
+                    // For Basic subjects, the learning outcome itself is the value we search for.
+                    // Also, add any specific topics that might be linked to this learning outcome.
                     if (Array.isArray(chapter.specificTopics)) {
-                        chapter.specificTopics.forEach(topic => relevantTopics.add(topic));
+                        chapter.specificTopics.forEach(topic => relevantTopics.add(topic)); // Keep this for cross-linking
                     }
                 }
             }

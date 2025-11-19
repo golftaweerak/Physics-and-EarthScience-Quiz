@@ -444,15 +444,16 @@ export function initializeCustomQuizHandler() {
      * @param {number} maxCount - The number of questions available for this topic.
      * @returns {string} The HTML string for the control row.
      */
-    function createSpecificTopicControlHTML(subjectKey, chapterTitle, specificTopic, maxCount) {
+    function createSpecificTopicControlHTML(subjectKey, chapterTitle, specificTopic, maxCount, isLearningOutcome = false) {
         const disabled = maxCount === 0;
-        const cleanTopic = specificTopic.replace(/^ว\s[\d\.]+\sม\.[\d\/]+\s/, '').replace(/^\d+\.\s/, '').trim();
+        // For learning outcomes, we show the full text. For specific topics, we clean it.
+        const displayTopic = isLearningOutcome ? specificTopic : specificTopic.replace(/^\d+\.\s/, '').trim();
 
         return `
             <div class="specific-topic-control py-3 px-4 border-t border-gray-200 dark:border-gray-700/50 ${disabled ? 'opacity-50 pointer-events-none' : ''}">
                 <div class="flex items-center justify-between gap-4">
                     <div class="min-w-0">
-                        <label class="font-medium text-gray-700 dark:text-gray-200 text-sm">${cleanTopic}</label>
+                        <label class="font-medium text-gray-700 dark:text-gray-200 text-sm">${displayTopic}</label>
                         <p class="text-xs text-gray-500 dark:text-gray-400">มี ${maxCount} ข้อ</p>
                     </div>
                     <input data-subject="${subjectKey}" data-chapter="${chapterTitle}" data-specific="${specificTopic}" type="number" min="0" max="${maxCount}" value="0" class="w-16 py-1 px-1 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900/50 text-center font-semibold text-sm text-blue-600 dark:text-blue-400 focus:ring-blue-500 focus:border-blue-500 flex-shrink-0">
@@ -766,25 +767,30 @@ export function initializeCustomQuizHandler() {
 
             sortedSubjects.forEach(subjectKey => {
                 const syllabus = getSyllabusForCategory(subjectKey);
-                const subjectDetails = allCategoryDetails[subjectKey];
-                if (!syllabus || !subjectDetails || !groupedQuestions[subjectKey]) return;
+                const subjectDetails = allCategoryDetails[subjectKey];                
+                if (!syllabus || !subjectDetails || !groupedQuestions[subjectKey]) {
+                    return;
+                }
 
-                const chapters = syllabus.units ? syllabus.units.flatMap(u => u.chapters) : syllabus.chapters;
-                if (!chapters) return;
+                // Determine if this subject uses learning outcomes or specific topics
+                const isBasicSubject = subjectKey.includes('Basic') || subjectKey.startsWith('Physics');
+                const topicKey = isBasicSubject ? 'learningOutcomes' : 'specificTopics';
+
+                const chapters = syllabus.units ? syllabus.units.flatMap(u => u.chapters) : (syllabus.chapters || []);
 
                 let chapterAccordionsHTML = '';
                 chapters.forEach(chapter => {
-                    const topics = chapter.specificTopics || chapter.learningOutcomes || [];
+                    const topics = chapter[topicKey] || [];
                     const topicControlsHTML = topics.map(topic => {
                         const count = groupedQuestions[subjectKey]?.[chapter.title]?.[topic] || 0;
-                        return createSpecificTopicControlHTML(subjectKey, chapter.title, topic, count);
+                        return createSpecificTopicControlHTML(subjectKey, chapter.title, topic, count, isBasicSubject);
                     }).join('');
 
                     if (topicControlsHTML) {
                         chapterAccordionsHTML += `
                             <div class="bg-gray-50 dark:bg-gray-800/30 rounded-lg mx-2 mb-2 border border-gray-200 dark:border-gray-700/50 overflow-hidden">
                                 <div class="chapter-accordion-toggle flex justify-between items-center cursor-pointer p-3 hover:bg-gray-100 dark:hover:bg-gray-700/40 transition-colors">
-                                    <h4 class="text-base font-bold text-gray-800 dark:text-gray-200 font-kanit truncate pr-2">${chapter.title}</h4>
+                                    <h4 class="text-base font-bold text-gray-800 dark:text-gray-200 font-kanit truncate pr-2">${chapter.title || 'บทเรียน'}</h4>
                                     <svg class="chevron-icon h-5 w-5 text-gray-500 dark:text-gray-400 transition-transform duration-300 flex-shrink-0 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
                                 </div>
                                 <div class="specific-topics-container grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-in-out">
@@ -797,7 +803,7 @@ export function initializeCustomQuizHandler() {
                 if (chapterAccordionsHTML) {
                     categoryHTML += `
                         <div class="subject-container bg-white dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
-                            <div class="subject-accordion-toggle p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                            <div class="subject-accordion-toggle p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors" role="button" aria-expanded="false">
                                 <div class="flex justify-between items-center">
                                     <div class="flex items-center gap-3 min-w-0">
                                         <img src="${subjectDetails.icon}" class="h-8 w-8 flex-shrink-0">
@@ -874,14 +880,20 @@ export function initializeCustomQuizHandler() {
 
         for (const [subject, chapters] of Object.entries(counts)) {
             for (const [chapter, specifics] of Object.entries(chapters)) {
-                for (const [specific, count] of Object.entries(specifics)) {
-                    const sourcePool = allQuestions.filter(q => q.subCategory?.main === chapter && q.subCategory?.specific === specific);
+                for (const [specific, count] of Object.entries(specifics)) {                    
+                    const sourcePool = allQuestions.filter(q => {
+                        if (!q.subCategory) return false;
+                        // Handle both object and string subcategories for robustness
+                        const mainCat = (typeof q.subCategory === 'object') ? q.subCategory.main : q.subCategory;
+                        const specificCat = (typeof q.subCategory === 'object') ? q.subCategory.specific : null;
+                        return mainCat === chapter && specificCat === specific;
+                    });
                     const shuffledPool = [...sourcePool].sort(() => 0.5 - Math.random());
                     const chosen = shuffledPool.slice(0, count);
                     const reconstructed = chosen.map(q => {
                         if (q.scenarioId && scenarios && scenarios.has(q.scenarioId)) {
                             const scenario = scenarios.get(q.scenarioId);
-                            const description = (scenario.description || '').replace(/\n/g, '<br>');
+                            const description = (scenario.description || '').replace(/\n/g, '<br>');                            
                             return {
                                 ...q,
                                 question: `<div class="p-4 mb-4 bg-gray-100 dark:bg-gray-800 border-l-4 border-blue-500 rounded-r-lg"><p class="font-bold text-lg">${scenario.title}</p><div class="mt-2 text-gray-700 dark:text-gray-300">${description}</div></div>${q.question}`,

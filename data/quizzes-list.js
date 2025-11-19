@@ -285,6 +285,18 @@ export const quizList = [
     "subCategory": "การแปรสัณฐานของแผ่นธรณี"
   },
   {
+    "id": "ess_basic_m6_ch6-3",
+    "title": "การแปรสัณฐานของแผ่นธรณี (ชุดที่ 3)",
+    "amount": 30,
+    "description": "บทที่ 6: การแปรสัณฐานของแผ่นธรณี (ชุดที่ 3, เน้นการวิเคราะห์และเชื่อมโยง)",
+    "url": "./quiz/index.html?id=ess_basic_m6_ch6-3",
+    "storageKey": "quizState-ess_basic_m6_ch6-3",
+    "icon": "./assets/icons/plate.png",
+    "altText": "ไอคอนสำหรับ ess_basic_m6_ch6-3",
+    "category": "EarthSpaceScienceBasic",
+    "subCategory": "การแปรสัณฐานของแผ่นธรณี"
+  },
+  {
     "id": "ess_basic_m6_ch4-1",
     "title": "เทคโนโลยีอวกาศ (ชุดที่ 1)",
     "amount": 30,
