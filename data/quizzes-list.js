@@ -1,6 +1,28 @@
 
 export const quizList = [
   {
+    "id": "phy_m5_ch12-1",
+    "title": "ไฟฟ้าสถิต (ชุดที่ 1)",
+    "amount": 40,
+    "description": "บทที่ 12: ไฟฟ้าสถิต (ทฤษฎีและคำนวณพื้นฐาน)",
+    "url": "./quiz/index.html?id=phy_m5_ch12-1",
+    "storageKey": "quizState-phy_m5_ch12-1",
+    "icon": "./assets/icons/static-electricity.png",
+    "category": "PhysicsM5",
+    "subCategory": "บทที่ 12: ไฟฟ้าสถิต"
+  },
+  {
+    "id": "phy_m5_ch12-2",
+    "title": "ไฟฟ้าสถิต (ชุดที่ 2)",
+    "amount": 40,
+    "description": "บทที่ 12: ไฟฟ้าสถิต (ทฤษฎีและคำนวณประยุกต์)",
+    "url": "./quiz/index.html?id=phy_m5_ch12-2",
+    "storageKey": "quizState-phy_m5_ch12-2",
+    "icon": "./assets/icons/static-electricity.png",
+    "category": "PhysicsM5",
+    "subCategory": "บทที่ 12: ไฟฟ้าสถิต"
+  },
+  {
     "id": "phy_m4_ch5-5",
     "title": "งานและพลังงาน (ชุดที่ 5)",
     "amount": 30,
