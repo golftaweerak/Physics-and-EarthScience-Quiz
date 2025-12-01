@@ -1,6 +1,28 @@
 
 export const quizList = [
   {
+    "id": "phy_m4_ch5-6",
+    "title": "งานและพลังงาน (ชุดที่ 6)",
+    "amount": 40,
+    "description": "บทที่ 5: งานและพลังงาน (เน้นกฎการอนุรักษ์พลังงานกล)",
+    "url": "./quiz/index.html?id=phy_m4_ch5-6",
+    "storageKey": "quizState-phy_m4_ch5-6",
+    "icon": "./assets/icons/kinetic-energy.png",
+    "category": "PhysicsM4",
+    "subCategory": "บทที่ 5: งานและพลังงาน"
+  },
+  {
+    "id": "phy_m4_ch5-7",
+    "title": "งานและพลังงาน (ชุดที่ 7)",
+    "amount": 30,
+    "description": "บทที่ 5: งานและพลังงาน (กฎการอนุรักษ์พลังงานประยุกต์)",
+    "url": "./quiz/index.html?id=phy_m4_ch5-7",
+    "storageKey": "quizState-phy_m4_ch5-7",
+    "icon": "./assets/icons/kinetic-energy.png",
+    "category": "PhysicsM4",
+    "subCategory": "บทที่ 5: งานและพลังงาน"
+  },
+  {
     "id": "phy_m5_ch12-1",
     "title": "ไฟฟ้าสถิต (ชุดที่ 1)",
     "amount": 40,
