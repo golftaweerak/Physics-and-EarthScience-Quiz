@@ -1,6 +1,17 @@
 
 export const quizList = [
   {
+    "id": "phy_m4_ch5-8",
+    "title": "งานและพลังงาน (ชุดที่ 8)",
+    "amount": 25,
+    "description": "บทที่ 5: งานและพลังงาน (กฎการอนุรักษ์พลังงานและการประยุกต์)",
+    "url": "./quiz/index.html?id=phy_m4_ch5-8",
+    "storageKey": "quizState-phy_m4_ch5-8",
+    "icon": "./assets/icons/kinetic-energy.png",
+    "category": "PhysicsM4",
+    "subCategory": "บทที่ 5: งานและพลังงาน"
+  },
+  {
     "id": "phy_m4_ch5-6",
     "title": "งานและพลังงาน (ชุดที่ 6)",
     "amount": 40,
