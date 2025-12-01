@@ -443,29 +443,40 @@ export function initializeCustomQuizHandler() {
      * @param {string} specificTopic - The specific topic or learning outcome.
      * @param {number} maxCount - The number of questions available for this topic.
      * @returns {string} The HTML string for the control row.
+     * @param {object} counts - An object containing counts for 'theory', 'calculation', and 'total'.
      */
-    function createSpecificTopicControlHTML(subjectKey, chapterTitle, specificTopic, maxCount, isLearningOutcome = false) {
-        const disabled = maxCount === 0;
+    function createSpecificTopicControlHTML(subjectKey, chapterTitle, specificTopic, counts, isLearningOutcome = false) {
+        const totalCount = counts.total || 0;
+        const theoryCount = counts.theory || 0;
+        const calcCount = counts.calculation || 0;
+        const disabled = totalCount === 0;
+
         // For learning outcomes, we show the full text. For specific topics, we clean it.
         const displayTopic = isLearningOutcome ? specificTopic : specificTopic.replace(/^\d+\.\s/, '').trim();
 
         return `
-            <div class="specific-topic-control py-3 px-4 border-t border-gray-200 dark:border-gray-700/50 ${disabled ? 'opacity-50 pointer-events-none' : ''}">
-                <div class="flex items-center justify-between gap-4">
-                    <div class="min-w-0">
-                        <label class="font-medium text-gray-700 dark:text-gray-200 text-sm">${displayTopic}</label>
-                        <p class="text-xs text-gray-500 dark:text-gray-400">มี ${maxCount} ข้อ</p>
+            <div class="specific-topic-control py-3 px-4 border-t border-gray-200 dark:border-gray-700/50 ${disabled ? 'opacity-50' : ''}">
+                <label class="font-medium text-gray-700 dark:text-gray-200 text-sm">${displayTopic}</label>
+                <div class="mt-2 space-y-2">
+                    <!-- Theory Questions -->
+                    <div class="flex items-center justify-between gap-2 ${theoryCount === 0 ? 'hidden' : ''}">
+                        <span class="text-xs text-gray-500 dark:text-gray-400 w-16">ทฤษฎี (${theoryCount} ข้อ)</span>
+                        <input data-subject="${subjectKey}" data-chapter="${chapterTitle}" data-specific="${specificTopic}" data-type="theory" type="number" min="0" max="${theoryCount}" value="0" class="w-16 py-1 px-1 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900/50 text-center font-semibold text-sm text-blue-600 dark:text-blue-400 focus:ring-blue-500 focus:border-blue-500 flex-shrink-0" ${disabled ? 'disabled' : ''}>
+                        <div class="flex-grow flex justify-end gap-1 quick-select-buttons">
+                            <button type="button" data-value="5" class="px-2 py-0.5 text-xs font-medium text-gray-600 bg-gray-100 dark:text-gray-300 dark:bg-gray-700/60 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 ${theoryCount < 5 ? 'hidden' : ''}">5</button>
+                            <button type="button" data-value="10" class="px-2 py-0.5 text-xs font-medium text-gray-600 bg-gray-100 dark:text-gray-300 dark:bg-gray-700/60 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 ${theoryCount < 10 ? 'hidden' : ''}">10</button>
+                            <button type="button" data-value="${theoryCount}" class="px-2 py-0.5 text-xs font-semibold text-blue-800 bg-blue-100 dark:text-blue-200 dark:bg-blue-900/50 rounded-full hover:bg-blue-200 dark:hover:bg-blue-900">All</button>
+                        </div>
                     </div>
-                    <input data-subject="${subjectKey}" data-chapter="${chapterTitle}" data-specific="${specificTopic}" type="number" min="0" max="${maxCount}" value="0" class="w-16 py-1 px-1 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900/50 text-center font-semibold text-sm text-blue-600 dark:text-blue-400 focus:ring-blue-500 focus:border-blue-500 flex-shrink-0">
-                </div>
-                <div class="flex items-center gap-3 mt-2">
-                    <input data-slider-subject="${subjectKey}" data-slider-chapter="${chapterTitle}" data-slider-specific="${specificTopic}" type="range" min="0" max="${maxCount}" value="0" class="flex-grow h-2 rounded-lg appearance-none cursor-pointer" ${disabled ? "disabled" : ""}>
-                    <div class="flex items-center gap-2 flex-shrink-0 quick-select-buttons">
-                        <button type="button" data-value="5" class="px-2 py-0.5 text-xs font-medium text-gray-700 bg-gray-100 dark:text-gray-300 dark:bg-gray-700/60 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors ${maxCount < 5 ? 'hidden' : ''}">5</button>
-                        <button type="button" data-value="10" class="px-2 py-0.5 text-xs font-medium text-gray-700 bg-gray-100 dark:text-gray-300 dark:bg-gray-700/60 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors ${maxCount < 10 ? 'hidden' : ''}">10</button>
-                        <button type="button" data-value="custom" class="px-2 py-0.5 text-xs font-medium text-gray-700 bg-gray-100 dark:text-gray-300 dark:bg-gray-700/60 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">อื่นๆ...</button>
-                        <button type="button" data-value="${maxCount}" class="px-2 py-0.5 text-xs font-medium text-gray-700 bg-gray-100 dark:text-gray-300 dark:bg-gray-700/60 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">All</button>
-                        <button type="button" data-value="0" class="px-2 py-0.5 text-xs font-medium text-red-800 bg-red-100 dark:text-red-200 dark:bg-red-900/50 rounded-full hover:bg-red-200 dark:hover:bg-red-900 transition-colors">ล้าง</button>
+                    <!-- Calculation Questions -->
+                    <div class="flex items-center justify-between gap-2 ${calcCount === 0 ? 'hidden' : ''}">
+                        <span class="text-xs text-gray-500 dark:text-gray-400 w-16">คำนวณ (${calcCount} ข้อ)</span>
+                        <input data-subject="${subjectKey}" data-chapter="${chapterTitle}" data-specific="${specificTopic}" data-type="calculation" type="number" min="0" max="${calcCount}" value="0" class="w-16 py-1 px-1 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900/50 text-center font-semibold text-sm text-green-600 dark:text-green-400 focus:ring-green-500 focus:border-green-500 flex-shrink-0" ${disabled ? 'disabled' : ''}>
+                        <div class="flex-grow flex justify-end gap-1 quick-select-buttons">
+                             <button type="button" data-value="5" class="px-2 py-0.5 text-xs font-medium text-gray-600 bg-gray-100 dark:text-gray-300 dark:bg-gray-700/60 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 ${calcCount < 5 ? 'hidden' : ''}">5</button>
+                            <button type="button" data-value="10" class="px-2 py-0.5 text-xs font-medium text-gray-600 bg-gray-100 dark:text-gray-300 dark:bg-gray-700/60 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 ${calcCount < 10 ? 'hidden' : ''}">10</button>
+                            <button type="button" data-value="${calcCount}" class="px-2 py-0.5 text-xs font-semibold text-green-800 bg-green-100 dark:text-green-200 dark:bg-green-900/50 rounded-full hover:bg-green-200 dark:hover:bg-green-900">All</button>
+                        </div>
                     </div>
                 </div>
             </div>`;
@@ -746,18 +757,26 @@ export function initializeCustomQuizHandler() {
             }
             const { allQuestions } = quizDataCache;
 
-            // Group questions by main category -> chapter -> specific topic
+            // Group questions and count types
             const groupedQuestions = allQuestions.reduce((acc, q) => {
                 if (q.subCategory && q.subCategory.main && q.subCategory.specific) {
                     const quizInfo = quizList.find(ql => ql.title === q.sourceQuizTitle);
                     const subjectKey = quizInfo ? quizInfo.category : 'Uncategorized';
+                    const questionType = q.type === 'fill-in-number' ? 'calculation' : 'theory';
 
                     if (!acc[subjectKey]) acc[subjectKey] = {};
                     if (!acc[subjectKey][q.subCategory.main]) acc[subjectKey][q.subCategory.main] = {};
                     if (!acc[subjectKey][q.subCategory.main][q.subCategory.specific]) {
-                        acc[subjectKey][q.subCategory.main][q.subCategory.specific] = 0;
+                        acc[subjectKey][q.subCategory.main][q.subCategory.specific] = {
+                            theory: [],
+                            calculation: [],
+                            total: 0
+                        };
                     }
-                    acc[subjectKey][q.subCategory.main][q.subCategory.specific]++;
+
+                    const group = acc[subjectKey][q.subCategory.main][q.subCategory.specific];
+                    group[questionType].push(q);
+                    group.total++;
                 }
                 return acc;
             }, {});
@@ -782,8 +801,12 @@ export function initializeCustomQuizHandler() {
                 chapters.forEach(chapter => {
                     const topics = chapter[topicKey] || [];
                     const topicControlsHTML = topics.map(topic => {
-                        const count = groupedQuestions[subjectKey]?.[chapter.title]?.[topic] || 0;
-                        return createSpecificTopicControlHTML(subjectKey, chapter.title, topic, count, isBasicSubject);
+                        const counts = groupedQuestions[subjectKey]?.[chapter.title]?.[topic] || { theory: 0, calculation: 0, total: 0 };
+                        return createSpecificTopicControlHTML(subjectKey, chapter.title, topic, {
+                            theory: counts.theory.length,
+                            calculation: counts.calculation.length,
+                            total: counts.total
+                        }, isBasicSubject);
                     }).join('');
 
                     if (topicControlsHTML) {
