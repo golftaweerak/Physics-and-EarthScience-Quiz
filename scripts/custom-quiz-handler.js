@@ -3,7 +3,6 @@ import { ModalHandler } from "./modal-handler.js";
 import { fetchAllQuizData, getQuizProgress, categoryDetails as allCategoryDetails } from "./data-manager.js";
 import { getSyllabusForCategory } from "./syllabus-manager.js";
 import { quizList } from "../data/quizzes-list.js";
-import { toggleAccordion } from "./main.js";
 
 
 /**
@@ -60,144 +59,6 @@ function createAndSaveCustomQuiz(quizData) {
     localStorage.setItem("customQuizzesList", JSON.stringify(savedQuizzes));
 
     return newCustomQuiz;
-}
-
-/**
- * Creates and injects the Random Quiz Generator UI into the page.
- * This function is exported to be called from main.js.
- */
-export function createRandomQuizGeneratorUI() {
-    const hubContent = document.querySelector('#custom-quiz-hub-modal .modal-content');
-    if (!hubContent) return;
-
-    // Check if the UI is already there to prevent duplication
-    if (hubContent.querySelector('#category-RandomQuiz-modal')) return;
-
-    const section = document.createElement('section');
-    section.id = 'category-RandomQuiz-modal'; // Unique ID for modal accordion
-    section.className = 'section-accordion bg-white/80 dark:bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-200 dark:border-gray-700 shadow-md overflow-hidden border-t-4 border-purple-500';
-
-    const toggleHeader = document.createElement('div');
-    toggleHeader.id = 'toggle-RandomQuiz-modal'; // Unique ID for modal accordion toggle
-    toggleHeader.className = 'section-toggle flex justify-between items-center cursor-pointer p-4 bg-purple-50/30 dark:bg-purple-900/10 hover:bg-purple-100/50 dark:hover:bg-purple-900/20 transition-colors duration-200';
-    toggleHeader.setAttribute('aria-expanded', 'false');
-    toggleHeader.setAttribute('aria-controls', 'content-RandomQuiz-modal');
-    toggleHeader.innerHTML = `
-        <div class="flex items-center min-w-0 gap-4">
-            <div class="section-icon-container flex-shrink-0 h-12 w-12 rounded-full flex items-center justify-center border-2 border-purple-300 dark:border-purple-400 bg-purple-100 dark:bg-purple-400/20 transition-all duration-300 shadow-md shadow-purple-400/30">
-                <img src="./assets/icons/dices.png" alt="Random Quiz Icon" class="section-main-icon h-8 w-8 transition-transform duration-300 ease-in-out">
-            </div>
-            <div class="min-w-0">
-                <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 font-kanit">เครื่องมือสร้างแบบทดสอบสุ่ม</h2>
-                <p class="text-xs font-normal text-gray-500 dark:text-gray-400 -mt-1">เหมาะสำหรับเตรียมสอบเข้ามหาวิทยาลัย</p>
-            </div>
-        </div>
-        <svg class="chevron-icon h-6 w-6 text-gray-500 dark:text-gray-400 transition-transform duration-300 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
-    `;
-
-    const contentDiv = document.createElement('div');
-    contentDiv.id = 'content-RandomQuiz-modal'; // Unique ID for modal accordion content
-    contentDiv.className = 'section-content grid grid-rows-[0fr] transition-[grid-template-rows] duration-500 ease-in-out';
-    contentDiv.setAttribute('role', 'region');
-
-    const innerContentWrapper = document.createElement('div');
-    innerContentWrapper.className = 'inner-content-wrapper overflow-hidden transition-all duration-300 ease-out opacity-0 -translate-y-2';
-    innerContentWrapper.innerHTML = `
-        <div class="p-4 md:p-6 space-y-4">
-            <div class="flex flex-col sm:flex-row items-center gap-4 bg-gray-50 dark:bg-gray-900/50 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
-                <label for="random-quiz-count" class="font-medium text-gray-700 dark:text-gray-300 flex-shrink-0">จำนวนคำถาม:</label>
-                <input type="number" id="random-quiz-count" value="30" min="10" max="100" step="5" class="w-full sm:w-32 p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-center font-semibold text-lg text-blue-600 dark:text-blue-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-            </div>
-            <div id="random-quiz-buttons" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                <button data-filter="all" class="random-preset-btn w-full text-left p-3 bg-gray-100 dark:bg-gray-700/80 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors">
-                    <span class="font-bold text-gray-800 dark:text-gray-200">สุ่มจากทุกวิชา</span>
-                    <span class="block text-xs text-gray-500 dark:text-gray-400">ฟิสิกส์, วิทย์โลกและอวกาศ</span>
-                </button>
-                <button data-filter="physics" class="random-preset-btn w-full text-left p-3 bg-red-50 dark:bg-red-900/40 hover:bg-red-100 dark:hover:bg-red-900/60 rounded-lg transition-colors">
-                     <span class="font-bold text-red-800 dark:text-red-300">สุ่มจากฟิสิกส์ทั้งหมด</span>
-                     <span class="block text-xs text-red-600 dark:text-red-400">ม.4 - ม.6</span>
-                </button>
-                <button data-filter="earth_science" class="random-preset-btn w-full text-left p-3 bg-teal-50 dark:bg-teal-900/40 hover:bg-teal-100 dark:hover:bg-teal-900/60 rounded-lg transition-colors">
-                     <span class="font-bold text-teal-800 dark:text-teal-300">สุ่มจากวิทย์โลกทั้งหมด</span>
-                     <span class="block text-xs text-teal-600 dark:text-teal-400">พื้นฐาน & เพิ่มเติม</span>
-                </button>
-            </div>
-        </div>
-    `;
-
-    contentDiv.appendChild(innerContentWrapper);
-    section.append(toggleHeader, contentDiv);
-    hubContent.prepend(section); // Prepend to the modal content
-
-    // Attach event listener for accordion toggle
-    toggleHeader.addEventListener('click', () => {
-        toggleAccordion(toggleHeader);
-    });
-
-    // Attach event listeners to the newly created buttons
-    innerContentWrapper.querySelectorAll('.random-preset-btn').forEach(button => {
-        button.addEventListener('click', handleGenerateRandomQuiz);
-    });
-}
-
-/**
- * Handles the logic for generating a random quiz based on user's preset selection.
- * @param {Event} event The click event from a preset button.
- */
-async function handleGenerateRandomQuiz(event) {
-    const button = event.currentTarget;
-    const filter = button.dataset.filter;
-    const countInput = document.getElementById('random-quiz-count');
-    const count = parseInt(countInput.value, 10);
-    
-    if (isNaN(count) || count < 1) {
-        alert('กรุณาระบุจำนวนคำถามที่ถูกต้อง');
-        return;
-    }
-
-    button.disabled = true;
-    button.innerHTML += ` <svg class="animate-spin ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>`;
-    
-    try {
-        const { allQuestions } = await fetchAllQuizData();
-        let questionPool = allQuestions;
-        let title = `แบบทดสอบสุ่ม ${count} ข้อ`;
-        
-        if (filter === 'physics') {
-            questionPool = allQuestions.filter(q => q.sourceQuizCategory?.startsWith('PhysicsM'));
-            title += ' (ฟิสิกส์ทั้งหมด)';
-        } else if (filter === 'earth_science') {
-            questionPool = allQuestions.filter(q => q.sourceQuizCategory?.includes('EarthSpaceScience'));
-            title += ' (วิทย์โลกและอวกาศ)';
-        } else {
-            title += ' (ทุกวิชา)';
-        }
-        
-        if (questionPool.length < count) {
-            alert(`มีคำถามในคลังไม่เพียงพอ (มี ${questionPool.length} ข้อ แต่ต้องการ ${count} ข้อ)`);
-            button.disabled = false;
-            button.querySelector('svg')?.remove();
-            return;
-        }
-        
-        const shuffledQuestions = [...questionPool].sort(() => 0.5 - Math.random()).slice(0, count);
-        
-        const customQuiz = createAndSaveCustomQuiz({
-            title: title,
-            questions: shuffledQuestions,
-            category: 'Custom',
-            categoryDisplay: 'แบบทดสอบแบบสุ่ม'
-        });
-
-        window.location.href = `./quiz/index.html?id=${customQuiz.customId}`;        
-        
-    } catch (error) {
-        console.error('Failed to generate random quiz:', error);
-        alert('เกิดข้อผิดพลาดในการสร้างแบบทดสอบ กรุณาลองใหม่อีกครั้ง');
-        button.disabled = false;
-        button.querySelector('svg')?.remove();
-    } finally {
-    }
 }
 
 /**
@@ -1185,16 +1046,20 @@ export function initializeCustomQuizHandler() {
         const counts = {};
         const subjectsInQuiz = new Set();
 
-        document.querySelectorAll('#custom-quiz-category-selection input[type="number"][data-chapter]').forEach(input => {
+        document.querySelectorAll('#custom-quiz-category-selection input[type="number"][data-specific]').forEach(input => {
             const count = parseInt(input.value, 10) || 0;
             if (count > 0) {
                 const subject = input.dataset.subject;
                 const chapter = input.dataset.chapter;
                 const specific = input.dataset.specific;
+                const type = input.dataset.type; // 'theory' or 'calculation'
 
                 if (!counts[subject]) counts[subject] = {};
                 if (!counts[subject][chapter]) counts[subject][chapter] = {};
-                counts[subject][chapter][specific] = count;
+                if (!counts[subject][chapter][specific]) {
+                    counts[subject][chapter][specific] = { theory: 0, calculation: 0 };
+                }
+                counts[subject][chapter][specific][type] = count;
 
                 subjectsInQuiz.add(subject);
             }
@@ -1210,17 +1075,27 @@ export function initializeCustomQuizHandler() {
 
         for (const [subject, chapters] of Object.entries(counts)) {
             for (const [chapter, specifics] of Object.entries(chapters)) {
-                for (const [specific, count] of Object.entries(specifics)) {                    
-                    const sourcePool = allQuestions.filter(q => {
+                for (const [specific, typeCounts] of Object.entries(specifics)) {
+                    // Filter the pool for this specific topic
+                    const topicPool = allQuestions.filter(q => {
                         if (!q.subCategory) return false;
                         // Handle both object and string subcategories for robustness
                         const mainCat = (typeof q.subCategory === 'object') ? q.subCategory.main : q.subCategory;
                         const specificCat = (typeof q.subCategory === 'object') ? q.subCategory.specific : null;
                         return mainCat === chapter && specificCat === specific;
                     });
-                    const shuffledPool = [...sourcePool].sort(() => 0.5 - Math.random());
-                    const chosen = shuffledPool.slice(0, count);
-                    const reconstructed = chosen.map(q => {
+
+                    // Separate the pool by question type
+                    const theoryPool = topicPool.filter(q => q.type !== 'fill-in-number');
+                    const calculationPool = topicPool.filter(q => q.type === 'fill-in-number');
+
+                    // Shuffle and slice for each type
+                    const chosenTheory = [...theoryPool].sort(() => 0.5 - Math.random()).slice(0, typeCounts.theory);
+                    const chosenCalculation = [...calculationPool].sort(() => 0.5 - Math.random()).slice(0, typeCounts.calculation);
+
+                    // Combine and reconstruct questions with scenario context
+                    const allChosenForTopic = [...chosenTheory, ...chosenCalculation];
+                    const reconstructed = allChosenForTopic.map(q => {
                         if (q.scenarioId && scenarios && scenarios.has(q.scenarioId)) {
                             const scenario = scenarios.get(q.scenarioId);
                             const description = (scenario.description || '').replace(/\n/g, '<br>');                            
@@ -1294,7 +1169,7 @@ export function initializeCustomQuizHandler() {
         // Use a small timeout to ensure the loader is rendered before the synchronous,
         // potentially blocking renderCustomQuizList() call. This improves UX.
         setTimeout(() => {
-            renderCustomQuizList();
+            renderCustomQuizList();            
         }, 50);
     });
 
