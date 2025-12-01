@@ -451,21 +451,25 @@ export function initializeCustomQuizHandler() {
         const calcCount = counts.calculation || 0;
         const disabled = totalCount === 0;
 
-        // For learning outcomes, we show the full text. For specific topics, we clean it.
         const displayTopic = isLearningOutcome ? specificTopic : specificTopic.replace(/^\d+\.\s/, '').trim();
 
         return `
             <div class="specific-topic-control py-3 px-4 border-t border-gray-200 dark:border-gray-700/50 ${disabled ? 'opacity-50' : ''}">
-                <label class="font-medium text-gray-700 dark:text-gray-200 text-sm">${displayTopic}</label>
+                <div class="flex justify-between items-start">
+                    <label class="font-medium text-gray-700 dark:text-gray-200 text-sm flex-grow">${displayTopic}</label>
+                    <button type="button" data-action="clear-topic" class="px-2 py-0.5 text-xs font-medium text-red-800 bg-red-100 dark:text-red-200 dark:bg-red-900/50 rounded-full hover:bg-red-200 dark:hover:bg-red-900 transition-colors flex-shrink-0">
+                        ล้าง
+                    </button>
+                </div>
                 <div class="mt-2 space-y-2">
                     <!-- Theory Questions -->
                     <div class="flex items-center justify-between gap-2 ${theoryCount === 0 ? 'hidden' : ''}">
                         <span class="text-xs text-gray-500 dark:text-gray-400 w-16">ทฤษฎี (${theoryCount} ข้อ)</span>
                         <input data-subject="${subjectKey}" data-chapter="${chapterTitle}" data-specific="${specificTopic}" data-type="theory" type="number" min="0" max="${theoryCount}" value="0" class="w-16 py-1 px-1 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900/50 text-center font-semibold text-sm text-blue-600 dark:text-blue-400 focus:ring-blue-500 focus:border-blue-500 flex-shrink-0" ${disabled ? 'disabled' : ''}>
                         <div class="flex-grow flex justify-end gap-1 quick-select-buttons">
-                            <button type="button" data-value="5" class="px-2 py-0.5 text-xs font-medium text-gray-600 bg-gray-100 dark:text-gray-300 dark:bg-gray-700/60 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 ${theoryCount < 5 ? 'hidden' : ''}">5</button>
-                            <button type="button" data-value="10" class="px-2 py-0.5 text-xs font-medium text-gray-600 bg-gray-100 dark:text-gray-300 dark:bg-gray-700/60 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 ${theoryCount < 10 ? 'hidden' : ''}">10</button>
-                            <button type="button" data-value="${theoryCount}" class="px-2 py-0.5 text-xs font-semibold text-blue-800 bg-blue-100 dark:text-blue-200 dark:bg-blue-900/50 rounded-full hover:bg-blue-200 dark:hover:bg-blue-900">All</button>
+                            <button type="button" data-value="5" data-type="theory" class="px-2 py-0.5 text-xs font-medium text-gray-600 bg-gray-100 dark:text-gray-300 dark:bg-gray-700/60 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 ${theoryCount < 5 ? 'hidden' : ''}">5</button>
+                            <button type="button" data-value="10" data-type="theory" class="px-2 py-0.5 text-xs font-medium text-gray-600 bg-gray-100 dark:text-gray-300 dark:bg-gray-700/60 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 ${theoryCount < 10 ? 'hidden' : ''}">10</button>
+                            <button type="button" data-value="${theoryCount}" data-type="theory" class="px-2 py-0.5 text-xs font-semibold text-blue-800 bg-blue-100 dark:text-blue-200 dark:bg-blue-900/50 rounded-full hover:bg-blue-200 dark:hover:bg-blue-900">All</button>
                         </div>
                     </div>
                     <!-- Calculation Questions -->
@@ -473,9 +477,9 @@ export function initializeCustomQuizHandler() {
                         <span class="text-xs text-gray-500 dark:text-gray-400 w-16">คำนวณ (${calcCount} ข้อ)</span>
                         <input data-subject="${subjectKey}" data-chapter="${chapterTitle}" data-specific="${specificTopic}" data-type="calculation" type="number" min="0" max="${calcCount}" value="0" class="w-16 py-1 px-1 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900/50 text-center font-semibold text-sm text-green-600 dark:text-green-400 focus:ring-green-500 focus:border-green-500 flex-shrink-0" ${disabled ? 'disabled' : ''}>
                         <div class="flex-grow flex justify-end gap-1 quick-select-buttons">
-                             <button type="button" data-value="5" class="px-2 py-0.5 text-xs font-medium text-gray-600 bg-gray-100 dark:text-gray-300 dark:bg-gray-700/60 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 ${calcCount < 5 ? 'hidden' : ''}">5</button>
-                            <button type="button" data-value="10" class="px-2 py-0.5 text-xs font-medium text-gray-600 bg-gray-100 dark:text-gray-300 dark:bg-gray-700/60 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 ${calcCount < 10 ? 'hidden' : ''}">10</button>
-                            <button type="button" data-value="${calcCount}" class="px-2 py-0.5 text-xs font-semibold text-green-800 bg-green-100 dark:text-green-200 dark:bg-green-900/50 rounded-full hover:bg-green-200 dark:hover:bg-green-900">All</button>
+                             <button type="button" data-value="5" data-type="calculation" class="px-2 py-0.5 text-xs font-medium text-gray-600 bg-gray-100 dark:text-gray-300 dark:bg-gray-700/60 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 ${calcCount < 5 ? 'hidden' : ''}">5</button>
+                            <button type="button" data-value="10" data-type="calculation" class="px-2 py-0.5 text-xs font-medium text-gray-600 bg-gray-100 dark:text-gray-300 dark:bg-gray-700/60 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 ${calcCount < 10 ? 'hidden' : ''}">10</button>
+                            <button type="button" data-value="${calcCount}" data-type="calculation" class="px-2 py-0.5 text-xs font-semibold text-green-800 bg-green-100 dark:text-green-200 dark:bg-green-900/50 rounded-full hover:bg-green-200 dark:hover:bg-green-900">All</button>
                         </div>
                     </div>
                 </div>
@@ -502,8 +506,13 @@ export function initializeCustomQuizHandler() {
                 <div class="p-6 bg-gray-50 dark:bg-gray-900/50 rounded-xl border border-gray-200 dark:border-gray-700 text-center shadow-sm">
                     <p class="text-sm font-medium text-gray-500 dark:text-gray-400">จำนวนข้อที่เลือก</p>
                     <p id="total-question-count" class="text-5xl font-bold text-blue-600 dark:text-blue-400 transition-all duration-300">0</p>
-                </div>
+                </div>    
     
+                <!-- Random Selection -->
+                <div class="p-4 bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm">
+                    <button id="custom-quiz-random-btn" class="w-full flex items-center justify-center gap-2 px-4 py-2 bg-purple-100 text-purple-700 dark:bg-purple-900/50 dark:text-purple-300 rounded-lg hover:bg-purple-200 dark:hover:bg-purple-800/70 text-sm font-bold transition">สุ่มเลือกคำถามจากทั้งหมด</button>
+                </div>
+
                 <!-- Timer Options -->
                 <fieldset class="p-4 bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm">
                     <legend class="px-2 font-bold text-lg font-kanit text-gray-800 dark:text-gray-200">ตั้งค่าเวลา</legend>
@@ -557,10 +566,40 @@ export function initializeCustomQuizHandler() {
             const target = e.target;
 
             // Then, handle the value synchronization for the interacted control
-            if (target.matches('input[type="range"]') || target.matches('input[type="number"]')) {
+            if (target.matches('input[type="number"][data-chapter]')) {
                 const subject = target.dataset.sliderSubject || target.dataset.subject;
                 const chapter = target.dataset.sliderChapter || target.dataset.chapter;
                 const specific = target.dataset.sliderSpecific || target.dataset.specific;
+                const type = target.dataset.type;
+
+                if (type === 'total') {
+                    const topicControl = target.closest('.specific-topic-control');
+                    const theoryInput = topicControl.querySelector('input[data-type="theory"]');
+                    const calcInput = topicControl.querySelector('input[data-type="calculation"]');
+                    const totalValue = parseInt(target.value, 10) || 0;
+
+                    const maxTheory = parseInt(theoryInput.max, 10) || 0;
+                    const maxCalc = parseInt(calcInput.max, 10) || 0;
+                    const maxTotal = maxTheory + maxCalc;
+
+                    if (maxTotal > 0) {
+                        // Distribute proportionally
+                        let theoryValue = Math.round(totalValue * (maxTheory / maxTotal));
+                        let calcValue = totalValue - theoryValue;
+
+                        // Adjust if one type over-allocates
+                        if (theoryValue > maxTheory) {
+                            calcValue += theoryValue - maxTheory;
+                            theoryValue = maxTheory;
+                        }
+                        if (calcValue > maxCalc) {
+                            theoryValue += calcValue - maxCalc;
+                            calcValue = maxCalc;
+                        }
+                        theoryInput.value = Math.min(maxTheory, theoryValue);
+                        calcInput.value = Math.min(maxCalc, calcValue);
+                    }
+                }
                 let value = target.value;
                 const slider = document.querySelector(`input[data-slider-subject="${subject}"][data-slider-chapter="${chapter}"][data-slider-specific="${specific}"]`);
                 const input = document.querySelector(`input[data-subject="${subject}"][data-chapter="${chapter}"][data-specific="${specific}"]`);
@@ -591,11 +630,15 @@ export function initializeCustomQuizHandler() {
 
             // Handle subject-level quick select
             const subjectSelectBtn = target.closest('button[data-quick-select-subject]');
+            const chapterSelectBtn = target.closest('button[data-quick-select-chapter]');
+
             if (subjectSelectBtn) {
                 const subjectContainer = subjectSelectBtn.closest('.subject-container');
                 const value = subjectSelectBtn.dataset.value;
 
                 if (subjectContainer) {
+                    // This was the source of the bug. It selected ALL inputs in the subject,
+                    // not just the ones for the specific chapter being interacted with.
                     const allInputs = Array.from(subjectContainer.querySelectorAll('input[type="number"][data-chapter]'));
                     const totalMax = allInputs.reduce((sum, input) => sum + parseInt(input.max, 10), 0);
 
@@ -667,15 +710,77 @@ export function initializeCustomQuizHandler() {
                         });
                     }
                 }
+            } else if (chapterSelectBtn) {
+                const chapterContainer = chapterSelectBtn.closest('.chapter-accordion-toggle').nextElementSibling;
+                const value = chapterSelectBtn.dataset.value;
+
+                if (chapterContainer) {
+                    // Correctly select inputs ONLY within the specific chapter accordion.
+                    const chapterInputs = Array.from(chapterContainer.querySelectorAll('input[type="number"][data-specific]'));
+                    const totalMaxInChapter = chapterInputs.reduce((sum, input) => sum + parseInt(input.max, 10), 0);
+
+                    if (totalMaxInChapter === 0 && value !== '0') return;
+
+                    let targetTotal;
+                    if (value === 'all') {
+                        targetTotal = totalMaxInChapter;
+                    } else {
+                        targetTotal = parseInt(value, 10);
+                        if (isNaN(targetTotal)) return;
+                    }
+
+                    if (targetTotal > totalMaxInChapter) {
+                        targetTotal = totalMaxInChapter;
+                    }
+
+                    if (targetTotal === 0) {
+                        chapterInputs.forEach(input => {
+                            if (input.value !== '0') {
+                                input.value = 0;
+                                input.dispatchEvent(new Event('input', { bubbles: true }));
+                            }
+                        });
+                        return;
+                    }
+
+                    if (totalMaxInChapter > 0) {
+                        const maxValues = chapterInputs.map(input => parseInt(input.max, 10));
+                        const idealValues = maxValues.map(max => targetTotal * (max / totalMaxInChapter));
+                        const remainders = [];
+                        let currentSum = 0;
+                        const flooredValues = idealValues.map((val, i) => {
+                            const floored = Math.floor(val);
+                            remainders.push({ index: i, remainder: val - floored });
+                            currentSum += floored;
+                            return floored;
+                        });
+
+                        let remainingDiff = targetTotal - currentSum;
+                        remainders.sort((a, b) => b.remainder - a.remainder);
+
+                        for (let i = 0; i < remainingDiff; i++) {
+                            if (remainders[i]) flooredValues[remainders[i].index]++;
+                        }
+
+                        chapterInputs.forEach((input, index) => {
+                            input.value = Math.min(maxValues[index], flooredValues[index]);
+                            input.dispatchEvent(new Event('input', { bubbles: true }));
+                        });
+                    }
+                }
             }
 
             // Handle quick select buttons
             const quickSelectButton = target.closest('.quick-select-buttons button');
             if (quickSelectButton) {
                 const controlRow = quickSelectButton.closest('.specific-topic-control');
+                const type = quickSelectButton.dataset.type; // 'theory' or 'calculation'
                 if (!controlRow) return;
-                const slider = controlRow.querySelector('input[type="range"]');
-                const input = controlRow.querySelector('input[type="number"]');
+
+                // Find the specific input and slider that match the button's type.
+                // This was the source of the bug. It was just finding the first input/slider.
+                const input = controlRow.querySelector(`input[type="number"][data-type="${type}"]`);
+
                 let value = quickSelectButton.dataset.value;
 
                 if (value === 'custom') {
@@ -692,10 +797,30 @@ export function initializeCustomQuizHandler() {
                     value = parsedValue;
                 }
 
-                if (slider) slider.value = value;
                 if (input) input.value = value;
-                if (slider) updateSliderTrack(slider);
                 updateTotalCount();
+            }
+
+            // Handle "Clear All" button in the summary panel (this is the one at the bottom of the sidebar)
+            // Handle "Clear All" button in the summary panel
+            if (target.id === 'custom-quiz-clear-btn') {
+                const allInputs = document.querySelectorAll('#custom-quiz-category-selection input[type="number"]');
+                allInputs.forEach(input => {
+                    if (input.value !== '0') {
+                        input.value = 0;
+                    }
+                });
+                updateTotalCount();
+            }
+            // Handle the new "Clear Topic" button
+            if (target.matches('button[data-action="clear-topic"]')) {
+                const topicControl = target.closest('.specific-topic-control');
+                if (topicControl) {
+                    topicControl.querySelectorAll('input[type="number"]').forEach(input => {
+                        input.value = 0;
+                    });
+                    updateTotalCount();
+                }
             }
 
             // Handle accordion toggling
@@ -750,6 +875,7 @@ export function initializeCustomQuizHandler() {
             </svg>
             กำลังโหลดข้อมูล...`;
         triggerElement.disabled = true;
+        customQuizModal.open(triggerElement); // Open modal immediately to show loading inside
 
         try {
             if (!quizDataCache) {
@@ -851,12 +977,15 @@ export function initializeCustomQuizHandler() {
                 }
             });
 
+            const mainContentArea = customQuizModal.modal.querySelector('#custom-quiz-main-content');
+            const sidebarArea = customQuizModal.modal.querySelector('#custom-quiz-sidebar');
+
             if (categorySelectionContainer) {
                 categorySelectionContainer.innerHTML = categoryHTML;
                 categorySelectionContainer.className = "space-y-4"; // Use space-y for vertical stacking
-                adjustScrollableContentPadding();
-                setupCustomQuizInputListeners();
-                updateTotalCount();
+            }
+            if (sidebarArea) {
+                sidebarArea.innerHTML = createSummaryPanelHTML();
             }
 
             customQuizHubModal.close();
@@ -866,8 +995,13 @@ export function initializeCustomQuizHandler() {
             console.error("Failed to fetch data for custom quiz creation:", error);
             // Optionally, show an error message to the user
         } finally {
+            // Re-enable the button and restore its text
             triggerElement.innerHTML = originalText;
             triggerElement.disabled = false;
+            // Setup listeners after all content is loaded
+            adjustScrollableContentPadding();
+            setupCustomQuizInputListeners();
+            updateTotalCount();
         }
     }
 
@@ -929,7 +1063,10 @@ export function initializeCustomQuizHandler() {
             }
         }
 
-        selectedQuestions = Array.from(new Set(selectedQuestions.map(q => JSON.stringify(q)))).map(s => JSON.parse(s));
+        // A more concise way to get unique questions if they are object references.
+        // This avoids the stringify/parse overhead.
+        const uniqueQuestions = [...new Map(selectedQuestions.map(item => [item.question, item])).values()];
+        selectedQuestions = uniqueQuestions;
 
         if (selectedQuestions.length === 0) {
             return;
@@ -1005,6 +1142,12 @@ export function initializeCustomQuizHandler() {
 
     // The final "Start" button in the creation modal
     customQuizStartBtn.addEventListener("click", handleStartCustomQuiz);
+
+    // Add listener for the new random selection button
+    const randomBtn = document.getElementById('custom-quiz-random-btn');
+    if (randomBtn) {
+        randomBtn.addEventListener('click', handleRandomSelection);
+    }
 
     // Event delegation for the list of custom quizzes (edit, delete, etc.)
     if (customQuizListContainer) {
