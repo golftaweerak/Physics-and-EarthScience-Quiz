@@ -786,7 +786,7 @@ export function initializeCustomQuizHandler() {
             if (quickSelectButton) {
                 // This now correctly handles both subject-level and topic-level controls
                 const controlRow = quickSelectButton.closest('.specific-topic-control, .subject-controls');
-                const type = quickSelectButton.dataset.type; // 'theory' or 'calculation'
+                const type = quickSelectButton.dataset.type;
                 if (!controlRow) return;
 
 
@@ -972,15 +972,6 @@ export function initializeCustomQuizHandler() {
                                         <span class="font-bold text-lg text-gray-800 dark:text-gray-100 truncate">${subjectDetails.displayName}</span>
                                     </div>
                                     <svg class="chevron-icon h-6 w-6 text-gray-500 dark:text-gray-400 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
-                                </div>
-                                <div class="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700/50 flex flex-wrap items-center gap-2">
-                                    <span class="text-xs font-medium text-gray-500 dark:text-gray-400 mr-2">เลือกด่วน:</span>
-                                    <button type="button" data-quick-select-subject data-value="5" class="px-2.5 py-1 text-xs font-semibold text-gray-700 bg-gray-100 dark:text-gray-300 dark:bg-gray-700/60 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">5</button>
-                                    <button type="button" data-quick-select-subject data-value="10" class="px-2.5 py-1 text-xs font-semibold text-gray-700 bg-gray-100 dark:text-gray-300 dark:bg-gray-700/60 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">10</button>
-                                    <button type="button" data-quick-select-subject data-value="15" class="px-2.5 py-1 text-xs font-semibold text-gray-700 bg-gray-100 dark:text-gray-300 dark:bg-gray-700/60 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">15</button>
-                                    <button type="button" data-quick-select-subject data-value="20" class="px-2.5 py-1 text-xs font-semibold text-gray-700 bg-gray-100 dark:text-gray-300 dark:bg-gray-700/60 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">20</button>
-                                    <button type="button" data-quick-select-subject data-value="all" class="px-2.5 py-1 text-xs font-semibold text-blue-800 bg-blue-100 dark:text-blue-200 dark:bg-blue-900/50 rounded-full hover:bg-blue-200 dark:hover:bg-blue-900 transition-colors">ทั้งหมด</button>
-                                    <button type="button" data-quick-select-subject data-value="0" class="px-2.5 py-1 text-xs font-semibold text-red-800 bg-red-100 dark:text-red-200 dark:bg-red-900/50 rounded-full hover:bg-red-200 dark:hover:bg-red-900 transition-colors">ล้าง</button>
                                 </div>
                             </div>
                             <div class="chapters-container grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-in-out">
