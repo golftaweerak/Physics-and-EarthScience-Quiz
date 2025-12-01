@@ -3,7 +3,7 @@ export const quizList = [
   {
     "id": "phy_m4_ch5-8",
     "title": "งานและพลังงาน (ชุดที่ 8)",
-    "amount": 25,
+    "amount": 40,
     "description": "บทที่ 5: งานและพลังงาน (กฎการอนุรักษ์พลังงานและการประยุกต์)",
     "url": "./quiz/index.html?id=phy_m4_ch5-8",
     "storageKey": "quizState-phy_m4_ch5-8",
@@ -25,7 +25,7 @@ export const quizList = [
   {
     "id": "phy_m4_ch5-7",
     "title": "งานและพลังงาน (ชุดที่ 7)",
-    "amount": 30,
+    "amount": 40,
     "description": "บทที่ 5: งานและพลังงาน (กฎการอนุรักษ์พลังงานประยุกต์)",
     "url": "./quiz/index.html?id=phy_m4_ch5-7",
     "storageKey": "quizState-phy_m4_ch5-7",
