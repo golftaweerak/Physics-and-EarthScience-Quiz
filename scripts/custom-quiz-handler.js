@@ -1096,31 +1096,19 @@ export function initializeCustomQuizHandler() {
             return `${title}: ${count} ข้อ`;
         }).join(' | ');
 
-        let quizCategory = 'Custom';
-        let quizCategoryDisplay = 'แบบทดสอบที่สร้างเอง';
         const subjectArray = Array.from(subjectsInQuiz);
-        if (subjectArray.length === 1) {
-            quizCategory = subjectArray[0];
-            quizCategoryDisplay = allCategoryDetails[quizCategory]?.displayName || 'ทั่วไป';
-        }
+        const singleSubject = subjectArray.length === 1 ? subjectArray[0] : 'Custom';
 
-        const timestamp = Date.now();
-        const customQuiz = {
-            customId: `custom_${timestamp}`,
-            storageKey: `quizState-custom_${timestamp}`,
-            title: `แบบทดสอบ (${new Date(timestamp).toLocaleString('th-TH')})`,
+        const customQuiz = createAndSaveCustomQuiz({
+            title: `แบบทดสอบ (${new Date().toLocaleString('th-TH')})`,
+            questions: selectedQuestions,
             description: detailedDescription,
-            questions: selectedQuestions.sort(() => 0.5 - Math.random()),
             timerMode: timerMode,
             customTime: customTime,
-            icon: "./assets/icons/dices.png",
-            category: quizCategory,
-            categoryDisplay: quizCategoryDisplay
-        };
+            category: singleSubject,
+            categoryDisplay: allCategoryDetails[singleSubject]?.displayName || 'แบบทดสอบที่สร้างเอง'
+        });
 
-        const savedQuizzes = getSavedCustomQuizzes();
-        savedQuizzes.unshift(customQuiz);
-        localStorage.setItem("customQuizzesList", JSON.stringify(savedQuizzes));
         window.location.href = `./quiz/index.html?id=${customQuiz.customId}`;
     }
 
