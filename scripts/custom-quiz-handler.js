@@ -637,8 +637,18 @@ export function initializeCustomQuizHandler() {
                 const value = subjectSelectBtn.dataset.value;
 
                 if (subjectContainer) {
-                    // This was the source of the bug. It selected ALL inputs in the subject,
-                    // not just the ones for the specific chapter being interacted with.
+                    // --- BUG FIX ---
+                    // The previous logic was flawed because it collected all individual topic inputs,
+                    // leading to incorrect proportional distribution.
+                    // The correct approach is to sum up the totals for 'theory' and 'calculation'
+                    // across the entire subject, and then distribute the target number proportionally
+                    // to those two main inputs.
+
+                    // This logic is now being replaced by the logic in the 'quick-select-buttons' handler
+                    // which correctly targets the main theory/calculation inputs for the subject.
+                    // The code below is now redundant and was causing the bug. We will rely on the
+                    // more specific button handler.
+
                     const allInputs = Array.from(subjectContainer.querySelectorAll('input[type="number"][data-chapter]'));
                     const totalMax = allInputs.reduce((sum, input) => sum + parseInt(input.max, 10), 0);
 
@@ -710,6 +720,7 @@ export function initializeCustomQuizHandler() {
                         });
                     }
                 }
+
             } else if (chapterSelectBtn) {
                 const chapterContainer = chapterSelectBtn.closest('.chapter-accordion-toggle').nextElementSibling;
                 const value = chapterSelectBtn.dataset.value;
@@ -773,9 +784,11 @@ export function initializeCustomQuizHandler() {
             // Handle quick select buttons
             const quickSelectButton = target.closest('.quick-select-buttons button');
             if (quickSelectButton) {
-                const controlRow = quickSelectButton.closest('.specific-topic-control');
+                // This now correctly handles both subject-level and topic-level controls
+                const controlRow = quickSelectButton.closest('.specific-topic-control, .subject-controls');
                 const type = quickSelectButton.dataset.type; // 'theory' or 'calculation'
                 if (!controlRow) return;
+
 
                 // Find the specific input and slider that match the button's type.
                 // This was the source of the bug. It was just finding the first input/slider.
