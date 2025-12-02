@@ -494,7 +494,7 @@ export function initializeCustomQuizHandler() {
                 <div class="mt-2 space-y-2">
                     <!-- Theory Questions -->
                     <div class="flex items-center justify-between gap-2 ${theoryCount === 0 ? 'hidden' : ''}">
-                        <span class="text-xs text-gray-500 dark:text-gray-400 w-16">ทฤษฎี (${theoryCount} ข้อ)</span>
+                        <span class="text-xs text-gray-500 dark:text-gray-400 w-16">ทฤษฎี <br>(${theoryCount} ข้อ)</span>
                         <input data-subject="${subjectKey}" data-chapter="${chapterTitle}" data-specific="${specificTopic}" data-type="theory" type="number" min="0" max="${theoryCount}" value="0" class="w-16 py-1 px-1 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900/50 text-center font-semibold text-sm text-blue-600 dark:text-blue-400 focus:ring-blue-500 focus:border-blue-500 flex-shrink-0" ${disabled ? 'disabled' : ''}>
                         <div class="flex-grow flex justify-end gap-1 quick-select-buttons">
                             <button type="button" data-value="5" data-type="theory" class="px-2 py-0.5 text-xs font-medium text-gray-600 bg-gray-100 dark:text-gray-300 dark:bg-gray-700/60 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 ${theoryCount < 5 ? 'hidden' : ''}">5</button>
@@ -504,7 +504,7 @@ export function initializeCustomQuizHandler() {
                     </div>
                     <!-- Calculation Questions -->
                     <div class="flex items-center justify-between gap-2 ${calcCount === 0 ? 'hidden' : ''}">
-                        <span class="text-xs text-gray-500 dark:text-gray-400 w-16">คำนวณ (${calcCount} ข้อ)</span>
+                        <span class="text-xs text-gray-500 dark:text-gray-400 w-16">คำนวณ <br>(${calcCount} ข้อ)</span>
                         <input data-subject="${subjectKey}" data-chapter="${chapterTitle}" data-specific="${specificTopic}" data-type="calculation" type="number" min="0" max="${calcCount}" value="0" class="w-16 py-1 px-1 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900/50 text-center font-semibold text-sm text-green-600 dark:text-green-400 focus:ring-green-500 focus:border-green-500 flex-shrink-0" ${disabled ? 'disabled' : ''}>
                         <div class="flex-grow flex justify-end gap-1 quick-select-buttons">
                              <button type="button" data-value="5" data-type="calculation" class="px-2 py-0.5 text-xs font-medium text-gray-600 bg-gray-100 dark:text-gray-300 dark:bg-gray-700/60 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 ${calcCount < 5 ? 'hidden' : ''}">5</button>
