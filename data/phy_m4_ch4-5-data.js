@@ -245,7 +245,7 @@ export const quizItems = [
     questions: [{
       number: 17,
       type: "fill-in-number",
-      question: "จงหาแรงปฏิกิริยาที่จุดรองรับ B",
+      question: "จงหาแรงปฏิกิริยาที่จุดรองรับ B (ตอบเป็นทศนิยม 2 ตำแหน่งในหน่วย N)",
       answer: 133.33,
       unit: "N",
       decimalPlaces: 2,
@@ -259,7 +259,7 @@ export const quizItems = [
     }, {
       number: 18,
       type: "fill-in-number",
-      question: "จงหาแรงปฏิกิริยาที่จุดรองรับ A",
+      question: "จงหาแรงปฏิกิริยาที่จุดรองรับ A (ตอบเป็นทศนิยม 2 ตำแหน่งในหน่วย N)",
       answer: 66.67,
       unit: "N",
       decimalPlaces: 2,
