@@ -1,6 +1,17 @@
 
 export const quizList = [
   {
+    "id": "phy_m4_ch5-9",
+    "title": "งานและพลังงาน (ชุดที่ 9)",
+    "amount": 40,
+    "description": "บทที่ 5: งานและพลังงาน (เน้นเครื่องกลอย่างง่าย)",
+    "url": "./quiz/index.html?id=phy_m4_ch5-9",
+    "storageKey": "quizState-phy_m4_ch5-9",
+    "icon": "./assets/icons/pulley.png",
+    "category": "PhysicsM4",
+    "subCategory": "บทที่ 5: งานและพลังงาน"
+  },
+  {
     "id": "phy_m4_ch5-8",
     "title": "งานและพลังงาน (ชุดที่ 8)",
     "amount": 40,
