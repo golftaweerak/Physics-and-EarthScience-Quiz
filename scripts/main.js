@@ -2,7 +2,6 @@ import { ModalHandler } from "./modal-handler.js";
 import { getQuizProgress, categoryDetails } from "./data-manager.js";
 import { quizList } from "../data/quizzes-list.js";
 //import { loadHeader } from "./header-loader.js";
-import { initializeCustomQuizHandler } from "./custom-quiz-handler.js";
 import { getSyllabusForCategory } from "./syllabus-manager.js";
 
 /**
