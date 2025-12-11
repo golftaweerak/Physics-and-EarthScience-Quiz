@@ -80,6 +80,8 @@ export function initializeCustomQuizHandler() {
     const confirmModalEl = document.getElementById("confirm-action-modal");
 
     const createCustomQuizBtn = document.getElementById("create-custom-quiz-btn");
+    const customQuizStartBtn = document.getElementById("custom-quiz-start-btn");
+    const customQuizClearBtn = document.getElementById("custom-quiz-clear-btn");
     const categorySelectionContainer = document.getElementById("custom-quiz-category-selection");
     const totalQuestionCountDisplay = document.getElementById("total-question-count");
     const openCreateQuizModalBtn = document.getElementById("open-create-quiz-modal-btn");
@@ -120,6 +122,100 @@ export function initializeCustomQuizHandler() {
     let activeStorageKey = '';
     let onConfirmAction = null;
 
+    /**
+     * Manages focus trapping within a modal to improve accessibility.
+     * - Sets initial focus on the first focusable element.
+     * - Traps Tab and Shift+Tab navigation within the modal.
+     * - Allows closing the modal with the Escape key.
+     */
+    const focusTrap = {
+        activeTrapElement: null,
+        closeCallback: null,
+
+        activate(modalElement, closeCallback) {
+            if (this.activeTrapElement) this.deactivate(); // Deactivate any existing trap
+
+            this.activeTrapElement = modalElement;
+            this.closeCallback = closeCallback;
+
+            this.handleKeyDown = this.handleKeyDown.bind(this);
+            document.addEventListener('keydown', this.handleKeyDown, true); // Use capture phase
+
+            // Defer focusing to allow for modal transitions and rendering.
+            setTimeout(() => {
+                if (!this.activeTrapElement) return;
+                const focusableElements = this.getFocusableElements(this.activeTrapElement);
+                if (focusableElements.length > 0) {
+                    focusableElements[0].focus();
+                }
+            }, 100);
+        },
+
+        deactivate() {
+            if (!this.activeTrapElement) return;
+            document.removeEventListener('keydown', this.handleKeyDown, true);
+            this.activeTrapElement = null;
+            this.closeCallback = null;
+        },
+
+        handleKeyDown(e) {
+            if (!this.activeTrapElement) return;
+
+            // If Escape key is pressed, call the close callback.
+            if (e.key === 'Escape') {
+                e.stopPropagation();
+                if (this.closeCallback) this.closeCallback();
+                return;
+            }
+
+            // If Tab key is not pressed, do nothing.
+            if (e.key !== 'Tab') return;
+
+            const focusableElements = this.getFocusableElements(this.activeTrapElement);
+            if (focusableElements.length === 0) {
+                e.preventDefault(); // Prevent tabbing out if no elements are focusable
+                return;
+            }
+
+            const firstElement = focusableElements[0];
+            const lastElement = focusableElements[focusableElements.length - 1];
+
+            if (e.shiftKey) { // Shift + Tab
+                if (document.activeElement === firstElement) {
+                    lastElement.focus();
+                    e.preventDefault();
+                }
+            } else { // Tab
+                if (document.activeElement === lastElement) {
+                    firstElement.focus();
+                    e.preventDefault();
+                }
+            }
+        },
+
+        getFocusableElements(element) {
+            const selector = 'a[href]:not([disabled]), button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
+            return Array.from(element.querySelectorAll(selector))
+                .filter(el => el.offsetParent !== null); // Check for visibility
+        }
+    };
+
+    /**
+     * Sets up a MutationObserver to automatically manage the focus trap for a given modal.
+     * @param {ModalHandler} modalHandler The modal handler instance.
+     */
+    function setupFocusTrapForModal(modalHandler) {
+        if (!modalHandler || !modalHandler.modal) return;
+        const modalElement = modalHandler.modal;
+
+        const observer = new MutationObserver(() => {
+            const isHidden = modalElement.classList.contains('hidden') || modalElement.getAttribute('aria-hidden') === 'true';
+            isHidden ? focusTrap.activeTrapElement === modalElement && focusTrap.deactivate() : focusTrap.activate(modalElement, () => modalHandler.close());
+        });
+
+        observer.observe(modalElement, { attributes: true, attributeFilter: ['class', 'aria-hidden'] });
+    }
+
     // Apply the modern scrollbar class to the modal bodies.
     try {
         // We assume the scrollable container within the modal has a class like 'overflow-y-auto'.
@@ -129,6 +225,9 @@ export function initializeCustomQuizHandler() {
     } catch (error) {
         console.error("Could not apply modern scrollbar class to modals:", error);
     }
+
+    // Automatically apply focus trap logic to all modals managed by ModalHandler.
+    [customQuizModal, customQuizHubModal, completedModal, confirmModal].forEach(setupFocusTrapForModal);
 
     /**
      * Updates a range slider's track to show a fill color up to the current value.
@@ -485,9 +584,12 @@ export function initializeCustomQuizHandler() {
         `;
     }
 
-    function bindCustomQuizModalEvents() {
+    function setupCustomQuizInputListeners() {
         const container = customQuizModal.modal; // Listen on the whole modal for delegated events
         if (!container) return;
+
+        // Initialize all sliders with the correct track fill on load
+        container.querySelectorAll('input[type="range"]').forEach(updateSliderTrack);
 
         // Use event delegation for better performance
         container.addEventListener('input', (e) => {
@@ -782,20 +884,26 @@ export function initializeCustomQuizHandler() {
         });
 
         // Add listeners for timer mode radio buttons to show/hide custom time inputs
-        container.addEventListener('change', (e) => {
-            if (e.target.name === 'custom-timer-mode') {
-                const overallTimeInputContainer = document.getElementById('overall-time-input-container');
-                const perQuestionTimeInputContainer = document.getElementById('per-question-time-input-container');
-                const selectedMode = e.target.value;
+        const timerRadios = document.querySelectorAll('input[name="custom-timer-mode"]');
+        const overallTimeInputContainer = document.getElementById('overall-time-input-container');
+        const perQuestionTimeInputContainer = document.getElementById('per-question-time-input-container');
 
-                if (overallTimeInputContainer) {
-                    overallTimeInputContainer.classList.toggle('hidden', selectedMode !== 'overall');
-                }
-                if (perQuestionTimeInputContainer) {
-                    perQuestionTimeInputContainer.classList.toggle('hidden', selectedMode !== 'perQuestion');
-                }
+        function handleTimerModeChange() {
+            const selectedMode = document.querySelector('input[name="custom-timer-mode"]:checked').value;
+            if (overallTimeInputContainer) {
+                overallTimeInputContainer.classList.toggle('hidden', selectedMode !== 'overall');
             }
+            if (perQuestionTimeInputContainer) {
+                perQuestionTimeInputContainer.classList.toggle('hidden', selectedMode !== 'perQuestion');
+            }
+        }
+
+        timerRadios.forEach(radio => {
+            radio.addEventListener('change', handleTimerModeChange);
         });
+
+        // Set initial visibility based on the default checked radio
+        handleTimerModeChange();
     }
 
     /**
@@ -814,11 +922,6 @@ export function initializeCustomQuizHandler() {
 
         try {
             if (!quizDataCache) {
-                // Show loader inside the modal body
-                const mainContentArea = customQuizModal.modal.querySelector('#custom-quiz-main-content');
-                if (mainContentArea) {
-                    mainContentArea.innerHTML = `<div class="flex justify-center items-center p-10"><svg class="animate-spin h-8 w-8 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg></div>`;
-                }
                 quizDataCache = await fetchAllQuizData();
             }
             const { allQuestions } = quizDataCache;
@@ -924,20 +1027,14 @@ export function initializeCustomQuizHandler() {
 
         } catch (error) {
             console.error("Failed to fetch data for custom quiz creation:", error);
-            customQuizModal.close(); // Close the loading modal
-            showNotificationModal({
-                title: 'เกิดข้อผิดพลาด',
-                message: `ไม่สามารถโหลดข้อมูลคำถามทั้งหมดได้ กรุณาลองอีกครั้งในภายหลัง<br><small class="text-gray-500">(${error.message})</small>`,
-                type: 'alert'
-            });
+            // Optionally, show an error message to the user
         } finally {
             // Re-enable the button and restore its text
             triggerElement.innerHTML = originalText;
             triggerElement.disabled = false;
             // Setup listeners after all content is loaded
             adjustScrollableContentPadding();
-            // Initialize sliders visual state
-            customQuizModal.modal.querySelectorAll('input[type="range"]').forEach(updateSliderTrack);
+            setupCustomQuizInputListeners();
             updateTotalCount();
         }
     }
@@ -1059,52 +1156,6 @@ export function initializeCustomQuizHandler() {
         window.location.href = `./quiz/index.html?id=${customQuiz.customId}`;
     }
 
-    function handleRandomSelection() {
-        const allInputs = Array.from(document.querySelectorAll('#custom-quiz-category-selection input[type="number"]'));
-        if (allInputs.length === 0) return;
-
-        const maxQuestions = allInputs.reduce((sum, input) => sum + parseInt(input.max, 10), 0);
-        
-        if (maxQuestions === 0) {
-            alert("ไม่มีคำถามให้เลือก");
-            return;
-        }
-
-        const userInput = prompt(`ระบุจำนวนข้อที่ต้องการสุ่ม (สูงสุด ${maxQuestions} ข้อ):`, Math.min(30, maxQuestions));
-        if (userInput === null) return;
-
-        let targetCount = parseInt(userInput, 10);
-        if (isNaN(targetCount) || targetCount <= 0) {
-            alert("กรุณาระบุจำนวนที่ถูกต้อง");
-            return;
-        }
-        
-        if (targetCount > maxQuestions) targetCount = maxQuestions;
-
-        // Reset
-        allInputs.forEach(input => input.value = 0);
-
-        let currentCount = 0;
-        // Create a pool of available inputs (indices)
-        let availableInputs = allInputs.map((input, index) => ({ index, max: parseInt(input.max, 10) })).filter(item => item.max > 0);
-
-        while (currentCount < targetCount && availableInputs.length > 0) {
-            const randIndex = Math.floor(Math.random() * availableInputs.length);
-            const item = availableInputs[randIndex];
-            const input = allInputs[item.index];
-            
-            const currentVal = parseInt(input.value, 10);
-            input.value = currentVal + 1;
-            currentCount++;
-
-            if (parseInt(input.value, 10) >= item.max) {
-                availableInputs.splice(randIndex, 1);
-            }
-        }
-
-        updateTotalCount();
-    }
-
     // --- 3. Event Listeners Setup ---
 
     // Main button on the index page to open the custom quiz hub
@@ -1124,6 +1175,15 @@ export function initializeCustomQuizHandler() {
 
     // Button inside the hub to open the creation modal
     openCreateQuizModalBtn.addEventListener("click", (e) => buildAndShowCreationModal(e.currentTarget));
+
+    // The final "Start" button in the creation modal
+    customQuizStartBtn.addEventListener("click", handleStartCustomQuiz);
+
+    // Add listener for the new random selection button
+    const randomBtn = document.getElementById('custom-quiz-random-btn');
+    if (randomBtn) {
+        randomBtn.addEventListener('click', handleRandomSelection);
+    }
 
     // Event delegation for the list of custom quizzes (edit, delete, etc.)
     if (customQuizListContainer) {
@@ -1239,7 +1299,4 @@ export function initializeCustomQuizHandler() {
         });
         observer.observe(confirmModalEl, { attributes: true, attributeFilter: ['class'] });
     }
-
-    // Initialize the delegated event listeners once
-    bindCustomQuizModalEvents();
 }

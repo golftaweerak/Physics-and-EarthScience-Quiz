@@ -136,6 +136,7 @@ export function getCategoryDisplayName(categoryKey) {
     return details.displayName || details.title;
 }
 
+
 let mergedScoresCache = null;
 
 /**
@@ -361,52 +362,44 @@ export async function fetchAllQuizData() {
   // Filter out any potential empty/falsy entries from the list to prevent errors.
   const validQuizList = Array.isArray(quizList) ? quizList.filter((quiz) => quiz) : [];
   const promises = validQuizList.map(async (quiz) => {
-    // Add a cache-busting query parameter to ensure the latest data is always fetched.
     const scriptPath = `../data/${quiz.id}-data.js?v=${Date.now()}`;
     try {
-      const module = await import(scriptPath);
-      // Handle modern `quizItems`, legacy `quizScenarios`, and oldest `quizData` for compatibility.
-      const data =
-        module.quizItems || module.quizScenarios || module.quizData || [];
+        const module = await import(scriptPath);
+        const data = module.quizItems || module.quizScenarios || module.quizData || [];
 
-      if (!data || !Array.isArray(data)) return [];
-
-      return data.flatMap((item) => {
-        if (!item) return [];
-
-        if (item.type === "scenario" && Array.isArray(item.questions)) {
-          const scenarioId = `${quiz.id}_${item.title.replace(/\s/g, "_")}`;
-          // Cache the scenario details
-          if (!scenariosCache.has(scenarioId)) {
-            scenariosCache.set(scenarioId, {
-              title: item.title,
-              description: item.description,
-            });
-          }
-          // Filter out null/undefined questions within the scenario before mapping
-          return item.questions
-            .filter((q) => q)
-            .map((q) => ({
-              ...q,
-              // Use the question's subCategory, fall back to the scenario's, then to the quiz's main category.
-              subCategory: q.subCategory || item.subCategory || quiz.category,
-              sourceQuizCategory: quiz.category,
-              sourceQuizTitle: quiz.title, // Add source quiz title
-              scenarioId: scenarioId, // Link question back to its scenario
-            }));
+        if (!Array.isArray(data)) {
+            console.warn(`Data for quiz ID "${quiz.id}" is not an array. Skipping.`);
+            return [];
         }
-        // For standalone questions, use its subCategory or fall back to the quiz's main category.
-        return {
-          ...item,
-          subCategory: item.subCategory || quiz.category,
-          sourceQuizCategory: quiz.category,
-          sourceQuizTitle: quiz.title,
-        };
-      });
+
+        return data.flatMap((item) => {
+            if (!item) return [];
+
+            if (item.type === "scenario" && Array.isArray(item.questions)) {
+                const scenarioId = `${quiz.id}_${item.title.replace(/\s/g, "_")}`;
+                if (!scenariosCache.has(scenarioId)) {
+                    scenariosCache.set(scenarioId, { title: item.title, description: item.description });
+                }
+                return item.questions.filter(q => q).map(q => ({
+                    ...q,
+                    subCategory: q.subCategory || item.subCategory || quiz.category,
+                    sourceQuizCategory: quiz.category,
+                    sourceQuizTitle: quiz.title,
+                    scenarioId: scenarioId,
+                }));
+            }
+            return {
+                ...item,
+                subCategory: item.subCategory || quiz.category,
+                sourceQuizCategory: quiz.category,
+                sourceQuizTitle: quiz.title,
+            };
+        });
     } catch (error) {
-      // Re-throw the error with more context so the caller can handle it.
-      // This prevents the entire process from silently failing on one bad file.
-      throw new Error(`Failed to load or parse ${scriptPath}: ${error.message}`);
+        // Instead of throwing, log the error and return an empty array.
+        // This allows Promise.all to complete successfully even if some files are missing.
+        console.warn(`Could not load or parse data for quiz ID "${quiz.id}" from ${scriptPath}. Skipping. Error: ${error.message}`);
+        return []; // Return an empty array for this failed import
     }
   });
 
@@ -414,36 +407,36 @@ export async function fetchAllQuizData() {
   try {
     const results = await Promise.all(promises);
     allQuestionsCache = results.flat();
-
-    // Pre-process each question to create a single, lowercase, searchable text field.
-    // This is done only once when the data is first loaded, making subsequent searches much faster.
-    allQuestionsCache.forEach(q => {
-      const searchableParts = [
-        q.question,
-        q.explanation,
-        q.scenarioTitle,
-        q.scenarioDescription,
-        q.sourceQuizTitle,
-        ...(q.options || q.choices || []),
-      ];
-      // Handle both object and string formats for subCategory
-      if (q.subCategory) {
-        if (typeof q.subCategory === 'object' && q.subCategory.main) {
-          searchableParts.push(q.subCategory.main);
-          const specifics = Array.isArray(q.subCategory.specific) ? q.subCategory.specific : [q.subCategory.specific];
-          searchableParts.push(...specifics);
-        } else if (typeof q.subCategory === 'string') {
-          searchableParts.push(q.subCategory);
-        }
-      }
-      q.searchableText = searchableParts.filter(Boolean).join(' ').toLowerCase();
-    });
   } catch (error) {
     // The error from a failing import will be caught here.
     // We re-throw it so the UI layer (e.g., preview.js) can display a meaningful message.
     console.error("A critical error occurred while loading all quiz data:", error);
     throw error;
   }
+
+  // Pre-process each question to create a single, lowercase, searchable text field.
+  // This is done only once when the data is first loaded, making subsequent searches much faster.
+  allQuestionsCache.forEach(q => {
+    const searchableParts = [
+      q.question,
+      q.explanation,
+      q.scenarioTitle,
+      q.scenarioDescription,
+      q.sourceQuizTitle,
+      ...(q.options || q.choices || []),
+    ];
+    // Handle both object and string formats for subCategory
+    if (q.subCategory) {
+      if (typeof q.subCategory === 'object' && q.subCategory.main) {
+        searchableParts.push(q.subCategory.main);
+        const specifics = Array.isArray(q.subCategory.specific) ? q.subCategory.specific : [q.subCategory.specific];
+        searchableParts.push(...specifics);
+      } else if (typeof q.subCategory === 'string') {
+        searchableParts.push(q.subCategory);
+      }
+    }
+    q.searchableText = searchableParts.filter(Boolean).join(' ').toLowerCase();
+  });
 
   // This logic creates a nested structure for easier filtering by specific sub-categories.
   // e.g., { Geology: { "หัวข้อ 1": [q1, q2], "หัวข้อ 2": [q3] } }

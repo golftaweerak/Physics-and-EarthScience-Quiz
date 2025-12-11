@@ -49,6 +49,18 @@ const config = {
 };
 
 /**
+ * Applies a temporary animation class to an element.
+ * @param {HTMLElement} element The element to animate.
+ * @param {string} animationClass The CSS class for the animation.
+ */
+function applyAnimation(element, animationClass) {
+  if (!element) return;
+  element.classList.add(animationClass);
+  element.addEventListener('animationend', () => {
+    element.classList.remove(animationClass);
+  }, { once: true });
+}
+/**
  * Parses the subCategory property from a question object and returns a standardized format.
  * This centralizes the logic for handling both old (string) and new (object) formats.
  * @param {object|string} subCategory - The subCategory property from a question.
@@ -543,8 +555,10 @@ function evaluateMultipleAnswer() {
   if (isCorrect) {
     state.score++;
     elements.scoreCounter.textContent = `คะแนน: ${state.score}`;
+    applyAnimation(answerInput, 'animate-correct');
     if (state.isSoundEnabled) state.correctSound.play().catch(e => console.error("Error playing sound:", e));
   } else {
+    applyAnimation(answerInput, 'animate-shake');
     if (state.isSoundEnabled) state.incorrectSound.play().catch(e => console.error("Error playing sound:", e));
   }
 
@@ -664,9 +678,11 @@ function evaluateFillInNumberAnswer() {
     state.score++;
     elements.scoreCounter.textContent = `คะแนน: ${state.score}`;
     answerInput.classList.add('correct');
+    applyAnimation(answerInput, 'animate-correct');
     if (state.isSoundEnabled) state.correctSound.play().catch(e => console.error("Error playing sound:", e));
   } else {
     answerInput.classList.add('incorrect');
+    applyAnimation(answerInput, 'animate-shake');
     if (state.isSoundEnabled) state.incorrectSound.play().catch(e => console.error("Error playing sound:", e));
   }
 
@@ -725,12 +741,14 @@ function selectAnswer(e) {
     state.score++;
     elements.scoreCounter.textContent = `คะแนน: ${state.score}`;
     selectedBtn.classList.add("correct");
+    applyAnimation(selectedBtn, 'animate-correct');
     if (state.isSoundEnabled)
       state.correctSound
         .play()
         .catch((e) => console.error("Error playing sound:", e));
   } else {
     selectedBtn.classList.add("incorrect");
+    applyAnimation(selectedBtn, 'animate-shake');
     if (state.isSoundEnabled)
       state.incorrectSound
         .play()
@@ -746,7 +764,11 @@ function selectAnswer(e) {
 
   Array.from(elements.options.children).forEach((button) => {
     if (button.dataset.optionValue.trim() === correctAnswer) {
+      // Always highlight the correct answer
       button.classList.add("correct");
+      if (!correct) {
+        applyAnimation(button, 'animate-correct');
+      }
     }
     button.disabled = true;
   });
