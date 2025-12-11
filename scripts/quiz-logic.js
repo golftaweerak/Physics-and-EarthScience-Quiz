@@ -681,9 +681,11 @@ function evaluateFillInNumberAnswer() {
     state.score++;
     elements.scoreCounter.textContent = `คะแนน: ${state.score}`;
     answerInput.classList.add('correct');
+    applyAnimation(answerInput, 'animate-correct');
     if (state.isSoundEnabled) state.correctSound.play().catch(e => console.error("Error playing sound:", e));
   } else {
     answerInput.classList.add('incorrect');
+    applyAnimation(answerInput, 'animate-shake');
     if (state.isSoundEnabled) state.incorrectSound.play().catch(e => console.error("Error playing sound:", e));
   }
 

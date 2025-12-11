@@ -120,100 +120,6 @@ export function initializeCustomQuizHandler() {
     let activeStorageKey = '';
     let onConfirmAction = null;
 
-    /**
-     * Manages focus trapping within a modal to improve accessibility.
-     * - Sets initial focus on the first focusable element.
-     * - Traps Tab and Shift+Tab navigation within the modal.
-     * - Allows closing the modal with the Escape key.
-     */
-    const focusTrap = {
-        activeTrapElement: null,
-        closeCallback: null,
-
-        activate(modalElement, closeCallback) {
-            if (this.activeTrapElement) this.deactivate(); // Deactivate any existing trap
-
-            this.activeTrapElement = modalElement;
-            this.closeCallback = closeCallback;
-
-            this.handleKeyDown = this.handleKeyDown.bind(this);
-            document.addEventListener('keydown', this.handleKeyDown, true); // Use capture phase
-
-            // Defer focusing to allow for modal transitions and rendering.
-            setTimeout(() => {
-                if (!this.activeTrapElement) return;
-                const focusableElements = this.getFocusableElements(this.activeTrapElement);
-                if (focusableElements.length > 0) {
-                    focusableElements[0].focus();
-                }
-            }, 100);
-        },
-
-        deactivate() {
-            if (!this.activeTrapElement) return;
-            document.removeEventListener('keydown', this.handleKeyDown, true);
-            this.activeTrapElement = null;
-            this.closeCallback = null;
-        },
-
-        handleKeyDown(e) {
-            if (!this.activeTrapElement) return;
-
-            // If Escape key is pressed, call the close callback.
-            if (e.key === 'Escape') {
-                e.stopPropagation();
-                if (this.closeCallback) this.closeCallback();
-                return;
-            }
-
-            // If Tab key is not pressed, do nothing.
-            if (e.key !== 'Tab') return;
-
-            const focusableElements = this.getFocusableElements(this.activeTrapElement);
-            if (focusableElements.length === 0) {
-                e.preventDefault(); // Prevent tabbing out if no elements are focusable
-                return;
-            }
-
-            const firstElement = focusableElements[0];
-            const lastElement = focusableElements[focusableElements.length - 1];
-
-            if (e.shiftKey) { // Shift + Tab
-                if (document.activeElement === firstElement) {
-                    lastElement.focus();
-                    e.preventDefault();
-                }
-            } else { // Tab
-                if (document.activeElement === lastElement) {
-                    firstElement.focus();
-                    e.preventDefault();
-                }
-            }
-        },
-
-        getFocusableElements(element) {
-            const selector = 'a[href]:not([disabled]), button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
-            return Array.from(element.querySelectorAll(selector))
-                .filter(el => el.offsetParent !== null); // Check for visibility
-        }
-    };
-
-    /**
-     * Sets up a MutationObserver to automatically manage the focus trap for a given modal.
-     * @param {ModalHandler} modalHandler The modal handler instance.
-     */
-    function setupFocusTrapForModal(modalHandler) {
-        if (!modalHandler || !modalHandler.modal) return;
-        const modalElement = modalHandler.modal;
-
-        const observer = new MutationObserver(() => {
-            const isHidden = modalElement.classList.contains('hidden') || modalElement.getAttribute('aria-hidden') === 'true';
-            isHidden ? focusTrap.activeTrapElement === modalElement && focusTrap.deactivate() : focusTrap.activate(modalElement, () => modalHandler.close());
-        });
-
-        observer.observe(modalElement, { attributes: true, attributeFilter: ['class', 'aria-hidden'] });
-    }
-
     // Apply the modern scrollbar class to the modal bodies.
     try {
         // We assume the scrollable container within the modal has a class like 'overflow-y-auto'.
@@ -223,9 +129,6 @@ export function initializeCustomQuizHandler() {
     } catch (error) {
         console.error("Could not apply modern scrollbar class to modals:", error);
     }
-
-    // Automatically apply focus trap logic to all modals managed by ModalHandler.
-    [customQuizModal, customQuizHubModal, completedModal, confirmModal].forEach(setupFocusTrapForModal);
 
     /**
      * Updates a range slider's track to show a fill color up to the current value.
@@ -849,7 +752,13 @@ export function initializeCustomQuizHandler() {
                 handleRandomSelection();
             }
 
-            // Handle "Clear All" button in the summary panel (this is the one at the bottom of the sidebar)
+            // NEW: Handle subject-level random button
+            if (target.dataset.action === 'random-subject') {
+                e.stopPropagation(); // Prevent accordion from toggling
+                const subjectKey = target.dataset.subjectKey;
+                handleRandomSelectionForSubject(subjectKey);
+            }
+
             if (target.id === 'custom-quiz-clear-btn' || target.closest('#custom-quiz-clear-btn')) {
                 const allInputs = document.querySelectorAll('#custom-quiz-category-selection input[type="number"]');
                 allInputs.forEach(input => {
@@ -1129,7 +1038,7 @@ export function initializeCustomQuizHandler() {
 
         const descriptionParts = Object.values(counts).reduce((acc, chapters) => {
             for (const [chapterTitle, specifics] of Object.entries(chapters)) {
-                const totalInChapter = Object.values(specifics).reduce((sum, count) => sum + count, 0);
+                const totalInChapter = Object.values(specifics).reduce((sum, typeCounts) => sum + (typeCounts.theory || 0) + (typeCounts.calculation || 0), 0);
                 acc[chapterTitle] = (acc[chapterTitle] || 0) + totalInChapter;
             }
             return acc;
