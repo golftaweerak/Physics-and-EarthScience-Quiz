@@ -80,8 +80,6 @@ export function initializeCustomQuizHandler() {
     const confirmModalEl = document.getElementById("confirm-action-modal");
 
     const createCustomQuizBtn = document.getElementById("create-custom-quiz-btn");
-    const customQuizStartBtn = document.getElementById("custom-quiz-start-btn");
-    const customQuizClearBtn = document.getElementById("custom-quiz-clear-btn");
     const categorySelectionContainer = document.getElementById("custom-quiz-category-selection");
     const totalQuestionCountDisplay = document.getElementById("total-question-count");
     const openCreateQuizModalBtn = document.getElementById("open-create-quiz-modal-btn");
@@ -584,12 +582,9 @@ export function initializeCustomQuizHandler() {
         `;
     }
 
-    function setupCustomQuizInputListeners() {
+    function bindCustomQuizModalEvents() {
         const container = customQuizModal.modal; // Listen on the whole modal for delegated events
         if (!container) return;
-
-        // Initialize all sliders with the correct track fill on load
-        container.querySelectorAll('input[type="range"]').forEach(updateSliderTrack);
 
         // Use event delegation for better performance
         container.addEventListener('input', (e) => {
@@ -844,9 +839,18 @@ export function initializeCustomQuizHandler() {
                 updateTotalCount();
             }
 
+            // Handle "Start Quiz" button
+            if (target.id === 'custom-quiz-start-btn' || target.closest('#custom-quiz-start-btn')) {
+                handleStartCustomQuiz();
+            }
+
+            // Handle "Random Selection" button
+            if (target.id === 'custom-quiz-random-btn' || target.closest('#custom-quiz-random-btn')) {
+                handleRandomSelection();
+            }
+
             // Handle "Clear All" button in the summary panel (this is the one at the bottom of the sidebar)
-            // Handle "Clear All" button in the summary panel
-            if (target.id === 'custom-quiz-clear-btn') {
+            if (target.id === 'custom-quiz-clear-btn' || target.closest('#custom-quiz-clear-btn')) {
                 const allInputs = document.querySelectorAll('#custom-quiz-category-selection input[type="number"]');
                 allInputs.forEach(input => {
                     if (input.value !== '0') {
@@ -884,26 +888,20 @@ export function initializeCustomQuizHandler() {
         });
 
         // Add listeners for timer mode radio buttons to show/hide custom time inputs
-        const timerRadios = document.querySelectorAll('input[name="custom-timer-mode"]');
-        const overallTimeInputContainer = document.getElementById('overall-time-input-container');
-        const perQuestionTimeInputContainer = document.getElementById('per-question-time-input-container');
+        container.addEventListener('change', (e) => {
+            if (e.target.name === 'custom-timer-mode') {
+                const overallTimeInputContainer = document.getElementById('overall-time-input-container');
+                const perQuestionTimeInputContainer = document.getElementById('per-question-time-input-container');
+                const selectedMode = e.target.value;
 
-        function handleTimerModeChange() {
-            const selectedMode = document.querySelector('input[name="custom-timer-mode"]:checked').value;
-            if (overallTimeInputContainer) {
-                overallTimeInputContainer.classList.toggle('hidden', selectedMode !== 'overall');
+                if (overallTimeInputContainer) {
+                    overallTimeInputContainer.classList.toggle('hidden', selectedMode !== 'overall');
+                }
+                if (perQuestionTimeInputContainer) {
+                    perQuestionTimeInputContainer.classList.toggle('hidden', selectedMode !== 'perQuestion');
+                }
             }
-            if (perQuestionTimeInputContainer) {
-                perQuestionTimeInputContainer.classList.toggle('hidden', selectedMode !== 'perQuestion');
-            }
-        }
-
-        timerRadios.forEach(radio => {
-            radio.addEventListener('change', handleTimerModeChange);
         });
-
-        // Set initial visibility based on the default checked radio
-        handleTimerModeChange();
     }
 
     /**
@@ -1034,7 +1032,8 @@ export function initializeCustomQuizHandler() {
             triggerElement.disabled = false;
             // Setup listeners after all content is loaded
             adjustScrollableContentPadding();
-            setupCustomQuizInputListeners();
+            // Initialize sliders visual state
+            customQuizModal.modal.querySelectorAll('input[type="range"]').forEach(updateSliderTrack);
             updateTotalCount();
         }
     }
@@ -1156,6 +1155,52 @@ export function initializeCustomQuizHandler() {
         window.location.href = `./quiz/index.html?id=${customQuiz.customId}`;
     }
 
+    function handleRandomSelection() {
+        const allInputs = Array.from(document.querySelectorAll('#custom-quiz-category-selection input[type="number"]'));
+        if (allInputs.length === 0) return;
+
+        const maxQuestions = allInputs.reduce((sum, input) => sum + parseInt(input.max, 10), 0);
+        
+        if (maxQuestions === 0) {
+            alert("ไม่มีคำถามให้เลือก");
+            return;
+        }
+
+        const userInput = prompt(`ระบุจำนวนข้อที่ต้องการสุ่ม (สูงสุด ${maxQuestions} ข้อ):`, Math.min(30, maxQuestions));
+        if (userInput === null) return;
+
+        let targetCount = parseInt(userInput, 10);
+        if (isNaN(targetCount) || targetCount <= 0) {
+            alert("กรุณาระบุจำนวนที่ถูกต้อง");
+            return;
+        }
+        
+        if (targetCount > maxQuestions) targetCount = maxQuestions;
+
+        // Reset
+        allInputs.forEach(input => input.value = 0);
+
+        let currentCount = 0;
+        // Create a pool of available inputs (indices)
+        let availableInputs = allInputs.map((input, index) => ({ index, max: parseInt(input.max, 10) })).filter(item => item.max > 0);
+
+        while (currentCount < targetCount && availableInputs.length > 0) {
+            const randIndex = Math.floor(Math.random() * availableInputs.length);
+            const item = availableInputs[randIndex];
+            const input = allInputs[item.index];
+            
+            const currentVal = parseInt(input.value, 10);
+            input.value = currentVal + 1;
+            currentCount++;
+
+            if (parseInt(input.value, 10) >= item.max) {
+                availableInputs.splice(randIndex, 1);
+            }
+        }
+
+        updateTotalCount();
+    }
+
     // --- 3. Event Listeners Setup ---
 
     // Main button on the index page to open the custom quiz hub
@@ -1175,15 +1220,6 @@ export function initializeCustomQuizHandler() {
 
     // Button inside the hub to open the creation modal
     openCreateQuizModalBtn.addEventListener("click", (e) => buildAndShowCreationModal(e.currentTarget));
-
-    // The final "Start" button in the creation modal
-    customQuizStartBtn.addEventListener("click", handleStartCustomQuiz);
-
-    // Add listener for the new random selection button
-    const randomBtn = document.getElementById('custom-quiz-random-btn');
-    if (randomBtn) {
-        randomBtn.addEventListener('click', handleRandomSelection);
-    }
 
     // Event delegation for the list of custom quizzes (edit, delete, etc.)
     if (customQuizListContainer) {
@@ -1299,4 +1335,7 @@ export function initializeCustomQuizHandler() {
         });
         observer.observe(confirmModalEl, { attributes: true, attributeFilter: ['class'] });
     }
+
+    // Initialize the delegated event listeners once
+    bindCustomQuizModalEvents();
 }
