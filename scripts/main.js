@@ -70,8 +70,8 @@ function groupQuizzesForCategory(quizzes, categoryKey) {
 
   if (Array.isArray(chapters)) {
     // 1. Separate special categories like "Final Review" from regular chapter quizzes.
-    const specialCategoryName = "แนวข้อสอบปลายภาค";
-    const finalReviewQuizzes = quizzes.filter(quiz => quiz.subCategory === specialCategoryName);
+    const specialCategoryName = "แนวข้อสอบ";
+    const specialQuizzes = quizzes.filter(quiz => quiz.subCategory === specialCategoryName);
     const regularQuizzes = quizzes.filter(quiz => quiz.subCategory !== specialCategoryName);
 
     // 2. Group the regular quizzes based on the syllabus structure.
@@ -101,18 +101,19 @@ function groupQuizzesForCategory(quizzes, categoryKey) {
     }).filter(Boolean);
 
     // 3. Create a separate group for the final review quizzes if they exist.
-    let finalReviewGroup = null;
-    if (finalReviewQuizzes.length > 0) {
-        finalReviewGroup = {
-            title: "แนวข้อสอบปลายภาค",
-            quizzes: finalReviewQuizzes,
+    let specialGroup = null;
+    if (specialQuizzes.length > 0) {
+        specialGroup = {
+            title: "แนวข้อสอบ",
+            description: "รวมแนวข้อสอบสำหรับทบทวนทั้งกลางภาคและปลายภาค",
+            quizzes: specialQuizzes,
             level: 1,
-            shortTitle: "ปลายภาค"
+            shortTitle: "แนวข้อสอบ"
         };
     }
 
     // 4. Combine the chapter groups and the special group, with the special group at the end.
-    return finalReviewGroup ? [...chapterGroups, finalReviewGroup] : chapterGroups;
+    return specialGroup ? [...chapterGroups, specialGroup] : chapterGroups;
   }
 
   // --- Fallback grouping logic for categories without a defined syllabus structure ---

@@ -150,6 +150,30 @@ export const quizList = [
     "subCategory": "ธรณีพิบัติภัย"
   },
   {
+    "id": "ess_basic_m6_mid2-review-1",
+    "title": "แนวข้อสอบกลางภาค เทอม 2 ชุดที่ 1",
+    "amount": 40,
+    "description": "แนวข้อสอบทบทวนกลางภาค (Midterm Review) ครอบคลุมเนื้อหาบทที่ 6 (การแปรสัณฐาน) และบทที่ 7 (ธรณีพิบัติภัย)",
+    "url": "./quiz/index.html?id=ess_basic_m6_mid2-review-1",
+    "storageKey": "quizState-ess_basic_m6_mid2-review-1",
+    "icon": "./assets/icons/earth.png",
+    "altText": "ไอคอนสำหรับ ess_basic_m6_mid2-review-1",
+    "category": "EarthSpaceScienceBasic",
+    "subCategory": "แนวข้อสอบ"
+  },
+  {
+    "id": "ess_basic_m6_mid2-review-2",
+    "title": "แนวข้อสอบกลางภาค เทอม 2 ชุดที่ 2",
+    "amount": 40,
+    "description": "แนวข้อสอบทบทวนกลางภาคชุดที่ 2 (เน้นไม่ซ้ำกับชุดแรก) ครอบคลุมเนื้อหาการแปรสัณฐานและธรณีพิบัติภัย",
+    "url": "./quiz/index.html?id=ess_basic_m6_mid2-review-2",
+    "storageKey": "quizState-ess_basic_m6_mid2-review-2",
+    "icon": "./assets/icons/earth.png",
+    "altText": "ไอคอนสำหรับ ess_basic_m6_mid2-review-2",
+    "category": "EarthSpaceScienceBasic",
+    "subCategory": "แนวข้อสอบ"
+  },
+  {
     "id": "ess_basic_m6_final-review-1",
     "title": "แนวข้อสอบปลายภาค เทอม 1 ชุดที่ 1",
     "amount": 20,
@@ -159,7 +183,7 @@ export const quizList = [
     "icon": "./assets/icons/earth.png",
     "altText": "ไอคอนสำหรับ ess_basic_m6_final-review-1",
     "category": "EarthSpaceScienceBasic",
-    "subCategory": "แนวข้อสอบปลายภาค"
+    "subCategory": "แนวข้อสอบ"
   },
   {
     "id": "ess_basic_m6_final-review-2",
@@ -171,7 +195,7 @@ export const quizList = [
     "icon": "./assets/icons/earth.png",
     "altText": "ไอคอนสำหรับ ess_basic_m6_final-review-2",
     "category": "EarthSpaceScienceBasic",
-    "subCategory": "แนวข้อสอบปลายภาค"
+    "subCategory": "แนวข้อสอบ"
   },
   {
     "id": "ess_adv_m4_ch1-1",
@@ -524,6 +548,7 @@ export const quizList = [
     "category": "PhysicsM4",
     "subCategory": "บทที่ 5: งานและพลังงาน"
   },
+  
   {
     "id": "phy_m4_final-exam-1",
     "title": "แนวข้อสอบปลายภาค 1 ชุดที่ 1",
@@ -534,7 +559,7 @@ export const quizList = [
     "icon": "./assets/icons/physicsm4.png",
     "altText": "ไอคอนสำหรับ phy_m4_final-exam-1",
     "category": "PhysicsM4",
-    "subCategory": "แนวข้อสอบปลายภาค"
+    "subCategory": "แนวข้อสอบ"
   },
   {
     "id": "phy_m4_final-exam-2",
@@ -546,7 +571,31 @@ export const quizList = [
     "icon": "./assets/icons/physicsm4.png",
     "altText": "ไอคอนสำหรับ phy_m4_final-exam-2",
     "category": "PhysicsM4",
-    "subCategory": "แนวข้อสอบปลายภาค"
+    "subCategory": "แนวข้อสอบ"
+  },
+  {
+    "id": "phy_m4_mid2-exam-1",
+    "title": "แนวข้อสอบกลางภาค 2 ชุดที่ 1",
+    "amount": 40,
+    "description": "ทบทวนเนื้อหาบทที่ 4 (สมดุลต่อการหมุน) และบทที่ 5 (งานและพลังงาน)",
+    "url": "./quiz/index.html?id=phy_m4_mid2-exam-1",
+    "storageKey": "quizState-phy_m4_mid2-exam-1",
+    "icon": "./assets/icons/physicsm4.png",
+    "altText": "ไอคอนสำหรับ phy_m4_mid2-exam-1",
+    "category": "PhysicsM4",
+    "subCategory": "แนวข้อสอบ"
+  },
+  {
+    "id": "phy_m4_mid2-exam-2",
+    "title": "แนวข้อสอบกลางภาค 2 ชุดที่ 2",
+    "amount": 30,
+    "description": "ทบทวนเนื้อหาบทที่ 3 (แรงและกฎการเคลื่อนที่) และบทที่ 4 (สมดุลต่อการเลื่อนที่) โดยเน้นเรื่องแรงโน้มถ่วงและการเปรียบเทียบน้ำหนัก",
+    "url": "./quiz/index.html?id=phy_m4_mid2-exam-2",
+    "storageKey": "quizState-phy_m4_mid2-exam-2",
+    "icon": "./assets/icons/physicsm4.png",
+    "altText": "ไอคอนสำหรับ phy_m4_mid2-exam-2",
+    "category": "PhysicsM4",
+    "subCategory": "แนวข้อสอบ"
   },
   {
     "id": "phy_m5_ch10-1",
@@ -592,7 +641,7 @@ export const quizList = [
     "icon": "./assets/icons/audio-waves.png",
     "altText": "ไอคอนสำหรับ phy_m5_final-exam-1",
     "category": "PhysicsM5",
-    "subCategory": "แนวข้อสอบปลายภาค"
+    "subCategory": "แนวข้อสอบ"
   },
   {
     "id": "phy_m5_final-exam-2",
@@ -604,6 +653,6 @@ export const quizList = [
     "icon": "./assets/icons/audio-waves.png",
     "altText": "ไอคอนสำหรับ phy_m5_final-exam-2",
     "category": "PhysicsM5",
-    "subCategory": "แนวข้อสอบปลายภาค"
+    "subCategory": "แนวข้อสอบ"
   }
 ];
