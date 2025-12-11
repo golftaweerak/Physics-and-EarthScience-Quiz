@@ -293,10 +293,10 @@ function updateProgressBar() {
  * @returns {HTMLElement} The created button element.
  */
 function createOptionButton(optionText, previousAnswer) {
-  const button = document.createElement("button");
+  const button = document.createElement('button');
   button.innerHTML = optionText.replace(/\n/g, "<br>");
   button.dataset.optionValue = optionText; // Store raw value
-  button.className = "option-btn w-full p-4 border-2 border-gray-300 dark:border-gray-600 rounded-lg text-left hover:bg-gray-100 dark:hover:bg-gray-700 hover:border-blue-500 dark:hover:border-blue-500";
+  button.className = "option-btn w-full p-4 border-2 border-gray-300 dark:border-gray-600 rounded-lg text-left hover:bg-gray-100 dark:hover:bg-gray-700 hover:border-blue-500 dark:hover:border-blue-500 transition-all duration-200 ease-in-out transform hover:-translate-y-0.5 hover:shadow-md";
 
   if (previousAnswer) {
     // This is a revisited question, so we disable the button and show its state.
@@ -326,12 +326,12 @@ function createOptionButton(optionText, previousAnswer) {
  * @returns {HTMLElement} The created label element which acts as a fully clickable wrapper.
  */
 function createCheckboxOption(optionText, previousAnswer) {
-  const wrapperLabel = document.createElement('label');
+  const wrapperLabel = document.createElement("label");
   // The entire element is now a label, making it fully clickable.
   // Added cursor-pointer to the wrapper itself and a smooth transition.
-  wrapperLabel.className = 'option-checkbox-wrapper flex items-center w-full p-4 border-2 border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 hover:border-blue-500 dark:hover:border-blue-500 cursor-pointer transition-colors duration-150';
+  wrapperLabel.className = "option-checkbox-wrapper flex items-center w-full p-4 border-2 border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 hover:border-blue-500 dark:hover:border-blue-500 cursor-pointer transition-all duration-200 ease-in-out transform hover:-translate-y-0.5 hover:shadow-md";
 
-  const checkbox = document.createElement('input');
+  const checkbox = document.createElement("input");
   checkbox.type = 'checkbox';
   checkbox.value = optionText.trim();
   // The checkbox itself doesn't need a pointer cursor and we prevent double-toggling.
@@ -490,16 +490,23 @@ function showHint() {
   const currentQuestion = state.shuffledQuestions[state.currentQuestionIndex];
   if (!currentQuestion || !currentQuestion.hint || !elements.hintContainer || !elements.hintBtn) return;
 
-  elements.hintContainer.innerHTML = currentQuestion.hint;
+  // NEW: Add styling to the hint container
+  elements.hintContainer.className = 'mt-4 p-4 bg-yellow-50 dark:bg-yellow-900/30 border-l-4 border-yellow-400 dark:border-yellow-500 text-yellow-800 dark:text-yellow-200 rounded-r-lg flex items-start gap-3 anim-feedback-in';
+  
+  const icon = `<div class="flex-shrink-0 mt-0.5"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" /></svg></div>`;
+  const hintText = `<div><strong class="font-bold">คำใบ้:</strong> ${currentQuestion.hint}</div>`;
+  
+  elements.hintContainer.innerHTML = icon + hintText;
+  
   renderMath(elements.hintContainer);
   elements.hintContainer.classList.remove('hidden');
   elements.hintBtn.classList.add('hidden'); // Hide the button after it's clicked
 }
+
 /**
  * Evaluates the answer for a multiple-select question.
  */
 function evaluateMultipleAnswer() {
-  if (elements.skipBtn) elements.skipBtn.classList.add("hidden");
   if (state.timerMode === "perQuestion") {
     stopTimer();
   }
@@ -566,7 +573,6 @@ function evaluateMultipleAnswer() {
  * Evaluates the answer for a fill-in-the-blank question.
  */
 function evaluateFillInAnswer() {
-  if (elements.skipBtn) elements.skipBtn.classList.add("hidden");
   if (state.timerMode === "perQuestion") {
     stopTimer();
   }
@@ -621,7 +627,6 @@ function evaluateFillInAnswer() {
  * Evaluates the answer for a fill-in-the-blank question with a numerical answer.
  */
 function evaluateFillInNumberAnswer() {
-  if (elements.skipBtn) elements.skipBtn.classList.add("hidden");
   if (state.timerMode === "perQuestion") {
     stopTimer();
   }
@@ -674,7 +679,7 @@ function resetState() {
   elements.nextBtn.classList.add("hidden");
   elements.skipBtn.classList.add("hidden");
   elements.feedback.classList.add("hidden");
-  elements.feedbackContent.innerHTML = "";
+  elements.feedbackContent.innerHTML = '';
   elements.feedback.className = "hidden mt-6 p-4 rounded-lg";
   elements.prevBtn.classList.add("hidden");
   while (elements.options.firstChild) {
@@ -687,7 +692,6 @@ function resetState() {
 }
 
 function selectAnswer(e) {
-  if (elements.skipBtn) elements.skipBtn.classList.add("hidden");
   // Only stop the timer if it's a per-question timer.
   // The overall timer should keep running.
   if (state.timerMode === "perQuestion") {
@@ -753,32 +757,41 @@ function selectAnswer(e) {
 }
 
 function showFeedback(isCorrect, explanation, correctAnswer) {
-  const explanationHtml = explanation
-    ? explanation.replace(/\n/g, "<br>")
-    : "";
-
+  const explanationHtml = explanation ? explanation.replace(/\n/g, "<br>") : "";
   // Handle both string and array for correct answer display
   const correctAnswerDisplay = Array.isArray(correctAnswer) ? correctAnswer.join(', ') : correctAnswer;
 
+  let feedbackHtml = '';
+  let containerClasses = '';
+
   if (isCorrect) {
-    elements.feedbackContent.innerHTML = `<h3 class="font-bold text-lg text-green-800 dark:text-green-300">ถูกต้อง!</h3><p class="text-green-700 dark:text-green-400 mt-2">${explanationHtml}</p>`;
-    elements.feedback.classList.add(
-      "bg-green-100",
-      "dark:bg-green-900/50",
-      "border",
-      "border-green-300",
-      "dark:border-green-700"
-    );
+    feedbackHtml = `
+      <div class="flex-shrink-0">
+        <svg class="h-8 w-8 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
+      </div>
+      <div class="ml-4 flex-grow">
+        <h3 class="font-bold text-lg text-green-800 dark:text-green-300">ถูกต้อง!</h3>
+        ${explanationHtml ? `<p class="text-green-700 dark:text-green-400 mt-2 leading-relaxed">${explanationHtml}</p>` : ''}
+      </div>
+    `;
+    containerClasses = "bg-green-50 dark:bg-green-900/40 border-green-400 dark:border-green-600";
   } else {
-    elements.feedbackContent.innerHTML = `<h3 class="font-bold text-lg text-red-800 dark:text-red-300">ผิดครับ!</h3><p class="text-red-700 dark:text-red-400 mt-1">คำตอบที่ถูกต้องคือ: <strong>${correctAnswerDisplay}</strong></p><p class="text-red-700 dark:text-red-400 mt-2">${explanationHtml}</p>`;
-    elements.feedback.classList.add(
-      "bg-red-100",
-      "dark:bg-red-900/50",
-      "border",
-      "border-red-300",
-      "dark:border-red-700"
-    );
+    feedbackHtml = `
+      <div class="flex-shrink-0">
+        <svg class="h-8 w-8 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" /></svg>
+      </div>
+      <div class="ml-4 flex-grow">
+        <h3 class="font-bold text-lg text-red-800 dark:text-red-300">ผิดครับ!</h3>
+        <p class="text-red-700 dark:text-red-400 mt-1">คำตอบที่ถูกต้องคือ: <strong class="font-mono">${correctAnswerDisplay}</strong></p>
+        ${explanationHtml ? `<p class="text-red-700 dark:text-red-400 mt-2 leading-relaxed">${explanationHtml}</p>` : ''}
+      </div>
+    `;
+    containerClasses = "bg-red-50 dark:bg-red-900/40 border-red-400 dark:border-red-600";
   }
+
+  elements.feedbackContent.innerHTML = feedbackHtml;
+  // Use a more distinct style with a left border
+  elements.feedback.className = `mt-8 p-4 rounded-r-lg border-l-4 flex items-start ${containerClasses}`;
   elements.feedback.classList.remove("hidden");
   elements.feedback.classList.add("anim-feedback-in");
 }
@@ -807,7 +820,7 @@ function handleNextButtonClick() {
       case 'multiple-select':
         evaluateMultipleAnswer();
         break;
-      case 'fill-in':
+    case 'fill-in': // This case is now redundant but kept for safety.
         evaluateFillInAnswer();
         break;
       case 'fill-in-number':
@@ -1299,19 +1312,7 @@ function buildResultsLayout(resultInfo, stats) {
   renderResultCategoryChart(stats.categoryStats);
 
   // --- 8. Final UI Updates ---
-  // Show or hide the review button based on incorrect answers
-  const incorrectAnswers = getIncorrectAnswers();
-  if (incorrectAnswers.length > 0) {
-    elements.reviewBtn.classList.remove("hidden");
-  } else {
-    elements.reviewBtn.classList.add("hidden");
-  }
-
   renderMath(layoutContainer); // Render math only in the new results layout
-}
-function getIncorrectAnswers() {
-  // Add a check for `answer` to prevent errors if some questions were not answered
-  return state.userAnswers.filter((answer) => answer && !answer.isCorrect);
 }
 // --- Core Quiz Logic ---
 
@@ -1876,7 +1877,7 @@ function bindEventListeners() {
   elements.prevBtn.addEventListener("click", showPreviousQuestion);
   elements.restartBtn.addEventListener("click", startQuiz);
   elements.reviewBtn.addEventListener("click", showReview);
-  elements.backToResultBtn.addEventListener("click", backToResult);
+  elements.backToResultBtn.addEventListener("click", () => switchScreen(elements.resultScreen));
   if (elements.soundToggleBtn) {
     elements.soundToggleBtn.addEventListener("click", toggleSound);
   }
