@@ -103,6 +103,42 @@ function groupQuizzesForCategory(quizzes, categoryKey) {
     // 3. Create a separate group for the final review quizzes if they exist.
     let specialGroup = null;
     if (specialQuizzes.length > 0) {
+        // Custom sorting logic for review quizzes to order them by term and type
+        const getSortKey = (quiz) => {
+            const title = quiz.title;
+            let term = 99;
+            let examType = 99; // 1 for midterm, 2 for final
+            let set = 99;
+
+            // Extract term number (e.g., from "เทอม 1" or "ปลายภาค 1")
+            if (title.includes('เทอม 1') || title.includes('ภาค 1')) {
+                term = 1;
+            } else if (title.includes('เทอม 2') || title.includes('ภาค 2')) {
+                term = 2;
+            }
+
+            // Extract exam type
+            if (title.includes('กลางภาค')) {
+                examType = 1;
+            } else if (title.includes('ปลายภาค')) {
+                examType = 2;
+            }
+
+            // Extract set number
+            const setMatch = title.match(/ชุดที่\s*(\d+)/);
+            if (setMatch) {
+                set = parseInt(setMatch[1], 10);
+            }
+            // Create a sortable string: term-examType-set
+            return `${String(term).padStart(2, '0')}-${String(examType).padStart(2, '0')}-${String(set).padStart(2, '0')}`;
+        };
+
+        specialQuizzes.sort((a, b) => {
+            const keyA = getSortKey(a);
+            const keyB = getSortKey(b);
+            return keyA.localeCompare(keyB);
+        });
+
         specialGroup = {
             title: "แนวข้อสอบ",
             description: "รวมแนวข้อสอบสำหรับทบทวนทั้งกลางภาคและปลายภาค",
