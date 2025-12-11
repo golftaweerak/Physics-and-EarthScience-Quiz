@@ -5,6 +5,42 @@ import { quizList } from "../data/quizzes-list.js";
 import { getSyllabusForCategory } from "./syllabus-manager.js";
 
 /**
+ * Injects custom scrollbar styles into the document's head to match the site's theme.
+ */
+function injectCustomScrollbarStyles() {
+    const style = document.createElement('style');
+    style.textContent = `
+        /* For Webkit-based browsers (Chrome, Safari, Edge) */
+        ::-webkit-scrollbar {
+            width: 12px;
+            height: 12px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f8fafc; /* slate-50 */
+        }
+        .dark ::-webkit-scrollbar-track {
+            background: #0f172a; /* slate-900 */
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1; /* slate-300 */
+            border-radius: 20px;
+            border: 3px solid #f8fafc; /* slate-50 */
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background-color: #475569; /* slate-600 */
+            border-color: #0f172a; /* slate-900 */
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: #94a3b8; /* slate-400 */
+        }
+        .dark ::-webkit-scrollbar-thumb:hover {
+            background-color: #334155; /* slate-700 */
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+/**
  * Toggles the state of an accordion section (expands or collapses it).
  * @param {HTMLElement} toggleElement The header element of the accordion section.
  * @param {'open'|'close'|undefined} forceState - Force the accordion to open, close, or toggle.
@@ -177,8 +213,8 @@ export const getSectionToggles = () =>
   document.querySelectorAll(".section-toggle");
 
 export function initializePage() {
-  // Apply modern scrollbar styling to the main page body.
-  document.body.classList.add('modern-scrollbar');
+  // Inject custom scrollbar styles that match the site's theme.
+  injectCustomScrollbarStyles();
 
     // Constants for animation timings to avoid "magic numbers"
     const ACCORDION_ANIMATION_DURATION = 500; // Corresponds to `duration-500` in Tailwind
@@ -237,14 +273,14 @@ export function initializePage() {
     let progressText, progressTextColor, progressBarColor, progressDetails;
 
     if (progress.isFinished) {
-      progressText = `<span class="inline-flex items-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>ทำเสร็จแล้ว!</span>`;
+      progressText = `<span class="inline-flex items-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 mr-1" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>ทำเสร็จแล้ว</span>`;
       progressTextColor = "text-green-600 dark:text-green-400";
-      progressBarColor = "bg-gradient-to-r from-green-400 to-green-500";
+      progressBarColor = "bg-gradient-to-r from-green-400 to-emerald-500 shadow-[0_0_8px_rgba(74,222,128,0.4)]";
       progressDetails = `คะแนน: ${progress.score}/${progress.totalQuestions}`;
     } else if (progress.hasProgress) {
-      progressText = `<span class="inline-flex items-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" viewBox="0 0 20 20" fill="currentColor"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" /></svg>ความคืบหน้า</span>`;
+      progressText = `<span class="inline-flex items-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 mr-1" viewBox="0 0 20 20" fill="currentColor"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" /></svg>ทำต่อ</span>`;
       progressTextColor = "text-blue-600 dark:text-blue-400";
-      progressBarColor = "bg-gradient-to-r from-blue-400 to-blue-600";
+      progressBarColor = "bg-gradient-to-r from-blue-400 to-indigo-500 shadow-[0_0_8px_rgba(96,165,250,0.4)]";
       progressDetails = `คะแนน: ${progress.score} | ${progress.answeredCount}/${progress.totalQuestions} ข้อ`;
     } else {
       progressText = "ยังไม่เริ่ม";
@@ -266,7 +302,19 @@ export function initializePage() {
       '<span class="text-gray-300 dark:text-gray-600">|</span>'
     );
 
-    return `<div class="mt-2 pt-2 border-t border-gray-200 dark:border-gray-700/80"><div class="flex justify-between items-center mb-1 font-medium"><span class="text-xs ${progressTextColor}">${progressText}</span><span class="text-xs text-gray-500 dark:text-gray-400">${progress.percentage}%</span></div><div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 overflow-hidden"><div class="${progressBarColor} h-2.5 rounded-full transition-all duration-500" style="width: ${progress.percentage}%"></div></div><div class="flex justify-between items-center text-[11px] text-gray-500 dark:text-gray-400 mt-1"><span>${progressDetails}</span><div class="flex items-center gap-2">${footerActionsHTML}</div></div></div>`;
+    return `<div class="mt-2 pt-2 border-t border-gray-200 dark:border-gray-700/60">
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-xs font-semibold ${progressTextColor}">${progressText}</span>
+                    <span class="text-xs font-medium text-gray-500 dark:text-gray-400">${progress.percentage}%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-1.5 dark:bg-gray-700">
+                    <div class="${progressBarColor} h-1.5 rounded-full" style="width: ${progress.percentage}%"></div>
+                </div>
+                <div class="flex justify-between items-center text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    <span>${progressDetails}</span>
+                    <div class="flex items-center gap-2">${footerActionsHTML}</div>
+                </div>
+            </div>`;
   }
 
   /**
@@ -275,44 +323,43 @@ export function initializePage() {
    * @param {number} index - The index for animation delay.
    * @returns {HTMLElement} The created anchor element representing the card.
    */
-  function createQuizCard(quiz, index) {
-    const categoryDetail = categoryDetails[quiz.category];
-    const borderColorClass = categoryDetail?.color || "border-gray-400";
-    // Extract color name (e.g., 'lime' from 'border-lime-600') for dynamic background/text colors
-    const colorName = borderColorClass.split('-')[1] || 'gray';
-
-    const card = document.createElement("a");
-    card.href = quiz.url;
-    const totalQuestions = quiz.amount || 0;
-
-    card.dataset.storageKey = quiz.storageKey;
-    card.dataset.totalQuestions = totalQuestions;
-
-    // Refined card styling with softer corners, better spacing, and more integrated color theme.
-    card.className = `quiz-card group flex flex-col h-full bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700/60 hover:border-${colorName}-300 dark:hover:border-${colorName}-600 hover:shadow-2xl hover:shadow-${colorName}-500/10 dark:hover:shadow-black/20 transition-all duration-300 transform hover:-translate-y-1 anim-card-pop-in`;
-    card.style.animationDelay = `${index * 50}ms`;
-    const progress = getQuizProgress(quiz.storageKey, totalQuestions);
-    const progressHTML = createProgressHTML(progress, quiz);
-
-    const iconBgClass = `bg-${colorName}-100 dark:bg-${colorName}-400/20`; // Lighter, glowing background for dark mode
-    const iconBorderClass = `border-${colorName}-200 dark:border-${colorName}-400`;
-    const titleHoverClass = `group-hover:text-${colorName}-600 dark:group-hover:text-${colorName}-400`;
-
-    card.innerHTML = `
-      <div class="flex-grow flex items-start gap-4">
-        <div class="flex-shrink-0 h-14 w-14 rounded-xl flex items-center justify-center ${iconBgClass} border-2 ${iconBorderClass} transition-all duration-300 shadow-md shadow-${colorName}-400/20">
-          <img src="${quiz.icon}" alt="${quiz.altText}" class="h-9 w-9 transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6">
-        </div>
-        <div class="flex-grow">
-          <h3 class="text-base font-bold text-gray-900 dark:text-white font-kanit leading-tight transition-colors ${titleHoverClass}">${quiz.title}</h3>
-          <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">จำนวน ${totalQuestions} ข้อ</p>
-          <p class="text-gray-600 dark:text-gray-300 text-xs leading-relaxed mt-1">${quiz.description}</p>
-        </div>
-      </div>
-      <div class="progress-footer-wrapper">${progressHTML}</div>
-    `;
-    return card;
-  }
+   function createQuizCard(quiz, index) {
+     const categoryDetail = categoryDetails[quiz.category];
+     const borderColorClass = categoryDetail?.color || "border-gray-400";
+     const colorName = borderColorClass.split('-')[1] || 'gray';
+ 
+     const card = document.createElement("a");
+     card.href = quiz.url;
+     const totalQuestions = quiz.amount || 0;
+ 
+     card.dataset.storageKey = quiz.storageKey;
+     card.dataset.totalQuestions = totalQuestions;
+ 
+     // NEW: More modern card styling
+     card.className = `quiz-card group flex flex-col h-full bg-white dark:bg-gray-800/50 p-4 rounded-xl border border-gray-200 dark:border-gray-700/60 shadow-sm hover:shadow-lg hover:border-${colorName}-400 dark:hover:border-${colorName}-500 transition-all duration-300 transform hover:-translate-y-1 anim-card-pop-in`;
+     card.style.animationDelay = `${index * 50}ms`;
+ 
+     const progress = getQuizProgress(quiz.storageKey, totalQuestions);
+     const progressHTML = createProgressHTML(progress, quiz);
+ 
+     const iconBgClass = `bg-${colorName}-100 dark:bg-${colorName}-900/30`;
+     const titleHoverClass = `group-hover:text-${colorName}-600 dark:group-hover:text-${colorName}-300`;
+ 
+     card.innerHTML = `
+       <div class="flex-grow flex items-start gap-4">
+         <div class="flex-shrink-0 h-12 w-12 rounded-lg flex items-center justify-center ${iconBgClass} p-2 transition-all duration-300 group-hover:shadow-lg group-hover:shadow-${colorName}-500/20">
+           <img src="${quiz.icon}" alt="${quiz.altText}" class="h-full w-full object-contain transition-transform duration-300 group-hover:scale-110">
+         </div>
+         <div class="flex-grow min-w-0">
+           <h3 class="text-base font-bold text-gray-800 dark:text-gray-100 font-kanit leading-tight transition-colors ${titleHoverClass}">${quiz.title}</h3>
+           <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">จำนวน ${totalQuestions} ข้อ</p>
+         </div>
+       </div>
+       <p class="text-gray-600 dark:text-gray-400 text-xs leading-relaxed mt-3 flex-grow">${quiz.description}</p>
+       <div class="progress-footer-wrapper mt-auto pt-3">${progressHTML}</div>
+     `;
+     return card;
+   }
 
   /**
    * Creates a nested accordion element for a sub-category.
