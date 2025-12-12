@@ -441,7 +441,11 @@ export function initializeCustomQuizHandler() {
     
                 <!-- Random Selection -->
                 <div class="p-4 bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm">
-                    <button id="custom-quiz-random-btn" class="w-full flex items-center justify-center gap-2 px-4 py-2 bg-purple-100 text-purple-700 dark:bg-purple-900/50 dark:text-purple-300 rounded-lg hover:bg-purple-200 dark:hover:bg-purple-800/70 text-sm font-bold transition">สุ่มเลือกคำถามจากทั้งหมด</button>
+                    <button id="custom-quiz-random-btn" class="w-full flex items-center justify-center gap-2 px-4 py-2 bg-purple-100 text-purple-700 dark:bg-purple-900/50 dark:text-purple-300 rounded-lg hover:bg-purple-200 dark:hover:bg-purple-800/70 text-sm font-bold transition">สุ่มทั้งหมด</button>
+                    <button id="custom-quiz-random-balanced-btn" class="w-full flex items-center justify-center gap-2 px-4 py-2 mt-2 bg-teal-100 text-teal-700 dark:bg-teal-900/50 dark:text-teal-300 rounded-lg hover:bg-teal-200 dark:hover:bg-teal-800/70 text-sm font-bold transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M8 5a1 1 0 100 2h5.586l-1.293 1.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L13.586 5H8zM12 15a1 1 0 100-2H6.414l1.293-1.293a1 1 0 10-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L6.414 15H12z" /></svg>
+                        <span>สุ่มแบบสมดุล</span>
+                    </button>
                 </div>
 
                 <!-- Timer Options -->
@@ -747,11 +751,6 @@ export function initializeCustomQuizHandler() {
                 handleStartCustomQuiz();
             }
 
-            // Handle "Random Selection" button
-            if (target.id === 'custom-quiz-random-btn' || target.closest('#custom-quiz-random-btn')) {
-                handleRandomSelection();
-            }
-
             // NEW: Handle subject-level random button
             if (target.dataset.action === 'random-subject') {
                 e.stopPropagation(); // Prevent accordion from toggling
@@ -759,6 +758,19 @@ export function initializeCustomQuizHandler() {
                 handleRandomSelectionForSubject(subjectKey);
             }
 
+            // NEW: Handle group random buttons
+            const groupBtn = target.closest('button[data-action="random-group"]');
+            if (groupBtn) {
+                const groupType = groupBtn.dataset.group;
+                handleSubjectGroupRandom(groupType);
+            }
+
+            // Handle "Random Selection" button
+            if (target.id === 'custom-quiz-random-btn' || target.closest('#custom-quiz-random-btn')) {
+                handleRandomSelection();
+            }
+
+            // Handle "Clear All" button in the summary panel (this is the one at the bottom of the sidebar)
             if (target.id === 'custom-quiz-clear-btn' || target.closest('#custom-quiz-clear-btn')) {
                 const allInputs = document.querySelectorAll('#custom-quiz-category-selection input[type="number"]');
                 allInputs.forEach(input => {
@@ -833,26 +845,31 @@ export function initializeCustomQuizHandler() {
             }
             const { allQuestions } = quizDataCache;
 
-            // Group questions and count types
+            // Group questions by subject, chapter, and specific topic, and count types
             const groupedQuestions = allQuestions.reduce((acc, q) => {
                 if (q.subCategory && q.subCategory.main && q.subCategory.specific) {
                     const quizInfo = quizList.find(ql => ql.title === q.sourceQuizTitle);
                     const subjectKey = quizInfo ? quizInfo.category : 'Uncategorized';
                     const questionType = q.type === 'fill-in-number' ? 'calculation' : 'theory';
 
-                    if (!acc[subjectKey]) acc[subjectKey] = {};
-                    if (!acc[subjectKey][q.subCategory.main]) acc[subjectKey][q.subCategory.main] = {};
-                    if (!acc[subjectKey][q.subCategory.main][q.subCategory.specific]) {
-                        acc[subjectKey][q.subCategory.main][q.subCategory.specific] = {
-                            theory: [],
-                            calculation: [],
-                            total: 0
-                        };
-                    }
+                    const specifics = Array.isArray(q.subCategory.specific) ? q.subCategory.specific : [q.subCategory.specific];
 
-                    const group = acc[subjectKey][q.subCategory.main][q.subCategory.specific];
-                    group[questionType].push(q);
-                    group.total++;
+                    specifics.forEach(specificTopic => {
+                        if (!acc[subjectKey]) acc[subjectKey] = {};
+                        if (!acc[subjectKey][q.subCategory.main]) acc[subjectKey][q.subCategory.main] = {};
+                        if (!acc[subjectKey][q.subCategory.main][specificTopic]) {
+                            acc[subjectKey][q.subCategory.main][specificTopic] = {
+                                theory: [],
+                                calculation: []
+                            };
+                        }
+
+                        const group = acc[subjectKey][q.subCategory.main][specificTopic];
+                        // Avoid adding duplicate questions to the same topic group
+                        if (!group[questionType].some(existingQ => existingQ.question === q.question)) {
+                            group[questionType].push(q);
+                        }
+                    });
                 }
                 return acc;
             }, {});
@@ -875,13 +892,13 @@ export function initializeCustomQuizHandler() {
 
                 let chapterAccordionsHTML = '';
                 chapters.forEach(chapter => {
-                    const topics = chapter[topicKey] || [];
+                    const topics = (chapter[topicKey] || []).sort((a, b) => a.localeCompare(b, 'th'));
                     const topicControlsHTML = topics.map(topic => {
-                        const counts = groupedQuestions[subjectKey]?.[chapter.title]?.[topic] || { theory: 0, calculation: 0, total: 0 };
+                        const counts = groupedQuestions[subjectKey]?.[chapter.title]?.[topic] || { theory: [], calculation: [] };
                         return createSpecificTopicControlHTML(subjectKey, chapter.title, topic, {
                             theory: counts.theory.length,
                             calculation: counts.calculation.length,
-                            total: counts.total
+                            total: counts.theory.length + counts.calculation.length
                         }, isBasicSubject);
                     }).join('');
 
@@ -905,7 +922,7 @@ export function initializeCustomQuizHandler() {
                             <div class="subject-accordion-toggle p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors" role="button" aria-expanded="false">
                                 <div class="flex justify-between items-center">
                                     <div class="flex items-center gap-3 min-w-0">
-                                        <img src="${subjectDetails.icon}" class="h-8 w-8 flex-shrink-0">
+                                        <img src="${subjectDetails.icon}" class="h-8 w-8 flex-shrink-0" alt="${subjectDetails.displayName} icon">
                                         <span class="font-bold text-lg text-gray-800 dark:text-gray-100 truncate">${subjectDetails.displayName}</span>
                                     </div>
                                     <svg class="chevron-icon h-6 w-6 text-gray-500 dark:text-gray-400 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
@@ -985,12 +1002,17 @@ export function initializeCustomQuizHandler() {
             for (const [chapter, specifics] of Object.entries(chapters)) {
                 for (const [specific, typeCounts] of Object.entries(specifics)) {
                     // Filter the pool for this specific topic
-                    const topicPool = allQuestions.filter(q => {
+                    const topicPool = allQuestions.filter(q => {                        
                         if (!q.subCategory) return false;
-                        // Handle both object and string subcategories for robustness
                         const mainCat = (typeof q.subCategory === 'object') ? q.subCategory.main : q.subCategory;
-                        const specificCat = (typeof q.subCategory === 'object') ? q.subCategory.specific : null;
-                        return mainCat === chapter && specificCat === specific;
+                        if (mainCat !== chapter) return false;
+
+                        if (typeof q.subCategory === 'object' && q.subCategory.specific) {
+                            const specificsInQuestion = Array.isArray(q.subCategory.specific) ? q.subCategory.specific : [q.subCategory.specific];
+                            return specificsInQuestion.includes(specific);
+                        }
+                        
+                        return false;
                     });
 
                     // Separate the pool by question type
@@ -1025,6 +1047,7 @@ export function initializeCustomQuizHandler() {
         selectedQuestions = uniqueQuestions;
 
         if (selectedQuestions.length === 0) {
+            alert("กรุณาเลือกคำถามอย่างน้อย 1 ข้อ");
             return;
         }
 
@@ -1247,4 +1270,77 @@ export function initializeCustomQuizHandler() {
 
     // Initialize the delegated event listeners once
     bindCustomQuizModalEvents();
+
+    /**
+     * NEW: Handles balanced random question selection for specific subject groups.
+     * @param {string} groupType - The type of group ('physics', 'earth-basic', 'earth-advanced').
+     */
+    function handleSubjectGroupRandom(groupType) {
+        let subjectKeys = [];
+        let groupName = "";
+
+        if (groupType === 'physics') {
+            subjectKeys = ['PhysicsM4', 'PhysicsM5', 'PhysicsM6'];
+            groupName = "ฟิสิกส์ (ม.4-6)";
+        } else if (groupType === 'earth-basic') {
+            subjectKeys = ['EarthSpaceScienceBasic'];
+            groupName = "วิทย์โลก (พื้นฐาน)";
+        } else if (groupType === 'earth-advanced') {
+            subjectKeys = ['EarthSpaceScienceAdvance'];
+            groupName = "วิทย์โลก (เพิ่มเติม)";
+        } else {
+            return;
+        }
+
+        const numPerChapterInput = prompt(`ระบุจำนวนข้อที่ต้องการสุ่ม 'ต่อหนึ่งบท' จากกลุ่ม ${groupName}:`, "2");
+        if (numPerChapterInput === null) return;
+
+        const numPerChapter = parseInt(numPerChapterInput, 10);
+        if (isNaN(numPerChapter) || numPerChapter < 0) {
+            alert("กรุณาระบุจำนวนที่ถูกต้อง");
+            return;
+        }
+
+        // Reset all inputs first to avoid confusion
+        document.querySelectorAll('#custom-quiz-category-selection input[type="number"]').forEach(input => {
+            if (input.value !== '0') { input.value = 0; }
+        });
+
+        let totalAdded = 0;
+
+        subjectKeys.forEach(subjectKey => {
+            const syllabus = getSyllabusForCategory(subjectKey);
+            if (!syllabus) return;
+
+            const chapters = syllabus.units ? syllabus.units.flatMap(u => u.chapters) : (syllabus.chapters || []);
+            
+            chapters.forEach(chapter => {
+                const chapterTitle = chapter.title;
+                // Select inputs for this chapter within this subject
+                const chapterInputs = Array.from(document.querySelectorAll(`#custom-quiz-category-selection input[type="number"][data-subject="${subjectKey}"][data-chapter="${chapterTitle}"]`));
+                
+                // Filter inputs that actually have questions (max > 0)
+                let availableInputs = chapterInputs.map(input => ({ input, max: parseInt(input.max, 10) })).filter(item => item.max > 0);
+                
+                // Calculate total available questions in this chapter
+                const totalAvailableInChapter = availableInputs.reduce((sum, item) => sum + item.max, 0);
+                let chapterTargetCount = Math.min(numPerChapter, totalAvailableInChapter);
+
+                for (let i = 0; i < chapterTargetCount; i++) {
+                    // Filter out inputs that are full
+                    availableInputs = availableInputs.filter(item => parseInt(item.input.value, 10) < item.max);
+                    
+                    if (availableInputs.length === 0) break;
+
+                    const randIndex = Math.floor(Math.random() * availableInputs.length);
+                    const item = availableInputs[randIndex];
+                    item.input.value = parseInt(item.input.value, 10) + 1;
+                    totalAdded++;
+                }
+            });
+        });
+
+        updateTotalCount();
+        alert(`สุ่มเลือกคำถามแบบสมดุลสำหรับ ${groupName} สำเร็จ! เพิ่มมาทั้งหมด ${totalAdded} ข้อ`);
+    }
 }

@@ -153,7 +153,7 @@ export const quizList = [
     "id": "ess_basic_m6_mid2-review-1",
     "title": "แนวข้อสอบกลางภาค เทอม 2 ชุดที่ 1",
     "amount": 40,
-    "description": "แนวข้อสอบทบทวนกลางภาค (Midterm Review) ครอบคลุมเนื้อหาบทที่ 6 (การแปรสัณฐาน) และบทที่ 7 (ธรณีพิบัติภัย)",
+    "description": "แนวข้อสอบทบทวนกลางภาค เทอม 2 ชุดที่ 1 ครอบคลุมเนื้อหาบทที่ 6 (การแปรสัณฐาน) และบทที่ 7 (ธรณีพิบัติภัย)",
     "url": "./quiz/index.html?id=ess_basic_m6_mid2-review-1",
     "storageKey": "quizState-ess_basic_m6_mid2-review-1",
     "icon": "./assets/icons/earth.png",
@@ -165,7 +165,7 @@ export const quizList = [
     "id": "ess_basic_m6_mid2-review-2",
     "title": "แนวข้อสอบกลางภาค เทอม 2 ชุดที่ 2",
     "amount": 40,
-    "description": "แนวข้อสอบทบทวนกลางภาคชุดที่ 2 (เน้นไม่ซ้ำกับชุดแรก) ครอบคลุมเนื้อหาการแปรสัณฐานและธรณีพิบัติภัย",
+    "description": "แนวข้อสอบทบทวนกลางภาค เทอม 2 ชุดที่ 2  ครอบคลุมเนื้อหาบทที่ 6 (การแปรสัณฐาน) และบทที่ 7 (ธรณีพิบัติภัย)",
     "url": "./quiz/index.html?id=ess_basic_m6_mid2-review-2",
     "storageKey": "quizState-ess_basic_m6_mid2-review-2",
     "icon": "./assets/icons/earth.png",
@@ -548,7 +548,6 @@ export const quizList = [
     "category": "PhysicsM4",
     "subCategory": "บทที่ 5: งานและพลังงาน"
   },
-  
   {
     "id": "phy_m4_final-exam-1",
     "title": "แนวข้อสอบปลายภาค 1 ชุดที่ 1",
@@ -588,8 +587,8 @@ export const quizList = [
   {
     "id": "phy_m4_mid2-exam-2",
     "title": "แนวข้อสอบกลางภาค 2 ชุดที่ 2",
-    "amount": 30,
-    "description": "ทบทวนเนื้อหาบทที่ 3 (แรงและกฎการเคลื่อนที่) และบทที่ 4 (สมดุลต่อการเลื่อนที่) โดยเน้นเรื่องแรงโน้มถ่วงและการเปรียบเทียบน้ำหนัก",
+    "amount": 40,
+    "description": "ทบทวนเนื้อหาบทที่ 4 (สมดุลต่อการหมุน) และบทที่ 5 (งานและพลังงาน)",
     "url": "./quiz/index.html?id=phy_m4_mid2-exam-2",
     "storageKey": "quizState-phy_m4_mid2-exam-2",
     "icon": "./assets/icons/physicsm4.png",
