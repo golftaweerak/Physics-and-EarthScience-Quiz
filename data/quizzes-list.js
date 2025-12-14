@@ -150,6 +150,84 @@ export const quizList = [
     "subCategory": "ธรณีพิบัติภัย"
   },
   {
+    "id": "ess_basic_m6_ch8-1",
+    "title": "ลมฟ้าอากาศและภูมิอากาศ (ชุดที่ 1)",
+    "amount": 40,
+    "description": "บทที่ 8: ลมฟ้าอากาศและภูมิอากาศ (สมดุลพลังงาน, การหมุนเวียนอากาศและน้ำ)",
+    "url": "./quiz/index.html?id=ess_basic_m6_ch8-1",
+    "storageKey": "quizState-ess_basic_m6_ch8-1",
+    "icon": "./assets/icons/wind.png",
+    "altText": "ไอคอนสำหรับ ess_basic_m6_ch8-1",
+    "category": "EarthSpaceScienceBasic",
+    "subCategory": "ลมฟ้าอากาศและภูมิอากาศ"
+  },
+  {
+    "id": "ess_basic_m6_ch8-2",
+    "title": "ลมฟ้าอากาศและภูมิอากาศ (ชุดที่ 2)",
+    "amount": 30,
+    "description": "บทที่ 8: ลมฟ้าอากาศและภูมิอากาศ (องค์ประกอบบรรยากาศ, เมฆ, พายุ, การเปลี่ยนแปลงภูมิอากาศ)",
+    "url": "./quiz/index.html?id=ess_basic_m6_ch8-2",
+    "storageKey": "quizState-ess_basic_m6_ch8-2",
+    "icon": "./assets/icons/wind.png",
+    "category": "EarthSpaceScienceBasic",
+    "subCategory": "ลมฟ้าอากาศและภูมิอากาศ"
+  },
+  {
+    "id": "ess_basic_m6_ch8-3",
+    "title": "ลมฟ้าอากาศและภูมิอากาศ (ชุดที่ 3)",
+    "amount": 30,
+    "description": "บทที่ 8: ลมฟ้าอากาศและภูมิอากาศ (ชั้นบรรยากาศ, แผนที่อากาศ, การพยากรณ์)",
+    "url": "./quiz/index.html?id=ess_basic_m6_ch8-3",
+    "storageKey": "quizState-ess_basic_m6_ch8-3",
+    "icon": "./assets/icons/wind.png",
+    "category": "EarthSpaceScienceBasic",
+    "subCategory": "ลมฟ้าอากาศและภูมิอากาศ"
+  },
+  {
+    "id": "ess_basic_m6_ch8-4",
+    "title": "ลมฟ้าอากาศและภูมิอากาศ (ชุดที่ 4)",
+    "amount": 30,
+    "description": "บทที่ 8: ลมฟ้าอากาศและภูมิอากาศ (เน้นการจำแนกภูมิอากาศ, การเปลี่ยนแปลง, และแผนที่อากาศ)",
+    "url": "./quiz/index.html?id=ess_basic_m6_ch8-4",
+    "storageKey": "quizState-ess_basic_m6_ch8-4",
+    "icon": "./assets/icons/wind.png",
+    "category": "EarthSpaceScienceBasic",
+    "subCategory": "ลมฟ้าอากาศและภูมิอากาศ"
+  },
+  {
+    "id": "ess_basic_m6_ch9-1",
+    "title": "การเปลี่ยนแปลงภูมิอากาศ",
+    "amount": 30,
+    "description": "บทที่ 9: การเปลี่ยนแปลงภูมิอากาศ",
+    "url": "./quiz/index.html?id=ess_basic_m6_ch9-1",
+    "storageKey": "quizState-ess_basic_m6_ch9-1",
+    "icon": "./assets/icons/wind.png",
+    "category": "EarthSpaceScienceBasic",
+    "subCategory": "การเปลี่ยนแปลงภูมิอากาศ"
+  },
+  {
+    "id": "ess_basic_m6_ch10-1",
+    "title": "ข้อมูลและสารสนเทศทางอุตุนิยมวิทยา",
+    "amount": 30,
+    "description": "บทที่ 10: ข้อมูลและสารสนเทศทางอุตุนิยมวิทยา",
+    "url": "./quiz/index.html?id=ess_basic_m6_ch10-1",
+    "storageKey": "quizState-ess_basic_m6_ch10-1",
+    "icon": "./assets/icons/wind.png",
+    "category": "EarthSpaceScienceBasic",
+    "subCategory": "ข้อมูลและสารสนเทศทางอุตุนิยมวิทยา"
+  },
+  {
+    "id": "ess_basic_m6_ch10-2",
+    "title": "ข้อมูลและสารสนเทศทางอุตุนิยมวิทยา (ชุดที่ 2)",
+    "amount": 30,
+    "description": "บทที่ 10: ข้อมูลและสารสนเทศทางอุตุนิยมวิทยา (ชุดที่ 2 - การพยากรณ์และการแปลความหมาย)",
+    "url": "./quiz/index.html?id=ess_basic_m6_ch10-2",
+    "storageKey": "quizState-ess_basic_m6_ch10-2",
+    "icon": "./assets/icons/wind.png",
+    "category": "EarthSpaceScienceBasic",
+    "subCategory": "ข้อมูลและสารสนเทศทางอุตุนิยมวิทยา"
+  },
+  {
     "id": "ess_basic_m6_mid2-review-1",
     "title": "แนวข้อสอบกลางภาค เทอม 2 ชุดที่ 1",
     "amount": 40,
@@ -629,6 +707,39 @@ export const quizList = [
     "icon": "./assets/icons/electric-current.png",
     "category": "PhysicsM5",
     "subCategory": "บทที่ 12: ไฟฟ้าสถิต"
+  },
+  {
+    "id": "phy_m5_ch12-3",
+    "title": "ไฟฟ้าสถิต (ชุดที่ 3)",
+    "amount": 40,
+    "description": "บทที่ 12: ไฟฟ้าสถิต (เน้นตัวเก็บประจุและการประยุกต์)",
+    "url": "./quiz/index.html?id=phy_m5_ch12-3",
+    "storageKey": "quizState-phy_m5_ch12-3",
+    "icon": "./assets/icons/electric-current.png",
+    "category": "PhysicsM5",
+    "subCategory": "บทที่ 12: ไฟฟ้าสถิต"
+  },
+  {
+    "id": "phy_m5_ch13-1",
+    "title": "ไฟฟ้ากระแส (ชุดที่ 1)",
+    "amount": 30,
+    "description": "บทที่ 13: ไฟฟ้ากระแส (พื้นฐาน, กฎของโอห์ม, วงจรเบื้องต้น)",
+    "url": "./quiz/index.html?id=phy_m5_ch13-1",
+    "storageKey": "quizState-phy_m5_ch13-1",
+    "icon": "./assets/icons/electric-current.png",
+    "category": "PhysicsM5",
+    "subCategory": "บทที่ 13: ไฟฟ้ากระแส"
+  },
+  {
+    "id": "phy_m5_ch13-2",
+    "title": "ไฟฟ้ากระแส (ชุดที่ 2)",
+    "amount": 20,
+    "description": "บทที่ 13: ไฟฟ้ากระแส (วงจรซับซ้อน, กฎของเคอร์ชอฟ, เครื่องมือวัด)",
+    "url": "./quiz/index.html?id=phy_m5_ch13-2",
+    "storageKey": "quizState-phy_m5_ch13-2",
+    "icon": "./assets/icons/electric-current.png",
+    "category": "PhysicsM5",
+    "subCategory": "บทที่ 13: ไฟฟ้ากระแส"
   },
   {
     "id": "phy_m5_final-exam-1",
