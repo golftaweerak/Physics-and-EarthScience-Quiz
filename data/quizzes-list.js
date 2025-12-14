@@ -622,7 +622,7 @@ export const quizList = [
     "description": "บทที่ 5: งานและพลังงาน (เน้นเครื่องกลอย่างง่าย)",
     "url": "./quiz/index.html?id=phy_m4_ch5-9",
     "storageKey": "quizState-phy_m4_ch5-9",
-    "icon": "./assets/icons/pulley.png",
+    "icon": "./assets/icons/kinetic-energy.png",
     "category": "PhysicsM4",
     "subCategory": "บทที่ 5: งานและพลังงาน"
   },
