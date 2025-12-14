@@ -206,6 +206,17 @@ export const quizList = [
     "subCategory": "การเปลี่ยนแปลงภูมิอากาศ"
   },
   {
+    "id": "ess_basic_m6_ch9-2",
+    "title": "การเปลี่ยนแปลงภูมิอากาศ (ชุดที่ 2)",
+    "amount": 30,
+    "description": "บทที่ 9: การเปลี่ยนแปลงภูมิอากาศ (ชุดที่ 2 - เน้นกลไก ผลกระทบเชิงลึก และการรับมือ)",
+    "url": "./quiz/index.html?id=ess_basic_m6_ch9-2",
+    "storageKey": "quizState-ess_basic_m6_ch9-2",
+    "icon": "./assets/icons/wind.png",
+    "category": "EarthSpaceScienceBasic",
+    "subCategory": "การเปลี่ยนแปลงภูมิอากาศ"
+  },
+  {
     "id": "ess_basic_m6_ch10-1",
     "title": "ข้อมูลและสารสนเทศทางอุตุนิยมวิทยา",
     "amount": 30,
@@ -223,6 +234,17 @@ export const quizList = [
     "description": "บทที่ 10: ข้อมูลและสารสนเทศทางอุตุนิยมวิทยา (ชุดที่ 2 - การพยากรณ์และการแปลความหมาย)",
     "url": "./quiz/index.html?id=ess_basic_m6_ch10-2",
     "storageKey": "quizState-ess_basic_m6_ch10-2",
+    "icon": "./assets/icons/wind.png",
+    "category": "EarthSpaceScienceBasic",
+    "subCategory": "ข้อมูลและสารสนเทศทางอุตุนิยมวิทยา"
+  },
+  {
+    "id": "ess_basic_m6_ch10-3",
+    "title": "ข้อมูลและสารสนเทศทางอุตุนิยมวิทยา (ชุดที่ 3)",
+    "amount": 30,
+    "description": "บทที่ 10: ข้อมูลและสารสนเทศทางอุตุนิยมวิทยา (ชุดที่ 3 - การพยากรณ์อากาศขั้นสูงและเทคโนโลยีอวกาศ)",
+    "url": "./quiz/index.html?id=ess_basic_m6_ch10-3",
+    "storageKey": "quizState-ess_basic_m6_ch10-3",
     "icon": "./assets/icons/wind.png",
     "category": "EarthSpaceScienceBasic",
     "subCategory": "ข้อมูลและสารสนเทศทางอุตุนิยมวิทยา"
@@ -625,6 +647,83 @@ export const quizList = [
     "icon": "./assets/icons/kinetic-energy.png",
     "category": "PhysicsM4",
     "subCategory": "บทที่ 5: งานและพลังงาน"
+  },
+  {
+    "id": "phy_m4_ch6-1",
+    "title": "โมเมนตัมและการชน (ชุดที่ 1)",
+    "amount": 30,
+    "description": "บทที่ 6: โมเมนตัมและการชน (พื้นฐาน, การดล, การอนุรักษ์โมเมนตัม)",
+    "url": "./quiz/index.html?id=phy_m4_ch6-1",
+    "storageKey": "quizState-phy_m4_ch6-1",
+    "icon": "./assets/icons/collision.png",
+    "category": "PhysicsM4",
+    "subCategory": "บทที่ 6: โมเมนตัมและการชน"
+  },
+  {
+    "id": "phy_m4_ch6-2",
+    "title": "โมเมนตัมและการชน (ชุดที่ 2)",
+    "amount": 40,
+    "description": "บทที่ 6: โมเมนตัมและการชน (เน้นโมเมนตัมและการดล)",
+    "url": "./quiz/index.html?id=phy_m4_ch6-2",
+    "storageKey": "quizState-phy_m4_ch6-2",
+    "icon": "./assets/icons/collision.png",
+    "category": "PhysicsM4",
+    "subCategory": "บทที่ 6: โมเมนตัมและการชน"
+  },
+  {
+    "id": "phy_m4_ch6-3",
+    "title": "โมเมนตัมและการชน (ชุดที่ 3)",
+    "amount": 40,
+    "description": "บทที่ 6: โมเมนตัมและการชน (เน้นกฎการอนุรักษ์โมเมนตัมและการชนรูปแบบต่างๆ)",
+    "url": "./quiz/index.html?id=phy_m4_ch6-3",
+    "storageKey": "quizState-phy_m4_ch6-3",
+    "icon": "./assets/icons/collision.png",
+    "category": "PhysicsM4",
+    "subCategory": "บทที่ 6: โมเมนตัมและการชน"
+  },
+  {
+    "id": "phy_m4_ch6-4",
+    "title": "โมเมนตัมและการชน (ชุดที่ 4)",
+    "amount": 30,
+    "description": "บทที่ 6: โมเมนตัมและการชน (ชุดที่ 4 - การประยุกต์และโจทย์ปัญหา)",
+    "url": "./quiz/index.html?id=phy_m4_ch6-4",
+    "storageKey": "quizState-phy_m4_ch6-4",
+    "icon": "./assets/icons/collision.png",
+    "category": "PhysicsM4",
+    "subCategory": "บทที่ 6: โมเมนตัมและการชน"
+  },
+  {
+    "id": "phy_m4_ch7-1",
+    "title": "การเคลื่อนที่แนวโค้ง (ชุดที่ 1)",
+    "amount": 40,
+    "description": "บทที่ 7: การเคลื่อนที่แนวโค้ง (ชุดที่ 1 - การเคลื่อนที่แบบโพรเจกไทล์)",
+    "url": "./quiz/index.html?id=phy_m4_ch7-1",
+    "storageKey": "quizState-phy_m4_ch7-1",
+    "icon": "./assets/icons/basketball.png",
+    "category": "PhysicsM4",
+    "subCategory": "บทที่ 7: การเคลื่อนที่แนวโค้ง"
+  },
+  {
+    "id": "phy_m4_ch7-2",
+    "title": "การเคลื่อนที่แนวโค้ง (ชุดที่ 2)",
+    "amount": 30,
+    "description": "บทที่ 7: การเคลื่อนที่แนวโค้ง (ชุดที่ 2 - การเคลื่อนที่แบบวงกลม)",
+    "url": "./quiz/index.html?id=phy_m4_ch7-2",
+    "storageKey": "quizState-phy_m4_ch7-2",
+    "icon": "./assets/icons/circular-motion.png",
+    "category": "PhysicsM4",
+    "subCategory": "บทที่ 7: การเคลื่อนที่แนวโค้ง"
+  },
+  {
+    "id": "phy_m5_ch8-1",
+    "title": "การเคลื่อนที่แบบฮาร์มอนิกอย่างง่าย (ชุดที่ 1)",
+    "amount": 30,
+    "description": "บทที่ 8: การเคลื่อนที่แบบฮาร์มอนิกอย่างง่าย",
+    "url": "./quiz/index.html?id=phy_m5_ch8-1",
+    "storageKey": "quizState-phy_m5_ch8-1",
+    "icon": "./assets/icons/shm.png",
+    "category": "PhysicsM5",
+    "subCategory": "บทที่ 8: การเคลื่อนที่แบบฮาร์มอนิกอย่างง่าย"
   },
   {
     "id": "phy_m4_final-exam-1",
