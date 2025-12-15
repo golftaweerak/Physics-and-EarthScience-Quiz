@@ -429,6 +429,18 @@ export const quizList = [
     "subCategory": "เทคโนโลยีอวกาศและการประยุกต์ใช้"
   },
   {
+    "id": "phy_m4/phy_m4_ch2-1",
+    "title": "การเคลื่อนที่แนวตรง (ชุดที่ 1 - ทฤษฎี)",
+    "amount": 20,
+    "description": "บทที่ 2: การเคลื่อนที่แนวตรง (เน้นทฤษฎี)",
+    "url": "./quiz/index.html?id=phy_m4/phy_m4_ch2-1",
+    "storageKey": "quizState-phy_m4_ch2-1",
+    "icon": "./assets/icons/physicsm4.png",
+    "altText": "ไอคอนสำหรับ phy_m4_ch2-1",
+    "category": "PhysicsM4",
+    "subCategory": "บทที่ 2: การเคลื่อนที่แนวตรง"
+  },
+  {
     "id": "phy_m4/phy_m4_Ch3-1",
     "title": "แรงและกฎการเคลื่อนที่ (ชุดที่ 1)",
     "amount": 40,

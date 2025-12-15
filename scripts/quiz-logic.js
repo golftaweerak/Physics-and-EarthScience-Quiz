@@ -1,5 +1,7 @@
 import { ModalHandler } from './modal-handler.js';
 import { shuffleArray } from './utils.js';
+import { Gamification } from './gamification.js';
+import { showToast } from './toast.js';
 
 // state: Stores all dynamic data of the quiz
 let state = {};
@@ -48,18 +50,6 @@ const config = {
   },
 };
 
-/**
- * Applies a temporary animation class to an element.
- * @param {HTMLElement} element The element to animate.
- * @param {string} animationClass The CSS class for the animation.
- */
-function applyAnimation(element, animationClass) {
-  if (!element) return;
-  element.classList.add(animationClass);
-  element.addEventListener('animationend', () => {
-    element.classList.remove(animationClass);
-  }, { once: true });
-}
 /**
  * Parses the subCategory property from a question object and returns a standardized format.
  * This centralizes the logic for handling both old (string) and new (object) formats.
@@ -147,6 +137,8 @@ export function init(quizData, storageKey, quizTitle, customTime, action) {
     isSoundEnabled: true, // This will be initialized properly later
     correctSound: new Audio("../assets/audio/correct.mp3"),
     incorrectSound: new Audio("../assets/audio/incorrect.mp3"),
+    levelUpSound: new Audio("../assets/audio/level-up.mp3"), // Added missing sound
+    badgeSound: new Audio("../assets/audio/badge-unlock.mp3"), // Added missing sound
     timerMode: "none",
     timeLeft: 0,
     timerId: null,
@@ -305,10 +297,10 @@ function updateProgressBar() {
  * @returns {HTMLElement} The created button element.
  */
 function createOptionButton(optionText, previousAnswer) {
-  const button = document.createElement('button');
+  const button = document.createElement("button");
   button.innerHTML = optionText.replace(/\n/g, "<br>");
   button.dataset.optionValue = optionText; // Store raw value
-  button.className = "option-btn w-full p-4 border-2 border-gray-300 dark:border-gray-600 rounded-lg text-left hover:bg-gray-100 dark:hover:bg-gray-700 hover:border-blue-500 dark:hover:border-blue-500 transition-all duration-200 ease-in-out transform hover:-translate-y-0.5 hover:shadow-md";
+  button.className = "option-btn w-full p-4 border-2 border-gray-300 dark:border-gray-600 rounded-lg text-left hover:bg-gray-100 dark:hover:bg-gray-700 hover:border-blue-500 dark:hover:border-blue-500";
 
   if (previousAnswer) {
     // This is a revisited question, so we disable the button and show its state.
@@ -338,12 +330,12 @@ function createOptionButton(optionText, previousAnswer) {
  * @returns {HTMLElement} The created label element which acts as a fully clickable wrapper.
  */
 function createCheckboxOption(optionText, previousAnswer) {
-  const wrapperLabel = document.createElement("label");
+  const wrapperLabel = document.createElement('label');
   // The entire element is now a label, making it fully clickable.
   // Added cursor-pointer to the wrapper itself and a smooth transition.
-  wrapperLabel.className = "option-checkbox-wrapper flex items-center w-full p-4 border-2 border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 hover:border-blue-500 dark:hover:border-blue-500 cursor-pointer transition-all duration-200 ease-in-out transform hover:-translate-y-0.5 hover:shadow-md";
+  wrapperLabel.className = 'option-checkbox-wrapper flex items-center w-full p-4 border-2 border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 hover:border-blue-500 dark:hover:border-blue-500 cursor-pointer transition-colors duration-150';
 
-  const checkbox = document.createElement("input");
+  const checkbox = document.createElement('input');
   checkbox.type = 'checkbox';
   checkbox.value = optionText.trim();
   // The checkbox itself doesn't need a pointer cursor and we prevent double-toggling.
@@ -475,7 +467,7 @@ function showQuestion() {
  */
 function skipQuestion() {
   // Prevent skipping if it's the last unanswered question or if it's already answered.
-  const unansweredQuestions = state.shuffledQuestions.length - state.userAnswers.filter(a => a !== null).length;
+  const unansweredQuestions = state.shuffledQuestions.length - state.userAnswers.filter(a => a).length;
   if (unansweredQuestions <= 1) {
     return;
   }
@@ -491,6 +483,12 @@ function skipQuestion() {
   state.shuffledQuestions.push(questionToSkip);
   state.userAnswers.push(answerSlotToSkip); // This should be null
 
+  // UX Fix: หากอยู่ที่ข้อสุดท้าย การย้ายไปต่อท้ายจะทำให้เจอข้อเดิม
+  // ให้วนกลับไปที่ข้อแรกแทนเพื่อให้เจอข้ออื่น
+  if (state.currentQuestionIndex >= state.shuffledQuestions.length - 1) {
+    state.currentQuestionIndex = 0;
+  }
+
   // Re-render the new question at the same index
   showQuestion();
   saveQuizState(); // Save the new order
@@ -502,23 +500,16 @@ function showHint() {
   const currentQuestion = state.shuffledQuestions[state.currentQuestionIndex];
   if (!currentQuestion || !currentQuestion.hint || !elements.hintContainer || !elements.hintBtn) return;
 
-  // NEW: Add styling to the hint container
-  elements.hintContainer.className = 'mt-4 p-4 bg-yellow-50 dark:bg-yellow-900/30 border-l-4 border-yellow-400 dark:border-yellow-500 text-yellow-800 dark:text-yellow-200 rounded-r-lg flex items-start gap-3 anim-feedback-in';
-  
-  const icon = `<div class="flex-shrink-0 mt-0.5"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" /></svg></div>`;
-  const hintText = `<div><strong class="font-bold">คำใบ้:</strong> ${currentQuestion.hint}</div>`;
-  
-  elements.hintContainer.innerHTML = icon + hintText;
-  
+  elements.hintContainer.innerHTML = currentQuestion.hint;
   renderMath(elements.hintContainer);
   elements.hintContainer.classList.remove('hidden');
   elements.hintBtn.classList.add('hidden'); // Hide the button after it's clicked
 }
-
 /**
  * Evaluates the answer for a multiple-select question.
  */
 function evaluateMultipleAnswer() {
+  if (elements.skipBtn) elements.skipBtn.classList.add("hidden");
   if (state.timerMode === "perQuestion") {
     stopTimer();
   }
@@ -555,10 +546,8 @@ function evaluateMultipleAnswer() {
   if (isCorrect) {
     state.score++;
     elements.scoreCounter.textContent = `คะแนน: ${state.score}`;
-    applyAnimation(answerInput, 'animate-correct');
     if (state.isSoundEnabled) state.correctSound.play().catch(e => console.error("Error playing sound:", e));
   } else {
-    applyAnimation(answerInput, 'animate-shake');
     if (state.isSoundEnabled) state.incorrectSound.play().catch(e => console.error("Error playing sound:", e));
   }
 
@@ -587,6 +576,7 @@ function evaluateMultipleAnswer() {
  * Evaluates the answer for a fill-in-the-blank question.
  */
 function evaluateFillInAnswer() {
+  if (elements.skipBtn) elements.skipBtn.classList.add("hidden");
   if (state.timerMode === "perQuestion") {
     stopTimer();
   }
@@ -598,9 +588,7 @@ function evaluateFillInAnswer() {
   answerInput.disabled = true; // Disable input after submission
 
   const currentQuestion = state.shuffledQuestions[state.currentQuestionIndex];
-  // Make sure correctAnswers is always an array for robust checking
-  const correctAnswersRaw = Array.isArray(currentQuestion.answer) ? currentQuestion.answer : [currentQuestion.answer];
-  const correctAnswers = correctAnswersRaw.map(ans => String(ans).trim().toLowerCase());
+  const correctAnswers = currentQuestion.answer.map(ans => ans.trim().toLowerCase());
 
   const isCorrect = correctAnswers.includes(userAnswer);
 
@@ -626,8 +614,7 @@ function evaluateFillInAnswer() {
   }
 
   // Show feedback
-  const correctAnswerDisplay = Array.isArray(currentQuestion.answer) ? currentQuestion.answer.join(' หรือ ') : currentQuestion.answer;
-  showFeedback(isCorrect, currentQuestion.explanation, correctAnswerDisplay);
+  showFeedback(isCorrect, currentQuestion.explanation, currentQuestion.answer.join(' หรือ '));
 
   // Visually indicate correctness on the input field
   if (isCorrect) {
@@ -644,6 +631,7 @@ function evaluateFillInAnswer() {
  * Evaluates the answer for a fill-in-the-blank question with a numerical answer.
  */
 function evaluateFillInNumberAnswer() {
+  if (elements.skipBtn) elements.skipBtn.classList.add("hidden");
   if (state.timerMode === "perQuestion") {
     stopTimer();
   }
@@ -681,11 +669,9 @@ function evaluateFillInNumberAnswer() {
     state.score++;
     elements.scoreCounter.textContent = `คะแนน: ${state.score}`;
     answerInput.classList.add('correct');
-    applyAnimation(answerInput, 'animate-correct');
     if (state.isSoundEnabled) state.correctSound.play().catch(e => console.error("Error playing sound:", e));
   } else {
     answerInput.classList.add('incorrect');
-    applyAnimation(answerInput, 'animate-shake');
     if (state.isSoundEnabled) state.incorrectSound.play().catch(e => console.error("Error playing sound:", e));
   }
 
@@ -698,7 +684,7 @@ function resetState() {
   elements.nextBtn.classList.add("hidden");
   elements.skipBtn.classList.add("hidden");
   elements.feedback.classList.add("hidden");
-  elements.feedbackContent.innerHTML = '';
+  elements.feedbackContent.innerHTML = "";
   elements.feedback.className = "hidden mt-6 p-4 rounded-lg";
   elements.prevBtn.classList.add("hidden");
   while (elements.options.firstChild) {
@@ -711,6 +697,7 @@ function resetState() {
 }
 
 function selectAnswer(e) {
+  if (elements.skipBtn) elements.skipBtn.classList.add("hidden");
   // Only stop the timer if it's a per-question timer.
   // The overall timer should keep running.
   if (state.timerMode === "perQuestion") {
@@ -744,14 +731,12 @@ function selectAnswer(e) {
     state.score++;
     elements.scoreCounter.textContent = `คะแนน: ${state.score}`;
     selectedBtn.classList.add("correct");
-    applyAnimation(selectedBtn, 'animate-correct');
     if (state.isSoundEnabled)
       state.correctSound
         .play()
         .catch((e) => console.error("Error playing sound:", e));
   } else {
     selectedBtn.classList.add("incorrect");
-    applyAnimation(selectedBtn, 'animate-shake');
     if (state.isSoundEnabled)
       state.incorrectSound
         .play()
@@ -767,11 +752,7 @@ function selectAnswer(e) {
 
   Array.from(elements.options.children).forEach((button) => {
     if (button.dataset.optionValue.trim() === correctAnswer) {
-      // Always highlight the correct answer
       button.classList.add("correct");
-      if (!correct) {
-        applyAnimation(button, 'animate-correct');
-      }
     }
     button.disabled = true;
   });
@@ -782,41 +763,32 @@ function selectAnswer(e) {
 }
 
 function showFeedback(isCorrect, explanation, correctAnswer) {
-  const explanationHtml = explanation ? explanation.replace(/\n/g, "<br>") : "";
+  const explanationHtml = explanation
+    ? explanation.replace(/\n/g, "<br>")
+    : "";
+
   // Handle both string and array for correct answer display
   const correctAnswerDisplay = Array.isArray(correctAnswer) ? correctAnswer.join(', ') : correctAnswer;
 
-  let feedbackHtml = '';
-  let containerClasses = '';
-
   if (isCorrect) {
-    feedbackHtml = `
-      <div class="flex-shrink-0">
-        <svg class="h-8 w-8 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
-      </div>
-      <div class="ml-4 flex-grow">
-        <h3 class="font-bold text-lg text-green-800 dark:text-green-300">ถูกต้อง!</h3>
-        ${explanationHtml ? `<p class="text-green-700 dark:text-green-400 mt-2 leading-relaxed">${explanationHtml}</p>` : ''}
-      </div>
-    `;
-    containerClasses = "bg-green-50 dark:bg-green-900/40 border-green-400 dark:border-green-600";
+    elements.feedbackContent.innerHTML = `<h3 class="font-bold text-lg text-green-800 dark:text-green-300">ถูกต้อง!</h3><p class="text-green-700 dark:text-green-400 mt-2">${explanationHtml}</p>`;
+    elements.feedback.classList.add(
+      "bg-green-100",
+      "dark:bg-green-900/50",
+      "border",
+      "border-green-300",
+      "dark:border-green-700"
+    );
   } else {
-    feedbackHtml = `
-      <div class="flex-shrink-0">
-        <svg class="h-8 w-8 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" /></svg>
-      </div>
-      <div class="ml-4 flex-grow">
-        <h3 class="font-bold text-lg text-red-800 dark:text-red-300">ผิดครับ!</h3>
-        <p class="text-red-700 dark:text-red-400 mt-1">คำตอบที่ถูกต้องคือ: <strong class="font-mono">${correctAnswerDisplay}</strong></p>
-        ${explanationHtml ? `<p class="text-red-700 dark:text-red-400 mt-2 leading-relaxed">${explanationHtml}</p>` : ''}
-      </div>
-    `;
-    containerClasses = "bg-red-50 dark:bg-red-900/40 border-red-400 dark:border-red-600";
+    elements.feedbackContent.innerHTML = `<h3 class="font-bold text-lg text-red-800 dark:text-red-300">ผิดครับ!</h3><p class="text-red-700 dark:text-red-400 mt-1">คำตอบที่ถูกต้องคือ: <strong>${correctAnswerDisplay}</strong></p><p class="text-red-700 dark:text-red-400 mt-2">${explanationHtml}</p>`;
+    elements.feedback.classList.add(
+      "bg-red-100",
+      "dark:bg-red-900/50",
+      "border",
+      "border-red-300",
+      "dark:border-red-700"
+    );
   }
-
-  elements.feedbackContent.innerHTML = feedbackHtml;
-  // Use a more distinct style with a left border
-  elements.feedback.className = `mt-8 p-4 rounded-r-lg border-l-4 flex items-start ${containerClasses}`;
   elements.feedback.classList.remove("hidden");
   elements.feedback.classList.add("anim-feedback-in");
 }
@@ -845,7 +817,7 @@ function handleNextButtonClick() {
       case 'multiple-select':
         evaluateMultipleAnswer();
         break;
-    case 'fill-in': // This case is now redundant but kept for safety.
+      case 'fill-in':
         evaluateFillInAnswer();
         break;
       case 'fill-in-number':
@@ -983,6 +955,95 @@ function showResults() {
   // Get the appropriate message and icon based on the score
   const resultInfo = getResultInfo(percentage);
 
+  // --- GAMIFICATION: Calculate XP and Check Badges ---
+  let xpEarned = 0;
+  let levelResult = null;
+  let newBadges = [];
+  let completedQuests = [];
+  let newAchievements = [];
+
+  try {
+    const game = new Gamification();
+    // ปรับลด XP: ให้ 2 XP ต่อ 1 ข้อที่ตอบถูก (จากเดิม 10)
+    xpEarned = correctAnswers * 2;
+    
+    // ดึง Category จากคำตอบแรก (ถ้ามี) หรือใช้ค่า Default
+    const firstAnswer = state.userAnswers.find(a => a);
+    let category = 'General';
+    if (firstAnswer) {
+        if (firstAnswer.sourceQuizCategory) {
+            category = firstAnswer.sourceQuizCategory;
+        } else if (firstAnswer.subCategory) {
+            // Handle both string and object formats for subCategory
+            category = typeof firstAnswer.subCategory === 'object' ? firstAnswer.subCategory.main : firstAnswer.subCategory;
+        }
+    }
+
+    levelResult = game.addXP(xpEarned, category);
+    newBadges = game.checkBadges(percentage);
+
+    // --- DAILY QUEST: Update Progress ---
+    if (typeof game.updateQuest === 'function') {
+        const result = game.updateQuest({
+            correctAnswers: correctAnswers,
+            totalQuestions: totalQuestions,
+            category: category,
+            percentage: percentage
+        });
+        
+        // รองรับรูปแบบการคืนค่าใหม่ { completed: [], newAchievements: [] }
+        if (result && result.completed && Array.isArray(result.completed)) {
+            completedQuests = result.completed;
+            newAchievements = result.newAchievements || [];
+        } else if (Array.isArray(result)) {
+            // รองรับรูปแบบเก่า (เผื่อไว้)
+            completedQuests = result;
+        } else if (result && result.completed) {
+            completedQuests = [result]; // รูปแบบเก่ามาก
+        }
+    }
+
+    // Play Sounds for Gamification
+    if (state.isSoundEnabled && levelResult) {
+        if (levelResult.overall?.leveledUp || levelResult.physics?.leveledUp || levelResult.earth?.leveledUp) {
+            if (state.levelUpSound) {
+                state.levelUpSound.currentTime = 0;
+                state.levelUpSound.play().catch(e => console.warn("Could not play level up sound", e));
+            }
+        } else if (newBadges.length > 0) {
+            if (state.badgeSound) {
+                state.badgeSound.currentTime = 0;
+                state.badgeSound.play().catch(e => console.warn("Could not play badge sound", e));
+            }
+        }
+    }
+  } catch (error) {
+    console.error("Gamification error:", error);
+  }
+
+  // --- Show Toast Notifications ---
+  if (levelResult?.overall?.leveledUp) {
+    showToast('Level Up!', `ยินดีด้วย! เลเวลรวมของคุณคือ ${levelResult.overall.info.level}: ${levelResult.overall.info.title}`, '🎉', 'gold');
+  }
+  
+  if (completedQuests.length > 0) {
+      completedQuests.forEach(res => {
+          showToast('ภารกิจประจำวันสำเร็จ!', `${res.quest.desc} (+${res.quest.xp} XP)`, '📜', 'gold');
+      });
+  }
+
+  if (newAchievements.length > 0) {
+      newAchievements.forEach(ach => {
+          showToast('ปลดล็อกความสำเร็จ!', `${ach.title}: ${ach.desc}`, ach.icon, 'success');
+      });
+  }
+  
+  if (newBadges.length > 0) {
+      newBadges.forEach(badge => {
+          showToast('ได้รับเหรียญรางวัลใหม่', `${badge.name}`, badge.icon, 'success');
+      });
+  }
+
   // Prepare stats object for the layout builder
   const stats = {
     totalQuestions,
@@ -994,6 +1055,9 @@ function showResults() {
     formattedAverageTime,
     performanceSummary,
     categoryStats,
+    xpEarned,
+    levelResult,
+    newBadges
   };
 
   // Clean up old results and build the new layout
@@ -1124,52 +1188,63 @@ function createStatItem(value, label, icon, theme) {
 function renderResultCategoryChart(categoryStats) {
   const chartCanvas = document.getElementById('result-category-chart');
   if (!chartCanvas) return;
-  const ctx = chartCanvas.getContext('2d');
 
-  const sortedCategories = Object.entries(categoryStats).sort((a, b) => a[0].localeCompare(b[0], 'th'));
+  // Check if Chart.js is loaded to prevent crash
+  if (typeof Chart === 'undefined') {
+    console.warn("Chart.js is not loaded. Skipping chart rendering.");
+    return;
+  }
 
-  const labels = sortedCategories.map(([name, _]) => name);
-  const scores = sortedCategories.map(([_, data]) => data.total > 0 ? (data.correct / data.total) * 100 : 0);
+  try {
+    const ctx = chartCanvas.getContext('2d');
 
-  new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: labels,
-      datasets: [{
-        label: 'คะแนน (%)',
-        data: scores,
-        backgroundColor: scores.map(score => score >= 75 ? 'rgba(34, 197, 94, 0.7)' : score >= 50 ? 'rgba(245, 158, 11, 0.7)' : 'rgba(239, 68, 68, 0.7)'),
-        borderColor: scores.map(score => score >= 75 ? '#16a34a' : score >= 50 ? '#d97706' : '#dc2626'),
-        borderWidth: 1,
-        borderRadius: 4,
-      }]
-    },
-    options: {
-      indexAxis: 'y',
-      responsive: true,
-      maintainAspectRatio: false,
-      scales: {
-        x: {
-          beginAtZero: true,
-          max: 100,
-          ticks: {
-            color: document.documentElement.classList.contains('dark') ? '#d1d5db' : '#374151',
-            callback: value => value + '%'
+    const sortedCategories = Object.entries(categoryStats).sort((a, b) => a[0].localeCompare(b[0], 'th'));
+
+    const labels = sortedCategories.map(([name, _]) => name);
+    const scores = sortedCategories.map(([_, data]) => data.total > 0 ? (data.correct / data.total) * 100 : 0);
+
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'คะแนน (%)',
+          data: scores,
+          backgroundColor: scores.map(score => score >= 75 ? 'rgba(34, 197, 94, 0.7)' : score >= 50 ? 'rgba(245, 158, 11, 0.7)' : 'rgba(239, 68, 68, 0.7)'),
+          borderColor: scores.map(score => score >= 75 ? '#16a34a' : score >= 50 ? '#d97706' : '#dc2626'),
+          borderWidth: 1,
+          borderRadius: 4,
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: {
+            beginAtZero: true,
+            max: 100,
+            ticks: {
+              color: document.documentElement.classList.contains('dark') ? '#d1d5db' : '#374151',
+              callback: value => value + '%'
+            }
+          },
+          y: {
+            ticks: {
+              color: document.documentElement.classList.contains('dark') ? '#d1d5db' : '#374151',
+              font: { family: "'Kanit', sans-serif" }
+            }
           }
         },
-        y: {
-          ticks: {
-            color: document.documentElement.classList.contains('dark') ? '#d1d5db' : '#374151',
-            font: { family: "'Kanit', sans-serif" }
-          }
+        plugins: {
+          legend: { display: false },
+          tooltip: { callbacks: { label: context => `คะแนน: ${context.raw.toFixed(1)}% (${categoryStats[context.label].correct}/${categoryStats[context.label].total} ข้อ)` } }
         }
-      },
-      plugins: {
-        legend: { display: false },
-        tooltip: { callbacks: { label: context => `คะแนน: ${context.raw.toFixed(1)}% (${categoryStats[context.label].correct}/${categoryStats[context.label].total} ข้อ)` } }
       }
-    }
-  });
+    });
+  } catch (error) {
+    console.error("Error rendering chart:", error);
+  }
 }
 
 /**
@@ -1181,90 +1256,85 @@ function buildResultsLayout(resultInfo, stats) {
   const layoutContainer = document.createElement("div");
   layoutContainer.id = "modern-results-layout";
   layoutContainer.className =
-    "w-full max-w-4xl mx-auto flex flex-col items-center gap-6 mt-8 mb-6 px-4";
+    "w-full max-w-4xl mx-auto flex flex-col items-center gap-8 mt-8 mb-6 px-4";
 
   // --- 1. Message Area (Icon, Title, Message) ---
   const messageContainer = document.createElement("div");
-  messageContainer.className = "text-center w-full anim-fade-in-up";
-  messageContainer.style.animationDelay = "0ms";
+  messageContainer.className = "text-center";
   messageContainer.innerHTML = `
-        <div class="relative w-24 h-24 mx-auto mb-4 flex items-center justify-center rounded-full bg-white dark:bg-gray-800 shadow-lg ring-4 ring-opacity-20 ${resultInfo.colorClass.replace('text-', 'ring-')}">
-            <div class="${resultInfo.colorClass} transform scale-125">${resultInfo.icon}</div>
-        </div>
-        <h2 class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-gray-800 to-gray-600 dark:from-gray-100 dark:to-gray-300 mb-2">${resultInfo.title}</h2>
-        <p class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">ชุดข้อสอบ: <span class="text-blue-600 dark:text-blue-400">${state.quizTitle}</span></p>
-        <p class="text-lg text-gray-700 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed">${resultInfo.message}</p>
+        <div class="w-16 h-16 mx-auto mb-3 ${resultInfo.colorClass}">${resultInfo.icon}</div>
+        <h2 class="text-3xl font-bold text-gray-800 dark:text-gray-100">${resultInfo.title}</h2>
+        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">จากชุดข้อสอบ: <span class="font-semibold">${state.quizTitle}</span></p>
+        <p class="mt-2 text-lg text-gray-600 dark:text-gray-300">${resultInfo.message}</p>
     `;
   layoutContainer.appendChild(messageContainer);
 
   // --- 2. Data Container (for Circle + Stats) ---
   const dataContainer = document.createElement("div");
   dataContainer.className =
-    "w-full grid grid-cols-1 md:grid-cols-2 items-center gap-8 p-8 bg-white dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 anim-fade-in-up";
-  dataContainer.style.animationDelay = "100ms";
+    "w-full grid grid-cols-1 md:grid-cols-2 items-center gap-8 p-6 bg-white dark:bg-gray-800/50 rounded-xl shadow-md border border-gray-200 dark:border-gray-700";
 
   // --- 2a. Progress Circle ---
-  let progressColor = "text-red-500";
-  if (stats.percentage >= 80) progressColor = "text-green-500";
-  else if (stats.percentage >= 50) progressColor = "text-yellow-500";
-
   const progressContainer = document.createElement("div");
-  progressContainer.className = "relative w-48 h-48 mx-auto flex-shrink-0 transform transition-transform hover:scale-105 duration-300";
+  progressContainer.className = "relative w-40 h-40 mx-auto flex-shrink-0";
   progressContainer.innerHTML = `
-        <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
-            <path class="text-gray-100 dark:text-gray-700"
-                stroke="currentColor" stroke-width="3" fill="none"
+        <svg class="w-full h-full" viewBox="0 0 36 36">
+            <path class="text-gray-200 dark:text-gray-700"
+                stroke="currentColor" stroke-width="2.5" fill="none"
                 d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-            <path class="${progressColor} drop-shadow-md"
-                stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"
+            <path class="text-blue-500"
+                stroke="currentColor" stroke-width="2.5" fill="none"
+                stroke-linecap="round"
                 stroke-dasharray="0, 100"
                 d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
         </svg>
         <div class="absolute inset-0 flex flex-col items-center justify-center">
-            <span class="text-5xl font-black text-gray-800 dark:text-gray-100 tracking-tight">${stats.percentage}<span class="text-2xl">%</span></span>
-            <span class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mt-1">คะแนนรวม</span>
+            <span class="text-4xl font-bold text-gray-700 dark:text-gray-200">${stats.percentage}%</span>
+            <span class="text-sm text-gray-500 dark:text-gray-400">คะแนนรวม</span>
         </div>
     `;
   dataContainer.appendChild(progressContainer);
 
   // Animate the circle
   setTimeout(() => {
-    const circlePath = progressContainer.querySelector(`path.${progressColor}`);
+    const circlePath = progressContainer.querySelector("path.text-blue-500");
     if (circlePath) {
-      circlePath.style.transition = "stroke-dasharray 1.5s cubic-bezier(0.4, 0, 0.2, 1)";
+      circlePath.style.transition = "stroke-dasharray 1s ease-out";
       circlePath.style.strokeDasharray = `${stats.percentage}, 100`;
     }
-  }, 200);
+  }, 100);
 
   // --- 2b. Stats List ---
   const statsContainer = document.createElement("div");
-  statsContainer.className = "grid grid-cols-2 gap-4 w-full";
-
-  const createEnhancedStatItem = (value, label, icon, colorClass) => {
-      const item = document.createElement("div");
-      item.className = "flex flex-col items-center justify-center p-4 rounded-xl bg-gray-50 dark:bg-gray-700/50 border border-gray-100 dark:border-gray-600 transition-all hover:shadow-md hover:bg-white dark:hover:bg-gray-700";
-      item.innerHTML = `
-        <div class="mb-2 p-2 rounded-full ${colorClass.replace('text-', 'bg-').replace('700', '100').replace('300', '900/30')} ${colorClass}">
-            ${icon}
-        </div>
-        <div class="text-2xl font-bold text-gray-800 dark:text-gray-100">${value}</div>
-        <div class="text-xs text-gray-500 dark:text-gray-400 font-medium">${label}</div>
-      `;
-      return item;
-  };
+  statsContainer.className = "grid grid-cols-2 gap-x-4 gap-y-5 w-full";
 
   // Define icons for stats
   const icons = {
-    correct: `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>`,
-    incorrect: `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>`,
-    time: `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`,
-    avg: `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>`,
+    correct: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>`,
+    incorrect: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>`,
+    time: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" /></svg>`,
+    total: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a1 1 0 100 2h16a1 1 0 100-2H2zM5 15a1 1 0 110 2h10a1 1 0 110-2H5z" /></svg>`,
   };
 
-  statsContainer.appendChild(createEnhancedStatItem(stats.correctAnswers, "ตอบถูก", icons.correct, "text-green-600 dark:text-green-400"));
-  statsContainer.appendChild(createEnhancedStatItem(stats.incorrectAnswersCount, "ตอบผิด", icons.incorrect, "text-red-600 dark:text-red-400"));
-  statsContainer.appendChild(createEnhancedStatItem(stats.formattedTime, "เวลาที่ใช้", icons.time, "text-blue-600 dark:text-blue-400"));
-  statsContainer.appendChild(createEnhancedStatItem(stats.formattedAverageTime, "เฉลี่ย/ข้อ", icons.avg, "text-purple-600 dark:text-purple-400"));
+  // Programmatically create and append stat items
+  statsContainer.appendChild(
+    createStatItem(stats.correctAnswers, "คำตอบถูก", icons.correct, "green")
+  );
+  statsContainer.appendChild(
+    createStatItem(
+      stats.incorrectAnswersCount,
+      "คำตอบผิด",
+      icons.incorrect,
+      "red"
+    )
+  );
+
+  statsContainer.appendChild(
+    createStatItem(stats.formattedTime, "เวลาที่ใช้", icons.time, "blue")
+  );
+  statsContainer.appendChild(
+    createStatItem(stats.formattedAverageTime, "เฉลี่ยต่อข้อ", icons.time, "purple")
+  );
 
   dataContainer.appendChild(statsContainer);
   layoutContainer.appendChild(dataContainer);
@@ -1272,13 +1342,9 @@ function buildResultsLayout(resultInfo, stats) {
   // --- 3. Category Performance Chart ---
   if (stats.categoryStats && Object.keys(stats.categoryStats).length > 0) {
     const chartContainer = document.createElement('div');
-    chartContainer.className = 'w-full p-6 bg-white dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 anim-fade-in-up';
-    chartContainer.style.animationDelay = "200ms";
+    chartContainer.className = 'w-full p-6 bg-white dark:bg-gray-800/50 rounded-xl shadow-md border border-gray-200 dark:border-gray-700';
     chartContainer.innerHTML = `
-            <div class="flex items-center justify-between mb-6">
-                <h3 class="text-lg font-bold text-gray-800 dark:text-gray-200 font-kanit">คะแนนตามหมวดหมู่</h3>
-                <div class="h-1 w-12 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
-            </div>
+            <h3 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4 font-kanit text-center">คะแนนตามหมวดหมู่</h3>
             <div class="relative h-64">
                 <canvas id="result-category-chart"></canvas>
             </div>
@@ -1289,43 +1355,33 @@ function buildResultsLayout(resultInfo, stats) {
   // --- 4. Performance Summary ---
   if (stats.performanceSummary && (stats.performanceSummary.best || stats.performanceSummary.worst)) {
     const summaryContainer = document.createElement('div');
-    summaryContainer.className = 'w-full mt-2 anim-fade-in-up';
-    summaryContainer.style.animationDelay = "300ms";
-    
-    const summaryGrid = document.createElement('div');
-    summaryGrid.className = 'grid grid-cols-1 md:grid-cols-2 gap-4';
+    summaryContainer.className = 'w-full max-w-2xl mx-auto mt-6 p-4 bg-white dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm';
+    summaryContainer.innerHTML = `<h3 class="text-lg font-bold text-gray-800 dark:text-gray-200 mb-3 font-kanit">สรุปผลการทำแบบทดสอบ</h3>`;
+
+    const summaryList = document.createElement('ul');
+    summaryList.className = 'space-y-2 text-sm';
 
     if (stats.performanceSummary.best) {
-      const bestCard = document.createElement('div');
-      bestCard.className = 'p-4 rounded-xl bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-800/50 flex items-start gap-3';
-      bestCard.innerHTML = `
-        <div class="p-2 bg-green-100 dark:bg-green-800/40 rounded-lg text-green-600 dark:text-green-400">
-            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
-        </div>
-        <div>
-            <h4 class="text-sm font-bold text-green-800 dark:text-green-300 mb-1">จุดแข็งของคุณ</h4>
-            <p class="text-sm text-green-700 dark:text-green-400">${stats.performanceSummary.best}</p>
-        </div>
-      `;
-      summaryGrid.appendChild(bestCard);
+      const bestItem = document.createElement('li');
+      bestItem.className = 'flex items-start gap-3';
+      bestItem.innerHTML = `
+                <svg class="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
+                <span class="text-gray-700 dark:text-gray-300">ทำได้ดีมากในหมวดหมู่: <strong class="font-semibold text-green-600 dark:text-green-400">${stats.performanceSummary.best}</strong></span>
+            `;
+      summaryList.appendChild(bestItem);
     }
 
     if (stats.performanceSummary.worst) {
-      const worstCard = document.createElement('div');
-      worstCard.className = 'p-4 rounded-xl bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-100 dark:border-yellow-800/50 flex items-start gap-3';
-      worstCard.innerHTML = `
-        <div class="p-2 bg-yellow-100 dark:bg-yellow-800/40 rounded-lg text-yellow-600 dark:text-yellow-400">
-            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.21 3.03-1.742 3.03H4.42c-1.532 0-2.492-1.696-1.742-3.03l5.58-9.92zM10 13a1 1 0 110-2 1 1 0 010 2zm-1-8a1 1 0 00-1 1v3a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>
-        </div>
-        <div>
-            <h4 class="text-sm font-bold text-yellow-800 dark:text-yellow-300 mb-1">ควรทบทวนเพิ่มเติม</h4>
-            <p class="text-sm text-yellow-700 dark:text-yellow-400">${stats.performanceSummary.worst}</p>
-        </div>
-      `;
-      summaryGrid.appendChild(worstCard);
+      const worstItem = document.createElement('li');
+      worstItem.className = 'flex items-start gap-3';
+      worstItem.innerHTML = `
+                <svg class="h-5 w-5 text-yellow-500 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.21 3.03-1.742 3.03H4.42c-1.532 0-2.492-1.696-1.742-3.03l5.58-9.92zM10 13a1 1 0 110-2 1 1 0 010 2zm-1-8a1 1 0 00-1 1v3a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>
+                <span class="text-gray-700 dark:text-gray-300">หมวดหมู่ที่ควรทบทวนเพิ่มเติม: <strong class="font-semibold text-yellow-600 dark:text-yellow-500">${stats.performanceSummary.worst}</strong></span>
+            `;
+      summaryList.appendChild(worstItem);
     }
 
-    summaryContainer.appendChild(summaryGrid);
+    summaryContainer.appendChild(summaryList);
     layoutContainer.appendChild(summaryContainer);
   }
 
@@ -1337,7 +1393,19 @@ function buildResultsLayout(resultInfo, stats) {
   renderResultCategoryChart(stats.categoryStats);
 
   // --- 8. Final UI Updates ---
+  // Show or hide the review button based on incorrect answers
+  const incorrectAnswers = getIncorrectAnswers();
+  if (incorrectAnswers.length > 0) {
+    elements.reviewBtn.classList.remove("hidden");
+  } else {
+    elements.reviewBtn.classList.add("hidden");
+  }
+
   renderMath(layoutContainer); // Render math only in the new results layout
+}
+function getIncorrectAnswers() {
+  // Add a check for `answer` to prevent errors if some questions were not answered
+  return state.userAnswers.filter((answer) => answer && !answer.isCorrect);
 }
 // --- Core Quiz Logic ---
 
@@ -1521,29 +1589,25 @@ function renderReviewItems(sourceAnswers, filterCategory, totalIncorrect) {
       .map(tag => `<span class="inline-block mt-2 px-2.5 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300 text-xs font-semibold rounded-full">${tag}</span>`)
       .join('');
 
-    // Handle both string and array for correct answer display
-    const correctAnswerDisplay = Array.isArray(answer.correctAnswer) ? answer.correctAnswer.join(', ') : answer.correctAnswer;
-    const selectedAnswerDisplay = Array.isArray(answer.selectedAnswer) ? answer.selectedAnswer.join(', ') : answer.selectedAnswer;
-
     reviewItem.innerHTML = `
             <div class="flex items-start gap-4">
                 <span class="flex-shrink-0 h-8 w-8 flex items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-full text-gray-600 dark:text-gray-300 font-bold">${index + 1}</span>
                 <div class="flex-grow min-w-0">
                     <div class="text-lg font-semibold text-gray-800 dark:text-gray-200 break-words">${questionHtml}</div>
-                    ${tagsHtml ? `<div class="mt-2">${tagsHtml}</div>` : ''}
+                    ${tagsHtml ? `<div class="mt-1">${tagsHtml}</div>` : ''}
                 </div>
             </div>
-            <div class="mt-4 pl-12 space-y-3">
+            <div class="mt-4 space-y-3">
                 ${!answer.isCorrect ? `
-                    <div class="flex items-start gap-3 p-3 rounded-lg bg-red-50 dark:bg-red-900/40 border border-red-200 dark:border-red-700/60">
+                    <div class="flex items-start gap-3 p-3 rounded-md bg-red-50 dark:bg-red-900/40 border border-red-200 dark:border-red-700/60">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 text-red-500 dark:text-red-400 mt-0.5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" /></svg>
                         <div>
                             <p class="text-sm font-medium text-red-800 dark:text-red-300">คำตอบของคุณ</p>
-                            <p class="text-red-700 dark:text-red-400 font-mono break-words whitespace-pre-wrap">${selectedAnswerDisplay || ""}</p>
+                            <p class="text-red-700 dark:text-red-400 font-mono break-words whitespace-pre-wrap">${answer.selectedAnswer || ""}</p>
                         </div>
                     </div>
                 ` : ''}
-                <div class="flex items-start gap-3 p-3 rounded-lg bg-green-50 dark:bg-green-900/40 border border-green-200 dark:border-green-700/60">
+                <div class="flex items-start gap-3 p-3 rounded-md bg-green-50 dark:bg-green-900/40 border border-green-200 dark:border-green-700/60">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 text-green-500 dark:text-green-400 mt-0.5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
                     <div>
                         <p class="text-sm font-medium text-green-800 dark:text-green-300">คำตอบที่ถูกต้อง</p>
@@ -1552,12 +1616,12 @@ function renderReviewItems(sourceAnswers, filterCategory, totalIncorrect) {
                 </div>
             </div>
             ${explanationHtml ? `
-            <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700/60">
+            <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
                 <div class="flex items-start gap-3">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 text-blue-500 dark:text-blue-400 mt-0.5" viewBox="0 0 20 20" fill="currentColor"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z" /></svg>
                     <div>
                         <p class="text-sm font-medium text-blue-800 dark:text-blue-300">คำอธิบาย</p>
-                        <p class="text-gray-600 dark:text-gray-400 mt-1 break-words leading-relaxed">${explanationHtml}</p>
+                        <p class="text-gray-600 dark:text-gray-400 mt-1 break-words">${explanationHtml}</p>
                     </div>
                 </div>
             </div>` : ""}
@@ -1896,13 +1960,19 @@ function bindEventListeners() {
     elements.skipBtn.addEventListener("click", skipQuestion);
   }
   elements.nextBtn.addEventListener("click", handleNextButtonClick);
+  if (elements.nextBtn) elements.nextBtn.addEventListener("click", handleNextButtonClick);
 
   // Keep other listeners as they are.
   elements.startBtn.addEventListener("click", startQuiz);
   elements.prevBtn.addEventListener("click", showPreviousQuestion);
   elements.restartBtn.addEventListener("click", startQuiz);
   elements.reviewBtn.addEventListener("click", showReview);
-  elements.backToResultBtn.addEventListener("click", () => switchScreen(elements.resultScreen));
+  elements.backToResultBtn.addEventListener("click", backToResult);
+  if (elements.startBtn) elements.startBtn.addEventListener("click", startQuiz);
+  if (elements.prevBtn) elements.prevBtn.addEventListener("click", showPreviousQuestion);
+  if (elements.restartBtn) elements.restartBtn.addEventListener("click", startQuiz);
+  if (elements.reviewBtn) elements.reviewBtn.addEventListener("click", showReview);
+  if (elements.backToResultBtn) elements.backToResultBtn.addEventListener("click", backToResult);
   if (elements.soundToggleBtn) {
     elements.soundToggleBtn.addEventListener("click", toggleSound);
   }
