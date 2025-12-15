@@ -1,6 +1,6 @@
 import { ModalHandler } from './modal-handler.js';
 import { shuffleArray } from './utils.js';
-import { Gamification } from './gamification.js';
+import { Gamification, SHOP_ITEMS } from './gamification.js';
 import { showToast } from './toast.js';
 
 // state: Stores all dynamic data of the quiz
@@ -9,6 +9,8 @@ let state = {};
 let elements = {};
 // handler: A dedicated handler for the resume modal
 let resumeModalHandler;
+// handler: For power-up buy modal
+let powerupBuyModalHandler;
 // config: Stores all static configuration and constants
 const config = {
   soundOnIcon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" /></svg>`,
@@ -123,6 +125,15 @@ export function init(quizData, storageKey, quizTitle, customTime, action) {
     hintBtn: document.getElementById("hint-btn"),
     hintContainer: document.getElementById("hint-container"),
     hintSection: document.getElementById("hint-section"),
+    // Power-up container (will be created dynamically)
+    powerUpContainer: null,
+    // Power-up Modal Elements
+    powerupModalIcon: document.getElementById("powerup-modal-icon"),
+    powerupModalTitle: document.getElementById("powerup-modal-title"),
+    powerupModalDesc: document.getElementById("powerup-modal-desc"),
+    powerupUserXp: document.getElementById("powerup-user-xp"),
+    powerupItemCost: document.getElementById("powerup-item-cost"),
+    powerupConfirmBtn: document.getElementById("powerup-confirm-buy-btn"),
   };
   // --- 2. State Initialization ---
   state = {
@@ -145,13 +156,21 @@ export function init(quizData, storageKey, quizTitle, customTime, action) {
     initialTime: 0,
     activeScreen: null,
     isFloatingNav: false, // To track the nav state
+    game: new Gamification(), // Initialize game instance
+    xpMultiplier: 1, // Default multiplier
+    used5050: false,
+    usedCut1: false,
+    usedRangeHint: false,
+    usedTolerance: false,
   };
 
   // --- 3. Initial Setup ---
   resumeModalHandler = new ModalHandler('resume-modal');
+  powerupBuyModalHandler = new ModalHandler('powerup-buy-modal');
   bindEventListeners();
   initializeSound();
   checkForSavedQuiz(action); // This will check localStorage and either show the start screen or a resume prompt.
+  setupPowerUpUI(); // Setup the power-up bar
 }
 
 /**
@@ -363,6 +382,192 @@ function createCheckboxOption(optionText, previousAnswer) {
   return wrapperLabel;
 }
 
+/**
+ * Sets up the Power-up UI elements.
+ */
+function setupPowerUpUI() {
+    // Create container if it doesn't exist
+    if (!document.getElementById('power-up-bar')) {
+        const container = document.createElement('div');
+        container.id = 'power-up-bar';
+        container.className = 'flex justify-center gap-4 mb-6';
+        
+        // Insert before the question container
+        const questionContainer = document.getElementById('question');
+        if (questionContainer && questionContainer.parentNode) {
+            questionContainer.parentNode.insertBefore(container, questionContainer);
+        }
+        elements.powerUpContainer = container;
+    }
+}
+
+/**
+ * Renders the power-up buttons based on current inventory.
+ */
+function renderPowerUps() {
+    if (!elements.powerUpContainer) return;
+    
+    const currentQuestion = state.shuffledQuestions[state.currentQuestionIndex];
+    const isNumberQuestion = currentQuestion && currentQuestion.type === 'fill-in-number';
+    const hasOptions = currentQuestion && (currentQuestion.options || currentQuestion.choices);
+
+    const consumables = SHOP_ITEMS.filter(i => i.type === 'consumable');
+    
+    elements.powerUpContainer.innerHTML = consumables.map(item => {
+        // Filter items based on question type
+        if (item.id === 'item_5050' || item.id === 'item_cut_1') {
+            if (!hasOptions) return '';
+        }
+        if (item.id === 'item_range_hint' || item.id === 'item_tolerance') {
+            if (!isNumberQuestion) return '';
+        }
+
+        const count = state.game.getItemCount(item.id);
+        let isUsed = false;
+        if (item.id === 'item_xp_2x') isUsed = state.xpMultiplier > 1;
+        else if (item.id === 'item_5050') isUsed = state.used5050;
+        else if (item.id === 'item_cut_1') isUsed = state.usedCut1;
+        else if (item.id === 'item_range_hint') isUsed = state.usedRangeHint;
+        else if (item.id === 'item_tolerance') isUsed = state.usedTolerance;
+        // item_undo and item_time_freeze are instant effects, not toggle states
+        
+        // Check if item should be disabled (e.g., Time Freeze when no timer)
+        const isTimeFreeze = item.id === 'item_time_freeze';
+        const isTimerDisabled = state.timerMode === 'none';
+        const isDisabled = isUsed || (isTimeFreeze && isTimerDisabled);
+
+        let btnClass = "flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-bold transition-all shadow-sm border-2 ";
+        if (isUsed) {
+            btnClass += "bg-green-100 text-green-700 border-green-500 cursor-default opacity-80";
+        } else if (isTimeFreeze && isTimerDisabled) {
+            // Style for unavailable item
+            btnClass += "bg-gray-100 dark:bg-gray-800 text-gray-400 border-gray-200 dark:border-gray-700 cursor-not-allowed opacity-60 grayscale";
+        } else if (count > 0) {
+            btnClass += "bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-600 hover:bg-blue-50 dark:hover:bg-gray-600 hover:border-blue-400 cursor-pointer transform hover:scale-105";
+        } else {
+            btnClass += "bg-gray-100 dark:bg-gray-800 text-gray-400 border-gray-200 dark:border-gray-700 cursor-pointer hover:bg-gray-200";
+        }
+
+        return `
+            <button class="power-up-btn ${btnClass}" data-id="${item.id}" ${isDisabled ? 'disabled' : ''}>
+                <span>${item.icon}</span>
+                <span>${item.name}</span>
+                <span class="bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-300 px-1.5 rounded-md text-xs">${isUsed ? 'ใช้แล้ว' : count}</span>
+            </button>
+        `;
+    }).join('');
+
+    // Bind events
+    elements.powerUpContainer.querySelectorAll('.power-up-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => handlePowerUpClick(e.currentTarget.dataset.id));
+    });
+}
+
+function handlePowerUpClick(itemId) {
+    const count = state.game.getItemCount(itemId);
+    
+    if (count <= 0) {
+        // Show buy modal
+        const item = SHOP_ITEMS.find(i => i.id === itemId);
+        
+        // Populate Modal Data
+        if (elements.powerupModalIcon) elements.powerupModalIcon.textContent = item.icon;
+        if (elements.powerupModalTitle) elements.powerupModalTitle.textContent = item.name;
+        if (elements.powerupModalDesc) elements.powerupModalDesc.textContent = item.desc;
+        if (elements.powerupUserXp) elements.powerupUserXp.textContent = `${state.game.state.xp.toLocaleString()} XP`;
+        if (elements.powerupItemCost) elements.powerupItemCost.textContent = `${item.cost} XP`;
+
+        // Setup Confirm Button
+        if (elements.powerupConfirmBtn) {
+            // Clone to remove old listeners
+            const newBtn = elements.powerupConfirmBtn.cloneNode(true);
+            elements.powerupConfirmBtn.parentNode.replaceChild(newBtn, elements.powerupConfirmBtn);
+            elements.powerupConfirmBtn = newBtn;
+
+            elements.powerupConfirmBtn.onclick = () => {
+            const result = state.game.buyItem(itemId);
+            if (result.success) {
+                showToast('ซื้อสำเร็จ', result.message, '🛒');
+                renderPowerUps();
+                powerupBuyModalHandler.close();
+            } else {
+                showToast('ซื้อไม่สำเร็จ', result.message, '❌', 'error');
+                powerupBuyModalHandler.close();
+            }
+            };
+        }
+        
+        powerupBuyModalHandler.open();
+        return;
+    }
+
+    // Use Item Logic
+    if (itemId === 'item_5050') {
+        if (state.used5050) return;
+        if (state.userAnswers[state.currentQuestionIndex]) return; // Cannot use if already answered
+        if (state.game.useItem(itemId)) {
+            apply5050();
+            state.used5050 = true;
+            renderPowerUps();
+            showToast('ใช้ตัวช่วยสำเร็จ', 'ตัดตัวเลือกผิดออก 2 ข้อ', '✂️');
+        }
+    } else if (itemId === 'item_xp_2x') {
+        if (state.xpMultiplier > 1) return;
+        if (state.game.useItem(itemId)) {
+            state.xpMultiplier = 2;
+            renderPowerUps();
+            showToast('ใช้ตัวช่วยสำเร็จ', 'XP คูณ 2 สำหรับการสอบครั้งนี้!', '✨', 'gold');
+        }
+    } else if (itemId === 'item_cut_1') {
+        if (state.usedCut1 || state.used5050) return; // Don't stack with 50/50 easily
+        if (state.userAnswers[state.currentQuestionIndex]) return;
+        if (state.game.useItem(itemId)) {
+            applyCut1();
+            state.usedCut1 = true;
+            renderPowerUps();
+            showToast('ใช้ตัวช่วยสำเร็จ', 'ตัดตัวเลือกผิดออก 1 ข้อ', '🔪');
+        }
+    } else if (itemId === 'item_undo') {
+        const currentAns = state.userAnswers[state.currentQuestionIndex];
+        if (currentAns && !currentAns.isCorrect) {
+             if (state.game.useItem(itemId)) {
+                undoLastAnswer();
+                renderPowerUps();
+                showToast('ใช้ตัวช่วยสำเร็จ', 'เริ่มตอบข้อนี้ใหม่ได้เลย!', '↩️');
+            }
+        } else {
+             showToast('ไม่สามารถใช้ได้', 'ใช้ได้เฉพาะเมื่อตอบผิดเท่านั้น', '⚠️', 'error');
+        }
+    } else if (itemId === 'item_time_freeze') {
+        if (state.timerMode === 'none' || state.isTimeFrozen) {
+             // This case should be handled by the disabled button, but keep as fallback
+             return;
+        }
+        if (state.game.useItem(itemId)) {
+            freezeTime();
+            renderPowerUps();
+            showToast('ใช้ตัวช่วยสำเร็จ', 'หยุดเวลา 30 วินาที!', '❄️', 'info');
+        }
+    } else if (itemId === 'item_range_hint') {
+        if (state.usedRangeHint) return;
+        if (state.userAnswers[state.currentQuestionIndex]) return;
+        if (state.game.useItem(itemId)) {
+            applyRangeHint();
+            state.usedRangeHint = true;
+            renderPowerUps();
+            // Toast handled in applyRangeHint to show the range
+        }
+    } else if (itemId === 'item_tolerance') {
+        if (state.usedTolerance) return;
+        if (state.userAnswers[state.currentQuestionIndex]) return;
+        if (state.game.useItem(itemId)) {
+            state.usedTolerance = true;
+            renderPowerUps();
+            showToast('ใช้ตัวช่วยสำเร็จ', 'ขยายเป้าคำตอบให้กว้างขึ้น +/- 20%', '⭕', 'success');
+        }
+    }
+}
+
 function showQuestion() {
   // Only stop the timer if it's a per-question timer.
   // The overall timer should continue running across questions.
@@ -370,6 +575,12 @@ function showQuestion() {
     stopTimer();
   }
   resetState();
+  state.used5050 = false; // Reset 50/50 flag for new question
+  state.usedCut1 = false; // Reset Cut 1 flag
+  state.usedRangeHint = false;
+  state.usedTolerance = false;
+  renderPowerUps(); // Update UI
+
   const currentQuestion = state.shuffledQuestions[state.currentQuestionIndex];
   if (!currentQuestion) {
     console.error("Invalid question index:", state.currentQuestionIndex);
@@ -459,6 +670,113 @@ function showQuestion() {
   }
 
   renderMath(elements.quizScreen); // Render math only within the quiz screen
+}
+
+function apply5050() {
+    const currentQuestion = state.shuffledQuestions[state.currentQuestionIndex];
+    const correctAnswer = String(currentQuestion.answer).trim();
+    
+    // Get all option buttons/checkboxes
+    const optionElements = Array.from(elements.options.children);
+    const wrongOptions = optionElements.filter(el => {
+        const val = el.tagName === 'BUTTON' ? el.dataset.optionValue : el.querySelector('input').value;
+        return val.trim() !== correctAnswer;
+    });
+
+    // Shuffle and pick 2 to hide
+    shuffleArray(wrongOptions);
+    const toHide = wrongOptions.slice(0, 2);
+
+    toHide.forEach(el => {
+        el.style.opacity = '0.3';
+        el.style.pointerEvents = 'none';
+        if (el.tagName === 'BUTTON') el.disabled = true;
+        else el.querySelector('input').disabled = true;
+    });
+}
+
+function applyCut1() {
+    const currentQuestion = state.shuffledQuestions[state.currentQuestionIndex];
+    const correctAnswer = String(currentQuestion.answer).trim();
+    
+    const optionElements = Array.from(elements.options.children);
+    const wrongOptions = optionElements.filter(el => {
+        const val = el.tagName === 'BUTTON' ? el.dataset.optionValue : el.querySelector('input').value;
+        return val.trim() !== correctAnswer && el.style.opacity !== '0.3';
+    });
+
+    if (wrongOptions.length > 0) {
+        shuffleArray(wrongOptions);
+        const toHide = wrongOptions[0];
+        
+        toHide.style.opacity = '0.3';
+        toHide.style.pointerEvents = 'none';
+        if (toHide.tagName === 'BUTTON') toHide.disabled = true;
+        else toHide.querySelector('input').disabled = true;
+    }
+}
+
+function applyRangeHint() {
+    const currentQuestion = state.shuffledQuestions[state.currentQuestionIndex];
+    const correctAnswer = parseFloat(currentQuestion.answer);
+    
+    if (isNaN(correctAnswer)) return;
+
+    // Generate a range that includes the answer
+    // Range width approx 40-60% of value
+    const rangeWidth = Math.abs(correctAnswer * 0.5) || 10; 
+    const offset = (Math.random() - 0.5) * (rangeWidth * 0.5); // Random offset so answer isn't always center
+    
+    let min = correctAnswer - (rangeWidth / 2) + offset;
+    let max = correctAnswer + (rangeWidth / 2) + offset;
+    
+    // Round for cleaner display
+    const decimals = currentQuestion.decimalPlaces || 0;
+    showToast('สโคปคำตอบ', `คำตอบอยู่ระหว่าง ${min.toFixed(decimals)} ถึง ${max.toFixed(decimals)}`, '🎯', 'info');
+}
+
+function undoLastAnswer() {
+    // --- Animation ---
+    const quizScreen = elements.quizScreen;
+    if (quizScreen) {
+        quizScreen.classList.remove('anim-rewind');
+        // Force reflow to allow re-triggering the animation
+        void quizScreen.offsetWidth;
+        quizScreen.classList.add('anim-rewind');
+    }
+    // Reset answer state
+    state.userAnswers[state.currentQuestionIndex] = null;
+    // Note: Score was not incremented for wrong answer, so no need to decrement.
+    saveQuizState();
+    
+    // Reset UI
+    elements.feedback.classList.add("hidden");
+    elements.nextBtn.classList.add("hidden");
+    
+    // Re-enable buttons and remove classes
+    Array.from(elements.options.children).forEach((child) => {
+        const button = child.tagName === 'BUTTON' ? child : child.querySelector('input');
+        const wrapper = child.tagName === 'BUTTON' ? child : child;
+        
+        if (button) button.disabled = false;
+        wrapper.classList.remove("correct", "incorrect");
+        // Keep 50/50 or Cut1 effects if they were used
+        if (wrapper.style.opacity !== '0.3') {
+            wrapper.style.pointerEvents = "auto";
+        }
+    });
+    
+    // Handle text inputs
+    const textInput = document.getElementById('fill-in-answer') || document.getElementById('fill-in-number-answer');
+    if (textInput) {
+        textInput.disabled = false;
+        textInput.value = '';
+        textInput.classList.remove("correct", "incorrect");
+        textInput.focus();
+    }
+    
+    // If per-question timer, maybe restart it? 
+    // For simplicity, we don't restart the timer to avoid exploiting time.
 }
 
 /**
@@ -644,7 +962,13 @@ function evaluateFillInNumberAnswer() {
 
   const currentQuestion = state.shuffledQuestions[state.currentQuestionIndex];
   const correctAnswer = parseFloat(currentQuestion.answer);
-  const tolerance = currentQuestion.tolerance || 0; // Default tolerance to 0 if not specified
+  
+  // Calculate tolerance: Base tolerance OR Boosted tolerance (20% of answer)
+  let tolerance = currentQuestion.tolerance || 0;
+  if (state.usedTolerance) {
+      const boostedTolerance = Math.abs(correctAnswer * 0.2); // 20%
+      tolerance = Math.max(tolerance, boostedTolerance);
+  }
 
   let isCorrect = false;
   if (!isNaN(userAnswer)) {
@@ -965,7 +1289,7 @@ function showResults() {
   let earthXP = 0;
 
   try {
-    const game = new Gamification();
+    const game = state.game; // Use the instance from state
     
     state.userAnswers.forEach(ans => {
         if (ans && ans.isCorrect) {
@@ -988,6 +1312,11 @@ function showResults() {
             }
         }
     });
+
+    // Apply XP Multiplier
+    xpEarned *= state.xpMultiplier;
+    physicsXP *= state.xpMultiplier;
+    earthXP *= state.xpMultiplier;
 
     // บันทึกผล XP ลงในระบบ Gamification
     if (typeof game.submitQuizResult === 'function') {
@@ -1948,6 +2277,18 @@ function startTimer() {
   elements.timerDisplay.classList.remove("hidden");
   updateTimerDisplay();
   state.timerId = setInterval(tick, 1000);
+}
+
+function freezeTime() {
+    stopTimer();
+    state.isTimeFrozen = true;
+    if (elements.timerDisplay) elements.timerDisplay.classList.add('text-blue-500', 'animate-pulse');
+    
+    setTimeout(() => {
+        state.isTimeFrozen = false;
+        if (elements.timerDisplay) elements.timerDisplay.classList.remove('text-blue-500', 'animate-pulse');
+        state.timerId = setInterval(tick, 1000); // Resume timer
+    }, 30000);
 }
 
 function handleTimeUp() {

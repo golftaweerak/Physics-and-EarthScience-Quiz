@@ -438,8 +438,10 @@ function setupShopSystem(game) {
                     const inventory = game.getInventory();
                     const isOwned = inventory.includes(item.id);
                     const canBuy = game.state.xp >= item.cost;
+                    const isConsumable = item.type === 'consumable';
+                    const quantity = isConsumable ? game.getItemCount(item.id) : 0;
 
-                    if (isOwned) {
+                    if (isOwned && !isConsumable) {
                         buyBtn.disabled = true;
                         buyBtn.className = 'w-full py-3 rounded-xl text-white font-bold text-lg shadow-md bg-gray-400 cursor-not-allowed';
                         buyBtn.innerHTML = '<span>เป็นเจ้าของแล้ว</span>';
@@ -457,7 +459,14 @@ function setupShopSystem(game) {
                         buyBtn.disabled = false;
                         buyBtn.className = 'w-full py-3 rounded-xl text-white font-bold text-lg shadow-md transition-transform transform hover:scale-105 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700';
                         buyBtn.innerHTML = `<span>ยืนยันการแลก</span> <span class="bg-white/20 px-2 py-0.5 rounded text-sm">${item.cost} XP</span>`;
-                        statusEl.classList.add('hidden');
+                        
+                        if (isConsumable) {
+                            statusEl.textContent = `คุณมีอยู่แล้ว: ${quantity} ชิ้น`;
+                            statusEl.className = 'mt-2 text-sm font-medium text-blue-600 dark:text-blue-400';
+                            statusEl.classList.remove('hidden');
+                        } else {
+                            statusEl.classList.add('hidden');
+                        }
                     }
 
                     shopModal.open();
@@ -492,13 +501,18 @@ function renderShop(game) {
     container.innerHTML = SHOP_ITEMS.map(item => {
         const isOwned = inventory.includes(item.id);
         const canBuy = game.state.xp >= item.cost;
+        const isConsumable = item.type === 'consumable';
+        const quantity = isConsumable ? game.getItemCount(item.id) : 0;
         
         let statusClass = '';
         let statusText = `${item.cost} XP`;
 
-        if (isOwned) {
+        if (isOwned && !isConsumable) {
             statusClass = 'text-green-600 dark:text-green-400';
             statusText = '✓ เป็นเจ้าของแล้ว';
+        } else if (isConsumable && quantity > 0) {
+            statusClass = 'text-blue-600 dark:text-blue-400';
+            statusText = `มีอยู่: ${quantity} | ${item.cost} XP`;
         } else if (!canBuy) {
             statusClass = 'text-red-500';
         } else {
