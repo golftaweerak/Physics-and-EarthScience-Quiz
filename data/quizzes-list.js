@@ -774,6 +774,18 @@ export const quizList = [
     "subCategory": "แนวข้อสอบ"
   },
   {
+    "id": "phy_m4/phy_m4_mid2-exam-3",
+    "title": "แนวข้อสอบกลางภาค 2 ชุดที่ 3",
+    "amount": 40,
+    "description": "ทบทวนเนื้อหาบทที่ 4 (สมดุลต่อการหมุน) และบทที่ 5 (งานและพลังงาน)",
+    "url": "./quiz/index.html?id=phy_m4/phy_m4_mid2-exam-3",
+    "storageKey": "quizState-phy_m4_mid2-exam-3",
+    "icon": "./assets/icons/physicsm4.png",
+    "altText": "ไอคอนสำหรับ phy_m4_mid2-exam-3",
+    "category": "PhysicsM4",
+    "subCategory": "แนวข้อสอบ"
+  },
+  {
     "id": "phy_m5/phy_m5_ch10-1",
     "title": "เสียง (ชุดที่ 1)",
     "amount": 30,
