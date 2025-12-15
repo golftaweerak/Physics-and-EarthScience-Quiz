@@ -127,7 +127,17 @@ export const SHOP_ITEMS = [
 export class Gamification {
     constructor() {
         this.storageKey = 'app_gamification_data';
+        
+        // ตรวจสอบว่าเป็นผู้ใช้ใหม่สำหรับระบบเกมหรือไม่ (ยังไม่มีข้อมูล Gamification)
+        const isNewToGamification = !localStorage.getItem(this.storageKey);
+        
         this.state = this.loadState();
+        
+        // ถ้าเป็นผู้ใช้ใหม่ของระบบเกม ให้ลองดึงข้อมูลเก่ามาคำนวณ
+        if (isNewToGamification) {
+            this.syncProgress();
+        }
+
         this.updateStreak();
         this.applyTheme(this.state.selectedTheme);
         this.updateHeaderAvatar();
@@ -194,6 +204,73 @@ export class Gamification {
         if (state.selectedTheme === undefined) state.selectedTheme = null;
         
         return state;
+    }
+
+    // ฟังก์ชันสำหรับดึงข้อมูลการทำโจทย์เก่าๆ มาคำนวณเป็น XP เริ่มต้น
+    syncProgress() {
+        let totalXP = 0;
+        let physicsXP = 0;
+        let earthXP = 0;
+        let completed = 0;
+        let totalCorrect = 0;
+
+        // วนลูปดูข้อมูลทั้งหมดใน LocalStorage
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            // ถ้าเจอคีย์ที่เป็นข้อมูลการทำโจทย์ (quizState-...)
+            if (key && key.startsWith('quizState-')) {
+                try {
+                    const data = JSON.parse(localStorage.getItem(key));
+                    if (data && data.userAnswers) {
+                        const correctCount = data.score || 0;
+                        const xp = correctCount * 2; // ให้ 2 XP ต่อ 1 ข้อที่ถูก (ตามเกณฑ์ปัจจุบัน)
+                        
+                        totalXP += xp;
+                        totalCorrect += correctCount;
+                        
+                        // นับจำนวนชุดที่ทำเสร็จ (ดูจากจำนวนข้อที่ตอบเทียบกับจำนวนข้อทั้งหมด)
+                        const totalQ = data.shuffledQuestions ? data.shuffledQuestions.length : 0;
+                        const answered = data.userAnswers.filter(a => a).length;
+                        if (totalQ > 0 && answered >= totalQ) {
+                            completed++;
+                        }
+
+                        // แยกสายวิชา (พยายามเดาจากข้อมูลที่มี)
+                        let category = 'General';
+                        const firstAns = data.userAnswers.find(a => a);
+                        if (firstAns) {
+                            if (firstAns.sourceQuizCategory) category = firstAns.sourceQuizCategory;
+                            else if (firstAns.subCategory) {
+                                category = typeof firstAns.subCategory === 'object' ? firstAns.subCategory.main : firstAns.subCategory;
+                            }
+                        }
+                        
+                        const lowerCat = String(category).toLowerCase();
+                        if (lowerCat.includes('physics') || lowerCat.includes('ฟิสิกส์')) {
+                            physicsXP += xp;
+                        } else if (lowerCat.includes('earth') || lowerCat.includes('astronomy') || lowerCat.includes('space') || lowerCat.includes('โลก') || lowerCat.includes('ดาราศาสตร์') || lowerCat.includes('วิทย์โลก')) {
+                            earthXP += xp;
+                        }
+                    }
+                } catch (e) {
+                    console.warn("Skipping invalid quiz state during sync:", key);
+                }
+            }
+        }
+
+        // ถ้าพบข้อมูลเก่า ให้อัปเดตสถานะเริ่มต้นทันที
+        if (totalXP > 0) {
+            this.state.xp = totalXP;
+            this.state.physicsXP = physicsXP;
+            this.state.earthXP = earthXP;
+            this.state.quizzesCompleted = completed;
+            this.state.totalCorrectAnswers = totalCorrect;
+            
+            // ตรวจสอบและปลดล็อกเหรียญรางวัลจากข้อมูลเก่าทันที
+            this.checkBadges(0); 
+            this.saveState();
+            console.log(`Synced old progress: ${totalXP} XP, ${completed} Quizzes`);
+        }
     }
 
     saveState() {
@@ -553,6 +630,30 @@ export class Gamification {
             overall: { leveledUp: newLevel.level > oldLevel.level, info: newLevel },
             physics: { leveledUp: isPhysics && newPhysics.level > oldPhysics.level, info: newPhysics },
             earth: { leveledUp: isEarth && newEarth.level > oldEarth.level, info: newEarth }
+        };
+    }
+
+    // ฟังก์ชันใหม่: บันทึกผลการทำข้อสอบโดยรับค่า XP แยกตามสายวิชา
+    submitQuizResult(totalXP, physicsXP, earthXP) {
+        const oldLevel = this.getCurrentLevel();
+        const oldPhysics = this.getPhysicsLevel();
+        const oldEarth = this.getEarthLevel();
+
+        this.state.xp += totalXP;
+        this.state.physicsXP += physicsXP;
+        this.state.earthXP += earthXP;
+        this.state.quizzesCompleted += 1;
+        
+        this.saveState();
+
+        const newLevel = this.getCurrentLevel();
+        const newPhysics = this.getPhysicsLevel();
+        const newEarth = this.getEarthLevel();
+
+        return {
+            overall: { leveledUp: newLevel.level > oldLevel.level, info: newLevel },
+            physics: { leveledUp: newPhysics.level > oldPhysics.level, info: newPhysics },
+            earth: { leveledUp: newEarth.level > oldEarth.level, info: newEarth }
         };
     }
 

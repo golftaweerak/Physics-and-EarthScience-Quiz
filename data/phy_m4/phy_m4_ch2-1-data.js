@@ -79,7 +79,7 @@ export const quizItems = [
       specific: LO_3
     }
   },
- /* {
+ {
     number: 6,
     type: "question",
     question: "วัตถุที่ถูกโยนขึ้นไปในแนวดิ่ง ขณะอยู่ที่จุดสูงสุด ความเร็วและความเร่งของวัตถุเป็นอย่างไร",
@@ -293,5 +293,5 @@ export const quizItems = [
       main: MAIN_CATEGORY,
       specific: LO_3
     }
-  }*/
+  }
 ];

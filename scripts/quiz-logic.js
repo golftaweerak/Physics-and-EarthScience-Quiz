@@ -961,33 +961,62 @@ function showResults() {
   let newBadges = [];
   let completedQuests = [];
   let newAchievements = [];
+  let physicsXP = 0;
+  let earthXP = 0;
 
   try {
     const game = new Gamification();
-    // ปรับลด XP: ให้ 2 XP ต่อ 1 ข้อที่ตอบถูก (จากเดิม 10)
-    xpEarned = correctAnswers * 2;
     
-    // ดึง Category จากคำตอบแรก (ถ้ามี) หรือใช้ค่า Default
-    const firstAnswer = state.userAnswers.find(a => a);
-    let category = 'General';
-    if (firstAnswer) {
-        if (firstAnswer.sourceQuizCategory) {
-            category = firstAnswer.sourceQuizCategory;
-        } else if (firstAnswer.subCategory) {
-            // Handle both string and object formats for subCategory
-            category = typeof firstAnswer.subCategory === 'object' ? firstAnswer.subCategory.main : firstAnswer.subCategory;
+    state.userAnswers.forEach(ans => {
+        if (ans && ans.isCorrect) {
+            const points = 5; // 5 XP ต่อ 1 ข้อที่ตอบถูก
+            xpEarned += points;
+            
+            // ตรวจสอบหมวดวิชาของข้อนี้
+            let qCategory = 'General';
+            if (ans.sourceQuizCategory) {
+                qCategory = ans.sourceQuizCategory;
+            } else if (ans.subCategory) {
+                qCategory = typeof ans.subCategory === 'object' ? ans.subCategory.main : ans.subCategory;
+            }
+            
+            const lowerCat = String(qCategory).toLowerCase();
+            if (lowerCat.includes('physics') || lowerCat.includes('ฟิสิกส์')) {
+                physicsXP += points;
+            } else if (lowerCat.includes('earth') || lowerCat.includes('astronomy') || lowerCat.includes('space') || lowerCat.includes('โลก') || lowerCat.includes('ดาราศาสตร์') || lowerCat.includes('วิทย์โลก')) {
+                earthXP += points;
+            }
         }
+    });
+
+    // บันทึกผล XP ลงในระบบ Gamification
+    if (typeof game.submitQuizResult === 'function') {
+        levelResult = game.submitQuizResult(xpEarned, physicsXP, earthXP);
+    } else {
+        // Fallback กรณีไม่มีฟังก์ชันใหม่
+        levelResult = game.addXP(xpEarned, 'General');
     }
 
-    levelResult = game.addXP(xpEarned, category);
     newBadges = game.checkBadges(percentage);
 
     // --- DAILY QUEST: Update Progress ---
+    // สำหรับ Quest ยังคงใช้หมวดหมู่หลักของแบบทดสอบ (จากข้อแรก) เพื่อความง่ายในการตรวจสอบเงื่อนไข "ทำแบบทดสอบหมวด..."
+    const firstAnswer = state.userAnswers.find(a => a);
+    let questCategory = 'General';
+    if (firstAnswer) {
+        if (firstAnswer.sourceQuizCategory) {
+            questCategory = firstAnswer.sourceQuizCategory;
+        } else if (firstAnswer.subCategory) {
+            // Handle both string and object formats for subCategory
+            questCategory = typeof firstAnswer.subCategory === 'object' ? firstAnswer.subCategory.main : firstAnswer.subCategory;
+        }
+    }
+
     if (typeof game.updateQuest === 'function') {
         const result = game.updateQuest({
             correctAnswers: correctAnswers,
             totalQuestions: totalQuestions,
-            category: category,
+            category: questCategory,
             percentage: percentage
         });
         
@@ -1057,7 +1086,9 @@ function showResults() {
     categoryStats,
     xpEarned,
     levelResult,
-    newBadges
+    newBadges,
+    physicsXP,
+    earthXP
   };
 
   // Clean up old results and build the new layout
@@ -1350,6 +1381,78 @@ function buildResultsLayout(resultInfo, stats) {
             </div>
         `;
     layoutContainer.appendChild(chartContainer);
+  }
+
+  // --- NEW: XP Breakdown Section with Animation ---
+  if (stats.xpEarned > 0) {
+    const xpSection = document.createElement('div');
+    xpSection.className = "w-full max-w-2xl mx-auto p-4 bg-white dark:bg-gray-800/50 rounded-xl border border-blue-100 dark:border-gray-700 shadow-sm overflow-hidden";
+    xpSection.innerHTML = `<h3 class="text-center text-gray-500 dark:text-gray-400 font-kanit mb-4 text-sm">ค่าประสบการณ์ที่ได้รับ (XP)</h3>`;
+    
+    const xpGrid = document.createElement('div');
+    xpGrid.className = "flex justify-center items-start gap-4 sm:gap-8";
+    
+    const items = [
+        { 
+            label: 'รวม', 
+            value: stats.xpEarned, 
+            color: 'text-blue-600 dark:text-blue-400', 
+            progress: stats.levelResult?.overall.info,
+            progressColor: 'bg-blue-500',
+            delay: 0 
+        },
+    ];
+    
+    if (stats.physicsXP > 0) items.push({ 
+        label: 'ฟิสิกส์', 
+        value: stats.physicsXP, 
+        color: 'text-purple-600 dark:text-purple-400', 
+        progress: stats.levelResult?.physics.info,
+        progressColor: 'bg-purple-500',
+        delay: 150 
+    });
+    if (stats.earthXP > 0) items.push({ 
+        label: 'วิทย์โลก', 
+        value: stats.earthXP, 
+        color: 'text-teal-600 dark:text-teal-400', 
+        progress: stats.levelResult?.earth.info,
+        progressColor: 'bg-teal-500',
+        delay: 300 
+    });
+    
+    items.forEach(item => {
+        const el = document.createElement('div');
+        el.className = "flex flex-col items-center transform scale-0 transition-transform duration-500 cubic-bezier(0.34, 1.56, 0.64, 1) w-28";
+        
+        let progressBarHtml = '';
+        if (item.progress && item.progress.nextLevelXP) {
+            const xpNeeded = item.progress.nextLevelXP - item.progress.currentXP;
+            progressBarHtml = `
+                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 mt-2">
+                    <div class="${item.progressColor} h-1.5 rounded-full" style="width: ${item.progress.progressPercent}%"></div>
+                </div>
+                <span class="text-[10px] text-gray-400 dark:text-gray-500 mt-1">อีก ${xpNeeded.toLocaleString()} XP</span>
+            `;
+        } else if (item.progress) { // Max level case
+             progressBarHtml = `
+                <div class="w-full bg-yellow-400 rounded-full h-1.5 mt-2"></div>
+                <span class="text-[10px] text-yellow-500 mt-1 font-bold">MAX LEVEL</span>
+            `;
+        }
+
+        el.innerHTML = `
+            <span class="text-3xl font-bold ${item.color}">+${item.value}</span>
+            <span class="text-xs text-gray-500 dark:text-gray-400 mt-1 font-medium">${item.label}</span>
+            ${progressBarHtml}
+        `;
+        xpGrid.appendChild(el);
+        
+        // Trigger animation
+        setTimeout(() => el.classList.remove('scale-0'), 100 + item.delay);
+    });
+    
+    xpSection.appendChild(xpGrid);
+    layoutContainer.appendChild(xpSection);
   }
 
   // --- 4. Performance Summary ---
