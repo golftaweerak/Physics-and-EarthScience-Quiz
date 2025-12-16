@@ -1,5 +1,6 @@
 import { Gamification, BADGES, ACHIEVEMENTS, SHOP_ITEMS } from './gamification.js';
 import { getDetailedProgressForAllQuizzes, calculateStrengthsAndWeaknesses } from './data-manager.js';
+import { renderDailyQuests } from './daily-quests-renderer.js';
 import { ModalHandler } from './modal-handler.js';
 import { showToast } from './toast.js';
 
@@ -74,6 +75,7 @@ export async function initializeProfile() {
     setupTitleSystem(game);
     setupThemeSystem(game);
     setupResetSystem(game);
+    renderDailyQuests('profile-daily-quests-container');
     setupCollapsibleSections();
     await renderRadarChart(game);
     await renderProficiencyHistoryChart(game);

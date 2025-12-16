@@ -14,6 +14,15 @@
         rel="stylesheet">
     <link rel="stylesheet" href="./styles/bundle.css">
     <link rel="icon" href="./assets/icons/exam.png" type="image/png">
+    <style>
+        /* Fix for iOS Safari image sizing in flex containers */
+        .quiz-card .flex-shrink-0, 
+        .section-icon-container,
+        .quiz-menu-item .h-8,
+        .custom-quiz-item .flex-shrink-0 {
+            overflow: hidden;
+        }
+    </style>
 </head>
 
 <body class="bg-gray-100 dark:bg-gray-900 transition-colors duration-300 flex flex-col min-h-screen font-sarabun">

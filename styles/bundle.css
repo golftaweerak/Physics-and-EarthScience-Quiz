@@ -147,6 +147,20 @@ body.dark {
     @apply bg-white dark:bg-gray-800/50 p-5 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 flex flex-col justify-between transition-all duration-300 hover:shadow-xl hover:-translate-y-1.5 hover:border-blue-500 dark:hover:border-blue-500 cursor-pointer;
   }
 
+  /* 
+    Fix for iOS/WebKit image sizing bug in flex containers.
+    Applying `overflow: hidden` to the flex item that contains an image
+    prevents the image from expanding its container beyond its defined size.
+  */
+  .quiz-card .flex-shrink-0,
+  .section-icon-container,
+  .quiz-menu-item .h-8,
+  .custom-quiz-item .flex-shrink-0,
+  #profile-avatar-display,
+  .stat-quiz-card .flex-shrink-0 {
+    @apply overflow-hidden;
+  }
+
   /* Customize autofill styles for better dark mode compatibility in Webkit browsers */
   input:-webkit-autofill,
   input:-webkit-autofill:hover,

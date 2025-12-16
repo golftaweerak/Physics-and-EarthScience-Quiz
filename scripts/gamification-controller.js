@@ -1,4 +1,5 @@
 import { Gamification } from './gamification.js';
+import { renderDailyQuests } from './daily-quests-renderer.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     const game = new Gamification();
@@ -49,6 +50,9 @@ document.addEventListener('DOMContentLoaded', () => {
             `).join('');
         }
     }
+
+    // Render Daily Quests
+    renderDailyQuests('daily-quests-container');
 });
 
 function setText(id, text) {

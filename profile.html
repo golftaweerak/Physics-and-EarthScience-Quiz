@@ -199,6 +199,26 @@
                     </div>
                 </section>
 
+                <!-- NEW: Daily Quests Section -->
+                <section
+                    class="bg-white dark:bg-gray-800 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700/60 overflow-hidden">
+                    <div class="p-6 flex justify-between items-center cursor-pointer collapsible-header hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+                        data-target="quests-content">
+                        <h2 class="text-xl font-bold font-kanit flex items-center gap-2">
+                            <span class="text-2xl">📜</span> ภารกิจประจำวัน (Daily Quests)
+                        </h2>
+                        <svg class="w-6 h-6 transform transition-transform duration-200 chevron-icon text-gray-400"
+                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </div>
+                    <div id="quests-content" class="collapsible-content" style="max-height: 2000px; opacity: 1;">
+                        <div id="profile-daily-quests-container" class="px-6 pb-6 space-y-3">
+                            <!-- Injected by JS -->
+                        </div>
+                    </div>
+                </section>
+
                 <!-- Achievements Section -->
                 <section
                     class="bg-white dark:bg-gray-800 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700/60 overflow-hidden">
