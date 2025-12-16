@@ -436,7 +436,7 @@ function renderPowerUps(animateItemId = null) {
         const isTimerDisabled = state.timerMode === 'none';
         const isDisabled = isUsed || (isTimeFreeze && isTimerDisabled);
 
-        let btnClass = "relative group flex items-center justify-center sm:justify-start gap-0 sm:gap-2 p-2 sm:px-3 sm:py-1.5 rounded-xl sm:rounded-full transition-all shadow-sm border-2 ";
+        let btnClass = "relative group flex items-center justify-center lg:justify-start gap-0 lg:gap-2 p-2 lg:px-3 lg:py-1.5 rounded-xl lg:rounded-full transition-all shadow-sm border-2 ";
         
         if (item.id === animateItemId) {
             btnClass += "anim-item-pop ";
@@ -455,9 +455,9 @@ function renderPowerUps(animateItemId = null) {
 
         return `
             <button class="power-up-btn ${btnClass}" data-id="${item.id}" ${isDisabled ? 'disabled' : ''} title="${item.name}">
-                <span class="text-xl sm:text-base leading-none">${item.icon}</span>
-                <span class="hidden sm:inline text-sm font-bold">${item.name}</span>
-                <span class="absolute -top-2 -right-2 sm:static sm:top-auto sm:right-auto bg-gray-100 dark:bg-gray-600 text-gray-800 dark:text-gray-200 px-1.5 py-0.5 rounded-full text-[10px] sm:text-xs font-bold min-w-[1.25rem] text-center border border-gray-200 dark:border-gray-500 shadow-sm z-10">
+                <span class="text-xl lg:text-base leading-none">${item.icon}</span>
+                <span class="hidden lg:inline text-sm font-bold">${item.name}</span>
+                <span class="absolute -top-2 -right-2 lg:static lg:top-auto lg:right-auto bg-gray-100 dark:bg-gray-600 text-gray-800 dark:text-gray-200 px-1.5 py-0.5 rounded-full text-[10px] lg:text-xs font-bold min-w-[1.25rem] text-center border border-gray-200 dark:border-gray-500 shadow-sm z-10">
                     ${isUsed ? '✓' : count}
                 </span>
             </button>
