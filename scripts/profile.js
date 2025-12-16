@@ -521,8 +521,8 @@ function renderShop(game) {
 
         return `
             <div class="shop-item-card bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col items-center text-center transition-all hover:shadow-md cursor-pointer hover:border-blue-400 dark:hover:border-blue-500 group" data-id="${item.id}">
-                <div class="text-4xl mb-3 transform group-hover:scale-110 transition-transform">${item.icon}</div>
-                <h4 class="font-bold text-gray-800 dark:text-gray-200 mb-1 text-sm">${item.name}</h4>
+                <div class="text-4xl mb-2 lg:mb-3 transform group-hover:scale-110 transition-transform">${item.icon}</div>
+                <h4 class="font-bold text-gray-800 dark:text-gray-200 mb-1 text-sm hidden lg:block w-full truncate px-1">${item.name}</h4>
                 <p class="text-xs font-bold ${statusClass}">${statusText}</p>
             </div>
         `;
@@ -572,7 +572,7 @@ function renderBadges(game) {
         return `
             <div class="flex flex-col items-center p-3 rounded-xl border-2 ${borderClass} ${opacityClass} transition-all duration-300 hover:scale-105 relative group">
                 <div class="text-3xl mb-2">${badge.icon}</div>
-                <div class="text-xs font-bold text-center truncate w-full">${badge.name}</div>
+                <div class="text-xs font-bold text-center truncate w-full hidden lg:block">${badge.name}</div>
                 ${!isEarned ? '<div class="absolute inset-0 flex items-center justify-center"><span class="text-xs font-bold text-gray-500 bg-white/80 dark:bg-black/80 px-2 py-1 rounded">Locked</span></div>' : ''}
                 
                 <!-- Tooltip -->
