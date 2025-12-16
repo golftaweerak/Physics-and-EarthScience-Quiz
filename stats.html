@@ -6,11 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>สถิติของฉัน - Earth Science Quiz</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-        }
-    </script>
+    <script src="./scripts/tailwind-setup.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;700&family=Sarabun:wght@400;700&display=swap"
@@ -96,6 +92,12 @@
                                 <!-- Progress Bar -->
                                 <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 overflow-hidden">
                                     <div id="xp-progress-bar" class="bg-gradient-to-r from-blue-500 to-purple-500 h-3 rounded-full transition-all duration-1000" style="width: 0%"></div>
+                                </div>
+                                <!-- NEW: Quest display -->
+                                <div id="next-level-quest-container" class="text-xs text-gray-500 dark:text-gray-400 mt-1.5 text-center md:text-left hidden">
+                                    <span>ภารกิจถัดไป:</span>
+                                    <span id="next-level-quest-desc" class="font-semibold"></span>
+                                    <span id="next-level-quest-progress" class="font-mono ml-1"></span>
                                 </div>
                                 <!-- Link to Profile -->
                                 <div class="mt-2 text-right">

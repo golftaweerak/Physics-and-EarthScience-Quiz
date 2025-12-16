@@ -2,26 +2,26 @@
 
 // กำหนดเกณฑ์ XP สำหรับทุกสาย (ใช้เกณฑ์เดียวกันเพื่อความง่าย)
 export const XP_THRESHOLDS = [
-    { level: 1, xp: 0 },
-    { level: 2, xp: 100 },
-    { level: 3, xp: 300 },
-    { level: 4, xp: 600 },
-    { level: 5, xp: 1000 },
-    { level: 6, xp: 1500 },
-    { level: 7, xp: 2200 },
-    { level: 8, xp: 3000 },
-    { level: 9, xp: 4000 },
-    { level: 10, xp: 5500 },
-    { level: 11, xp: 7500 },
-    { level: 12, xp: 10000 },
-    { level: 13, xp: 13000 },
-    { level: 14, xp: 16500 },
-    { level: 15, xp: 20500 },
-    { level: 16, xp: 25000 },
-    { level: 17, xp: 30000 },
-    { level: 18, xp: 36000 },
-    { level: 19, xp: 43000 },
-    { level: 20, xp: 50000 }
+    { level: 1, xp: 0, quest: null }, // No quest to reach level 1
+    { level: 2, xp: 100, quest: { type: 'correct_streak', target: 10, desc: 'ตอบคำถามถูกติดต่อกัน 10 ข้อ' } },
+    { level: 3, xp: 300, quest: { type: 'quizzes_completed', target: 5, desc: 'ทำแบบทดสอบให้ครบ 5 ครั้ง' } },
+    { level: 4, xp: 600, quest: { type: 'perfect_scores', target: 1, desc: 'ทำคะแนนเต็ม 100% ให้ได้ 1 ครั้ง' } },
+    { level: 5, xp: 1000, quest: { type: 'high_scores_80', target: 3, desc: 'ทำคะแนนได้ 80% ขึ้นไป 3 ครั้ง' } },
+    { level: 6, xp: 1500, quest: { type: 'quizzes_completed', target: 15, desc: 'ทำแบบทดสอบให้ครบ 15 ครั้ง' } },
+    { level: 7, xp: 2200, quest: { type: 'correct_streak', target: 20, desc: 'ตอบคำถามถูกติดต่อกัน 20 ข้อ' } },
+    { level: 8, xp: 3000, quest: { type: 'physics_level', target: 5, desc: 'ไปให้ถึงเลเวล 5 ในสายฟิสิกส์' } },
+    { level: 9, xp: 4000, quest: { type: 'earth_level', target: 5, desc: 'ไปให้ถึงเลเวล 5 ในสายวิทย์โลก' } },
+    { level: 10, xp: 5500, quest: { type: 'quizzes_completed', target: 30, desc: 'ทำแบบทดสอบให้ครบ 30 ครั้ง' } },
+    { level: 11, xp: 7500, quest: null },
+    { level: 12, xp: 10000, quest: null },
+    { level: 13, xp: 13000, quest: null },
+    { level: 14, xp: 16500, quest: null },
+    { level: 15, xp: 20500, quest: null },
+    { level: 16, xp: 25000, quest: null },
+    { level: 17, xp: 30000, quest: null },
+    { level: 18, xp: 36000, quest: null },
+    { level: 19, xp: 43000, quest: null },
+    { level: 20, xp: 50000, quest: null }
 ];
 
 // ชื่อยศสำหรับแต่ละสาย
@@ -182,7 +182,10 @@ export class Gamification {
                 inventory: [], // รายการไอเทมถาวรที่ซื้อแล้ว (เก็บเป็น ID)
                 consumables: {}, // รายการไอเทมใช้แล้วหมดไป (เก็บเป็น {id: quantity})
                 selectedTheme: null // ธีมที่เลือก
-            };
+            ,
+                correctStreak: 0,
+                perfectScores: 0,
+                highScores80: 0,};
         }
 
         // ตรวจสอบและรีเซ็ตภารกิจถ้าเป็นวันใหม่
@@ -211,6 +214,10 @@ export class Gamification {
         if (!state.inventory) state.inventory = [];
         if (!state.consumables) state.consumables = {};
         if (state.selectedTheme === undefined) state.selectedTheme = null;
+        // Ensure new stats for level-up quests exist
+        if (state.correctStreak === undefined) state.correctStreak = 0;
+        if (state.perfectScores === undefined) state.perfectScores = 0;
+        if (state.highScores80 === undefined) state.highScores80 = 0;
         
         return state;
     }
@@ -523,41 +530,100 @@ export class Gamification {
         this.saveState();
     }
 
+    incrementCorrectStreak() {
+        this.state.correctStreak = (this.state.correctStreak || 0) + 1;
+        this.saveState();
+    }
+
+    resetCorrectStreak() {
+        this.state.correctStreak = 0;
+        this.saveState();
+    }
+
+    updateEndQuizStats(percentage) {
+        if (percentage === 100) {
+            this.state.perfectScores = (this.state.perfectScores || 0) + 1;
+        }
+        if (percentage >= 80) {
+            this.state.highScores80 = (this.state.highScores80 || 0) + 1;
+        }
+        this.saveState();
+    }
+
+    isQuestCompleted(quest) {
+        if (!quest) return true; // No quest for this level, so it's "completed".
+
+        switch (quest.type) {
+            case 'correct_streak':
+                return (this.state.correctStreak || 0) >= quest.target;
+            case 'quizzes_completed':
+                return (this.state.quizzesCompleted || 0) >= quest.target;
+            case 'perfect_scores':
+                return (this.state.perfectScores || 0) >= quest.target;
+            case 'high_scores_80':
+                return (this.state.highScores80 || 0) >= quest.target;
+            case 'physics_level':
+                return this.getPhysicsLevel().level >= quest.target;
+            case 'earth_level':
+                return this.getEarthLevel().level >= quest.target;
+            default:
+                return false; // Unknown quest type
+        }
+    }
+
     // ฟังก์ชันช่วยคำนวณเลเวลจาก XP และสายที่ระบุ
     getLevelInfo(xp, track = 'overall') {
-        let level = 1;
-        let nextLevelXP = XP_THRESHOLDS[1].xp;
-        
-        for (let i = 0; i < XP_THRESHOLDS.length; i++) {
-            if (xp >= XP_THRESHOLDS[i].xp) {
-                level = XP_THRESHOLDS[i].level;
-                if (i < XP_THRESHOLDS.length - 1) {
-                    nextLevelXP = XP_THRESHOLDS[i+1].xp;
+        // For now, only the 'overall' track has level-up quests.
+        // Other tracks (physics, earth) will still level up based on XP only.
+        if (track !== 'overall') {
+            // Original logic for other tracks
+            let level = 0;
+            for (const threshold of XP_THRESHOLDS) {
+                if (xp >= threshold.xp) {
+                    level = threshold.level;
                 } else {
-                    nextLevelXP = null; // Max level
+                    break;
                 }
             }
+            if (level === 0) level = 1;
+            const currentLevelData = XP_THRESHOLDS[level - 1];
+            const nextLevelData = XP_THRESHOLDS[level] || null;
+            const titles = TRACK_TITLES[track] || TRACK_TITLES.overall;
+            const titleIndex = Math.min(level - 1, titles.length - 1);
+            let progressPercent = 100;
+            if (nextLevelData) {
+                const range = nextLevelData.xp - currentLevelData.xp;
+                const gained = xp - currentLevelData.xp;
+                progressPercent = range > 0 ? Math.min(100, Math.max(0, (gained / range) * 100)) : 100;
+            }
+            return { level, title: titles[titleIndex], currentXP: xp, nextLevelXP: nextLevelData ? nextLevelData.xp : null, progressPercent };
         }
 
-        const titles = TRACK_TITLES[track] || TRACK_TITLES['overall'];
-        const titleIndex = Math.min(level - 1, titles.length - 1);
-        
-        // คำนวณ % ความคืบหน้า
-        let progressPercent = 100;
-        if (nextLevelXP) {
-            const currentLevelBaseXP = XP_THRESHOLDS[level - 1].xp;
-            const range = nextLevelXP - currentLevelBaseXP;
-            const gained = xp - currentLevelBaseXP;
-            progressPercent = Math.min(100, Math.max(0, (gained / range) * 100));
+        // --- NEW LOGIC FOR OVERALL LEVEL ---
+        let currentLevel = 0;
+        for (const threshold of XP_THRESHOLDS) {
+            if (xp >= threshold.xp && this.isQuestCompleted(threshold.quest)) {
+                currentLevel = threshold.level;
+            } else {
+                break; // Stop at the first level where requirements are not met
+            }
+        }
+        if (currentLevel === 0) currentLevel = 1;
+
+        const currentLevelData = XP_THRESHOLDS[currentLevel - 1];
+        const nextLevelData = XP_THRESHOLDS[currentLevel] || null;
+        const titles = TRACK_TITLES.overall;
+        const titleIndex = Math.min(currentLevel - 1, titles.length - 1);
+
+        let xpProgressPercent = 100;
+        let questProgressPercent = 100;
+        if (nextLevelData) {
+            const xpRange = nextLevelData.xp - currentLevelData.xp;
+            if (xpRange > 0) xpProgressPercent = Math.min(100, ((xp - currentLevelData.xp) / xpRange) * 100);
+            if (nextLevelData.quest) questProgressPercent = this.getQuestProgressPercent(nextLevelData.quest);
         }
 
-        return {
-            level: level,
-            title: titles[titleIndex],
-            currentXP: xp,
-            nextLevelXP: nextLevelXP,
-            progressPercent: progressPercent
-        };
+        return { level: currentLevel, title: titles[titleIndex], currentXP: xp, nextLevelXP: nextLevelData ? nextLevelData.xp : null, progressPercent: Math.min(xpProgressPercent, questProgressPercent), nextLevelQuest: nextLevelData ? nextLevelData.quest : null };
     }
 
     getCurrentLevel() {
@@ -577,6 +643,43 @@ export class Gamification {
         const info = this.getCurrentLevel();
         if (!info.nextLevelXP) return null;
         return { level: info.level + 1, xp: info.nextLevelXP };
+    }
+
+    getQuestProgressValue(quest) {
+        if (!quest) return 0;
+        switch (quest.type) {
+            case 'correct_streak':
+                return this.state.correctStreak || 0;
+            case 'quizzes_completed':
+                return this.state.quizzesCompleted || 0;
+            case 'perfect_scores':
+                return this.state.perfectScores || 0;
+            case 'high_scores_80':
+                return this.state.highScores80 || 0;
+            case 'physics_level':
+                return this.getPhysicsLevel().level;
+            case 'earth_level':
+                return this.getEarthLevel().level;
+            default:
+                return 0;
+        }
+    }
+
+    getQuestProgressPercent(quest) {
+        if (!quest || this.isQuestCompleted(quest)) return 100;
+
+        const currentProgress = this.getQuestProgressValue(quest);
+        let baseValue = 0;
+
+        // For level-based quests, progress starts from the base level (e.g., level 1)
+        if (quest.type.endsWith('_level')) {
+            baseValue = 1; // Assuming level quests start counting from level 1
+        }
+
+        const range = quest.target - baseValue;
+        const gained = currentProgress - baseValue;
+
+        return range > 0 ? Math.min(100, Math.max(0, (gained / range) * 100)) : 0;
     }
 
     // สุ่มภารกิจใหม่

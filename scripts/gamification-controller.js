@@ -14,7 +14,21 @@ document.addEventListener('DOMContentLoaded', () => {
         setText('next-level-xp', levelInfo.nextLevelXP.toLocaleString());
         const progress = levelInfo.progressPercent;
         const bar = document.getElementById('xp-progress-bar');
-        if (bar) bar.style.width = `${progress}%`;
+        if (bar) bar.style.width = `${progress}%`;        
+        // NEW: Update Quest Info
+        const questContainer = document.getElementById('next-level-quest-container');
+        const questDescEl = document.getElementById('next-level-quest-desc');
+        const questProgressEl = document.getElementById('next-level-quest-progress');
+
+        if (questContainer && questDescEl && questProgressEl && levelInfo.nextLevelQuest) {
+            const quest = levelInfo.nextLevelQuest;
+            questDescEl.textContent = quest.desc;
+            
+            const progressValue = game.getQuestProgressValue(quest);
+            questProgressEl.textContent = `(${progressValue}/${quest.target})`;
+
+            questContainer.classList.remove('hidden');
+        }
     } else {
         setText('next-level-xp', 'MAX');
         const bar = document.getElementById('xp-progress-bar');

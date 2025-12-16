@@ -907,8 +907,10 @@ function evaluateMultipleAnswer() {
   if (isCorrect) {
     state.score++;
     elements.scoreCounter.textContent = `คะแนน: ${state.score}`;
+    state.game.incrementCorrectStreak();
     if (state.isSoundEnabled) state.correctSound.play().catch(e => console.error("Error playing sound:", e));
   } else {
+    state.game.resetCorrectStreak();
     if (state.isSoundEnabled) state.incorrectSound.play().catch(e => console.error("Error playing sound:", e));
   }
 
@@ -969,8 +971,10 @@ function evaluateFillInAnswer() {
   if (isCorrect) {
     state.score++;
     elements.scoreCounter.textContent = `คะแนน: ${state.score}`;
+    state.game.incrementCorrectStreak();
     if (state.isSoundEnabled) state.correctSound.play().catch(e => console.error("Error playing sound:", e));
   } else {
+    state.game.resetCorrectStreak();
     if (state.isSoundEnabled) state.incorrectSound.play().catch(e => console.error("Error playing sound:", e));
   }
 
@@ -1036,9 +1040,11 @@ function evaluateFillInNumberAnswer() {
     state.score++;
     elements.scoreCounter.textContent = `คะแนน: ${state.score}`;
     answerInput.classList.add('correct');
+    state.game.incrementCorrectStreak();
     if (state.isSoundEnabled) state.correctSound.play().catch(e => console.error("Error playing sound:", e));
   } else {
     answerInput.classList.add('incorrect');
+    state.game.resetCorrectStreak();
     if (state.isSoundEnabled) state.incorrectSound.play().catch(e => console.error("Error playing sound:", e));
   }
 
@@ -1097,12 +1103,14 @@ function selectAnswer(e) {
   if (correct) {
     state.score++;
     elements.scoreCounter.textContent = `คะแนน: ${state.score}`;
+    state.game.incrementCorrectStreak();
     selectedBtn.classList.add("correct");
     if (state.isSoundEnabled)
       state.correctSound
         .play()
         .catch((e) => console.error("Error playing sound:", e));
   } else {
+    state.game.resetCorrectStreak();
     selectedBtn.classList.add("incorrect");
     if (state.isSoundEnabled)
       state.incorrectSound
@@ -1333,6 +1341,7 @@ function showResults() {
 
   try {
     const game = state.game; // Use the instance from state
+    game.updateEndQuizStats(percentage);
     
     state.userAnswers.forEach((ans, index) => {
         if (ans && ans.isCorrect) {
