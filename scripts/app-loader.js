@@ -50,12 +50,17 @@ function initializeAnchorScrollFix() {
  */
 async function main() {
     // Load all shared components concurrently for better performance.
-    await Promise.all([
+    const loadPromises = [
         loadComponent('#main_header-placeholder', './components/main_header.html'),
-        loadComponent('#header-placeholder', './components/header.html'),
         loadComponent('#footer-placeholder', './components/footer.html'),
         loadComponent('#modals-placeholder', './components/modals_common.html'),
-    ]);
+    ];
+
+    if (document.getElementById('header-placeholder')) {
+        loadPromises.push(loadComponent('#header-placeholder', './components/header.html'));
+    }
+
+    await Promise.all(loadPromises);
 
     // Initialize common components like header, menu, etc.
     initializeCommonComponents();
