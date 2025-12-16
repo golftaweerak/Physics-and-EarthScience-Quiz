@@ -29,7 +29,7 @@
 
 body {
   font-family: "Sarabun", sans-serif;
-  word-break: thai;
+  word-break: break-word;
   text-justify: inter-word; /* Better justification for Thai text */
   @apply bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100;
   /* Apply a subtle fade-in animation on page load */
@@ -38,7 +38,7 @@ body {
 
 .font-kanit {
   font-family: "Kanit", sans-serif;
-  word-break: thai;
+  word-break: break-word;
   text-justify: inter-word; /* Better justification for Thai text */
 }
 
@@ -261,26 +261,6 @@ body.dark {
   }
   to {
     background-position: 0 0;
-  }
-}
-
-@keyframes shake-horizontal {
-  0%,
-  100% {
-    transform: translateX(0);
-  }
-  10%,
-  30%,
-  50%,
-  70%,
-  90% {
-    transform: translateX(-5px);
-  }
-  20%,
-  40%,
-  60%,
-  80% {
-    transform: translateX(5px);
   }
 }
 
