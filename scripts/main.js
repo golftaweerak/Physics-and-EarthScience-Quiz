@@ -48,9 +48,9 @@ function injectCustomScrollbarStyles() {
 export const toggleAccordion = (toggleElement, forceState) => {
   const content = toggleElement.nextElementSibling;
   const icon = toggleElement.querySelector(".chevron-icon");
-  const innerContent = content?.querySelector(".inner-content-wrapper");
+  const innerContent = content && content.querySelector(".inner-content-wrapper");
   const iconContainer = toggleElement.querySelector(".section-icon-container");
-  const mainIcon = iconContainer?.querySelector(".section-main-icon");
+  const mainIcon = iconContainer && iconContainer.querySelector(".section-main-icon");
   if (!content || !icon) return;
 
   const isCurrentlyOpen = toggleElement.getAttribute('aria-expanded') === 'true';
@@ -98,11 +98,11 @@ function groupQuizzesForCategory(quizzes, categoryKey) {
 
   // Determine if the syllabus is structured with units or a flat chapter list
   // This flattens the structure for unified processing but preserves unit-specific data.
-  const chapters = syllabus?.units 
+  const chapters = (syllabus && syllabus.units)
     ? syllabus.units.flatMap(unit => 
         unit.chapters.map(ch => ({ ...ch, standard: unit.standard }))
       ) 
-    : syllabus?.chapters;
+    : (syllabus && syllabus.chapters);
 
   if (Array.isArray(chapters)) {
     // 1. Separate special categories like "Final Review" from regular chapter quizzes.
@@ -120,9 +120,9 @@ function groupQuizzesForCategory(quizzes, categoryKey) {
             displayTitle = `บทที่ ${chapter.chapterId}: ${chapter.title}`;
         } else if (categoryKey === 'EarthSpaceScienceAdvance') {
             const firstQuiz = chapterQuizzes[0];
-            if (firstQuiz?.description) {
+            if (firstQuiz && firstQuiz.description) {
                 const match = firstQuiz.description.match(/บทที่\s*(\d+)/);
-                if (match?.[1]) {
+                if (match && match[1]) {
                     displayTitle = `บทที่ ${match[1]}: ${chapter.title}`;
                 }
           }
@@ -325,7 +325,7 @@ export function initializePage() {
    */
    function createQuizCard(quiz, index) {
      const categoryDetail = categoryDetails[quiz.category];
-     const borderColorClass = categoryDetail?.color || "border-gray-400";
+     const borderColorClass = (categoryDetail && categoryDetail.color) || "border-gray-400";
      const colorName = borderColorClass.split('-')[1] || 'gray';
  
      const card = document.createElement("a");

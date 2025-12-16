@@ -215,7 +215,7 @@ export function getQuizProgress(storageKey, totalQuestions) {
       return defaultState;
     // Use the length from the saved state if available, as it's the most accurate count
     // for the session the user was in. Fallback to the static totalQuestions.
-    const actualTotalQuestions = savedState.shuffledQuestions?.length || totalQuestions;
+    const actualTotalQuestions = (savedState.shuffledQuestions && savedState.shuffledQuestions.length) || totalQuestions;
 
     // A more robust way to count answered questions is to check the userAnswers array.
     // This avoids ambiguity with currentQuestionIndex, which points to the *next* question to be shown.
