@@ -1,6 +1,6 @@
 import { ModalHandler } from './modal-handler.js';
 import { shuffleArray } from './utils.js';
-import { Gamification, SHOP_ITEMS } from './gamification.js';
+import { Gamification } from './gamification.js';
 import { showToast } from './toast.js';
 
 // state: Stores all dynamic data of the quiz
@@ -9,8 +9,6 @@ let state = {};
 let elements = {};
 // handler: A dedicated handler for the resume modal
 let resumeModalHandler;
-// handler: For power-up buy modal
-let powerupBuyModalHandler;
 // config: Stores all static configuration and constants
 const config = {
   soundOnIcon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" /></svg>`,
@@ -125,15 +123,6 @@ export function init(quizData, storageKey, quizTitle, customTime, action) {
     hintBtn: document.getElementById("hint-btn"),
     hintContainer: document.getElementById("hint-container"),
     hintSection: document.getElementById("hint-section"),
-    // Power-up container (will be created dynamically)
-    powerUpContainer: null,
-    // Power-up Modal Elements
-    powerupModalIcon: document.getElementById("powerup-modal-icon"),
-    powerupModalTitle: document.getElementById("powerup-modal-title"),
-    powerupModalDesc: document.getElementById("powerup-modal-desc"),
-    powerupUserXp: document.getElementById("powerup-user-xp"),
-    powerupItemCost: document.getElementById("powerup-item-cost"),
-    powerupConfirmBtn: document.getElementById("powerup-confirm-buy-btn"),
   };
   // --- 2. State Initialization ---
   state = {
@@ -156,21 +145,13 @@ export function init(quizData, storageKey, quizTitle, customTime, action) {
     initialTime: 0,
     activeScreen: null,
     isFloatingNav: false, // To track the nav state
-    game: new Gamification(), // Initialize game instance
-    xpMultiplier: 1, // Default multiplier
-    used5050: false,
-    usedCut1: false,
-    usedRangeHint: false,
-    usedTolerance: false,
   };
 
   // --- 3. Initial Setup ---
   resumeModalHandler = new ModalHandler('resume-modal');
-  powerupBuyModalHandler = new ModalHandler('powerup-buy-modal');
   bindEventListeners();
   initializeSound();
   checkForSavedQuiz(action); // This will check localStorage and either show the start screen or a resume prompt.
-  setupPowerUpUI(); // Setup the power-up bar
 }
 
 /**
@@ -382,199 +363,6 @@ function createCheckboxOption(optionText, previousAnswer) {
   return wrapperLabel;
 }
 
-/**
- * Sets up the Power-up UI elements.
- */
-function setupPowerUpUI() {
-    // Create container if it doesn't exist
-    if (!document.getElementById('power-up-bar')) {
-        const container = document.createElement('div');
-        container.id = 'power-up-bar';
-        container.className = 'flex flex-wrap justify-center gap-3 mb-6 px-2';
-        
-        // Insert before the question container
-        const questionContainer = document.getElementById('question');
-        if (questionContainer && questionContainer.parentNode) {
-            questionContainer.parentNode.insertBefore(container, questionContainer);
-        }
-        elements.powerUpContainer = container;
-    }
-}
-
-/**
- * Renders the power-up buttons based on current inventory.
- */
-function renderPowerUps(animateItemId = null) {
-    if (!elements.powerUpContainer) return;
-    
-    const currentQuestion = state.shuffledQuestions[state.currentQuestionIndex];
-    const isNumberQuestion = currentQuestion && currentQuestion.type === 'fill-in-number';
-    const hasOptions = currentQuestion && (currentQuestion.options || currentQuestion.choices);
-
-    const consumables = SHOP_ITEMS.filter(i => i.type === 'consumable');
-    
-    elements.powerUpContainer.innerHTML = consumables.map(item => {
-        // Filter items based on question type
-        if (item.id === 'item_5050' || item.id === 'item_cut_1') {
-            if (!hasOptions) return '';
-        }
-        if (item.id === 'item_range_hint' || item.id === 'item_tolerance') {
-            if (!isNumberQuestion) return '';
-        }
-
-        const count = state.game.getItemCount(item.id);
-        let isUsed = false;
-        if (item.id === 'item_xp_2x') isUsed = state.xpMultiplier > 1;
-        else if (item.id === 'item_5050') isUsed = state.used5050;
-        else if (item.id === 'item_cut_1') isUsed = state.usedCut1;
-        else if (item.id === 'item_range_hint') isUsed = state.usedRangeHint;
-        else if (item.id === 'item_tolerance') isUsed = state.usedTolerance;
-        // item_undo and item_time_freeze are instant effects, not toggle states
-        
-        // Check if item should be disabled (e.g., Time Freeze when no timer)
-        const isTimeFreeze = item.id === 'item_time_freeze';
-        const isTimerDisabled = state.timerMode === 'none';
-        const isDisabled = isUsed || (isTimeFreeze && isTimerDisabled);
-
-        let btnClass = "relative group flex items-center justify-center lg:justify-start gap-0 lg:gap-2 p-2 lg:px-3 lg:py-1.5 rounded-xl lg:rounded-full transition-all shadow-sm border-2 ";
-        
-        if (item.id === animateItemId) {
-            btnClass += "anim-item-pop ";
-        }
-
-        if (isUsed) {
-            btnClass += "bg-green-100 text-green-700 border-green-500 cursor-default opacity-80";
-        } else if (isTimeFreeze && isTimerDisabled) {
-            // Style for unavailable item
-            btnClass += "bg-gray-100 dark:bg-gray-800 text-gray-400 border-gray-200 dark:border-gray-700 cursor-not-allowed opacity-60 grayscale";
-        } else if (count > 0) {
-            btnClass += "bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-600 hover:bg-blue-50 dark:hover:bg-gray-600 hover:border-blue-400 cursor-pointer transform hover:scale-105";
-        } else {
-            btnClass += "bg-gray-100 dark:bg-gray-800 text-gray-400 border-gray-200 dark:border-gray-700 cursor-pointer hover:bg-gray-200";
-        }
-
-        return `
-            <button class="power-up-btn ${btnClass}" data-id="${item.id}" ${isDisabled ? 'disabled' : ''} title="${item.name}">
-                <span class="text-xl lg:text-base leading-none">${item.icon}</span>
-                <span class="hidden lg:inline text-sm font-bold">${item.name}</span>
-                <span class="absolute -top-2 -right-2 lg:static lg:top-auto lg:right-auto bg-gray-100 dark:bg-gray-600 text-gray-800 dark:text-gray-200 px-1.5 py-0.5 rounded-full text-[10px] lg:text-xs font-bold min-w-[1.25rem] text-center border border-gray-200 dark:border-gray-500 shadow-sm z-10">
-                    ${isUsed ? '✓' : count}
-                </span>
-            </button>
-        `;
-    }).join('');
-
-    // Bind events
-    elements.powerUpContainer.querySelectorAll('.power-up-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => handlePowerUpClick(e.currentTarget.dataset.id));
-    });
-}
-
-function handlePowerUpClick(itemId) {
-    const count = state.game.getItemCount(itemId);
-    
-    if (count <= 0) {
-        // Show buy modal
-        const item = SHOP_ITEMS.find(i => i.id === itemId);
-        
-        // Populate Modal Data
-        if (elements.powerupModalIcon) elements.powerupModalIcon.textContent = item.icon;
-        if (elements.powerupModalTitle) elements.powerupModalTitle.textContent = item.name;
-        if (elements.powerupModalDesc) elements.powerupModalDesc.textContent = item.desc;
-        if (elements.powerupUserXp) elements.powerupUserXp.textContent = `${state.game.state.xp.toLocaleString()} XP`;
-        if (elements.powerupItemCost) elements.powerupItemCost.textContent = `${item.cost} XP`;
-
-        // Setup Confirm Button
-        if (elements.powerupConfirmBtn) {
-            // Clone to remove old listeners
-            const newBtn = elements.powerupConfirmBtn.cloneNode(true);
-            elements.powerupConfirmBtn.parentNode.replaceChild(newBtn, elements.powerupConfirmBtn);
-            elements.powerupConfirmBtn = newBtn;
-
-            elements.powerupConfirmBtn.onclick = () => {
-            const result = state.game.buyItem(itemId);
-            if (result.success) {
-                showToast('ซื้อสำเร็จ', result.message, '🛒');
-                renderPowerUps(itemId);
-                powerupBuyModalHandler.close();
-            } else {
-                showToast('ซื้อไม่สำเร็จ', result.message, '❌', 'error');
-                powerupBuyModalHandler.close();
-            }
-            };
-        }
-        
-        powerupBuyModalHandler.open();
-        return;
-    }
-
-    // Use Item Logic
-    if (itemId === 'item_5050') {
-        if (state.used5050) return;
-        if (state.userAnswers[state.currentQuestionIndex]) return; // Cannot use if already answered
-        if (state.game.useItem(itemId)) {
-            apply5050();
-            state.used5050 = true;
-            renderPowerUps(itemId);
-            showToast('ใช้ตัวช่วยสำเร็จ', 'ตัดตัวเลือกผิดออก 2 ข้อ', '✂️');
-        }
-    } else if (itemId === 'item_xp_2x') {
-        if (state.xpMultiplier > 1) return;
-        if (state.game.useItem(itemId)) {
-            state.xpMultiplier = 2;
-            renderPowerUps(itemId);
-            showToast('ใช้ตัวช่วยสำเร็จ', 'XP คูณ 2 สำหรับการสอบครั้งนี้!', '✨', 'gold');
-        }
-    } else if (itemId === 'item_cut_1') {
-        if (state.usedCut1 || state.used5050) return; // Don't stack with 50/50 easily
-        if (state.userAnswers[state.currentQuestionIndex]) return;
-        if (state.game.useItem(itemId)) {
-            applyCut1();
-            state.usedCut1 = true;
-            renderPowerUps(itemId);
-            showToast('ใช้ตัวช่วยสำเร็จ', 'ตัดตัวเลือกผิดออก 1 ข้อ', '🔪');
-        }
-    } else if (itemId === 'item_undo') {
-        const currentAns = state.userAnswers[state.currentQuestionIndex];
-        if (currentAns && !currentAns.isCorrect) {
-             if (state.game.useItem(itemId)) {
-                undoLastAnswer();
-                renderPowerUps(itemId);
-                showToast('ใช้ตัวช่วยสำเร็จ', 'เริ่มตอบข้อนี้ใหม่ได้เลย!', '↩️');
-            }
-        } else {
-             showToast('ไม่สามารถใช้ได้', 'ใช้ได้เฉพาะเมื่อตอบผิดเท่านั้น', '⚠️', 'error');
-        }
-    } else if (itemId === 'item_time_freeze') {
-        if (state.timerMode === 'none' || state.isTimeFrozen) {
-             // This case should be handled by the disabled button, but keep as fallback
-             return;
-        }
-        if (state.game.useItem(itemId)) {
-            freezeTime();
-            renderPowerUps(itemId);
-            showToast('ใช้ตัวช่วยสำเร็จ', 'หยุดเวลา 30 วินาที!', '❄️', 'info');
-        }
-    } else if (itemId === 'item_range_hint') {
-        if (state.usedRangeHint) return;
-        if (state.userAnswers[state.currentQuestionIndex]) return;
-        if (state.game.useItem(itemId)) {
-            applyRangeHint();
-            state.usedRangeHint = true;
-            renderPowerUps(itemId);
-            // Toast handled in applyRangeHint to show the range
-        }
-    } else if (itemId === 'item_tolerance') {
-        if (state.usedTolerance) return;
-        if (state.userAnswers[state.currentQuestionIndex]) return;
-        if (state.game.useItem(itemId)) {
-            state.usedTolerance = true;
-            renderPowerUps(itemId);
-            showToast('ใช้ตัวช่วยสำเร็จ', 'ขยายเป้าคำตอบให้กว้างขึ้น +/- 20%', '⭕', 'success');
-        }
-    }
-}
-
 function showQuestion() {
   // Only stop the timer if it's a per-question timer.
   // The overall timer should continue running across questions.
@@ -582,12 +370,6 @@ function showQuestion() {
     stopTimer();
   }
   resetState();
-  state.used5050 = false; // Reset 50/50 flag for new question
-  state.usedCut1 = false; // Reset Cut 1 flag
-  state.usedRangeHint = false;
-  state.usedTolerance = false;
-  renderPowerUps(); // Update UI
-
   const currentQuestion = state.shuffledQuestions[state.currentQuestionIndex];
   if (!currentQuestion) {
     console.error("Invalid question index:", state.currentQuestionIndex);
@@ -677,113 +459,6 @@ function showQuestion() {
   }
 
   renderMath(elements.quizScreen); // Render math only within the quiz screen
-}
-
-function apply5050() {
-    const currentQuestion = state.shuffledQuestions[state.currentQuestionIndex];
-    const correctAnswer = String(currentQuestion.answer).trim();
-    
-    // Get all option buttons/checkboxes
-    const optionElements = Array.from(elements.options.children);
-    const wrongOptions = optionElements.filter(el => {
-        const val = el.tagName === 'BUTTON' ? el.dataset.optionValue : el.querySelector('input').value;
-        return val.trim() !== correctAnswer;
-    });
-
-    // Shuffle and pick 2 to hide
-    shuffleArray(wrongOptions);
-    const toHide = wrongOptions.slice(0, 2);
-
-    toHide.forEach(el => {
-        el.style.opacity = '0.3';
-        el.style.pointerEvents = 'none';
-        if (el.tagName === 'BUTTON') el.disabled = true;
-        else el.querySelector('input').disabled = true;
-    });
-}
-
-function applyCut1() {
-    const currentQuestion = state.shuffledQuestions[state.currentQuestionIndex];
-    const correctAnswer = String(currentQuestion.answer).trim();
-    
-    const optionElements = Array.from(elements.options.children);
-    const wrongOptions = optionElements.filter(el => {
-        const val = el.tagName === 'BUTTON' ? el.dataset.optionValue : el.querySelector('input').value;
-        return val.trim() !== correctAnswer && el.style.opacity !== '0.3';
-    });
-
-    if (wrongOptions.length > 0) {
-        shuffleArray(wrongOptions);
-        const toHide = wrongOptions[0];
-        
-        toHide.style.opacity = '0.3';
-        toHide.style.pointerEvents = 'none';
-        if (toHide.tagName === 'BUTTON') toHide.disabled = true;
-        else toHide.querySelector('input').disabled = true;
-    }
-}
-
-function applyRangeHint() {
-    const currentQuestion = state.shuffledQuestions[state.currentQuestionIndex];
-    const correctAnswer = parseFloat(currentQuestion.answer);
-    
-    if (isNaN(correctAnswer)) return;
-
-    // Generate a range that includes the answer
-    // Range width approx 40-60% of value
-    const rangeWidth = Math.abs(correctAnswer * 0.5) || 10; 
-    const offset = (Math.random() - 0.5) * (rangeWidth * 0.5); // Random offset so answer isn't always center
-    
-    let min = correctAnswer - (rangeWidth / 2) + offset;
-    let max = correctAnswer + (rangeWidth / 2) + offset;
-    
-    // Round for cleaner display
-    const decimals = currentQuestion.decimalPlaces || 0;
-    showToast('สโคปคำตอบ', `คำตอบอยู่ระหว่าง ${min.toFixed(decimals)} ถึง ${max.toFixed(decimals)}`, '🎯', 'info');
-}
-
-function undoLastAnswer() {
-    // --- Animation ---
-    const quizScreen = elements.quizScreen;
-    if (quizScreen) {
-        quizScreen.classList.remove('anim-rewind');
-        // Force reflow to allow re-triggering the animation
-        void quizScreen.offsetWidth;
-        quizScreen.classList.add('anim-rewind');
-    }
-    // Reset answer state
-    state.userAnswers[state.currentQuestionIndex] = null;
-    // Note: Score was not incremented for wrong answer, so no need to decrement.
-    saveQuizState();
-    
-    // Reset UI
-    elements.feedback.classList.add("hidden");
-    elements.nextBtn.classList.add("hidden");
-    
-    // Re-enable buttons and remove classes
-    Array.from(elements.options.children).forEach((child) => {
-        const button = child.tagName === 'BUTTON' ? child : child.querySelector('input');
-        const wrapper = child.tagName === 'BUTTON' ? child : child;
-        
-        if (button) button.disabled = false;
-        wrapper.classList.remove("correct", "incorrect");
-        // Keep 50/50 or Cut1 effects if they were used
-        if (wrapper.style.opacity !== '0.3') {
-            wrapper.style.pointerEvents = "auto";
-        }
-    });
-    
-    // Handle text inputs
-    const textInput = document.getElementById('fill-in-answer') || document.getElementById('fill-in-number-answer');
-    if (textInput) {
-        textInput.disabled = false;
-        textInput.value = '';
-        textInput.classList.remove("correct", "incorrect");
-        textInput.focus();
-    }
-    
-    // If per-question timer, maybe restart it? 
-    // For simplicity, we don't restart the timer to avoid exploiting time.
 }
 
 /**
@@ -969,13 +644,7 @@ function evaluateFillInNumberAnswer() {
 
   const currentQuestion = state.shuffledQuestions[state.currentQuestionIndex];
   const correctAnswer = parseFloat(currentQuestion.answer);
-  
-  // Calculate tolerance: Base tolerance OR Boosted tolerance (20% of answer)
-  let tolerance = currentQuestion.tolerance || 0;
-  if (state.usedTolerance) {
-      const boostedTolerance = Math.abs(correctAnswer * 0.2); // 20%
-      tolerance = Math.max(tolerance, boostedTolerance);
-  }
+  const tolerance = currentQuestion.tolerance || 0; // Default tolerance to 0 if not specified
 
   let isCorrect = false;
   if (!isNaN(userAnswer)) {
@@ -1292,67 +961,33 @@ function showResults() {
   let newBadges = [];
   let completedQuests = [];
   let newAchievements = [];
-  let physicsXP = 0;
-  let earthXP = 0;
 
   try {
-    const game = state.game; // Use the instance from state
+    const game = new Gamification();
+    // ปรับลด XP: ให้ 2 XP ต่อ 1 ข้อที่ตอบถูก (จากเดิม 10)
+    xpEarned = correctAnswers * 2;
     
-    state.userAnswers.forEach(ans => {
-        if (ans && ans.isCorrect) {
-            const points = 5; // 5 XP ต่อ 1 ข้อที่ตอบถูก
-            xpEarned += points;
-            
-            // ตรวจสอบหมวดวิชาของข้อนี้
-            let qCategory = 'General';
-            if (ans.sourceQuizCategory) {
-                qCategory = ans.sourceQuizCategory;
-            } else if (ans.subCategory) {
-                qCategory = typeof ans.subCategory === 'object' ? ans.subCategory.main : ans.subCategory;
-            }
-            
-            const lowerCat = String(qCategory).toLowerCase();
-            if (lowerCat.includes('physics') || lowerCat.includes('ฟิสิกส์')) {
-                physicsXP += points;
-            } else if (lowerCat.includes('earth') || lowerCat.includes('astronomy') || lowerCat.includes('space') || lowerCat.includes('โลก') || lowerCat.includes('ดาราศาสตร์') || lowerCat.includes('วิทย์โลก')) {
-                earthXP += points;
-            }
+    // ดึง Category จากคำตอบแรก (ถ้ามี) หรือใช้ค่า Default
+    const firstAnswer = state.userAnswers.find(a => a);
+    let category = 'General';
+    if (firstAnswer) {
+        if (firstAnswer.sourceQuizCategory) {
+            category = firstAnswer.sourceQuizCategory;
+        } else if (firstAnswer.subCategory) {
+            // Handle both string and object formats for subCategory
+            category = typeof firstAnswer.subCategory === 'object' ? firstAnswer.subCategory.main : firstAnswer.subCategory;
         }
-    });
-
-    // Apply XP Multiplier
-    xpEarned *= state.xpMultiplier;
-    physicsXP *= state.xpMultiplier;
-    earthXP *= state.xpMultiplier;
-
-    // บันทึกผล XP ลงในระบบ Gamification
-    if (typeof game.submitQuizResult === 'function') {
-        levelResult = game.submitQuizResult(xpEarned, physicsXP, earthXP);
-    } else {
-        // Fallback กรณีไม่มีฟังก์ชันใหม่
-        levelResult = game.addXP(xpEarned, 'General');
     }
 
+    levelResult = game.addXP(xpEarned, category);
     newBadges = game.checkBadges(percentage);
 
     // --- DAILY QUEST: Update Progress ---
-    // สำหรับ Quest ยังคงใช้หมวดหมู่หลักของแบบทดสอบ (จากข้อแรก) เพื่อความง่ายในการตรวจสอบเงื่อนไข "ทำแบบทดสอบหมวด..."
-    const firstAnswer = state.userAnswers.find(a => a);
-    let questCategory = 'General';
-    if (firstAnswer) {
-        if (firstAnswer.sourceQuizCategory) {
-            questCategory = firstAnswer.sourceQuizCategory;
-        } else if (firstAnswer.subCategory) {
-            // Handle both string and object formats for subCategory
-            questCategory = typeof firstAnswer.subCategory === 'object' ? firstAnswer.subCategory.main : firstAnswer.subCategory;
-        }
-    }
-
     if (typeof game.updateQuest === 'function') {
         const result = game.updateQuest({
             correctAnswers: correctAnswers,
             totalQuestions: totalQuestions,
-            category: questCategory,
+            category: category,
             percentage: percentage
         });
         
@@ -1422,9 +1057,7 @@ function showResults() {
     categoryStats,
     xpEarned,
     levelResult,
-    newBadges,
-    physicsXP,
-    earthXP
+    newBadges
   };
 
   // Clean up old results and build the new layout
@@ -1717,78 +1350,6 @@ function buildResultsLayout(resultInfo, stats) {
             </div>
         `;
     layoutContainer.appendChild(chartContainer);
-  }
-
-  // --- NEW: XP Breakdown Section with Animation ---
-  if (stats.xpEarned > 0) {
-    const xpSection = document.createElement('div');
-    xpSection.className = "w-full max-w-2xl mx-auto p-4 bg-white dark:bg-gray-800/50 rounded-xl border border-blue-100 dark:border-gray-700 shadow-sm overflow-hidden";
-    xpSection.innerHTML = `<h3 class="text-center text-gray-500 dark:text-gray-400 font-kanit mb-4 text-sm">ค่าประสบการณ์ที่ได้รับ (XP)</h3>`;
-    
-    const xpGrid = document.createElement('div');
-    xpGrid.className = "flex justify-center items-start gap-4 sm:gap-8";
-    
-    const items = [
-        { 
-            label: 'รวม', 
-            value: stats.xpEarned, 
-            color: 'text-blue-600 dark:text-blue-400', 
-            progress: stats.levelResult?.overall.info,
-            progressColor: 'bg-blue-500',
-            delay: 0 
-        },
-    ];
-    
-    if (stats.physicsXP > 0) items.push({ 
-        label: 'ฟิสิกส์', 
-        value: stats.physicsXP, 
-        color: 'text-purple-600 dark:text-purple-400', 
-        progress: stats.levelResult?.physics.info,
-        progressColor: 'bg-purple-500',
-        delay: 150 
-    });
-    if (stats.earthXP > 0) items.push({ 
-        label: 'วิทย์โลก', 
-        value: stats.earthXP, 
-        color: 'text-teal-600 dark:text-teal-400', 
-        progress: stats.levelResult?.earth.info,
-        progressColor: 'bg-teal-500',
-        delay: 300 
-    });
-    
-    items.forEach(item => {
-        const el = document.createElement('div');
-        el.className = "flex flex-col items-center transform scale-0 transition-transform duration-500 cubic-bezier(0.34, 1.56, 0.64, 1) w-28";
-        
-        let progressBarHtml = '';
-        if (item.progress && item.progress.nextLevelXP) {
-            const xpNeeded = item.progress.nextLevelXP - item.progress.currentXP;
-            progressBarHtml = `
-                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 mt-2">
-                    <div class="${item.progressColor} h-1.5 rounded-full" style="width: ${item.progress.progressPercent}%"></div>
-                </div>
-                <span class="text-[10px] text-gray-400 dark:text-gray-500 mt-1">อีก ${xpNeeded.toLocaleString()} XP</span>
-            `;
-        } else if (item.progress) { // Max level case
-             progressBarHtml = `
-                <div class="w-full bg-yellow-400 rounded-full h-1.5 mt-2"></div>
-                <span class="text-[10px] text-yellow-500 mt-1 font-bold">MAX LEVEL</span>
-            `;
-        }
-
-        el.innerHTML = `
-            <span class="text-3xl font-bold ${item.color}">+${item.value}</span>
-            <span class="text-xs text-gray-500 dark:text-gray-400 mt-1 font-medium">${item.label}</span>
-            ${progressBarHtml}
-        `;
-        xpGrid.appendChild(el);
-        
-        // Trigger animation
-        setTimeout(() => el.classList.remove('scale-0'), 100 + item.delay);
-    });
-    
-    xpSection.appendChild(xpGrid);
-    layoutContainer.appendChild(xpSection);
   }
 
   // --- 4. Performance Summary ---
@@ -2284,18 +1845,6 @@ function startTimer() {
   elements.timerDisplay.classList.remove("hidden");
   updateTimerDisplay();
   state.timerId = setInterval(tick, 1000);
-}
-
-function freezeTime() {
-    stopTimer();
-    state.isTimeFrozen = true;
-    if (elements.timerDisplay) elements.timerDisplay.classList.add('text-blue-500', 'animate-pulse');
-    
-    setTimeout(() => {
-        state.isTimeFrozen = false;
-        if (elements.timerDisplay) elements.timerDisplay.classList.remove('text-blue-500', 'animate-pulse');
-        state.timerId = setInterval(tick, 1000); // Resume timer
-    }, 30000);
 }
 
 function handleTimeUp() {
