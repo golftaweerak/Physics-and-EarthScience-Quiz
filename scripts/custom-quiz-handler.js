@@ -443,7 +443,7 @@ export function initializeCustomQuizHandler() {
                 <div class="p-4 bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm">
                     <button id="custom-quiz-random-btn" class="w-full flex items-center justify-center gap-2 px-4 py-2 bg-purple-100 text-purple-700 dark:bg-purple-900/50 dark:text-purple-300 rounded-lg hover:bg-purple-200 dark:hover:bg-purple-800/70 text-sm font-bold transition">สุ่มทั้งหมด</button>
                     <button id="custom-quiz-random-balanced-btn" class="w-full flex items-center justify-center gap-2 px-4 py-2 mt-2 bg-teal-100 text-teal-700 dark:bg-teal-900/50 dark:text-teal-300 rounded-lg hover:bg-teal-200 dark:hover:bg-teal-800/70 text-sm font-bold transition">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M8 5a1 1 0 100 2h5.586l-1.293 1.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L13.586 5H8zM12 15a1 1 0 100-2H6.414l1.293-1.293a1 1 0 10-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L6.414 15H12z" /></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0" width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M8 5a1 1 0 100 2h5.586l-1.293 1.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L13.586 5H8zM12 15a1 1 0 100-2H6.414l1.293-1.293a1 1 0 10-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L6.414 15H12z" /></svg>
                         <span>สุ่มแบบสมดุล</span>
                     </button>
                 </div>
@@ -478,7 +478,7 @@ export function initializeCustomQuizHandler() {
                 <!-- Action Buttons -->
                 <div class="space-y-3 pt-4 border-t border-gray-200 dark:border-gray-700">
                     <button id="custom-quiz-start-btn" class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-base font-bold transition shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z" clip-rule="evenodd" /></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0" width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z" clip-rule="evenodd" /></svg>
                         เริ่มทำแบบทดสอบ
                     </button>
                     <button id="custom-quiz-clear-btn" class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition text-sm font-bold">

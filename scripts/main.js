@@ -355,7 +355,7 @@ export function initializePage() {
            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">จำนวน ${totalQuestions} ข้อ</p>
          </div>
        </div>
-       <p class="text-gray-600 dark:text-gray-400 text-xs leading-relaxed mt-3 flex-grow">${quiz.description}</p>
+       <p class="text-gray-600 dark:text-gray-400 text-xs leading-relaxed mt-3 flex-grow font-sarabun">${quiz.description}</p>
        <div class="progress-footer-wrapper mt-auto pt-3">${progressHTML}</div>
      `;
      return card;
@@ -384,8 +384,8 @@ export function initializePage() {
             <h4 class="font-bold text-sm text-${colorName}-800 dark:text-${colorName}-300 truncate pr-2">${groupData.title}</h4>
         </div>
         <div class="flex items-center gap-2 flex-shrink-0">
-            <span class="px-2 py-0.5 text-xs font-semibold text-${colorName}-700 bg-${colorName}-200/80 dark:text-${colorName}-200 dark:bg-${colorName}-800/60 rounded-full">${groupData.quizzes.length} ชุด</span>
-            <svg class="chevron-icon h-5 w-5 text-gray-500 dark:text-gray-400 transition-transform duration-300" width="20" height="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+            <span class="px-2 py-0.5 text-xs font-semibold text-${colorName}-700 bg-${colorName}-200/80 dark:text-${colorName}-200 dark:bg-${colorName}-800/60 rounded-full font-sarabun">${groupData.quizzes.length} ชุด</span>
+            <svg class="chevron-icon h-5 w-5 flex-shrink-0 text-gray-500 dark:text-gray-400 transition-transform duration-300" width="20" height="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
         </div>
     `;
 
@@ -478,11 +478,11 @@ export function initializePage() {
         </div>
         <div class="min-w-0">
           ${titleContent}
-          <p class="text-xs font-normal text-gray-500 dark:text-gray-400 -mt-1">${quizzes.length} ชุด</p>
+          <p class="text-xs font-normal text-gray-500 dark:text-gray-400 -mt-1 font-sarabun">${quizzes.length} ชุด</p>
         </div>
       </div>
       <div class="flex-shrink-0 ml-2">
-        <svg class="chevron-icon h-6 w-6 text-gray-500 dark:text-gray-400 transition-transform duration-300" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+        <svg class="chevron-icon h-6 w-6 flex-shrink-0 text-gray-500 dark:text-gray-400 transition-transform duration-300" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
       </div>
     `;
     // Accessibility: Add ARIA attributes for the accordion header

@@ -564,7 +564,7 @@ function createBreakdownRow(student, label, scoreKey) {
     return `
         <tr class="bg-gray-50 dark:bg-gray-800/50">
             <td class="py-2 px-4 pl-10 text-sm text-gray-500 dark:text-gray-400 flex items-center">
-                <svg class="h-3 w-3 mr-2 text-gray-400" width="12" height="12" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" /></svg>
+                <svg class="h-3 w-3 mr-2 text-gray-400 flex-shrink-0" width="12" height="12" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" /></svg>
                 <span class="italic">${label}</span>
             </td>
             <td class="py-2 px-4 text-right">${scoreDisplay}</td>

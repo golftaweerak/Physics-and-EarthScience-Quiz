@@ -215,7 +215,7 @@ function populateGenerator(itemsContainer, addQuestionBtn, items) {
                    </div>
                    <div class="pt-3 border-t border-blue-200 dark:border-blue-700">
                        <button type="button" class="gen-add-sub-question-btn px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition text-xs font-bold inline-flex items-center gap-1.5 shadow-sm hover:shadow-md">
-                           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" /></svg>
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" /></svg>
                            เพิ่มคำถามย่อย
                        </button>
                    </div>
