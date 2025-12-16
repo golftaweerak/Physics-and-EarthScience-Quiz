@@ -1298,9 +1298,14 @@ function showResults() {
   try {
     const game = state.game; // Use the instance from state
     
-    state.userAnswers.forEach(ans => {
+    state.userAnswers.forEach((ans, index) => {
         if (ans && ans.isCorrect) {
-            const points = 5; // 5 XP ต่อ 1 ข้อที่ตอบถูก
+            const question = state.shuffledQuestions[index];
+            let points = 4; // Default for standard questions
+
+            if (question && (question.type === 'multiple-select' || question.type === 'fill-in-number')) {
+                points = 5;
+            }
             xpEarned += points;
             
             // ตรวจสอบหมวดวิชาของข้อนี้

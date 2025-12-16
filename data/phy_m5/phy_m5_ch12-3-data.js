@@ -474,30 +474,37 @@ export const quizItems = [
     }
   },
   {
-    number: 29,
-    type: "fill-in-number",
-    question: "ทรงกลมตัวนำรัศมี $9 \\, \\text{cm}$ มีประจุ $10 \\, \\text{nC}$ จงหาศักย์ไฟฟ้าที่ผิวทรงกลม ($k = 9 \\times 10^9 \\, \\text{Nm}^2/\\text{C}^2$) (ตอบเป็นจำนวนเต็มในหน่วย $\\text{V}$)",
-    answer: 1000,
-    unit: "V",
-    hint: "$V = kQ/R$",
-    explanation: "$V = \\frac{(9 \\times 10^9)(10 \\times 10^{-9})}{0.09} = \\frac{90}{0.09} = 1000 \\, \\text{V}$",
-    subCategory: {
-      main: "บทที่ 12: ไฟฟ้าสถิต",
-      specific: "4. อธิบายและคำนวณพลังงานศักย์ไฟฟ้าและศักย์ไฟฟ้า"
-    }
-  },
-  {
-    number: 30,
-    type: "fill-in-number",
-    question: "จากข้อที่แล้ว จงหาความจุไฟฟ้าของทรงกลมตัวนำนี้ (ตอบเป็นจำนวนเต็มในหน่วย $\\text{pF}$)",
-    answer: 10,
-    unit: "pF",
-    hint: "$C = Q/V$ หรือ $C = R/k$",
-    explanation: "$C = Q/V = 10 \\times 10^{-9} / 1000 = 10 \\times 10^{-12} \\, \\text{F} = 10 \\, \\text{pF}$",
-    subCategory: {
-      main: "บทที่ 12: ไฟฟ้าสถิต",
-      specific: "5. อธิบายและคำนวณความจุและพลังงานสะสมในตัวเก็บประจุ"
-    }
+    type: "scenario",
+    title: "สถานการณ์: ทรงกลมตัวนำ",
+    description: "ทรงกลมตัวนำรัศมี $9 \\, \\text{cm}$ มีประจุ $10 \\, \\text{nC}$ ($k = 9 \\times 10^9 \\, \\text{Nm}^2/\\text{C}^2$)",
+    questions: [
+      {
+        number: 29,
+        type: "fill-in-number",
+        question: "จงหาศักย์ไฟฟ้าที่ผิวทรงกลม (ตอบเป็นจำนวนเต็มในหน่วย $\\text{V}$)",
+        answer: 1000,
+        unit: "V",
+        hint: "$V = kQ/R$",
+        explanation: "$V = \\frac{(9 \\times 10^9)(10 \\times 10^{-9})}{0.09} = \\frac{90}{0.09} = 1000 \\, \\text{V}$",
+        subCategory: {
+          main: "บทที่ 12: ไฟฟ้าสถิต",
+          specific: "4. อธิบายและคำนวณพลังงานศักย์ไฟฟ้าและศักย์ไฟฟ้า"
+        }
+      },
+      {
+        number: 30,
+        type: "fill-in-number",
+        question: "จงหาความจุไฟฟ้าของทรงกลมตัวนำนี้ (ตอบเป็นจำนวนเต็มในหน่วย $\\text{pF}$)",
+        answer: 10,
+        unit: "pF",
+        hint: "$C = R/k$ หรือ $C = Q/V$",
+        explanation: "$C = \\frac{R}{k} = \\frac{0.09}{9 \\times 10^9} = 10^{-11} \\, \\text{F} = 10 \\, \\text{pF}$",
+        subCategory: {
+          main: "บทที่ 12: ไฟฟ้าสถิต",
+          specific: "5. อธิบายและคำนวณความจุและพลังงานสะสมในตัวเก็บประจุ"
+        }
+      }
+    ]
   },
   {
     number: 31,

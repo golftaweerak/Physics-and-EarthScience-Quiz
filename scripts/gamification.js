@@ -79,18 +79,18 @@ export const DAILY_QUESTS = [
     { id: 'quiz_1', desc: 'ทำแบบทดสอบให้จบ 1 ครั้ง', target: 1, type: 'quiz_complete', xp: 100 },
     { id: 'quiz_3', desc: 'ทำแบบทดสอบให้จบ 3 ครั้ง', target: 3, type: 'quiz_complete', xp: 250 },
     { id: 'correct_5', desc: 'ตอบถูกให้ได้ 5 ข้อ', target: 5, type: 'correct_answers', xp: 150 },
-    { id: 'correct_10', desc: 'ตอบถูกให้ได้ 10 ข้อ', target: 10, type: 'correct_answers', xp: 250 },
-    { id: 'correct_20', desc: 'ตอบถูกให้ได้ 20 ข้อ', target: 20, type: 'correct_answers', xp: 400 },
+    { id: 'correct_10', desc: 'ตอบถูกให้ได้ 10 ข้อ', target: 10, type: 'correct_answers', xp: 200 },
+    { id: 'correct_20', desc: 'ตอบถูกให้ได้ 20 ข้อ', target: 20, type: 'correct_answers', xp: 300 },
     { id: 'physics_3', desc: 'ทำโจทย์ฟิสิกส์ 3 ข้อ', target: 3, type: 'questions_category', category: 'Physics', xp: 200 },
     { id: 'physics_5', desc: 'ทำโจทย์ฟิสิกส์ 5 ข้อ', target: 5, type: 'questions_category', category: 'Physics', xp: 300 },
     { id: 'earth_3', desc: 'ทำโจทย์วิทย์โลก 3 ข้อ', target: 3, type: 'questions_category', category: 'Earth', xp: 200 },
     { id: 'earth_5', desc: 'ทำโจทย์วิทย์โลก 5 ข้อ', target: 5, type: 'questions_category', category: 'Earth', xp: 300 },
     { id: 'score_80', desc: 'ได้คะแนน 80% ขึ้นไป 1 ครั้ง', target: 1, type: 'high_score', threshold: 80, xp: 300 },
-    { id: 'score_100', desc: 'ได้คะแนนเต็ม (100%) 1 ครั้ง', target: 1, type: 'high_score', threshold: 100, xp: 500 },
+    { id: 'score_100', desc: 'ได้คะแนนเต็ม (100%) 1 ครั้ง', target: 1, type: 'high_score', threshold: 100, xp: 400 },
     { id: 'quiz_5', desc: 'ทำแบบทดสอบให้จบ 5 ครั้ง', target: 5, type: 'quiz_complete', xp: 400 },
     { id: 'correct_50', desc: 'ตอบถูกให้ได้ 50 ข้อ', target: 50, type: 'correct_answers', xp: 800 },
-    { id: 'physics_10', desc: 'ทำโจทย์ฟิสิกส์ 10 ข้อ', target: 10, type: 'questions_category', category: 'Physics', xp: 500 },
-    { id: 'earth_10', desc: 'ทำโจทย์วิทย์โลก 10 ข้อ', target: 10, type: 'questions_category', category: 'Earth', xp: 500 }
+    { id: 'physics_10', desc: 'ทำโจทย์ฟิสิกส์ 10 ข้อ', target: 10, type: 'questions_category', category: 'Physics', xp: 300 },
+    { id: 'earth_10', desc: 'ทำโจทย์วิทย์โลก 10 ข้อ', target: 10, type: 'questions_category', category: 'Earth', xp: 300 }
 ];
 
 // กำหนดความสำเร็จ (Achievements)

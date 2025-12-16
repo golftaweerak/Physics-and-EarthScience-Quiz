@@ -145,24 +145,31 @@ export const quizItems = [
   },
   // Complex Circuit Analysis
   {
-    number: 14,
-    type: "fill-in-number",
-    question: "ในวงจรไฟฟ้าที่มีตัวต้านทาน 3 ตัว $R_1=2\\Omega, R_2=3\\Omega, R_3=6\\Omega$ ต่อขนานกันทั้งหมด แล้วต่อกับแหล่งจ่าย $6\\text{V}$ กระแสรวมในวงจรคือเท่าใด (ตอบเป็นจำนวนเต็มในหน่วย A)",
-    answer: 6,
-    unit: "A",
-    hint: "หา $R_{eq}$ แบบขนาน $1/R_{eq} = 1/2 + 1/3 + 1/6$",
-    explanation: "$1/R_{eq} = 3/6 + 2/6 + 1/6 = 6/6 = 1 \\Rightarrow R_{eq} = 1 \\, \\Omega$. $I = V/R = 6/1 = 6 \\text{ A}$",
-    subCategory: { main: "บทที่ 13: ไฟฟ้ากระแส", specific: "10. คำนวณปริมาณต่างๆ ในวงจรไฟฟ้ากระแสตรง" }
-  },
-  {
-    number: 15,
-    type: "fill-in-number",
-    question: "จากข้อ 14 กระแสที่ไหลผ่าน $R_1$ ($2\\Omega$) คือเท่าใด (ตอบเป็นจำนวนเต็มในหน่วย A)",
-    answer: 3,
-    unit: "A",
-    hint: "วงจรขนาน แรงดันเท่ากันทุกตัว",
-    explanation: "$I_1 = V/R_1 = 6/2 = 3 \\text{ A}$",
-    subCategory: { main: "บทที่ 13: ไฟฟ้ากระแส", specific: "10. คำนวณปริมาณต่างๆ ในวงจรไฟฟ้ากระแสตรง" }
+    type: "scenario",
+    title: "สถานการณ์: วงจรขนาน",
+    description: "วงจรไฟฟ้าประกอบด้วยตัวต้านทาน 3 ตัว $R_1=2\\Omega, R_2=3\\Omega, R_3=6\\Omega$ ต่อขนานกันทั้งหมด แล้วต่อกับแหล่งจ่าย $6\\text{V}$",
+    questions: [
+      {
+        number: 14,
+        type: "fill-in-number",
+        question: "กระแสรวมในวงจรคือเท่าใด (ตอบเป็นจำนวนเต็มในหน่วย A)",
+        answer: 6,
+        unit: "A",
+        hint: "หา $R_{eq}$ แบบขนาน $1/R_{eq} = 1/2 + 1/3 + 1/6$",
+        explanation: "$1/R_{eq} = 3/6 + 2/6 + 1/6 = 6/6 = 1 \\Rightarrow R_{eq} = 1 \\, \\Omega$. $I = V/R = 6/1 = 6 \\text{ A}$",
+        subCategory: { main: "บทที่ 13: ไฟฟ้ากระแส", specific: "10. คำนวณปริมาณต่างๆ ในวงจรไฟฟ้ากระแสตรง" }
+      },
+      {
+        number: 15,
+        type: "fill-in-number",
+        question: "กระแสที่ไหลผ่าน $R_1$ ($2\\Omega$) คือเท่าใด (ตอบเป็นจำนวนเต็มในหน่วย A)",
+        answer: 3,
+        unit: "A",
+        hint: "วงจรขนาน แรงดันเท่ากันทุกตัว",
+        explanation: "$I_1 = V/R_1 = 6/2 = 3 \\text{ A}$",
+        subCategory: { main: "บทที่ 13: ไฟฟ้ากระแส", specific: "10. คำนวณปริมาณต่างๆ ในวงจรไฟฟ้ากระแสตรง" }
+      }
+    ]
   },
   {
     number: 16,

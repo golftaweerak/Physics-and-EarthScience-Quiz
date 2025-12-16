@@ -165,7 +165,7 @@ function renderDailyQuest(game) {
                 </div>
                 ${canReroll ? 
                     `<button class="reroll-quest-btn text-gray-400 hover:text-blue-500 transition-colors p-1 rounded-full hover:bg-blue-50 dark:hover:bg-blue-900/30" data-index="${index}" title="เปลี่ยนภารกิจ">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                        <svg class="h-4 w-4 flex-shrink-0 pointer-events-none" width="16" height="16" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                     </button>` : ''}
             </div>
             
@@ -193,15 +193,28 @@ function renderDailyQuest(game) {
     // Bind events for reroll buttons
     questContainer.querySelectorAll('.reroll-quest-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
             const idx = parseInt(e.currentTarget.dataset.index);
-            if(confirm("ต้องการเปลี่ยนภารกิจนี้ใช่หรือไม่?")) {
-                const res = game.rerollQuest(idx);
-                if(res.success) {
-                    renderDailyQuest(game);
-                } else {
-                    alert(res.message);
+            
+            setTimeout(() => {
+                if (confirm("ต้องการเปลี่ยนภารกิจนี้ใช่หรือไม่?")) {
+                    const icon = btn.querySelector('svg');
+                    if (icon) icon.classList.add('animate-spin');
+                    btn.disabled = true;
+
+                    setTimeout(() => {
+                        const res = game.rerollQuest(idx);
+                        if (res.success) {
+                            renderDailyQuest(game);
+                        } else {
+                            if (icon) icon.classList.remove('animate-spin');
+                            btn.disabled = false;
+                            alert(res.message);
+                        }
+                    }, 500);
                 }
-            }
+            }, 50);
         });
     });
 }
