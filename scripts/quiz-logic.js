@@ -404,7 +404,7 @@ function setupPowerUpUI() {
 /**
  * Renders the power-up buttons based on current inventory.
  */
-function renderPowerUps() {
+function renderPowerUps(animateItemId = null) {
     if (!elements.powerUpContainer) return;
     
     const currentQuestion = state.shuffledQuestions[state.currentQuestionIndex];
@@ -437,6 +437,11 @@ function renderPowerUps() {
         const isDisabled = isUsed || (isTimeFreeze && isTimerDisabled);
 
         let btnClass = "relative group flex items-center justify-center sm:justify-start gap-0 sm:gap-2 p-2 sm:px-3 sm:py-1.5 rounded-xl sm:rounded-full transition-all shadow-sm border-2 ";
+        
+        if (item.id === animateItemId) {
+            btnClass += "anim-item-pop ";
+        }
+
         if (isUsed) {
             btnClass += "bg-green-100 text-green-700 border-green-500 cursor-default opacity-80";
         } else if (isTimeFreeze && isTimerDisabled) {
@@ -490,7 +495,7 @@ function handlePowerUpClick(itemId) {
             const result = state.game.buyItem(itemId);
             if (result.success) {
                 showToast('ซื้อสำเร็จ', result.message, '🛒');
-                renderPowerUps();
+                renderPowerUps(itemId);
                 powerupBuyModalHandler.close();
             } else {
                 showToast('ซื้อไม่สำเร็จ', result.message, '❌', 'error');
@@ -510,14 +515,14 @@ function handlePowerUpClick(itemId) {
         if (state.game.useItem(itemId)) {
             apply5050();
             state.used5050 = true;
-            renderPowerUps();
+            renderPowerUps(itemId);
             showToast('ใช้ตัวช่วยสำเร็จ', 'ตัดตัวเลือกผิดออก 2 ข้อ', '✂️');
         }
     } else if (itemId === 'item_xp_2x') {
         if (state.xpMultiplier > 1) return;
         if (state.game.useItem(itemId)) {
             state.xpMultiplier = 2;
-            renderPowerUps();
+            renderPowerUps(itemId);
             showToast('ใช้ตัวช่วยสำเร็จ', 'XP คูณ 2 สำหรับการสอบครั้งนี้!', '✨', 'gold');
         }
     } else if (itemId === 'item_cut_1') {
@@ -526,7 +531,7 @@ function handlePowerUpClick(itemId) {
         if (state.game.useItem(itemId)) {
             applyCut1();
             state.usedCut1 = true;
-            renderPowerUps();
+            renderPowerUps(itemId);
             showToast('ใช้ตัวช่วยสำเร็จ', 'ตัดตัวเลือกผิดออก 1 ข้อ', '🔪');
         }
     } else if (itemId === 'item_undo') {
@@ -534,7 +539,7 @@ function handlePowerUpClick(itemId) {
         if (currentAns && !currentAns.isCorrect) {
              if (state.game.useItem(itemId)) {
                 undoLastAnswer();
-                renderPowerUps();
+                renderPowerUps(itemId);
                 showToast('ใช้ตัวช่วยสำเร็จ', 'เริ่มตอบข้อนี้ใหม่ได้เลย!', '↩️');
             }
         } else {
@@ -547,7 +552,7 @@ function handlePowerUpClick(itemId) {
         }
         if (state.game.useItem(itemId)) {
             freezeTime();
-            renderPowerUps();
+            renderPowerUps(itemId);
             showToast('ใช้ตัวช่วยสำเร็จ', 'หยุดเวลา 30 วินาที!', '❄️', 'info');
         }
     } else if (itemId === 'item_range_hint') {
@@ -556,7 +561,7 @@ function handlePowerUpClick(itemId) {
         if (state.game.useItem(itemId)) {
             applyRangeHint();
             state.usedRangeHint = true;
-            renderPowerUps();
+            renderPowerUps(itemId);
             // Toast handled in applyRangeHint to show the range
         }
     } else if (itemId === 'item_tolerance') {
@@ -564,7 +569,7 @@ function handlePowerUpClick(itemId) {
         if (state.userAnswers[state.currentQuestionIndex]) return;
         if (state.game.useItem(itemId)) {
             state.usedTolerance = true;
-            renderPowerUps();
+            renderPowerUps(itemId);
             showToast('ใช้ตัวช่วยสำเร็จ', 'ขยายเป้าคำตอบให้กว้างขึ้น +/- 20%', '⭕', 'success');
         }
     }

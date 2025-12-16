@@ -431,6 +431,16 @@ export class Gamification {
             .anim-rewind {
               animation: rewind-flash 0.4s ease-in-out;
             }
+
+            /* NEW: Item Pop Animation */
+            @keyframes itemPop {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.2); }
+                100% { transform: scale(1); }
+            }
+            .anim-item-pop {
+                animation: itemPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            }
         `;
 
         for (const [themeName, colors] of Object.entries(themes)) {
