@@ -390,7 +390,7 @@ function setupPowerUpUI() {
     if (!document.getElementById('power-up-bar')) {
         const container = document.createElement('div');
         container.id = 'power-up-bar';
-        container.className = 'flex justify-center gap-4 mb-6';
+        container.className = 'flex flex-wrap justify-center gap-3 mb-6 px-2';
         
         // Insert before the question container
         const questionContainer = document.getElementById('question');
@@ -436,7 +436,7 @@ function renderPowerUps() {
         const isTimerDisabled = state.timerMode === 'none';
         const isDisabled = isUsed || (isTimeFreeze && isTimerDisabled);
 
-        let btnClass = "flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-bold transition-all shadow-sm border-2 ";
+        let btnClass = "relative group flex items-center justify-center sm:justify-start gap-0 sm:gap-2 p-2 sm:px-3 sm:py-1.5 rounded-xl sm:rounded-full transition-all shadow-sm border-2 ";
         if (isUsed) {
             btnClass += "bg-green-100 text-green-700 border-green-500 cursor-default opacity-80";
         } else if (isTimeFreeze && isTimerDisabled) {
@@ -449,10 +449,12 @@ function renderPowerUps() {
         }
 
         return `
-            <button class="power-up-btn ${btnClass}" data-id="${item.id}" ${isDisabled ? 'disabled' : ''}>
-                <span>${item.icon}</span>
-                <span>${item.name}</span>
-                <span class="bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-300 px-1.5 rounded-md text-xs">${isUsed ? 'ใช้แล้ว' : count}</span>
+            <button class="power-up-btn ${btnClass}" data-id="${item.id}" ${isDisabled ? 'disabled' : ''} title="${item.name}">
+                <span class="text-xl sm:text-base leading-none">${item.icon}</span>
+                <span class="hidden sm:inline text-sm font-bold">${item.name}</span>
+                <span class="absolute -top-2 -right-2 sm:static sm:top-auto sm:right-auto bg-gray-100 dark:bg-gray-600 text-gray-800 dark:text-gray-200 px-1.5 py-0.5 rounded-full text-[10px] sm:text-xs font-bold min-w-[1.25rem] text-center border border-gray-200 dark:border-gray-500 shadow-sm z-10">
+                    ${isUsed ? '✓' : count}
+                </span>
             </button>
         `;
     }).join('');
