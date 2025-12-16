@@ -503,7 +503,9 @@ export async function initializeScoreSearch() {
                         <details class="group bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden transition-all duration-300 open:ring-2 open:ring-blue-500 open:shadow-lg">
                             <summary class="flex justify-between items-center p-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                                 <h4 class="font-bold text-gray-800 dark:text-gray-200 font-kanit">${chapter}</h4>
+                            <div class="flex-shrink-0 ml-2">
                                 <svg class="h-5 w-5 text-gray-500 dark:text-gray-400 transition-transform duration-300 group-open:rotate-90" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>
+                            </div>
                             </summary>
                             <div class="border-t border-gray-200 dark:border-gray-700">
                                 <ul class="divide-y divide-gray-200 dark:divide-gray-700">

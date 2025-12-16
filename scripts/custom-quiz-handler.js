@@ -801,10 +801,20 @@ export function initializeCustomQuizHandler() {
 
                 const content = toggle.nextElementSibling;
                 const icon = toggle.querySelector('.chevron-icon');
+                const innerContent = content.querySelector('.inner-content-wrapper');
+
                 const isOpen = content.classList.contains('grid-rows-[1fr]');
                 content.classList.toggle('grid-rows-[1fr]', !isOpen);
                 content.classList.toggle('grid-rows-[0fr]', isOpen);
                 icon.classList.toggle('rotate-180', !isOpen);
+
+                if (innerContent) {
+                    innerContent.style.transitionDelay = !isOpen ? "150ms" : "0ms";
+                    innerContent.classList.toggle('opacity-100', !isOpen);
+                    innerContent.classList.toggle('translate-y-0', !isOpen);
+                    innerContent.classList.toggle('opacity-0', isOpen);
+                    innerContent.classList.toggle('-translate-y-2', isOpen);
+                }
             }
         });
 
@@ -907,10 +917,12 @@ export function initializeCustomQuizHandler() {
                             <div class="bg-gray-50 dark:bg-gray-800/30 rounded-lg mx-2 mb-2 border border-gray-200 dark:border-gray-700/50 overflow-hidden">
                                 <div class="chapter-accordion-toggle flex justify-between items-center cursor-pointer p-3 hover:bg-gray-100 dark:hover:bg-gray-700/40 transition-colors">
                                     <h4 class="text-base font-bold text-gray-800 dark:text-gray-200 font-kanit truncate pr-2">${chapter.title || 'บทเรียน'}</h4>
-                                    <svg class="chevron-icon h-5 w-5 text-gray-500 dark:text-gray-400 transition-transform duration-300 flex-shrink-0 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                                    <div class="flex-shrink-0 ml-2">
+                                        <svg class="chevron-icon h-5 w-5 text-gray-500 dark:text-gray-400 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                                    </div>
                                 </div>
                                 <div class="specific-topics-container grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-in-out">
-                                    <div class="overflow-hidden">${topicControlsHTML}</div>
+                                    <div class="overflow-hidden inner-content-wrapper opacity-0 -translate-y-2 transition-all duration-300 ease-out">${topicControlsHTML}</div>
                                 </div>
                             </div>`;
                     }
@@ -925,11 +937,13 @@ export function initializeCustomQuizHandler() {
                                         <img src="${subjectDetails.icon}" class="h-8 w-8 flex-shrink-0" alt="${subjectDetails.displayName} icon">
                                         <span class="font-bold text-lg text-gray-800 dark:text-gray-100 truncate">${subjectDetails.displayName}</span>
                                     </div>
-                                    <svg class="chevron-icon h-6 w-6 text-gray-500 dark:text-gray-400 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                                    <div class="flex-shrink-0 ml-2">
+                                        <svg class="chevron-icon h-6 w-6 text-gray-500 dark:text-gray-400 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                                    </div>
                                 </div>
                             </div>
                             <div class="chapters-container grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-in-out">
-                                <div class="overflow-hidden pt-2">${chapterAccordionsHTML}</div>
+                                <div class="overflow-hidden pt-2 inner-content-wrapper opacity-0 -translate-y-2 transition-all duration-300 ease-out">${chapterAccordionsHTML}</div>
                             </div>
                         </div>`;
                 }
