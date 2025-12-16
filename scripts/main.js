@@ -48,9 +48,9 @@ function injectCustomScrollbarStyles() {
 export const toggleAccordion = (toggleElement, forceState) => {
   const content = toggleElement.nextElementSibling;
   const icon = toggleElement.querySelector(".chevron-icon");
-  const innerContent = content && content.querySelector(".inner-content-wrapper");
+  const innerContent = content?.querySelector(".inner-content-wrapper");
   const iconContainer = toggleElement.querySelector(".section-icon-container");
-  const mainIcon = iconContainer && iconContainer.querySelector(".section-main-icon");
+  const mainIcon = iconContainer?.querySelector(".section-main-icon");
   if (!content || !icon) return;
 
   const isCurrentlyOpen = toggleElement.getAttribute('aria-expanded') === 'true';
@@ -98,11 +98,11 @@ function groupQuizzesForCategory(quizzes, categoryKey) {
 
   // Determine if the syllabus is structured with units or a flat chapter list
   // This flattens the structure for unified processing but preserves unit-specific data.
-  const chapters = (syllabus && syllabus.units) 
+  const chapters = syllabus?.units 
     ? syllabus.units.flatMap(unit => 
         unit.chapters.map(ch => ({ ...ch, standard: unit.standard }))
       ) 
-    : (syllabus && syllabus.chapters);
+    : syllabus?.chapters;
 
   if (Array.isArray(chapters)) {
     // 1. Separate special categories like "Final Review" from regular chapter quizzes.
@@ -120,9 +120,9 @@ function groupQuizzesForCategory(quizzes, categoryKey) {
             displayTitle = `บทที่ ${chapter.chapterId}: ${chapter.title}`;
         } else if (categoryKey === 'EarthSpaceScienceAdvance') {
             const firstQuiz = chapterQuizzes[0];
-            if (firstQuiz && firstQuiz.description) {
+            if (firstQuiz?.description) {
                 const match = firstQuiz.description.match(/บทที่\s*(\d+)/);
-                if (match && match[1]) {
+                if (match?.[1]) {
                     displayTitle = `บทที่ ${match[1]}: ${chapter.title}`;
                 }
           }
@@ -273,12 +273,12 @@ export function initializePage() {
     let progressText, progressTextColor, progressBarColor, progressDetails;
 
     if (progress.isFinished) {
-      progressText = `<span class="inline-flex items-center"><svg class="h-3.5 w-3.5 mr-1 flex-shrink-0" width="14" height="14" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>ทำเสร็จแล้ว</span>`;
+      progressText = `<span class="inline-flex items-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 mr-1" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>ทำเสร็จแล้ว</span>`;
       progressTextColor = "text-green-600 dark:text-green-400";
       progressBarColor = "bg-gradient-to-r from-green-400 to-emerald-500 shadow-[0_0_8px_rgba(74,222,128,0.4)]";
       progressDetails = `คะแนน: ${progress.score}/${progress.totalQuestions}`;
     } else if (progress.hasProgress) {
-      progressText = `<span class="inline-flex items-center"><svg class="h-3.5 w-3.5 mr-1 flex-shrink-0" width="14" height="14" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" /></svg>ทำต่อ</span>`;
+      progressText = `<span class="inline-flex items-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 mr-1" viewBox="0 0 20 20" fill="currentColor"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" /></svg>ทำต่อ</span>`;
       progressTextColor = "text-blue-600 dark:text-blue-400";
       progressBarColor = "bg-gradient-to-r from-blue-400 to-indigo-500 shadow-[0_0_8px_rgba(96,165,250,0.4)]";
       progressDetails = `คะแนน: ${progress.score} | ${progress.answeredCount}/${progress.totalQuestions} ข้อ`;
@@ -293,7 +293,7 @@ export function initializePage() {
     if (progress.hasProgress) {
       actions.push(`
             <button data-storage-key="${quiz.storageKey}" class="reset-progress-btn text-[11px] text-gray-500 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400 transition-colors duration-200 inline-flex items-center font-medium">
-                <svg class="h-3 w-3 mr-1 flex-shrink-0" width="12" height="12" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>
                 ล้างข้อมูล
             </button>`);
     }
@@ -325,7 +325,7 @@ export function initializePage() {
    */
    function createQuizCard(quiz, index) {
      const categoryDetail = categoryDetails[quiz.category];
-     const borderColorClass = (categoryDetail && categoryDetail.color) || "border-gray-400";
+     const borderColorClass = categoryDetail?.color || "border-gray-400";
      const colorName = borderColorClass.split('-')[1] || 'gray';
  
      const card = document.createElement("a");
@@ -385,7 +385,7 @@ export function initializePage() {
         </div>
         <div class="flex items-center gap-2 flex-shrink-0">
             <span class="px-2 py-0.5 text-xs font-semibold text-${colorName}-700 bg-${colorName}-200/80 dark:text-${colorName}-200 dark:bg-${colorName}-800/60 rounded-full">${groupData.quizzes.length} ชุด</span>
-            <svg class="chevron-icon h-5 w-5 text-gray-500 dark:text-gray-400 transition-transform duration-300 flex-shrink-0" width="20" height="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+            <svg class="chevron-icon h-5 w-5 text-gray-500 dark:text-gray-400 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
         </div>
     `;
 
@@ -481,7 +481,7 @@ export function initializePage() {
           <p class="text-xs font-normal text-gray-500 dark:text-gray-400 -mt-1">${quizzes.length} ชุด</p>
         </div>
       </div>
-      <svg class="chevron-icon h-6 w-6 text-gray-500 dark:text-gray-400 transition-transform duration-300 flex-shrink-0" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+      <svg class="chevron-icon h-6 w-6 text-gray-500 dark:text-gray-400 transition-transform duration-300 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
     `;
     // Accessibility: Add ARIA attributes for the accordion header
     toggleHeader.setAttribute("aria-expanded", "false");
@@ -624,8 +624,8 @@ export function initializePage() {
     // Close Category Button
     const closeBtn = createFloatingButton({
       ariaLabel: "ปิดหมวดหมู่",
-      innerHTML: `<svg class="h-5 w-5" width="20" height="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>`,
-      onClick: () => { if (activeToggle) activeToggle.click(); },
+      innerHTML: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>`,
+      onClick: () => activeToggle?.click(),
     });
     fragment.appendChild(closeBtn);
 
@@ -768,8 +768,8 @@ export function initializePage() {
     if (a !== 'AstronomyReview' && b === 'AstronomyReview') return 1;
 
     // --- Default Sort Logic: Use the 'order' property from data-manager ---
-    const orderA = (categoryDetails[a] && categoryDetails[a].order) || 99;
-    const orderB = (categoryDetails[b] && categoryDetails[b].order) || 99;
+    const orderA = categoryDetails[a]?.order || 99;
+    const orderB = categoryDetails[b]?.order || 99;
     return orderA - orderB;
   });
 

@@ -6,7 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>สถิติของฉัน - Earth Science Quiz</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="./scripts/tailwind-setup.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;700&family=Sarabun:wght@400;700&display=swap"
@@ -21,7 +25,7 @@
     <!-- Shared Sticky Header -->
     <div id="main_header-placeholder"></div>
 
-    <main class="container mx-auto px-4 sm:px-8 pt-24 md:pt-28">
+    <div class="container mx-auto px-4 sm:px-8 pt-24 md:pt-28">
         <header class="max-w-4xl mx-auto mb-8 pb-4 border-b border-gray-200 dark:border-gray-700">
             <div class="flex flex-wrap justify-between items-center gap-4">
                 <div>
@@ -63,55 +67,6 @@
         <div id="stats-content" class="max-w-4xl mx-auto pb-8 sm:pb-12 opacity-0 transition-opacity duration-500">
             <!-- Overview Panel -->
             <div id="panel-overview" role="tabpanel" aria-labelledby="tab-overview" class="space-y-8">
-                
-                <!-- NEW: Gamification Dashboard -->
-                <section id="gamification-dashboard" class="bg-white dark:bg-gray-800/50 p-6 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 relative overflow-hidden">
-                    <!-- Background decoration -->
-                    <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-blue-500/10 rounded-full blur-xl pointer-events-none"></div>
-                    <div class="absolute bottom-0 left-0 -mb-4 -ml-4 w-32 h-32 bg-purple-500/10 rounded-full blur-xl pointer-events-none"></div>
-            
-                    <div class="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
-                        <!-- Level & XP -->
-                        <div class="col-span-2 flex items-center gap-4 sm:gap-6">
-                            <div class="relative flex-shrink-0">
-                                <!-- Level Circle -->
-                                <div class="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-3xl shadow-lg ring-4 ring-blue-100 dark:ring-blue-900/30">
-                                    <span id="user-level">1</span>
-                                </div>
-                                <div class="absolute -bottom-2 -right-2 bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-1 rounded-full shadow-sm border border-white dark:border-gray-800">
-                                    LVL
-                                </div>
-                            </div>
-                            <div class="flex-grow min-w-0">
-                                <h3 id="user-rank-title" class="text-lg sm:text-xl font-bold text-gray-800 dark:text-white font-kanit truncate">ผู้สังเกตการณ์ฝึกหัด</h3>
-                                <div class="flex justify-between text-sm text-gray-500 dark:text-gray-400 mb-1 font-mono">
-                                    <span>XP: <span id="current-xp">0</span></span>
-                                    <span>Goal: <span id="next-level-xp">100</span></span>
-                                </div>
-                                <!-- Progress Bar -->
-                                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 overflow-hidden">
-                                    <div id="xp-progress-bar" class="bg-gradient-to-r from-blue-500 to-purple-500 h-3 rounded-full transition-all duration-1000" style="width: 0%"></div>
-                                </div>
-                                <!-- Link to Profile -->
-                                <div class="mt-2 text-right">
-                                    <a href="./profile.html" class="text-xs font-bold text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors inline-flex items-center gap-1 group">
-                                        ดูโปรไฟล์เต็ม <span class="transform group-hover:translate-x-0.5 transition-transform">→</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-            
-                        <!-- Badges -->
-                        <div class="border-t md:border-t-0 md:border-l border-gray-200 dark:border-gray-700 pt-4 md:pt-0 md:pl-6">
-                            <h4 class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">เหรียญรางวัลล่าสุด</h4>
-                            <div id="recent-badges" class="flex gap-3 flex-wrap">
-                                <!-- Badges injected by JS -->
-                                <div class="animate-pulse w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
                 <section id="summary-cards-container">
                     <div id="summary-cards-grid" class="grid grid-cols-2 gap-4 sm:gap-6">
                         <!-- Summary cards will be injected here by stats.js -->
@@ -188,7 +143,7 @@
         </div>
 
         <div id="footer-placeholder" class="mt-12"></div>
-    </main>
+    </div>
 
     <!-- Modals moved to the end of the body to ensure they are on top of all other content. -->
     <div id="modals-placeholder"></div>
@@ -228,7 +183,6 @@
     </div>
 
     <script src="./scripts/stats-loader.js" type="module"></script>
-    <script src="./scripts/gamification-controller.js" type="module"></script>
 </body>
 
 </html>

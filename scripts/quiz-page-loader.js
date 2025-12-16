@@ -77,11 +77,6 @@ async function main() {
         setupMathObserver('question'); // For the question text itself
         setupMathObserver('feedback'); // For the explanation text in the feedback box
 
-        // --- APPLY USER THEME ---
-        // Instantiate Gamification to apply the saved theme immediately
-        const { Gamification } = await import('./gamification.js');
-        new Gamification(); // Constructor automatically applies the theme
-
         const { initializeQuiz } = await import('./quiz-loader.js');
         // Initialize the core quiz functionality.
         // This function will handle loading data and setting up the quiz logic.

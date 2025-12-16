@@ -64,9 +64,7 @@ export class ModalHandler {
         // Use requestAnimationFrame to ensure the browser has applied the display change
         // before adding the class that triggers the animation.
         requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                this.modal.classList.add("is-open");
-            });
+            this.modal.classList.add("is-open");
         });
 
         document.addEventListener("keydown", this.handleKeyDown);

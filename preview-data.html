@@ -7,7 +7,12 @@
     <title>แสดงตัวอย่างชุดข้อสอบ</title>
     <!-- Using Tailwind CSS for styling, consistent with other files -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="./scripts/tailwind-setup.js"></script>
+    <script>
+        // Enable class-based dark mode, consistent with other pages
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;700&family=Sarabun:wght@400;700&display=swap"
@@ -297,10 +302,6 @@
 
             <!-- Use the more robust loader for better error handling -->
             <script src="./scripts/preview-loader.js" type="module"></script>
-            <script type="module">
-                import { Gamification } from './scripts/gamification.js';
-                new Gamification();
-            </script>
 </body>
 
 </html>

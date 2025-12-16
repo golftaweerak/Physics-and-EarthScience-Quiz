@@ -101,8 +101,7 @@ function highlightText(text, keyword) {
 
 // Helper function to create a single question element. This promotes reusability.
 function createQuestionElement(item, displayIndex, keyword) {
-    const toggle = document.getElementById('show-answers-toggle');
-    const showAnswers = toggle && toggle.checked;
+    const showAnswers = document.getElementById('show-answers-toggle')?.checked;
 
     // Replace newline characters with <br> tags for proper HTML rendering
     const questionHtml = item.question ? highlightText(String(item.question).replace(/\n/g, '<br>'), keyword) : '';
@@ -456,7 +455,7 @@ function renderQuizData() {
                 }
 
                 // Add source quiz title if available
-                if (group.questions[0] && group.questions[0].sourceQuizTitle) {
+                if (group.questions[0]?.sourceQuizTitle) {
                     const sourceTitleEl = document.createElement('p');
                     sourceTitleEl.className = 'text-sm text-gray-500 dark:text-gray-400 mt-2 italic';
                     sourceTitleEl.textContent = `(จากชุดข้อสอบ: ${group.questions[0].sourceQuizTitle})`;
@@ -467,7 +466,7 @@ function renderQuizData() {
                 // Add toggle icon
                 const iconContainer = document.createElement('div');
                 iconContainer.className = 'flex-shrink-0 pt-1';
-                iconContainer.innerHTML = `<svg class="chevron-icon h-6 w-6 text-blue-600 dark:text-blue-400 transition-transform duration-300 flex-shrink-0" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>`; // Chevron-down icon
+                iconContainer.innerHTML = `<svg class="chevron-icon h-6 w-6 text-blue-600 dark:text-blue-400 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>`; // Chevron-down icon
                 scenarioHeader.appendChild(iconContainer);
                 scenarioCard.appendChild(scenarioHeader);
 
@@ -586,7 +585,7 @@ async function handleGlobalSearch() {
     }
 
     container.innerHTML = `<div class="text-center p-8 text-gray-500 dark:text-gray-400">
-                                <svg class="animate-spin h-8 w-8 mx-auto mb-4" width="32" height="32" xmlns="http://www.w3.org/2000/
+                                <svg class="animate-spin h-8 w-8 mx-auto mb-4" xmlns="http://www.w3.org/2000/
 svg" fill="none" viewBox="0 0 24 24">
                                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -841,15 +840,15 @@ export function initializePreviewPage() {
             if (a !== 'AstronomyReview' && b === 'AstronomyReview') return 1;
 
             // --- Default Sort Logic: Use the 'order' property from data-manager ---
-            const orderA = (allCategoryDetails[a] && allCategoryDetails[a].order) || 99;
-            const orderB = (allCategoryDetails[b] && allCategoryDetails[b].order) || 99;
+            const orderA = allCategoryDetails[a]?.order || 99;
+            const orderB = allCategoryDetails[b]?.order || 99;
             return orderA - orderB;
         });
 
         sortedCategoryKeys.forEach(categoryKey => {
             const optgroup = document.createElement('optgroup');
             // Use the display title from the imported allCategoryDetails, or the key itself as a fallback
-            optgroup.label = (allCategoryDetails[categoryKey] && allCategoryDetails[categoryKey].title) || categoryKey;
+            optgroup.label = allCategoryDetails[categoryKey]?.title || categoryKey;
 
             groupedQuizzes[categoryKey].forEach(quiz => {
                 const option = document.createElement('option');
@@ -881,7 +880,7 @@ export function initializePreviewPage() {
         const scriptPath = `../data/${scriptName}`;
         //scriptNameEl.textContent = `กำลังแสดงผลจาก: ${scriptPath}`;
         container.innerHTML = `<div class="text-center p-8 text-gray-500 dark:text-gray-400">
-                                    <svg class="animate-spin h-8 w-8 mx-auto mb-4" width="32" height="32" xmlns="http://www.w3.org/2000/
+                                    <svg class="animate-spin h-8 w-8 mx-auto mb-4" xmlns="http://www.w3.org/2000/
 svg" fill="none" viewBox="0 0 24 24">
                                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -894,7 +893,7 @@ svg" fill="none" viewBox="0 0 24 24">
             const { allQuestions, scenarios } = await fetchAllQuizData();
             const quizId = scriptName.replace('-data.js', '');
             const quizInfo = quizList.find(q => q.id === quizId);
-            const quizTitle = quizInfo && quizInfo.title;
+            const quizTitle = quizInfo?.title; // Use optional chaining for safety
 
             if (!quizTitle) {
                 throw new Error(`Quiz info not found for ID: ${quizId}`);
