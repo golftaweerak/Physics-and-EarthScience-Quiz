@@ -30,16 +30,15 @@
   <link rel="stylesheet" href="../styles/animations.css"> <!-- เพิ่มไฟล์อนิเมชันหลักสำหรับ Modal -->
   <link rel="stylesheet" href="../styles/quiz-animations.css">
   <!-- Preload assets for faster quiz start -->
-  <link rel="preload" href="../assets/audio/correct.mp3" as="audio">
-  <link rel="preload" href="../assets/audio/incorrect.mp3" as="audio">
   <!-- Chart.js for result statistics -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="stylesheet" href="../styles/bundle.css">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
-
+  <link rel="icon" href="../assets/icons/exam.png" type="image/png">
 </head>
 
-<body class="pt-24 md:pt-28 bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-300 p-4">
+<body
+  class="pt-24 md:pt-28 bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-300 p-4">
   <div class="max-w-3xl mx-auto">
     <!-- Header with buttons -->
     <div id="main_header-placeholder"></div>
@@ -208,4 +207,5 @@
   <!-- The single entry point for all quiz page functionality -->
   <script src="../scripts/quiz-page-loader.js" type="module"></script>
 </body>
+
 </html>

@@ -398,7 +398,8 @@ export async function fetchAllQuizData() {
     } catch (error) {
         // Instead of throwing, log the error and return an empty array.
         // This allows Promise.all to complete successfully even if some files are missing.
-        console.warn(`Could not load or parse data for quiz ID "${quiz.id}" from ${scriptPath}. Skipping. Error: ${error.message}`);
+        // Make the warning more informative, pointing towards a likely data consistency issue.
+        console.warn(`Data file not found for quiz ID "${quiz.id}" (path: ${scriptPath}). This is expected if the quiz entry in 'quizzes-list.js' is obsolete. Skipping. Original error: ${error.message}`);
         return []; // Return an empty array for this failed import
     }
   });

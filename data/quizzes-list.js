@@ -405,11 +405,11 @@ export const quizList = [
     "subCategory": "การเคลื่อนที่ปรากฏของดาวเคราะห์"
   },
   {
-    "id": "ess_adv_m6_ch18-1",
+    "id": "ess_adv/ess_adv_m6_ch18-1",
     "title": "เทคโนโลยีอวกาศและการประยุกต์ใช้ (ชุดที่ 1)",
     "amount": 30,
     "description": "บทที่ 18: เทคโนโลยีอวกาศและการประยุกต์ใช้ (ชุดที่ 1)",
-    "url": "./quiz/index.html?id=ess_adv_m6_ch18-1",
+    "url": "./quiz/index.html?id=ess_adv/ess_adv_m6_ch18-1",
     "storageKey": "quizState-ess_adv_m6_ch18-1",
     "icon": "./assets/icons/space-exploration.png",
     "altText": "ไอคอนสำหรับ ess_adv_m6_ch18-1",
@@ -417,16 +417,28 @@ export const quizList = [
     "subCategory": "เทคโนโลยีอวกาศและการประยุกต์ใช้"
   },
   {
-    "id": "ess_adv_m6_ch18-2",
+    "id": "ess_adv/ess_adv_m6_ch18-2",
     "title": "เทคโนโลยีอวกาศและการประยุกต์ใช้ (ชุดที่ 2)",
     "amount": 30,
     "description": "บทที่ 18: เทคโนโลยีอวกาศและการประยุกต์ใช้ (ชุดที่ 2)",
-    "url": "./quiz/index.html?id=ess_adv_m6_ch18-2",
+    "url": "./quiz/index.html?id=ess_adv/ess_adv_m6_ch18-2",
     "storageKey": "quizState-ess_adv_m6_ch18-2",
     "icon": "./assets/icons/space-exploration.png",
     "altText": "ไอคอนสำหรับ ess_adv_m6_ch18-2",
     "category": "EarthSpaceScienceAdvance",
     "subCategory": "เทคโนโลยีอวกาศและการประยุกต์ใช้"
+  },
+  {
+    "id": "phy_m4/phy_m4_ch2-1",
+    "title": "การเคลื่อนที่แนวตรง (ชุดที่ 1 - ทฤษฎี)",
+    "amount": 20,
+    "description": "บทที่ 2: การเคลื่อนที่แนวตรง (เน้นทฤษฎี)",
+    "url": "./quiz/index.html?id=phy_m4/phy_m4_ch2-1",
+    "storageKey": "quizState-phy_m4_ch2-1",
+    "icon": "./assets/icons/physicsm4.png",
+    "altText": "ไอคอนสำหรับ phy_m4_ch2-1",
+    "category": "PhysicsM4",
+    "subCategory": "บทที่ 2: การเคลื่อนที่แนวตรง"
   },
   {
     "id": "phy_m4/phy_m4_Ch3-1",

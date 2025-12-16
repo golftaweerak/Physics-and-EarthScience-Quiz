@@ -5,11 +5,38 @@
 async function main() {
     try {
         const { loadComponent } = await import('./component-loader.js');
+        
+        // Custom loader to fix paths BEFORE injection to prevent 404s in the quiz subdirectory
+        const loadComponentWithFix = async (selector, path) => {
+            try {
+                const response = await fetch(path);
+                let html = await response.text();
+                // Replace ./assets/ with ../assets/ to fix 404s
+                html = html.replace(/src="\.\/assets\//g, 'src="../assets/');
+                // Replace other ./ links with ../ to fix navigation
+                html = html.replace(/href="\.\//g, 'href="../');
+                
+                const element = document.querySelector(selector);
+                if (element) {
+                    element.innerHTML = html;
+                    // Re-execute scripts since innerHTML doesn't run them
+                    Array.from(element.querySelectorAll('script')).forEach(oldScript => {
+                        const newScript = document.createElement('script');
+                        Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+                        newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+                        oldScript.parentNode.replaceChild(newScript, oldScript);
+                    });
+                }
+            } catch (e) {
+                console.error(`Error loading ${path}`, e);
+            }
+        };
+
         // Load shared components first
         await Promise.all([
-                loadComponent('#main_header-placeholder', '../components/main_header.html'),
-                loadComponent('#footer-placeholder', '../components/footer.html'),
-                loadComponent('#modals-placeholder', '../components/modals_common.html')
+                loadComponentWithFix('#main_header-placeholder', '../components/main_header.html'),
+                loadComponentWithFix('#footer-placeholder', '../components/footer.html'),
+                loadComponentWithFix('#modals-placeholder', '../components/modals_common.html')
         ]);
 
         const { initializeCommonComponents } = await import('./common-init.js');
