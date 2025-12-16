@@ -1,5 +1,7 @@
 import { ModalHandler } from './modal-handler.js';
 import { shuffleArray } from './utils.js';
+import { Gamification, SHOP_ITEMS } from './gamification.js';
+import { showToast } from './toast.js';
 
 // state: Stores all dynamic data of the quiz
 let state = {};
@@ -7,6 +9,8 @@ let state = {};
 let elements = {};
 // handler: A dedicated handler for the resume modal
 let resumeModalHandler;
+// handler: For power-up buy modal
+let powerupBuyModalHandler;
 // config: Stores all static configuration and constants
 const config = {
   soundOnIcon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" /></svg>`,
@@ -49,18 +53,6 @@ const config = {
 };
 
 /**
- * Applies a temporary animation class to an element.
- * @param {HTMLElement} element The element to animate.
- * @param {string} animationClass The CSS class for the animation.
- */
-function applyAnimation(element, animationClass) {
-  if (!element) return;
-  element.classList.add(animationClass);
-  element.addEventListener('animationend', () => {
-    element.classList.remove(animationClass);
-  }, { once: true });
-}
-/**
  * Parses the subCategory property from a question object and returns a standardized format.
  * This centralizes the logic for handling both old (string) and new (object) formats.
  * @param {object|string} subCategory - The subCategory property from a question.
@@ -83,6 +75,39 @@ function getCategoryNames(subCategory) {
   return { main: 'ไม่มีหมวดหมู่', specific: null }; // Fallback for unknown formats
 }
 
+function ensurePowerUpModalExists() {
+    if (document.getElementById('powerup-buy-modal')) return;
+    const modalHTML = `
+    <div id="powerup-buy-modal" class="modal hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-75" role="dialog" aria-modal="true">
+        <div class="modal-container bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-sm p-6 transform transition-all scale-100 relative">
+            <button data-modal-close class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+            <div class="flex flex-col items-center text-center">
+                <div id="powerup-modal-icon" class="text-6xl mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded-full"></div>
+                <h3 id="powerup-modal-title" class="text-2xl font-bold text-gray-900 dark:text-white font-kanit mb-2"></h3>
+                <p id="powerup-modal-desc" class="text-gray-600 dark:text-gray-300 mb-4 text-sm"></p>
+                
+                <div class="flex items-center gap-4 mb-6 text-sm">
+                    <div class="bg-blue-100 dark:bg-blue-900/30 px-3 py-1 rounded-full text-blue-700 dark:text-blue-300 font-bold">
+                        มี: <span id="powerup-user-xp">0 XP</span>
+                    </div>
+                    <div class="text-gray-400">→</div>
+                    <div class="bg-red-100 dark:bg-red-900/30 px-3 py-1 rounded-full text-red-700 dark:text-red-300 font-bold">
+                        จ่าย: <span id="powerup-item-cost">0 XP</span>
+                    </div>
+                </div>
+
+                <div class="w-full flex gap-3">
+                    <button data-modal-close class="flex-1 py-2 rounded-xl bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-bold hover:bg-gray-300 dark:hover:bg-gray-600 transition">ยกเลิก</button>
+                    <button id="powerup-confirm-buy-btn" class="flex-1 py-2 rounded-xl bg-blue-600 text-white font-bold hover:bg-blue-700 transition shadow-md">ยืนยัน</button>
+                </div>
+            </div>
+        </div>
+    </div>`;
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+}
+
 /**
  * Initializes the entire quiz application.
  * This function is the main entry point for the quiz logic, called by quiz-loader.js.
@@ -92,6 +117,9 @@ function getCategoryNames(subCategory) {
  * @param {number|null} customTime - Custom time in seconds, if provided.
  */
 export function init(quizData, storageKey, quizTitle, customTime, action) {
+  // Ensure the power-up modal exists in the DOM
+  ensurePowerUpModalExists();
+
   // --- 1. Element Caching ---
   elements = {
     // Screens
@@ -133,6 +161,15 @@ export function init(quizData, storageKey, quizTitle, customTime, action) {
     hintBtn: document.getElementById("hint-btn"),
     hintContainer: document.getElementById("hint-container"),
     hintSection: document.getElementById("hint-section"),
+    // Power-up container (will be created dynamically)
+    powerUpContainer: null,
+    // Power-up Modal Elements
+    powerupModalIcon: document.getElementById("powerup-modal-icon"),
+    powerupModalTitle: document.getElementById("powerup-modal-title"),
+    powerupModalDesc: document.getElementById("powerup-modal-desc"),
+    powerupUserXp: document.getElementById("powerup-user-xp"),
+    powerupItemCost: document.getElementById("powerup-item-cost"),
+    powerupConfirmBtn: document.getElementById("powerup-confirm-buy-btn"),
   };
   // --- 2. State Initialization ---
   state = {
@@ -147,19 +184,29 @@ export function init(quizData, storageKey, quizTitle, customTime, action) {
     isSoundEnabled: true, // This will be initialized properly later
     correctSound: new Audio("../assets/audio/correct.mp3"),
     incorrectSound: new Audio("../assets/audio/incorrect.mp3"),
+    levelUpSound: new Audio("../assets/audio/level-up.mp3"), // Added missing sound
+    badgeSound: new Audio("../assets/audio/badge-unlock.mp3"), // Added missing sound
     timerMode: "none",
     timeLeft: 0,
     timerId: null,
     initialTime: 0,
     activeScreen: null,
     isFloatingNav: false, // To track the nav state
+    game: new Gamification(), // Initialize game instance
+    xpMultiplier: 1, // Default multiplier
+    used5050: false,
+    usedCut1: false,
+    usedRangeHint: false,
+    usedTolerance: false,
   };
 
   // --- 3. Initial Setup ---
   resumeModalHandler = new ModalHandler('resume-modal');
+  powerupBuyModalHandler = new ModalHandler('powerup-buy-modal');
   bindEventListeners();
   initializeSound();
   checkForSavedQuiz(action); // This will check localStorage and either show the start screen or a resume prompt.
+  setupPowerUpUI(); // Setup the power-up bar
 }
 
 /**
@@ -305,10 +352,10 @@ function updateProgressBar() {
  * @returns {HTMLElement} The created button element.
  */
 function createOptionButton(optionText, previousAnswer) {
-  const button = document.createElement('button');
+  const button = document.createElement("button");
   button.innerHTML = optionText.replace(/\n/g, "<br>");
   button.dataset.optionValue = optionText; // Store raw value
-  button.className = "option-btn w-full p-4 border-2 border-gray-300 dark:border-gray-600 rounded-lg text-left hover:bg-gray-100 dark:hover:bg-gray-700 hover:border-blue-500 dark:hover:border-blue-500 transition-all duration-200 ease-in-out transform hover:-translate-y-0.5 hover:shadow-md";
+  button.className = "option-btn w-full p-4 border-2 border-gray-300 dark:border-gray-600 rounded-lg text-left hover:bg-gray-100 dark:hover:bg-gray-700 hover:border-blue-500 dark:hover:border-blue-500";
 
   if (previousAnswer) {
     // This is a revisited question, so we disable the button and show its state.
@@ -338,12 +385,12 @@ function createOptionButton(optionText, previousAnswer) {
  * @returns {HTMLElement} The created label element which acts as a fully clickable wrapper.
  */
 function createCheckboxOption(optionText, previousAnswer) {
-  const wrapperLabel = document.createElement("label");
+  const wrapperLabel = document.createElement('label');
   // The entire element is now a label, making it fully clickable.
   // Added cursor-pointer to the wrapper itself and a smooth transition.
-  wrapperLabel.className = "option-checkbox-wrapper flex items-center w-full p-4 border-2 border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 hover:border-blue-500 dark:hover:border-blue-500 cursor-pointer transition-all duration-200 ease-in-out transform hover:-translate-y-0.5 hover:shadow-md";
+  wrapperLabel.className = 'option-checkbox-wrapper flex items-center w-full p-4 border-2 border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 hover:border-blue-500 dark:hover:border-blue-500 cursor-pointer transition-colors duration-150';
 
-  const checkbox = document.createElement("input");
+  const checkbox = document.createElement('input');
   checkbox.type = 'checkbox';
   checkbox.value = optionText.trim();
   // The checkbox itself doesn't need a pointer cursor and we prevent double-toggling.
@@ -371,6 +418,199 @@ function createCheckboxOption(optionText, previousAnswer) {
   return wrapperLabel;
 }
 
+/**
+ * Sets up the Power-up UI elements.
+ */
+function setupPowerUpUI() {
+    // Create container if it doesn't exist
+    if (!document.getElementById('power-up-bar')) {
+        const container = document.createElement('div');
+        container.id = 'power-up-bar';
+        container.className = 'flex flex-wrap justify-center gap-3 mb-6 px-2';
+        
+        // Insert before the question container
+        const questionContainer = document.getElementById('question');
+        if (questionContainer && questionContainer.parentNode) {
+            questionContainer.parentNode.insertBefore(container, questionContainer);
+        }
+        elements.powerUpContainer = container;
+    }
+}
+
+/**
+ * Renders the power-up buttons based on current inventory.
+ */
+function renderPowerUps(animateItemId = null) {
+    if (!elements.powerUpContainer) return;
+    
+    const currentQuestion = state.shuffledQuestions[state.currentQuestionIndex];
+    const isNumberQuestion = currentQuestion && currentQuestion.type === 'fill-in-number';
+    const hasOptions = currentQuestion && (currentQuestion.options || currentQuestion.choices);
+
+    const consumables = SHOP_ITEMS.filter(i => i.type === 'consumable');
+    
+    elements.powerUpContainer.innerHTML = consumables.map(item => {
+        // Filter items based on question type
+        if (item.id === 'item_5050' || item.id === 'item_cut_1') {
+            if (!hasOptions) return '';
+        }
+        if (item.id === 'item_range_hint' || item.id === 'item_tolerance') {
+            if (!isNumberQuestion) return '';
+        }
+
+        const count = state.game.getItemCount(item.id);
+        let isUsed = false;
+        if (item.id === 'item_xp_2x') isUsed = state.xpMultiplier > 1;
+        else if (item.id === 'item_5050') isUsed = state.used5050;
+        else if (item.id === 'item_cut_1') isUsed = state.usedCut1;
+        else if (item.id === 'item_range_hint') isUsed = state.usedRangeHint;
+        else if (item.id === 'item_tolerance') isUsed = state.usedTolerance;
+        // item_undo and item_time_freeze are instant effects, not toggle states
+        
+        // Check if item should be disabled (e.g., Time Freeze when no timer)
+        const isTimeFreeze = item.id === 'item_time_freeze';
+        const isTimerDisabled = state.timerMode === 'none';
+        const isDisabled = isUsed || (isTimeFreeze && isTimerDisabled);
+
+        let btnClass = "relative group flex items-center justify-center lg:justify-start gap-0 lg:gap-2 p-2 lg:px-3 lg:py-1.5 rounded-xl lg:rounded-full transition-all shadow-sm border-2 ";
+        
+        if (item.id === animateItemId) {
+            btnClass += "anim-item-pop ";
+        }
+
+        if (isUsed) {
+            btnClass += "bg-green-100 text-green-700 border-green-500 cursor-default opacity-80";
+        } else if (isTimeFreeze && isTimerDisabled) {
+            // Style for unavailable item
+            btnClass += "bg-gray-100 dark:bg-gray-800 text-gray-400 border-gray-200 dark:border-gray-700 cursor-not-allowed opacity-60 grayscale";
+        } else if (count > 0) {
+            btnClass += "bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-600 hover:bg-blue-50 dark:hover:bg-gray-600 hover:border-blue-400 cursor-pointer transform hover:scale-105";
+        } else {
+            btnClass += "bg-gray-100 dark:bg-gray-800 text-gray-400 border-gray-200 dark:border-gray-700 cursor-pointer hover:bg-gray-200";
+        }
+
+        return `
+            <button class="power-up-btn ${btnClass}" data-id="${item.id}" ${isDisabled ? 'disabled' : ''} title="${item.name}">
+                <span class="text-xl lg:text-base leading-none">${item.icon}</span>
+                <span class="hidden lg:inline text-sm font-bold">${item.name}</span>
+                <span class="absolute -top-2 -right-2 lg:static lg:top-auto lg:right-auto bg-gray-100 dark:bg-gray-600 text-gray-800 dark:text-gray-200 px-1.5 py-0.5 rounded-full text-[10px] lg:text-xs font-bold min-w-[1.25rem] text-center border border-gray-200 dark:border-gray-500 shadow-sm z-10">
+                    ${isUsed ? '✓' : count}
+                </span>
+            </button>
+        `;
+    }).join('');
+
+    // Bind events
+    elements.powerUpContainer.querySelectorAll('.power-up-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => handlePowerUpClick(e.currentTarget.dataset.id));
+    });
+}
+
+function handlePowerUpClick(itemId) {
+    const count = state.game.getItemCount(itemId);
+    
+    if (count <= 0) {
+        // Show buy modal
+        const item = SHOP_ITEMS.find(i => i.id === itemId);
+        
+        // Populate Modal Data
+        if (elements.powerupModalIcon) elements.powerupModalIcon.textContent = item.icon;
+        if (elements.powerupModalTitle) elements.powerupModalTitle.textContent = item.name;
+        if (elements.powerupModalDesc) elements.powerupModalDesc.textContent = item.desc;
+        if (elements.powerupUserXp) elements.powerupUserXp.textContent = `${state.game.state.xp.toLocaleString()} XP`;
+        if (elements.powerupItemCost) elements.powerupItemCost.textContent = `${item.cost} XP`;
+
+        // Setup Confirm Button
+        if (elements.powerupConfirmBtn) {
+            // Clone to remove old listeners
+            const newBtn = elements.powerupConfirmBtn.cloneNode(true);
+            elements.powerupConfirmBtn.parentNode.replaceChild(newBtn, elements.powerupConfirmBtn);
+            elements.powerupConfirmBtn = newBtn;
+
+            elements.powerupConfirmBtn.onclick = () => {
+            const result = state.game.buyItem(itemId);
+            if (result.success) {
+                showToast('ซื้อสำเร็จ', result.message, '🛒');
+                renderPowerUps(itemId);
+                powerupBuyModalHandler.close();
+            } else {
+                showToast('ซื้อไม่สำเร็จ', result.message, '❌', 'error');
+                powerupBuyModalHandler.close();
+            }
+            };
+        }
+        
+        powerupBuyModalHandler.open();
+        return;
+    }
+
+    // Use Item Logic
+    if (itemId === 'item_5050') {
+        if (state.used5050) return;
+        if (state.userAnswers[state.currentQuestionIndex]) return; // Cannot use if already answered
+        if (state.game.useItem(itemId)) {
+            apply5050();
+            state.used5050 = true;
+            renderPowerUps(itemId);
+            showToast('ใช้ตัวช่วยสำเร็จ', 'ตัดตัวเลือกผิดออก 2 ข้อ', '✂️');
+        }
+    } else if (itemId === 'item_xp_2x') {
+        if (state.xpMultiplier > 1) return;
+        if (state.game.useItem(itemId)) {
+            state.xpMultiplier = 2;
+            renderPowerUps(itemId);
+            showToast('ใช้ตัวช่วยสำเร็จ', 'XP คูณ 2 สำหรับการสอบครั้งนี้!', '✨', 'gold');
+        }
+    } else if (itemId === 'item_cut_1') {
+        if (state.usedCut1 || state.used5050) return; // Don't stack with 50/50 easily
+        if (state.userAnswers[state.currentQuestionIndex]) return;
+        if (state.game.useItem(itemId)) {
+            applyCut1();
+            state.usedCut1 = true;
+            renderPowerUps(itemId);
+            showToast('ใช้ตัวช่วยสำเร็จ', 'ตัดตัวเลือกผิดออก 1 ข้อ', '🔪');
+        }
+    } else if (itemId === 'item_undo') {
+        const currentAns = state.userAnswers[state.currentQuestionIndex];
+        if (currentAns && !currentAns.isCorrect) {
+             if (state.game.useItem(itemId)) {
+                undoLastAnswer();
+                renderPowerUps(itemId);
+                showToast('ใช้ตัวช่วยสำเร็จ', 'เริ่มตอบข้อนี้ใหม่ได้เลย!', '↩️');
+            }
+        } else {
+             showToast('ไม่สามารถใช้ได้', 'ใช้ได้เฉพาะเมื่อตอบผิดเท่านั้น', '⚠️', 'error');
+        }
+    } else if (itemId === 'item_time_freeze') {
+        if (state.timerMode === 'none' || state.isTimeFrozen) {
+             // This case should be handled by the disabled button, but keep as fallback
+             return;
+        }
+        if (state.game.useItem(itemId)) {
+            freezeTime();
+            renderPowerUps(itemId);
+            showToast('ใช้ตัวช่วยสำเร็จ', 'หยุดเวลา 30 วินาที!', '❄️', 'info');
+        }
+    } else if (itemId === 'item_range_hint') {
+        if (state.usedRangeHint) return;
+        if (state.userAnswers[state.currentQuestionIndex]) return;
+        if (state.game.useItem(itemId)) {
+            applyRangeHint();
+            state.usedRangeHint = true;
+            renderPowerUps(itemId);
+            // Toast handled in applyRangeHint to show the range
+        }
+    } else if (itemId === 'item_tolerance') {
+        if (state.usedTolerance) return;
+        if (state.userAnswers[state.currentQuestionIndex]) return;
+        if (state.game.useItem(itemId)) {
+            state.usedTolerance = true;
+            renderPowerUps(itemId);
+            showToast('ใช้ตัวช่วยสำเร็จ', 'ขยายเป้าคำตอบให้กว้างขึ้น +/- 20%', '⭕', 'success');
+        }
+    }
+}
+
 function showQuestion() {
   // Only stop the timer if it's a per-question timer.
   // The overall timer should continue running across questions.
@@ -378,6 +618,12 @@ function showQuestion() {
     stopTimer();
   }
   resetState();
+  state.used5050 = false; // Reset 50/50 flag for new question
+  state.usedCut1 = false; // Reset Cut 1 flag
+  state.usedRangeHint = false;
+  state.usedTolerance = false;
+  renderPowerUps(); // Update UI
+
   const currentQuestion = state.shuffledQuestions[state.currentQuestionIndex];
   if (!currentQuestion) {
     console.error("Invalid question index:", state.currentQuestionIndex);
@@ -469,13 +715,120 @@ function showQuestion() {
   renderMath(elements.quizScreen); // Render math only within the quiz screen
 }
 
+function apply5050() {
+    const currentQuestion = state.shuffledQuestions[state.currentQuestionIndex];
+    const correctAnswer = String(currentQuestion.answer).trim();
+    
+    // Get all option buttons/checkboxes
+    const optionElements = Array.from(elements.options.children);
+    const wrongOptions = optionElements.filter(el => {
+        const val = el.tagName === 'BUTTON' ? el.dataset.optionValue : el.querySelector('input').value;
+        return val.trim() !== correctAnswer;
+    });
+
+    // Shuffle and pick 2 to hide
+    shuffleArray(wrongOptions);
+    const toHide = wrongOptions.slice(0, 2);
+
+    toHide.forEach(el => {
+        el.style.opacity = '0.3';
+        el.style.pointerEvents = 'none';
+        if (el.tagName === 'BUTTON') el.disabled = true;
+        else el.querySelector('input').disabled = true;
+    });
+}
+
+function applyCut1() {
+    const currentQuestion = state.shuffledQuestions[state.currentQuestionIndex];
+    const correctAnswer = String(currentQuestion.answer).trim();
+    
+    const optionElements = Array.from(elements.options.children);
+    const wrongOptions = optionElements.filter(el => {
+        const val = el.tagName === 'BUTTON' ? el.dataset.optionValue : el.querySelector('input').value;
+        return val.trim() !== correctAnswer && el.style.opacity !== '0.3';
+    });
+
+    if (wrongOptions.length > 0) {
+        shuffleArray(wrongOptions);
+        const toHide = wrongOptions[0];
+        
+        toHide.style.opacity = '0.3';
+        toHide.style.pointerEvents = 'none';
+        if (toHide.tagName === 'BUTTON') toHide.disabled = true;
+        else toHide.querySelector('input').disabled = true;
+    }
+}
+
+function applyRangeHint() {
+    const currentQuestion = state.shuffledQuestions[state.currentQuestionIndex];
+    const correctAnswer = parseFloat(currentQuestion.answer);
+    
+    if (isNaN(correctAnswer)) return;
+
+    // Generate a range that includes the answer
+    // Range width approx 40-60% of value
+    const rangeWidth = Math.abs(correctAnswer * 0.5) || 10; 
+    const offset = (Math.random() - 0.5) * (rangeWidth * 0.5); // Random offset so answer isn't always center
+    
+    let min = correctAnswer - (rangeWidth / 2) + offset;
+    let max = correctAnswer + (rangeWidth / 2) + offset;
+    
+    // Round for cleaner display
+    const decimals = currentQuestion.decimalPlaces || 0;
+    showToast('สโคปคำตอบ', `คำตอบอยู่ระหว่าง ${min.toFixed(decimals)} ถึง ${max.toFixed(decimals)}`, '🎯', 'info');
+}
+
+function undoLastAnswer() {
+    // --- Animation ---
+    const quizScreen = elements.quizScreen;
+    if (quizScreen) {
+        quizScreen.classList.remove('anim-rewind');
+        // Force reflow to allow re-triggering the animation
+        void quizScreen.offsetWidth;
+        quizScreen.classList.add('anim-rewind');
+    }
+    // Reset answer state
+    state.userAnswers[state.currentQuestionIndex] = null;
+    // Note: Score was not incremented for wrong answer, so no need to decrement.
+    saveQuizState();
+    
+    // Reset UI
+    elements.feedback.classList.add("hidden");
+    elements.nextBtn.classList.add("hidden");
+    
+    // Re-enable buttons and remove classes
+    Array.from(elements.options.children).forEach((child) => {
+        const button = child.tagName === 'BUTTON' ? child : child.querySelector('input');
+        const wrapper = child.tagName === 'BUTTON' ? child : child;
+        
+        if (button) button.disabled = false;
+        wrapper.classList.remove("correct", "incorrect");
+        // Keep 50/50 or Cut1 effects if they were used
+        if (wrapper.style.opacity !== '0.3') {
+            wrapper.style.pointerEvents = "auto";
+        }
+    });
+    
+    // Handle text inputs
+    const textInput = document.getElementById('fill-in-answer') || document.getElementById('fill-in-number-answer');
+    if (textInput) {
+        textInput.disabled = false;
+        textInput.value = '';
+        textInput.classList.remove("correct", "incorrect");
+        textInput.focus();
+    }
+    
+    // If per-question timer, maybe restart it? 
+    // For simplicity, we don't restart the timer to avoid exploiting time.
+}
+
 /**
  * Skips the current question by moving it to the end of the quiz array.
  * The user will encounter the question again later.
  */
 function skipQuestion() {
   // Prevent skipping if it's the last unanswered question or if it's already answered.
-  const unansweredQuestions = state.shuffledQuestions.length - state.userAnswers.filter(a => a !== null).length;
+  const unansweredQuestions = state.shuffledQuestions.length - state.userAnswers.filter(a => a).length;
   if (unansweredQuestions <= 1) {
     return;
   }
@@ -491,6 +844,12 @@ function skipQuestion() {
   state.shuffledQuestions.push(questionToSkip);
   state.userAnswers.push(answerSlotToSkip); // This should be null
 
+  // UX Fix: หากอยู่ที่ข้อสุดท้าย การย้ายไปต่อท้ายจะทำให้เจอข้อเดิม
+  // ให้วนกลับไปที่ข้อแรกแทนเพื่อให้เจอข้ออื่น
+  if (state.currentQuestionIndex >= state.shuffledQuestions.length - 1) {
+    state.currentQuestionIndex = 0;
+  }
+
   // Re-render the new question at the same index
   showQuestion();
   saveQuizState(); // Save the new order
@@ -502,23 +861,16 @@ function showHint() {
   const currentQuestion = state.shuffledQuestions[state.currentQuestionIndex];
   if (!currentQuestion || !currentQuestion.hint || !elements.hintContainer || !elements.hintBtn) return;
 
-  // NEW: Add styling to the hint container
-  elements.hintContainer.className = 'mt-4 p-4 bg-yellow-50 dark:bg-yellow-900/30 border-l-4 border-yellow-400 dark:border-yellow-500 text-yellow-800 dark:text-yellow-200 rounded-r-lg flex items-start gap-3 anim-feedback-in';
-  
-  const icon = `<div class="flex-shrink-0 mt-0.5"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" /></svg></div>`;
-  const hintText = `<div><strong class="font-bold">คำใบ้:</strong> ${currentQuestion.hint}</div>`;
-  
-  elements.hintContainer.innerHTML = icon + hintText;
-  
+  elements.hintContainer.innerHTML = currentQuestion.hint;
   renderMath(elements.hintContainer);
   elements.hintContainer.classList.remove('hidden');
   elements.hintBtn.classList.add('hidden'); // Hide the button after it's clicked
 }
-
 /**
  * Evaluates the answer for a multiple-select question.
  */
 function evaluateMultipleAnswer() {
+  if (elements.skipBtn) elements.skipBtn.classList.add("hidden");
   if (state.timerMode === "perQuestion") {
     stopTimer();
   }
@@ -555,10 +907,8 @@ function evaluateMultipleAnswer() {
   if (isCorrect) {
     state.score++;
     elements.scoreCounter.textContent = `คะแนน: ${state.score}`;
-    applyAnimation(answerInput, 'animate-correct');
     if (state.isSoundEnabled) state.correctSound.play().catch(e => console.error("Error playing sound:", e));
   } else {
-    applyAnimation(answerInput, 'animate-shake');
     if (state.isSoundEnabled) state.incorrectSound.play().catch(e => console.error("Error playing sound:", e));
   }
 
@@ -587,6 +937,7 @@ function evaluateMultipleAnswer() {
  * Evaluates the answer for a fill-in-the-blank question.
  */
 function evaluateFillInAnswer() {
+  if (elements.skipBtn) elements.skipBtn.classList.add("hidden");
   if (state.timerMode === "perQuestion") {
     stopTimer();
   }
@@ -598,9 +949,7 @@ function evaluateFillInAnswer() {
   answerInput.disabled = true; // Disable input after submission
 
   const currentQuestion = state.shuffledQuestions[state.currentQuestionIndex];
-  // Make sure correctAnswers is always an array for robust checking
-  const correctAnswersRaw = Array.isArray(currentQuestion.answer) ? currentQuestion.answer : [currentQuestion.answer];
-  const correctAnswers = correctAnswersRaw.map(ans => String(ans).trim().toLowerCase());
+  const correctAnswers = currentQuestion.answer.map(ans => ans.trim().toLowerCase());
 
   const isCorrect = correctAnswers.includes(userAnswer);
 
@@ -626,8 +975,7 @@ function evaluateFillInAnswer() {
   }
 
   // Show feedback
-  const correctAnswerDisplay = Array.isArray(currentQuestion.answer) ? currentQuestion.answer.join(' หรือ ') : currentQuestion.answer;
-  showFeedback(isCorrect, currentQuestion.explanation, correctAnswerDisplay);
+  showFeedback(isCorrect, currentQuestion.explanation, currentQuestion.answer.join(' หรือ '));
 
   // Visually indicate correctness on the input field
   if (isCorrect) {
@@ -644,6 +992,7 @@ function evaluateFillInAnswer() {
  * Evaluates the answer for a fill-in-the-blank question with a numerical answer.
  */
 function evaluateFillInNumberAnswer() {
+  if (elements.skipBtn) elements.skipBtn.classList.add("hidden");
   if (state.timerMode === "perQuestion") {
     stopTimer();
   }
@@ -656,7 +1005,13 @@ function evaluateFillInNumberAnswer() {
 
   const currentQuestion = state.shuffledQuestions[state.currentQuestionIndex];
   const correctAnswer = parseFloat(currentQuestion.answer);
-  const tolerance = currentQuestion.tolerance || 0; // Default tolerance to 0 if not specified
+  
+  // Calculate tolerance: Base tolerance OR Boosted tolerance (20% of answer)
+  let tolerance = currentQuestion.tolerance || 0;
+  if (state.usedTolerance) {
+      const boostedTolerance = Math.abs(correctAnswer * 0.2); // 20%
+      tolerance = Math.max(tolerance, boostedTolerance);
+  }
 
   let isCorrect = false;
   if (!isNaN(userAnswer)) {
@@ -681,11 +1036,9 @@ function evaluateFillInNumberAnswer() {
     state.score++;
     elements.scoreCounter.textContent = `คะแนน: ${state.score}`;
     answerInput.classList.add('correct');
-    applyAnimation(answerInput, 'animate-correct');
     if (state.isSoundEnabled) state.correctSound.play().catch(e => console.error("Error playing sound:", e));
   } else {
     answerInput.classList.add('incorrect');
-    applyAnimation(answerInput, 'animate-shake');
     if (state.isSoundEnabled) state.incorrectSound.play().catch(e => console.error("Error playing sound:", e));
   }
 
@@ -698,7 +1051,7 @@ function resetState() {
   elements.nextBtn.classList.add("hidden");
   elements.skipBtn.classList.add("hidden");
   elements.feedback.classList.add("hidden");
-  elements.feedbackContent.innerHTML = '';
+  elements.feedbackContent.innerHTML = "";
   elements.feedback.className = "hidden mt-6 p-4 rounded-lg";
   elements.prevBtn.classList.add("hidden");
   while (elements.options.firstChild) {
@@ -711,6 +1064,7 @@ function resetState() {
 }
 
 function selectAnswer(e) {
+  if (elements.skipBtn) elements.skipBtn.classList.add("hidden");
   // Only stop the timer if it's a per-question timer.
   // The overall timer should keep running.
   if (state.timerMode === "perQuestion") {
@@ -744,14 +1098,12 @@ function selectAnswer(e) {
     state.score++;
     elements.scoreCounter.textContent = `คะแนน: ${state.score}`;
     selectedBtn.classList.add("correct");
-    applyAnimation(selectedBtn, 'animate-correct');
     if (state.isSoundEnabled)
       state.correctSound
         .play()
         .catch((e) => console.error("Error playing sound:", e));
   } else {
     selectedBtn.classList.add("incorrect");
-    applyAnimation(selectedBtn, 'animate-shake');
     if (state.isSoundEnabled)
       state.incorrectSound
         .play()
@@ -767,11 +1119,7 @@ function selectAnswer(e) {
 
   Array.from(elements.options.children).forEach((button) => {
     if (button.dataset.optionValue.trim() === correctAnswer) {
-      // Always highlight the correct answer
       button.classList.add("correct");
-      if (!correct) {
-        applyAnimation(button, 'animate-correct');
-      }
     }
     button.disabled = true;
   });
@@ -782,41 +1130,32 @@ function selectAnswer(e) {
 }
 
 function showFeedback(isCorrect, explanation, correctAnswer) {
-  const explanationHtml = explanation ? explanation.replace(/\n/g, "<br>") : "";
+  const explanationHtml = explanation
+    ? explanation.replace(/\n/g, "<br>")
+    : "";
+
   // Handle both string and array for correct answer display
   const correctAnswerDisplay = Array.isArray(correctAnswer) ? correctAnswer.join(', ') : correctAnswer;
 
-  let feedbackHtml = '';
-  let containerClasses = '';
-
   if (isCorrect) {
-    feedbackHtml = `
-      <div class="flex-shrink-0">
-        <svg class="h-8 w-8 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
-      </div>
-      <div class="ml-4 flex-grow">
-        <h3 class="font-bold text-lg text-green-800 dark:text-green-300">ถูกต้อง!</h3>
-        ${explanationHtml ? `<p class="text-green-700 dark:text-green-400 mt-2 leading-relaxed">${explanationHtml}</p>` : ''}
-      </div>
-    `;
-    containerClasses = "bg-green-50 dark:bg-green-900/40 border-green-400 dark:border-green-600";
+    elements.feedbackContent.innerHTML = `<h3 class="font-bold text-lg text-green-800 dark:text-green-300">ถูกต้อง!</h3><p class="text-green-700 dark:text-green-400 mt-2">${explanationHtml}</p>`;
+    elements.feedback.classList.add(
+      "bg-green-100",
+      "dark:bg-green-900/50",
+      "border",
+      "border-green-300",
+      "dark:border-green-700"
+    );
   } else {
-    feedbackHtml = `
-      <div class="flex-shrink-0">
-        <svg class="h-8 w-8 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" /></svg>
-      </div>
-      <div class="ml-4 flex-grow">
-        <h3 class="font-bold text-lg text-red-800 dark:text-red-300">ผิดครับ!</h3>
-        <p class="text-red-700 dark:text-red-400 mt-1">คำตอบที่ถูกต้องคือ: <strong class="font-mono">${correctAnswerDisplay}</strong></p>
-        ${explanationHtml ? `<p class="text-red-700 dark:text-red-400 mt-2 leading-relaxed">${explanationHtml}</p>` : ''}
-      </div>
-    `;
-    containerClasses = "bg-red-50 dark:bg-red-900/40 border-red-400 dark:border-red-600";
+    elements.feedbackContent.innerHTML = `<h3 class="font-bold text-lg text-red-800 dark:text-red-300">ผิดครับ!</h3><p class="text-red-700 dark:text-red-400 mt-1">คำตอบที่ถูกต้องคือ: <strong>${correctAnswerDisplay}</strong></p><p class="text-red-700 dark:text-red-400 mt-2">${explanationHtml}</p>`;
+    elements.feedback.classList.add(
+      "bg-red-100",
+      "dark:bg-red-900/50",
+      "border",
+      "border-red-300",
+      "dark:border-red-700"
+    );
   }
-
-  elements.feedbackContent.innerHTML = feedbackHtml;
-  // Use a more distinct style with a left border
-  elements.feedback.className = `mt-8 p-4 rounded-r-lg border-l-4 flex items-start ${containerClasses}`;
   elements.feedback.classList.remove("hidden");
   elements.feedback.classList.add("anim-feedback-in");
 }
@@ -845,7 +1184,7 @@ function handleNextButtonClick() {
       case 'multiple-select':
         evaluateMultipleAnswer();
         break;
-    case 'fill-in': // This case is now redundant but kept for safety.
+      case 'fill-in':
         evaluateFillInAnswer();
         break;
       case 'fill-in-number':
@@ -983,6 +1322,134 @@ function showResults() {
   // Get the appropriate message and icon based on the score
   const resultInfo = getResultInfo(percentage);
 
+  // --- GAMIFICATION: Calculate XP and Check Badges ---
+  let xpEarned = 0;
+  let levelResult = null;
+  let newBadges = [];
+  let completedQuests = [];
+  let newAchievements = [];
+  let physicsXP = 0;
+  let earthXP = 0;
+
+  try {
+    const game = state.game; // Use the instance from state
+    
+    state.userAnswers.forEach((ans, index) => {
+        if (ans && ans.isCorrect) {
+            const question = state.shuffledQuestions[index];
+            let points = 4; // Default for standard questions
+
+            if (question && (question.type === 'multiple-select' || question.type === 'fill-in-number')) {
+                points = 5;
+            }
+            xpEarned += points;
+            
+            // ตรวจสอบหมวดวิชาของข้อนี้
+            let qCategory = 'General';
+            if (ans.sourceQuizCategory) {
+                qCategory = ans.sourceQuizCategory;
+            } else if (ans.subCategory) {
+                qCategory = typeof ans.subCategory === 'object' ? ans.subCategory.main : ans.subCategory;
+            }
+            
+            const lowerCat = String(qCategory).toLowerCase();
+            if (lowerCat.includes('physics') || lowerCat.includes('ฟิสิกส์')) {
+                physicsXP += points;
+            } else if (lowerCat.includes('earth') || lowerCat.includes('astronomy') || lowerCat.includes('space') || lowerCat.includes('โลก') || lowerCat.includes('ดาราศาสตร์') || lowerCat.includes('วิทย์โลก')) {
+                earthXP += points;
+            }
+        }
+    });
+
+    // Apply XP Multiplier
+    xpEarned *= state.xpMultiplier;
+    physicsXP *= state.xpMultiplier;
+    earthXP *= state.xpMultiplier;
+
+    // บันทึกผล XP ลงในระบบ Gamification
+    if (typeof game.submitQuizResult === 'function') {
+        levelResult = game.submitQuizResult(xpEarned, physicsXP, earthXP);
+    } else {
+        // Fallback กรณีไม่มีฟังก์ชันใหม่
+        levelResult = game.addXP(xpEarned, 'General');
+    }
+
+    newBadges = game.checkBadges(percentage);
+
+    // --- DAILY QUEST: Update Progress ---
+    // สำหรับ Quest ยังคงใช้หมวดหมู่หลักของแบบทดสอบ (จากข้อแรก) เพื่อความง่ายในการตรวจสอบเงื่อนไข "ทำแบบทดสอบหมวด..."
+    const firstAnswer = state.userAnswers.find(a => a);
+    let questCategory = 'General';
+    if (firstAnswer) {
+        if (firstAnswer.sourceQuizCategory) {
+            questCategory = firstAnswer.sourceQuizCategory;
+        } else if (firstAnswer.subCategory) {
+            // Handle both string and object formats for subCategory
+            questCategory = typeof firstAnswer.subCategory === 'object' ? firstAnswer.subCategory.main : firstAnswer.subCategory;
+        }
+    }
+
+    if (typeof game.updateQuest === 'function') {
+        const result = game.updateQuest({
+            correctAnswers: correctAnswers,
+            totalQuestions: totalQuestions,
+            category: questCategory,
+            percentage: percentage
+        });
+        
+        // รองรับรูปแบบการคืนค่าใหม่ { completed: [], newAchievements: [] }
+        if (result && result.completed && Array.isArray(result.completed)) {
+            completedQuests = result.completed;
+            newAchievements = result.newAchievements || [];
+        } else if (Array.isArray(result)) {
+            // รองรับรูปแบบเก่า (เผื่อไว้)
+            completedQuests = result;
+        } else if (result && result.completed) {
+            completedQuests = [result]; // รูปแบบเก่ามาก
+        }
+    }
+
+    // Play Sounds for Gamification
+    if (state.isSoundEnabled && levelResult) {
+        if (levelResult.overall?.leveledUp || levelResult.physics?.leveledUp || levelResult.earth?.leveledUp) {
+            if (state.levelUpSound) {
+                state.levelUpSound.currentTime = 0;
+                state.levelUpSound.play().catch(e => console.warn("Could not play level up sound", e));
+            }
+        } else if (newBadges.length > 0) {
+            if (state.badgeSound) {
+                state.badgeSound.currentTime = 0;
+                state.badgeSound.play().catch(e => console.warn("Could not play badge sound", e));
+            }
+        }
+    }
+  } catch (error) {
+    console.error("Gamification error:", error);
+  }
+
+  // --- Show Toast Notifications ---
+  if (levelResult?.overall?.leveledUp) {
+    showToast('Level Up!', `ยินดีด้วย! เลเวลรวมของคุณคือ ${levelResult.overall.info.level}: ${levelResult.overall.info.title}`, '🎉', 'gold');
+  }
+  
+  if (completedQuests.length > 0) {
+      completedQuests.forEach(res => {
+          showToast('ภารกิจประจำวันสำเร็จ!', `${res.quest.desc} (+${res.quest.xp} XP)`, '📜', 'gold');
+      });
+  }
+
+  if (newAchievements.length > 0) {
+      newAchievements.forEach(ach => {
+          showToast('ปลดล็อกความสำเร็จ!', `${ach.title}: ${ach.desc}`, ach.icon, 'success');
+      });
+  }
+  
+  if (newBadges.length > 0) {
+      newBadges.forEach(badge => {
+          showToast('ได้รับเหรียญรางวัลใหม่', `${badge.name}`, badge.icon, 'success');
+      });
+  }
+
   // Prepare stats object for the layout builder
   const stats = {
     totalQuestions,
@@ -994,6 +1461,11 @@ function showResults() {
     formattedAverageTime,
     performanceSummary,
     categoryStats,
+    xpEarned,
+    levelResult,
+    newBadges,
+    physicsXP,
+    earthXP
   };
 
   // Clean up old results and build the new layout
@@ -1124,52 +1596,63 @@ function createStatItem(value, label, icon, theme) {
 function renderResultCategoryChart(categoryStats) {
   const chartCanvas = document.getElementById('result-category-chart');
   if (!chartCanvas) return;
-  const ctx = chartCanvas.getContext('2d');
 
-  const sortedCategories = Object.entries(categoryStats).sort((a, b) => a[0].localeCompare(b[0], 'th'));
+  // Check if Chart.js is loaded to prevent crash
+  if (typeof Chart === 'undefined') {
+    console.warn("Chart.js is not loaded. Skipping chart rendering.");
+    return;
+  }
 
-  const labels = sortedCategories.map(([name, _]) => name);
-  const scores = sortedCategories.map(([_, data]) => data.total > 0 ? (data.correct / data.total) * 100 : 0);
+  try {
+    const ctx = chartCanvas.getContext('2d');
 
-  new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: labels,
-      datasets: [{
-        label: 'คะแนน (%)',
-        data: scores,
-        backgroundColor: scores.map(score => score >= 75 ? 'rgba(34, 197, 94, 0.7)' : score >= 50 ? 'rgba(245, 158, 11, 0.7)' : 'rgba(239, 68, 68, 0.7)'),
-        borderColor: scores.map(score => score >= 75 ? '#16a34a' : score >= 50 ? '#d97706' : '#dc2626'),
-        borderWidth: 1,
-        borderRadius: 4,
-      }]
-    },
-    options: {
-      indexAxis: 'y',
-      responsive: true,
-      maintainAspectRatio: false,
-      scales: {
-        x: {
-          beginAtZero: true,
-          max: 100,
-          ticks: {
-            color: document.documentElement.classList.contains('dark') ? '#d1d5db' : '#374151',
-            callback: value => value + '%'
+    const sortedCategories = Object.entries(categoryStats).sort((a, b) => a[0].localeCompare(b[0], 'th'));
+
+    const labels = sortedCategories.map(([name, _]) => name);
+    const scores = sortedCategories.map(([_, data]) => data.total > 0 ? (data.correct / data.total) * 100 : 0);
+
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'คะแนน (%)',
+          data: scores,
+          backgroundColor: scores.map(score => score >= 75 ? 'rgba(34, 197, 94, 0.7)' : score >= 50 ? 'rgba(245, 158, 11, 0.7)' : 'rgba(239, 68, 68, 0.7)'),
+          borderColor: scores.map(score => score >= 75 ? '#16a34a' : score >= 50 ? '#d97706' : '#dc2626'),
+          borderWidth: 1,
+          borderRadius: 4,
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: {
+            beginAtZero: true,
+            max: 100,
+            ticks: {
+              color: document.documentElement.classList.contains('dark') ? '#d1d5db' : '#374151',
+              callback: value => value + '%'
+            }
+          },
+          y: {
+            ticks: {
+              color: document.documentElement.classList.contains('dark') ? '#d1d5db' : '#374151',
+              font: { family: "'Kanit', sans-serif" }
+            }
           }
         },
-        y: {
-          ticks: {
-            color: document.documentElement.classList.contains('dark') ? '#d1d5db' : '#374151',
-            font: { family: "'Kanit', sans-serif" }
-          }
+        plugins: {
+          legend: { display: false },
+          tooltip: { callbacks: { label: context => `คะแนน: ${context.raw.toFixed(1)}% (${categoryStats[context.label].correct}/${categoryStats[context.label].total} ข้อ)` } }
         }
-      },
-      plugins: {
-        legend: { display: false },
-        tooltip: { callbacks: { label: context => `คะแนน: ${context.raw.toFixed(1)}% (${categoryStats[context.label].correct}/${categoryStats[context.label].total} ข้อ)` } }
       }
-    }
-  });
+    });
+  } catch (error) {
+    console.error("Error rendering chart:", error);
+  }
 }
 
 /**
@@ -1181,90 +1664,85 @@ function buildResultsLayout(resultInfo, stats) {
   const layoutContainer = document.createElement("div");
   layoutContainer.id = "modern-results-layout";
   layoutContainer.className =
-    "w-full max-w-4xl mx-auto flex flex-col items-center gap-6 mt-8 mb-6 px-4";
+    "w-full max-w-4xl mx-auto flex flex-col items-center gap-8 mt-8 mb-6 px-4";
 
   // --- 1. Message Area (Icon, Title, Message) ---
   const messageContainer = document.createElement("div");
-  messageContainer.className = "text-center w-full anim-fade-in-up";
-  messageContainer.style.animationDelay = "0ms";
+  messageContainer.className = "text-center";
   messageContainer.innerHTML = `
-        <div class="relative w-24 h-24 mx-auto mb-4 flex items-center justify-center rounded-full bg-white dark:bg-gray-800 shadow-lg ring-4 ring-opacity-20 ${resultInfo.colorClass.replace('text-', 'ring-')}">
-            <div class="${resultInfo.colorClass} transform scale-125">${resultInfo.icon}</div>
-        </div>
-        <h2 class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-gray-800 to-gray-600 dark:from-gray-100 dark:to-gray-300 mb-2">${resultInfo.title}</h2>
-        <p class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">ชุดข้อสอบ: <span class="text-blue-600 dark:text-blue-400">${state.quizTitle}</span></p>
-        <p class="text-lg text-gray-700 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed">${resultInfo.message}</p>
+        <div class="w-16 h-16 mx-auto mb-3 ${resultInfo.colorClass}">${resultInfo.icon}</div>
+        <h2 class="text-3xl font-bold text-gray-800 dark:text-gray-100">${resultInfo.title}</h2>
+        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">จากชุดข้อสอบ: <span class="font-semibold">${state.quizTitle}</span></p>
+        <p class="mt-2 text-lg text-gray-600 dark:text-gray-300">${resultInfo.message}</p>
     `;
   layoutContainer.appendChild(messageContainer);
 
   // --- 2. Data Container (for Circle + Stats) ---
   const dataContainer = document.createElement("div");
   dataContainer.className =
-    "w-full grid grid-cols-1 md:grid-cols-2 items-center gap-8 p-8 bg-white dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 anim-fade-in-up";
-  dataContainer.style.animationDelay = "100ms";
+    "w-full grid grid-cols-1 md:grid-cols-2 items-center gap-8 p-6 bg-white dark:bg-gray-800/50 rounded-xl shadow-md border border-gray-200 dark:border-gray-700";
 
   // --- 2a. Progress Circle ---
-  let progressColor = "text-red-500";
-  if (stats.percentage >= 80) progressColor = "text-green-500";
-  else if (stats.percentage >= 50) progressColor = "text-yellow-500";
-
   const progressContainer = document.createElement("div");
-  progressContainer.className = "relative w-48 h-48 mx-auto flex-shrink-0 transform transition-transform hover:scale-105 duration-300";
+  progressContainer.className = "relative w-40 h-40 mx-auto flex-shrink-0";
   progressContainer.innerHTML = `
-        <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
-            <path class="text-gray-100 dark:text-gray-700"
-                stroke="currentColor" stroke-width="3" fill="none"
+        <svg class="w-full h-full" viewBox="0 0 36 36">
+            <path class="text-gray-200 dark:text-gray-700"
+                stroke="currentColor" stroke-width="2.5" fill="none"
                 d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-            <path class="${progressColor} drop-shadow-md"
-                stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"
+            <path class="text-blue-500"
+                stroke="currentColor" stroke-width="2.5" fill="none"
+                stroke-linecap="round"
                 stroke-dasharray="0, 100"
                 d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
         </svg>
         <div class="absolute inset-0 flex flex-col items-center justify-center">
-            <span class="text-5xl font-black text-gray-800 dark:text-gray-100 tracking-tight">${stats.percentage}<span class="text-2xl">%</span></span>
-            <span class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mt-1">คะแนนรวม</span>
+            <span class="text-4xl font-bold text-gray-700 dark:text-gray-200">${stats.percentage}%</span>
+            <span class="text-sm text-gray-500 dark:text-gray-400">คะแนนรวม</span>
         </div>
     `;
   dataContainer.appendChild(progressContainer);
 
   // Animate the circle
   setTimeout(() => {
-    const circlePath = progressContainer.querySelector(`path.${progressColor}`);
+    const circlePath = progressContainer.querySelector("path.text-blue-500");
     if (circlePath) {
-      circlePath.style.transition = "stroke-dasharray 1.5s cubic-bezier(0.4, 0, 0.2, 1)";
+      circlePath.style.transition = "stroke-dasharray 1s ease-out";
       circlePath.style.strokeDasharray = `${stats.percentage}, 100`;
     }
-  }, 200);
+  }, 100);
 
   // --- 2b. Stats List ---
   const statsContainer = document.createElement("div");
-  statsContainer.className = "grid grid-cols-2 gap-4 w-full";
-
-  const createEnhancedStatItem = (value, label, icon, colorClass) => {
-      const item = document.createElement("div");
-      item.className = "flex flex-col items-center justify-center p-4 rounded-xl bg-gray-50 dark:bg-gray-700/50 border border-gray-100 dark:border-gray-600 transition-all hover:shadow-md hover:bg-white dark:hover:bg-gray-700";
-      item.innerHTML = `
-        <div class="mb-2 p-2 rounded-full ${colorClass.replace('text-', 'bg-').replace('700', '100').replace('300', '900/30')} ${colorClass}">
-            ${icon}
-        </div>
-        <div class="text-2xl font-bold text-gray-800 dark:text-gray-100">${value}</div>
-        <div class="text-xs text-gray-500 dark:text-gray-400 font-medium">${label}</div>
-      `;
-      return item;
-  };
+  statsContainer.className = "grid grid-cols-2 gap-x-4 gap-y-5 w-full";
 
   // Define icons for stats
   const icons = {
-    correct: `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>`,
-    incorrect: `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>`,
-    time: `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`,
-    avg: `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>`,
+    correct: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>`,
+    incorrect: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>`,
+    time: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" /></svg>`,
+    total: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a1 1 0 100 2h16a1 1 0 100-2H2zM5 15a1 1 0 110 2h10a1 1 0 110-2H5z" /></svg>`,
   };
 
-  statsContainer.appendChild(createEnhancedStatItem(stats.correctAnswers, "ตอบถูก", icons.correct, "text-green-600 dark:text-green-400"));
-  statsContainer.appendChild(createEnhancedStatItem(stats.incorrectAnswersCount, "ตอบผิด", icons.incorrect, "text-red-600 dark:text-red-400"));
-  statsContainer.appendChild(createEnhancedStatItem(stats.formattedTime, "เวลาที่ใช้", icons.time, "text-blue-600 dark:text-blue-400"));
-  statsContainer.appendChild(createEnhancedStatItem(stats.formattedAverageTime, "เฉลี่ย/ข้อ", icons.avg, "text-purple-600 dark:text-purple-400"));
+  // Programmatically create and append stat items
+  statsContainer.appendChild(
+    createStatItem(stats.correctAnswers, "คำตอบถูก", icons.correct, "green")
+  );
+  statsContainer.appendChild(
+    createStatItem(
+      stats.incorrectAnswersCount,
+      "คำตอบผิด",
+      icons.incorrect,
+      "red"
+    )
+  );
+
+  statsContainer.appendChild(
+    createStatItem(stats.formattedTime, "เวลาที่ใช้", icons.time, "blue")
+  );
+  statsContainer.appendChild(
+    createStatItem(stats.formattedAverageTime, "เฉลี่ยต่อข้อ", icons.time, "purple")
+  );
 
   dataContainer.appendChild(statsContainer);
   layoutContainer.appendChild(dataContainer);
@@ -1272,13 +1750,9 @@ function buildResultsLayout(resultInfo, stats) {
   // --- 3. Category Performance Chart ---
   if (stats.categoryStats && Object.keys(stats.categoryStats).length > 0) {
     const chartContainer = document.createElement('div');
-    chartContainer.className = 'w-full p-6 bg-white dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 anim-fade-in-up';
-    chartContainer.style.animationDelay = "200ms";
+    chartContainer.className = 'w-full p-6 bg-white dark:bg-gray-800/50 rounded-xl shadow-md border border-gray-200 dark:border-gray-700';
     chartContainer.innerHTML = `
-            <div class="flex items-center justify-between mb-6">
-                <h3 class="text-lg font-bold text-gray-800 dark:text-gray-200 font-kanit">คะแนนตามหมวดหมู่</h3>
-                <div class="h-1 w-12 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
-            </div>
+            <h3 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4 font-kanit text-center">คะแนนตามหมวดหมู่</h3>
             <div class="relative h-64">
                 <canvas id="result-category-chart"></canvas>
             </div>
@@ -1286,46 +1760,108 @@ function buildResultsLayout(resultInfo, stats) {
     layoutContainer.appendChild(chartContainer);
   }
 
+  // --- NEW: XP Breakdown Section with Animation ---
+  if (stats.xpEarned > 0) {
+    const xpSection = document.createElement('div');
+    xpSection.className = "w-full max-w-2xl mx-auto p-4 bg-white dark:bg-gray-800/50 rounded-xl border border-blue-100 dark:border-gray-700 shadow-sm overflow-hidden";
+    xpSection.innerHTML = `<h3 class="text-center text-gray-500 dark:text-gray-400 font-kanit mb-4 text-sm">ค่าประสบการณ์ที่ได้รับ (XP)</h3>`;
+    
+    const xpGrid = document.createElement('div');
+    xpGrid.className = "flex justify-center items-start gap-4 sm:gap-8";
+    
+    const items = [
+        { 
+            label: 'รวม', 
+            value: stats.xpEarned, 
+            color: 'text-blue-600 dark:text-blue-400', 
+            progress: stats.levelResult?.overall.info,
+            progressColor: 'bg-blue-500',
+            delay: 0 
+        },
+    ];
+    
+    if (stats.physicsXP > 0) items.push({ 
+        label: 'ฟิสิกส์', 
+        value: stats.physicsXP, 
+        color: 'text-purple-600 dark:text-purple-400', 
+        progress: stats.levelResult?.physics.info,
+        progressColor: 'bg-purple-500',
+        delay: 150 
+    });
+    if (stats.earthXP > 0) items.push({ 
+        label: 'วิทย์โลก', 
+        value: stats.earthXP, 
+        color: 'text-teal-600 dark:text-teal-400', 
+        progress: stats.levelResult?.earth.info,
+        progressColor: 'bg-teal-500',
+        delay: 300 
+    });
+    
+    items.forEach(item => {
+        const el = document.createElement('div');
+        el.className = "flex flex-col items-center transform scale-0 transition-transform duration-500 cubic-bezier(0.34, 1.56, 0.64, 1) w-28";
+        
+        let progressBarHtml = '';
+        if (item.progress && item.progress.nextLevelXP) {
+            const xpNeeded = item.progress.nextLevelXP - item.progress.currentXP;
+            progressBarHtml = `
+                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 mt-2">
+                    <div class="${item.progressColor} h-1.5 rounded-full" style="width: ${item.progress.progressPercent}%"></div>
+                </div>
+                <span class="text-[10px] text-gray-400 dark:text-gray-500 mt-1">อีก ${xpNeeded.toLocaleString()} XP</span>
+            `;
+        } else if (item.progress) { // Max level case
+             progressBarHtml = `
+                <div class="w-full bg-yellow-400 rounded-full h-1.5 mt-2"></div>
+                <span class="text-[10px] text-yellow-500 mt-1 font-bold">MAX LEVEL</span>
+            `;
+        }
+
+        el.innerHTML = `
+            <span class="text-3xl font-bold ${item.color}">+${item.value}</span>
+            <span class="text-xs text-gray-500 dark:text-gray-400 mt-1 font-medium">${item.label}</span>
+            ${progressBarHtml}
+        `;
+        xpGrid.appendChild(el);
+        
+        // Trigger animation
+        setTimeout(() => el.classList.remove('scale-0'), 100 + item.delay);
+    });
+    
+    xpSection.appendChild(xpGrid);
+    layoutContainer.appendChild(xpSection);
+  }
+
   // --- 4. Performance Summary ---
   if (stats.performanceSummary && (stats.performanceSummary.best || stats.performanceSummary.worst)) {
     const summaryContainer = document.createElement('div');
-    summaryContainer.className = 'w-full mt-2 anim-fade-in-up';
-    summaryContainer.style.animationDelay = "300ms";
-    
-    const summaryGrid = document.createElement('div');
-    summaryGrid.className = 'grid grid-cols-1 md:grid-cols-2 gap-4';
+    summaryContainer.className = 'w-full max-w-2xl mx-auto mt-6 p-4 bg-white dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm';
+    summaryContainer.innerHTML = `<h3 class="text-lg font-bold text-gray-800 dark:text-gray-200 mb-3 font-kanit">สรุปผลการทำแบบทดสอบ</h3>`;
+
+    const summaryList = document.createElement('ul');
+    summaryList.className = 'space-y-2 text-sm';
 
     if (stats.performanceSummary.best) {
-      const bestCard = document.createElement('div');
-      bestCard.className = 'p-4 rounded-xl bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-800/50 flex items-start gap-3';
-      bestCard.innerHTML = `
-        <div class="p-2 bg-green-100 dark:bg-green-800/40 rounded-lg text-green-600 dark:text-green-400">
-            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
-        </div>
-        <div>
-            <h4 class="text-sm font-bold text-green-800 dark:text-green-300 mb-1">จุดแข็งของคุณ</h4>
-            <p class="text-sm text-green-700 dark:text-green-400">${stats.performanceSummary.best}</p>
-        </div>
-      `;
-      summaryGrid.appendChild(bestCard);
+      const bestItem = document.createElement('li');
+      bestItem.className = 'flex items-start gap-3';
+      bestItem.innerHTML = `
+                <svg class="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
+                <span class="text-gray-700 dark:text-gray-300">ทำได้ดีมากในหมวดหมู่: <strong class="font-semibold text-green-600 dark:text-green-400">${stats.performanceSummary.best}</strong></span>
+            `;
+      summaryList.appendChild(bestItem);
     }
 
     if (stats.performanceSummary.worst) {
-      const worstCard = document.createElement('div');
-      worstCard.className = 'p-4 rounded-xl bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-100 dark:border-yellow-800/50 flex items-start gap-3';
-      worstCard.innerHTML = `
-        <div class="p-2 bg-yellow-100 dark:bg-yellow-800/40 rounded-lg text-yellow-600 dark:text-yellow-400">
-            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.21 3.03-1.742 3.03H4.42c-1.532 0-2.492-1.696-1.742-3.03l5.58-9.92zM10 13a1 1 0 110-2 1 1 0 010 2zm-1-8a1 1 0 00-1 1v3a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>
-        </div>
-        <div>
-            <h4 class="text-sm font-bold text-yellow-800 dark:text-yellow-300 mb-1">ควรทบทวนเพิ่มเติม</h4>
-            <p class="text-sm text-yellow-700 dark:text-yellow-400">${stats.performanceSummary.worst}</p>
-        </div>
-      `;
-      summaryGrid.appendChild(worstCard);
+      const worstItem = document.createElement('li');
+      worstItem.className = 'flex items-start gap-3';
+      worstItem.innerHTML = `
+                <svg class="h-5 w-5 text-yellow-500 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.21 3.03-1.742 3.03H4.42c-1.532 0-2.492-1.696-1.742-3.03l5.58-9.92zM10 13a1 1 0 110-2 1 1 0 010 2zm-1-8a1 1 0 00-1 1v3a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>
+                <span class="text-gray-700 dark:text-gray-300">หมวดหมู่ที่ควรทบทวนเพิ่มเติม: <strong class="font-semibold text-yellow-600 dark:text-yellow-500">${stats.performanceSummary.worst}</strong></span>
+            `;
+      summaryList.appendChild(worstItem);
     }
 
-    summaryContainer.appendChild(summaryGrid);
+    summaryContainer.appendChild(summaryList);
     layoutContainer.appendChild(summaryContainer);
   }
 
@@ -1337,7 +1873,19 @@ function buildResultsLayout(resultInfo, stats) {
   renderResultCategoryChart(stats.categoryStats);
 
   // --- 8. Final UI Updates ---
+  // Show or hide the review button based on incorrect answers
+  const incorrectAnswers = getIncorrectAnswers();
+  if (incorrectAnswers.length > 0) {
+    elements.reviewBtn.classList.remove("hidden");
+  } else {
+    elements.reviewBtn.classList.add("hidden");
+  }
+
   renderMath(layoutContainer); // Render math only in the new results layout
+}
+function getIncorrectAnswers() {
+  // Add a check for `answer` to prevent errors if some questions were not answered
+  return state.userAnswers.filter((answer) => answer && !answer.isCorrect);
 }
 // --- Core Quiz Logic ---
 
@@ -1521,29 +2069,25 @@ function renderReviewItems(sourceAnswers, filterCategory, totalIncorrect) {
       .map(tag => `<span class="inline-block mt-2 px-2.5 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300 text-xs font-semibold rounded-full">${tag}</span>`)
       .join('');
 
-    // Handle both string and array for correct answer display
-    const correctAnswerDisplay = Array.isArray(answer.correctAnswer) ? answer.correctAnswer.join(', ') : answer.correctAnswer;
-    const selectedAnswerDisplay = Array.isArray(answer.selectedAnswer) ? answer.selectedAnswer.join(', ') : answer.selectedAnswer;
-
     reviewItem.innerHTML = `
             <div class="flex items-start gap-4">
                 <span class="flex-shrink-0 h-8 w-8 flex items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-full text-gray-600 dark:text-gray-300 font-bold">${index + 1}</span>
                 <div class="flex-grow min-w-0">
                     <div class="text-lg font-semibold text-gray-800 dark:text-gray-200 break-words">${questionHtml}</div>
-                    ${tagsHtml ? `<div class="mt-2">${tagsHtml}</div>` : ''}
+                    ${tagsHtml ? `<div class="mt-1">${tagsHtml}</div>` : ''}
                 </div>
             </div>
-            <div class="mt-4 pl-12 space-y-3">
+            <div class="mt-4 space-y-3">
                 ${!answer.isCorrect ? `
-                    <div class="flex items-start gap-3 p-3 rounded-lg bg-red-50 dark:bg-red-900/40 border border-red-200 dark:border-red-700/60">
+                    <div class="flex items-start gap-3 p-3 rounded-md bg-red-50 dark:bg-red-900/40 border border-red-200 dark:border-red-700/60">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 text-red-500 dark:text-red-400 mt-0.5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" /></svg>
                         <div>
                             <p class="text-sm font-medium text-red-800 dark:text-red-300">คำตอบของคุณ</p>
-                            <p class="text-red-700 dark:text-red-400 font-mono break-words whitespace-pre-wrap">${selectedAnswerDisplay || ""}</p>
+                            <p class="text-red-700 dark:text-red-400 font-mono break-words whitespace-pre-wrap">${answer.selectedAnswer || ""}</p>
                         </div>
                     </div>
                 ` : ''}
-                <div class="flex items-start gap-3 p-3 rounded-lg bg-green-50 dark:bg-green-900/40 border border-green-200 dark:border-green-700/60">
+                <div class="flex items-start gap-3 p-3 rounded-md bg-green-50 dark:bg-green-900/40 border border-green-200 dark:border-green-700/60">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 text-green-500 dark:text-green-400 mt-0.5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
                     <div>
                         <p class="text-sm font-medium text-green-800 dark:text-green-300">คำตอบที่ถูกต้อง</p>
@@ -1552,12 +2096,12 @@ function renderReviewItems(sourceAnswers, filterCategory, totalIncorrect) {
                 </div>
             </div>
             ${explanationHtml ? `
-            <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700/60">
+            <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
                 <div class="flex items-start gap-3">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 text-blue-500 dark:text-blue-400 mt-0.5" viewBox="0 0 20 20" fill="currentColor"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z" /></svg>
                     <div>
                         <p class="text-sm font-medium text-blue-800 dark:text-blue-300">คำอธิบาย</p>
-                        <p class="text-gray-600 dark:text-gray-400 mt-1 break-words leading-relaxed">${explanationHtml}</p>
+                        <p class="text-gray-600 dark:text-gray-400 mt-1 break-words">${explanationHtml}</p>
                     </div>
                 </div>
             </div>` : ""}
@@ -1783,6 +2327,18 @@ function startTimer() {
   state.timerId = setInterval(tick, 1000);
 }
 
+function freezeTime() {
+    stopTimer();
+    state.isTimeFrozen = true;
+    if (elements.timerDisplay) elements.timerDisplay.classList.add('text-blue-500', 'animate-pulse');
+    
+    setTimeout(() => {
+        state.isTimeFrozen = false;
+        if (elements.timerDisplay) elements.timerDisplay.classList.remove('text-blue-500', 'animate-pulse');
+        state.timerId = setInterval(tick, 1000); // Resume timer
+    }, 30000);
+}
+
 function handleTimeUp() {
   if (state.timerMode === "perQuestion") {
     // Ensure we don't proceed if the question index is out of bounds
@@ -1896,13 +2452,19 @@ function bindEventListeners() {
     elements.skipBtn.addEventListener("click", skipQuestion);
   }
   elements.nextBtn.addEventListener("click", handleNextButtonClick);
+  if (elements.nextBtn) elements.nextBtn.addEventListener("click", handleNextButtonClick);
 
   // Keep other listeners as they are.
   elements.startBtn.addEventListener("click", startQuiz);
   elements.prevBtn.addEventListener("click", showPreviousQuestion);
   elements.restartBtn.addEventListener("click", startQuiz);
   elements.reviewBtn.addEventListener("click", showReview);
-  elements.backToResultBtn.addEventListener("click", () => switchScreen(elements.resultScreen));
+  elements.backToResultBtn.addEventListener("click", backToResult);
+  if (elements.startBtn) elements.startBtn.addEventListener("click", startQuiz);
+  if (elements.prevBtn) elements.prevBtn.addEventListener("click", showPreviousQuestion);
+  if (elements.restartBtn) elements.restartBtn.addEventListener("click", startQuiz);
+  if (elements.reviewBtn) elements.reviewBtn.addEventListener("click", showReview);
+  if (elements.backToResultBtn) elements.backToResultBtn.addEventListener("click", backToResult);
   if (elements.soundToggleBtn) {
     elements.soundToggleBtn.addEventListener("click", toggleSound);
   }

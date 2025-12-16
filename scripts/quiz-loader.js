@@ -101,7 +101,8 @@ export async function initializeQuiz() {
                             ...question,
                             type: question.type || 'question',
                             question: `<div class="p-4 mb-4 bg-gray-100 dark:bg-gray-800 border-l-4 border-blue-500 rounded-r-lg"><p class="font-bold text-lg">${title}</p><div class="mt-2 text-gray-700 dark:text-gray-300">${description}</div></div>${question.question}`,
-                            sourceQuizTitle: quizInfo.title
+                            sourceQuizTitle: quizInfo.title,
+                            sourceQuizCategory: quizInfo.category
                         });
                     }
                 }
@@ -110,7 +111,8 @@ export async function initializeQuiz() {
                 processedQuizData.push({
                     ...item,
                     type: item.type || 'question',
-                    sourceQuizTitle: quizInfo.title
+                    sourceQuizTitle: quizInfo.title,
+                    sourceQuizCategory: quizInfo.category
                 });
             }
         }

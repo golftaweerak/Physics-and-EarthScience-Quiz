@@ -215,7 +215,7 @@ export function getQuizProgress(storageKey, totalQuestions) {
       return defaultState;
     // Use the length from the saved state if available, as it's the most accurate count
     // for the session the user was in. Fallback to the static totalQuestions.
-    const actualTotalQuestions = savedState.shuffledQuestions?.length || totalQuestions;
+    const actualTotalQuestions = (savedState.shuffledQuestions && savedState.shuffledQuestions.length) || totalQuestions;
 
     // A more robust way to count answered questions is to check the userAnswers array.
     // This avoids ambiguity with currentQuestionIndex, which points to the *next* question to be shown.
@@ -319,7 +319,7 @@ export async function getAllQuizProgress() {
         ...progress,
         title: quiz.title,
         category:
-          categoryDetails[quiz.category]?.title || quiz.category || "ไม่ระบุ",
+          (categoryDetails[quiz.category] && categoryDetails[quiz.category].title) || quiz.category || "ไม่ระบุ",
         storageKey: storageKey,
       };
     })
@@ -398,8 +398,7 @@ export async function fetchAllQuizData() {
     } catch (error) {
         // Instead of throwing, log the error and return an empty array.
         // This allows Promise.all to complete successfully even if some files are missing.
-        // Make the warning more informative, pointing towards a likely data consistency issue.
-        console.warn(`Data file not found for quiz ID "${quiz.id}" (path: ${scriptPath}). This is expected if the quiz entry in 'quizzes-list.js' is obsolete. Skipping. Original error: ${error.message}`);
+        console.warn(`Could not load or parse data for quiz ID "${quiz.id}" from ${scriptPath}. Skipping. Error: ${error.message}`);
         return []; // Return an empty array for this failed import
     }
   });
@@ -466,4 +465,72 @@ export async function fetchAllQuizData() {
     byCategory: questionsBySubCategoryCache,
     scenarios: scenariosCache,
   };
+}
+
+/**
+ * Calculates the learner's strengths and weaknesses based on aggregated quiz data.
+ * Analyzes performance across different sub-categories (topics).
+ * @returns {Promise<{strengths: Array<{name: string, percentage: number, total: number}>, weaknesses: Array<{name: string, percentage: number, total: number}>}>}
+ */
+export async function calculateStrengthsAndWeaknesses() {
+  const allProgress = await getDetailedProgressForAllQuizzes();
+  const topicStats = {};
+
+  allProgress.forEach((quiz) => {
+    if (!quiz.userAnswers) return;
+
+    quiz.userAnswers.forEach((answer) => {
+      if (!answer) return;
+
+      // Determine the topic name (Main Category)
+      let topicName = "General";
+      if (answer.subCategory) {
+        if (typeof answer.subCategory === "object" && answer.subCategory.main) {
+          topicName = answer.subCategory.main;
+        } else if (typeof answer.subCategory === "string") {
+          topicName = answer.subCategory;
+        }
+      } else if (quiz.subCategory) {
+        // Fallback to quiz level subCategory
+        topicName = quiz.subCategory;
+      }
+
+      // Clean up topic name (remove prefixes like "บทที่ 1: ")
+      topicName = topicName.replace(/^บทที่\s*\d+:\s*/, "").trim();
+
+      if (!topicStats[topicName]) {
+        topicStats[topicName] = { correct: 0, total: 0 };
+      }
+
+      topicStats[topicName].total++;
+      if (answer.isCorrect) {
+        topicStats[topicName].correct++;
+      }
+    });
+  });
+
+  // Convert to array and calculate percentages
+  const topics = Object.entries(topicStats).map(([name, stats]) => ({
+    name,
+    correct: stats.correct,
+    total: stats.total,
+    percentage: stats.total > 0 ? (stats.correct / stats.total) * 100 : 0,
+  }));
+
+  // Filter out topics with too few questions to be significant (e.g., < 3 questions)
+  const significantTopics = topics.filter((t) => t.total >= 3);
+
+  // Sort by percentage descending
+  significantTopics.sort((a, b) => b.percentage - a.percentage);
+
+  // Top 3 Strengths (Best 3)
+  const strengths = significantTopics.slice(0, 3);
+
+  // Bottom 3 Weaknesses (Worst 3, sorted ascending)
+  // We take the whole list, sort ascending, then take top 3
+  const weaknesses = [...significantTopics]
+    .sort((a, b) => a.percentage - b.percentage)
+    .slice(0, 3);
+
+  return { strengths, weaknesses };
 }
