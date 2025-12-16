@@ -77,16 +77,19 @@ export const BADGES = [
 // กำหนดภารกิจประจำวัน (Daily Quests)
 export const DAILY_QUESTS = [
     { id: 'quiz_1', desc: 'ทำแบบทดสอบให้จบ 1 ครั้ง', target: 1, type: 'quiz_complete', xp: 100 },
-    { id: 'quiz_3', desc: 'ทำแบบทดสอบให้จบ 3 ครั้ง', target: 3, type: 'quiz_complete', xp: 250 },
-    { id: 'correct_5', desc: 'ตอบถูกให้ได้ 5 ข้อ', target: 5, type: 'correct_answers', xp: 150 },
-    { id: 'correct_10', desc: 'ตอบถูกให้ได้ 10 ข้อ', target: 10, type: 'correct_answers', xp: 200 },
-    { id: 'correct_20', desc: 'ตอบถูกให้ได้ 20 ข้อ', target: 20, type: 'correct_answers', xp: 300 },
-    { id: 'physics_3', desc: 'ทำโจทย์ฟิสิกส์ 3 ข้อ', target: 3, type: 'questions_category', category: 'Physics', xp: 200 },
-    { id: 'physics_5', desc: 'ทำโจทย์ฟิสิกส์ 5 ข้อ', target: 5, type: 'questions_category', category: 'Physics', xp: 300 },
-    { id: 'earth_3', desc: 'ทำโจทย์วิทย์โลก 3 ข้อ', target: 3, type: 'questions_category', category: 'Earth', xp: 200 },
-    { id: 'earth_5', desc: 'ทำโจทย์วิทย์โลก 5 ข้อ', target: 5, type: 'questions_category', category: 'Earth', xp: 300 },
-    { id: 'score_80', desc: 'ได้คะแนน 80% ขึ้นไป 1 ครั้ง', target: 1, type: 'high_score', threshold: 80, xp: 300 },
-    { id: 'score_100', desc: 'ได้คะแนนเต็ม (100%) 1 ครั้ง', target: 1, type: 'high_score', threshold: 100, xp: 400 },
+    { id: 'quiz_2', desc: 'ทำแบบทดสอบให้จบ 2 ครั้ง', target: 2, type: 'quiz_complete', xp: 200 },
+    { id: 'correct_10', desc: 'ตอบถูกให้ได้ 10 ข้อ', target: 10, type: 'correct_answers', xp: 150 },
+    { id: 'correct_15', desc: 'ตอบถูกให้ได้ 15 ข้อ', target: 15, type: 'correct_answers', xp: 250 },
+    { id: 'physics_5', desc: 'ทำโจทย์ฟิสิกส์ 5 ข้อ', target: 5, type: 'questions_category', category: 'Physics', xp: 250 },
+    { id: 'earth_5', desc: 'ทำโจทย์วิทย์โลก 5 ข้อ', target: 5, type: 'questions_category', category: 'Earth', xp: 250 },
+    { id: 'score_80', desc: 'ทำคะแนนให้ได้ 80% ขึ้นไป 1 ครั้ง', target: 1, type: 'high_score', threshold: 80, xp: 250 },
+    { id: 'score_100', desc: 'ทำคะแนนเต็ม (100%) 1 ครั้ง', target: 1, type: 'high_score', threshold: 100, xp: 500 },
+    // NEW QUEST TYPES
+    { id: 'theory_10', desc: 'ตอบคำถามทฤษฎีให้ถูก 10 ข้อ', target: 10, type: 'correct_answers_type', questionType: 'theory', xp: 250 },
+    { id: 'calc_5', desc: 'ตอบคำถามคำนวณให้ถูก 5 ข้อ', target: 5, type: 'correct_answers_type', questionType: 'calculation', xp: 300 },
+    { id: 'physics_quiz_1', desc: 'ทำแบบทดสอบหมวดฟิสิกส์ 1 ครั้ง', target: 1, type: 'quiz_category', category: 'Physics', xp: 150 },
+    { id: 'earth_quiz_1', desc: 'ทำแบบทดสอบหมวดวิทย์โลก 1 ครั้ง', target: 1, type: 'quiz_category', category: 'Earth', xp: 150 },
+    // More quests for variety
     { id: 'quiz_5', desc: 'ทำแบบทดสอบให้จบ 5 ครั้ง', target: 5, type: 'quiz_complete', xp: 400 },
     { id: 'correct_50', desc: 'ตอบถูกให้ได้ 50 ข้อ', target: 50, type: 'correct_answers', xp: 800 },
     { id: 'physics_10', desc: 'ทำโจทย์ฟิสิกส์ 10 ข้อ', target: 10, type: 'questions_category', category: 'Physics', xp: 300 },
@@ -842,6 +845,16 @@ export class Gamification {
             } else if (q.type === 'high_score') {
                 const threshold = q.threshold || 80;
                 if (stats.percentage >= threshold) progressMade = 1;
+            } else if (q.type === 'correct_answers_type') {
+                if (q.questionType === 'theory') {
+                    progressMade = stats.correctTheory || 0;
+                } else if (q.questionType === 'calculation') {
+                    progressMade = stats.correctCalculation || 0;
+                }
+            } else if (q.type === 'quiz_category') {
+                if (this.checkCategoryMatch(stats.category, q.category)) {
+                    progressMade = 1;
+                }
             }
 
             if (progressMade > 0) {

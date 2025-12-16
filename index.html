@@ -7,22 +7,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>เตรียมความพร้อม วิชาฟิสิกส์ และวิชาวิทยาศาสตร์โลกและอวกาศ</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="./scripts/tailwind-setup.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        kanit: ['Kanit', 'sans-serif'],
+                        sarabun: ['Sarabun', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;700&family=Sarabun:wght@400;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="./styles/bundle.css">
     <link rel="icon" href="./assets/icons/exam.png" type="image/png">
-    <style>
-        /* Fix for iOS Safari image sizing in flex containers */
-        .quiz-card .flex-shrink-0, 
-        .section-icon-container,
-        .quiz-menu-item .h-8,
-        .custom-quiz-item .flex-shrink-0 {
-            overflow: hidden;
-        }
-    </style>
 </head>
 
 <body class="bg-gray-100 dark:bg-gray-900 transition-colors duration-300 flex flex-col min-h-screen font-sarabun">
@@ -33,7 +36,7 @@
     <div class="container mx-auto px-4 pb-8 md:pb-12 flex-grow">
 
         <!-- Content wrapper with top padding to avoid overlapping with the new fixed header -->
-        <div class="pt-24 md:pt-28">
+        <div style="padding-top: var(--header-height-offset, 7rem);">
             <!-- Category selection buttons are injected here by app-loader.js from components/header.html.
                  This approach improves semantics by defining the header structure in the main layout. -->
             <header id="header-placeholder" class="mb-8 font-kanit fade-in-up" aria-label="เลือกหมวดวิชา">

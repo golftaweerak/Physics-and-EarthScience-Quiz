@@ -624,7 +624,7 @@ function renderPerformanceAccordions(groupedData) {
             <details class="group">
                 <summary class="flex justify-between items-center cursor-pointer p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors list-none">
                     <div class="flex items-center flex-grow min-w-0 gap-3 sm:gap-4">
-                        <div class="flex-shrink-0 h-10 w-10 sm:h-12 sm:w-12 rounded-full flex items-center justify-center border-4 ${subjectDetails.color} bg-white p-1 sm:p-1.5">
+                        <div class="flex-shrink-0 h-10 w-10 sm:h-12 sm:w-12 rounded-full flex items-center justify-center border-4 ${subjectDetails.color} bg-white p-1 sm:p-1.5 overflow-hidden">
                             <img src="${subjectDetails.icon}" alt="${subjectDetails.displayName} Icon" class="h-full w-full object-contain">
                         </div>
                         <div class="flex-grow min-w-0">

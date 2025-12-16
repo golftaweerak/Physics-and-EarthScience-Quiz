@@ -610,7 +610,7 @@ export function initializePage() {
     const createFloatingButton = (options) => {
       const button = document.createElement("button");
       const baseClasses = 'floating-nav-btn-base anim-nav-btn-pop-in transform transition-all duration-200 hover:scale-110';
-      const layoutClasses = options.classList || `flex items-center justify-center h-8 w-8 rounded-full flex-shrink-0 ${bgColor} ${hoverBgColor} ${textColor} shadow-md border ${borderColor}`;
+      const layoutClasses = options.classList || `flex items-center justify-center h-8 w-8 rounded-full flex-shrink-0 ${bgColor} ${hoverBgColor} ${textColor} shadow-md border ${borderColor} overflow-hidden`;
       
       button.className = `${baseClasses} ${layoutClasses}`;
       button.setAttribute("aria-label", options.ariaLabel);
@@ -723,6 +723,11 @@ export function initializePage() {
   }
 
   // Set the header height property on initial load and on window resize.
+  const headerElement = document.getElementById("main_header-placeholder");
+  if (headerElement) {
+      const resizeObserver = new ResizeObserver(() => setHeaderHeightProperty());
+      resizeObserver.observe(headerElement);
+  }
   setHeaderHeightProperty();
   window.addEventListener("resize", setHeaderHeightProperty);
   // --- Main Rendering Logic ---

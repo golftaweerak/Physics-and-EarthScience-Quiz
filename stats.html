@@ -6,7 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>สถิติของฉัน - Earth Science Quiz</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="./scripts/tailwind-setup.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        kanit: ['Kanit', 'sans-serif'],
+                        sarabun: ['Sarabun', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;700&family=Sarabun:wght@400;700&display=swap"
@@ -22,7 +34,7 @@
     <!-- Shared Sticky Header -->
     <div id="main_header-placeholder"></div>
 
-    <div class="container mx-auto px-4 sm:px-8 pt-24 md:pt-28">
+    <div class="container mx-auto px-4 sm:px-8" style="padding-top: var(--header-height-offset, 7rem);">
         <header class="max-w-4xl mx-auto mb-8 pb-4 border-b border-gray-200 dark:border-gray-700">
             <div class="flex flex-wrap justify-between items-center gap-4">
                 <div>

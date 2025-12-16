@@ -1339,6 +1339,19 @@ function showResults() {
   let physicsXP = 0;
   let earthXP = 0;
 
+  // NEW: Calculate correct answer types for quests
+  let correctTheory = 0;
+  let correctCalculation = 0;
+  state.userAnswers.forEach((ans, index) => {
+      if (ans && ans.isCorrect) {
+          const question = state.shuffledQuestions[index];
+          if (question) {
+              if (question.type === 'fill-in-number') correctCalculation++;
+              else correctTheory++;
+          }
+      }
+  });
+
   try {
     const game = state.game; // Use the instance from state
     game.updateEndQuizStats(percentage);
@@ -1403,7 +1416,9 @@ function showResults() {
             correctAnswers: correctAnswers,
             totalQuestions: totalQuestions,
             category: questCategory,
-            percentage: percentage
+            percentage: percentage,
+            correctTheory: correctTheory,
+            correctCalculation: correctCalculation
         });
         
         // รองรับรูปแบบการคืนค่าใหม่ { completed: [], newAchievements: [] }

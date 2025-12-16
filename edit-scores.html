@@ -9,7 +9,15 @@
     <script>
         // Enable class-based dark mode
         tailwind.config = {
-            darkMode: 'class'
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        kanit: ['Kanit', 'sans-serif'],
+                        sarabun: ['Sarabun', 'sans-serif'],
+                    }
+                }
+            }
         }
     </script>
     <link rel="stylesheet" href="./styles/bundle.css">
@@ -20,7 +28,7 @@
     <!-- Load shared header -->
     <div id="main_header-placeholder"></div>
 
-    <main class="container mx-auto px-4 pb-8 pt-24 md:pt-28">
+    <main class="container mx-auto px-4 pb-8" style="padding-top: var(--header-height-offset, 7rem);">
         <div class="max-w-7xl mx-auto">
             <div class="relative text-center mb-8">
                 <h1 class="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white font-kanit">เครื่องมือสำหรับผู้สอน</h1>
@@ -183,6 +191,10 @@
     <div id="modals-placeholder"></div>
 
     <script type="module" src="./scripts/edit-scores-loader.js"></script>
+    <script type="module">
+        import { Gamification } from './scripts/gamification.js';
+        new Gamification();
+    </script>
 </body>
 
 </html>

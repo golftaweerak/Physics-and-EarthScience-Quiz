@@ -9,6 +9,14 @@
         // Enable class-based dark mode
         tailwind.config = {
             darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        kanit: ['Kanit', 'sans-serif'],
+                        sarabun: ['Sarabun', 'sans-serif'],
+                    }
+                }
+            }
         }
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,7 +25,7 @@
     <link rel="stylesheet" href="./styles/bundle.css">
     <link rel="icon" href="./assets/icons/exam.png" type="image/png">
 </head>
-<body class="pt-24 md:pt-28 bg-gray-100 dark:bg-gray-900 transition-colors duration-300 font-sarabun">
+<body class="bg-gray-100 dark:bg-gray-900 transition-colors duration-300 font-sarabun" style="padding-top: var(--header-height-offset, 7rem);">
 
     <!-- Load shared header -->
     <div id="main_header-placeholder"></div>
