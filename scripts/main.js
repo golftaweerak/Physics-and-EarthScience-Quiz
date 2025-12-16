@@ -98,7 +98,7 @@ function groupQuizzesForCategory(quizzes, categoryKey) {
 
   // Determine if the syllabus is structured with units or a flat chapter list
   // This flattens the structure for unified processing but preserves unit-specific data.
-  const chapters = (syllabus && syllabus.units)
+  const chapters = (syllabus && syllabus.units) 
     ? syllabus.units.flatMap(unit => 
         unit.chapters.map(ch => ({ ...ch, standard: unit.standard }))
       ) 
@@ -625,7 +625,7 @@ export function initializePage() {
     const closeBtn = createFloatingButton({
       ariaLabel: "ปิดหมวดหมู่",
       innerHTML: `<svg class="h-5 w-5" width="20" height="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>`,
-      onClick: () => activeToggle?.click(),
+      onClick: () => { if (activeToggle) activeToggle.click(); },
     });
     fragment.appendChild(closeBtn);
 
@@ -768,8 +768,8 @@ export function initializePage() {
     if (a !== 'AstronomyReview' && b === 'AstronomyReview') return 1;
 
     // --- Default Sort Logic: Use the 'order' property from data-manager ---
-    const orderA = categoryDetails[a]?.order || 99;
-    const orderB = categoryDetails[b]?.order || 99;
+    const orderA = (categoryDetails[a] && categoryDetails[a].order) || 99;
+    const orderB = (categoryDetails[b] && categoryDetails[b].order) || 99;
     return orderA - orderB;
   });
 

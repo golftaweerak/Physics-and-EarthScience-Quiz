@@ -101,7 +101,8 @@ function highlightText(text, keyword) {
 
 // Helper function to create a single question element. This promotes reusability.
 function createQuestionElement(item, displayIndex, keyword) {
-    const showAnswers = document.getElementById('show-answers-toggle')?.checked;
+    const toggle = document.getElementById('show-answers-toggle');
+    const showAnswers = toggle && toggle.checked;
 
     // Replace newline characters with <br> tags for proper HTML rendering
     const questionHtml = item.question ? highlightText(String(item.question).replace(/\n/g, '<br>'), keyword) : '';
@@ -455,7 +456,7 @@ function renderQuizData() {
                 }
 
                 // Add source quiz title if available
-                if (group.questions[0]?.sourceQuizTitle) {
+                if (group.questions[0] && group.questions[0].sourceQuizTitle) {
                     const sourceTitleEl = document.createElement('p');
                     sourceTitleEl.className = 'text-sm text-gray-500 dark:text-gray-400 mt-2 italic';
                     sourceTitleEl.textContent = `(จากชุดข้อสอบ: ${group.questions[0].sourceQuizTitle})`;
@@ -840,15 +841,15 @@ export function initializePreviewPage() {
             if (a !== 'AstronomyReview' && b === 'AstronomyReview') return 1;
 
             // --- Default Sort Logic: Use the 'order' property from data-manager ---
-            const orderA = allCategoryDetails[a]?.order || 99;
-            const orderB = allCategoryDetails[b]?.order || 99;
+            const orderA = (allCategoryDetails[a] && allCategoryDetails[a].order) || 99;
+            const orderB = (allCategoryDetails[b] && allCategoryDetails[b].order) || 99;
             return orderA - orderB;
         });
 
         sortedCategoryKeys.forEach(categoryKey => {
             const optgroup = document.createElement('optgroup');
             // Use the display title from the imported allCategoryDetails, or the key itself as a fallback
-            optgroup.label = allCategoryDetails[categoryKey]?.title || categoryKey;
+            optgroup.label = (allCategoryDetails[categoryKey] && allCategoryDetails[categoryKey].title) || categoryKey;
 
             groupedQuizzes[categoryKey].forEach(quiz => {
                 const option = document.createElement('option');
@@ -893,7 +894,7 @@ svg" fill="none" viewBox="0 0 24 24">
             const { allQuestions, scenarios } = await fetchAllQuizData();
             const quizId = scriptName.replace('-data.js', '');
             const quizInfo = quizList.find(q => q.id === quizId);
-            const quizTitle = quizInfo?.title; // Use optional chaining for safety
+            const quizTitle = quizInfo && quizInfo.title;
 
             if (!quizTitle) {
                 throw new Error(`Quiz info not found for ID: ${quizId}`);

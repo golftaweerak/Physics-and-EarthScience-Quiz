@@ -319,7 +319,7 @@ export async function getAllQuizProgress() {
         ...progress,
         title: quiz.title,
         category:
-          categoryDetails[quiz.category]?.title || quiz.category || "ไม่ระบุ",
+          (categoryDetails[quiz.category] && categoryDetails[quiz.category].title) || quiz.category || "ไม่ระบุ",
         storageKey: storageKey,
       };
     })
