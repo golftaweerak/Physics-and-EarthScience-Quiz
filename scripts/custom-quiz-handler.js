@@ -337,7 +337,7 @@ export function initializeCustomQuizHandler() {
             quizItemEl.innerHTML = `
                 <div class="flex-grow">
                     <div class="flex items-start gap-4">
-                        <div class="flex-shrink-0 h-12 w-12 rounded-lg flex items-center justify-center bg-gray-100 dark:bg-gray-700 p-2">
+                        <div class="flex-shrink-0 h-12 w-12 rounded-lg flex items-center justify-center bg-gray-100 dark:bg-gray-700 p-2 overflow-hidden">
                             <img src="${iconUrl}" alt="${iconAlt}" class="h-full w-full object-contain">
                         </div>
                         <div class="flex-grow min-w-0">
