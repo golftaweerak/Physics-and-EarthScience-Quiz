@@ -890,14 +890,14 @@ export const quizList = [
   },
   {
     "id": "phy_m6/phy_m6_ch18-1",
-    "title": "แม่เหล็กไฟฟ้า (ชุดที่ 1)",
+    "title": "ฟิสิกส์อะตอม (ชุดที่ 1)",
     "amount": 30,
-    "description": "บทที่ 18: แม่เหล็กไฟฟ้า (ชุดที่ 1)",
+    "description": "บทที่ 18: ฟิสิกส์อะตอม (ชุดที่ 1 - ทฤษฎีอะตอมของโบร์, ปรากฏการณ์โฟโตอิเล็กทริก, ทวิภาวะของคลื่นและอนุภาค)",
     "url": "./quiz/index.html?id=phy_m6/phy_m6_ch18-1",
     "storageKey": "quizState-phy_m6_ch18-1",
-    "icon": "./assets/icons/electromagnetism.png",
+    "icon": "./assets/icons/physics.png",
     "altText": "ไอคอนสำหรับ phy_m6_ch18-1",
     "category": "PhysicsM6",
-    "subCategory": "บทที่ 18: แม่เหล็กไฟฟ้า"
+    "subCategory": "บทที่ 18: ฟิสิกส์อะตอม"
   }
 ];
