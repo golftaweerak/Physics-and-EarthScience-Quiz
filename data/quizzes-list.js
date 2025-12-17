@@ -887,5 +887,17 @@ export const quizList = [
     "altText": "ไอคอนสำหรับ phy_m5_final-exam-2",
     "category": "PhysicsM5",
     "subCategory": "แนวข้อสอบ"
+  },
+  {
+    "id": "phy_m6/phy_m6_ch18-1",
+    "title": "แม่เหล็กไฟฟ้า (ชุดที่ 1)",
+    "amount": 30,
+    "description": "บทที่ 18: แม่เหล็กไฟฟ้า (ชุดที่ 1)",
+    "url": "./quiz/index.html?id=phy_m6/phy_m6_ch18-1",
+    "storageKey": "quizState-phy_m6_ch18-1",
+    "icon": "./assets/icons/electromagnetism.png",
+    "altText": "ไอคอนสำหรับ phy_m6_ch18-1",
+    "category": "PhysicsM6",
+    "subCategory": "บทที่ 18: แม่เหล็กไฟฟ้า"
   }
 ];
