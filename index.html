@@ -6,6 +6,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>เตรียมความพร้อม วิชาฟิสิกส์ และวิชาวิทยาศาสตร์โลกและอวกาศ</title>
+    <meta name="description" content="เว็บไซต์รวมแบบฝึกหัดและคลังข้อสอบวิชาฟิสิกส์ และวิชาวิทยาศาสตร์โลกและอวกาศ สำหรับเตรียมสอบและทบทวนความรู้">
+    <meta property="og:title" content="เตรียมความพร้อม วิชาฟิสิกส์ และวิชาวิทยาศาสตร์โลกและอวกาศ">
+    <meta property="og:description" content="ฝึกทำโจทย์และดูสถิติคะแนนของคุณได้ที่นี่">
+    <meta property="og:image" content="./assets/icons/exam.png">
+    <meta property="og:type" content="website">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -15,6 +20,13 @@
                     fontFamily: {
                         kanit: ['Kanit', 'sans-serif'],
                         sarabun: ['Sarabun', 'sans-serif'],
+                    },
+                    // เพิ่มส่วนนี้
+                    height: {
+                        screen: '100dvh',
+                    },
+                    minHeight: {
+                        screen: '100dvh',
                     }
                 }
             }
@@ -28,75 +40,180 @@
     <link rel="icon" href="./assets/icons/exam.png" type="image/png">
 </head>
 
-<body class="bg-gray-100 dark:bg-gray-900 transition-colors duration-300 flex flex-col min-h-screen font-sarabun">
+<body class="bg-gray-100 dark:bg-gray-900 transition-colors duration-300 font-sarabun flex flex-col min-h-screen">
 
-    <!-- New Sticky Header -->
-    <div id="main_header-placeholder"></div>
-
-    <div class="container mx-auto px-4 pb-8 md:pb-12 flex-grow">
-
-        <!-- Content wrapper with top padding to avoid overlapping with the new fixed header -->
-        <div style="padding-top: var(--header-height-offset, 7rem);">
-            <!-- Category selection buttons are injected here by app-loader.js from components/header.html.
-                 This approach improves semantics by defining the header structure in the main layout. -->
-            <header id="header-placeholder" class="mb-8 font-kanit fade-in-up" aria-label="เลือกหมวดวิชา">
-                <!-- Content is loaded dynamically by app-loader.js -->
-            </header>
-
-
-            <!-- Header for the quiz list section, populated by main.js -->
-            <div id="quiz-list-header" class="max-w-4xl mx-auto mt-8 mb-4 hidden flex justify-between items-center">
-                <h2 id="quiz-count-display" class="text-2xl font-bold font-kanit text-gray-800 dark:text-gray-100"
-                    aria-live="polite"></h2>
-                <!-- Action Buttons -->
-                <div class="flex items-center gap-3">
-                    <!-- Secondary Action Chip: Random Quiz -->
-                    <button id="random-quiz-btn"
-                        class="inline-flex items-center gap-1.5 px-3 py-1.5 font-kanit font-semibold text-xs text-purple-700 dark:text-purple-300 bg-purple-100 dark:bg-purple-900/50 rounded-full shadow-sm hover:bg-purple-200 dark:hover:bg-purple-800/80 transition-all duration-200 transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 dark:focus:ring-offset-gray-900">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 20 20"
-                            fill="currentColor" aria-hidden="true">
-                            <path fill-rule="evenodd"
-                                d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 110 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.51A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.51-1.276z"
-                                clip-rule="evenodd"></path>
+    <!-- Hardcoded Header to prevent FOUC/Layout Shift -->
+    <header
+        id="main-header"
+        class="fixed top-0 left-0 right-0 z-40 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm shadow-md transition-colors duration-300">
+        <div class="container mx-auto flex items-center justify-between h-16 px-4">
+            <!-- Left Side: Menu -->
+            <div class="flex-1 flex justify-start">
+                <nav class="relative" aria-label="Main navigation">
+                    <button type="button" id="main-menu-btn" aria-label="เปิดเมนูหลัก"
+                        class="p-2 rounded-full bg-gray-200/50 dark:bg-gray-700/50 text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:focus:ring-offset-gray-900 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
-                        <span>สุ่ม</span>
                     </button>
-                    <!-- Primary Action Chip: Custom Quiz -->
-                    <button id="create-custom-quiz-btn"
-                        class="inline-flex items-center gap-1.5 px-3 py-1.5 font-kanit font-semibold text-xs text-white bg-gradient-to-br from-purple-600 to-indigo-600 rounded-full shadow-md hover:shadow-lg hover:from-purple-700 hover:to-indigo-700 transition-all duration-200 transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 dark:focus:ring-offset-gray-900">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 20 20"
-                            fill="currentColor" aria-hidden="true">
-                            <path fill-rule="evenodd"
-                                d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.532 1.532 0 012.287-.947c1.372.836 2.942-.734-2.106-2.106a1.532 1.532 0 01-.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
-                                clip-rule="evenodd"></path>
-                        </svg>
-                        <span>สร้างเอง</span>
-                    </button>
-                </div>
+                    <div id="main-menu-dropdown"
+                        class="hidden absolute left-0 mt-2 w-72 sm:w-80 origin-top-left bg-white dark:bg-gray-800 rounded-lg shadow-xl z-[51] border border-gray-200 dark:border-gray-700 font-sarabun transition-all duration-200 ease-out transform opacity-0 scale-95 max-h-[80vh] overflow-y-auto custom-scrollbar-menu">
+                        <div class="p-2">
+                            <a href="./index.html"
+                                class="nav-link text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 px-2.5 py-1.5 rounded-md text-sm font-medium flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0" viewBox="0 0 20 20"
+                                    fill="currentColor">
+                                    <path
+                                        d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                                </svg>
+                                <span>หน้าหลัก</span>
+                            </a>
+                            <a href="./summary.html" class="nav-link text-gray-500 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 px-2.5 py-1.5 rounded-md text-sm font-medium flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z" />
+                                    <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z" />
+                                </svg>
+                                <span>คะแนนรายวิชาวิทย์โลกฯ</span>
+                            </a>
+                            <a href="./preview.html"
+                                class="nav-link text-gray-500 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 px-2.5 py-1.5 rounded-md text-sm font-medium flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0" viewBox="0 0 20 20"
+                                    fill="currentColor">
+                                    <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+                                    <path fill-rule="evenodd"
+                                        d="M4 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                <span>แสดงตัวอย่างข้อสอบ</span>
+                            </a>
+                            <a href="./stats.html" id="open-stats-hub-btn"
+                                class="nav-link text-gray-500 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 px-2.5 py-1.5 rounded-md text-sm font-medium flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0" viewBox="0 0 20 20"
+                                    fill="currentColor">
+                                    <path
+                                        d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
+                                </svg>
+                                <span>สถิติของฉัน</span>
+                            </a>
+                            <a href="./profile.html"
+                                class="nav-link text-gray-500 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 px-2.5 py-1.5 rounded-md text-sm font-medium flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                                </svg>
+                                <span>โปรไฟล์ของฉัน</span>
+                            </a>
+                            <a href="./about.html" id="open-about-modal-btn"
+                                class="nav-link text-gray-500 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 px-2.5 py-1.5 rounded-md text-sm font-medium flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0" viewBox="0 0 20 20"
+                                    fill="currentColor">
+                                    <path fill-rule="evenodd"
+                                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                <span>เกี่ยวกับผู้จัดทำ</span>
+                            </a>
+                            <hr class="my-2 border-gray-200 dark:border-gray-600">
+                            <div class="px-2.5 py-1.5 text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase">สำหรับผู้สอน</div>
+                            <a href="./edit-scores.html"
+                                class="nav-link text-gray-500 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 px-2.5 py-1.5 rounded-md text-sm font-medium flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M10.394 2.08a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11.69l-4 2V15a1 1 0 001 1h12a1 1 0 001-1v-1.31l-4-2v3.882a1 1 0 00.224.621l5 1.428a1 1 0 001.17-1.408l-7-14z" />
+                                    <path d="M10 11.69l4-2V6.03l-4 2v3.66z" />
+                                </svg>
+                                <span>เครื่องมือสำหรับผู้สอน</span>
+                            </a>
+                            <hr class="my-2 border-gray-200 dark:border-gray-600">
+                            <div id="menu-quiz-list" class="space-y-px"></div>
+                        </div>
+                    </div>
+                </nav>
             </div>
 
-            <main id="quiz-categories-container" class="max-w-4xl mx-auto space-y-6 mb-12">
-                <main class="flex-grow"></main>
-                <!-- Placeholder for loading, error, or empty states. JS will replace this. -->
-                <div id="categories-placeholder" class="text-center py-16 text-gray-500 dark:text-gray-400">
-                    <p>กำลังโหลดรายการแบบทดสอบ...</p>
-                </div>
-            </main>
+            <!-- Center: Title -->
+            <div class="flex-shrink-0">
+                <a href="./index.html" class="flex items-center gap-3" aria-label="กลับไปหน้าหลัก">
+                    <img src="./assets/images/saba.png" alt="SABA Logo" class="hidden sm:block h-10 w-auto max-w-full">
+                    <h1
+                        class="font-kanit text-xl sm:text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500 dark:from-blue-400 dark:to-cyan-300 text-center whitespace-nowrap">
+                        แบบฝึกหัด ฟิสิกส์ & วิทย์โลกฯ
+                    </h1>
+                </a>
+            </div>
+
+            <!-- Right Side: Profile & Dark Mode Toggle -->
+            <div class="flex-1 flex justify-end gap-2">
+                <a href="./profile.html" id="main-header-profile-link" aria-label="ดูโปรไฟล์"
+                    class="p-2 rounded-full bg-gray-200/50 dark:bg-gray-700/50 text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:focus:ring-offset-gray-900 transition-colors flex items-center justify-center h-10 w-10">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                </a>
+                <button type="button" id="dark-mode-toggle" aria-label="สลับโหมดมืด/สว่าง"
+                    class="p-2 rounded-full bg-gray-200/50 dark:bg-gray-700/50 text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:focus:ring-offset-gray-900 transition-colors">
+                    <!-- Icon will be inserted by JS -->
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 pb-8 md:pb-12 flex-grow"
+        style="padding-top: var(--header-height-offset, 5rem);">
+
+        <header id="header-placeholder" class="mb-8 font-kanit fade-in-up" aria-label="เลือกหมวดวิชา"
+            style="min-height: 120px;">
+        </header>
 
 
+        <!-- Header for the quiz list section, populated by main.js -->
+        <div id="quiz-list-header" class="max-w-4xl mx-auto mt-8 mb-4 hidden flex justify-between items-center">
+            <h2 id="quiz-count-display" class="text-2xl font-bold font-kanit text-gray-800 dark:text-gray-100"
+                aria-live="polite"></h2>
+            <!-- Action Buttons -->
+            <div class="flex items-center gap-3">
+                <!-- Secondary Action Chip: Random Quiz -->
+                <button id="random-quiz-btn"
+                    class="inline-flex items-center gap-1.5 px-3 py-1.5 font-kanit font-semibold text-xs text-purple-700 dark:text-purple-300 bg-purple-100 dark:bg-purple-900/50 rounded-full shadow-sm hover:bg-purple-200 dark:hover:bg-purple-800/80 transition-all duration-200 transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 dark:focus:ring-offset-gray-900">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor"
+                        aria-hidden="true">
+                        <path fill-rule="evenodd"
+                            d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 110 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.51A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.51-1.276z"
+                            clip-rule="evenodd"></path>
+                    </svg>
+                    <span>สุ่ม</span>
+                </button>
+                <!-- Primary Action Chip: Custom Quiz -->
+                <button id="create-custom-quiz-btn"
+                    class="inline-flex items-center gap-1.5 px-3 py-1.5 font-kanit font-semibold text-xs text-white bg-gradient-to-br from-purple-600 to-indigo-600 rounded-full shadow-md hover:shadow-lg hover:from-purple-700 hover:to-indigo-700 transition-all duration-200 transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 dark:focus:ring-offset-gray-900">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor"
+                        aria-hidden="true">
+                        <path fill-rule="evenodd"
+                            d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.532 1.532 0 012.287-.947c1.372.836 2.942-.734-2.106-2.106a1.532 1.532 0 01-.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
+                            clip-rule="evenodd"></path>
+                    </svg>
+                    <span>สร้างเอง</span>
+                </button>
+            </div>
         </div>
 
-        <div id="footer-placeholder"></div>
-        <div id="footer-container"></div>
-        <!-- Placeholder for all common modals, loaded by app-loader.js -->
-        <div id="modals-placeholder"></div>
+        <div id="quiz-categories-container" class="max-w-4xl mx-auto space-y-6 mb-12">
+            <!-- Placeholder for loading, error, or empty states. JS will replace this. -->
+            <div id="categories-placeholder" class="text-center py-16 text-gray-500 dark:text-gray-400" style="min-height: 300px;">
+                <p>กำลังโหลดรายการแบบทดสอบ...</p>
+            </div>
+        </div>
+    </main>
 
-        <!-- app-loader is a module and will handle importing its own dependencies. -->
-        <script src="./scripts/app-loader.js" type="module"></script>
-        <script type="module">
-            import { Gamification } from './scripts/gamification.js';
-            new Gamification();
-        </script>
+    <div id="footer-placeholder"></div>
+    <!-- Placeholder for all common modals, loaded by app-loader.js -->
+    <div id="modals-placeholder"></div>
+
+    <!-- app-loader is a module and will handle importing its own dependencies. -->
+    <script src="./scripts/app-loader.js" type="module"></script>
+    <script type="module">
+        import { Gamification } from './scripts/gamification.js';
+        new Gamification();
+    </script>
 </body>
 
 </html>

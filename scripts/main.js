@@ -1,15 +1,14 @@
 import { ModalHandler } from "./modal-handler.js";
 import { getQuizProgress, categoryDetails } from "./data-manager.js";
 import { quizList } from "../data/quizzes-list.js";
-//import { loadHeader } from "./header-loader.js";
 import { getSyllabusForCategory } from "./syllabus-manager.js";
 
 /**
  * Injects custom scrollbar styles into the document's head to match the site's theme.
  */
 function injectCustomScrollbarStyles() {
-    const style = document.createElement('style');
-    style.textContent = `
+  const style = document.createElement('style');
+  style.textContent = `
         /* For Webkit-based browsers (Chrome, Safari, Edge) */
         ::-webkit-scrollbar {
             width: 12px;
@@ -37,7 +36,7 @@ function injectCustomScrollbarStyles() {
             background-color: #334155; /* slate-700 */
         }
     `;
-    document.head.appendChild(style);
+  document.head.appendChild(style);
 }
 
 /**
@@ -98,10 +97,10 @@ function groupQuizzesForCategory(quizzes, categoryKey) {
 
   // Determine if the syllabus is structured with units or a flat chapter list
   // This flattens the structure for unified processing but preserves unit-specific data.
-  const chapters = (syllabus && syllabus.units) 
-    ? syllabus.units.flatMap(unit => 
-        unit.chapters.map(ch => ({ ...ch, standard: unit.standard }))
-      ) 
+  const chapters = (syllabus && syllabus.units)
+    ? syllabus.units.flatMap(unit =>
+      unit.chapters.map(ch => ({ ...ch, standard: unit.standard }))
+    )
     : (syllabus && syllabus.chapters);
 
   if (Array.isArray(chapters)) {
@@ -112,76 +111,76 @@ function groupQuizzesForCategory(quizzes, categoryKey) {
 
     // 2. Group the regular quizzes based on the syllabus structure.
     const chapterGroups = chapters.map(chapter => {
-        const chapterQuizzes = regularQuizzes.filter(quiz => quiz.subCategory === chapter.title);
-        if (chapterQuizzes.length === 0) return null;
+      const chapterQuizzes = regularQuizzes.filter(quiz => quiz.subCategory === chapter.title);
+      if (chapterQuizzes.length === 0) return null;
 
-        let displayTitle = chapter.title;
-        if (categoryKey === 'EarthSpaceScienceBasic') {
-            displayTitle = `บทที่ ${chapter.chapterId}: ${chapter.title}`;
-        } else if (categoryKey === 'EarthSpaceScienceAdvance') {
-            const firstQuiz = chapterQuizzes[0];
-            if (firstQuiz && firstQuiz.description) {
-                const match = firstQuiz.description.match(/บทที่\s*(\d+)/);
-                if (match && match[1]) {
-                    displayTitle = `บทที่ ${match[1]}: ${chapter.title}`;
-                }
+      let displayTitle = chapter.title;
+      if (categoryKey === 'EarthSpaceScienceBasic') {
+        displayTitle = `บทที่ ${chapter.chapterId}: ${chapter.title}`;
+      } else if (categoryKey === 'EarthSpaceScienceAdvance') {
+        const firstQuiz = chapterQuizzes[0];
+        if (firstQuiz && firstQuiz.description) {
+          const match = firstQuiz.description.match(/บทที่\s*(\d+)/);
+          if (match && match[1]) {
+            displayTitle = `บทที่ ${match[1]}: ${chapter.title}`;
           }
         }
+      }
 
-        return {
-            title: displayTitle,
-            quizzes: chapterQuizzes,
-            level: 1,
-            shortTitle: chapter.shortTitle || chapter.title.substring(0, 6)
-        };
+      return {
+        title: displayTitle,
+        quizzes: chapterQuizzes,
+        level: 1,
+        shortTitle: chapter.shortTitle || chapter.title.substring(0, 6)
+      };
     }).filter(Boolean);
 
     // 3. Create a separate group for the final review quizzes if they exist.
     let specialGroup = null;
     if (specialQuizzes.length > 0) {
-        // Custom sorting logic for review quizzes to order them by term and type
-        const getSortKey = (quiz) => {
-            const title = quiz.title;
-            let term = 99;
-            let examType = 99; // 1 for midterm, 2 for final
-            let set = 99;
+      // Custom sorting logic for review quizzes to order them by term and type
+      const getSortKey = (quiz) => {
+        const title = quiz.title;
+        let term = 99;
+        let examType = 99; // 1 for midterm, 2 for final
+        let set = 99;
 
-            // Extract term number (e.g., from "เทอม 1" or "ปลายภาค 1")
-            if (title.includes('เทอม 1') || title.includes('ภาค 1')) {
-                term = 1;
-            } else if (title.includes('เทอม 2') || title.includes('ภาค 2')) {
-                term = 2;
-            }
+        // Extract term number (e.g., from "เทอม 1" or "ปลายภาค 1")
+        if (title.includes('เทอม 1') || title.includes('ภาค 1')) {
+          term = 1;
+        } else if (title.includes('เทอม 2') || title.includes('ภาค 2')) {
+          term = 2;
+        }
 
-            // Extract exam type
-            if (title.includes('กลางภาค')) {
-                examType = 1;
-            } else if (title.includes('ปลายภาค')) {
-                examType = 2;
-            }
+        // Extract exam type
+        if (title.includes('กลางภาค')) {
+          examType = 1;
+        } else if (title.includes('ปลายภาค')) {
+          examType = 2;
+        }
 
-            // Extract set number
-            const setMatch = title.match(/ชุดที่\s*(\d+)/);
-            if (setMatch) {
-                set = parseInt(setMatch[1], 10);
-            }
-            // Create a sortable string: term-examType-set
-            return `${String(term).padStart(2, '0')}-${String(examType).padStart(2, '0')}-${String(set).padStart(2, '0')}`;
-        };
+        // Extract set number
+        const setMatch = title.match(/ชุดที่\s*(\d+)/);
+        if (setMatch) {
+          set = parseInt(setMatch[1], 10);
+        }
+        // Create a sortable string: term-examType-set
+        return `${String(term).padStart(2, '0')}-${String(examType).padStart(2, '0')}-${String(set).padStart(2, '0')}`;
+      };
 
-        specialQuizzes.sort((a, b) => {
-            const keyA = getSortKey(a);
-            const keyB = getSortKey(b);
-            return keyA.localeCompare(keyB);
-        });
+      specialQuizzes.sort((a, b) => {
+        const keyA = getSortKey(a);
+        const keyB = getSortKey(b);
+        return keyA.localeCompare(keyB);
+      });
 
-        specialGroup = {
-            title: "แนวข้อสอบ",
-            description: "รวมแนวข้อสอบสำหรับทบทวนทั้งกลางภาคและปลายภาค",
-            quizzes: specialQuizzes,
-            level: 1,
-            shortTitle: "แนวข้อสอบ"
-        };
+      specialGroup = {
+        title: "แนวข้อสอบ",
+        description: "รวมแนวข้อสอบสำหรับทบทวนทั้งกลางภาคและปลายภาค",
+        quizzes: specialQuizzes,
+        level: 1,
+        shortTitle: "แนวข้อสอบ"
+      };
     }
 
     // 4. Combine the chapter groups and the special group, with the special group at the end.
@@ -216,93 +215,77 @@ export function initializePage() {
   // Inject custom scrollbar styles that match the site's theme.
   injectCustomScrollbarStyles();
 
-    // Constants for animation timings to avoid "magic numbers"
-    const ACCORDION_ANIMATION_DURATION = 500; // Corresponds to `duration-500` in Tailwind
-    const SCROLL_DELAY = ACCORDION_ANIMATION_DURATION + 50; // Buffer for smooth scrolling after animation
+  // Constants for animation timings to avoid "magic numbers"
+  const ACCORDION_ANIMATION_DURATION = 500; // Corresponds to `duration-500` in Tailwind
+  const SCROLL_DELAY = ACCORDION_ANIMATION_DURATION + 50; // Buffer for smooth scrolling after animation
 
-    try {
-        // The rest of the function's logic will be wrapped in this try block.
-        // This ensures that if any part of the page initialization fails (e.g., data loading, element finding, rendering),
-        // a user-friendly error message is displayed instead of a blank or broken page.
+  try {
+    // The rest of the function's logic will be wrapped in this try block.
+    // This ensures that if any part of the page initialization fails (e.g., data loading, element finding, rendering),
+    // a user-friendly error message is displayed instead of a blank or broken page.
 
-        /**
-         * Sets a CSS custom property for the header's height plus a margin.
-         * This allows the CSS `scroll-padding-top` to be dynamic and responsive. It also positions the floating navigation bar.
-         */
-        function setHeaderHeightProperty() {
-            const header = document.getElementById("main_header-placeholder");
-            if (header) {
-                const headerHeight = header.offsetHeight;
-                // Set the value to header height + 16px for a nice margin
-                document.documentElement.style.setProperty(
-                    "--header-height-offset",
-                    `${headerHeight + 16}px`
-                );
-            }
-        }
+    // Use the new ModalHandler for accessible, reusable modals.
+    const confirmModal = new ModalHandler("confirm-action-modal");
+    const completedModal = new ModalHandler("completed-quiz-modal");
 
-  // Use the new ModalHandler for accessible, reusable modals.
-  const confirmModal = new ModalHandler("confirm-action-modal");
-  const completedModal = new ModalHandler("completed-quiz-modal");
+    // Cache buttons that trigger actions other than just closing the modal.
+    const confirmActionBtn = document.getElementById("confirm-action-btn");
+    const viewResultsBtn = document.getElementById("completed-view-results-btn");
+    const startOverBtn = document.getElementById("completed-start-over-btn");
+    // Cache modal text elements for dynamic content
+    const confirmModalTitle = document.getElementById("confirm-modal-title");
+    const confirmModalDesc = document.getElementById("confirm-modal-description");
 
-  // Cache buttons that trigger actions other than just closing the modal.
-  const confirmActionBtn = document.getElementById("confirm-action-btn");
-  const viewResultsBtn = document.getElementById("completed-view-results-btn");
-  const startOverBtn = document.getElementById("completed-start-over-btn");
-  // Cache modal text elements for dynamic content
-  const confirmModalTitle = document.getElementById("confirm-modal-title");
-  const confirmModalDesc = document.getElementById("confirm-modal-description");
+    // State variables to hold context for the active modal.
+    const pageState = {
+      activeQuizUrl: "", // To store the quiz URL for the 'completed' modal actions.
+      activeStorageKey: "", // To store the storage key for the modal actions
+      confirmCallback: null, // To store the action to perform on confirmation
+    };
 
-  // State variables to hold context for the active modal.
-  const pageState = {
-    activeQuizUrl: "", // To store the quiz URL for the 'completed' modal actions.
-    activeStorageKey: "", // To store the storage key for the modal actions
-    confirmCallback: null, // To store the action to perform on confirmation
-  };
+    /**
+     * Creates the HTML for the progress bar section of a quiz card.
+     * @param {object} progress - The progress object from getQuizProgress.
+     * @param {object} quiz - The full quiz object.
+     * @returns {string} The HTML string for the progress section.
+     */
+    function createProgressHTML(progress, quiz) {
+      // The progress object now contains totalQuestions, answeredCount, etc. from data-manager
+      if (!progress.totalQuestions || progress.totalQuestions <= 0) return "";
 
-  /**
-   * Creates the HTML for the progress bar section of a quiz card.
-   * @param {object} progress - The progress object from getQuizProgress.
-   * @param {object} quiz - The full quiz object.
-   * @returns {string} The HTML string for the progress section.
-   */
-  function createProgressHTML(progress, quiz) {
-    // The progress object now contains totalQuestions, answeredCount, etc. from data-manager
-    if (!progress.totalQuestions || progress.totalQuestions <= 0) return "";
+      let progressText, progressTextColor, progressBarColor, progressDetails;
 
-    let progressText, progressTextColor, progressBarColor, progressDetails;
+      if (progress.isFinished) {
+        progressText = `<span class="inline-flex items-center"><svg class="h-3.5 w-3.5 mr-1 flex-shrink-0" width="14" height="14" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>ทำเสร็จแล้ว</span>`;
+        progressTextColor = "text-green-600 dark:text-green-400";
+        progressBarColor = "bg-gradient-to-r from-green-400 to-emerald-500 shadow-[0_0_8px_rgba(74,222,128,0.4)]";
+        progressDetails = `คะแนน: ${progress.score}/${progress.totalQuestions}`;
+      } else if (progress.hasProgress) {
+        progressText = `<span class="inline-flex items-center"><svg class="h-3.5 w-3.5 mr-1 flex-shrink-0" width="14" height="14" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" /></svg>ทำต่อ</span>`;
+        progressTextColor = "text-blue-600 dark:text-blue-400";
+        progressBarColor = "bg-gradient-to-r from-blue-400 to-indigo-500 shadow-[0_0_8px_rgba(96,165,250,0.4)]";
+        progressDetails = `คะแนน: ${progress.score} | ${progress.answeredCount}/${progress.totalQuestions} ข้อ`;
+      } else {
+        progressText = "ยังไม่เริ่ม";
+        progressTextColor = "text-gray-500 dark:text-gray-400";
+        progressBarColor = "bg-gray-300 dark:bg-gray-600";
+        progressDetails = `0/${progress.totalQuestions} ข้อ`;
+      }
 
-    if (progress.isFinished) {
-      progressText = `<span class="inline-flex items-center"><svg class="h-3.5 w-3.5 mr-1 flex-shrink-0" width="14" height="14" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>ทำเสร็จแล้ว</span>`;
-      progressTextColor = "text-green-600 dark:text-green-400";
-      progressBarColor = "bg-gradient-to-r from-green-400 to-emerald-500 shadow-[0_0_8px_rgba(74,222,128,0.4)]";
-      progressDetails = `คะแนน: ${progress.score}/${progress.totalQuestions}`;
-    } else if (progress.hasProgress) {
-      progressText = `<span class="inline-flex items-center"><svg class="h-3.5 w-3.5 mr-1 flex-shrink-0" width="14" height="14" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" /></svg>ทำต่อ</span>`;
-      progressTextColor = "text-blue-600 dark:text-blue-400";
-      progressBarColor = "bg-gradient-to-r from-blue-400 to-indigo-500 shadow-[0_0_8px_rgba(96,165,250,0.4)]";
-      progressDetails = `คะแนน: ${progress.score} | ${progress.answeredCount}/${progress.totalQuestions} ข้อ`;
-    } else {
-      progressText = "ยังไม่เริ่ม";
-      progressTextColor = "text-gray-500 dark:text-gray-400";
-      progressBarColor = "bg-gray-300 dark:bg-gray-600";
-      progressDetails = `0/${progress.totalQuestions} ข้อ`;
-    }
-
-    const actions = [];
-    if (progress.hasProgress) {
-      actions.push(`
+      const actions = [];
+      if (progress.hasProgress) {
+        actions.push(`
             <button data-storage-key="${quiz.storageKey}" class="reset-progress-btn text-[11px] text-gray-500 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400 transition-colors duration-200 inline-flex items-center font-medium">
                 <svg class="h-3 w-3 mr-1 flex-shrink-0" width="12" height="12" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>
                 ล้างข้อมูล
             </button>`);
-    }
+      }
 
-    const footerActionsHTML = actions.join(
-      '<span class="text-gray-300 dark:text-gray-600">|</span>'
-    );
+      const footerActionsHTML = actions.join(
+        '<span class="text-gray-300 dark:text-gray-600">|</span>'
+      );
 
-    return `<div class="mt-2 pt-2 border-t border-gray-200 dark:border-gray-700/60">
+      return `<div class="mt-2 pt-2 border-t border-gray-200 dark:border-gray-700/60">
                 <div class="flex justify-between items-center mb-1">
                     <span class="text-xs font-semibold ${progressTextColor}">${progressText}</span>
                     <span class="text-xs font-medium text-gray-500 dark:text-gray-400">${progress.percentage}%</span>
@@ -315,71 +298,79 @@ export function initializePage() {
                     <div class="flex items-center gap-2">${footerActionsHTML}</div>
                 </div>
             </div>`;
-  }
+    }
 
-  /**
-   * Creates a single quiz card element.
-   * @param {object} quiz - The quiz data object.
-   * @param {number} index - The index for animation delay.
-   * @returns {HTMLElement} The created anchor element representing the card.
-   */
-   function createQuizCard(quiz, index) {
-     const categoryDetail = categoryDetails[quiz.category];
-     const borderColorClass = (categoryDetail && categoryDetail.color) || "border-gray-400";
-     const colorName = borderColorClass.split('-')[1] || 'gray';
- 
-     const card = document.createElement("a");
-     card.href = quiz.url;
-     const totalQuestions = quiz.amount || 0;
- 
-     card.dataset.storageKey = quiz.storageKey;
-     card.dataset.totalQuestions = totalQuestions;
- 
-     // NEW: More modern card styling
-     card.className = `quiz-card group flex flex-col h-full bg-white dark:bg-gray-800/50 p-4 rounded-xl border border-gray-200 dark:border-gray-700/60 shadow-sm hover:shadow-lg hover:border-${colorName}-400 dark:hover:border-${colorName}-500 transition-all duration-300 transform hover:-translate-y-1 anim-card-pop-in overflow-hidden`;
-     card.style.animationDelay = `${index * 50}ms`;
- 
-     const progress = getQuizProgress(quiz.storageKey, totalQuestions);
-     const progressHTML = createProgressHTML(progress, quiz);
- 
-     const iconBgClass = `bg-${colorName}-100 dark:bg-${colorName}-900/30`;
-     const titleHoverClass = `group-hover:text-${colorName}-600 dark:group-hover:text-${colorName}-300`;
- 
-     card.innerHTML = `
+    /**
+     * Creates a single quiz card element.
+     * @param {object} quiz - The quiz data object.
+     * @param {number} index - The index for animation delay.
+     * @returns {HTMLElement} The created anchor element representing the card.
+     */
+    function createQuizCard(quiz, index) {
+      const categoryDetail = categoryDetails[quiz.category];
+      const borderColorClass = (categoryDetail && categoryDetail.color) || "border-gray-400";
+      const colorName = borderColorClass.split('-')[1] || 'gray';
+
+      const card = document.createElement("a");
+      card.href = quiz.url;
+      const totalQuestions = quiz.amount || 0;
+
+      card.dataset.storageKey = quiz.storageKey;
+      card.dataset.totalQuestions = totalQuestions;
+
+      // NEW: More modern card styling
+      card.className = `quiz-card group flex flex-col h-full bg-white dark:bg-gray-800/50 p-4 rounded-xl border border-gray-200 dark:border-gray-700/60 shadow-sm hover:shadow-lg hover:border-${colorName}-400 dark:hover:border-${colorName}-500 transition-all duration-300 transform hover:-translate-y-1 anim-card-pop-in overflow-hidden`;
+      card.style.animationDelay = `${index * 50}ms`;
+
+      const progress = getQuizProgress(quiz.storageKey, totalQuestions);
+      const progressHTML = createProgressHTML(progress, quiz);
+
+      const iconBgClass = `bg-${colorName}-100 dark:bg-${colorName}-900/30`;
+      const titleHoverClass = `group-hover:text-${colorName}-600 dark:group-hover:text-${colorName}-300`;
+
+      card.innerHTML = `
        <div class="flex-grow flex items-start gap-4">
-         <div class="flex-shrink-0 h-12 w-12 rounded-lg flex items-center justify-center ${iconBgClass} p-2 transition-all duration-300 group-hover:shadow-lg group-hover:shadow-${colorName}-500/20 overflow-hidden">
-           <img src="${quiz.icon}" alt="${quiz.altText}" class="h-full w-full object-contain transition-transform duration-300 group-hover:scale-110">
+         <div class="shrink-0 h-12 w-12 rounded-lg flex items-center justify-center ${iconBgClass} p-2 transition-all duration-300 group-hover:shadow-lg group-hover:shadow-${colorName}-500/20 overflow-hidden" 
+              style="height: 3rem; width: 3rem; min-width: 3rem; min-height: 3rem; flex: 0 0 auto;">
+           <img src="${quiz.icon}" alt="${quiz.altText}" loading="lazy" 
+                class="h-full w-full object-contain transition-transform duration-300 group-hover:scale-110 shrink-0"
+                style="display: block;">
          </div>
-         <div class="flex-grow min-w-0">
-           <h3 class="text-base font-bold text-gray-800 dark:text-gray-100 font-kanit leading-tight transition-colors ${titleHoverClass}">${quiz.title}</h3>
+         
+         <div class="flex-grow min-w-0 overflow-hidden">
+           <h3 class="text-base font-bold text-gray-800 dark:text-gray-100 font-kanit leading-tight transition-colors ${titleHoverClass} truncate">
+             ${quiz.title}
+           </h3>
            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">จำนวน ${totalQuestions} ข้อ</p>
          </div>
        </div>
-       <p class="text-gray-600 dark:text-gray-400 text-xs leading-relaxed mt-3 flex-grow">${quiz.description}</p>
+       <p class="text-gray-600 dark:text-gray-400 text-xs leading-relaxed mt-3 flex-grow line-clamp-2">
+         ${quiz.description}
+       </p>
        <div class="progress-footer-wrapper mt-auto pt-3">${progressHTML}</div>
      `;
-     return card;
-   }
+      return card;
+    }
 
-  /**
-   * Creates a nested accordion element for a sub-category.
-   * @param {string} subCategoryTitle - The title for the sub-category accordion.
-   * @param {Array<object>} quizzes - An array of quiz objects for this sub-category.
-   * @param {string} colorName - The base color name (e.g., 'blue') for styling.
-   * @returns {HTMLElement} The created accordion element.
-   * @param {object} groupData - The group object containing title, quizzes, level, and shortTitle.
-   */
-  function createSubCategoryAccordion(groupData, colorName, categoryKey) {
-    const accordion = document.createElement('div');
-    accordion.className = 'sub-accordion py-1';
+    /**
+     * Creates a nested accordion element for a sub-category.
+     * @param {string} subCategoryTitle - The title for the sub-category accordion.
+     * @param {Array<object>} quizzes - An array of quiz objects for this sub-category.
+     * @param {string} colorName - The base color name (e.g., 'blue') for styling.
+     * @returns {HTMLElement} The created accordion element.
+     * @param {object} groupData - The group object containing title, quizzes, level, and shortTitle.
+     */
+    function createSubCategoryAccordion(groupData, colorName, categoryKey) {
+      const accordion = document.createElement('div');
+      accordion.className = 'sub-accordion py-1';
 
-    const toggleHeader = document.createElement('div');
-    // A slightly different style for the sub-header
-    toggleHeader.className = `sub-section-toggle flex justify-between items-center cursor-pointer p-3 rounded-lg bg-${colorName}-100/40 dark:bg-${colorName}-900/20 hover:bg-${colorName}-100/70 dark:hover:bg-${colorName}-900/40 transition-colors`;
-    toggleHeader.setAttribute('aria-expanded', 'false');
-    toggleHeader.dataset.level = groupData.level;
-    toggleHeader.dataset.shortTitle = groupData.shortTitle; // Add short title to dataset
-    toggleHeader.innerHTML = `
+      const toggleHeader = document.createElement('div');
+      // A slightly different style for the sub-header
+      toggleHeader.className = `sub-section-toggle flex justify-between items-center cursor-pointer p-3 rounded-lg bg-${colorName}-100/40 dark:bg-${colorName}-900/20 hover:bg-${colorName}-100/70 dark:hover:bg-${colorName}-900/40 transition-colors`;
+      toggleHeader.setAttribute('aria-expanded', 'false');
+      toggleHeader.dataset.level = groupData.level;
+      toggleHeader.dataset.shortTitle = groupData.shortTitle; // Add short title to dataset
+      toggleHeader.innerHTML = `
         <div class="flex-grow min-w-0">
             <h4 class="font-bold text-sm text-${colorName}-800 dark:text-${colorName}-300 truncate pr-2">${groupData.title}</h4>
         </div>
@@ -389,92 +380,92 @@ export function initializePage() {
         </div>
     `;
 
-    const contentDiv = document.createElement("div");
-    contentDiv.className = "sub-section-content grid grid-rows-[0fr] transition-[grid-template-rows] duration-500 ease-in-out";
+      const contentDiv = document.createElement("div");
+      contentDiv.className = "sub-section-content grid grid-rows-[0fr] transition-[grid-template-rows] duration-500 ease-in-out";
 
-    const innerContentWrapper = document.createElement("div");
-    innerContentWrapper.className = "inner-content-wrapper overflow-hidden";
+      const innerContentWrapper = document.createElement("div");
+      innerContentWrapper.className = "inner-content-wrapper overflow-hidden";
 
-    const quizGrid = document.createElement("div");
-    quizGrid.className = `quiz-grid-container pt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2`;
+      const quizGrid = document.createElement("div");
+      quizGrid.className = `quiz-grid-container pt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2`;
 
-    // Only create quiz cards if there are quizzes to display.
-    if (groupData.quizzes && groupData.quizzes.length > 0) {
+      // Only create quiz cards if there are quizzes to display.
+      if (groupData.quizzes && groupData.quizzes.length > 0) {
         groupData.quizzes.forEach((quiz, index) => {
-            const card = createQuizCard(quiz, index);
-            quizGrid.appendChild(card);
+          const card = createQuizCard(quiz, index);
+          quizGrid.appendChild(card);
         });
-    }
-    innerContentWrapper.appendChild(quizGrid);
-    contentDiv.appendChild(innerContentWrapper);
-    accordion.append(toggleHeader, contentDiv);
-
-    toggleHeader.addEventListener('click', () => {
-      const wasOpen = toggleHeader.getAttribute('aria-expanded') === 'true';
-      toggleAccordion(toggleHeader);
-
-      // If the accordion was closed and is now opening, scroll to it.
-      if (!wasOpen) {
-        setTimeout(() => {
-          scrollToElement(toggleHeader);
-        }, 150); // A short delay for a better visual experience.
       }
-    });
-    return accordion;
-  }
+      innerContentWrapper.appendChild(quizGrid);
+      contentDiv.appendChild(innerContentWrapper);
+      accordion.append(toggleHeader, contentDiv);
 
-  /**
-   * Creates a full category section element, including its header and quiz cards.
-   * @param {string} categoryKey - The key for the category (e.g., 'Senior').
-   * @param {Array<object>} quizzes - An array of quiz objects for this category.
-   * @returns {HTMLElement} The created section element.
-   */
-  function createCategorySection(categoryKey, quizzes) {
-    const details = categoryDetails[categoryKey];
-    if (!details) {
-      console.warn(
-        `Details for category "${categoryKey}" not found. Skipping.`
-      );
-      return null;
+      toggleHeader.addEventListener('click', () => {
+        const wasOpen = toggleHeader.getAttribute('aria-expanded') === 'true';
+        toggleAccordion(toggleHeader);
+
+        // If the accordion was closed and is now opening, scroll to it.
+        if (!wasOpen) {
+          setTimeout(() => {
+            scrollToElement(toggleHeader);
+          }, 150); // A short delay for a better visual experience.
+        }
+      });
+      return accordion;
     }
 
-    const sectionBorderColor = details.color || "border-blue-600";
-    const colorName = sectionBorderColor.split('-')[1] || 'gray';
+    /**
+     * Creates a full category section element, including its header and quiz cards.
+     * @param {string} categoryKey - The key for the category (e.g., 'Senior').
+     * @param {Array<object>} quizzes - An array of quiz objects for this category.
+     * @returns {HTMLElement} The created section element.
+     */
+    function createCategorySection(categoryKey, quizzes) {
+      const details = categoryDetails[categoryKey];
+      if (!details) {
+        console.warn(
+          `Details for category "${categoryKey}" not found. Skipping.`
+        );
+        return null;
+      }
 
-    const section = document.createElement("section");
-    section.id = `category-${categoryKey}`;
-    // Added a thick top border with the category color for better visual grouping.
-    section.className = `section-accordion bg-white/80 dark:bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-200 dark:border-gray-700 shadow-md overflow-hidden border-t-4 ${sectionBorderColor}`;
+      const sectionBorderColor = details.color || "border-blue-600";
+      const colorName = sectionBorderColor.split('-')[1] || 'gray';
 
-    const toggleHeader = document.createElement("div");
-    toggleHeader.id = `toggle-${categoryKey}`; // Add unique ID for targeting
-    // Dynamic background color for header based on category, with even more subtle opacity in dark mode.
-    toggleHeader.className = `section-toggle flex justify-between items-center cursor-pointer p-4 bg-${colorName}-50/30 dark:bg-${colorName}-900/10 hover:bg-${colorName}-100/50 dark:hover:bg-${colorName}-900/20 transition-colors duration-200`;
+      const section = document.createElement("section");
+      section.id = `category-${categoryKey}`;
+      // Added a thick top border with the category color for better visual grouping.
+      section.className = `section-accordion bg-white/80 dark:bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-200 dark:border-gray-700 shadow-md overflow-hidden border-t-4 ${sectionBorderColor}`;
 
-    // Handle titles with parentheses for better wrapping on small screens.
-    const titleMatch = details.title.match(/(.+)\s+\((.+)\)/);
-    let titleContent;
+      const toggleHeader = document.createElement("div");
+      toggleHeader.id = `toggle-${categoryKey}`; // Add unique ID for targeting
+      // Dynamic background color for header based on category, with even more subtle opacity in dark mode.
+      toggleHeader.className = `section-toggle flex justify-between items-center cursor-pointer p-4 bg-${colorName}-50/30 dark:bg-${colorName}-900/10 hover:bg-${colorName}-100/50 dark:hover:bg-${colorName}-900/20 transition-colors duration-200`;
 
-    if (titleMatch) {
-      const mainTitle = titleMatch[1];
-      const subTitle = titleMatch[2];
-      titleContent = `
+      // Handle titles with parentheses for better wrapping on small screens.
+      const titleMatch = details.title.match(/(.+)\s+\((.+)\)/);
+      let titleContent;
+
+      if (titleMatch) {
+        const mainTitle = titleMatch[1];
+        const subTitle = titleMatch[2];
+        titleContent = `
         <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 font-kanit flex flex-wrap items-baseline gap-x-2 leading-tight">
           <span>${mainTitle}</span>
           <span class="text-base font-normal text-gray-500 dark:text-gray-400">(${subTitle})</span>
         </h2>
       `;
-    } else {
-      titleContent = `<h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 font-kanit">${details.title}</h2>`;
-    }
+      } else {
+        titleContent = `<h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 font-kanit">${details.title}</h2>`;
+      }
 
-    const iconBgClass = `bg-${colorName}-100 dark:bg-${colorName}-400/20`; // Lighter, glowing background for dark mode
-    const iconBorderClass = `border-${colorName}-300 dark:border-${colorName}-400`;
+      const iconBgClass = `bg-${colorName}-100 dark:bg-${colorName}-400/20`; // Lighter, glowing background for dark mode
+      const iconBorderClass = `border-${colorName}-300 dark:border-${colorName}-400`;
 
-    toggleHeader.innerHTML = `
+      toggleHeader.innerHTML = `
       <div class="flex items-center min-w-0 gap-4">
-        <div class="section-icon-container flex-shrink-0 h-12 w-12 rounded-full flex items-center justify-center border-2 ${iconBorderClass} ${iconBgClass} transition-all duration-300 shadow-md shadow-${colorName}-400/30 overflow-hidden">
-          <img src="${details.icon}" alt="${details.title} Icon" class="section-main-icon h-8 w-8 transition-transform duration-300 ease-in-out">
+        <div class="section-icon-container shrink-0 h-12 w-12 rounded-full flex items-center justify-center border-2 ${iconBorderClass} ${iconBgClass} transition-all duration-300 shadow-md shadow-${colorName}-400/30 overflow-hidden" style="height: 3rem; width: 3rem; min-width: 3rem; min-height: 3rem; flex: 0 0 auto;">
+          <img src="${details.icon}" alt="${details.title} Icon" class="section-main-icon h-8 w-8 transition-transform duration-300 ease-in-out" style="height: 2rem; width: 2rem; display: block;">
         </div>
         <div class="min-w-0">
           ${titleContent}
@@ -483,534 +474,526 @@ export function initializePage() {
       </div>
       <svg class="chevron-icon h-6 w-6 text-gray-500 dark:text-gray-400 transition-transform duration-300 flex-shrink-0" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
     `;
-    // Accessibility: Add ARIA attributes for the accordion header
-    toggleHeader.setAttribute("aria-expanded", "false");
-    toggleHeader.setAttribute("aria-controls", `content-${categoryKey}`);
+      // Accessibility: Add ARIA attributes for the accordion header
+      toggleHeader.setAttribute("aria-expanded", "false");
+      toggleHeader.setAttribute("aria-controls", `content-${categoryKey}`);
 
-    const contentDiv = document.createElement("div");
-    contentDiv.className =
-      "section-content grid grid-rows-[0fr] transition-[grid-template-rows] duration-500 ease-in-out";
-    const innerContentWrapper = document.createElement("div"); // This wrapper will be animated
-    // The inner wrapper handles the fade/slide, while the parent handles the height expansion.
-    innerContentWrapper.className = "inner-content-wrapper overflow-hidden transition-all duration-300 ease-out opacity-0 -translate-y-2";
-    // Accessibility: Add ID and ARIA attributes for the content panel
-    contentDiv.id = `content-${categoryKey}`;
-    contentDiv.setAttribute("role", "region");
+      const contentDiv = document.createElement("div");
+      contentDiv.className =
+        "section-content grid grid-rows-[0fr] transition-[grid-template-rows] duration-500 ease-in-out";
+      const innerContentWrapper = document.createElement("div"); // This wrapper will be animated
+      // The inner wrapper handles the fade/slide, while the parent handles the height expansion.
+      innerContentWrapper.className = "inner-content-wrapper overflow-hidden transition-all duration-300 ease-out opacity-0 -translate-y-2";
+      // Accessibility: Add ID and ARIA attributes for the content panel
+      contentDiv.id = `content-${categoryKey}`;
+      contentDiv.setAttribute("role", "region");
 
-    const hasSubCategories = ['AstronomyPOSN', 'ChallengePOSN', 'AstronomyReview', 'PhysicsM4', 'PhysicsM5', 'PhysicsM6', 'EarthSpaceScienceBasic', 'EarthSpaceScienceAdvance'].includes(categoryKey);
+      const hasSubCategories = ['AstronomyPOSN', 'ChallengePOSN', 'AstronomyReview', 'PhysicsM4', 'PhysicsM5', 'PhysicsM6', 'EarthSpaceScienceBasic', 'EarthSpaceScienceAdvance'].includes(categoryKey);
 
-    if (hasSubCategories) {
-      const subCategoryContainer = document.createElement('div');
-      subCategoryContainer.className = 'p-2 md:p-4 space-y-2';
+      if (hasSubCategories) {
+        const subCategoryContainer = document.createElement('div');
+        subCategoryContainer.className = 'p-2 md:p-4 space-y-2';
 
-      const groupedData = groupQuizzesForCategory(quizzes, categoryKey);
+        const groupedData = groupQuizzesForCategory(quizzes, categoryKey);
 
-      groupedData.forEach(group => {
-        if (group.isNested) {
-          // Create a container accordion for nested groups
-          const containerAccordion = createSubCategoryAccordion({ title: group.title, quizzes: [], level: group.level, shortTitle: group.shortTitle }, colorName);
-          const contentWrapper = containerAccordion.querySelector('.inner-content-wrapper');
-          contentWrapper.innerHTML = ''; // Clear default grid
-          contentWrapper.classList.remove('quiz-grid-container');
-          contentWrapper.classList.add('space-y-2', 'p-2');
+        groupedData.forEach(group => {
+          if (group.isNested) {
+            // Create a container accordion for nested groups
+            const containerAccordion = createSubCategoryAccordion({ title: group.title, quizzes: [], level: group.level, shortTitle: group.shortTitle }, colorName);
+            const contentWrapper = containerAccordion.querySelector('.inner-content-wrapper');
+            contentWrapper.innerHTML = ''; // Clear default grid
+            contentWrapper.classList.remove('quiz-grid-container');
+            contentWrapper.classList.add('space-y-2', 'p-2');
 
-          group.subGroups.forEach(subGroup => {
-            const nestedAccordion = createSubCategoryAccordion(subGroup, colorName, categoryKey);
-            contentWrapper.appendChild(nestedAccordion);
-          });
-          subCategoryContainer.appendChild(containerAccordion);
-        } else {
-          // Create a standard sub-category accordion
-          const accordion = createSubCategoryAccordion(group, colorName, categoryKey);
-          subCategoryContainer.appendChild(accordion);
-        }
-      });
-
-      innerContentWrapper.appendChild(subCategoryContainer);
-    } else {
-      const quizGrid = document.createElement("div");
-      quizGrid.className = "quiz-grid-container p-4 md:p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2";
-      quizzes.forEach((quiz, index) => {
-        const card = createQuizCard(quiz, index);
-        quizGrid.appendChild(card);
-      });
-      innerContentWrapper.appendChild(quizGrid);
-    }
-
-    contentDiv.appendChild(innerContentWrapper);
-    section.append(toggleHeader, contentDiv);
-    return section;
-  }
-
-  /**
-   * Scrolls the page smoothly to a target element, respecting the CSS `scroll-padding-top`.
-   * @param {HTMLElement} targetElement The element to scroll to.
-   */
-  function scrollToElement(targetElement) {
-    targetElement.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
-  }
-
-  /**
-   * Updates the floating navigation bar based on the currently active section.
-   * @param {HTMLElement|null} activeToggle - The toggle element of the currently open section, or null to hide.
-   * @param {NodeListOf<Element>} allToggles - A collection of all section toggle elements.
-   */
-  function updateFloatingNav(activeToggle, allToggles) {
-    const floatingNavContainer = document.getElementById('floating-nav-container');    
-    const floatingNavButtons = document.getElementById('floating-nav-buttons');
-    if (!floatingNavContainer || !floatingNavButtons) return;
-
-    // --- 1. Determine theme and clean up old theme classes ---
-    const previousColor = floatingNavContainer.dataset.themeColor || 'default';
-    let colorName = 'default';
-
-    const activeSection = activeToggle ? activeToggle.closest('section') : null;
-    if (activeToggle) {
-      const activeCategoryKey = activeSection ? activeSection.id.replace('category-', '') : null;
-      const activeCategoryDetails = activeCategoryKey ? categoryDetails[activeCategoryKey] : null;
-      if (activeCategoryDetails && activeCategoryDetails.color) {
-        const extractedColor = activeCategoryDetails.color.split('-')[1];
-        if (extractedColor) colorName = extractedColor;
-      }
-    }
-
-    if (previousColor !== colorName) {
-      // Remove old container colors. The spread syntax (...) is used to pass multiple arguments.
-      const oldContainerBg = previousColor === 'default' ? 'bg-white/60 dark:bg-gray-900/60' : `bg-${previousColor}-50/80 dark:bg-${previousColor}-950/70`;
-      const oldContainerBorder = previousColor === 'default' ? 'border-gray-200 dark:border-gray-700' : `border-${previousColor}-200 dark:border-${previousColor}-800`;
-      floatingNavContainer.classList.remove(...oldContainerBg.split(' '), ...oldContainerBorder.split(' '));
-    }
-
-    // --- 2. Define and apply new theme classes to the container ---
-    const containerBg = colorName === 'default' ? 'bg-white/60 dark:bg-gray-900/60' : `bg-${colorName}-50/80 dark:bg-${colorName}-950/70`;
-    const containerBorder = colorName === 'default' ? 'border-gray-200 dark:border-gray-700' : `border-${colorName}-200 dark:border-${colorName}-800`;
-    floatingNavContainer.classList.add(...containerBg.split(' '), ...containerBorder.split(' '));
-    floatingNavContainer.dataset.themeColor = colorName;
-
-    // --- 3. Handle visibility and button generation ---
-    if (!activeToggle) {
-      floatingNavContainer.classList.add('opacity-0', 'pointer-events-none', 'translate-y-full');
-      return;
-    }
-
-    // Define button colors based on the same theme
-    const bgColor = colorName === 'default' ? 'bg-gray-200/80 dark:bg-gray-800/90' : `bg-${colorName}-100/80 dark:bg-${colorName}-900/60`;
-    const hoverBgColor = colorName === 'default' ? 'hover:bg-gray-300 dark:hover:bg-gray-700/90' : `hover:bg-${colorName}-200/90 dark:hover:bg-${colorName}-800/70`;
-    const borderColor = colorName === 'default' ? 'border-gray-300 dark:border-gray-700' : `border-${colorName}-300 dark:border-${colorName}-600`;
-    const textColor = colorName === 'default' ? 'text-gray-800 dark:text-gray-200' : `text-${colorName}-800 dark:text-${colorName}-200`;
-    // --- 4. Rebuild buttons with the new theme ---
-    floatingNavButtons.innerHTML = ''; // Clear old buttons first
-    const fragment = document.createDocumentFragment();
-    let animationDelay = 0;
-    const delayIncrement = 50; // 50ms between each button
-
-    const createFloatingButton = (options) => {
-      const button = document.createElement("button");
-      const baseClasses = 'floating-nav-btn-base anim-nav-btn-pop-in transform transition-all duration-200 hover:scale-110';
-      const layoutClasses = options.classList || `flex items-center justify-center h-8 w-8 rounded-full flex-shrink-0 ${bgColor} ${hoverBgColor} ${textColor} shadow-md border ${borderColor} overflow-hidden`;
-      
-      button.className = `${baseClasses} ${layoutClasses}`;
-      button.setAttribute("aria-label", options.ariaLabel);
-      button.innerHTML = options.innerHTML;
-      button.style.animationDelay = `${animationDelay}ms`;
-      animationDelay += delayIncrement;
-      button.addEventListener("click", options.onClick);
-      return button;
-    };
-
-    // Close Category Button
-    const closeBtn = createFloatingButton({
-      ariaLabel: "ปิดหมวดหมู่",
-      innerHTML: `<svg class="h-5 w-5" width="20" height="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>`,
-      onClick: () => { if (activeToggle) activeToggle.click(); },
-    });
-    fragment.appendChild(closeBtn);
-
-    // Scroll to Top Button
-    const scrollToTopBtn = createFloatingButton({
-      ariaLabel: "กลับไปด้านบนสุด",
-      innerHTML: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" /></svg>`,
-      onClick: () => window.scrollTo({ top: 0, behavior: "smooth" }),
-    });
-    fragment.appendChild(scrollToTopBtn);
-
-    // Add a separator if there are other buttons to navigate to.
-    if (allToggles.length > 1) {
-      const separator = document.createElement("div");
-      separator.className = `h-6 w-px mx-1.5 bg-gray-300 dark:bg-gray-600`;
-      fragment.appendChild(separator);
-    }
-
-    allToggles.forEach((toggle) => {
-      if (toggle === activeToggle) return; // Skip the active one
-
-      const section = toggle.closest('section');
-      if (!section) return;
-
-      const categoryKey = section.id.replace('category-', '');
-      const details = categoryDetails[categoryKey];
-      if (!details) return;
-
-      const mainTitle = details.title.split('(')[0].trim();
-      const button = createFloatingButton({
-        ariaLabel: `ไปที่หมวดหมู่ ${mainTitle}`,
-        innerHTML: `<img src="${details.icon}" alt="${mainTitle} icon" class="h-5 w-5">`,
-        onClick: (e) => {
-          const targetToggle = document.getElementById(toggle.id); // Use closure to get the correct toggle
-          if (targetToggle) {
-            const targetSection = targetToggle.closest("section");
-            targetToggle.click();
-            if (targetSection) {
-              setTimeout(() => scrollToElement(targetSection), SCROLL_DELAY);
-            }
-          }
-        }
-      });
-
-      fragment.appendChild(button);
-    });
-
-    // --- NEW: Add Sub-category buttons if applicable, AFTER main category buttons ---
-    const activeCategoryKey = activeSection ? activeSection.id.replace('category-', '') : null;
-    if (['AstronomyPOSN', 'ChallengePOSN', 'AstronomyReview', 'PhysicsM4', 'PhysicsM5', 'PhysicsM6', 'EarthSpaceScienceBasic', 'EarthSpaceScienceAdvance'].includes(activeCategoryKey) && activeSection) {
-      const subToggles = activeSection.querySelectorAll('.sub-section-toggle[data-level="1"]');
-      if (subToggles.length > 0) {
-        const subSeparator = document.createElement("div");
-        subSeparator.className = `h-5 w-px mx-1.5 bg-gray-300 dark:bg-gray-600`;
-        fragment.appendChild(subSeparator);
-
-        subToggles.forEach(subToggle => {
-          const subTitle = subToggle.querySelector('h4').textContent;
-          
-          // Extract "บทที่ X" for the button text, otherwise use a short title.
-          let buttonText;
-          const match = subTitle.match(/บทที่\s*([\d\.]+)/);
-          if (match && match[1]) {
-            buttonText = `บทที่ ${match[1]}`;
+            group.subGroups.forEach(subGroup => {
+              const nestedAccordion = createSubCategoryAccordion(subGroup, colorName, categoryKey);
+              contentWrapper.appendChild(nestedAccordion);
+            });
+            subCategoryContainer.appendChild(containerAccordion);
           } else {
-            buttonText = subToggle.dataset.shortTitle || subTitle;
+            // Create a standard sub-category accordion
+            const accordion = createSubCategoryAccordion(group, colorName, categoryKey);
+            subCategoryContainer.appendChild(accordion);
           }
-
-          const subButton = createFloatingButton({
-            ariaLabel: `ไปที่ ${subTitle}`,
-            innerHTML: `<span class="text-xs font-bold whitespace-nowrap">${buttonText}</span>`,
-            classList: `flex items-center justify-center h-7 px-3 rounded-lg ${bgColor} ${hoverBgColor} ${textColor} shadow-sm border ${borderColor}`,
-            onClick: () => {
-              const isAlreadyOpen = subToggle.getAttribute('aria-expanded') === 'true';
-              if (!isAlreadyOpen) {
-                toggleAccordion(subToggle, 'open');
-              }
-              setTimeout(() => {
-                scrollToElement(subToggle); // Use the consistent scroll function
-                subToggle.classList.add('ring-2', 'ring-offset-2', `ring-${colorName}-500`, `dark:ring-offset-gray-900`);
-                setTimeout(() => subToggle.classList.remove('ring-2', 'ring-offset-2', `ring-${colorName}-500`, `dark:ring-offset-gray-900`), 2000);
-              }, isAlreadyOpen ? 0 : 150); // No delay if already open, small delay if just opened.
-            }
-          });
-          fragment.appendChild(subButton);
         });
+
+        innerContentWrapper.appendChild(subCategoryContainer);
+      } else {
+        const quizGrid = document.createElement("div");
+        quizGrid.className = "quiz-grid-container p-4 md:p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2";
+        quizzes.forEach((quiz, index) => {
+          const card = createQuizCard(quiz, index);
+          quizGrid.appendChild(card);
+        });
+        innerContentWrapper.appendChild(quizGrid);
       }
+
+      contentDiv.appendChild(innerContentWrapper);
+      section.append(toggleHeader, contentDiv);
+      return section;
     }
 
-    floatingNavButtons.appendChild(fragment);
+    /**
+     * Scrolls the page smoothly to a target element, respecting the CSS `scroll-padding-top`.
+     * @param {HTMLElement} targetElement The element to scroll to.
+     */
+    function scrollToElement(targetElement) {
+      targetElement.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
 
-    // Show the nav (the container's transition will handle the fade/slide)
-    floatingNavContainer.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-full');
-    // No specific button animation needed here as requested.
-  }
+    /**
+     * Updates the floating navigation bar based on the currently active section.
+     * @param {HTMLElement|null} activeToggle - The toggle element of the currently open section, or null to hide.
+     * @param {NodeListOf<Element>} allToggles - A collection of all section toggle elements.
+     */
+    function updateFloatingNav(activeToggle, allToggles) {
+      const floatingNavContainer = document.getElementById('floating-nav-container');
+      const floatingNavButtons = document.getElementById('floating-nav-buttons');
+      if (!floatingNavContainer || !floatingNavButtons) return;
 
-  // Set the header height property on initial load and on window resize.
-  const headerElement = document.getElementById("main_header-placeholder");
-  if (headerElement) {
-      const resizeObserver = new ResizeObserver(() => setHeaderHeightProperty());
-      resizeObserver.observe(headerElement);
-  }
-  setHeaderHeightProperty();
-  window.addEventListener("resize", setHeaderHeightProperty);
-  // --- Main Rendering Logic ---
+      // --- 1. Determine theme and clean up old theme classes ---
+      const previousColor = floatingNavContainer.dataset.themeColor || 'default';
+      let colorName = 'default';
 
-  // Display total quiz count in the new header for the list
-  const quizListHeader = document.getElementById("quiz-list-header");
-  const quizCountDisplay = document.getElementById("quiz-count-display");
-  if (quizListHeader && quizCountDisplay) {
-    const totalQuizCount = quizList.filter(q => q).length; // Filter for safety
-    const totalQuestionsCount = quizList.reduce((sum, quiz) => sum + (quiz.amount || 0), 0);
+      const activeSection = activeToggle ? activeToggle.closest('section') : null;
+      if (activeToggle) {
+        const activeCategoryKey = activeSection ? activeSection.id.replace('category-', '') : null;
+        const activeCategoryDetails = activeCategoryKey ? categoryDetails[activeCategoryKey] : null;
+        if (activeCategoryDetails && activeCategoryDetails.color) {
+          const extractedColor = activeCategoryDetails.color.split('-')[1];
+          if (extractedColor) colorName = extractedColor;
+        }
+      }
 
-    if (totalQuizCount > 0) {
-      quizCountDisplay.innerHTML = `
+      if (previousColor !== colorName) {
+        // Remove old container colors. The spread syntax (...) is used to pass multiple arguments.
+        const oldContainerBg = previousColor === 'default' ? 'bg-white/60 dark:bg-gray-900/60' : `bg-${previousColor}-50/80 dark:bg-${previousColor}-950/70`;
+        const oldContainerBorder = previousColor === 'default' ? 'border-gray-200 dark:border-gray-700' : `border-${previousColor}-200 dark:border-${previousColor}-800`;
+        floatingNavContainer.classList.remove(...oldContainerBg.split(' '), ...oldContainerBorder.split(' '));
+      }
+
+      // --- 2. Define and apply new theme classes to the container ---
+      const containerBg = colorName === 'default' ? 'bg-white/60 dark:bg-gray-900/60' : `bg-${colorName}-50/80 dark:bg-${colorName}-950/70`;
+      const containerBorder = colorName === 'default' ? 'border-gray-200 dark:border-gray-700' : `border-${colorName}-200 dark:border-${colorName}-800`;
+      floatingNavContainer.classList.add(...containerBg.split(' '), ...containerBorder.split(' '));
+      floatingNavContainer.dataset.themeColor = colorName;
+
+      // --- 3. Handle visibility and button generation ---
+      if (!activeToggle) {
+        floatingNavContainer.classList.add('opacity-0', 'pointer-events-none', 'translate-y-full');
+        return;
+      }
+
+      // Define button colors based on the same theme
+      const bgColor = colorName === 'default' ? 'bg-gray-200/80 dark:bg-gray-800/90' : `bg-${colorName}-100/80 dark:bg-${colorName}-900/60`;
+      const hoverBgColor = colorName === 'default' ? 'hover:bg-gray-300 dark:hover:bg-gray-700/90' : `hover:bg-${colorName}-200/90 dark:hover:bg-${colorName}-800/70`;
+      const borderColor = colorName === 'default' ? 'border-gray-300 dark:border-gray-700' : `border-${colorName}-300 dark:border-${colorName}-600`;
+      const textColor = colorName === 'default' ? 'text-gray-800 dark:text-gray-200' : `text-${colorName}-800 dark:text-${colorName}-200`;
+      // --- 4. Rebuild buttons with the new theme ---
+      floatingNavButtons.innerHTML = ''; // Clear old buttons first
+      const fragment = document.createDocumentFragment();
+      let animationDelay = 0;
+      const delayIncrement = 50; // 50ms between each button
+
+      const createFloatingButton = (options) => {
+        const button = document.createElement("button");
+        const baseClasses = 'floating-nav-btn-base anim-nav-btn-pop-in transform transition-all duration-200 hover:scale-110';
+        const layoutClasses = options.classList || `flex items-center justify-center h-8 w-8 rounded-full flex-shrink-0 ${bgColor} ${hoverBgColor} ${textColor} shadow-md border ${borderColor} overflow-hidden`;
+
+        button.className = `${baseClasses} ${layoutClasses}`;
+        button.setAttribute("aria-label", options.ariaLabel);
+        button.innerHTML = options.innerHTML;
+        button.style.animationDelay = `${animationDelay}ms`;
+        animationDelay += delayIncrement;
+        button.addEventListener("click", options.onClick);
+        return button;
+      };
+
+      // Close Category Button
+      const closeBtn = createFloatingButton({
+        ariaLabel: "ปิดหมวดหมู่",
+        innerHTML: `<svg class="h-5 w-5" width="20" height="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>`,
+        onClick: () => { if (activeToggle) activeToggle.click(); },
+      });
+      fragment.appendChild(closeBtn);
+
+      // Scroll to Top Button
+      const scrollToTopBtn = createFloatingButton({
+        ariaLabel: "กลับไปด้านบนสุด",
+        innerHTML: `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" /></svg>`,
+        onClick: () => window.scrollTo({ top: 0, behavior: "smooth" }),
+      });
+      fragment.appendChild(scrollToTopBtn);
+
+      // Add a separator if there are other buttons to navigate to.
+      if (allToggles.length > 1) {
+        const separator = document.createElement("div");
+        separator.className = `h-6 w-px mx-1.5 bg-gray-300 dark:bg-gray-600`;
+        fragment.appendChild(separator);
+      }
+
+      allToggles.forEach((toggle) => {
+        if (toggle === activeToggle) return; // Skip the active one
+
+        const section = toggle.closest('section');
+        if (!section) return;
+
+        const categoryKey = section.id.replace('category-', '');
+        const details = categoryDetails[categoryKey];
+        if (!details) return;
+
+        const mainTitle = details.title.split('(')[0].trim();
+        const button = createFloatingButton({
+          ariaLabel: `ไปที่หมวดหมู่ ${mainTitle}`,
+          innerHTML: `<img src="${details.icon}" alt="${mainTitle} icon" class="h-5 w-5" style="height: 1.25rem; width: 1.25rem;">`,
+          onClick: (e) => {
+            const targetToggle = document.getElementById(toggle.id); // Use closure to get the correct toggle
+            if (targetToggle) {
+              const targetSection = targetToggle.closest("section");
+              targetToggle.click();
+              if (targetSection) {
+                setTimeout(() => scrollToElement(targetSection), SCROLL_DELAY);
+              }
+            }
+          }
+        });
+
+        fragment.appendChild(button);
+      });
+
+      // --- NEW: Add Sub-category buttons if applicable, AFTER main category buttons ---
+      const activeCategoryKey = activeSection ? activeSection.id.replace('category-', '') : null;
+      if (['AstronomyPOSN', 'ChallengePOSN', 'AstronomyReview', 'PhysicsM4', 'PhysicsM5', 'PhysicsM6', 'EarthSpaceScienceBasic', 'EarthSpaceScienceAdvance'].includes(activeCategoryKey) && activeSection) {
+        const subToggles = activeSection.querySelectorAll('.sub-section-toggle[data-level="1"]');
+        if (subToggles.length > 0) {
+          const subSeparator = document.createElement("div");
+          subSeparator.className = `h-5 w-px mx-1.5 bg-gray-300 dark:bg-gray-600`;
+          fragment.appendChild(subSeparator);
+
+          subToggles.forEach(subToggle => {
+            const subTitle = subToggle.querySelector('h4').textContent;
+
+            // Extract "บทที่ X" for the button text, otherwise use a short title.
+            let buttonText;
+            const match = subTitle.match(/บทที่\s*([\d\.]+)/);
+            if (match && match[1]) {
+              buttonText = `บทที่ ${match[1]}`;
+            } else {
+              buttonText = subToggle.dataset.shortTitle || subTitle;
+            }
+
+            const subButton = createFloatingButton({
+              ariaLabel: `ไปที่ ${subTitle}`,
+              innerHTML: `<span class="text-xs font-bold whitespace-nowrap">${buttonText}</span>`,
+              classList: `flex items-center justify-center h-7 px-3 rounded-lg ${bgColor} ${hoverBgColor} ${textColor} shadow-sm border ${borderColor}`,
+              onClick: () => {
+                const isAlreadyOpen = subToggle.getAttribute('aria-expanded') === 'true';
+                if (!isAlreadyOpen) {
+                  toggleAccordion(subToggle, 'open');
+                }
+                setTimeout(() => {
+                  scrollToElement(subToggle); // Use the consistent scroll function
+                  subToggle.classList.add('ring-2', 'ring-offset-2', `ring-${colorName}-500`, `dark:ring-offset-gray-900`);
+                  setTimeout(() => subToggle.classList.remove('ring-2', 'ring-offset-2', `ring-${colorName}-500`, `dark:ring-offset-gray-900`), 2000);
+                }, isAlreadyOpen ? 0 : 150); // No delay if already open, small delay if just opened.
+              }
+            });
+            fragment.appendChild(subButton);
+          });
+        }
+      }
+
+      floatingNavButtons.appendChild(fragment);
+
+      // Show the nav (the container's transition will handle the fade/slide)
+      floatingNavContainer.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-full');
+      // No specific button animation needed here as requested.
+    }
+
+    // --- Main Rendering Logic ---
+
+    // Display total quiz count in the new header for the list
+    const quizListHeader = document.getElementById("quiz-list-header");
+    const quizCountDisplay = document.getElementById("quiz-count-display");
+    if (quizListHeader && quizCountDisplay) {
+      const totalQuizCount = quizList.filter(q => q).length; // Filter for safety
+      const totalQuestionsCount = quizList.reduce((sum, quiz) => sum + (quiz.amount || 0), 0);
+
+      if (totalQuizCount > 0) {
+        quizCountDisplay.innerHTML = `
         <div>
             <span class="text-base text-xs font-bold">แบบฝึกหัดทั้งหมด</span> 
             <span class="text-base text-xs font-bold text-teal-600 dark:text-teal-400 ml-2">${totalQuizCount} ชุด</span>
         </div>
         <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">จำนวนคำถามทั้งหมด ${totalQuestionsCount.toLocaleString()} ข้อ</div>
       `;
-      quizListHeader.classList.remove('hidden');
-    }
-  }
-  // 1. Group quizzes by category
-  const groupedQuizzes = quizList.reduce((acc, quiz) => {
-    const category = quiz.category || "Uncategorized";
-    if (!acc[category]) {
-      acc[category] = [];
-    }
-    acc[category].push(quiz);
-    return acc;
-  }, {});
-
-  // Sort quizzes within each category using natural sort for consistent ordering.
-  // This ensures that "Quiz 2" comes before "Quiz 10".
-  Object.keys(groupedQuizzes).forEach(categoryKey => {
-    groupedQuizzes[categoryKey].sort((a, b) => a.title.localeCompare(b.title, 'th', { numeric: true, sensitivity: 'base' }));
-  });
-
-  // 2. Sort categories based on the 'order' property for consistent display
-  const sortedCategories = Object.keys(groupedQuizzes).sort((a, b) => {
-    // --- Custom Sort Logic: Force 'AstronomyReview' to be first ---
-    if (a === 'AstronomyReview' && b !== 'AstronomyReview') return -1;
-    if (a !== 'AstronomyReview' && b === 'AstronomyReview') return 1;
-
-    // --- Default Sort Logic: Use the 'order' property from data-manager ---
-    const orderA = (categoryDetails[a] && categoryDetails[a].order) || 99;
-    const orderB = (categoryDetails[b] && categoryDetails[b].order) || 99;
-    return orderA - orderB;
-  });
-
-  // 3. Create and append category sections using a DocumentFragment for performance
-  const container = document.getElementById("quiz-categories-container");
-  if (container) {
-    // Proactively adjust the spacing between sections for a more compact view.
-    // This assumes the container uses Tailwind's space-y utility.
-    container.classList.remove('space-y-6', 'space-y-8'); // Remove potentially larger spacing
-    container.classList.add('space-y-4'); // Apply a smaller, consistent gap
-
-    const fragment = document.createDocumentFragment();
-    sortedCategories.forEach((categoryKey) => {
-      const quizzes = groupedQuizzes[categoryKey];
-      const section = createCategorySection(categoryKey, quizzes);
-      if (section) {
-        fragment.appendChild(section);
+        quizListHeader.classList.remove('hidden');
       }
+    }
+    // 1. Group quizzes by category
+    const groupedQuizzes = quizList.reduce((acc, quiz) => {
+      const category = quiz.category || "Uncategorized";
+      if (!acc[category]) {
+        acc[category] = [];
+      }
+      acc[category].push(quiz);
+      return acc;
+    }, {});
+
+    // Sort quizzes within each category using natural sort for consistent ordering.
+    // This ensures that "Quiz 2" comes before "Quiz 10".
+    Object.keys(groupedQuizzes).forEach(categoryKey => {
+      groupedQuizzes[categoryKey].sort((a, b) => a.title.localeCompare(b.title, 'th', { numeric: true, sensitivity: 'base' }));
     });
-    container.innerHTML = ""; // Clear existing content
-    container.appendChild(fragment);
-  } else {
-    console.error("Category container not found!");
-  }
 
-  // Create and append the floating navigation container
-  const floatingNavContainer = document.createElement('div');
-  floatingNavContainer.id = 'floating-nav-container';
-  floatingNavContainer.className = 'fixed bottom-4 left-1/2 p-2 bg-white/60 dark:bg-gray-900/60 backdrop-blur-sm shadow-xl rounded-t-xl transform -translate-x-1/2 opacity-0 pointer-events-none translate-y-full transition-all duration-300 z-40 border border-gray-200 dark:border-gray-700 max-w-[95vw] overflow-x-auto overflow-y-hidden modern-scrollbar';
-  floatingNavContainer.innerHTML = `<div id="floating-nav-buttons" class="flex flex-row flex-nowrap items-center gap-2"></div>`;
-  document.body.appendChild(floatingNavContainer);
+    // 2. Sort categories based on the 'order' property for consistent display
+    const sortedCategories = Object.keys(groupedQuizzes).sort((a, b) => {
+      // --- Custom Sort Logic: Force 'AstronomyReview' to be first ---
+      if (a === 'AstronomyReview' && b !== 'AstronomyReview') return -1;
+      if (a !== 'AstronomyReview' && b === 'AstronomyReview') return 1;
 
-  // 4. Attach listeners and set initial state for accordions
-  const sectionToggles = getSectionToggles();
-  let currentlyOpenSectionToggle = null;
+      // --- Default Sort Logic: Use the 'order' property from data-manager ---
+      const orderA = (categoryDetails[a] && categoryDetails[a].order) || 99;
+      const orderB = (categoryDetails[b] && categoryDetails[b].order) || 99;
+      return orderA - orderB;
+    });
 
-  // Refactored accordion logic for clarity and robustness.
-  // This ensures that state is managed correctly regardless of how the toggle is triggered.
-  sectionToggles.forEach((toggle) => {
-    toggle.addEventListener("click", () => {
-      const isThisTheCurrentlyOpen = currentlyOpenSectionToggle === toggle;
+    // 3. Create and append category sections using a DocumentFragment for performance
+    const container = document.getElementById("quiz-categories-container");
+    if (container) {
+      // Proactively adjust the spacing between sections for a more compact view.
+      // This assumes the container uses Tailwind's space-y utility.
+      container.classList.remove('space-y-6', 'space-y-8'); // Remove potentially larger spacing
+      container.classList.add('space-y-4'); // Apply a smaller, consistent gap
 
-      // Case 1: The clicked toggle is the one that's already open, so we close it.
-      if (isThisTheCurrentlyOpen) {
-        toggleAccordion(toggle, "close");
-        currentlyOpenSectionToggle = null;
-      } else {
-        // Case 2: A new section is being opened.
-        // First, close the old one if it exists.
-        if (currentlyOpenSectionToggle) {
-          toggleAccordion(currentlyOpenSectionToggle, "close");
+      const fragment = document.createDocumentFragment();
+      sortedCategories.forEach((categoryKey) => {
+        const quizzes = groupedQuizzes[categoryKey];
+        const section = createCategorySection(categoryKey, quizzes);
+        if (section) {
+          fragment.appendChild(section);
         }
-        // Then, open the new one and update the state.
-        toggleAccordion(toggle, "open");
-        currentlyOpenSectionToggle = toggle;
-      }
-
-      // After all state changes, update the floating nav based on the new state.
-      updateFloatingNav(currentlyOpenSectionToggle, sectionToggles);
-    });
-  });
-
-  /**
-   * Handles clicks on navigation links (e.g., in the header) that point to category sections.
-   * This allows opening a specific accordion section from anywhere on the page.
-   * @param {MouseEvent} event
-   */
-  function handleCategoryNavigation(event) {
-    const navLink = event.target.closest('a[href^="#category-"]');
-    if (!navLink) return;
-
-    event.preventDefault();
-    const targetId = navLink.hash;
-    const targetSection = document.querySelector(targetId);
-    if (!targetSection) return;
-
-    const targetToggle = targetSection.querySelector('.section-toggle');
-    if (targetToggle) {
-      const isAlreadyOpen = targetToggle.getAttribute('aria-expanded') === 'true';
-      if (!isAlreadyOpen) {
-        // Programmatically click the toggle to trigger all associated logic
-        // (closing other sections, updating floating nav, etc.)
-        targetToggle.click();
-      } else {
-        // If the section is already open, the click won't change the state,
-        // so we need to manually ensure the floating nav is visible and updated.
-        updateFloatingNav(targetToggle, sectionToggles);
-      }
-      // Use a longer timeout here as well to ensure any closing animation has finished
-      // before scrolling, which gives a more stable final position. The animation
-      // is 500ms, so we wait slightly longer.
-      setTimeout(() => scrollToElement(targetSection), SCROLL_DELAY);
+      });
+      container.innerHTML = ""; // Clear existing content
+      container.appendChild(fragment);
+    } else {
+      console.error("Category container not found!");
     }
-  }
-  document.addEventListener('click', handleCategoryNavigation);
 
-  // Display a message if no quizzes were found after processing
-  // This check should happen AFTER attempting to append content to the container.
-  // Check if the container actually has children, not the fragment (which might be empty or out of scope).
-  if (container && container.children.length === 0) {
-    container.innerHTML = `
+    // Create and append the floating navigation container
+    const floatingNavContainer = document.createElement('div');
+    floatingNavContainer.id = 'floating-nav-container';
+    floatingNavContainer.className = 'fixed bottom-4 left-1/2 p-2 bg-white/60 dark:bg-gray-900/60 backdrop-blur-sm shadow-xl rounded-t-xl transform -translate-x-1/2 opacity-0 pointer-events-none translate-y-full transition-all duration-300 z-40 border border-gray-200 dark:border-gray-700 max-w-[95vw] overflow-x-auto overflow-y-hidden modern-scrollbar';
+    floatingNavContainer.innerHTML = `<div id="floating-nav-buttons" class="flex flex-row flex-nowrap items-center gap-2"></div>`;
+    document.body.appendChild(floatingNavContainer);
+
+    // 4. Attach listeners and set initial state for accordions
+    const sectionToggles = getSectionToggles();
+    let currentlyOpenSectionToggle = null;
+
+    // Refactored accordion logic for clarity and robustness.
+    // This ensures that state is managed correctly regardless of how the toggle is triggered.
+    sectionToggles.forEach((toggle) => {
+      toggle.addEventListener("click", () => {
+        const isThisTheCurrentlyOpen = currentlyOpenSectionToggle === toggle;
+
+        // Case 1: The clicked toggle is the one that's already open, so we close it.
+        if (isThisTheCurrentlyOpen) {
+          toggleAccordion(toggle, "close");
+          currentlyOpenSectionToggle = null;
+        } else {
+          // Case 2: A new section is being opened.
+          // First, close the old one if it exists.
+          if (currentlyOpenSectionToggle) {
+            toggleAccordion(currentlyOpenSectionToggle, "close");
+          }
+          // Then, open the new one and update the state.
+          toggleAccordion(toggle, "open");
+          currentlyOpenSectionToggle = toggle;
+        }
+
+        // After all state changes, update the floating nav based on the new state.
+        updateFloatingNav(currentlyOpenSectionToggle, sectionToggles);
+      });
+    });
+
+    /**
+     * Handles clicks on navigation links (e.g., in the header) that point to category sections.
+     * This allows opening a specific accordion section from anywhere on the page.
+     * @param {MouseEvent} event
+     */
+    function handleCategoryNavigation(event) {
+      const navLink = event.target.closest('a[href^="#category-"]');
+      if (!navLink) return;
+
+      event.preventDefault();
+      const targetId = navLink.hash;
+      const targetSection = document.querySelector(targetId);
+      if (!targetSection) return;
+
+      const targetToggle = targetSection.querySelector('.section-toggle');
+      if (targetToggle) {
+        const isAlreadyOpen = targetToggle.getAttribute('aria-expanded') === 'true';
+        if (!isAlreadyOpen) {
+          // Programmatically click the toggle to trigger all associated logic
+          // (closing other sections, updating floating nav, etc.)
+          targetToggle.click();
+        } else {
+          // If the section is already open, the click won't change the state,
+          // so we need to manually ensure the floating nav is visible and updated.
+          updateFloatingNav(targetToggle, sectionToggles);
+        }
+        // Use a longer timeout here as well to ensure any closing animation has finished
+        // before scrolling, which gives a more stable final position. The animation
+        // is 500ms, so we wait slightly longer.
+        setTimeout(() => scrollToElement(targetSection), SCROLL_DELAY);
+      }
+    }
+    document.addEventListener('click', handleCategoryNavigation);
+
+    // Display a message if no quizzes were found after processing
+    // This check should happen AFTER attempting to append content to the container.
+    // Check if the container actually has children, not the fragment (which might be empty or out of scope).
+    if (container && container.children.length === 0) {
+      container.innerHTML = `
         <div class="text-center py-16 text-gray-500 dark:text-gray-400">
           <p class="text-lg font-bold mb-2">ไม่พบแบบทดสอบ</p>
           <p>ดูเหมือนจะยังไม่มีแบบทดสอบให้แสดงในขณะนี้ โปรดลองตรวจสอบภายหลัง</p>
         </div>
       `;
-  }
+    }
 
-  /**
-   * Handles the logic when a reset progress button is clicked.
-   * @param {Event} event The click event.
-   * @param {HTMLElement} card The parent quiz card element.
-   * @param {HTMLElement} resetButton The reset button that was clicked.
-   */
-  function handleResetButtonClick(event, card, resetButton) {
-    event.preventDefault();
-    event.stopPropagation();
-    const key = resetButton.dataset.storageKey;
-    const totalQuestions = parseInt(card.dataset.totalQuestions, 10);
-    const quiz = quizList.find(q => q.storageKey === key);
-
-    const onConfirm = () => {
-      localStorage.removeItem(key);
-      const progressWrapper = card.querySelector(".progress-footer-wrapper");
-      if (!progressWrapper) return;
-      const newProgress = getQuizProgress(key, totalQuestions);
-      const newProgressHTML = createProgressHTML(newProgress, quiz);
-      progressWrapper.style.transition = "opacity 0.2s ease-out";
-      progressWrapper.style.opacity = "0";
-      setTimeout(() => {
-        progressWrapper.innerHTML = newProgressHTML;
-        progressWrapper.style.transition = "opacity 0.3s ease-in";
-        progressWrapper.style.opacity = "1";
-      }, 200);
-    };
-    showConfirmModal(
-      "ยืนยันการล้างข้อมูล",
-      'คุณแน่ใจหรือไม่ว่าต้องการล้างความคืบหน้าของแบบทดสอบนี้?<br><strong class="text-red-600 dark:text-red-500">การกระทำนี้ไม่สามารถย้อนกลับได้</strong>',
-      onConfirm,
-      resetButton
-    );
-  }
-
-  // --- Random Quiz Button Functionality ---
-  const randomQuizBtn = document.getElementById("random-quiz-btn");
-  if (randomQuizBtn) {
-    randomQuizBtn.addEventListener("click", () => {
-      if (quizList && quizList.length > 0) {
-        const randomIndex = Math.floor(Math.random() * quizList.length);
-        const randomQuizUrl = quizList[randomIndex].url;
-        window.location.href = randomQuizUrl;
-      }
-    });
-  }
-
-  /**
-   * Shows a generic confirmation modal.
-   * @param {string} title The title for the confirmation dialog.
-   * @param {string} description The descriptive text for the dialog, can contain HTML.
-   * @param {Function} onConfirm The callback function to execute if the user confirms.
-   * @param {HTMLElement} triggerElement The element that triggered the modal.
-   */
-  function showConfirmModal(title, description, onConfirm, triggerElement) {
-    if (confirmModalTitle) confirmModalTitle.textContent = title;
-    if (confirmModalDesc) confirmModalDesc.innerHTML = description;
-    pageState.confirmCallback = onConfirm;
-    confirmModal.open(triggerElement);
-  }
-
-  // --- Event Delegation Listener ---
-  if (container) {
-    container.addEventListener("click", (event) => {
-      const card = event.target.closest(".quiz-card");
-      if (!card) return; // Exit if the click was not inside a card
-
-      const resetButton = event.target.closest(".reset-progress-btn");
-
-      // Handle reset button click
-      if (resetButton) {
-        handleResetButtonClick(event, card, resetButton);
-        return; // Stop further processing
-      }
-
-      // Handle card click (for completed quizzes)
-      const storageKey = card.dataset.storageKey;
+    /**
+     * Handles the logic when a reset progress button is clicked.
+     * @param {Event} event The click event.
+     * @param {HTMLElement} card The parent quiz card element.
+     * @param {HTMLElement} resetButton The reset button that was clicked.
+     */
+    function handleResetButtonClick(event, card, resetButton) {
+      event.preventDefault();
+      event.stopPropagation();
+      const key = resetButton.dataset.storageKey;
       const totalQuestions = parseInt(card.dataset.totalQuestions, 10);
-      const currentProgress = getQuizProgress(storageKey, totalQuestions);
+      const quiz = quizList.find(q => q.storageKey === key);
 
-      if (currentProgress.isFinished) {
-        event.preventDefault();
-        pageState.activeQuizUrl = card.href;
-        pageState.activeStorageKey = storageKey;
-        completedModal.open(card);
-      }
-    });
-  }
+      const onConfirm = () => {
+        localStorage.removeItem(key);
+        const progressWrapper = card.querySelector(".progress-footer-wrapper");
+        if (!progressWrapper) return;
+        const newProgress = getQuizProgress(key, totalQuestions);
+        const newProgressHTML = createProgressHTML(newProgress, quiz);
+        progressWrapper.style.transition = "opacity 0.2s ease-out";
+        progressWrapper.style.opacity = "0";
+        setTimeout(() => {
+          progressWrapper.innerHTML = newProgressHTML;
+          progressWrapper.style.transition = "opacity 0.3s ease-in";
+          progressWrapper.style.opacity = "1";
+        }, 200);
+      };
+      showConfirmModal(
+        "ยืนยันการล้างข้อมูล",
+        'คุณแน่ใจหรือไม่ว่าต้องการล้างความคืบหน้าของแบบทดสอบนี้?<br><strong class="text-red-600 dark:text-red-500">การกระทำนี้ไม่สามารถย้อนกลับได้</strong>',
+        onConfirm,
+        resetButton
+      );
+    }
 
-  // This single listener handles all confirmation actions for the generic modal.
-  if (confirmActionBtn) {
-    confirmActionBtn.addEventListener("click", () => {
-      if (typeof pageState.confirmCallback === "function") {
-        pageState.confirmCallback();
-      }
-      confirmModal.close();
-      pageState.confirmCallback = null; // Clean up callback after use.
-    });
-  }
+    // --- Random Quiz Button Functionality ---
+    const randomQuizBtn = document.getElementById("random-quiz-btn");
+    if (randomQuizBtn) {
+      randomQuizBtn.addEventListener("click", () => {
+        if (quizList && quizList.length > 0) {
+          const randomIndex = Math.floor(Math.random() * quizList.length);
+          const randomQuizUrl = quizList[randomIndex].url;
+          window.location.href = randomQuizUrl;
+        }
+      });
+    }
 
-  // --- Completed Quiz Modal Actions ---
-  if (viewResultsBtn) {
-    viewResultsBtn.addEventListener("click", () => {
-      if (pageState.activeQuizUrl) {
-        const separator = pageState.activeQuizUrl.includes("?") ? "&" : "?";
-        window.location.href = `${pageState.activeQuizUrl}${separator}action=view_results`;
-      }
-      completedModal.close();
-    });
-  }
-  if (startOverBtn) {
-    startOverBtn.addEventListener("click", () => {
-      if (pageState.activeStorageKey) localStorage.removeItem(pageState.activeStorageKey);
-      if (pageState.activeQuizUrl) window.location.href = pageState.activeQuizUrl;
-      completedModal.close();
-    });
-  }
+    /**
+     * Shows a generic confirmation modal.
+     * @param {string} title The title for the confirmation dialog.
+     * @param {string} description The descriptive text for the dialog, can contain HTML.
+     * @param {Function} onConfirm The callback function to execute if the user confirms.
+     * @param {HTMLElement} triggerElement The element that triggered the modal.
+     */
+    function showConfirmModal(title, description, onConfirm, triggerElement) {
+      if (confirmModalTitle) confirmModalTitle.textContent = title;
+      if (confirmModalDesc) confirmModalDesc.innerHTML = description;
+      pageState.confirmCallback = onConfirm;
+      confirmModal.open(triggerElement);
+    }
 
-    } catch (error) {
-        console.error("Failed to initialize main page:", error);
-        const container = document.getElementById('quiz-categories-container');
-        if (container) {
-            container.innerHTML = `
+    // --- Event Delegation Listener ---
+    if (container) {
+      container.addEventListener("click", (event) => {
+        const card = event.target.closest(".quiz-card");
+        if (!card) return; // Exit if the click was not inside a card
+
+        const resetButton = event.target.closest(".reset-progress-btn");
+
+        // Handle reset button click
+        if (resetButton) {
+          handleResetButtonClick(event, card, resetButton);
+          return; // Stop further processing
+        }
+
+        // Handle card click (for completed quizzes)
+        const storageKey = card.dataset.storageKey;
+        const totalQuestions = parseInt(card.dataset.totalQuestions, 10);
+        const currentProgress = getQuizProgress(storageKey, totalQuestions);
+
+        if (currentProgress.isFinished) {
+          event.preventDefault();
+          pageState.activeQuizUrl = card.href;
+          pageState.activeStorageKey = storageKey;
+          completedModal.open(card);
+        }
+      });
+    }
+
+    // This single listener handles all confirmation actions for the generic modal.
+    if (confirmActionBtn) {
+      confirmActionBtn.addEventListener("click", () => {
+        if (typeof pageState.confirmCallback === "function") {
+          pageState.confirmCallback();
+        }
+        confirmModal.close();
+        pageState.confirmCallback = null; // Clean up callback after use.
+      });
+    }
+
+    // --- Completed Quiz Modal Actions ---
+    if (viewResultsBtn) {
+      viewResultsBtn.addEventListener("click", () => {
+        if (pageState.activeQuizUrl) {
+          const separator = pageState.activeQuizUrl.includes("?") ? "&" : "?";
+          window.location.href = `${pageState.activeQuizUrl}${separator}action=view_results`;
+        }
+        completedModal.close();
+      });
+    }
+    if (startOverBtn) {
+      startOverBtn.addEventListener("click", () => {
+        if (pageState.activeStorageKey) localStorage.removeItem(pageState.activeStorageKey);
+        if (pageState.activeQuizUrl) window.location.href = pageState.activeQuizUrl;
+        completedModal.close();
+      });
+    }
+
+  } catch (error) {
+    console.error("Failed to initialize main page:", error);
+    const container = document.getElementById('quiz-categories-container');
+    if (container) {
+      container.innerHTML = `
                 <div class="text-center py-16 px-6 bg-white dark:bg-gray-800/50 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700/60">
                     <h3 class="text-xl font-semibold text-red-500 dark:text-red-400 font-kanit">เกิดข้อผิดพลาด</h3>
                     <p class="mt-2 text-base text-gray-500 dark:text-gray-400">ไม่สามารถโหลดรายการแบบทดสอบได้ในขณะนี้<br>กรุณาลองรีเฟรชหน้าอีกครั้ง</p>
                 </div>
             `;
-        }
     }
+  }
 }

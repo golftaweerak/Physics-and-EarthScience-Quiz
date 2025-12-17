@@ -4,72 +4,6 @@
     This approach reduces code duplication and simplifies maintenance.
 -->
 
-<!-- KaTeX for beautiful math rendering -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
-    xintegrity="sha384-n8MVd4RsNIU0KOV5nYqrHGjWp7MVxG/FLECzfAnnotations.css" crossorigin="anonymous">
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"
-    xintegrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzYCEh3iZapBXpdJvA/LV7Ck8gAALw8DbqL" crossorigin="anonymous"></script>
-
-<script>
-    /**
-     * This function MUST be defined before the auto-render script that calls it via onload.
-     * It sets up a sophisticated, two-stage observer system to robustly render KaTeX
-     * in the dynamically-loaded scenario modal.
-     */
-    function setupKatexObserverForScenarioModal() {
-        const scenarioModal = document.getElementById('scenario-modal');
-        const scenarioDescription = document.getElementById('scenario-modal-description');
-
-        if (!scenarioModal || !scenarioDescription) return;
-
-        const renderMath = () => {
-            // Check if KaTeX's rendering function is available before calling it.
-            if (typeof window.renderMathInElement === 'function') {
-                window.renderMathInElement(scenarioDescription, {
-                    delimiters: [
-                        { left: '$$', right: '$$', display: true },
-                        { left: '$', right: '$', display: false },
-                        { left: '\\(', right: '\\)', display: false },
-                        { left: '\\[', right: '\\]', display: true }
-                    ],
-                    throwOnError: false
-                });
-            }
-        };
-
-        // This observer watches for changes *inside* the description div.
-        // This handles cases where content is loaded asynchronously after the modal is already visible.
-        const contentObserver = new MutationObserver(renderMath);
-
-        // This observer watches for the modal itself to become visible.
-        const modalVisibilityObserver = new MutationObserver(() => {
-            if (!scenarioModal.classList.contains('hidden')) {
-                // Modal is now visible. Do an initial render in case content is already present.
-                renderMath();
-                // Then, start observing the content div for any subsequent changes.
-                contentObserver.observe(scenarioDescription, {
-                    childList: true, // observe direct children additions/removals
-                    subtree: true    // observe all descendants
-                });
-            } else {
-                // Modal is hidden. Stop observing content to save resources.
-                contentObserver.disconnect();
-            }
-        });
-
-        // Start observing the modal for visibility changes (when 'class' attribute changes).
-        modalVisibilityObserver.observe(scenarioModal, { attributes: true, attributeFilter: ['class'] });
-    }
-</script>
-
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
-    xintegrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"
-    onload="setupKatexObserverForScenarioModal()"></script>
-<style>
-    /* Custom styles for KaTeX to prevent layout shifts */
-    .katex { line-height: normal; }
-</style>
-
 <!-- Generic Confirmation Modal (for clearing stats, etc.) -->
 <div id="confirm-action-modal"
     class="modal hidden fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4 font-sarabun"
@@ -84,7 +18,7 @@
         </button>
         <div class="flex items-start gap-4">
             <div
-                class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 dark:bg-red-900/50 sm:mx-0 sm:h-10 sm:w-10">
+                class="mx-auto shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 dark:bg-red-900/50 sm:mx-0 sm:h-10 sm:w-10" style="min-width: 2.5rem; min-height: 2.5rem;">
                 <svg class="h-6 w-6 text-red-600 dark:text-red-400" xmlns="http://www.w3.org/2000/svg" fill="none"
                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round"
