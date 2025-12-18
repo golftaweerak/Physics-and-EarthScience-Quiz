@@ -1,18 +1,17 @@
 /**
  * Initializes the stats page.
  */
+import { initializeAuth } from './auth-controller.js';
+
 async function main() {
     try {
-        const { loadComponent } = await import('./component-loader.js');
-        // Load shared HTML components like header, footer, and modals
+        const { loadComponent } = await import('./component-loader.js'); // Keep for footer/modals
         await Promise.all([
-            loadComponent('#main_header-placeholder', './components/main_header.html'),
             loadComponent('#footer-placeholder', './components/footer.html'),
             loadComponent('#modals-placeholder', './components/modals_common.html')
         ]);
 
         const { initializeCommonComponents } = await import('./common-init.js');
-        // Initialize common functionalities like theme toggling
         initializeCommonComponents();
 
         // --- Initialize Clear Button First ---
@@ -53,9 +52,12 @@ async function main() {
             });
         }
 
+        // Initialize authentication to get user data
+        const gameInstance = initializeAuth();
+
         // --- Build the main stats page content ---
         const { buildStatsPage } = await import('./stats.js');
-        buildStatsPage();
+        buildStatsPage(gameInstance); // Pass the game instance
 
     } catch (error) {
         console.error("Failed to initialize stats page:", error);

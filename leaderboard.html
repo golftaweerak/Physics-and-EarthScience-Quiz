@@ -1,62 +1,103 @@
-<!-- leaderboard.html -->
 <!DOCTYPE html>
-<html>
+<html lang="th" class="scroll-smooth">
+
 <head>
-    <!-- ... (Header, Tailwind, etc.) ... -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>กระดานผู้นำ (Leaderboard)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Enable class-based dark mode
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        kanit: ['Kanit', 'sans-serif'],
+                        sarabun: ['Sarabun', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="./styles/bundle.css">
+    <link rel="icon" href="./assets/icons/leaderboard.png" type="image/png">
 </head>
-<body>
-    <!-- ... (Navbar) ... -->
-    <main class="container mx-auto p-8">
-        <h1 class="text-3xl font-bold mb-6">กระดานผู้นำ (Leaderboard)</h1>
-        <div id="leaderboard-container" class="space-y-4">
-            <!-- Loading spinner -->
-            <p>กำลังโหลดข้อมูล...</p>
+
+<body class="bg-gray-100 dark:bg-gray-900 font-sarabun transition-colors duration-300">
+    <!-- Load shared header -->
+    <div id="main_header-placeholder"></div>
+
+    <main class="container mx-auto px-4 pb-8" style="padding-top: var(--header-height-offset, 5rem);">
+        <div class="max-w-2xl mx-auto">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white font-kanit">กระดานผู้นำ (Leaderboard)</h1>
+                <p class="text-gray-600 dark:text-gray-400 mt-2">20 อันดับผู้เล่นที่มีค่าประสบการณ์ (XP) สูงสุด</p>
+            </div>
+
+            <div id="leaderboard-container" class="space-y-3">
+                <!-- Loading spinner -->
+                <div class="text-center py-16">
+                    <svg class="animate-spin h-8 w-8 text-blue-600 dark:text-blue-400 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <p class="mt-4 text-gray-500 dark:text-gray-400">กำลังโหลดข้อมูล...</p>
+                </div>
+            </div>
         </div>
     </main>
 
+    <div id="footer-placeholder"></div>
+    <div id="modals-placeholder"></div>
+
     <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     <script type="module">
         import { db } from './scripts/firebase-init.js';
+        import { loadComponent } from './scripts/component-loader.js';
+        import { initializeCommonComponents } from './scripts/common-init.js';
+        import { initializeAuth } from './scripts/auth-controller.js';
+
+        // Load shared components and initialize auth
+        await Promise.all([
+            loadComponent('#main_header-placeholder', './components/main_header.html'),
+            loadComponent('#footer-placeholder', './components/footer.html'),
+            loadComponent('#modals-placeholder', './components/modals_common.html')
+        ]);
+        initializeCommonComponents();
+        initializeAuth();
 
         const container = document.getElementById('leaderboard-container');
 
         async function fetchLeaderboard() {
             try {
-                const snapshot = await db.collection('leaderboard')
-                                         .orderBy('xp', 'desc') // เรียงจาก XP มากไปน้อย
-                                         .limit(20)             // แสดงผล 20 อันดับแรก
-                                         .get();
-
+                const snapshot = await db.collection('leaderboard').orderBy('xp', 'desc').limit(20).get();
                 if (snapshot.empty) {
-                    container.innerHTML = '<p>ยังไม่มีข้อมูลในกระดานผู้นำ</p>';
+                    container.innerHTML = '<p class="text-center text-gray-500">ยังไม่มีข้อมูลในกระดานผู้นำ</p>';
                     return;
                 }
-
-                let rank = 1;
-                container.innerHTML = snapshot.docs.map(doc => {
+                container.innerHTML = snapshot.docs.map((doc, index) => {
                     const user = doc.data();
+                    const isImage = user.avatar && (user.avatar.includes('/') || user.avatar.includes('.'));
+                    const avatarHtml = isImage ? `<img src="${user.avatar}" alt="Avatar" class="w-10 h-10 rounded-full object-cover">` : `<span class="text-3xl">${user.avatar || '🧑‍🎓'}</span>`;
                     return `
-                        <div class="flex items-center bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm">
-                            <span class="font-bold text-lg w-10">${rank++}</span>
-                            <span class="text-3xl w-12">${user.avatar || '🧑‍🎓'}</span>
-                            <div class="flex-grow">
-                                <p class="font-bold text-gray-800 dark:text-white">${user.name}</p>
-                                <p class="text-sm text-gray-500">Level ${user.level}</p>
-                            </div>
-                            <span class="font-bold text-blue-600 dark:text-blue-400">${user.xp.toLocaleString()} XP</span>
-                        </div>
-                    `;
+                        <div class="flex items-center bg-white dark:bg-gray-800 p-3 rounded-lg shadow-sm transition-transform transform hover:scale-105 hover:shadow-md">
+                            <span class="font-bold text-lg w-10 text-center text-gray-500 dark:text-gray-400">${index + 1}</span>
+                            <div class="w-12 h-12 flex items-center justify-center">${avatarHtml}</div>
+                            <div class="flex-grow ml-4"><p class="font-bold text-gray-800 dark:text-white">${user.name}</p><p class="text-sm text-gray-500">Level ${user.level}</p></div>
+                            <span class="font-bold text-blue-600 dark:text-blue-400">${(user.xp || 0).toLocaleString()} XP</span>
+                        </div>`;
                 }).join('');
-
             } catch (error) {
                 console.error("Error fetching leaderboard: ", error);
-                container.innerHTML = '<p class="text-red-500">เกิดข้อผิดพลาดในการโหลดข้อมูล</p>';
+                container.innerHTML = '<p class="text-center text-red-500">เกิดข้อผิดพลาดในการโหลดข้อมูล</p>';
             }
         }
-
         fetchLeaderboard();
     </script>
 </body>
 </html>
+
