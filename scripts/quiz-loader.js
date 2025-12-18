@@ -15,7 +15,7 @@ function populatePage(title, description) {
     if (startScreenDesc) startScreenDesc.textContent = description;
 }
 
-export async function initializeQuiz(gameInstance) {
+export async function initializeQuiz() {
     const { quizList } = await import(`../data/quizzes-list.js?v=${Date.now()}`);
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -51,7 +51,7 @@ export async function initializeQuiz(gameInstance) {
             if (selectedTimerInput) selectedTimerInput.checked = true;
         }
 
-        initQuizApp(customQuizData.questions, customQuizData.storageKey, customQuizData.title, customQuizData.customTime, action, gameInstance);
+        initQuizApp(customQuizData.questions, customQuizData.storageKey, customQuizData.title, customQuizData.customTime, action);
         return; // Stop further execution
     }
 

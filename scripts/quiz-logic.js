@@ -2,8 +2,6 @@ import { ModalHandler } from './modal-handler.js';
 import { shuffleArray } from './utils.js';
 import { Gamification, SHOP_ITEMS } from './gamification.js';
 import { showToast } from './toast.js';
-import { db } from './firebase-init.js';
-
 
 // state: Stores all dynamic data of the quiz
 let state = {};
@@ -118,7 +116,7 @@ function ensurePowerUpModalExists() {
  * @param {string} quizTitle - The title of the current quiz.
  * @param {number|null} customTime - Custom time in seconds, if provided.
  */
-export function init(quizData, storageKey, quizTitle, customTime, action, gameInstance) {
+export function init(quizData, storageKey, quizTitle, customTime, action) {
   // Ensure the power-up modal exists in the DOM
   ensurePowerUpModalExists();
 
@@ -194,7 +192,7 @@ export function init(quizData, storageKey, quizTitle, customTime, action, gameIn
     initialTime: 0,
     activeScreen: null,
     isFloatingNav: false, // To track the nav state
-    game: gameInstance, // Use the shared game instance
+    game: new Gamification(), // Initialize game instance
     xpMultiplier: 1, // Default multiplier
     used5050: false,
     usedCut1: false,

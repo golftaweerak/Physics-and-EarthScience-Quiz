@@ -792,81 +792,14 @@ function setupActionListeners() {
 }
 
 /**
- * NEW: Renders the gamification dashboard at the top of the stats page.
- * @param {object} game - The active gamification instance.
- */
-function renderGamificationDashboard(game) {
-    if (!game || !game.state) return;
-
-    const dashboard = document.getElementById('gamification-dashboard');
-    if (!dashboard) return;
-
-    const levelInfo = game.getCurrentLevel();
-
-    // Update Level & Rank UI
-    document.getElementById('user-level').textContent = levelInfo.level;
-    document.getElementById('user-rank-title').textContent = levelInfo.title;
-    document.getElementById('current-xp').textContent = game.state.xp.toLocaleString();
-
-    // Update Progress Bar
-    const nextLevelXpEl = document.getElementById('next-level-xp');
-    const progressBar = document.getElementById('xp-progress-bar');
-    const questContainer = document.getElementById('next-level-quest-container');
-
-    if (levelInfo.nextLevelXP && nextLevelXpEl && progressBar) {
-        nextLevelXpEl.textContent = levelInfo.nextLevelXP.toLocaleString();
-        progressBar.style.width = `${levelInfo.progressPercent}%`;
-        
-        const questDescEl = document.getElementById('next-level-quest-desc');
-        const questProgressEl = document.getElementById('next-level-quest-progress');
-
-        if (questContainer && questDescEl && questProgressEl && levelInfo.nextLevelQuest) {
-            const quest = levelInfo.nextLevelQuest;
-            questDescEl.textContent = quest.desc;
-            const progressValue = game.getQuestProgressValue(quest);
-            questProgressEl.textContent = `(${progressValue}/${quest.target})`;
-            questContainer.classList.remove('hidden');
-        } else if (questContainer) {
-            questContainer.classList.add('hidden');
-        }
-    } else if (nextLevelXpEl && progressBar) {
-        nextLevelXpEl.textContent = 'MAX';
-        progressBar.style.width = '100%';
-        if (questContainer) questContainer.classList.add('hidden');
-    }
-
-    // Update Recent Badges
-    const recentBadges = game.getEarnedBadges().slice(-3).reverse();
-    const badgesContainer = document.getElementById('recent-badges');
-    if (badgesContainer) {
-        if (recentBadges.length === 0) {
-            badgesContainer.innerHTML = '<span class="text-xs text-gray-400">ยังไม่มีเหรียญรางวัล</span>';
-        } else {
-            badgesContainer.innerHTML = recentBadges.map(b => `
-                <div class="w-10 h-10 rounded-full bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center text-xl shadow-sm border border-yellow-200 dark:border-yellow-700/50 transition-transform hover:scale-110 cursor-help" title="${b.name}: ${b.desc}">
-                    ${b.icon}
-                </div>
-            `).join('');
-        }
-    }
-}
-
-/**
  * Main function to build the entire stats page.
  * It orchestrates fetching, calculating, and rendering all components.
- * @param {object} gameInstance - The shared Gamification instance.
  */
-export function buildStatsPage(gameInstance) {
+export function buildStatsPage() {
     const loadingSpinner = document.getElementById("loading-spinner");
     const noStatsMessage = document.getElementById("no-stats-message");
     const statsContent = document.getElementById("stats-content");
 
-    // --- NEW: Render Gamification data first ---
-    renderGamificationDashboard(gameInstance);
-    window.addEventListener('gamification-updated', () => renderGamificationDashboard(gameInstance));
-
-    // --- The rest of the page uses localStorage data as before ---
-    // NOTE: This part shows stats from the CURRENT DEVICE ONLY.
     const allStats = getAllStats();
     const totalAvailableQuizzes = [...quizList, ...getSavedCustomQuizzes()].length;
 
