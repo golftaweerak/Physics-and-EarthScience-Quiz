@@ -1,5 +1,7 @@
 import { initializePage } from './main.js';
 import { initializeCustomQuizHandler } from './custom-quiz-handler.js';
+// Key Change: Import the new authentication system
+import { initializeAuth } from './auth-controller.js';
 import { loadComponent } from './component-loader.js';
 import { initializeCommonComponents } from './common-init.js';
 
@@ -24,12 +26,15 @@ async function main() {
     // Initialize common components like header, menu, etc.
     initializeCommonComponents();
 
+    // Initialize the authentication system. This will create the single, shared Gamification instance.
+    const gameInstance = initializeAuth();
+
     // Then, initialize scripts specific to the page by checking for key elements.
     if (document.getElementById('quiz-categories-container')) {
-        initializePage();
+        initializePage(gameInstance); // Pass the shared instance
     }
     if (document.getElementById('create-custom-quiz-btn')) {
-        initializeCustomQuizHandler();
+        initializeCustomQuizHandler(gameInstance); // Pass the shared instance
     }
 }
 

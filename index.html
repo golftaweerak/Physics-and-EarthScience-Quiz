@@ -143,12 +143,18 @@
 
             <!-- Right Side: Profile & Dark Mode Toggle -->
             <div class="flex-1 flex justify-end gap-2">
+            <button id="main-header-login-btn" class="px-4 py-1.5 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors font-bold text-sm shadow-md">Login</button>
                 <a href="./profile.html" id="main-header-profile-link" aria-label="ดูโปรไฟล์"
                     class="p-2 rounded-full bg-gray-200/50 dark:bg-gray-700/50 text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:focus:ring-offset-gray-900 transition-colors flex items-center justify-center h-10 w-10">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
                 </a>
+        <button id="main-header-logout-btn" class="p-2 rounded-full bg-gray-200/50 dark:bg-gray-700/50 text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:focus:ring-offset-gray-900 transition-colors" aria-label="ออกจากระบบ">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+        </button>
                 <button type="button" id="dark-mode-toggle" aria-label="สลับโหมดมืด/สว่าง"
                     class="p-2 rounded-full bg-gray-200/50 dark:bg-gray-700/50 text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:focus:ring-offset-gray-900 transition-colors">
                     <!-- Icon will be inserted by JS -->
@@ -217,12 +223,13 @@
         </svg>
     </button>
 
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
     <!-- app-loader is a module and will handle importing its own dependencies. -->
     <script src="./scripts/app-loader.js" type="module"></script>
-    <script type="module">
-        import { Gamification } from './scripts/gamification.js';
-        new Gamification();
-    </script>
 </body>
 
 </html>

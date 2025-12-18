@@ -1,4 +1,5 @@
 // scripts/gamification.js
+import { db } from './firebase-init.js';
 
 // กำหนดเกณฑ์ XP สำหรับทุกสาย (ใช้เกณฑ์เดียวกันเพื่อความง่าย)
 export const XP_THRESHOLDS = [
@@ -135,85 +136,158 @@ export const SHOP_ITEMS = [
 ];
 
 export class Gamification {
-    constructor() {
-        this.storageKey = 'app_gamification_data';
+    /**
+     * @param {object} db - The Firestore database instance.
+     */
+    constructor(db) {
+        if (!db) throw new Error("Firestore database instance is required.");
+        this.db = db;
+        this.usersCollection = 'users';
+        this.userId = null; // Set after login
+        this.state = this.getDefaultState();
         
-        // ตรวจสอบว่าเป็นผู้ใช้ใหม่สำหรับระบบเกมหรือไม่ (ยังไม่มีข้อมูล Gamification)
-        const isNewToGamification = !localStorage.getItem(this.storageKey);
-        
-        this.state = this.loadState();
-        
-        // ถ้าเป็นผู้ใช้ใหม่ของระบบเกม ให้ลองดึงข้อมูลเก่ามาคำนวณ
-        if (isNewToGamification) {
-            this.syncProgress();
+        // FIX: โหลดข้อมูลจาก LocalStorage สำหรับ Guest (ถ้ามี)
+        const guestState = this.loadGuestState();
+        if (guestState) {
+            this.state = { ...this.state, ...guestState };
         }
-
-        this.updateStreak();
-        this.applyTheme(this.state.selectedTheme);
-        this.updateHeaderAvatar();
-
-        // IMPROVEMENT: Cross-tab synchronization
-        // เมื่อมีการเปลี่ยนแปลงข้อมูลใน Tab อื่น ให้โหลดข้อมูลใหม่และอัปเดตหน้าจอนี้ทันที
-        window.addEventListener('storage', (e) => {
-            if (e.key === this.storageKey) {
-                this.state = this.loadState();
-                this.onStateUpdated();
-            }
-        });
+        
+        this.unsubscribe = null; // Firestore listener
     }
 
-    loadState() {
-        const stored = localStorage.getItem(this.storageKey);
-        let state = null;
+    /**
+     * Handles the entire login process for a user.
+     * Checks for existing data, migrates from localStorage if needed, and sets up a real-time listener.
+     * @param {firebase.User} user - The authenticated user object from Firebase.
+     */
+    async handleLogin(user) {
+        if (this.unsubscribe) this.unsubscribe(); // Detach old listener
+
+        this.userId = user.uid;
+        const userRef = this.db.collection(this.usersCollection).doc(this.userId);
+
         try {
-            if (stored) {
-                state = JSON.parse(stored);
+            const doc = await userRef.get();
+
+            if (!doc.exists) {
+                // --- FIRST TIME LOGIN ---
+                console.log("New user detected. Attempting to migrate from localStorage.");
+                
+                // 1. Start with default state
+                this.state = this.getDefaultState();
+                
+                // 2. Try to migrate old data from localStorage
+                this.migrateFromLocalStorage(); // This modifies `this.state` in place
+                
+                // 3. Set user's profile info from Google/Firebase, but only if using defaults
+                if (this.state.displayName === 'ผู้เรียน (Guest)') {
+                    this.state.displayName = user.displayName || 'ผู้เรียน';
+                }
+                if (this.state.avatar === '🧑‍🎓' && user.photoURL) {
+                    this.state.avatar = user.photoURL;
+                }
+                
+                // 4. Save the newly created/migrated state to Firestore
+                await userRef.set(this.state);
+                console.log("Migration and initial save complete.");
             }
-        } catch (e) {
-            console.error("Error loading gamification state:", e);
-        }
 
-        // IMPROVEMENT: Define Default State clearly
-        const defaultState = {
-            xp: 0,
-            physicsXP: 0,
-            earthXP: 0,
-            badges: [],
-            quizzesCompleted: 0,
-            lastLogin: null,
-            streak: 0,
-            activeQuests: [],
-            rerolls: 3,
-            lastQuestDate: null,
-            avatar: '🧑‍🎓',
-            displayName: 'ผู้เรียน (Guest)',
-            totalCorrectAnswers: 0,
-            questHistory: [],
-            unlockedAchievements: [],
-            selectedTitle: null,
-            inventory: [],
-            consumables: {},
-            selectedTheme: null,
-            correctStreak: 0,
-            perfectScores: 0,
-            highScores80: 0,
+            // After initial setup (or for returning users), attach the real-time listener.
+            this.unsubscribe = userRef.onSnapshot(snapshot => {
+                if (snapshot.exists) {
+                    this.state = { ...this.getDefaultState(), ...snapshot.data() };
+                    this.onStateUpdated(); // Update UI with the latest data
+                }
+            }, console.error);
+
+        } catch (error) {
+            console.error("Error during user login handling:", error);
+            // Fallback to a default state if anything goes wrong
+            this.state = this.getDefaultState();
+            this.onStateUpdated();
+        }
+    }
+
+    /**
+     * Logs out the user and resets the state to default.
+     */
+    logout() {
+        if (this.unsubscribe) this.unsubscribe();
+        this.userId = null;
+        this.state = this.getDefaultState();
+        this.onStateUpdated();
+    }
+    getDefaultState() {
+        return {
+            xp: 0, physicsXP: 0, earthXP: 0, badges: [], quizzesCompleted: 0,
+            lastLogin: null, streak: 0, activeQuests: this.generateDailyQuests(),
+            rerolls: 3, lastQuestDate: new Date().toDateString(), avatar: '🧑‍🎓',
+            displayName: 'ผู้เรียน (Guest)', totalCorrectAnswers: 0, questHistory: [],
+            unlockedAchievements: [], selectedTitle: null, inventory: [],
+            consumables: {}, selectedTheme: null, correctStreak: 0,
+            perfectScores: 0, highScores80: 0,
         };
+    }
 
-        // Merge loaded state with defaults to ensure all keys exist (Robustness)
-        state = { ...defaultState, ...(state || {}) };
+    // FIX: ฟังก์ชันช่วยโหลดข้อมูล Guest
+    loadGuestState() {
+        try {
+            const stored = localStorage.getItem('app_gamification_data');
+            return stored ? JSON.parse(stored) : null;
+        } catch (e) {
+            console.error("Error loading guest state:", e);
+            return null;
+        }
+    }
 
-        // ตรวจสอบและรีเซ็ตภารกิจถ้าเป็นวันใหม่
-        const today = new Date().toDateString();
-        if (state.lastQuestDate !== today) {
-            state.activeQuests = this.generateDailyQuests();
-            state.rerolls = 3; // รีเซ็ตสิทธิ์การเปลี่ยนภารกิจ
-            state.lastQuestDate = today;
-            state.dailyQuest = null; // ล้างข้อมูลเก่า (ถ้ามี)
-            // Note: We don't save immediately here to avoid side effects during load,
-            // but updateStreak calls saveState shortly after.
+    async saveState() {
+        if (!this.userId) {
+            // FIX: บันทึกลง LocalStorage สำหรับ Guest เพื่อไม่ให้ข้อมูลหาย
+            try {
+                localStorage.setItem('app_gamification_data', JSON.stringify(this.state));
+            } catch (e) {
+                console.error("Error saving guest state:", e);
+            }
+            return;
+        }
+        try {
+            const userRef = this.db.collection(this.usersCollection).doc(this.userId);
+            // Use set with merge:true to create or update the document without overwriting fields.
+            await userRef.set(this.state, { merge: true });
+        } catch (e) {
+            console.error("Error saving gamification state to Firestore:", e);
+        }
+    }
+
+    /**
+     * Loads progress from localStorage and merges it into the current state.
+     * This is called for new users to migrate their old, non-logged-in progress.
+     * It also cleans up the old localStorage data after migration.
+     */
+    migrateFromLocalStorage() {
+        const oldStorageKey = 'app_gamification_data';
+        const oldDataJSON = localStorage.getItem(oldStorageKey);
+
+        if (!oldDataJSON) {
+            console.log("No 'app_gamification_data' found in localStorage to migrate.");
+            return; // Nothing to migrate
         }
 
-        return state;
+        try {
+            const oldState = JSON.parse(oldDataJSON);
+            
+            // Merge the old state over the default state.
+            // This preserves any progress like XP, badges, inventory, etc.
+            this.state = { ...this.state, ...oldState };
+            
+            console.log("Successfully merged data from 'app_gamification_data'.");
+
+            // After successful migration, remove the old key to prevent re-migration.
+            localStorage.removeItem(oldStorageKey);
+        } catch (e) {
+            console.error("Error parsing or migrating from localStorage:", e);
+            // If parsing fails, we stick with the default state.
+        }
     }
 
     // ฟังก์ชันสำหรับดึงข้อมูลการทำโจทย์เก่าๆ มาคำนวณเป็น XP เริ่มต้น
@@ -296,15 +370,6 @@ export class Gamification {
         }
     }
 
-    saveState() {
-        try {
-            localStorage.setItem(this.storageKey, JSON.stringify(this.state));
-            this.onStateUpdated(); // Trigger UI updates
-        } catch (e) {
-            console.error("Error saving gamification state:", e);
-        }
-    }
-
     // IMPROVEMENT: Centralized UI Update Trigger
     onStateUpdated() {
         this.updateHeaderAvatar();
@@ -312,6 +377,10 @@ export class Gamification {
         // Dispatch event for other components (e.g. profile page charts) to react
         window.dispatchEvent(new CustomEvent('gamification-updated', { detail: this.state }));
     }
+    // The rest of the methods (setAvatar, addXP, etc.) remain the same.
+    // They modify `this.state` and then call `this.saveState()`, which now saves to Firestore.
+    // The `syncProgress` method is now less relevant for logged-in users but can be kept for a first-time login migration.
+
 
     setAvatar(avatar) {
         this.state.avatar = avatar;

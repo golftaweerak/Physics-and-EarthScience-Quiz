@@ -1,3 +1,4 @@
+import { initializeAuth } from './auth-controller.js';
 /**
  * Initializes all scripts required for the quiz page.
  * This acts as the main entry point after the DOM is loaded.
@@ -43,6 +44,9 @@ async function main() {
         // Initialize common UI components like header, menu, and footer scripts.
         // This must run BEFORE fixing paths, as it populates the menu with links.
         initializeCommonComponents();
+
+        // Initialize the authentication system.
+        const gameInstance = initializeAuth();
 
         // --- FIX COMPONENT PATHS FOR QUIZ PAGE (which is in a subdirectory) ---
         if (window.location.pathname.includes('/quiz/')) {
@@ -107,7 +111,8 @@ async function main() {
         const { initializeQuiz } = await import('./quiz-loader.js');
         // Initialize the core quiz functionality.
         // This function will handle loading data and setting up the quiz logic.
-        initializeQuiz();
+        initializeQuiz(gameInstance);
+
     } catch (error) {
         console.error("A critical error occurred on the quiz page:", error);
         // A simple, dependency-free error message.
