@@ -76,24 +76,24 @@ export const BADGES = [
 
 // กำหนดภารกิจประจำวัน (Daily Quests)
 export const DAILY_QUESTS = [
-    { id: 'quiz_1', desc: 'ทำแบบทดสอบให้จบ 1 ครั้ง', target: 1, type: 'quiz_complete', xp: 100 },
-    { id: 'quiz_2', desc: 'ทำแบบทดสอบให้จบ 2 ครั้ง', target: 2, type: 'quiz_complete', xp: 200 },
-    { id: 'correct_10', desc: 'ตอบถูกให้ได้ 10 ข้อ', target: 10, type: 'correct_answers', xp: 150 },
-    { id: 'correct_15', desc: 'ตอบถูกให้ได้ 15 ข้อ', target: 15, type: 'correct_answers', xp: 250 },
-    { id: 'physics_5', desc: 'ทำโจทย์ฟิสิกส์ 5 ข้อ', target: 5, type: 'questions_category', category: 'Physics', xp: 250 },
-    { id: 'earth_5', desc: 'ทำโจทย์วิทย์โลก 5 ข้อ', target: 5, type: 'questions_category', category: 'Earth', xp: 250 },
-    { id: 'score_80', desc: 'ทำคะแนนให้ได้ 80% ขึ้นไป 1 ครั้ง', target: 1, type: 'high_score', threshold: 80, xp: 250 },
-    { id: 'score_100', desc: 'ทำคะแนนเต็ม (100%) 1 ครั้ง', target: 1, type: 'high_score', threshold: 100, xp: 500 },
+    { id: 'quiz_1', desc: 'ทำแบบทดสอบให้จบ 1 ครั้ง', target: 1, type: 'quiz_complete', xp: 50 },
+    { id: 'quiz_2', desc: 'ทำแบบทดสอบให้จบ 2 ครั้ง', target: 2, type: 'quiz_complete', xp: 100 },
+    { id: 'correct_10', desc: 'ตอบถูกให้ได้ 10 ข้อ', target: 10, type: 'correct_answers', xp: 80 },
+    { id: 'correct_15', desc: 'ตอบถูกให้ได้ 15 ข้อ', target: 15, type: 'correct_answers', xp: 120 },
+    { id: 'physics_5', desc: 'ทำโจทย์ฟิสิกส์ 5 ข้อ', target: 5, type: 'questions_category', category: 'Physics', xp: 100 },
+    { id: 'earth_5', desc: 'ทำโจทย์วิทย์โลก 5 ข้อ', target: 5, type: 'questions_category', category: 'Earth', xp: 100 },
+    { id: 'score_80', desc: 'ทำคะแนนให้ได้ 80% ขึ้นไป 1 ครั้ง', target: 1, type: 'high_score', threshold: 80, xp: 150 },
+    { id: 'score_100', desc: 'ทำคะแนนเต็ม (100%) 1 ครั้ง', target: 1, type: 'high_score', threshold: 100, xp: 300 },
     // NEW QUEST TYPES
-    { id: 'theory_10', desc: 'ตอบคำถามทฤษฎีให้ถูก 10 ข้อ', target: 10, type: 'correct_answers_type', questionType: 'theory', xp: 250 },
-    { id: 'calc_5', desc: 'ตอบคำถามคำนวณให้ถูก 5 ข้อ', target: 5, type: 'correct_answers_type', questionType: 'calculation', xp: 300 },
-    { id: 'physics_quiz_1', desc: 'ทำแบบทดสอบหมวดฟิสิกส์ 1 ครั้ง', target: 1, type: 'quiz_category', category: 'Physics', xp: 150 },
-    { id: 'earth_quiz_1', desc: 'ทำแบบทดสอบหมวดวิทย์โลก 1 ครั้ง', target: 1, type: 'quiz_category', category: 'Earth', xp: 150 },
+    { id: 'theory_10', desc: 'ตอบคำถามทฤษฎีให้ถูก 10 ข้อ', target: 10, type: 'correct_answers_type', questionType: 'theory', xp: 120 },
+    { id: 'calc_5', desc: 'ตอบคำถามคำนวณให้ถูก 5 ข้อ', target: 5, type: 'correct_answers_type', questionType: 'calculation', xp: 150 },
+    { id: 'physics_quiz_1', desc: 'ทำแบบทดสอบหมวดฟิสิกส์ 1 ครั้ง', target: 1, type: 'quiz_category', category: 'Physics', xp: 80 },
+    { id: 'earth_quiz_1', desc: 'ทำแบบทดสอบหมวดวิทย์โลก 1 ครั้ง', target: 1, type: 'quiz_category', category: 'Earth', xp: 80 },
     // More quests for variety
-    { id: 'quiz_5', desc: 'ทำแบบทดสอบให้จบ 5 ครั้ง', target: 5, type: 'quiz_complete', xp: 400 },
-    { id: 'correct_50', desc: 'ตอบถูกให้ได้ 50 ข้อ', target: 50, type: 'correct_answers', xp: 800 },
-    { id: 'physics_10', desc: 'ทำโจทย์ฟิสิกส์ 10 ข้อ', target: 10, type: 'questions_category', category: 'Physics', xp: 300 },
-    { id: 'earth_10', desc: 'ทำโจทย์วิทย์โลก 10 ข้อ', target: 10, type: 'questions_category', category: 'Earth', xp: 300 }
+    { id: 'quiz_5', desc: 'ทำแบบทดสอบให้จบ 5 ครั้ง', target: 5, type: 'quiz_complete', xp: 250 },
+    { id: 'correct_50', desc: 'ตอบถูกให้ได้ 50 ข้อ', target: 50, type: 'correct_answers', xp: 400 },
+    { id: 'physics_10', desc: 'ทำโจทย์ฟิสิกส์ 10 ข้อ', target: 10, type: 'questions_category', category: 'Physics', xp: 150 },
+    { id: 'earth_10', desc: 'ทำโจทย์วิทย์โลก 10 ข้อ', target: 10, type: 'questions_category', category: 'Earth', xp: 150 }
 ];
 
 // กำหนดความสำเร็จ (Achievements)
@@ -151,6 +151,15 @@ export class Gamification {
         this.updateStreak();
         this.applyTheme(this.state.selectedTheme);
         this.updateHeaderAvatar();
+
+        // IMPROVEMENT: Cross-tab synchronization
+        // เมื่อมีการเปลี่ยนแปลงข้อมูลใน Tab อื่น ให้โหลดข้อมูลใหม่และอัปเดตหน้าจอนี้ทันที
+        window.addEventListener('storage', (e) => {
+            if (e.key === this.storageKey) {
+                this.state = this.loadState();
+                this.onStateUpdated();
+            }
+        });
     }
 
     loadState() {
@@ -164,32 +173,34 @@ export class Gamification {
             console.error("Error loading gamification state:", e);
         }
 
-        if (!state || typeof state !== 'object') {
-            state = {
-                xp: 0,
-                physicsXP: 0,
-                earthXP: 0,
-                badges: [], // เก็บ badge id
-                quizzesCompleted: 0,
-                lastLogin: null,
-                streak: 0,
-                activeQuests: [], // เก็บรายการภารกิจ 3 งาน
-                rerolls: 3, // จำนวนครั้งที่เปลี่ยนภารกิจได้
-                lastQuestDate: null,
-                avatar: '🧑‍🎓', // Default avatar
-                displayName: 'ผู้เรียน (Guest)', // Default name
-                totalCorrectAnswers: 0, // สะสมจำนวนข้อที่ตอบถูกทั้งหมด
-                questHistory: [], // ประวัติการทำภารกิจ
-                unlockedAchievements: [], // ความสำเร็จที่ปลดล็อกแล้ว
-                selectedTitle: null, // ฉายาที่เลือก
-                inventory: [], // รายการไอเทมถาวรที่ซื้อแล้ว (เก็บเป็น ID)
-                consumables: {}, // รายการไอเทมใช้แล้วหมดไป (เก็บเป็น {id: quantity})
-                selectedTheme: null // ธีมที่เลือก
-            ,
-                correctStreak: 0,
-                perfectScores: 0,
-                highScores80: 0,};
-        }
+        // IMPROVEMENT: Define Default State clearly
+        const defaultState = {
+            xp: 0,
+            physicsXP: 0,
+            earthXP: 0,
+            badges: [],
+            quizzesCompleted: 0,
+            lastLogin: null,
+            streak: 0,
+            activeQuests: [],
+            rerolls: 3,
+            lastQuestDate: null,
+            avatar: '🧑‍🎓',
+            displayName: 'ผู้เรียน (Guest)',
+            totalCorrectAnswers: 0,
+            questHistory: [],
+            unlockedAchievements: [],
+            selectedTitle: null,
+            inventory: [],
+            consumables: {},
+            selectedTheme: null,
+            correctStreak: 0,
+            perfectScores: 0,
+            highScores80: 0,
+        };
+
+        // Merge loaded state with defaults to ensure all keys exist (Robustness)
+        state = { ...defaultState, ...(state || {}) };
 
         // ตรวจสอบและรีเซ็ตภารกิจถ้าเป็นวันใหม่
         const today = new Date().toDateString();
@@ -198,30 +209,10 @@ export class Gamification {
             state.rerolls = 3; // รีเซ็ตสิทธิ์การเปลี่ยนภารกิจ
             state.lastQuestDate = today;
             state.dailyQuest = null; // ล้างข้อมูลเก่า (ถ้ามี)
-            if (stored) this.saveState(); // บันทึกทันทีถ้ามีการเปลี่ยนภารกิจ
+            // Note: We don't save immediately here to avoid side effects during load,
+            // but updateStreak calls saveState shortly after.
         }
 
-        // Ensure avatar exists for existing users
-        if (!state.avatar) state.avatar = '🧑‍🎓';
-        if (!state.displayName) state.displayName = 'ผู้เรียน (Guest)';
-
-        // Ensure XP tracks exist for existing users (fix for NaN issues)
-        if (state.physicsXP === undefined) state.physicsXP = 0;
-        if (state.earthXP === undefined) state.earthXP = 0;
-        
-        // Ensure new fields exist for existing users
-        if (state.totalCorrectAnswers === undefined) state.totalCorrectAnswers = 0;
-        if (!state.questHistory) state.questHistory = [];
-        if (!state.unlockedAchievements) state.unlockedAchievements = [];
-        if (state.selectedTitle === undefined) state.selectedTitle = null;
-        if (!state.inventory) state.inventory = [];
-        if (!state.consumables) state.consumables = {};
-        if (state.selectedTheme === undefined) state.selectedTheme = null;
-        // Ensure new stats for level-up quests exist
-        if (state.correctStreak === undefined) state.correctStreak = 0;
-        if (state.perfectScores === undefined) state.perfectScores = 0;
-        if (state.highScores80 === undefined) state.highScores80 = 0;
-        
         return state;
     }
 
@@ -240,13 +231,26 @@ export class Gamification {
             if (key && key.startsWith('quizState-')) {
                 try {
                     const data = JSON.parse(localStorage.getItem(key));
-                    if (data && data.userAnswers) {
-                        const correctCount = data.score || 0;
-                        const xp = correctCount * 4; // ปรับให้เท่ากับเกณฑ์ใหม่ (4 XP ต่อข้อ) เพื่อความยุติธรรม
+                    // NEW: Check for shuffledQuestions to ensure we can calculate XP accurately
+                    if (data && data.userAnswers && data.shuffledQuestions) {
+                        let calculatedXp = 0;
+                        data.userAnswers.forEach((ans, index) => {
+                            if (ans && ans.isCorrect) {
+                                const question = data.shuffledQuestions[index];
+                                // Award 5 XP for complex questions, 4 for others
+                                if (question && (question.type === 'multiple-select' || question.type === 'fill-in-number')) {
+                                    calculatedXp += 5;
+                                } else {
+                                    calculatedXp += 4;
+                                }
+                            }
+                        });
                         
+                        const xp = calculatedXp;
+                        const correctCount = data.score || 0;
+
                         totalXP += xp;
                         totalCorrect += correctCount;
-                        
                         // นับจำนวนชุดที่ทำเสร็จ (ดูจากจำนวนข้อที่ตอบเทียบกับจำนวนข้อทั้งหมด)
                         const totalQ = data.shuffledQuestions ? data.shuffledQuestions.length : 0;
                         const answered = data.userAnswers.filter(a => a).length;
@@ -295,15 +299,23 @@ export class Gamification {
     saveState() {
         try {
             localStorage.setItem(this.storageKey, JSON.stringify(this.state));
+            this.onStateUpdated(); // Trigger UI updates
         } catch (e) {
             console.error("Error saving gamification state:", e);
         }
     }
 
+    // IMPROVEMENT: Centralized UI Update Trigger
+    onStateUpdated() {
+        this.updateHeaderAvatar();
+        this.applyTheme(this.state.selectedTheme);
+        // Dispatch event for other components (e.g. profile page charts) to react
+        window.dispatchEvent(new CustomEvent('gamification-updated', { detail: this.state }));
+    }
+
     setAvatar(avatar) {
         this.state.avatar = avatar;
         this.saveState();
-        this.updateHeaderAvatar();
     }
 
     setDisplayName(name) {
@@ -319,7 +331,6 @@ export class Gamification {
     equipTheme(themeValue) {
         this.state.selectedTheme = themeValue;
         this.saveState();
-        this.applyTheme(themeValue);
     }
 
     buyItem(itemId) {
