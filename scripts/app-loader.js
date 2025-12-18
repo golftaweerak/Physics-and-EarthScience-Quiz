@@ -12,7 +12,7 @@ import { initializeCommonComponents } from './common-init.js';
 async function main() {
     // Load all shared components concurrently for better performance.
     const loadPromises = [
-        //loadComponent('#main_header-placeholder', './components/main_header.html'),
+        loadComponent('#main_header-placeholder', './components/main_header.html'),
         loadComponent('#footer-placeholder', './components/footer.html'),
         loadComponent('#modals-placeholder', './components/modals_common.html'),
     ];
