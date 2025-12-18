@@ -276,7 +276,7 @@ export const quizList = [
   {
     "id": "ess_basic/ess_basic_m6_mid2-review-3",
     "title": "แนวข้อสอบกลางภาค เทอม 2 ชุดที่ 3",
-    "amount": 40,
+    "amount": 30,
     "description": "แนวข้อสอบทบทวนกลางภาค เทอม 2 ชุดที่ 3  ครอบคลุมเนื้อหาบทที่ 6 (การแปรสัณฐาน) และบทที่ 7 (ธรณีพิบัติภัย)",
     "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_mid2-review-3",
     "storageKey": "quizState-ess_basic_m6_mid2-review-3",
