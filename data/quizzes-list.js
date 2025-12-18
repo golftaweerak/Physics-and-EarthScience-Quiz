@@ -274,6 +274,18 @@ export const quizList = [
     "subCategory": "แนวข้อสอบ"
   },
   {
+    "id": "ess_basic/ess_basic_m6_mid2-review-3",
+    "title": "แนวข้อสอบกลางภาค เทอม 2 ชุดที่ 3",
+    "amount": 40,
+    "description": "แนวข้อสอบทบทวนกลางภาค เทอม 2 ชุดที่ 3  ครอบคลุมเนื้อหาบทที่ 6 (การแปรสัณฐาน) และบทที่ 7 (ธรณีพิบัติภัย)",
+    "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_mid2-review-3",
+    "storageKey": "quizState-ess_basic_m6_mid2-review-3",
+    "icon": "./assets/icons/earth.png",
+    "altText": "ไอคอนสำหรับ ess_basic_m6_mid2-review-3",
+    "category": "EarthSpaceScienceBasic",
+    "subCategory": "แนวข้อสอบ"
+  },
+  {
     "id": "ess_basic/ess_basic_m6_final-review-1",
     "title": "แนวข้อสอบปลายภาค เทอม 1 ชุดที่ 1",
     "amount": 20,
@@ -895,7 +907,7 @@ export const quizList = [
     "description": "บทที่ 18: ฟิสิกส์อะตอม (ชุดที่ 1 - ทฤษฎีอะตอมของโบร์, ปรากฏการณ์โฟโตอิเล็กทริก, ทวิภาวะของคลื่นและอนุภาค)",
     "url": "./quiz/index.html?id=phy_m6/phy_m6_ch18-1",
     "storageKey": "quizState-phy_m6_ch18-1",
-    "icon": "./assets/icons/physics.png",
+    "icon": "./assets/icons/atom.png",
     "altText": "ไอคอนสำหรับ phy_m6_ch18-1",
     "category": "PhysicsM6",
     "subCategory": "บทที่ 18: ฟิสิกส์อะตอม"
