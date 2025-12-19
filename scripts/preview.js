@@ -656,12 +656,12 @@ svg" fill="none" viewBox="0 0 24 24">
 }
 
 // Main execution
-export function initializePreviewPage() {
+export async function initializePreviewPage() {
     // Defensively initialize shared components that might rely on elements
     // not present on every page. This prevents an error in one component
     // from breaking the entire page's script execution.
     try {
-        initializeMenu();
+        await initializeMenu();
     } catch (error) {
         // Log the error for debugging but allow the rest of the page to load.
         console.error("Failed to initialize menu, but continuing with page load:", error);

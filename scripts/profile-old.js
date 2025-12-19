@@ -1,13 +1,13 @@
-import { Gamification, BADGES, ACHIEVEMENTS, SHOP_ITEMS, XP_THRESHOLDS, TRACK_TITLES } from './gamification.js';
+import { Gamification, BADGES, ACHIEVEMENTS, SHOP_ITEMS } from './gamification.js';
 import { getDetailedProgressForAllQuizzes, calculateStrengthsAndWeaknesses } from './data-manager.js';
 import { renderDailyQuests } from './daily-quests-renderer.js';
 import { ModalHandler } from './modal-handler.js';
 import { showToast } from './toast.js';
-import { collection, query, orderBy, limit, getDocs, where, getCountFromServer } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import { db } from './firebase-config.js';
 
 const AVATARS = [
-    '🧑‍🎓', '👨‍🎓', '👩‍🎓', '👨‍🔬', '👩‍🔬', '👨‍🚀', '👩‍🚀', '👽', '🤖'
+    '🧑‍🎓', '👨‍🎓', '👩‍🎓', '👨‍🔬', '👩‍🔬', '👨‍🚀', '👩‍🚀', '👽', '🤖', 
+    '🌍', '🪐', '🌑', '☀️', '⭐', '☄️', '🚀', '🛰️', '🔭',
+    '⚛️', '🧬', '🦠', '🧠', '🦉', '🦊', '🦁', '🐯', '🐶'
 ];
 
 // NEW: Proficiency Group Definitions for Radar Chart
@@ -61,160 +61,37 @@ const THEME_HUES = {
     'theme-midnight': 220 // Slate/Blue-ish
 };
 
-// Mock Global Averages (ค่าเฉลี่ยสมมติสำหรับเปรียบเทียบ)
-const GLOBAL_AVERAGES = {
-    'Mechanics': 55,
-    'Electricity': 48,
-    'WavesLight': 50,
-    'ModernHeat': 45,
-    'Astronomy': 62,
-    'Geology': 65,
-    'Meteorology': 58
-};
-
-let lastSyncTime = null;
-let previousXP = null;
-let previousAvatar = null;
-
-function getTitleFromXP(xp, type) {
-    let track = 'overall';
-    if (type === 'physicsXP') track = 'physics';
-    if (type === 'earthXP') track = 'earth';
-    
-    let level = 1;
-    for (const threshold of XP_THRESHOLDS) {
-        if (xp >= threshold.xp) {
-            level = threshold.level;
-        } else {
-            break;
-        }
-    }
-    
-    const titles = TRACK_TITLES[track] || TRACK_TITLES.overall;
-    const titleIndex = Math.min(level - 1, titles.length - 1);
-    return titles[titleIndex];
-}
-
-function getLevelBorderClass(level) {
-    if (level >= 20) return 'bg-gradient-to-br from-red-500 via-yellow-400 to-green-500 animate-pulse'; // Rainbow
-    if (level >= 15) return 'bg-gradient-to-br from-cyan-300 to-blue-500'; // Diamond
-    if (level >= 10) return 'bg-gradient-to-br from-yellow-300 to-amber-500'; // Gold
-    if (level >= 5) return 'bg-gradient-to-br from-gray-300 to-blue-300'; // Silver/Blue
-    return 'bg-gray-300 dark:bg-gray-600'; // Bronze/Gray
-}
-
-function getAvatarFrameClass(avatar) {
-    const shopItem = SHOP_ITEMS.find(i => i.value === avatar && i.type === 'avatar');
-    if (!shopItem) return 'ring-2 ring-gray-200 dark:ring-gray-700'; // Default
-
-    if (shopItem.cost >= 1000) return 'ring-4 ring-yellow-400 shadow-lg shadow-yellow-400/50 legendary-frame';
-    if (shopItem.cost >= 500) return 'ring-4 ring-purple-500 shadow-md shadow-purple-500/30';
-    return 'ring-4 ring-green-500';
-}
-
 export async function initializeProfile() {
     const game = new Gamification();
-    
-    // 1. เรนเดอร์ UI ทั่วไปทันที (รวดเร็ว)
     renderUserInfo(game);
     renderTrackProgress(game);
     renderBadges(game);
     renderAchievements(game);
     renderQuestHistory(game);
     renderShop(game);
-    renderDailyQuests('profile-daily-quests-container');
-    renderSyncStatus(game);
-
-    // 2. ติดตั้งระบบต่างๆ
     setupShopSystem(game);
     setupAvatarSystem(game);
     setupNameEditSystem(game);
     setupTitleSystem(game);
     setupThemeSystem(game);
     setupResetSystem(game);
+    renderDailyQuests('profile-daily-quests-container');
     setupCollapsibleSections();
-    setupRefreshChartsSystem(game);
-    setupManualSync(game);
-    setupRadarControls(game);
-    setupLeaderboardSystem(game);
-    setupShopAccordion(game);
-
-    // 3. เรนเดอร์กราฟ (Asynchronous/ช้ากว่า)
-    document.getElementById('radar-chart-loader')?.classList.remove('hidden');
-    document.getElementById('history-chart-loader')?.classList.remove('hidden');
-    document.getElementById('strengths-weaknesses-loader')?.classList.remove('hidden');
-
-    const r1 = await renderRadarChart(game);
-    const r2 = await renderProficiencyHistoryChart(game);
-    const r3 = await renderStrengthsWeaknesses();
-
-    if (r1 && r2 && r3) {
-        document.getElementById('refresh-charts-btn')?.classList.add('hidden');
-    }
+    await renderRadarChart(game);
+    await renderProficiencyHistoryChart(game);
+    await renderStrengthsWeaknesses();
 }
 
 function renderUserInfo(game) {
     const overall = game.getCurrentLevel();
-    const rankTitleEl = document.getElementById('user-rank-title');
+    const rankTitleEl = document.getElementById('profile-rank-title');
     if (rankTitleEl) rankTitleEl.textContent = `${overall.title} (Lv.${overall.level})`;
 
-    const levelEl = document.getElementById('user-level');
-    if (levelEl) levelEl.textContent = overall.level;
+    const totalXpEl = document.getElementById('profile-total-xp');
+    if (totalXpEl) totalXpEl.textContent = game.state.xp.toLocaleString();
 
-    const currentXP = game.state.xp;
-    const totalXpEl = document.getElementById('current-xp');
-    
-    if (totalXpEl) {
-        if (previousXP !== null && previousXP !== currentXP) {
-            animateValue(totalXpEl, previousXP, currentXP, 1000);
-            const isDecrease = currentXP < previousXP;
-            const colorClass = isDecrease ? 'text-red-500' : 'text-green-500';
-            totalXpEl.classList.add(colorClass, 'scale-125', 'inline-block', 'transition-transform');
-            setTimeout(() => totalXpEl.classList.remove(colorClass, 'scale-125'), 500);
-        } else {
-            totalXpEl.textContent = currentXP.toLocaleString();
-        }
-    }
-
-    // Update Level Progress Bar & Quest
-    // const nextLevelNumEl = document.getElementById('next-level-number'); // Removed in new design
-    // const currentLevelXpDisplayEl = document.getElementById('current-level-xp-display'); // Removed
-    const nextLevelTargetXpEl = document.getElementById('next-level-xp');
-    const progressBarEl = document.getElementById('xp-progress-bar');
-    const questContainerEl = document.getElementById('next-level-quest-container');
-    const questDescEl = document.getElementById('next-level-quest-desc');
-    const questProgressEl = document.getElementById('next-level-quest-progress');
-    
-    // Calculate XP Progress relative to current level
-    const currentThreshold = XP_THRESHOLDS[overall.level - 1];
-    const nextThreshold = XP_THRESHOLDS[overall.level]; // level is 1-based, array is 0-based
-    
-    if (nextThreshold) {
-        const xpRange = nextThreshold.xp - currentThreshold.xp;
-        const xpGained = game.state.xp - currentThreshold.xp;
-        const xpPercent = Math.min(100, Math.max(0, (xpGained / xpRange) * 100));
-        
-        if (progressBarEl) progressBarEl.style.width = `${xpPercent}%`;
-        if (nextLevelTargetXpEl) nextLevelTargetXpEl.textContent = xpRange.toLocaleString();
-    } else {
-        if (progressBarEl) progressBarEl.style.width = '100%';
-        if (nextLevelTargetXpEl) nextLevelTargetXpEl.textContent = 'MAX';
-    }
-
-    if (questContainerEl) {
-        if (overall.nextLevelQuest) {
-            questContainerEl.classList.remove('hidden');
-            if (questDescEl) questDescEl.textContent = overall.nextLevelQuest.desc;
-            
-            const questProgress = game.getQuestProgressValue(overall.nextLevelQuest);
-            const questTarget = overall.nextLevelQuest.target;
-            if (questProgressEl) questProgressEl.textContent = `(${questProgress}/${questTarget})`;
-        } else {
-            questContainerEl.classList.add('hidden');
-        }
-    }
-
-    // Quizzes count removed from header in new design
+    const quizzesCountEl = document.getElementById('profile-quizzes-count');
+    if (quizzesCountEl) quizzesCountEl.textContent = game.state.quizzesCompleted.toLocaleString();
     
     // Update display name
     const nameEl = document.getElementById('profile-display-name');
@@ -222,31 +99,14 @@ function renderUserInfo(game) {
     
     // Update avatar display
     const avatarEl = document.getElementById('profile-avatar-display');
-    const levelFrameEl = document.getElementById('level-frame-container');
-
-    if (avatarEl && levelFrameEl) {
+    if (avatarEl) {
         const avatar = game.state.avatar || '🧑‍🎓';
-        if (previousAvatar !== avatar) {
-            const isImage = avatar.includes('/') || avatar.includes('.');
-            if (isImage) {
-                avatarEl.innerHTML = `<img src="${avatar}" alt="Profile Avatar" class="w-full h-full rounded-full object-cover">`;
-            } else {
-                avatarEl.innerHTML = avatar;
-            }
-            avatarEl.classList.remove('anim-avatar-pop');
-            void avatarEl.offsetWidth; // Force reflow
-            avatarEl.classList.add('anim-avatar-pop');
-            previousAvatar = avatar;
+        const isImage = avatar.includes('/') || avatar.includes('.');
+        if (isImage) {
+            avatarEl.innerHTML = `<img src="${avatar}" alt="Profile Avatar" class="w-full h-full rounded-full object-cover">`;
+        } else {
+            avatarEl.innerHTML = avatar;
         }
-
-        // Update border class based on price/rarity
-        const frameClass = getAvatarFrameClass(avatar);
-        avatarEl.className = `w-full h-full rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-4xl cursor-pointer transition-transform transform group-hover:scale-105 ${frameClass}`;
-
-        // NEW: Update level border (outer ring)
-        const levelBorderClass = getLevelBorderClass(overall.level);
-        levelFrameEl.className = 'w-full h-full rounded-full p-2 transition-all duration-300'; // Reset and use p-2 for visibility
-        levelFrameEl.classList.add(...levelBorderClass.split(' '));
     }
 
     // Update Title
@@ -258,85 +118,12 @@ function renderUserInfo(game) {
 
     // Update Shop XP
     const shopXpEl = document.getElementById('shop-user-xp');
-    if (shopXpEl) {
-        if (previousXP !== null && previousXP !== currentXP) {
-            animateValue(shopXpEl, previousXP, currentXP, 1000);
-            const isDecrease = currentXP < previousXP;
-            const colorClass = isDecrease ? 'text-red-500' : 'text-green-500';
-            shopXpEl.classList.add(colorClass, 'scale-125', 'inline-block', 'transition-transform');
-            setTimeout(() => shopXpEl.classList.remove(colorClass, 'scale-125'), 500);
-        } else {
-            shopXpEl.textContent = currentXP.toLocaleString();
-        }
-    }
+    if (shopXpEl) shopXpEl.textContent = game.state.xp.toLocaleString();
 
     // Update Theme Display (Optional, maybe just a text or icon)
     const themeEl = document.getElementById('profile-theme-display');
     if (themeEl) {
         themeEl.textContent = game.state.selectedTheme ? '🎨 ธีม: กำหนดเอง' : '🎨 ธีม: มาตรฐาน';
-    }
-
-    renderRecentBadges(game);
-    previousXP = currentXP;
-}
-
-function renderSyncStatus(game) {
-    const wrapper = document.getElementById('sync-status-wrapper');
-    const statusEl = document.getElementById('connection-status');
-    const lastSyncEl = document.getElementById('last-sync-display');
-    
-    if (!wrapper || !statusEl) return;
-
-    wrapper.classList.remove('hidden');
-
-    // Access authManager from game instance if available
-    const user = game.authManager?.currentUser; 
-    const isOnline = navigator.onLine;
-
-    if (!user) {
-        // Guest Mode
-         statusEl.innerHTML = `
-            <span class="w-2 h-2 rounded-full bg-gray-400"></span>
-            <span class="text-gray-600 dark:text-gray-400 text-[10px] sm:text-xs">Guest (Local)</span>
-        `;
-        statusEl.className = "flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600";
-        if (lastSyncEl) lastSyncEl.textContent = "";
-    } else {
-        if (isOnline) {
-             statusEl.innerHTML = `
-                <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                <span class="text-green-700 dark:text-green-300 text-[10px] sm:text-xs">Cloud Synced</span>
-            `;
-            statusEl.className = "flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800";
-        } else {
-             statusEl.innerHTML = `
-                <span class="w-2 h-2 rounded-full bg-yellow-500"></span>
-                <span class="text-yellow-700 dark:text-yellow-300 text-[10px] sm:text-xs">Offline</span>
-            `;
-            statusEl.className = "flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800";
-        }
-
-        if (lastSyncEl && lastSyncTime) {
-            const timeStr = lastSyncTime.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
-            lastSyncEl.textContent = `ล่าสุด: ${timeStr}`;
-        }
-    }
-}
-
-function renderRecentBadges(game) {
-    const container = document.getElementById('recent-badges');
-    if (!container) return;
-    
-    const recentBadges = game.getEarnedBadges().slice(-3).reverse();
-    
-    if (recentBadges.length === 0) {
-            container.innerHTML = '<span class="text-sm text-gray-400">ยังไม่มีเหรียญรางวัล</span>';
-    } else {
-        container.innerHTML = recentBadges.map(b => `
-            <div class="w-10 h-10 rounded-full bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center text-xl shadow-sm border border-yellow-200 dark:border-yellow-700/50 transition-transform hover:scale-110 cursor-help" title="${b.name}: ${b.desc}">
-                ${b.icon}
-            </div>
-        `).join('');
     }
 }
 
@@ -405,228 +192,6 @@ function setupResetSystem(game) {
     });
 }
 
-function setupRefreshChartsSystem(game) {
-    const refreshBtn = document.getElementById('refresh-charts-btn');
-    if (!refreshBtn) return;
-
-    refreshBtn.addEventListener('click', async () => {
-        // Add rotation animation class
-        const icon = refreshBtn.querySelector('svg');
-        if (icon) icon.classList.add('animate-spin');
-
-        // Show loaders
-        document.getElementById('radar-chart-loader')?.classList.remove('hidden');
-        document.getElementById('history-chart-loader')?.classList.remove('hidden');
-        document.getElementById('strengths-weaknesses-loader')?.classList.remove('hidden');
-
-        const [r1, r2, r3] = await Promise.all([
-            renderRadarChart(game),
-            renderProficiencyHistoryChart(game),
-            renderStrengthsWeaknesses()
-        ]);
-
-        if (r1 && r2 && r3) {
-            refreshBtn.classList.add('hidden');
-        }
-
-        // Remove animation
-        if (icon) icon.classList.remove('animate-spin');
-        
-        showToast('อัปเดตข้อมูล', 'โหลดข้อมูลกราฟล่าสุดเรียบร้อยแล้ว', '🔄');
-    });
-}
-
-function setupManualSync(game) {
-    const btn = document.getElementById('manual-sync-btn');
-    if (!btn) return;
-
-    btn.addEventListener('click', async () => {
-        const icon = btn.querySelector('svg');
-        if (icon) icon.classList.add('animate-spin');
-        
-        // Disable button
-        btn.disabled = true;
-        btn.classList.add('opacity-50', 'cursor-not-allowed');
-
-        try {
-            const success = await game.forceCloudSync();
-            if (success) {
-                lastSyncTime = new Date();
-                renderSyncStatus(game);
-                showToast('ซิงค์ข้อมูลสำเร็จ', 'ข้อมูลล่าสุดถูกโหลดเรียบร้อยแล้ว', '☁️');
-            } else {
-                if (!game.authManager.currentUser) {
-                     showToast('ไม่ได้เข้าสู่ระบบ', 'ระบบบันทึกข้อมูลในเครื่อง (Local) เท่านั้น', '💻');
-                } else {
-                     showToast('ซิงค์ไม่สำเร็จ', 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้', '⚠️', 'error');
-                }
-            }
-        } catch (e) {
-            console.error(e);
-            showToast('ข้อผิดพลาด', 'เกิดข้อผิดพลาดในการซิงค์', '❌', 'error');
-        } finally {
-            if (icon) icon.classList.remove('animate-spin');
-            btn.disabled = false;
-            btn.classList.remove('opacity-50', 'cursor-not-allowed');
-        }
-    });
-}
-
-function setupRadarControls(game) {
-    const toggleBtn = document.getElementById('toggle-average-btn');
-    if (!toggleBtn) return;
-
-    toggleBtn.addEventListener('change', (e) => {
-        const ctx = document.getElementById('skills-radar-chart')?.getContext('2d');
-        if (!ctx) return;
-        
-        const chart = Chart.getChart(ctx);
-        if (chart) {
-            // Global Average is the first dataset (index 0)
-            chart.data.datasets[0].hidden = !e.target.checked;
-            chart.update();
-        }
-    });
-}
-
-function setupLeaderboardSystem(game) {
-    const listContainer = document.getElementById('leaderboard-list');
-    const tabs = document.querySelectorAll('.leaderboard-tab');
-    
-    if (!listContainer || tabs.length === 0) return;
-
-    const renderList = async (type) => {
-        // Show loading
-        listContainer.innerHTML = `
-            <div class="flex flex-col items-center justify-center h-40 text-gray-500">
-                <svg class="animate-spin h-6 w-6 mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                <span>กำลังโหลดอันดับ...</span>
-            </div>
-        `;
-
-        try {
-            const usersRef = collection(db, 'users');
-            const q = query(usersRef, orderBy(type, 'desc'), limit(10));
-            const querySnapshot = await getDocs(q);
-            
-            const leaderboard = [];
-            querySnapshot.forEach((doc) => {
-                leaderboard.push({ id: doc.id, ...doc.data() });
-            });
-
-            if (leaderboard.length === 0) {
-                listContainer.innerHTML = `<div class="text-center py-8 text-gray-500">ยังไม่มีข้อมูลการจัดอันดับ</div>`;
-                return;
-            }
-
-            const currentUser = game.authManager?.currentUser;
-            const currentUserId = currentUser ? currentUser.uid : null;
-
-            // Check if user is in top 10
-            const userInTop10 = leaderboard.some(u => u.id === currentUserId);
-            let userRankData = null;
-
-            // If user not in top 10 and logged in, fetch their rank
-            if (!userInTop10 && currentUserId) {
-                try {
-                    const userScore = game.state[type] || 0;
-                    // Count users with higher score
-                    const rankQuery = query(usersRef, where(type, '>', userScore));
-                    const snapshot = await getCountFromServer(rankQuery);
-                    const rank = snapshot.data().count + 1;
-
-                    userRankData = {
-                        rank: rank,
-                        id: currentUserId,
-                        displayName: game.state.displayName,
-                        avatar: game.state.avatar,
-                        selectedTitle: game.state.selectedTitle,
-                        score: userScore,
-                        isMe: true
-                    };
-                } catch (err) {
-                    console.warn("Failed to fetch user rank:", err);
-                }
-            }
-
-            const renderRow = (user, rank, isMe) => {
-                
-                let rankDisplay = `<span class="font-bold text-gray-500 w-6 text-center text-sm sm:text-base">${rank}</span>`;
-                if (rank === 1) rankDisplay = `<span class="text-xl sm:text-2xl">🥇</span>`;
-                if (rank === 2) rankDisplay = `<span class="text-xl sm:text-2xl">🥈</span>`;
-                if (rank === 3) rankDisplay = `<span class="text-xl sm:text-2xl">🥉</span>`;
-
-                const avatar = user.avatar || '🧑‍🎓';
-                const isImage = avatar.includes('/') || avatar.includes('.');
-                const avatarHtml = isImage 
-                    ? `<img src="${avatar}" class="w-8 h-8 sm:w-10 sm:h-10 rounded-full object-cover border border-gray-200">`
-                    : `<span class="text-2xl sm:text-3xl">${avatar}</span>`;
-
-                const score = isMe && user.score !== undefined ? user.score : (user[type] || 0);
-                const scoreFormatted = score.toLocaleString();
-                const rankTitle = getTitleFromXP(score, type);
-
-                return `
-                    <div class="flex items-center gap-2 sm:gap-4 p-2 sm:p-3 rounded-lg ${isMe ? 'bg-blue-50 border border-blue-200 dark:bg-blue-900/20 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-900/30 hover:shadow-md hover:scale-[1.02] z-10 relative' : 'hover:bg-gray-50 dark:hover:bg-gray-700/30'} transition-all duration-200">
-                        <div class="flex items-center justify-center w-6 sm:w-8 flex-shrink-0">
-                            ${rankDisplay}
-                        </div>
-                        <div class="flex-shrink-0">
-                            ${avatarHtml}
-                        </div>
-                        <div class="flex-grow min-w-0 flex flex-col justify-center">
-                            <div class="font-bold text-sm sm:text-base text-gray-800 dark:text-gray-200 truncate">
-                                ${user.displayName || 'ผู้เรียน'} ${isMe ? '<span class="text-xs text-blue-600 dark:text-blue-400 ml-1">(คุณ)</span>' : ''}
-                            </div>
-                            <div class="text-xs text-gray-500 dark:text-gray-400 flex flex-wrap items-center gap-x-1.5 gap-y-0.5 leading-tight">
-                                <span class="text-blue-600 dark:text-blue-400 font-medium whitespace-nowrap">${rankTitle}</span>
-                                ${user.selectedTitle ? `<span class="hidden sm:inline text-gray-300 dark:text-gray-600">•</span> <span class="truncate max-w-[100px] sm:max-w-none">《 ${user.selectedTitle} 》</span>` : ''}
-                            </div>
-                        </div>
-                        <div class="flex-shrink-0 text-right">
-                            <div class="font-mono font-bold text-blue-600 dark:text-blue-400 text-sm sm:text-base">
-                                ${scoreFormatted}
-                            </div>
-                            <div class="text-[10px] sm:text-xs text-gray-400 dark:text-gray-500 font-medium uppercase">XP</div>
-                        </div>
-                    </div>
-                `;
-            };
-
-            let listHtml = leaderboard.map((user, index) => renderRow(user, index + 1, user.id === currentUserId)).join('');
-
-            if (userRankData) {
-                listHtml += `
-                    <div class="flex items-center justify-center py-1 opacity-50">
-                        <div class="h-1 w-1 bg-gray-400 rounded-full mx-0.5"></div>
-                        <div class="h-1 w-1 bg-gray-400 rounded-full mx-0.5"></div>
-                        <div class="h-1 w-1 bg-gray-400 rounded-full mx-0.5"></div>
-                    </div>
-                    ${renderRow(userRankData, userRankData.rank, true)}
-                `;
-            }
-
-            listContainer.innerHTML = listHtml;
-
-        } catch (error) {
-            console.error("Leaderboard error:", error);
-            listContainer.innerHTML = `<div class="text-center py-8 text-red-500 text-sm">ไม่สามารถโหลดข้อมูลได้<br>(ต้องเชื่อมต่ออินเทอร์เน็ต)</div>`;
-        }
-    };
-
-    // Tab switching logic
-    tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            tabs.forEach(t => t.className = "leaderboard-tab flex-1 py-2 px-3 rounded-lg text-xs sm:text-sm font-bold transition-all text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200");
-            tab.className = "leaderboard-tab flex-1 py-2 px-3 rounded-lg text-xs sm:text-sm font-bold transition-all bg-white dark:bg-gray-600 shadow text-blue-600 dark:text-blue-300";
-            renderList(tab.dataset.type);
-        });
-    });
-
-    // Initial load
-    renderList('xp');
-}
-
 function setupCollapsibleSections() {
     const headers = document.querySelectorAll('.collapsible-header');
     const expandAllBtn = document.getElementById('expand-all-btn');
@@ -689,14 +254,9 @@ function setupAvatarSystem(game) {
     const avatarDisplay = document.getElementById('profile-avatar-display');
     const grid = document.getElementById('avatar-grid');
 
-    const openAvatarModal = () => {
-        if (grid) renderAvatarGrid(game, grid);
-        avatarModal.open();
-    };
-
     // Open modal handlers
-    if (editBtn) editBtn.addEventListener('click', openAvatarModal);
-    if (avatarDisplay) avatarDisplay.addEventListener('click', openAvatarModal);
+    if (editBtn) editBtn.addEventListener('click', () => avatarModal.open());
+    if (avatarDisplay) avatarDisplay.addEventListener('click', () => avatarModal.open());
 
     // Render avatar grid
     if (grid) {
@@ -706,7 +266,6 @@ function setupAvatarSystem(game) {
             const btn = e.target.closest('.avatar-option');
             if (btn) {
                 const newAvatar = btn.dataset.avatar;
-                
                 game.setAvatar(newAvatar);
                 renderUserInfo(game); // Update UI immediately
 
@@ -730,7 +289,7 @@ function setupAvatarSystem(game) {
 
 function renderAvatarGrid(game, grid) {
     // Combine default avatars with purchased ones
-    const inventory = game.getInventory ? (game.getInventory() || []) : [];
+    const inventory = game.getInventory();
     const purchasedAvatars = SHOP_ITEMS.filter(i => i.type === 'avatar' && inventory.includes(i.id)).map(i => i.value);
     const allAvatars = [...AVATARS, ...purchasedAvatars];
     const uniqueAvatars = [...new Set(allAvatars)];
@@ -741,21 +300,8 @@ function renderAvatarGrid(game, grid) {
             ? `<img src="${avatar}" alt="Avatar" class="w-8 h-8 rounded-full object-cover mx-auto">` 
             : avatar;
 
-        // Determine frame class based on price
-        const shopItem = SHOP_ITEMS.find(i => i.value === avatar && i.type === 'avatar');
-        const isSelected = game.state.avatar === avatar;
-        const frameClass = getAvatarFrameClass(avatar);
-
-        let classes = `avatar-option text-3xl p-2 rounded-full transition-all relative group ${frameClass}`;
-
-        if (isSelected) {
-            classes += " bg-blue-100 dark:bg-blue-900/50 scale-110 z-10";
-        } else {
-            classes += " hover:scale-105 hover:bg-gray-100 dark:hover:bg-gray-700";
-        }
-
         return `
-        <button class="${classes}" data-avatar="${avatar}" title="${shopItem ? shopItem.name : ''}">
+        <button class="avatar-option text-3xl p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${game.state.avatar === avatar ? 'bg-blue-100 dark:bg-blue-900/50 ring-2 ring-blue-500' : ''}" data-avatar="${avatar}">
             ${content}
         </button>
     `}).join('');
@@ -938,11 +484,6 @@ function setupShopSystem(game) {
             const result = game.buyItem(currentItemId);
             if (result.success) {
                 showToast('ซื้อสำเร็จ', result.message, '🛒');
-
-                const audio = new Audio('./assets/audio/badge-unlock.mp3');
-                audio.volume = 0.7;
-                audio.play().catch(() => {});
-
                 renderUserInfo(game);
                 renderShop(game); // Re-render grid to update status
                 shopModal.close();
@@ -956,102 +497,38 @@ function setupShopSystem(game) {
 function renderShop(game) {
     const container = document.getElementById('shop-items-grid');
     if (!container) return;
-    
-    // Change layout to vertical stack for categories
-    container.className = 'space-y-8';
 
     const inventory = game.getInventory();
 
-    const categories = [
-        { type: 'consumable', label: 'ไอเทมตัวช่วย (Consumables)', icon: '⚡' },
-        { type: 'avatar', label: 'อวตาร (Avatars)', icon: '👤' },
-        { type: 'theme', label: 'ธีม (Themes)', icon: '🎨' },
-        { type: 'title', label: 'ฉายา (Titles)', icon: '🏷️' }
-    ];
+    container.innerHTML = SHOP_ITEMS.map(item => {
+        const isOwned = inventory.includes(item.id);
+        const canBuy = game.state.xp >= item.cost;
+        const isConsumable = item.type === 'consumable';
+        const quantity = isConsumable ? game.getItemCount(item.id) : 0;
+        
+        let statusClass = '';
+        let statusText = `${item.cost} XP`;
 
-    container.innerHTML = categories.map(cat => {
-        const items = SHOP_ITEMS.filter(item => item.type === cat.type);
-        if (items.length === 0) return '';
+        if (isOwned && !isConsumable) {
+            statusClass = 'text-green-600 dark:text-green-400';
+            statusText = '✓ เป็นเจ้าของแล้ว';
+        } else if (isConsumable && quantity > 0) {
+            statusClass = 'text-blue-600 dark:text-blue-400';
+            statusText = `มีอยู่: ${quantity} | ${item.cost} XP`;
+        } else if (!canBuy) {
+            statusClass = 'text-red-500';
+        } else {
+            statusClass = 'text-blue-600 dark:text-blue-400';
+        }
 
-        const itemsHtml = items.map(item => {
-            const isOwned = inventory.includes(item.id);
-            const canBuy = game.state.xp >= item.cost;
-            const isConsumable = item.type === 'consumable';
-            const quantity = isConsumable ? game.getItemCount(item.id) : 0;
-            
-            let statusClass = '';
-            let statusText = `${item.cost} XP`;
-    
-            if (isOwned && !isConsumable) {
-                statusClass = 'text-green-600 dark:text-green-400';
-                statusText = '✓ เป็นเจ้าของแล้ว';
-            } else if (isConsumable && quantity > 0) {
-                statusClass = 'text-blue-600 dark:text-blue-400';
-                statusText = `มีอยู่: ${quantity} | ${item.cost} XP`;
-            } else if (!canBuy) {
-                statusClass = 'text-red-500';
-            } else {
-                statusClass = 'text-blue-600 dark:text-blue-400';
-            }
-    
         return `
             <div class="shop-item-card bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col items-center text-center transition-all hover:shadow-md cursor-pointer hover:border-blue-400 dark:hover:border-blue-500 group" data-id="${item.id}">
-                <div class="text-4xl mb-2 lg:mb-3 transform transition-transform duration-300 group-hover:scale-125 group-hover:rotate-6 group-hover:drop-shadow-md">${item.icon}</div>
+                <div class="text-4xl mb-2 lg:mb-3 transform group-hover:scale-110 transition-transform">${item.icon}</div>
                 <h4 class="font-bold text-gray-800 dark:text-gray-200 mb-1 text-sm hidden lg:block w-full truncate px-1">${item.name}</h4>
                 <p class="text-xs font-bold ${statusClass}">${statusText}</p>
             </div>
         `;
-        }).join('');
-
-        // Accordion Structure
-        return `
-            <div class="shop-category border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
-                <button class="w-full flex justify-between items-center p-4 bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shop-category-header" data-target="shop-cat-${cat.type}">
-                    <div class="flex items-center gap-2">
-                        <span class="text-xl">${cat.icon}</span>
-                        <span class="font-bold text-gray-700 dark:text-gray-300">${cat.label}</span>
-                    </div>
-                    <svg class="w-5 h-5 transform transition-transform duration-200 chevron-icon text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                    </svg>
-                </button>
-                <div id="shop-cat-${cat.type}" class="collapsible-content" style="max-height: 2000px; opacity: 1;">
-                    <div class="p-4 grid grid-cols-2 md:grid-cols-4 gap-4">
-                        ${itemsHtml}
-                    </div>
-                </div>
-            </div>
-        `;
     }).join('');
-}
-
-function setupShopAccordion(game) {
-    const container = document.getElementById('shop-items-grid');
-    if (!container) return;
-
-    container.addEventListener('click', (e) => {
-        const header = e.target.closest('.shop-category-header');
-        if (!header) return;
-
-        const targetId = header.dataset.target;
-        const content = document.getElementById(targetId);
-        const icon = header.querySelector('.chevron-icon');
-
-        if (content && icon) {
-            // Check if currently collapsed (maxHeight is 0 or close to it)
-            const isCollapsed = content.style.maxHeight === '0px';
-            
-            if (isCollapsed) {
-                content.style.maxHeight = content.scrollHeight + "px";
-                content.style.opacity = "1";
-                icon.classList.remove('-rotate-90');
-            } else {
-                content.style.maxHeight = "0px";
-                content.style.opacity = "0";
-                icon.classList.add('-rotate-90');
-            }
-        }
-    });
 }
 
 function renderTrackProgress(game) {
@@ -1117,41 +594,17 @@ function renderAchievements(game) {
 
     container.innerHTML = ACHIEVEMENTS.map(ach => {
         const isUnlocked = unlockedIds.includes(ach.id);
-        const containerClass = isUnlocked 
-            ? 'bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 border-yellow-200 dark:border-yellow-700 opacity-100' 
-            : 'bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 opacity-60 grayscale';
-        
-        const titleClass = isUnlocked ? 'text-gray-800 dark:text-gray-200' : 'text-gray-500 dark:text-gray-500';
-        const descClass = isUnlocked ? 'text-gray-500 dark:text-gray-400' : 'text-gray-400 dark:text-gray-600';
-
-        // Calculate Progress
-        let currentProgress = 0;
-        if (ach.type === 'level') {
-            currentProgress = game.getCurrentLevel().level;
-        } else if (ach.type === 'total_correct') {
-            currentProgress = game.state.totalCorrectAnswers || 0;
-        } else if (ach.type === 'total_quizzes') {
-            currentProgress = game.state.quizzesCompleted || 0;
-        }
-
-        const percent = Math.min(100, Math.max(0, (currentProgress / ach.target) * 100));
-        const displayProgress = Math.min(currentProgress, ach.target);
-        const barColor = isUnlocked ? 'bg-green-500' : 'bg-blue-500';
+        const opacityClass = isUnlocked ? 'opacity-100' : 'opacity-50 grayscale';
+        const bgClass = isUnlocked ? 'bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 border-yellow-200 dark:border-yellow-700' : 'bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700';
 
         return `
-            <div class="p-3 rounded-lg border ${containerClass} transition-all">
-                <div class="flex items-center gap-3 mb-2">
-                    <div class="text-2xl flex-shrink-0">${ach.icon}</div>
-                    <div class="flex-grow min-w-0">
-                        <h4 class="text-sm font-bold ${titleClass} truncate">${ach.title}</h4>
-                        <p class="text-xs ${descClass} truncate">${ach.desc}</p>
-                    </div>
-                    ${isUnlocked ? '<span class="text-green-500 text-lg">✓</span>' : '<span class="text-xs text-gray-400">Locked</span>'}
+            <div class="flex items-center gap-3 p-3 rounded-lg border ${bgClass} ${opacityClass} transition-all">
+                <div class="text-2xl flex-shrink-0">${ach.icon}</div>
+                <div class="flex-grow min-w-0">
+                    <h4 class="text-sm font-bold text-gray-800 dark:text-gray-200 truncate">${ach.title}</h4>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 truncate">${ach.desc}</p>
                 </div>
-                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 overflow-hidden">
-                    <div class="${barColor} h-1.5 rounded-full transition-all duration-500" style="width: ${percent}%"></div>
-                </div>
-                <div class="text-[10px] text-right mt-1 ${descClass}">${displayProgress} / ${ach.target}</div>
+                ${isUnlocked ? '<span class="text-green-500 text-lg">✓</span>' : '<span class="text-xs text-gray-400">Locked</span>'}
             </div>
         `;
     }).join('');
@@ -1181,18 +634,13 @@ function renderQuestHistory(game) {
 
 async function renderRadarChart(game) {
     const ctx = document.getElementById('skills-radar-chart')?.getContext('2d');
-    const loader = document.getElementById('radar-chart-loader');
-    if (!ctx) {
-        if (loader) loader.classList.add('hidden');
-        return false;
-    }
+    if (!ctx) return;
     const chartContainer = ctx.canvas.parentElement;
     
     // Check if Chart.js is loaded
     if (typeof Chart === 'undefined') {
         console.warn("Chart.js is not loaded. Skipping radar chart rendering.");
-        if (loader) loader.classList.add('hidden');
-        return false;
+        return;
     }
 
     try {
@@ -1242,10 +690,6 @@ async function renderRadarChart(game) {
             const s = stats[key];
             return s.total > 0 ? (s.correct / s.total) * 100 : 0;
         });
-        
-        const averageDataPoints = Object.keys(PROFICIENCY_GROUPS).map(key => {
-            return GLOBAL_AVERAGES[key] || 50;
-        });
 
         // 3. Render Chart 
         const isDark = document.documentElement.classList.contains('dark');
@@ -1264,30 +708,16 @@ async function renderRadarChart(game) {
             type: 'radar',
             data: {
                 labels: labels,
-                datasets: [
-                {
-                    label: 'ค่าเฉลี่ยผู้เรียน',
-                    data: averageDataPoints,
-                    fill: true,
-                    backgroundColor: isDark ? 'rgba(156, 163, 175, 0.1)' : 'rgba(156, 163, 175, 0.2)',
-                    borderColor: isDark ? 'rgba(156, 163, 175, 0.4)' : 'rgba(156, 163, 175, 0.6)',
-                    pointBackgroundColor: 'transparent',
-                    pointBorderColor: 'transparent',
-                    pointHoverBackgroundColor: 'transparent',
-                    pointHoverBorderColor: 'transparent',
-                    borderDash: [5, 5],
-                    hidden: !document.getElementById('toggle-average-btn')?.checked
-                },
-                {
-                    label: 'ความถนัดของคุณ',
+                datasets: [{
+                    label: 'ความถนัด (%)',
                     data: dataPoints,
                     fill: true,
-                    backgroundColor: themeColors.background,
-                    borderColor: themeColors.border,
-                    pointBackgroundColor: themeColors.point,
+                backgroundColor: themeColors.background,
+                borderColor: themeColors.border,
+                pointBackgroundColor: themeColors.point,
                     pointBorderColor: '#fff',
                     pointHoverBackgroundColor: '#fff',
-                    pointHoverBorderColor: themeColors.border
+                pointHoverBorderColor: themeColors.border
                 }]
             },
             options: {
@@ -1310,56 +740,25 @@ async function renderRadarChart(game) {
                     }
                 },
                 plugins: {
-                    legend: { 
-                        display: true,
-                        labels: { color: textColor, font: { family: "'Kanit', sans-serif" } }
-                    },
+                    legend: { display: false },
                     tooltip: {
                         callbacks: {
                             label: function(context) {
-                                if (context.dataset.label === 'ความถนัดของคุณ') {
-                                    const key = Object.keys(PROFICIENCY_GROUPS)[context.dataIndex];
-                                    const s = stats[key];
-                                    return `${context.dataset.label}: ${context.raw.toFixed(1)}% (${s.correct}/${s.total})`;
-                                }
-                                return `${context.dataset.label}: ${context.raw.toFixed(1)}%`;
+                                const key = Object.keys(PROFICIENCY_GROUPS)[context.dataIndex];
+                                const s = stats[key];
+                                return `${context.label}: ${context.raw.toFixed(1)}% (${s.correct}/${s.total})`;
                             }
                         }
                     }
                 }
             }
-        });
-        return true;    
+        });    
     } catch (error) {
         console.error("Failed to render radar chart:", error);
         if (chartContainer) {
             chartContainer.innerHTML = `<p class="text-center text-sm text-red-500">ไม่สามารถโหลดข้อมูลสำหรับแผนภูมิได้</p>`;
         }
-        return false;
-    } finally {
-        if (loader) loader.classList.add('hidden');
     }
-}
-
-function animateValue(obj, start, end, duration) {
-    if (!obj) return;
-    if (obj.animationId) cancelAnimationFrame(obj.animationId);
-    
-    let startTimestamp = null;
-    const step = (timestamp) => {
-        if (!startTimestamp) startTimestamp = timestamp;
-        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-        const ease = 1 - Math.pow(1 - progress, 4); // Ease out quart
-        const value = Math.floor(ease * (end - start) + start);
-        obj.textContent = value.toLocaleString();
-        if (progress < 1) {
-            obj.animationId = window.requestAnimationFrame(step);
-        } else {
-            obj.textContent = end.toLocaleString();
-            obj.animationId = null;
-        }
-    };
-    obj.animationId = window.requestAnimationFrame(step);
 }
 
 function showProficiencyDetails(label, data) {
@@ -1412,17 +811,12 @@ function showProficiencyDetails(label, data) {
 
 async function renderProficiencyHistoryChart(game) {
     const ctx = document.getElementById('proficiency-history-chart')?.getContext('2d');
-    const loader = document.getElementById('history-chart-loader');
-    if (!ctx) {
-        if (loader) loader.classList.add('hidden');
-        return false;
-    }
+    if (!ctx) return;
 
     // Check if Chart.js is loaded
     if (typeof Chart === 'undefined') {
         console.warn("Chart.js is not loaded. Skipping history chart rendering.");
-        if (loader) loader.classList.add('hidden');
-        return false;
+        return;
     }
 
     try {
@@ -1548,24 +942,17 @@ async function renderProficiencyHistoryChart(game) {
                 }
             }
         });
-        return true;
+
     } catch (error) {
         console.error("Failed to render history chart:", error);
-        return false;
-    } finally {
-        if (loader) loader.classList.add('hidden');
     }
 }
 
 async function renderStrengthsWeaknesses() {
     const strengthsList = document.getElementById('strengths-list');
     const weaknessesList = document.getElementById('weaknesses-list');
-    const loader = document.getElementById('strengths-weaknesses-loader');
 
-    if (!strengthsList || !weaknessesList) {
-        if (loader) loader.classList.add('hidden');
-        return false;
-    }
+    if (!strengthsList || !weaknessesList) return;
 
     try {
         const { strengths, weaknesses } = await calculateStrengthsAndWeaknesses();
@@ -1591,13 +978,9 @@ async function renderStrengthsWeaknesses() {
         } else {
             weaknessesList.innerHTML = `<li class="text-sm text-gray-500 dark:text-gray-400 italic">ยังไม่มีข้อมูลเพียงพอ</li>`;
         }
-        return true;
     } catch (error) {
         console.error("Failed to render strengths and weaknesses:", error);
         if (strengthsList) strengthsList.innerHTML = `<li class="text-sm text-red-500">เกิดข้อผิดพลาดในการโหลดข้อมูล</li>`;
         if (weaknessesList) weaknessesList.innerHTML = `<li class="text-sm text-red-500">เกิดข้อผิดพลาดในการโหลดข้อมูล</li>`;
-        return false;
-    } finally {
-        if (loader) loader.classList.add('hidden');
     }
 }

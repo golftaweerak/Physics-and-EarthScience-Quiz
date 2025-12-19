@@ -364,10 +364,12 @@ function createOptionButton(optionText, previousAnswer) {
     const wasSelected = optionText.trim() === previousAnswer.selectedAnswer.trim();
 
     if (isCorrectOption) {
-      button.classList.add("correct");
+      button.classList.add('bg-green-100', 'dark:bg-green-900/30', 'border-green-500', 'dark:border-green-600', 'text-green-800', 'dark:text-green-300');
     } else if (wasSelected) {
       // Only mark as incorrect if it was selected and is not the correct answer.
-      button.classList.add("incorrect");
+      button.classList.add('bg-red-100', 'dark:bg-red-900/30', 'border-red-500', 'dark:border-red-600', 'text-red-800', 'dark:text-red-400');
+    } else {
+      button.classList.add('opacity-60');
     }
   } else {
     // This is a new, unanswered question.
@@ -408,11 +410,20 @@ function createCheckboxOption(optionText, previousAnswer) {
     checkbox.disabled = true;
     // When disabled, the wrapper should not look clickable.
     wrapperLabel.classList.remove('cursor-pointer', 'hover:bg-gray-100', 'dark:hover:bg-gray-700', 'hover:border-blue-500', 'dark:hover:border-blue-500');
-    wrapperLabel.classList.add('cursor-not-allowed', 'opacity-75');
+    wrapperLabel.classList.add('cursor-default');
 
     const selectedAnswers = new Set(previousAnswer.selectedAnswer || []);
+    const correctAnswersSet = new Set(previousAnswer.correctAnswer || []);
     if (selectedAnswers.has(optionText.trim())) {
       checkbox.checked = true;
+    }
+
+    if (correctAnswersSet.has(optionText.trim())) {
+        wrapperLabel.classList.add('bg-green-100', 'dark:bg-green-900/30', 'border-green-500', 'dark:border-green-600', 'anim-correct-pop');
+    } else if (selectedAnswers.has(optionText.trim())) {
+        wrapperLabel.classList.add('bg-red-100', 'dark:bg-red-900/30', 'border-red-500', 'dark:border-red-600', 'anim-shake');
+    } else {
+        wrapperLabel.classList.add('opacity-60');
     }
   }
   return wrapperLabel;
@@ -921,13 +932,19 @@ function evaluateMultipleAnswer() {
     const checkbox = wrapper.querySelector('input');
     const optionValue = checkbox.value.trim();
     checkbox.disabled = true;
+    // Remove hover effects
+    wrapper.classList.remove('hover:bg-gray-100', 'dark:hover:bg-gray-700', 'hover:border-blue-500', 'dark:hover:border-blue-500', 'cursor-pointer');
+    wrapper.classList.add('cursor-default');
 
     if (correctSet.has(optionValue)) {
       // Add a class to highlight all correct answers
-      wrapper.classList.add('correct');
+      wrapper.classList.add('bg-green-100', 'dark:bg-green-900/30', 'border-green-500', 'dark:border-green-600');
     } else if (selectedSet.has(optionValue)) {
       // Add a class to highlight incorrectly selected answers
-      wrapper.classList.add('incorrect');
+      wrapper.classList.add('bg-red-100', 'dark:bg-red-900/30', 'border-red-500', 'dark:border-red-600');
+    } else {
+      // For other incorrect, unselected options, make them faded
+      wrapper.classList.add('opacity-60');
     }
   });
 
@@ -983,9 +1000,11 @@ function evaluateFillInAnswer() {
 
   // Visually indicate correctness on the input field
   if (isCorrect) {
-    answerInput.classList.add('correct');
+    answerInput.classList.remove('border-gray-300', 'dark:border-gray-600');
+    answerInput.classList.add('bg-green-100', 'dark:bg-green-900/30', 'border-green-500', 'dark:border-green-600', 'text-green-800', 'dark:text-green-300');
   } else {
-    answerInput.classList.add('incorrect');
+    answerInput.classList.remove('border-gray-300', 'dark:border-gray-600');
+    answerInput.classList.add('bg-red-100', 'dark:bg-red-900/30', 'border-red-500', 'dark:border-red-600', 'text-red-800', 'dark:text-red-400');
   }
 
   updateNextButtonAppearance('next');
@@ -1039,11 +1058,13 @@ function evaluateFillInNumberAnswer() {
   if (isCorrect) {
     state.score++;
     elements.scoreCounter.textContent = `คะแนน: ${state.score}`;
-    answerInput.classList.add('correct');
+    answerInput.classList.remove('border-gray-300', 'dark:border-gray-600');
+    answerInput.classList.add('bg-green-100', 'dark:bg-green-900/30', 'border-green-500', 'dark:border-green-600', 'text-green-800', 'dark:text-green-300');
     state.game.incrementCorrectStreak();
     if (state.isSoundEnabled) state.correctSound.play().catch(e => console.error("Error playing sound:", e));
   } else {
-    answerInput.classList.add('incorrect');
+    answerInput.classList.remove('border-gray-300', 'dark:border-gray-600');
+    answerInput.classList.add('bg-red-100', 'dark:bg-red-900/30', 'border-red-500', 'dark:border-red-600', 'text-red-800', 'dark:text-red-400');
     state.game.resetCorrectStreak();
     if (state.isSoundEnabled) state.incorrectSound.play().catch(e => console.error("Error playing sound:", e));
   }
@@ -1104,14 +1125,12 @@ function selectAnswer(e) {
     state.score++;
     elements.scoreCounter.textContent = `คะแนน: ${state.score}`;
     state.game.incrementCorrectStreak();
-    selectedBtn.classList.add("correct");
     if (state.isSoundEnabled)
       state.correctSound
         .play()
         .catch((e) => console.error("Error playing sound:", e));
   } else {
     state.game.resetCorrectStreak();
-    selectedBtn.classList.add("incorrect");
     if (state.isSoundEnabled)
       state.incorrectSound
         .play()
@@ -1126,8 +1145,21 @@ function selectAnswer(e) {
   );
 
   Array.from(elements.options.children).forEach((button) => {
-    if (button.dataset.optionValue.trim() === correctAnswer) {
-      button.classList.add("correct");
+    const isCorrectAnswer = button.dataset.optionValue.trim() === correctAnswer;
+    const wasSelected = button === selectedBtn;
+
+    // Remove hover effects since it's disabled
+    button.classList.remove('hover:bg-gray-100', 'dark:hover:bg-gray-700', 'hover:border-blue-500', 'dark:hover:border-blue-500');
+
+    if (isCorrectAnswer) {
+        // Always highlight the correct answer in green
+        button.classList.add('bg-green-100', 'dark:bg-green-900/30', 'border-green-500', 'dark:border-green-600', 'text-green-800', 'dark:text-green-300');
+    } else if (wasSelected) {
+        // If this button was selected and it's not the correct one, highlight in red
+        button.classList.add('bg-red-100', 'dark:bg-red-900/30', 'border-red-500', 'dark:border-red-600', 'text-red-800', 'dark:text-red-400');
+    } else {
+        // For other incorrect, unselected options, make them faded
+        button.classList.add('opacity-60');
     }
     button.disabled = true;
   });
@@ -2186,10 +2218,21 @@ function saveQuizState() {
   } catch (e) {
     console.error("Error saving quiz state to local storage:", e);
   }
+
+  // NEW: Sync to Cloud if logged in
+  if (state.game && state.game.authManager) {
+      state.game.authManager.saveQuizHistoryItem(state.storageKey, stateToSave);
+  }
 }
 
 function clearSavedState() {
-  localStorage.removeItem(state.storageKey);
+  // NEW: Use AuthManager to delete from both local and cloud
+  if (state.game && state.game.authManager) {
+      state.game.authManager.deleteQuizHistoryItem(state.storageKey);
+  } else {
+      // Fallback for when authManager is not available
+      localStorage.removeItem(state.storageKey);
+  }
 }
 
 function resumeQuiz(savedState) {

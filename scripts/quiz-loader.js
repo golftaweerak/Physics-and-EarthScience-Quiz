@@ -33,7 +33,7 @@ export async function initializeQuiz() {
 
     // --- NEW: Handle Custom Quiz ---
     if (quizId && quizId.startsWith('custom_')) {
-        const allCustomQuizzes = getSavedCustomQuizzes();
+        const allCustomQuizzes = await getSavedCustomQuizzes();
         const customQuizData = allCustomQuizzes.find(q => q.customId === quizId);
 
         if (!customQuizData) {

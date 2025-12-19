@@ -8,11 +8,11 @@ async function main() {
         ]);
 
         const { initializeCommonComponents } = await import('./common-init.js');
-        initializeCommonComponents();
+        await initializeCommonComponents();
 
         // Load main profile logic
         const { initializeProfile } = await import('./profile.js');
-        initializeProfile();
+        await initializeProfile();
 
     } catch (error) {
         console.error("Failed to initialize profile page:", error);

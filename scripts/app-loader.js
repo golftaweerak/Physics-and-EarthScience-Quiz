@@ -30,11 +30,11 @@ async function main() {
     await Promise.all(loadPromises);
 
     // Initialize common components like header, menu, etc.
-    initializeCommonComponents();
+    await initializeCommonComponents();
 
     // Then, initialize scripts specific to the page by checking for key elements.
     if (document.getElementById('quiz-categories-container')) {
-        initializePage();
+        await initializePage();
     }
     if (document.getElementById('create-custom-quiz-btn')) {
         initializeCustomQuizHandler();

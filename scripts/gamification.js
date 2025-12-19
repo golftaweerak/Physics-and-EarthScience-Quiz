@@ -1,5 +1,7 @@
 // scripts/gamification.js
 
+import { authManager } from './auth-manager.js';
+
 // กำหนดเกณฑ์ XP สำหรับทุกสาย (ใช้เกณฑ์เดียวกันเพื่อความง่าย)
 export const XP_THRESHOLDS = [
     { level: 1, xp: 0, quest: null }, // No quest to reach level 1
@@ -113,30 +115,99 @@ export const ACHIEVEMENTS = [
 
 // กำหนดสินค้าในร้านค้า (Shop Items)
 export const SHOP_ITEMS = [
-    { id: 'avatar_wizard', type: 'avatar', name: 'พ่อมด', icon: '🧙', cost: 500, value: '🧙', desc: 'อวตารพ่อมดผู้ทรงพลัง' },
-    { id: 'avatar_dragon', type: 'avatar', name: 'มังกร', icon: '🐉', cost: 1000, value: '🐉', desc: 'อวตารมังกรในตำนาน' },
-    { id: 'avatar_unicorn', type: 'avatar', name: 'ยูนิคอร์น', icon: '🦄', cost: 1200, value: '🦄', desc: 'สัตว์วิเศษหายาก' },
-    { id: 'avatar_ninja', type: 'avatar', name: 'นินจา', icon: '🥷', cost: 800, value: '🥷', desc: 'นักรบเงา' },
-    { id: 'title_scholar', type: 'title', name: 'ผู้ใฝ่รู้', icon: '📚', cost: 300, value: 'ผู้ใฝ่รู้', desc: 'ฉายาสำหรับผู้รักการเรียน' },
-    { id: 'title_master', type: 'title', name: 'ปรมาจารย์', icon: '🎓', cost: 2000, value: 'ปรมาจารย์', desc: 'ฉายาขั้นสูง' },
-    { id: 'title_rich', type: 'title', name: 'เศรษฐี XP', icon: '💰', cost: 5000, value: 'เศรษฐี XP', desc: 'ฉายาสำหรับผู้มั่งคั่ง' },
-    { id: 'theme_forest', type: 'theme', name: 'ป่าไม้ (Forest)', icon: '🌲', cost: 500, value: 'theme-forest', desc: 'ธีมสีเขียวธรรมชาติ' },
-    { id: 'theme_sunset', type: 'theme', name: 'พระอาทิตย์ตก (Sunset)', icon: '🌅', cost: 800, value: 'theme-sunset', desc: 'ธีมสีส้มอบอุ่น' },
-    { id: 'theme_ocean', type: 'theme', name: 'มหาสมุทร (Ocean)', icon: '🌊', cost: 800, value: 'theme-ocean', desc: 'ธีมสีฟ้าน้ำทะเล' },
-    { id: 'theme_berry', type: 'theme', name: 'เบอร์รี่ (Berry)', icon: '🍇', cost: 1000, value: 'theme-berry', desc: 'ธีมสีม่วงสดใส' },
-    { id: 'theme_dark', type: 'theme', name: 'รัตติกาล (Midnight)', icon: '🌑', cost: 5000, value: 'theme-midnight', desc: 'ธีมสีมืดลึกลับ' },
-    { id: 'item_5050', type: 'consumable', name: 'ตัวช่วย 50/50', icon: '✂️', cost: 100, value: '5050', desc: 'ตัดตัวเลือกที่ผิดออก 2 ตัวเลือก' },
+    // 50 XP
     { id: 'item_cut_1', type: 'consumable', name: 'ตัดช้อยส์ (25%)', icon: '🔪', cost: 50, value: 'cut_1', desc: 'ตัดตัวเลือกที่ผิดออก 1 ตัวเลือก' },
+    { id: 'item_range_hint', type: 'consumable', name: 'สโคปคำตอบ', icon: '🎯', cost: 50, value: 'range_hint', desc: 'บอกช่วงของคำตอบที่ถูกต้อง (สำหรับข้อเขียนตัวเลข)' },
+    { id: 'item_tolerance', type: 'consumable', name: 'ขยายเป้า', icon: '⭕', cost: 50, value: 'tolerance', desc: 'เพิ่มค่าความคลาดเคลื่อนที่ยอมรับได้ +/- 20% (สำหรับข้อเขียนตัวเลข)' },
+    
+    // 100 XP
+    { id: 'item_5050', type: 'consumable', name: 'ตัวช่วย 50/50', icon: '✂️', cost: 100, value: '5050', desc: 'ตัดตัวเลือกที่ผิดออก 2 ตัวเลือก' },
+    
+    // 150 XP
+    { id: 'avatar_earth', type: 'avatar', name: 'โลก', icon: '🌍', cost: 150, value: '🌍', desc: 'อวตารโลกสีคราม' },
+    { id: 'avatar_newmoon', type: 'avatar', name: 'จันทร์ดับ', icon: '🌑', cost: 150, value: '🌑', desc: 'อวตารดวงจันทร์ในคืนเดือนมืด' },
+    { id: 'avatar_star', type: 'avatar', name: 'ดาว', icon: '⭐', cost: 150, value: '⭐', desc: 'อวตารดวงดาวเปล่งประกาย' },
+    { id: 'item_time_freeze', type: 'consumable', name: 'หยุดเวลา', icon: '❄️', cost: 150, value: 'time_freeze', desc: 'หยุดเวลาชั่วคราว 30 วินาที' },
+    
+    // 200 XP
+    { id: 'avatar_saturn', type: 'avatar', name: 'ดาวเสาร์', icon: '🪐', cost: 200, value: '🪐', desc: 'อวตารดาวเคราะห์มีวงแหวน' },
+    { id: 'avatar_comet', type: 'avatar', name: 'ดาวหาง', icon: '☄️', cost: 200, value: '☄️', desc: 'อวตารดาวหางผู้มาเยือน' },
+    
+    // 250 XP
+    { id: 'avatar_sun', type: 'avatar', name: 'ดวงอาทิตย์', icon: '☀️', cost: 250, value: '☀️', desc: 'อวตารดาวฤกษ์ศูนย์กลาง' },
+    { id: 'avatar_dog', type: 'avatar', name: 'สุนัข', icon: '🐶', cost: 250, value: '🐶', desc: 'อวตารเพื่อนผู้ซื่อสัตย์' },
+    { id: 'avatar_cat', type: 'avatar', name: 'แมว', icon: '😺', cost: 250, value: '😺', desc: 'อวตารแมวเหมียว' },
     { id: 'item_xp_2x', type: 'consumable', name: 'คูณ XP x2', icon: '✨', cost: 250, value: 'xp_2x', desc: 'ได้รับ XP 2 เท่าเมื่อทำแบบทดสอบจบ' },
     { id: 'item_undo', type: 'consumable', name: 'แก้ตัวใหม่', icon: '↩️', cost: 250, value: 'undo', desc: 'กลับไปตอบข้อที่เพิ่งตอบผิดได้อีกครั้ง' },
-    { id: 'item_time_freeze', type: 'consumable', name: 'หยุดเวลา', icon: '❄️', cost: 150, value: 'time_freeze', desc: 'หยุดเวลาชั่วคราว 30 วินาที' },
-    { id: 'item_range_hint', type: 'consumable', name: 'สโคปคำตอบ', icon: '🎯', cost: 50, value: 'range_hint', desc: 'บอกช่วงของคำตอบที่ถูกต้อง (สำหรับข้อเขียนตัวเลข)' },
-    { id: 'item_tolerance', type: 'consumable', name: 'ขยายเป้า', icon: '⭕', cost: 50, value: 'tolerance', desc: 'เพิ่มค่าความคลาดเคลื่อนที่ยอมรับได้ +/- 20% (สำหรับข้อเขียนตัวเลข)' }
+    
+    // 300 XP
+    { id: 'avatar_rocket', type: 'avatar', name: 'จรวด', icon: '🚀', cost: 300, value: '🚀', desc: 'อวตารจรวดทะยานฟ้า' },
+    { id: 'avatar_microbe', type: 'avatar', name: 'จุลินทรีย์', icon: '🦠', cost: 300, value: '🦠', desc: 'อวตารสิ่งมีชีวิตขนาดเล็ก' },
+    { id: 'title_scholar', type: 'title', name: 'ผู้ใฝ่รู้', icon: '📚', cost: 300, value: 'ผู้ใฝ่รู้', desc: 'ฉายาสำหรับผู้รักการเรียน' },
+    
+    // 350 XP
+    { id: 'avatar_satellite', type: 'avatar', name: 'ดาวเทียม', icon: '🛰️', cost: 350, value: '🛰️', desc: 'อวตารดาวเทียมสำรวจ' },
+    { id: 'avatar_telescope', type: 'avatar', name: 'กล้องโทรทรรศน์', icon: '🔭', cost: 350, value: '🔭', desc: 'อวตารนักส่องดาว' },
+    
+    // 400 XP
+    { id: 'avatar_atom', type: 'avatar', name: 'อะตอม', icon: '⚛️', cost: 400, value: '⚛️', desc: 'อวตารโครงสร้างอะตอม' },
+    { id: 'avatar_dna', type: 'avatar', name: 'ดีเอ็นเอ', icon: '🧬', cost: 400, value: '🧬', desc: 'อวตารเกลียวคู่' },
+    
+    // 450 XP
+    { id: 'avatar_owl', type: 'avatar', name: 'นกฮูก', icon: '🦉', cost: 450, value: '🦉', desc: 'อวตารนกฮูกผู้รอบรู้' },
+    { id: 'avatar_fox', type: 'avatar', name: 'สุนัขจิ้งจอก', icon: '🦊', cost: 450, value: '🦊', desc: 'อวตารสุนัขจิ้งจอกเจ้าเล่ห์' },
+    
+    // 500 XP
+    { id: 'avatar_brain', type: 'avatar', name: 'สมอง', icon: '🧠', cost: 500, value: '🧠', desc: 'อวตารคลังปัญญา' },
+    { id: 'avatar_wizard', type: 'avatar', name: 'พ่อมด', icon: '🧙', cost: 500, value: '🧙', desc: 'อวตารพ่อมดผู้ทรงพลัง' },
+    { id: 'theme_forest', type: 'theme', name: 'ป่าไม้ (Forest)', icon: '🌲', cost: 500, value: 'theme-forest', desc: 'ธีมสีเขียวธรรมชาติ' },
+    
+    // 600 XP
+    { id: 'avatar_lion', type: 'avatar', name: 'สิงโต', icon: '🦁', cost: 600, value: '🦁', desc: 'อวตารเจ้าป่า' },
+    { id: 'avatar_tiger', type: 'avatar', name: 'เสือ', icon: '🐯', cost: 600, value: '🐯', desc: 'อวตารพยัคฆ์' },
+    
+    // 800 XP
+    { id: 'avatar_ninja', type: 'avatar', name: 'นินจา', icon: '🥷', cost: 800, value: '🥷', desc: 'นักรบเงา' },
+    { id: 'theme_sunset', type: 'theme', name: 'พระอาทิตย์ตก (Sunset)', icon: '🌅', cost: 800, value: 'theme-sunset', desc: 'ธีมสีส้มอบอุ่น' },
+    { id: 'theme_ocean', type: 'theme', name: 'มหาสมุทร (Ocean)', icon: '🌊', cost: 800, value: 'theme-ocean', desc: 'ธีมสีฟ้าน้ำทะเล' },
+    
+    // 1000 XP
+    { id: 'avatar_dragon', type: 'avatar', name: 'มังกร', icon: '🐉', cost: 1000, value: '🐉', desc: 'อวตารมังกรในตำนาน' },
+    { id: 'theme_berry', type: 'theme', name: 'เบอร์รี่ (Berry)', icon: '🍇', cost: 1000, value: 'theme-berry', desc: 'ธีมสีม่วงสดใส' },
+    
+    // 1200 XP
+    { id: 'avatar_unicorn', type: 'avatar', name: 'ยูนิคอร์น', icon: '🦄', cost: 1200, value: '🦄', desc: 'สัตว์วิเศษหายาก' },
+    
+    // 2000 XP
+    { id: 'title_master', type: 'title', name: 'ปรมาจารย์', icon: '🎓', cost: 2000, value: 'ปรมาจารย์', desc: 'ฉายาขั้นสูง' },
+    
+    // 5000 XP
+    { id: 'title_rich', type: 'title', name: 'เศรษฐี XP', icon: '💰', cost: 5000, value: 'เศรษฐี XP', desc: 'ฉายาสำหรับผู้มั่งคั่ง' },
+    { id: 'theme_dark', type: 'theme', name: 'รัตติกาล (Midnight)', icon: '🌑', cost: 5000, value: 'theme-midnight', desc: 'ธีมสีมืดลึกลับ' },
 ];
+
+function getAvatarFrameClass(avatar) {
+    const shopItem = SHOP_ITEMS.find(i => i.value === avatar && i.type === 'avatar');
+    if (!shopItem) return 'ring-2 ring-gray-200 dark:ring-gray-700'; // Default
+
+    // Use ring-2 for the smaller header icon
+    if (shopItem.cost >= 1000) return 'ring-2 ring-yellow-400 legendary-frame';
+    if (shopItem.cost >= 500) return 'ring-2 ring-purple-500';
+    return 'ring-2 ring-green-500';
+}
+
+function getLevelBorderClass(level) {
+    if (level >= 20) return 'bg-gradient-to-br from-red-500 via-yellow-400 to-green-500 animate-pulse'; // Rainbow
+    if (level >= 15) return 'bg-gradient-to-br from-cyan-300 to-blue-500'; // Diamond
+    if (level >= 10) return 'bg-gradient-to-br from-yellow-300 to-amber-500'; // Gold
+    if (level >= 5) return 'bg-gradient-to-br from-gray-300 to-blue-300'; // Silver/Blue
+    return 'bg-gray-300 dark:bg-gray-600'; // Bronze/Gray
+}
 
 export class Gamification {
     constructor() {
         this.storageKey = 'app_gamification_data';
+        this.authManager = authManager;
         
         // ตรวจสอบว่าเป็นผู้ใช้ใหม่สำหรับระบบเกมหรือไม่ (ยังไม่มีข้อมูล Gamification)
         const isNewToGamification = !localStorage.getItem(this.storageKey);
@@ -160,21 +231,23 @@ export class Gamification {
                 this.onStateUpdated();
             }
         });
+
+        // เชื่อมต่อกับ AuthManager เพื่อโหลดข้อมูลเมื่อสถานะ Login เปลี่ยนแปลง
+        this.authManager.onUserChange(async (user) => {
+            // โหลดข้อมูลล่าสุด (จะจัดการให้เองว่ามาจาก Cloud หรือ Local)
+            const data = await this.authManager.loadUserData();
+            if (data) {
+                // Merge ข้อมูลจาก Cloud เข้ากับ Default State เพื่อความสมบูรณ์
+                this.state = { ...this.getDefaultState(), ...data };
+                // ตรวจสอบ Streak และอัปเดต UI
+                this.updateStreak(); 
+                this.onStateUpdated();
+            }
+        });
     }
 
-    loadState() {
-        const stored = localStorage.getItem(this.storageKey);
-        let state = null;
-        try {
-            if (stored) {
-                state = JSON.parse(stored);
-            }
-        } catch (e) {
-            console.error("Error loading gamification state:", e);
-        }
-
-        // IMPROVEMENT: Define Default State clearly
-        const defaultState = {
+    getDefaultState() {
+        return {
             xp: 0,
             physicsXP: 0,
             earthXP: 0,
@@ -198,9 +271,22 @@ export class Gamification {
             perfectScores: 0,
             highScores80: 0,
         };
+    }
 
+    loadState() {
+        const stored = localStorage.getItem(this.storageKey);
+        let state = null;
+        try {
+            if (stored) {
+                state = JSON.parse(stored);
+            }
+        } catch (e) {
+            console.error("Error loading gamification state:", e);
+        }
+
+        // IMPROVEMENT: Define Default State clearly
         // Merge loaded state with defaults to ensure all keys exist (Robustness)
-        state = { ...defaultState, ...(state || {}) };
+        state = { ...this.getDefaultState(), ...(state || {}) };
 
         // ตรวจสอบและรีเซ็ตภารกิจถ้าเป็นวันใหม่
         const today = new Date().toDateString();
@@ -297,12 +383,27 @@ export class Gamification {
     }
 
     saveState() {
+        // ใช้ AuthManager บันทึกข้อมูล (จะลงทั้ง LocalStorage และ Firestore ถ้าล็อกอิน)
+        this.authManager.saveUserData(this.state).catch(e => {
+            console.error("Error saving gamification state via AuthManager:", e);
+        });
+        this.onStateUpdated(); // Trigger UI updates ทันทีเพื่อให้ลื่นไหล
+    }
+
+    async forceCloudSync() {
+        if (!this.authManager.currentUser) return false;
         try {
-            localStorage.setItem(this.storageKey, JSON.stringify(this.state));
-            this.onStateUpdated(); // Trigger UI updates
+            const data = await this.authManager.loadUserData();
+            if (data) {
+                this.state = { ...this.getDefaultState(), ...data };
+                this.updateStreak();
+                this.onStateUpdated();
+                return true;
+            }
         } catch (e) {
-            console.error("Error saving gamification state:", e);
+            console.error("Force sync failed:", e);
         }
+        return false;
     }
 
     // IMPROVEMENT: Centralized UI Update Trigger
@@ -373,18 +474,42 @@ export class Gamification {
         const profileLink = document.getElementById('main-header-profile-link');
         if (profileLink) {
             const avatar = this.state.avatar || '🧑‍🎓';
+            const level = this.getCurrentLevel().level;
+
+            // Ensure the container is round and clean
+            profileLink.classList.add('rounded-full');
+            const classesToRemove = [
+                'ring-2', 'ring-4', 'ring-gray-200', 'dark:ring-gray-700',
+                'ring-green-500', 'ring-purple-500', 'ring-yellow-400',
+                'legendary-frame', 'p-0.5'
+            ];
+            profileLink.classList.remove(...classesToRemove);
+
             // ตรวจสอบว่าเป็น URL รูปภาพหรือไม่ (มีจุดหรือเครื่องหมาย /)
             const isImage = avatar.includes('/') || avatar.includes('.');
+            let contentHtml = '';
             
             if (isImage) {
-                profileLink.innerHTML = `<img src="${avatar}" alt="Avatar" class="w-8 h-8 rounded-full object-cover">`;
+                contentHtml = `<img src="${avatar}" alt="Avatar" class="w-full h-full rounded-full object-cover">`;
             } else {
-                profileLink.innerHTML = `<span class="text-xl leading-none">${avatar}</span>`;
+                contentHtml = `<span class="text-xl leading-none flex items-center justify-center h-full w-full select-none">${avatar}</span>`;
             }
 
-            // Trigger Animation
+            const levelBorderClass = getLevelBorderClass(level);
+            const avatarFrameClass = getAvatarFrameClass(avatar);
+
+            // Create nested structure: Level Border (Outer) -> Avatar Frame (Inner) -> Content
+            profileLink.innerHTML = `
+                <div class="w-full h-full rounded-full p-[3px] ${levelBorderClass} shadow-sm transition-all duration-300">
+                    <div class="w-full h-full rounded-full bg-white dark:bg-gray-800 flex items-center justify-center overflow-hidden ${avatarFrameClass.replace('ring-2', 'ring-1')}">
+                        ${contentHtml}
+                    </div>
+                </div>
+            `;
+
+            // Trigger Animation on the link itself
             profileLink.classList.remove('anim-avatar-pop');
-            void profileLink.offsetWidth; // Force reflow to restart animation
+            void profileLink.offsetWidth; // Force reflow
             profileLink.classList.add('anim-avatar-pop');
         } else {
             // ถ้ายังไม่พบ Element (เช่น Header กำลังโหลดอยู่) ให้รอจับตาดูการเปลี่ยนแปลงใน placeholder
@@ -462,6 +587,26 @@ export class Gamification {
             .anim-item-pop {
                 animation: itemPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             }
+
+            /* NEW: Legendary Frame Shimmer */
+            @keyframes shimmer {
+                0% { background-position: -200% 0; }
+                100% { background-position: 200% 0; }
+            }
+            .legendary-frame {
+                position: relative;
+                overflow: hidden;
+            }
+            .legendary-frame::after {
+                content: "";
+                position: absolute;
+                top: 0; left: 0; width: 100%; height: 100%;
+                background: linear-gradient(120deg, transparent 30%, rgba(255, 255, 255, 0.6) 50%, transparent 70%);
+                background-size: 200% 100%;
+                animation: shimmer 3s infinite linear;
+                border-radius: 9999px;
+                pointer-events: none;
+            }
         `;
 
         for (const [themeName, colors] of Object.entries(themes)) {
@@ -538,10 +683,10 @@ export class Gamification {
     }
 
     resetProgress() {
-        localStorage.removeItem(this.storageKey);
+        this.authManager.resetGamificationData();
         this.state = this.loadState(); // Reloads defaults
-        // Force save to ensure clean state exists
-        this.saveState();
+        // No need to save state, as the goal is to wipe it.
+        // The page reload in profile.js will handle getting a fresh state.
     }
 
     incrementCorrectStreak() {

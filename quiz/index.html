@@ -212,8 +212,32 @@
   <!-- Placeholder for all common modals -->
   <div id="modals-placeholder"></div>
 
+  <!-- Sync Notification Toast -->
+  <div id="sync-toast" class="fixed bottom-4 left-4 bg-gray-800 dark:bg-gray-700 text-white px-4 py-3 rounded-lg shadow-lg transform translate-y-24 opacity-0 transition-all duration-300 z-50 flex items-center gap-3 border border-gray-700 dark:border-gray-600">
+      <div class="bg-green-500 rounded-full p-1">
+          <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+      </div>
+      <div>
+          <p class="text-sm font-bold font-kanit">บันทึกข้อมูลแล้ว</p>
+          <p class="text-xs text-gray-300">ซิงค์กับ Cloud เรียบร้อย</p>
+      </div>
+  </div>
+
   <!-- The single entry point for all quiz page functionality -->
   <script src="../scripts/quiz-page-loader.js" type="module"></script>
+  <script type="module">
+    import { Gamification } from '../scripts/gamification.js';
+    new Gamification(); // To apply theme and header avatar on load
+
+    // Listener for sync toast notification
+    const toast = document.getElementById('sync-toast');
+    window.addEventListener('auth-synced', () => {
+        if(toast) {
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            setTimeout(() => { toast.classList.add('translate-y-24', 'opacity-0'); }, 3000);
+        }
+    });
+  </script>
 </body>
 
 </html>

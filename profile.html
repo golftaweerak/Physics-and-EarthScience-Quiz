@@ -5,26 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>โปรไฟล์ผู้เรียน - Physics & Earth Science Quiz</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: {
-                        kanit: ['Kanit', 'sans-serif'],
-                        sarabun: ['Sarabun', 'sans-serif'],
-                    },
-                    height: {
-                        screen: '100dvh',
-                    },
-                    minHeight: {
-                        screen: '100dvh',
-                    }
-                }
-            }
-        }
-    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;700&family=Sarabun:wght@400;700&display=swap"
@@ -53,10 +33,12 @@
             <div class="h-32 bg-gradient-to-r from-blue-500 to-purple-600"></div>
             <div class="px-6 pb-6 relative">
                 <div class="flex flex-col md:flex-row items-center md:items-end -mt-12 mb-4 gap-4">
-                    <div class="w-24 h-24 rounded-full bg-white dark:bg-gray-800 p-1 shadow-lg z-10 relative group">
-                        <div id="profile-avatar-display"
-                            class="w-full h-full rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-4xl cursor-pointer transition-transform transform group-hover:scale-105">
-                            <!-- Avatar injected by JS -->
+                    <div class="w-24 h-24 rounded-full bg-white dark:bg-gray-800 p-0.5 shadow-lg z-10 relative group">
+                        <div id="level-frame-container" class="w-full h-full rounded-full p-2 transition-all duration-300">
+                            <div id="profile-avatar-display"
+                                class="w-full h-full rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-4xl cursor-pointer transition-transform transform group-hover:scale-105">
+                                <!-- Avatar injected by JS -->
+                            </div>
                         </div>
                         <button id="edit-avatar-btn"
                             class="absolute bottom-0 right-0 bg-blue-600 text-white p-1.5 rounded-full shadow-md hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:focus:ring-offset-gray-800"
@@ -83,6 +65,20 @@
                                 </svg>
                             </button>
                         </div>
+                        <!-- Sync Status Indicator -->
+                        <div id="sync-status-wrapper" class="hidden flex items-center justify-center md:justify-start gap-3 mt-1 text-xs font-medium transition-all duration-300">
+                            <div id="connection-status" class="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-700/50">
+                                <span class="w-2 h-2 rounded-full bg-gray-400 animate-pulse"></span>
+                                <span class="text-gray-600 dark:text-gray-400">ตรวจสอบสถานะ...</span>
+                            </div>
+                            <div id="last-sync-display" class="text-gray-500 dark:text-gray-500 hidden sm:block">
+                            </div>
+                            <button id="manual-sync-btn" class="text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700" title="ซิงค์ข้อมูลล่าสุด">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                </svg>
+                            </button>
+                        </div>
                         <div class="flex items-center justify-center md:justify-start gap-2 mt-1">
                             <p id="profile-title-display"
                                 class="text-sm font-bold text-purple-600 dark:text-purple-400 hidden"></p>
@@ -97,26 +93,89 @@
                                 class="text-[10px] bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 px-2 py-0.5 rounded-full text-gray-600 dark:text-gray-300 transition-colors"
                                 title="เปลี่ยนธีม">เปลี่ยน</button>
                         </div>
-                        <p id="profile-rank-title" class="text-blue-600 dark:text-blue-400 font-medium">Novice</p>
-                    </div>
-                    <div class="flex gap-2 mt-4 md:mt-0">
-                        <div class="text-center px-4 py-2 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
-                            <div id="profile-total-xp" class="text-xl font-bold text-gray-800 dark:text-gray-100">0
-                            </div>
-                            <div class="text-xs text-gray-500 dark:text-gray-400">Total XP</div>
-                        </div>
-                        <div class="text-center px-4 py-2 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
-                            <div id="profile-quizzes-count" class="text-xl font-bold text-gray-800 dark:text-gray-100">0
-                            </div>
-                            <div class="text-xs text-gray-500 dark:text-gray-400">Quizzes</div>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- NEW: Gamification Dashboard -->
+        <section id="gamification-dashboard" class="max-w-5xl mx-auto bg-white dark:bg-gray-800/50 p-6 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 relative overflow-hidden mb-8">
+            <!-- Background decoration -->
+            <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-blue-500/10 rounded-full blur-xl pointer-events-none"></div>
+            <div class="absolute bottom-0 left-0 -mb-4 -ml-4 w-32 h-32 bg-purple-500/10 rounded-full blur-xl pointer-events-none"></div>
+
+            <div class="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6 items-center mb-6">
+                <!-- Level & XP -->
+                <div class="col-span-2 flex items-center gap-4 sm:gap-6">
+                    <div class="relative flex-shrink-0">
+                        <!-- Level Circle -->
+                        <div class="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-3xl shadow-lg ring-4 ring-blue-100 dark:ring-blue-900/30">
+                            <span id="user-level">1</span>
+                        </div>
+                        <div class="absolute -bottom-2 -right-2 bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-1 rounded-full shadow-sm border border-white dark:border-gray-800">
+                            LVL
+                        </div>
+                    </div>
+                    <div class="flex-grow min-w-0">
+                        <h3 id="user-rank-title" class="text-lg sm:text-xl font-bold text-gray-800 dark:text-white font-kanit truncate">ผู้สังเกตการณ์ฝึกหัด</h3>
+                        <div class="flex justify-between text-sm text-gray-500 dark:text-gray-400 mb-1 font-mono">
+                            <span>XP: <span id="current-xp">0</span></span>
+                            <span>Goal: <span id="next-level-xp">100</span></span>
+                        </div>
+                        <!-- Progress Bar -->
+                        <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 overflow-hidden">
+                            <div id="xp-progress-bar" class="bg-gradient-to-r from-blue-500 to-purple-500 h-3 rounded-full transition-all duration-1000" style="width: 0%"></div>
+                        </div>
+                        <!-- NEW: Quest display -->
+                        <div id="next-level-quest-container" class="text-xs text-gray-500 dark:text-gray-400 mt-1.5 text-center md:text-left hidden">
+                            <span>ภารกิจถัดไป:</span>
+                            <span id="next-level-quest-desc" class="font-semibold"></span>
+                            <span id="next-level-quest-progress" class="font-mono ml-1"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Badges -->
+                <div class="border-t md:border-t-0 md:border-l border-gray-200 dark:border-gray-700 pt-4 md:pt-0 md:pl-6">
+                    <h4 class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">เหรียญรางวัลล่าสุด</h4>
+                    <div id="recent-badges" class="flex gap-3 flex-wrap">
+                        <!-- Badges injected by JS -->
+                        <div class="animate-pulse w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Divider -->
+            <hr class="border-gray-200 dark:border-gray-700 my-6 relative z-10">
+
+            <!-- Track Progress & Daily Quests Grid -->
+            <div class="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div>
+                    <h4 class="text-lg font-bold text-gray-800 dark:text-white font-kanit mb-4 flex items-center gap-2">
+                        <span class="text-xl">📊</span> ความก้าวหน้าแต่ละสายวิชา
+                    </h4>
+                    <div id="track-progress-container" class="space-y-4">
+                        <!-- Injected by JS -->
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold text-gray-800 dark:text-white font-kanit mb-4 flex items-center gap-2">
+                        <span class="text-xl">📜</span> ภารกิจประจำวัน
+                    </h4>
+                    <div id="profile-daily-quests-container" class="space-y-3">
+                        <!-- Injected by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Global Collapse/Expand Controls -->
         <div class="max-w-5xl mx-auto mb-4 flex justify-end gap-4 px-2">
+            <button id="refresh-charts-btn"
+                class="text-sm font-bold text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300 transition-colors flex items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg> รีเฟรชกราฟ</button>
             <button id="expand-all-btn"
                 class="text-sm font-bold text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-colors flex items-center gap-1"><svg
                     xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
@@ -137,26 +196,37 @@
             <!-- Left Column: Stats & Radar -->
             <div class="lg:col-span-2 space-y-8">
                 <!-- Radar Chart Section -->
-                <section
-                    class="bg-white dark:bg-gray-800 rounded-2xl shadow-md p-6 border border-gray-200 dark:border-gray-700">
-                    <h2 class="text-xl font-bold font-kanit mb-6 flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-500" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
-                        </svg>
-                        ความถนัดรายด้าน (Proficiency)
-                    </h2>
+                <section class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-md p-6 border border-gray-200 dark:border-gray-700">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold font-kanit flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-500" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
+                            </svg>
+                            ความถนัดรายด้าน (Proficiency)
+                        </h2>
+                        <label class="inline-flex items-center cursor-pointer" title="แสดง/ซ่อน เส้นค่าเฉลี่ยผู้เรียน">
+                            <input type="checkbox" id="toggle-average-btn" class="sr-only peer" checked>
+                            <div class="relative w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                            <span class="ms-2 text-xs font-medium text-gray-500 dark:text-gray-400 select-none">ค่าเฉลี่ย</span>
+                        </label>
+                    </div>
+                    <div id="radar-chart-loader" class="absolute inset-0 flex items-center justify-center bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm z-10 rounded-2xl">
+                        <div class="flex flex-col items-center text-center">
+                            <svg class="animate-spin h-8 w-8 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                            <p class="mt-3 text-sm font-semibold text-gray-600 dark:text-gray-400">กำลังโหลดข้อมูลแผนภูมิ...</p>
+                        </div>
+                    </div>
                     <div class="relative h-80 w-full flex justify-center">
                         <canvas id="skills-radar-chart"></canvas>
                     </div>
                 </section>
 
                 <!-- Proficiency History Chart Section -->
-                <section
-                    class="bg-white dark:bg-gray-800 rounded-2xl shadow-md p-6 border border-gray-200 dark:border-gray-700">
+                <section class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-md p-6 border border-gray-200 dark:border-gray-700">
                     <h2 class="text-xl font-bold font-kanit mb-6 flex items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="none"
                             viewBox="0 0 24 24" stroke="currentColor">
@@ -165,15 +235,23 @@
                         </svg>
                         พัฒนาการตามกลุ่มสาระ (History)
                     </h2>
+                    <div id="history-chart-loader" class="absolute inset-0 flex items-center justify-center bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm z-10 rounded-2xl">
+                        <div class="flex flex-col items-center text-center">
+                            <svg class="animate-spin h-8 w-8 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                            <p class="mt-3 text-sm font-semibold text-gray-600 dark:text-gray-400">กำลังโหลดประวัติ...</p>
+                        </div>
+                    </div>
                     <div class="relative h-64 w-full">
                         <canvas id="proficiency-history-chart"></canvas>
                     </div>
                 </section>
 
                 <!-- Strengths & Weaknesses Section -->
-                <section
-                    class="bg-white dark:bg-gray-800 rounded-2xl shadow-md p-6 border border-gray-200 dark:border-gray-700">
+                <section class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-md p-6 border border-gray-200 dark:border-gray-700">
                     <h2 class="text-xl font-bold font-kanit mb-4">จุดแข็งและจุดที่ควรพัฒนา</h2>
+                    <div id="strengths-weaknesses-loader" class="absolute inset-0 flex items-center justify-center bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm z-10 rounded-2xl">
+                        <div class="flex flex-col items-center text-center"><svg class="animate-spin h-8 w-8 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><p class="mt-3 text-sm font-semibold text-gray-600 dark:text-gray-400">กำลังวิเคราะห์...</p></div>
+                    </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <h3
@@ -204,35 +282,6 @@
                             <ul id="weaknesses-list" class="space-y-2">
                                 <li class="text-sm text-gray-500 dark:text-gray-400 italic">กำลังโหลดข้อมูล...</li>
                             </ul>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Level Progress -->
-                <section
-                    class="bg-white dark:bg-gray-800 rounded-2xl shadow-md p-6 border border-gray-200 dark:border-gray-700/60">
-                    <h2 class="text-xl font-bold font-kanit mb-4">ความก้าวหน้าแต่ละสายวิชา</h2>
-                    <div id="track-progress-container" class="space-y-6">
-                        <!-- Injected by JS -->
-                    </div>
-                </section>
-
-                <!-- NEW: Daily Quests Section -->
-                <section
-                    class="bg-white dark:bg-gray-800 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700/60 overflow-hidden">
-                    <div class="p-6 flex justify-between items-center cursor-pointer collapsible-header hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
-                        data-target="quests-content">
-                        <h2 class="text-xl font-bold font-kanit flex items-center gap-2">
-                            <span class="text-2xl">📜</span> ภารกิจประจำวัน (Daily Quests)
-                        </h2>
-                        <svg class="w-6 h-6 transform transition-transform duration-200 chevron-icon text-gray-400"
-                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                        </svg>
-                    </div>
-                    <div id="quests-content" class="collapsible-content" style="max-height: 2000px; opacity: 1;">
-                        <div id="profile-daily-quests-container" class="px-6 pb-6 space-y-3">
-                            <!-- Injected by JS -->
                         </div>
                     </div>
                 </section>
@@ -288,6 +337,31 @@
 
             <!-- Right Column: Badges & History -->
             <div class="space-y-8">
+                <!-- Leaderboard Section -->
+                <section class="bg-white dark:bg-gray-800 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700/60 overflow-hidden">
+                    <div class="p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+                        <h2 class="text-xl font-bold font-kanit flex items-center gap-2">
+                            <span class="text-2xl">🏆</span> อันดับผู้เรียน
+                        </h2>
+                        <span class="text-xs font-medium px-2 py-1 bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300 rounded-full">Top 10</span>
+                    </div>
+                    <div class="p-4">
+                        <!-- Tabs -->
+                        <div class="flex p-1 bg-gray-100 dark:bg-gray-700 rounded-xl mb-4">
+                            <button class="leaderboard-tab flex-1 py-2 px-3 rounded-lg text-xs sm:text-sm font-bold transition-all bg-white dark:bg-gray-600 shadow text-blue-600 dark:text-blue-300" data-type="xp">รวม</button>
+                            <button class="leaderboard-tab flex-1 py-2 px-3 rounded-lg text-xs sm:text-sm font-bold transition-all text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200" data-type="physicsXP">ฟิสิกส์</button>
+                            <button class="leaderboard-tab flex-1 py-2 px-3 rounded-lg text-xs sm:text-sm font-bold transition-all text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200" data-type="earthXP">วิทย์โลก</button>
+                        </div>
+                        <!-- List -->
+                        <div id="leaderboard-list" class="space-y-2 min-h-[200px]">
+                            <div class="flex flex-col items-center justify-center h-40 text-gray-500">
+                                <svg class="animate-spin h-6 w-6 mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                                <span>กำลังโหลดอันดับ...</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
                 <section
                     class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700/60 overflow-hidden">
                     <div class="p-6 flex justify-between items-center cursor-pointer collapsible-header hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"

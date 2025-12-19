@@ -3,18 +3,54 @@ import { ModalHandler } from "./modal-handler.js";
 import { fetchAllQuizData, getQuizProgress, categoryDetails as allCategoryDetails } from "./data-manager.js";
 import { getSyllabusForCategory } from "./syllabus-manager.js";
 import { quizList } from "../data/quizzes-list.js";
-
+import { authManager } from './auth-manager.js';
+import { db } from './firebase-config.js';
+import { doc, setDoc, getDocs, collection, writeBatch, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 /**
  * Safely retrieves and parses the list of custom quizzes from localStorage.
+ * If the user is logged in, it syncs the local list with Firestore.
  * @returns {Array} An array of custom quiz objects, or an empty array if none exist or data is corrupt.
  */
-export function getSavedCustomQuizzes() {
-    const savedQuizzesJSON = localStorage.getItem("customQuizzesList");
+export async function getSavedCustomQuizzes() {
+    // Wait for auth state to be determined
+    await authManager.waitForAuthReady();
+
+    const savedQuizzesJSON = localStorage.getItem("customQuizzesList");    
     if (!savedQuizzesJSON) return [];
     try {
         const parsed = JSON.parse(savedQuizzesJSON);
-        return Array.isArray(parsed) ? parsed : [];
+        let localQuizzes = Array.isArray(parsed) ? parsed : [];
+
+        // If logged in, perform sync
+        if (authManager.currentUser) {
+            const user = authManager.currentUser;
+            const customQuizzesRef = collection(db, 'users', user.uid, 'custom_quizzes');
+            const cloudSnapshot = await getDocs(customQuizzesRef);
+            const cloudQuizzesMap = new Map();
+            cloudSnapshot.forEach(doc => cloudQuizzesMap.set(doc.id, doc.data()));
+
+            const localQuizzesMap = new Map(localQuizzes.map(q => [q.customId, q]));
+            const batch = writeBatch(db);
+            let hasCloudUploads = false;
+
+            for (const localQuiz of localQuizzes) {
+                if (!cloudQuizzesMap.has(localQuiz.customId)) {
+                    const docRef = doc(customQuizzesRef, localQuiz.customId);
+                    batch.set(docRef, localQuiz);
+                    hasCloudUploads = true;
+                }
+            }
+            if (hasCloudUploads) await batch.commit();
+
+            cloudQuizzesMap.forEach((cloudQuiz, customId) => {
+                if (!localQuizzesMap.has(customId)) localQuizzes.push(cloudQuiz);
+            });
+            
+            localStorage.setItem("customQuizzesList", JSON.stringify(localQuizzes));
+        }
+
+        return localQuizzes;
     } catch (error) {
         console.error("Could not parse customQuizzesList from localStorage. The data might be corrupted.", error);
 
@@ -38,7 +74,7 @@ export function getSavedCustomQuizzes() {
  * @param {object} quizData - Object containing quiz properties like title, questions, timerMode, customTime, category.
  * @returns {object} The newly created custom quiz object.
  */
-function createAndSaveCustomQuiz(quizData) {
+async function createAndSaveCustomQuiz(quizData) {
     const customId = `custom_${Date.now()}`; // Unique ID for the custom quiz
     const newCustomQuiz = {
         customId: customId,
@@ -54,9 +90,15 @@ function createAndSaveCustomQuiz(quizData) {
         altText: 'ไอคอนแบบทดสอบที่สร้างเอง'
     };
 
-    let savedQuizzes = getSavedCustomQuizzes();
+    let savedQuizzes = await getSavedCustomQuizzes();
     savedQuizzes.push(newCustomQuiz);
     localStorage.setItem("customQuizzesList", JSON.stringify(savedQuizzes));
+
+    // Sync to cloud if logged in
+    if (authManager.currentUser) {
+        const docRef = doc(db, 'users', authManager.currentUser.uid, 'custom_quizzes', newCustomQuiz.customId);
+        await setDoc(docRef, newCustomQuiz);
+    }
 
     return newCustomQuiz;
 }
@@ -162,23 +204,45 @@ export function initializeCustomQuizHandler() {
 
     // --- 2. Core Logic Functions ---
 
-    function deleteCustomQuiz(customId) {
-        let savedQuizzes = getSavedCustomQuizzes();
+    async function deleteCustomQuiz(customId) {
+        let savedQuizzes = await getSavedCustomQuizzes();
         const quizToDelete = savedQuizzes.find((q) => q.customId === customId);
         if (quizToDelete?.storageKey) {
             localStorage.removeItem(quizToDelete.storageKey);
         }
         const updatedQuizzes = savedQuizzes.filter((q) => q.customId !== customId);
         localStorage.setItem("customQuizzesList", JSON.stringify(updatedQuizzes));
-        renderCustomQuizList();
+
+        // Sync deletion to cloud
+        if (authManager.currentUser) {
+            const user = authManager.currentUser;
+            // Delete quiz definition
+            const quizDefRef = doc(db, 'users', user.uid, 'custom_quizzes', customId);
+            await deleteDoc(quizDefRef);
+
+            // Delete quiz progress from history
+            if (quizToDelete?.storageKey) {
+                const progressRef = doc(db, 'users', user.uid, 'quiz_history', quizToDelete.storageKey);
+                await deleteDoc(progressRef);
+            }
+        }
+        await renderCustomQuizList();
     }
 
-    function updateCustomQuizTitle(customId, newTitle) {
-        let savedQuizzes = getSavedCustomQuizzes();
+    async function updateCustomQuizTitle(customId, newTitle) {
+        let savedQuizzes = await getSavedCustomQuizzes();
         const quizIndex = savedQuizzes.findIndex((q) => q.customId === customId);
         if (quizIndex > -1) {
             savedQuizzes[quizIndex].title = newTitle.trim();
             localStorage.setItem("customQuizzesList", JSON.stringify(savedQuizzes));
+
+            // NEW: Sync title change to cloud
+            if (authManager.currentUser) {
+                const docRef = doc(db, 'users', authManager.currentUser.uid, 'custom_quizzes', customId);
+                await updateDoc(docRef, {
+                    title: newTitle.trim()
+                });
+            }
         }
     }
 
@@ -255,8 +319,8 @@ export function initializeCustomQuizHandler() {
         `;
     }
 
-    function renderCustomQuizList() {
-        const savedQuizzes = getSavedCustomQuizzes();
+    async function renderCustomQuizList() {
+        const savedQuizzes = await getSavedCustomQuizzes();
 
         // Sort quizzes by creation date (newest first)
         savedQuizzes.sort((a, b) => {
@@ -382,6 +446,8 @@ export function initializeCustomQuizHandler() {
         const calcCount = counts.calculation || 0;
         const disabled = totalCount === 0;
 
+        const escapeAttr = (str) => String(str).replace(/"/g, '&quot;');
+
         const displayTopic = isLearningOutcome ? specificTopic : specificTopic.replace(/^\d+\.\s/, '').trim();
 
         return `
@@ -396,7 +462,7 @@ export function initializeCustomQuizHandler() {
                     <!-- Theory Questions -->
                     <div class="flex items-center justify-between gap-2 ${theoryCount === 0 ? 'hidden' : ''}">
                         <span class="text-xs text-gray-500 dark:text-gray-400 w-16">ทฤษฎี <br>(${theoryCount} ข้อ)</span>
-                        <input data-subject="${subjectKey}" data-chapter="${chapterTitle}" data-specific="${specificTopic}" data-type="theory" type="number" min="0" max="${theoryCount}" value="0" class="w-16 py-1 px-1 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900/50 text-center font-semibold text-sm text-blue-600 dark:text-blue-400 focus:ring-blue-500 focus:border-blue-500 flex-shrink-0" ${disabled ? 'disabled' : ''}>
+                        <input data-subject="${escapeAttr(subjectKey)}" data-chapter="${escapeAttr(chapterTitle)}" data-specific="${escapeAttr(specificTopic)}" data-type="theory" type="number" min="0" max="${theoryCount}" value="0" class="w-16 py-1 px-1 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900/50 text-center font-semibold text-sm text-blue-600 dark:text-blue-400 focus:ring-blue-500 focus:border-blue-500 flex-shrink-0" ${disabled ? 'disabled' : ''}>
                         <div class="flex-grow flex justify-end gap-1 quick-select-buttons">
                             <button type="button" data-value="5" data-type="theory" class="px-2 py-0.5 text-xs font-medium text-gray-600 bg-gray-100 dark:text-gray-300 dark:bg-gray-700/60 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 ${theoryCount < 5 ? 'hidden' : ''}">5</button>
                             <button type="button" data-value="10" data-type="theory" class="px-2 py-0.5 text-xs font-medium text-gray-600 bg-gray-100 dark:text-gray-300 dark:bg-gray-700/60 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 ${theoryCount < 10 ? 'hidden' : ''}">10</button>
@@ -406,7 +472,7 @@ export function initializeCustomQuizHandler() {
                     <!-- Calculation Questions -->
                     <div class="flex items-center justify-between gap-2 ${calcCount === 0 ? 'hidden' : ''}">
                         <span class="text-xs text-gray-500 dark:text-gray-400 w-16">คำนวณ <br>(${calcCount} ข้อ)</span>
-                        <input data-subject="${subjectKey}" data-chapter="${chapterTitle}" data-specific="${specificTopic}" data-type="calculation" type="number" min="0" max="${calcCount}" value="0" class="w-16 py-1 px-1 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900/50 text-center font-semibold text-sm text-green-600 dark:text-green-400 focus:ring-green-500 focus:border-green-500 flex-shrink-0" ${disabled ? 'disabled' : ''}>
+                        <input data-subject="${escapeAttr(subjectKey)}" data-chapter="${escapeAttr(chapterTitle)}" data-specific="${escapeAttr(specificTopic)}" data-type="calculation" type="number" min="0" max="${calcCount}" value="0" class="w-16 py-1 px-1 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900/50 text-center font-semibold text-sm text-green-600 dark:text-green-400 focus:ring-green-500 focus:border-green-500 flex-shrink-0" ${disabled ? 'disabled' : ''}>
                         <div class="flex-grow flex justify-end gap-1 quick-select-buttons">
                              <button type="button" data-value="5" data-type="calculation" class="px-2 py-0.5 text-xs font-medium text-gray-600 bg-gray-100 dark:text-gray-300 dark:bg-gray-700/60 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 ${calcCount < 5 ? 'hidden' : ''}">5</button>
                             <button type="button" data-value="10" data-type="calculation" class="px-2 py-0.5 text-xs font-medium text-gray-600 bg-gray-100 dark:text-gray-300 dark:bg-gray-700/60 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 ${calcCount < 10 ? 'hidden' : ''}">10</button>
@@ -967,7 +1033,14 @@ export function initializeCustomQuizHandler() {
     /**
      * Gathers user selections, creates a custom quiz object, and saves it.
      */
-    async function handleStartCustomQuiz() {
+    async function handleStartCustomQuiz() {        
+        const startBtn = document.getElementById('custom-quiz-start-btn');
+        if (startBtn) {
+            startBtn.disabled = true;
+            startBtn.innerHTML = '<svg class="animate-spin h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> กำลังสร้าง...';
+        }
+
+        try {
         const counts = {};
         const subjectsInQuiz = new Set();
 
@@ -992,6 +1065,10 @@ export function initializeCustomQuizHandler() {
 
         if (!quizDataCache) {
             console.error("Quiz data has not been loaded. Cannot start quiz.");
+            if (startBtn) {
+                startBtn.disabled = false;
+                startBtn.innerHTML = 'เริ่มทำแบบทดสอบ';
+            }
             return;
         }
 
@@ -1048,6 +1125,10 @@ export function initializeCustomQuizHandler() {
 
         if (selectedQuestions.length === 0) {
             alert("กรุณาเลือกคำถามอย่างน้อย 1 ข้อ");
+            if (startBtn) {
+                startBtn.disabled = false;
+                startBtn.innerHTML = 'เริ่มทำแบบทดสอบ';
+            }
             return;
         }
 
@@ -1074,7 +1155,7 @@ export function initializeCustomQuizHandler() {
         const subjectArray = Array.from(subjectsInQuiz);
         const singleSubject = subjectArray.length === 1 ? subjectArray[0] : 'Custom';
 
-        const customQuiz = createAndSaveCustomQuiz({
+        const customQuiz = await createAndSaveCustomQuiz({
             title: `แบบทดสอบ (${new Date().toLocaleString('th-TH')})`,
             questions: selectedQuestions,
             description: detailedDescription,
@@ -1085,6 +1166,14 @@ export function initializeCustomQuizHandler() {
         });
 
         window.location.href = `./quiz/index.html?id=${customQuiz.customId}`;
+        } catch (error) {
+            console.error("Error starting custom quiz:", error);
+            alert("เกิดข้อผิดพลาดในการเริ่มทำแบบทดสอบ: " + error.message);
+            if (startBtn) {
+                startBtn.disabled = false;
+                startBtn.innerHTML = 'เริ่มทำแบบทดสอบ';
+            }
+        }
     }
 
     function handleRandomSelection() {
@@ -1146,7 +1235,7 @@ export function initializeCustomQuizHandler() {
         // Use a small timeout to ensure the loader is rendered before the synchronous,
         // potentially blocking renderCustomQuizList() call. This improves UX.
         setTimeout(() => {
-            renderCustomQuizList();            
+            renderCustomQuizList();
         }, 50);
     });
 
@@ -1155,7 +1244,7 @@ export function initializeCustomQuizHandler() {
 
     // Event delegation for the list of custom quizzes (edit, delete, etc.)
     if (customQuizListContainer) {
-        customQuizListContainer.addEventListener("click", (event) => {
+        customQuizListContainer.addEventListener("click", async (event) => {
             const target = event.target;
             const quizItemEl = target.closest(".custom-quiz-item");
             if (!quizItemEl) return;
@@ -1191,7 +1280,7 @@ export function initializeCustomQuizHandler() {
                         const input = quizItemEl.querySelector("input[type='text']");
                         if (input && input.value.trim()) {
                             const newTitle = input.value.trim();
-                            updateCustomQuizTitle(customId, newTitle);
+                            await updateCustomQuizTitle(customId, newTitle);
                             const titleDisplayP = quizItemEl.querySelector("[data-title-display] p.font-bold");
                             if (titleDisplayP) titleDisplayP.textContent = newTitle;
                             toggleEditMode(quizItemEl, false);
@@ -1205,7 +1294,7 @@ export function initializeCustomQuizHandler() {
             // Case 2: Clicked on the start/continue link
             const startLink = target.closest("a.start-custom-quiz-btn");
             if (startLink) {
-                const savedQuizzes = getSavedCustomQuizzes();
+                const savedQuizzes = await getSavedCustomQuizzes();
                 const quiz = savedQuizzes.find(q => q.customId === customId);
                 if (!quiz) return;
 

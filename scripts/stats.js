@@ -47,12 +47,13 @@ function tailwindBorderToHex(tailwindClass) {
  * Retrieves all finished quiz stats from localStorage.
  * @returns {Array<object>} An array of quiz objects merged with their progress.
  */
-function getAllStats() {
-  const allQuizzes = [...quizList, ...getSavedCustomQuizzes()];
+function getAllStats(customQuizzes) {
+  const allQuizzes = [...quizList, ...customQuizzes];
   const allStats = [];
 
   for (const quiz of allQuizzes) {
-    const data = localStorage.getItem(quiz.storageKey);
+    const storageKey = quiz.storageKey || `quizState-${quiz.id || quiz.customId}`;
+    const data = localStorage.getItem(storageKey);
     if (data) {
       try { // Wrap the entire processing of a single item in a try-catch
         const progress = JSON.parse(data);
@@ -76,6 +77,7 @@ function getAllStats() {
         allStats.push({
           ...quiz, // title, category, url, icon etc.
           ...progress, // score, userAnswers, etc.
+          storageKey: storageKey, // Ensure the correct storageKey is carried forward
           url: finalUrl,
           isFinished: isFinished,
         });
@@ -122,6 +124,11 @@ function renderScoreTrendChart(trendData) {
     const ctx = document.getElementById('score-trend-chart')?.getContext('2d');
 
     if (!ctx || !chartContainer) return;
+
+    if (typeof Chart === 'undefined') {
+        console.warn("Chart.js is not loaded. Skipping score trend chart.");
+        return;
+    }
 
     // If there's not enough data to show a meaningful trend, display a message instead.
     if (trendData.labels.length < 2) {
@@ -392,6 +399,10 @@ function renderSummaryCards(summary) {
  * @param {object} summary - The summary object from calculateSummary.
  */
 function renderOverallChart(summary) {
+    if (typeof Chart === 'undefined') {
+        console.warn("Chart.js is not loaded. Skipping overall chart.");
+        return;
+    }
     const ctx = document.getElementById("overall-chart")?.getContext("2d");
     if (!ctx) return;
 
@@ -439,6 +450,10 @@ function renderOverallChart(summary) {
  * @param {Array<object>} subjectData - Data from calculateSubjectPerformance.
  */
 function renderSubjectPerformanceChart(subjectData) {
+    if (typeof Chart === 'undefined') {
+        console.warn("Chart.js is not loaded. Skipping subject performance chart.");
+        return;
+    }
     const ctx = document.getElementById('subject-performance-chart')?.getContext('2d');
     if (!ctx || subjectData.length === 0) return;
 
@@ -499,7 +514,7 @@ function renderSubjectPerformanceChart(subjectData) {
 /**
  * Initializes the tab navigation functionality.
  */
-function initializeTabs() {
+export function initializeTabs() {
     const tabContainer = document.querySelector('[aria-label="Tabs"]');
     if (!tabContainer) return;
 
@@ -795,13 +810,18 @@ function setupActionListeners() {
  * Main function to build the entire stats page.
  * It orchestrates fetching, calculating, and rendering all components.
  */
-export function buildStatsPage() {
+export async function buildStatsPage() {
     const loadingSpinner = document.getElementById("loading-spinner");
     const noStatsMessage = document.getElementById("no-stats-message");
     const statsContent = document.getElementById("stats-content");
 
-    const allStats = getAllStats();
-    const totalAvailableQuizzes = [...quizList, ...getSavedCustomQuizzes()].length;
+    // Fetch custom quizzes ONCE with a timeout to prevent hanging.
+    const customQuizzesPromise = getSavedCustomQuizzes();
+    const timeoutPromise = new Promise(resolve => setTimeout(() => resolve([]), 3000)); // Increased timeout to 3s for safety
+    const customQuizzes = await Promise.race([customQuizzesPromise, timeoutPromise]);
+
+    const allStats = getAllStats(customQuizzes); // Pass data, don't re-fetch
+    const totalAvailableQuizzes = quizList.length + customQuizzes.length;
 
     loadingSpinner.classList.add("hidden");
 
@@ -809,23 +829,29 @@ export function buildStatsPage() {
         noStatsMessage.classList.remove("hidden");
         document.getElementById("clear-stats-btn").disabled = true;
     } else {
-        const groupedData = calculateGroupedPerformance(allStats);
-        const summary = calculateSummary(allStats, totalAvailableQuizzes);
-        const subjectPerformance = calculateSubjectPerformance(allStats);
-        renderSummaryCards(summary);
-        renderOverallChart(summary);
-        renderSubjectPerformanceChart(subjectPerformance);
-        renderPerformanceAccordions(groupedData);
-        renderDetailedList(allStats);
+        try {
+            const groupedData = calculateGroupedPerformance(allStats);
+            const summary = calculateSummary(allStats, totalAvailableQuizzes);
+            const subjectPerformance = calculateSubjectPerformance(allStats);
+            
+            renderSummaryCards(summary);
+            renderOverallChart(summary);
+            renderSubjectPerformanceChart(subjectPerformance);
+            renderPerformanceAccordions(groupedData);
+            renderDetailedList(allStats);
 
-        // NEW calls for trend chart
-        const trendData = calculateScoreTrend(allStats);
-        renderScoreTrendChart(trendData);
+            // NEW calls for trend chart
+            const trendData = calculateScoreTrend(allStats);
+            renderScoreTrendChart(trendData);
 
-        finishedQuizModalHandler = new ModalHandler('finished-quiz-modal');
-        setupActionListeners();
-        initializeTabs();
-        statsContent.classList.add("anim-fade-in");
-        statsContent.style.opacity = 1;
+            finishedQuizModalHandler = new ModalHandler('finished-quiz-modal');
+            setupActionListeners();
+        } catch (error) {
+            console.error("Error building stats page components:", error);
+        } finally {
+            initializeTabs();
+            statsContent.classList.add("anim-fade-in");
+            statsContent.style.opacity = 1;
+        }
     }
 }

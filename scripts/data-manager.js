@@ -276,7 +276,12 @@ export async function getDetailedProgressForAllQuizzes() {
   const { quizList } = await import(`../data/quizzes-list.js?v=${Date.now()}`);
   const { getSavedCustomQuizzes } = await import("./custom-quiz-handler.js");
 
-  const allQuizzes = [...quizList, ...getSavedCustomQuizzes()];
+  // Add timeout to prevent hanging
+  const customQuizzesPromise = getSavedCustomQuizzes();
+  const timeoutPromise = new Promise(resolve => setTimeout(() => resolve([]), 3000));
+  const customQuizzes = await Promise.race([customQuizzesPromise, timeoutPromise]);
+
+  const allQuizzes = [...quizList, ...customQuizzes];
   const allDetailedProgress = allQuizzes
     .map((quiz) => {
       const storageKey =
@@ -305,7 +310,12 @@ export async function getAllQuizProgress() {
   const { quizList } = await import(`../data/quizzes-list.js?v=${Date.now()}`);
   const { getSavedCustomQuizzes } = await import("./custom-quiz-handler.js");
 
-  const allQuizzes = [...quizList, ...getSavedCustomQuizzes()];
+  // Add timeout to prevent hanging
+  const customQuizzesPromise = getSavedCustomQuizzes();
+  const timeoutPromise = new Promise(resolve => setTimeout(() => resolve([]), 3000));
+  const customQuizzes = await Promise.race([customQuizzesPromise, timeoutPromise]);
+
+  const allQuizzes = [...quizList, ...customQuizzes];
   const allProgress = allQuizzes
     .map((quiz) => {
       const totalQuestions = quiz.amount || quiz.questions?.length || 0;

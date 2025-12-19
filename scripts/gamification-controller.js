@@ -3,6 +3,18 @@ import { renderDailyQuests } from './daily-quests-renderer.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     const game = new Gamification();
+    
+    // เรนเดอร์ครั้งแรก
+    updateGamificationUI(game);
+
+    // รอฟัง Event เพื่ออัปเดตเมื่อข้อมูลซิงค์เสร็จ
+    window.addEventListener('gamification-updated', () => {
+        updateGamificationUI(game);
+    });
+});
+
+// แยก Logic การแสดงผลออกมาเป็นฟังก์ชันเพื่อให้เรียกซ้ำได้
+function updateGamificationUI(game) {
     const levelInfo = game.getCurrentLevel();
     
     // Update Level & Rank UI
@@ -53,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Render Daily Quests
     renderDailyQuests('daily-quests-container');
-});
+}
 
 function setText(id, text) {
     const el = document.getElementById(id);

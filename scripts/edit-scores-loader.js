@@ -10,7 +10,7 @@ async function main() {
 
         const { initializeCommonComponents } = await import('./common-init.js');
         // Initialize common functionalities
-        initializeCommonComponents();
+        await initializeCommonComponents();
 
         const { initializeScoreEditor } = await import('./edit-scores-handler.js');
         // Initialize the score editor functionality specific to this page

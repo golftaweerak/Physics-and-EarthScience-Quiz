@@ -10,7 +10,7 @@ async function main() {
 
         const { initializeCommonComponents } = await import('./common-init.js');
         // Initialize common functionalities
-        initializeCommonComponents();
+        await initializeCommonComponents();
 
         const { initializeSummaryPage } = await import('./summary-handler.js');
         // Build the summary page content

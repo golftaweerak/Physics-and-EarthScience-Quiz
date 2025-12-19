@@ -71,7 +71,7 @@ function createMenuItemHTML(quiz, getQuizUrl, currentQuizId, basePath = './') {
  * - Highlights the currently active quiz.
  * - Handles clicks on completed quizzes to show a modal.
  */
-export function initializeMenu() {
+export async function initializeMenu() {
     const menuDropdown = document.getElementById('main-menu-dropdown');
     const menuQuizListContainer = document.getElementById('menu-quiz-list');
 
@@ -94,7 +94,12 @@ export function initializeMenu() {
     const getQuizUrl = (id) => `${isSubdirectory ? '' : './quiz/'}index.html?id=${id}`;
 
     // --- Get All Quizzes and Progress ---
-    const allQuizzes = [...quizList, ...getSavedCustomQuizzes()];
+    // Add timeout to prevent menu from hanging if auth fails
+    const customQuizzesPromise = getSavedCustomQuizzes();
+    const timeoutPromise = new Promise(resolve => setTimeout(() => resolve([]), 3000));
+    const customQuizzesList = await Promise.race([customQuizzesPromise, timeoutPromise]);
+
+    const allQuizzes = [...quizList, ...customQuizzesList];
     const quizzesWithProgress = allQuizzes.map(quiz => {
         const totalQuestions = quiz.amount || quiz.questions?.length || 0;
         if (totalQuestions === 0) return null;
@@ -111,7 +116,7 @@ export function initializeMenu() {
     const recentQuizIds = new Set(recentQuizzes.map(q => q.id || q.customId));
 
     // --- Get ALL custom quizzes, regardless of recency ---
-    const customQuizzes = quizzesWithProgress.filter(q => q.customId);
+    const customQuizzes = quizzesWithProgress.filter(q => q.customId && !recentQuizIds.has(q.customId));
     // --- Get standard quizzes that are NOT recent ---
     const standardQuizzes = quizzesWithProgress.filter(q => q.id && !recentQuizIds.has(q.id));
 
