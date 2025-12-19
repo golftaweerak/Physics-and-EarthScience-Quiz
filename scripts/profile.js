@@ -1407,6 +1407,149 @@ function showProficiencyDetails(label, data) {
     modal.open();
 }
 
+function getOrCreateTooltip(chart) {
+    let tooltipEl = chart.canvas.parentNode.querySelector('div.chartjs-tooltip');
+
+    if (!tooltipEl) {
+        tooltipEl = document.createElement('div');
+        tooltipEl.className = 'chartjs-tooltip bg-gray-900/95 dark:bg-gray-700/95 text-white text-xs rounded-lg shadow-xl pointer-events-auto absolute transition-all duration-150 z-50 backdrop-blur-sm border border-gray-700 dark:border-gray-600';
+        tooltipEl.style.opacity = 0;
+        tooltipEl.style.transition = 'opacity .3s';
+
+        const table = document.createElement('table');
+        table.style.margin = '0px';
+
+        tooltipEl.appendChild(table);
+        chart.canvas.parentNode.appendChild(tooltipEl);
+    }
+
+    return tooltipEl;
+}
+
+function externalTooltipHandler(context) {
+    // Tooltip Element
+    const { chart, tooltip } = context;
+    const tooltipEl = getOrCreateTooltip(chart);
+
+    // Hide if no tooltip
+    if (tooltip.opacity === 0) {
+        tooltipEl.style.opacity = 0;
+        tooltipEl.style.pointerEvents = 'none';
+        return;
+    } else {
+        tooltipEl.style.pointerEvents = 'auto';
+    }
+
+    // Set Text
+    if (tooltip.body) {
+        const titleLines = tooltip.title || [];
+        const bodyLines = tooltip.body.map(b => b.lines);
+
+        const tableHead = document.createElement('thead');
+
+        // Close button row
+        const closeRow = document.createElement('tr');
+        const closeCell = document.createElement('th');
+        closeCell.colSpan = 2;
+        closeCell.className = "text-right pb-1 border-b border-gray-600/50 mb-2";
+        
+        const closeBtn = document.createElement('button');
+        closeBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400 hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>`;
+        closeBtn.className = "p-0.5 rounded hover:bg-white/10 transition-colors cursor-pointer";
+        closeBtn.type = "button";
+        closeBtn.onclick = (e) => {
+            e.stopPropagation();
+            tooltipEl.style.opacity = 0;
+            tooltipEl.style.pointerEvents = 'none';
+            chart.setActiveElements([], { x: 0, y: 0 });
+            chart.update();
+        };
+        
+        closeCell.appendChild(closeBtn);
+        closeRow.appendChild(closeCell);
+        tableHead.appendChild(closeRow);
+
+        titleLines.forEach(title => {
+            const tr = document.createElement('tr');
+            tr.style.borderWidth = 0;
+
+            const th = document.createElement('th');
+            th.style.borderWidth = 0;
+            th.className = "text-left font-bold py-2 font-kanit text-sm";
+            const text = document.createTextNode(title);
+
+            th.appendChild(text);
+            tr.appendChild(th);
+            tableHead.appendChild(tr);
+        });
+
+        const tableBody = document.createElement('tbody');
+        bodyLines.forEach((body, i) => {
+            const colors = tooltip.labelColors[i];
+
+            const span = document.createElement('span');
+            span.style.background = colors.backgroundColor;
+            span.style.borderColor = colors.borderColor;
+            span.style.borderWidth = '2px';
+            span.style.marginRight = '8px';
+            span.style.height = '10px';
+            span.style.width = '10px';
+            span.style.display = 'inline-block';
+            span.style.borderRadius = '50%';
+
+            const tr = document.createElement('tr');
+            tr.style.backgroundColor = 'inherit';
+            tr.style.borderWidth = 0;
+
+            const td = document.createElement('td');
+            td.style.borderWidth = 0;
+            td.className = "py-1 font-sarabun";
+
+            const text = document.createTextNode(body);
+
+            td.appendChild(span);
+            td.appendChild(text);
+            tr.appendChild(td);
+            tableBody.appendChild(tr);
+        });
+
+        const tableRoot = tooltipEl.querySelector('table');
+
+        // Remove old children
+        while (tableRoot.firstChild) {
+            tableRoot.firstChild.remove();
+        }
+
+        // Add new children
+        tableRoot.appendChild(tableHead);
+        tableRoot.appendChild(tableBody);
+    }
+
+    const { offsetLeft: positionX, offsetTop: positionY } = chart.canvas;
+
+    // Display, position, and set styles for font
+    tooltipEl.style.opacity = 1;
+    tooltipEl.style.left = positionX + tooltip.caretX + 'px';
+    tooltipEl.style.top = positionY + tooltip.caretY + 'px';
+    tooltipEl.style.padding = '12px';
+    
+    // Smart positioning
+    let transformX = '-50%';
+    let transformY = '-100%';
+    let marginTop = '-10px';
+
+    if (tooltip.yAlign === 'top') {
+        transformY = '0';
+        marginTop = '10px';
+    } else if (tooltip.yAlign === 'center') {
+        transformY = '-50%';
+        marginTop = '0';
+    }
+
+    tooltipEl.style.transform = `translate(${transformX}, ${transformY})`;
+    tooltipEl.style.marginTop = marginTop;
+}
+
 async function renderProficiencyHistoryChart(game) {
     const ctx = document.getElementById('proficiency-history-chart')?.getContext('2d');
     const loader = document.getElementById('history-chart-loader');
@@ -1533,6 +1676,8 @@ async function renderProficiencyHistoryChart(game) {
                         labels: { color: textColor, font: { family: "'Kanit', sans-serif" } }
                     },
                     tooltip: {
+                        enabled: false,
+                        external: externalTooltipHandler,
                         callbacks: {
                             label: (ctx) => `${ctx.dataset.label}: ${ctx.raw.y.toFixed(1)}% (${ctx.raw.title})`
                         }

@@ -213,16 +213,18 @@ export class Gamification {
         
         this.state = this.loadState();
         
-        // NEW: Check and reset daily quests if it's a new day.
-        // This logic is moved from loadState to here to ensure saveState() is called reliably.
         const today = new Date().toDateString();
         if (this.state.lastQuestDate !== today) {
             this.state.activeQuests = this.generateDailyQuests();
             this.state.rerolls = 3;
             this.state.lastQuestDate = today;
             this.state.dailyQuest = null; // Clear legacy quest data if any
-            this.saveState(); // Save immediately after generating new quests for the day.
         }
+
+        // Initial level up check in case quests were completed offline
+        // and the user just came back online.
+        this.updateLevel();
+        this.saveState();
         
         if (isNewToGamification) {
             this.syncProgress();
@@ -244,12 +246,20 @@ export class Gamification {
         // เชื่อมต่อกับ AuthManager เพื่อโหลดข้อมูลเมื่อสถานะ Login เปลี่ยนแปลง
         this.authManager.onUserChange(async (user) => {
             // โหลดข้อมูลล่าสุด (จะจัดการให้เองว่ามาจาก Cloud หรือ Local)
-            const data = await this.authManager.loadUserData();
-            if (data) {
-                // Merge ข้อมูลจาก Cloud เข้ากับ Default State เพื่อความสมบูรณ์
-                this.state = { ...this.getDefaultState(), ...data };
-                // ตรวจสอบ Streak และอัปเดต UI
-                this.updateStreak(); 
+            try {
+                const data = await this.authManager.loadUserData();
+                if (data) {
+                    // Merge ข้อมูลจาก Cloud เข้ากับ Default State เพื่อความสมบูรณ์
+                    this.state = { ...this.getDefaultState(), ...data };
+                    // ตรวจสอบ Streak และอัปเดต UI
+                    this.updateStreak();
+                    this.onStateUpdated();
+                }
+            } catch (error) {
+                console.error("Failed to load user data on auth change (client might be offline):", error);
+                // Even if cloud fails, we can still proceed with local data.
+                // The state is already loaded from localStorage in the constructor.
+                // We can just trigger a UI update to be safe.
                 this.onStateUpdated();
             }
         });
@@ -257,6 +267,7 @@ export class Gamification {
 
     getDefaultState() {
         return {
+            level: 1,
             xp: 0,
             physicsXP: 0,
             earthXP: 0,
@@ -280,6 +291,28 @@ export class Gamification {
             perfectScores: 0,
             highScores80: 0,
         };
+    }
+
+    updateLevel() {
+        let leveledUp = false;
+        // Loop to handle multiple level-ups in one go, but sequentially.
+        while (true) {
+            const currentLevel = this.state.level || 1;
+            const nextLevelThreshold = XP_THRESHOLDS.find(t => t.level === currentLevel + 1);
+
+            if (!nextLevelThreshold) {
+                break; // Max level reached
+            }
+
+            // Check if XP and quest conditions are met for the *next* level
+            if (this.state.xp >= nextLevelThreshold.xp && this.isQuestCompleted(nextLevelThreshold.quest)) {
+                this.state.level = currentLevel + 1;
+                leveledUp = true;
+            } else {
+                break; // Cannot level up further
+            }
+        }
+        return leveledUp;
     }
 
     loadState() {
@@ -730,8 +763,6 @@ export class Gamification {
 
     // ฟังก์ชันช่วยคำนวณเลเวลจาก XP และสายที่ระบุ
     getLevelInfo(xp, track = 'overall') {
-        // For now, only the 'overall' track has level-up quests.
-        // Other tracks (physics, earth) will still level up based on XP only.
         if (track !== 'overall') {
             // Original logic for other tracks
             let level = 0;
@@ -756,31 +787,35 @@ export class Gamification {
             return { level, title: titles[titleIndex], currentXP: xp, nextLevelXP: nextLevelData ? nextLevelData.xp : null, progressPercent };
         }
 
-        // --- NEW LOGIC FOR OVERALL LEVEL ---
-        let currentLevel = 0;
-        for (const threshold of XP_THRESHOLDS) {
-            if (xp >= threshold.xp && this.isQuestCompleted(threshold.quest)) {
-                currentLevel = threshold.level;
-            } else {
-                break; // Stop at the first level where requirements are not met
-            }
-        }
-        if (currentLevel === 0) currentLevel = 1;
+        // --- REVISED LOGIC FOR OVERALL LEVEL ---
+        // The level is now stored in the state. We just calculate progress towards the next one.
+        const currentLevel = this.state.level || 1;
+        
+        const currentLevelData = XP_THRESHOLDS.find(t => t.level === currentLevel);
+        const nextLevelData = XP_THRESHOLDS.find(t => t.level === currentLevel + 1);
 
-        const currentLevelData = XP_THRESHOLDS[currentLevel - 1];
-        const nextLevelData = XP_THRESHOLDS[currentLevel] || null;
         const titles = TRACK_TITLES.overall;
         const titleIndex = Math.min(currentLevel - 1, titles.length - 1);
 
         let xpProgressPercent = 100;
         let questProgressPercent = 100;
-        if (nextLevelData) {
+        let overallProgressPercent = 100;
+
+        if (nextLevelData && currentLevelData) {
+            // Calculate XP progress
             const xpRange = nextLevelData.xp - currentLevelData.xp;
-            if (xpRange > 0) xpProgressPercent = Math.min(100, ((xp - currentLevelData.xp) / xpRange) * 100);
+            if (xpRange > 0) {
+                xpProgressPercent = Math.min(100, Math.max(0, ((xp - currentLevelData.xp) / xpRange) * 100));
+            }
+
+            // Calculate Quest progress
             if (nextLevelData.quest) questProgressPercent = this.getQuestProgressPercent(nextLevelData.quest);
+            
+            // Overall progress is the minimum of the two
+            overallProgressPercent = Math.min(xpProgressPercent, questProgressPercent);
         }
 
-        return { level: currentLevel, title: titles[titleIndex], currentXP: xp, nextLevelXP: nextLevelData ? nextLevelData.xp : null, progressPercent: Math.min(xpProgressPercent, questProgressPercent), nextLevelQuest: nextLevelData ? nextLevelData.quest : null };
+        return { level: currentLevel, title: titles[titleIndex], currentXP: xp, nextLevelXP: nextLevelData ? nextLevelData.xp : null, progressPercent: overallProgressPercent, nextLevelQuest: nextLevelData ? nextLevelData.quest : null };
     }
 
     getCurrentLevel() {
@@ -902,12 +937,13 @@ export class Gamification {
         }
 
         this.state.lastLogin = today;
+        this.updateLevel(); // Check if streak quest completion triggers level up
         this.saveState();
     }
 
     // ฟังก์ชันเพิ่ม XP (เรียกใช้เมื่อทำข้อสอบเสร็จ)
     addXP(amount, category = '') {
-        const oldLevel = this.getCurrentLevel();
+        const oldLevel = this.state.level || 1;
         const oldPhysics = this.getPhysicsLevel();
         const oldEarth = this.getEarthLevel();
 
@@ -928,16 +964,18 @@ export class Gamification {
         }
 
         this.state.quizzesCompleted += 1;
+
+        this.updateLevel();
+
         this.saveState();
 
-        const newLevel = this.getCurrentLevel();
+        const newLevelInfo = this.getCurrentLevel();
         const newPhysics = this.getPhysicsLevel();
         const newEarth = this.getEarthLevel();
 
         return {
-            leveledUp: newLevel.level > oldLevel.level, // For backward compatibility
-            newLevel: newLevel, // For backward compatibility
-            
+            leveledUp: newLevelInfo.level > oldLevel, // For backward compatibility
+            newLevel: newLevelInfo, // For backward compatibility
             // Detailed results
             overall: { leveledUp: newLevel.level > oldLevel.level, info: newLevel },
             physics: { leveledUp: isPhysics && newPhysics.level > oldPhysics.level, info: newPhysics },
@@ -947,7 +985,7 @@ export class Gamification {
 
     // ฟังก์ชันใหม่: บันทึกผลการทำข้อสอบโดยรับค่า XP แยกตามสายวิชา
     submitQuizResult(totalXP, physicsXP, earthXP) {
-        const oldLevel = this.getCurrentLevel();
+        const oldLevel = this.state.level || 1;
         const oldPhysics = this.getPhysicsLevel();
         const oldEarth = this.getEarthLevel();
 
@@ -956,14 +994,16 @@ export class Gamification {
         this.state.earthXP += earthXP;
         this.state.quizzesCompleted += 1;
         
+        this.updateLevel();
+        
         this.saveState();
 
-        const newLevel = this.getCurrentLevel();
+        const newLevelInfo = this.getCurrentLevel();
         const newPhysics = this.getPhysicsLevel();
         const newEarth = this.getEarthLevel();
 
         return {
-            overall: { leveledUp: newLevel.level > oldLevel.level, info: newLevel },
+            overall: { leveledUp: newLevelInfo.level > oldLevel, info: newLevelInfo },
             physics: { leveledUp: newPhysics.level > oldPhysics.level, info: newPhysics },
             earth: { leveledUp: newEarth.level > oldEarth.level, info: newEarth }
         };
@@ -971,7 +1011,7 @@ export class Gamification {
 
     // ฟังก์ชันอัปเดตความคืบหน้าภารกิจ
     updateQuest(stats) {
-        if (!this.state.activeQuests) return [];
+        if (!this.state.activeQuests) return { completed: [], newAchievements: [] };
 
         // อัปเดตสถิติรวม (Total Stats)
         if (stats.correctAnswers) {
@@ -1033,7 +1073,9 @@ export class Gamification {
             }
         });
         
-        if (completedQuests.length > 0 || newAchievements.length > 0) {
+        const leveledUp = this.updateLevel();
+
+        if (completedQuests.length > 0 || newAchievements.length > 0 || leveledUp) {
             this.saveState();
         }
         

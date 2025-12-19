@@ -938,10 +938,10 @@ function evaluateMultipleAnswer() {
 
     if (correctSet.has(optionValue)) {
       // Add a class to highlight all correct answers
-      wrapper.classList.add('bg-green-100', 'dark:bg-green-900/30', 'border-green-500', 'dark:border-green-600');
+      wrapper.classList.add('bg-green-100', 'dark:bg-green-900/30', 'border-green-500', 'dark:border-green-600', 'anim-correct-pop');
     } else if (selectedSet.has(optionValue)) {
       // Add a class to highlight incorrectly selected answers
-      wrapper.classList.add('bg-red-100', 'dark:bg-red-900/30', 'border-red-500', 'dark:border-red-600');
+      wrapper.classList.add('bg-red-100', 'dark:bg-red-900/30', 'border-red-500', 'dark:border-red-600', 'anim-shake');
     } else {
       // For other incorrect, unselected options, make them faded
       wrapper.classList.add('opacity-60');
@@ -1001,10 +1001,10 @@ function evaluateFillInAnswer() {
   // Visually indicate correctness on the input field
   if (isCorrect) {
     answerInput.classList.remove('border-gray-300', 'dark:border-gray-600');
-    answerInput.classList.add('bg-green-100', 'dark:bg-green-900/30', 'border-green-500', 'dark:border-green-600', 'text-green-800', 'dark:text-green-300');
+    answerInput.classList.add('bg-green-100', 'dark:bg-green-900/30', 'border-green-500', 'dark:border-green-600', 'text-green-800', 'dark:text-green-300', 'anim-correct-pop');
   } else {
     answerInput.classList.remove('border-gray-300', 'dark:border-gray-600');
-    answerInput.classList.add('bg-red-100', 'dark:bg-red-900/30', 'border-red-500', 'dark:border-red-600', 'text-red-800', 'dark:text-red-400');
+    answerInput.classList.add('bg-red-100', 'dark:bg-red-900/30', 'border-red-500', 'dark:border-red-600', 'text-red-800', 'dark:text-red-400', 'anim-shake');
   }
 
   updateNextButtonAppearance('next');
@@ -1059,12 +1059,12 @@ function evaluateFillInNumberAnswer() {
     state.score++;
     elements.scoreCounter.textContent = `คะแนน: ${state.score}`;
     answerInput.classList.remove('border-gray-300', 'dark:border-gray-600');
-    answerInput.classList.add('bg-green-100', 'dark:bg-green-900/30', 'border-green-500', 'dark:border-green-600', 'text-green-800', 'dark:text-green-300');
+    answerInput.classList.add('bg-green-100', 'dark:bg-green-900/30', 'border-green-500', 'dark:border-green-600', 'text-green-800', 'dark:text-green-300', 'anim-correct-pop');
     state.game.incrementCorrectStreak();
     if (state.isSoundEnabled) state.correctSound.play().catch(e => console.error("Error playing sound:", e));
   } else {
     answerInput.classList.remove('border-gray-300', 'dark:border-gray-600');
-    answerInput.classList.add('bg-red-100', 'dark:bg-red-900/30', 'border-red-500', 'dark:border-red-600', 'text-red-800', 'dark:text-red-400');
+    answerInput.classList.add('bg-red-100', 'dark:bg-red-900/30', 'border-red-500', 'dark:border-red-600', 'text-red-800', 'dark:text-red-400', 'anim-shake');
     state.game.resetCorrectStreak();
     if (state.isSoundEnabled) state.incorrectSound.play().catch(e => console.error("Error playing sound:", e));
   }
@@ -1098,7 +1098,6 @@ function selectAnswer(e) {
     stopTimer();
   }
   const selectedBtn = e.currentTarget;
-  selectedBtn.classList.add("anim-option-pop");
   const selectedValue = selectedBtn.dataset.optionValue.trim();
   // Safely get and trim the correct answer to prevent errors if it's not a string (e.g., null, undefined, number)
   const correctAnswerValue =
@@ -1153,12 +1152,10 @@ function selectAnswer(e) {
 
     if (isCorrectAnswer) {
         // Always highlight the correct answer in green
-        button.classList.remove('anim-option-pop');
-        button.classList.add('bg-green-100', 'dark:bg-green-900/30', 'border-green-500', 'dark:border-green-600', 'text-green-800', 'dark:text-green-300');
+        button.classList.add('bg-green-100', 'dark:bg-green-900/30', 'border-green-500', 'dark:border-green-600', 'text-green-800', 'dark:text-green-300', 'anim-correct-pop');
     } else if (wasSelected) {
         // If this button was selected and it's not the correct one, highlight in red
-        button.classList.remove('anim-option-pop');
-        button.classList.add('bg-red-100', 'dark:bg-red-900/30', 'border-red-500', 'dark:border-red-600', 'text-red-800', 'dark:text-red-400');
+        button.classList.add('bg-red-100', 'dark:bg-red-900/30', 'border-red-500', 'dark:border-red-600', 'text-red-800', 'dark:text-red-400', 'anim-shake');
     } else {
         // For other incorrect, unselected options, make them faded
         button.classList.add('opacity-60');

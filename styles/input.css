@@ -485,6 +485,9 @@ body.dark {
 .option-btn {
   transition: all 0.3s ease;
 }
+  .option-btn:active {
+    animation: option-select-pop 0.3s ease-out;
+  }
 
 .correct {
   background-color: #22c55e !important;
