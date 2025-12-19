@@ -123,6 +123,13 @@ function renderScoreTrendChart(trendData) {
     const chartContainer = document.getElementById('score-trend-chart')?.closest('section');
     const ctx = document.getElementById('score-trend-chart')?.getContext('2d');
 
+    // Destroy existing chart to prevent duplicates on re-render
+    if (ctx) {
+        const existingChart = Chart.getChart(ctx);
+        if (existingChart) {
+            existingChart.destroy();
+        }
+    }
     if (!ctx || !chartContainer) return;
 
     if (typeof Chart === 'undefined') {
@@ -404,6 +411,14 @@ function renderOverallChart(summary) {
         return;
     }
     const ctx = document.getElementById("overall-chart")?.getContext("2d");
+
+    // Destroy existing chart to prevent duplicates on re-render
+    if (ctx) {
+        const existingChart = Chart.getChart(ctx);
+        if (existingChart) {
+            existingChart.destroy();
+        }
+    }
     if (!ctx) return;
 
     new Chart(ctx, {
@@ -456,6 +471,14 @@ function renderSubjectPerformanceChart(subjectData) {
     }
     const ctx = document.getElementById('subject-performance-chart')?.getContext('2d');
     if (!ctx || subjectData.length === 0) return;
+
+    // Destroy existing chart to prevent duplicates on re-render
+    if (ctx) {
+        const existingChart = Chart.getChart(ctx);
+        if (existingChart) {
+            existingChart.destroy();
+        }
+    }
 
     const labels = subjectData.map(d => d.subject);
     const scores = subjectData.map(d => d.score);

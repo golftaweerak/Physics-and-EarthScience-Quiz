@@ -1,0 +1,19 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // กฎสำหรับ Collection 'users'
+    match /users/{userId} {
+      // อนุญาตให้ทุกคนอ่านข้อมูลพื้นฐาน (สำหรับ Leaderboard)
+      allow read: if true;
+      
+      // อนุญาตให้เจ้าของบัญชีแก้ไขข้อมูลของตนเองได้
+      allow write: if request.auth != null && request.auth.uid == userId;
+
+      // กฎสำหรับ Subcollections ทั้งหมดภายใต้ users (เช่น custom_quizzes, quiz_history)
+      match /{document=**} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+    }
+  }
+}

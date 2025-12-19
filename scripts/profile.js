@@ -151,6 +151,25 @@ export async function initializeProfile() {
     if (r1 && r2 && r3) {
         document.getElementById('refresh-charts-btn')?.classList.add('hidden');
     }
+
+    // 4. NEW: Auto-refresh when data changes (e.g., after login/sync)
+    window.addEventListener('gamification-updated', async () => {
+        // Update UI elements
+        renderUserInfo(game);
+        renderTrackProgress(game);
+        renderBadges(game);
+        renderAchievements(game);
+        renderQuestHistory(game);
+        renderShop(game);
+        renderSyncStatus(game);
+
+        // Re-render charts to reflect merged data
+        await Promise.all([
+            renderRadarChart(game),
+            renderProficiencyHistoryChart(game),
+            renderStrengthsWeaknesses()
+        ]);
+    });
 }
 
 function renderUserInfo(game) {

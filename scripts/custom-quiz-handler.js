@@ -96,8 +96,14 @@ async function createAndSaveCustomQuiz(quizData) {
 
     // Sync to cloud if logged in
     if (authManager.currentUser) {
-        const docRef = doc(db, 'users', authManager.currentUser.uid, 'custom_quizzes', newCustomQuiz.customId);
-        await setDoc(docRef, newCustomQuiz);
+        try {
+            const docRef = doc(db, 'users', authManager.currentUser.uid, 'custom_quizzes', newCustomQuiz.customId);
+            await setDoc(docRef, newCustomQuiz);
+        } catch (error) {
+            // Log the error but don't block the user. The quiz is saved locally.
+            // This is a workaround for potential Firestore permission issues.
+            console.warn("Could not sync custom quiz to Firestore. It will be available on this device only.", error);
+        }
     }
 
     return newCustomQuiz;
