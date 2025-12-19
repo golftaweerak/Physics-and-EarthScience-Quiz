@@ -61,17 +61,6 @@ const THEME_HUES = {
     'theme-midnight': 220 // Slate/Blue-ish
 };
 
-// Mock Global Averages (ค่าเฉลี่ยสมมติสำหรับเปรียบเทียบ)
-const GLOBAL_AVERAGES = {
-    'Mechanics': 55,
-    'Electricity': 48,
-    'WavesLight': 50,
-    'ModernHeat': 45,
-    'Astronomy': 62,
-    'Geology': 65,
-    'Meteorology': 58
-};
-
 let lastSyncTime = null;
 let previousXP = null;
 let previousAvatar = null;
@@ -133,9 +122,7 @@ export async function initializeProfile() {
     setupThemeSystem(game);
     setupResetSystem(game);
     setupCollapsibleSections();
-    setupRefreshChartsSystem(game);
     setupManualSync(game);
-    setupRadarControls(game);
     setupLeaderboardSystem(game);
     setupShopAccordion(game);
 
@@ -143,12 +130,14 @@ export async function initializeProfile() {
     document.getElementById('radar-chart-loader')?.classList.remove('hidden');
     document.getElementById('history-chart-loader')?.classList.remove('hidden');
     document.getElementById('strengths-weaknesses-loader')?.classList.remove('hidden');
-
-    const r1 = await renderRadarChart(game);
-    const r2 = await renderProficiencyHistoryChart(game);
-    const r3 = await renderStrengthsWeaknesses();
-
-    if (r1 && r2 && r3) {
+    
+    setupRefreshChartsSystem(game); // Setup once
+    const chartsRendered = await Promise.all([
+        renderRadarChart(game),
+        renderProficiencyHistoryChart(game),
+        renderStrengthsWeaknesses()
+    ]);
+    if (chartsRendered.every(Boolean)) {
         document.getElementById('refresh-charts-btn')?.classList.add('hidden');
     }
 
@@ -169,6 +158,7 @@ export async function initializeProfile() {
             renderProficiencyHistoryChart(game),
             renderStrengthsWeaknesses()
         ]);
+        setupRefreshChartsSystem(game); // Re-setup in case elements were re-rendered
     });
 }
 
@@ -364,10 +354,29 @@ function setupNameEditSystem(game) {
     const editBtn = document.getElementById('edit-name-btn');
     const saveBtn = document.getElementById('save-name-btn');
     const nameInput = document.getElementById('new-display-name');
+    const currentXpEl = document.getElementById('name-change-current-xp');
+    const NAME_CHANGE_COST = 50;
 
     if (editBtn) {
         editBtn.addEventListener('click', () => {
             if (nameInput) nameInput.value = game.state.displayName || '';
+            if (currentXpEl) currentXpEl.textContent = game.state.xp.toLocaleString();
+
+            // Disable save button if not enough XP
+            if (saveBtn) {
+                if (game.state.xp < NAME_CHANGE_COST) {
+                    saveBtn.disabled = true;
+                    saveBtn.innerHTML = `<span>ต้องการ ${NAME_CHANGE_COST} XP</span>`;
+                    saveBtn.classList.add('opacity-50', 'cursor-not-allowed', 'bg-gray-400');
+                    saveBtn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+                } else {
+                    saveBtn.disabled = false;
+                    saveBtn.innerHTML = `<span>บันทึก (ใช้ ${NAME_CHANGE_COST} XP)</span>`;
+                    saveBtn.classList.remove('opacity-50', 'cursor-not-allowed', 'bg-gray-400');
+                    saveBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+                }
+            }
+
             nameModal.open();
             // Focus input after modal opens
             setTimeout(() => nameInput?.focus(), 100);
@@ -376,12 +385,18 @@ function setupNameEditSystem(game) {
 
     if (saveBtn && nameInput) {
         const saveName = () => {
+            if (game.state.xp < NAME_CHANGE_COST) {
+                showToast('XP ไม่พอ', `คุณต้องการ ${NAME_CHANGE_COST} XP เพื่อเปลี่ยนชื่อ`, '⚠️', 'error');
+                return;
+            }
+
             const newName = nameInput.value.trim();
             if (newName) {
+                game.state.xp -= NAME_CHANGE_COST;
                 game.setDisplayName(newName);
                 renderUserInfo(game);
                 nameModal.close();
-                showToast('บันทึกสำเร็จ', 'เปลี่ยนชื่อเรียบร้อยแล้ว', '✏️');
+                showToast('บันทึกสำเร็จ', `เปลี่ยนชื่อเรียบร้อยแล้ว (-${NAME_CHANGE_COST} XP)`, '✏️');
             } else {
                 showToast('ข้อผิดพลาด', 'กรุณาระบุชื่อ', '⚠️', 'error');
             }
@@ -487,23 +502,6 @@ function setupManualSync(game) {
             if (icon) icon.classList.remove('animate-spin');
             btn.disabled = false;
             btn.classList.remove('opacity-50', 'cursor-not-allowed');
-        }
-    });
-}
-
-function setupRadarControls(game) {
-    const toggleBtn = document.getElementById('toggle-average-btn');
-    if (!toggleBtn) return;
-
-    toggleBtn.addEventListener('change', (e) => {
-        const ctx = document.getElementById('skills-radar-chart')?.getContext('2d');
-        if (!ctx) return;
-        
-        const chart = Chart.getChart(ctx);
-        if (chart) {
-            // Global Average is the first dataset (index 0)
-            chart.data.datasets[0].hidden = !e.target.checked;
-            chart.update();
         }
     });
 }
@@ -997,24 +995,30 @@ function renderShop(game) {
             const canBuy = game.state.xp >= item.cost;
             const isConsumable = item.type === 'consumable';
             const quantity = isConsumable ? game.getItemCount(item.id) : 0;
-            
+
             let statusClass = '';
             let statusText = `${item.cost} XP`;
-    
+
+            const quantityBadge = isConsumable
+                ? `<div class="absolute -top-2 -right-2 bg-blue-600 text-white text-xs font-bold w-6 h-6 flex items-center justify-center rounded-full border-2 border-white dark:border-gray-800 shadow-md">${quantity}</div>`
+                : '';
+
             if (isOwned && !isConsumable) {
                 statusClass = 'text-green-600 dark:text-green-400';
                 statusText = '✓ เป็นเจ้าของแล้ว';
             } else if (isConsumable && quantity > 0) {
                 statusClass = 'text-blue-600 dark:text-blue-400';
-                statusText = `มีอยู่: ${quantity} | ${item.cost} XP`;
+                // The quantity is now shown in a badge, so we just show the cost here.
+                statusText = `${item.cost} XP`;
             } else if (!canBuy) {
                 statusClass = 'text-red-500';
             } else {
                 statusClass = 'text-blue-600 dark:text-blue-400';
             }
-    
+
         return `
-            <div class="shop-item-card bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col items-center text-center transition-all hover:shadow-md cursor-pointer hover:border-blue-400 dark:hover:border-blue-500 group" data-id="${item.id}">
+            <div class="shop-item-card relative bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col items-center text-center transition-all hover:shadow-md cursor-pointer hover:border-blue-400 dark:hover:border-blue-500 group" data-id="${item.id}">
+                ${quantityBadge}
                 <div class="text-4xl mb-2 lg:mb-3 transform transition-transform duration-300 group-hover:scale-125 group-hover:rotate-6 group-hover:drop-shadow-md">${item.icon}</div>
                 <h4 class="font-bold text-gray-800 dark:text-gray-200 mb-1 text-sm hidden lg:block w-full truncate px-1">${item.name}</h4>
                 <p class="text-xs font-bold ${statusClass}">${statusText}</p>
@@ -1262,20 +1266,14 @@ async function renderRadarChart(game) {
             return s.total > 0 ? (s.correct / s.total) * 100 : 0;
         });
         
-        const averageDataPoints = Object.keys(PROFICIENCY_GROUPS).map(key => {
-            return GLOBAL_AVERAGES[key] || 50;
-        });
-
         // 3. Render Chart 
         const isDark = document.documentElement.classList.contains('dark');
         const gridColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
         const textColor = isDark ? '#e5e7eb' : '#374151';
 
-        // Determine colors based on theme
         const currentTheme = game?.state?.selectedTheme;
         const themeColors = THEME_COLORS[currentTheme] || THEME_COLORS['default'];
 
-        // Destroy existing chart if it exists (Chart.js doesn't automatically replace)
         const existingChart = Chart.getChart(ctx);
         if (existingChart) existingChart.destroy();
 
@@ -1283,21 +1281,7 @@ async function renderRadarChart(game) {
             type: 'radar',
             data: {
                 labels: labels,
-                datasets: [
-                {
-                    label: 'ค่าเฉลี่ยผู้เรียน',
-                    data: averageDataPoints,
-                    fill: true,
-                    backgroundColor: isDark ? 'rgba(156, 163, 175, 0.1)' : 'rgba(156, 163, 175, 0.2)',
-                    borderColor: isDark ? 'rgba(156, 163, 175, 0.4)' : 'rgba(156, 163, 175, 0.6)',
-                    pointBackgroundColor: 'transparent',
-                    pointBorderColor: 'transparent',
-                    pointHoverBackgroundColor: 'transparent',
-                    pointHoverBorderColor: 'transparent',
-                    borderDash: [5, 5],
-                    hidden: !document.getElementById('toggle-average-btn')?.checked
-                },
-                {
+                datasets: [{
                     label: 'ความถนัดของคุณ',
                     data: dataPoints,
                     fill: true,
@@ -1329,19 +1313,13 @@ async function renderRadarChart(game) {
                     }
                 },
                 plugins: {
-                    legend: { 
-                        display: true,
-                        labels: { color: textColor, font: { family: "'Kanit', sans-serif" } }
-                    },
+                    legend: { display: false },
                     tooltip: {
                         callbacks: {
                             label: function(context) {
-                                if (context.dataset.label === 'ความถนัดของคุณ') {
-                                    const key = Object.keys(PROFICIENCY_GROUPS)[context.dataIndex];
-                                    const s = stats[key];
-                                    return `${context.dataset.label}: ${context.raw.toFixed(1)}% (${s.correct}/${s.total})`;
-                                }
-                                return `${context.dataset.label}: ${context.raw.toFixed(1)}%`;
+                                const key = Object.keys(PROFICIENCY_GROUPS)[context.dataIndex];
+                                const s = stats[key];
+                                return `${context.label}: ${context.raw.toFixed(1)}% (${s.correct}/${s.total} ข้อ)`;
                             }
                         }
                     }

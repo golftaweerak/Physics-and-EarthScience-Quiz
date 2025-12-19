@@ -1153,9 +1153,11 @@ function selectAnswer(e) {
 
     if (isCorrectAnswer) {
         // Always highlight the correct answer in green
+        button.classList.remove('anim-option-pop');
         button.classList.add('bg-green-100', 'dark:bg-green-900/30', 'border-green-500', 'dark:border-green-600', 'text-green-800', 'dark:text-green-300');
     } else if (wasSelected) {
         // If this button was selected and it's not the correct one, highlight in red
+        button.classList.remove('anim-option-pop');
         button.classList.add('bg-red-100', 'dark:bg-red-900/30', 'border-red-500', 'dark:border-red-600', 'text-red-800', 'dark:text-red-400');
     } else {
         // For other incorrect, unselected options, make them faded

@@ -208,13 +208,22 @@ export class Gamification {
     constructor() {
         this.storageKey = 'app_gamification_data';
         this.authManager = authManager;
-        
-        // ตรวจสอบว่าเป็นผู้ใช้ใหม่สำหรับระบบเกมหรือไม่ (ยังไม่มีข้อมูล Gamification)
+
         const isNewToGamification = !localStorage.getItem(this.storageKey);
         
         this.state = this.loadState();
         
-        // ถ้าเป็นผู้ใช้ใหม่ของระบบเกม ให้ลองดึงข้อมูลเก่ามาคำนวณ
+        // NEW: Check and reset daily quests if it's a new day.
+        // This logic is moved from loadState to here to ensure saveState() is called reliably.
+        const today = new Date().toDateString();
+        if (this.state.lastQuestDate !== today) {
+            this.state.activeQuests = this.generateDailyQuests();
+            this.state.rerolls = 3;
+            this.state.lastQuestDate = today;
+            this.state.dailyQuest = null; // Clear legacy quest data if any
+            this.saveState(); // Save immediately after generating new quests for the day.
+        }
+        
         if (isNewToGamification) {
             this.syncProgress();
         }
@@ -287,18 +296,7 @@ export class Gamification {
         // IMPROVEMENT: Define Default State clearly
         // Merge loaded state with defaults to ensure all keys exist (Robustness)
         state = { ...this.getDefaultState(), ...(state || {}) };
-
-        // ตรวจสอบและรีเซ็ตภารกิจถ้าเป็นวันใหม่
-        const today = new Date().toDateString();
-        if (state.lastQuestDate !== today) {
-            state.activeQuests = this.generateDailyQuests();
-            state.rerolls = 3; // รีเซ็ตสิทธิ์การเปลี่ยนภารกิจ
-            state.lastQuestDate = today;
-            state.dailyQuest = null; // ล้างข้อมูลเก่า (ถ้ามี)
-            // Note: We don't save immediately here to avoid side effects during load,
-            // but updateStreak calls saveState shortly after.
-        }
-
+        
         return state;
     }
 

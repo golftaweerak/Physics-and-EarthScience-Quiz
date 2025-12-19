@@ -205,14 +205,8 @@
                                     d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
-                            </svg>
-                            ความถนัดรายด้าน (Proficiency)
+                            </svg> ความถนัดรายด้าน (Proficiency)
                         </h2>
-                        <label class="inline-flex items-center cursor-pointer" title="แสดง/ซ่อน เส้นค่าเฉลี่ยผู้เรียน">
-                            <input type="checkbox" id="toggle-average-btn" class="sr-only peer" checked>
-                            <div class="relative w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                            <span class="ms-2 text-xs font-medium text-gray-500 dark:text-gray-400 select-none">ค่าเฉลี่ย</span>
-                        </label>
                     </div>
                     <div id="radar-chart-loader" class="absolute inset-0 flex items-center justify-center bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm z-10 rounded-2xl">
                         <div class="flex flex-col items-center text-center">
@@ -453,6 +447,10 @@
                     <input type="text" id="new-display-name"
                         class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none"
                         placeholder="ระบุชื่อของคุณ" maxlength="30">
+                </div>
+                <div id="name-change-cost-info" class="p-3 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 rounded-lg text-center text-sm">
+                    <p class="text-blue-700 dark:text-blue-300">การเปลี่ยนชื่อจะใช้ <span class="font-bold">50 XP</span></p>
+                    <p class="text-gray-500 dark:text-gray-400">XP ปัจจุบันของคุณ: <span id="name-change-current-xp" class="font-bold">0</span></p>
                 </div>
                 <div class="flex justify-end gap-2">
                     <button data-modal-close
