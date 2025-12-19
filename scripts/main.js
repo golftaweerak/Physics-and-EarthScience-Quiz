@@ -4,42 +4,6 @@ import { quizList } from "../data/quizzes-list.js";
 import { getSyllabusForCategory } from "./syllabus-manager.js";
 
 /**
- * Injects custom scrollbar styles into the document's head to match the site's theme.
- */
-function injectCustomScrollbarStyles() {
-  const style = document.createElement('style');
-  style.textContent = `
-        /* For Webkit-based browsers (Chrome, Safari, Edge) */
-        ::-webkit-scrollbar {
-            width: 12px;
-            height: 12px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f8fafc; /* slate-50 */
-        }
-        .dark ::-webkit-scrollbar-track {
-            background: #0f172a; /* slate-900 */
-        }
-        ::-webkit-scrollbar-thumb {
-            background-color: #cbd5e1; /* slate-300 */
-            border-radius: 20px;
-            border: 3px solid #f8fafc; /* slate-50 */
-        }
-        .dark ::-webkit-scrollbar-thumb {
-            background-color: #475569; /* slate-600 */
-            border-color: #0f172a; /* slate-900 */
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background-color: #94a3b8; /* slate-400 */
-        }
-        .dark ::-webkit-scrollbar-thumb:hover {
-            background-color: #334155; /* slate-700 */
-        }
-    `;
-  document.head.appendChild(style);
-}
-
-/**
  * Toggles the state of an accordion section (expands or collapses it).
  * @param {HTMLElement} toggleElement The header element of the accordion section.
  * @param {'open'|'close'|undefined} forceState - Force the accordion to open, close, or toggle.
@@ -212,9 +176,6 @@ export const getSectionToggles = () =>
   document.querySelectorAll(".section-toggle");
 
 export function initializePage() {
-  // Inject custom scrollbar styles that match the site's theme.
-  injectCustomScrollbarStyles();
-
   // Constants for animation timings to avoid "magic numbers"
   const ACCORDION_ANIMATION_DURATION = 500; // Corresponds to `duration-500` in Tailwind
   const SCROLL_DELAY = ACCORDION_ANIMATION_DURATION + 50; // Buffer for smooth scrolling after animation
@@ -435,7 +396,7 @@ export function initializePage() {
       const section = document.createElement("section");
       section.id = `category-${categoryKey}`;
       // Added a thick top border with the category color for better visual grouping.
-      section.className = `section-accordion bg-white/80 dark:bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-200 dark:border-gray-700 shadow-md overflow-hidden border-t-4 ${sectionBorderColor}`;
+      section.className = `section-accordion bg-white/80 dark:bg-gray-800/50 backdrop-blur-sm rounded-2xl border shadow-md overflow-hidden border-t-4 ${sectionBorderColor}`;
 
       const toggleHeader = document.createElement("div");
       toggleHeader.id = `toggle-${categoryKey}`; // Add unique ID for targeting
