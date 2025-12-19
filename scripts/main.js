@@ -332,7 +332,7 @@ export function initializePage() {
        <div class="flex-grow flex items-start gap-4">
          <div class="shrink-0 h-12 w-12 rounded-lg flex items-center justify-center ${iconBgClass} p-2 transition-all duration-300 group-hover:shadow-lg group-hover:shadow-${colorName}-500/20 overflow-hidden" 
               style="height: 3rem; width: 3rem; min-width: 3rem; min-height: 3rem; flex: 0 0 auto;">
-           <img src="${quiz.icon}" alt="${quiz.altText}" loading="lazy" 
+           <img src="${quiz.icon}" alt="${quiz.altText}" ${index > 6 ? 'loading="lazy"' : ''} 
                 class="h-full w-full object-contain transition-transform duration-300 group-hover:scale-110 shrink-0"
                 style="display: block;">
          </div>

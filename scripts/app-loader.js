@@ -9,11 +9,19 @@ import { initializeCommonComponents } from './common-init.js';
  */
 async function main() {
     // Load all shared components concurrently for better performance.
-    const loadPromises = [
-        //loadComponent('#main_header-placeholder', './components/main_header.html'),
-        loadComponent('#footer-placeholder', './components/footer.html'),
-        loadComponent('#modals-placeholder', './components/modals_common.html'),
-    ];
+    const loadPromises = [];
+
+    if (document.getElementById('main_header-placeholder')) {
+        loadPromises.push(loadComponent('#main_header-placeholder', './components/main_header.html'));
+    }
+
+    if (document.getElementById('footer-placeholder')) {
+        loadPromises.push(loadComponent('#footer-placeholder', './components/footer.html'));
+    }
+
+    if (document.getElementById('modals-placeholder')) {
+        loadPromises.push(loadComponent('#modals-placeholder', './components/modals_common.html'));
+    }
 
     if (document.getElementById('header-placeholder')) {
         loadPromises.push(loadComponent('#header-placeholder', './components/header.html'));
