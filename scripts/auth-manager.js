@@ -26,6 +26,7 @@ class AuthManagerInternal {
             })
             .catch((error) => {
                 console.error("Redirect Login Error:", error);
+                alert("การเข้าสู่ระบบขัดข้อง: " + (error.message || "Unknown error") + "\nหากปัญหายังเกิดซ้ำ โปรดลองเปลี่ยน Browser หรือปิด AdBlock");
             });
 
         onAuthStateChanged(auth, async (user) => {
@@ -70,7 +71,12 @@ class AuthManagerInternal {
     // ฟังก์ชัน Login
     async login() {
         try {
-            // ไม่ต้อง signOut ก่อน เพราะเราตั้งค่า prompt: 'select_account' ไว้แล้ว
+            // Force sign out first to ensure account picker works and clear old session
+            try {
+                await signOut(auth);
+            } catch (e) {
+                console.warn("Pre-login sign out failed:", e);
+            }
             await signInWithRedirect(auth, googleProvider);
         } catch (error) {
             console.error("Login failed:", error);
@@ -170,7 +176,12 @@ class AuthManagerInternal {
     // ฟังก์ชัน Sync ข้อมูลเก่าขึ้น Cloud เมื่อล็อกอินครั้งแรก
     async syncLocalToCloud(user) {
         const localDataString = localStorage.getItem(this.LOCAL_STORAGE_KEY);
-        const localData = localDataString ? JSON.parse(localDataString) : null;
+        let localData = null;
+        try {
+            localData = localDataString ? JSON.parse(localDataString) : null;
+        } catch (e) {
+            console.warn("Invalid local data, skipping migration:", e);
+        }
         
         const userRef = doc(db, "users", user.uid);
         let docSnap;
