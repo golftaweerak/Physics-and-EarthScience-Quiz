@@ -448,6 +448,7 @@ export class Gamification {
     // IMPROVEMENT: Centralized UI Update Trigger
     onStateUpdated() {
         this.updateHeaderAvatar();
+        this.updateUserMenu();
         this.applyTheme(this.state.selectedTheme);
         // Dispatch event for other components (e.g. profile page charts) to react
         window.dispatchEvent(new CustomEvent('gamification-updated', { detail: this.state }));
@@ -507,6 +508,29 @@ export class Gamification {
 
     getItemCount(itemId) {
         return this.state.consumables ? (this.state.consumables[itemId] || 0) : 0;
+    }
+
+    updateUserMenu() {
+        const emailEl = document.getElementById('user-hub-email');
+        const loginBtn = document.getElementById('user-hub-login-btn');
+        const logoutBtn = document.getElementById('user-hub-logout-btn');
+        const user = this.authManager.currentUser;
+
+        if (user) {
+            if (emailEl) {
+                emailEl.textContent = user.email;
+                emailEl.classList.remove('hidden');
+            }
+            if (loginBtn) loginBtn.classList.add('hidden');
+            if (logoutBtn) logoutBtn.classList.remove('hidden');
+        } else {
+            if (emailEl) {
+                emailEl.textContent = '';
+                emailEl.classList.add('hidden');
+            }
+            if (loginBtn) loginBtn.classList.remove('hidden');
+            if (logoutBtn) logoutBtn.classList.add('hidden');
+        }
     }
 
     updateHeaderAvatar() {

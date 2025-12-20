@@ -22,6 +22,10 @@ const auth = getAuth(app);
 // หากฐานข้อมูลของคุณชื่ออื่นที่ไม่ใช่ (default) ให้ระบุชื่อตรงนี้ เช่น getFirestore(app, "my-database-name")
 const db = getFirestore(app);
 const googleProvider = new GoogleAuthProvider();
+// NEW: บังคับให้แสดงหน้าเลือกบัญชีทุกครั้ง เพื่อแก้ปัญหา Login ค้างบัญชีเดิม
+googleProvider.setCustomParameters({
+    prompt: 'select_account'
+});
 
 // NEW: ตั้งค่า Persistence เพื่อแก้ปัญหา Cross-Origin และ Tracking Prevention
 setPersistence(auth, browserLocalPersistence)

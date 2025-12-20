@@ -53,6 +53,7 @@ class AuthManagerInternal {
     async logout() {
         try {
             await signOut(auth);
+            localStorage.removeItem(this.LOCAL_STORAGE_KEY); // ล้างข้อมูล Gamification ในเครื่อง
             // Optional: ล้างหน้าจอหรือรีโหลด
             window.location.reload();
         } catch (error) {
