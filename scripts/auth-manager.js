@@ -42,6 +42,9 @@ class AuthManagerInternal {
                     await this.syncLocalToCloud(user);
                 } catch (e) {
                     console.warn("Sync local to cloud failed (might be offline):", e);
+                    if (e.message && e.message.includes('404')) {
+                        console.error("Database connection error (404). Please check Firebase config.");
+                    }
                 }
                 try {
                     await this.syncHistory(user); // ซิงค์ประวัติการทำข้อสอบ
@@ -117,6 +120,7 @@ class AuthManagerInternal {
                 
                 if (docSnap.exists()) {
                     const cloudData = docSnap.data();
+                    console.log("Loaded user data from cloud:", cloudData);
                     // อัปเดตลง LocalStorage ด้วยเพื่อให้โค้ดเดิมทำงานต่อได้ (Hybrid)
                     localStorage.setItem(this.LOCAL_STORAGE_KEY, JSON.stringify(cloudData));
                     this.updateLastSyncTime();
@@ -169,7 +173,13 @@ class AuthManagerInternal {
         const localData = localDataString ? JSON.parse(localDataString) : null;
         
         const userRef = doc(db, "users", user.uid);
-        const docSnap = await getDoc(userRef);
+        let docSnap;
+        try {
+            docSnap = await getDoc(userRef);
+        } catch (e) {
+            console.error("Error fetching user doc in syncLocalToCloud:", e);
+            throw e;
+        }
 
         if (!docSnap.exists()) {
             // กรณี: ผู้ใช้ใหม่บน Cloud แต่มีข้อมูลในเครื่อง (ผู้เรียนเก่าเพิ่งล็อกอิน)
@@ -197,6 +207,7 @@ class AuthManagerInternal {
             console.log("Found cloud data, syncing to local...");
             const cloudData = docSnap.data();
             localStorage.setItem(this.LOCAL_STORAGE_KEY, JSON.stringify(cloudData));
+            this.updateLastSyncTime();
         }
     }
 
