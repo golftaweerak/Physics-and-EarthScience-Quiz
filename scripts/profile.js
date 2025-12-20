@@ -1,4 +1,4 @@
-import { Gamification, BADGES, ACHIEVEMENTS, SHOP_ITEMS, XP_THRESHOLDS, TRACK_TITLES } from './gamification.js';
+import { Gamification, BADGES, ACHIEVEMENTS, SHOP_ITEMS, XP_THRESHOLDS, TRACK_TITLES, PROFICIENCY_GROUPS } from './gamification.js';
 import { getDetailedProgressForAllQuizzes, calculateStrengthsAndWeaknesses } from './data-manager.js';
 import { renderDailyQuests } from './daily-quests-renderer.js';
 import { ModalHandler } from './modal-handler.js';
@@ -9,38 +9,6 @@ import { db } from './firebase-config.js';
 const AVATARS = [
     '🧑‍🎓', '👨‍🎓', '👩‍🎓', '👨‍🔬', '👩‍🔬', '👨‍🚀', '👩‍🚀', '👽', '🤖'
 ];
-
-// NEW: Proficiency Group Definitions for Radar Chart
-const PROFICIENCY_GROUPS = {
-    'Mechanics': { 
-        label: 'กลศาสตร์', 
-        keywords: ['บทที่ 1:', 'บทที่ 2:', 'บทที่ 3:', 'บทที่ 4:', 'บทที่ 5:', 'บทที่ 6:', 'บทที่ 7:', 'บทที่ 8:', 'บทที่ 15:', 'ธรรมชาติทางฟิสิกส์', 'การเคลื่อนที่', 'แรง', 'สมดุล', 'งาน', 'โมเมนตัม', 'ของแข็ง'] 
-    },
-    'Electricity': { 
-        label: 'ไฟฟ้าและแม่เหล็ก', 
-        keywords: ['บทที่ 12:', 'บทที่ 13:', 'บทที่ 14:', 'ไฟฟ้า', 'แม่เหล็ก'] 
-    },
-    'WavesLight': { 
-        label: 'คลื่นและแสง', 
-        keywords: ['บทที่ 9:', 'บทที่ 10:', 'บทที่ 11:', 'บทที่ 17:', 'คลื่น', 'เสียง', 'แสง'] 
-    },
-    'ModernHeat': { 
-        label: 'สสารและฟิสิกส์ยุคใหม่', 
-        keywords: ['บทที่ 16:', 'บทที่ 18:', 'บทที่ 19:', 'ความร้อน', 'อะตอม', 'นิวเคลียร์'] 
-    },
-    'Astronomy': { 
-        label: 'ดาราศาสตร์', 
-        keywords: ['เอกภพ', 'กาแล็กซี', 'ดาวฤกษ์', 'ระบบสุริยะ', 'เทคโนโลยีอวกาศ', 'ทรงกลมฟ้า', 'ดาวเคราะห์', 'ดาราศาสตร์'] 
-    },
-    'Geology': { 
-        label: 'ธรณีวิทยา', 
-        keywords: ['โครงสร้างโลก', 'แปรสัณฐาน', 'ธรณี', 'หิน', 'แร่', 'แผนที่', 'ดิน', 'ทรัพยากรธรณี'] 
-    },
-    'Meteorology': { 
-        label: 'อุตุนิยมวิทยา', 
-        keywords: ['ลมฟ้าอากาศ', 'ภูมิอากาศ', 'อากาศ', 'หมุนเวียน', 'เมฆ', 'พยากรณ์', 'สมุทร', 'บรรยากาศ', 'อุตุนิยมวิทยา'] 
-    }
-};
 
 // Theme colors for Radar Chart
 const THEME_COLORS = {
@@ -125,6 +93,7 @@ export async function initializeProfile() {
     setupManualSync(game);
     setupLeaderboardSystem(game);
     setupShopAccordion(game);
+    setupShopShortcut();
     setupBadgeInteractions(game);
 
     // 3. เรนเดอร์กราฟ (Asynchronous/ช้ากว่า)
@@ -272,10 +241,13 @@ function renderUserInfo(game) {
     }
 
     // Update Title
-    const titleEl = document.getElementById('profile-title-display');
-    if (titleEl) {
-        titleEl.textContent = game.state.selectedTitle ? `《 ${game.state.selectedTitle} 》` : '';
-        titleEl.classList.toggle('hidden', !game.state.selectedTitle);
+    const titleBtn = document.getElementById('edit-title-btn');
+    if (titleBtn) {
+        if (game.state.selectedTitle) {
+            titleBtn.innerHTML = `<span class="text-purple-600 dark:text-purple-400 font-bold">《 ${game.state.selectedTitle} 》</span>`;
+        } else {
+            titleBtn.innerHTML = `🏷️ เปลี่ยนฉายา`;
+        }
     }
 
     // Update Shop XP
@@ -293,9 +265,9 @@ function renderUserInfo(game) {
     }
 
     // Update Theme Display (Optional, maybe just a text or icon)
-    const themeEl = document.getElementById('profile-theme-display');
-    if (themeEl) {
-        themeEl.textContent = game.state.selectedTheme ? '🎨 ธีม: กำหนดเอง' : '🎨 ธีม: มาตรฐาน';
+    const themeBtn = document.getElementById('edit-theme-btn');
+    if (themeBtn) {
+        themeBtn.textContent = game.state.selectedTheme ? '🎨 ธีม: กำหนดเอง' : '🎨 ธีม: มาตรฐาน';
     }
 
     renderRecentBadges(game);
@@ -601,7 +573,7 @@ function setupLeaderboardSystem(game) {
                         <div class="flex items-center justify-center w-6 sm:w-8 flex-shrink-0">
                             ${rankDisplay}
                         </div>
-                        <div class="flex-shrink-0">
+                    <div class="flex-shrink-0 relative">
                             ${avatarHtml}
                         </div>
                         <div class="flex-grow min-w-0 flex flex-col justify-center">
@@ -636,6 +608,13 @@ function setupLeaderboardSystem(game) {
                 `;
             }
 
+            listHtml += `
+                <div class="mt-3 text-center">
+                    <a href="./leaderboard.html" class="text-sm font-bold text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-colors">
+                        ดูอันดับทั้งหมด &rarr;
+                    </a>
+                </div>
+            `;
             listContainer.innerHTML = listHtml;
 
         } catch (error) {
@@ -655,6 +634,30 @@ function setupLeaderboardSystem(game) {
 
     // Initial load
     renderList('xp');
+}
+
+function setupShopShortcut() {
+    const shortcutBtn = document.getElementById('goto-shop-btn');
+    const shopSection = document.getElementById('shop-section');
+    const shopContent = document.getElementById('shop-content');
+    const shopHeader = shopContent?.previousElementSibling;
+
+    if (!shortcutBtn || !shopSection || !shopContent || !shopHeader) return;
+
+    shortcutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        // Expand the shop if it's collapsed
+        const isCollapsed = shopContent.style.maxHeight === '0px';
+        if (isCollapsed) {
+            const icon = shopHeader.querySelector('.chevron-icon');
+            shopContent.style.maxHeight = shopContent.scrollHeight + "px";
+            shopContent.style.opacity = "1";
+            if (icon) icon.classList.remove('-rotate-90');
+        }
+
+        shopSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
 }
 
 function setupCollapsibleSections() {
@@ -680,10 +683,24 @@ function setupCollapsibleSections() {
             content.style.maxHeight = content.scrollHeight + "px";
             content.style.opacity = "1";
             icon.classList.remove('-rotate-90'); // Point down
+
+            // NEW: ปลดล็อกความสูงหลังจาก Animation จบ เพื่อให้ Accordion ซ้อนข้างในขยายได้
+            const onTransitionEnd = () => {
+                if (content.style.opacity === "1") {
+                    content.style.maxHeight = "none";
+                    content.style.overflow = "visible";
+                }
+                content.removeEventListener('transitionend', onTransitionEnd);
+            };
+            content.addEventListener('transitionend', onTransitionEnd);
         } else {
             // Collapse
-            // content.style.maxHeight = content.scrollHeight + "px"; // No longer needed if max-height is not initially 0
-            // Force reflow - might not be needed depending on initial state
+            // ถ้าความสูงเป็น none อยู่ (เปิดค้างไว้) ต้องกำหนดค่าเป็น pixel ก่อนเพื่อให้ Animation ทำงาน
+            if (content.style.maxHeight === 'none') {
+                content.style.maxHeight = content.scrollHeight + "px";
+                content.style.overflow = "hidden";
+            }
+            
             content.offsetHeight; 
             content.style.maxHeight = "0px";
             content.style.opacity = "0";
@@ -973,6 +990,13 @@ function setupShopSystem(game) {
                 audio.volume = 0.7;
                 audio.play().catch(() => {});
 
+                // NEW: Play item flying animation
+                const item = SHOP_ITEMS.find(i => i.id === currentItemId);
+                const startEl = document.getElementById('shop-modal-icon');
+                if (item && startEl) {
+                    animateItemToBag(item.icon, startEl);
+                }
+
                 renderUserInfo(game);
                 renderShop(game); // Re-render grid to update status
                 shopModal.close();
@@ -988,7 +1012,7 @@ function renderShop(game) {
     if (!container) return;
     
     // Change layout to vertical stack for categories
-    container.className = 'space-y-8';
+    container.className = 'space-y-6';
 
     const inventory = game.getInventory();
 
@@ -1013,7 +1037,7 @@ function renderShop(game) {
             let statusText = `${item.cost} XP`;
 
             const quantityBadge = isConsumable
-                ? `<div class="absolute -top-2 -right-2 bg-blue-600 text-white text-xs font-bold w-6 h-6 flex items-center justify-center rounded-full border-2 border-white dark:border-gray-800 shadow-md">${quantity}</div>`
+                ? `<div class="absolute top-2 right-2 bg-blue-600 text-white text-xs font-bold w-6 h-6 flex items-center justify-center rounded-full border-2 border-white dark:border-gray-800 shadow-md z-10">${quantity}</div>`
                 : '';
 
             if (isOwned && !isConsumable) {
@@ -1030,29 +1054,33 @@ function renderShop(game) {
             }
 
         return `
-            <div class="shop-item-card relative bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col items-center text-center transition-all hover:shadow-md cursor-pointer hover:border-blue-400 dark:hover:border-blue-500 group" data-id="${item.id}">
+            <div class="shop-item-card relative bg-gray-50 dark:bg-gray-700/30 p-3 rounded-2xl border border-transparent hover:border-blue-300 dark:hover:border-blue-500 flex flex-col items-center text-center transition-all duration-300 hover:shadow-lg hover:-translate-y-1 cursor-pointer group" data-id="${item.id}">
                 ${quantityBadge}
-                <div class="text-4xl mb-2 lg:mb-3 transform transition-transform duration-300 group-hover:scale-125 group-hover:rotate-6 group-hover:drop-shadow-md">${item.icon}</div>
-                <h4 class="font-bold text-gray-800 dark:text-gray-200 mb-1 text-sm hidden lg:block w-full truncate px-1">${item.name}</h4>
-                <p class="text-xs font-bold ${statusClass}">${statusText}</p>
+                <div class="w-12 h-12 mb-2 rounded-full bg-white dark:bg-gray-800 flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform duration-300">
+                    <div class="text-2xl transform group-hover:rotate-12 transition-transform duration-300">${item.icon}</div>
+                </div>
+                <h4 class="font-bold text-gray-800 dark:text-gray-100 mb-1 text-xs w-full truncate px-1">${item.name}</h4>
+                <p class="text-[10px] font-bold ${statusClass} bg-white/50 dark:bg-black/20 px-2 py-0.5 rounded-full mt-0.5">${statusText}</p>
             </div>
         `;
         }).join('');
 
         // Accordion Structure
         return `
-            <div class="shop-category border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
-                <button class="w-full flex justify-between items-center p-4 bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shop-category-header" data-target="shop-cat-${cat.type}">
-                    <div class="flex items-center gap-2">
-                        <span class="text-xl">${cat.icon}</span>
-                        <span class="font-bold text-gray-700 dark:text-gray-300">${cat.label}</span>
+            <div class="shop-category bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
+                <button class="w-full flex justify-between items-center p-4 bg-gradient-to-r from-gray-50 to-white dark:from-gray-800 dark:to-gray-700/50 hover:from-blue-50 hover:to-white dark:hover:from-gray-700 dark:hover:to-gray-700 transition-all shop-category-header group" data-target="shop-cat-${cat.type}">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-white dark:bg-gray-700 flex items-center justify-center shadow-sm text-xl group-hover:scale-110 transition-transform">${cat.icon}</div>
+                        <span class="font-bold text-gray-700 dark:text-gray-200 text-lg">${cat.label}</span>
                     </div>
-                    <svg class="w-5 h-5 transform transition-transform duration-200 chevron-icon text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <div class="w-8 h-8 rounded-full bg-white dark:bg-gray-700 flex items-center justify-center shadow-sm text-gray-400 group-hover:text-blue-500 transition-colors">
+                        <svg class="w-5 h-5 transform transition-transform duration-300 chevron-icon -rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                    </svg>
+                        </svg>
+                    </div>
                 </button>
-                <div id="shop-cat-${cat.type}" class="collapsible-content" style="max-height: 2000px; opacity: 1;">
-                    <div class="p-4 grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div id="shop-cat-${cat.type}" class="collapsible-content" style="max-height: 0px; opacity: 0;">
+                    <div class="p-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 bg-white dark:bg-gray-800">
                         ${itemsHtml}
                     </div>
                 </div>
@@ -1096,19 +1124,21 @@ function renderTrackProgress(game) {
     const earth = game.getEarthLevel();
 
     const createTrackHTML = (name, data, colorClass, icon) => `
-        <div>
-            <div class="flex justify-between items-end mb-1">
-                <span class="font-bold text-gray-700 dark:text-gray-300 flex items-center gap-2">
-                    ${icon} ${name} <span class="text-xs font-normal text-gray-500 bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded-full">Lv.${data.level}</span>
+        <div class="bg-gray-50 dark:bg-gray-700/30 p-4 rounded-xl border border-gray-200 dark:border-gray-700/50">
+            <div class="flex justify-between items-center mb-2">
+                <span class="font-bold text-sm text-gray-700 dark:text-gray-300 flex items-center gap-2">
+                    ${icon} ${name}
                 </span>
-                <span class="text-xs text-gray-500 dark:text-gray-400">${data.currentXP} XP</span>
+                <span class="text-xs font-bold text-gray-500 bg-gray-200 dark:bg-gray-700 px-2 py-0.5 rounded-full">Lv.${data.level}</span>
             </div>
-            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-4 overflow-hidden shadow-inner">
-                <div class="${colorClass} h-4 rounded-full transition-all duration-1000 relative" style="width: ${data.progressPercent}%">
-                    <div class="absolute inset-0 bg-white/20 w-full h-full animate-pulse"></div>
+            <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2.5 overflow-hidden shadow-inner">
+                <div class="${colorClass} h-2.5 rounded-full transition-all duration-1000 relative" style="width: ${data.progressPercent}%">
                 </div>
             </div>
-            <p class="text-xs text-right mt-1 text-gray-500 dark:text-gray-400">${data.title}</p>
+            <div class="flex justify-between text-xs mt-1.5 text-gray-500 dark:text-gray-400">
+                <span class="font-medium">${data.title}</span>
+                <span>${data.currentXP.toLocaleString()} XP</span>
+            </div>
         </div>
     `;
 
@@ -1152,7 +1182,7 @@ function renderBadges(game) {
         }
 
         return `
-            <div class="badge-card flex flex-col items-center p-3 rounded-xl border-2 ${borderClass} ${opacityClass} transition-all duration-300 hover:scale-105 relative group cursor-pointer overflow-hidden" data-id="${badge.id}">
+            <div class="badge-card flex flex-col items-center p-3 rounded-xl border-2 ${borderClass} ${opacityClass} transition-all duration-300 hover:shadow-md hover:-translate-y-1 hover:scale-102 hover:z-10 relative group cursor-pointer" data-id="${badge.id}">
                 <div class="text-3xl mb-2">${badge.icon}</div>
                 <div class="text-xs font-bold text-center truncate w-full hidden lg:block mb-3">${badge.name}</div>
                 ${overlayHtml}
@@ -1265,11 +1295,12 @@ function renderAchievements(game) {
     container.innerHTML = ACHIEVEMENTS.map(ach => {
         const isUnlocked = unlockedIds.includes(ach.id);
         const containerClass = isUnlocked 
-            ? 'bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 border-yellow-200 dark:border-yellow-700 opacity-100' 
-            : 'bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 opacity-60 grayscale';
+            ? 'bg-white dark:bg-gray-800 border-yellow-200 dark:border-yellow-900/50 shadow-sm' 
+            : 'bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700 opacity-80';
         
         const titleClass = isUnlocked ? 'text-gray-800 dark:text-gray-200' : 'text-gray-500 dark:text-gray-500';
         const descClass = isUnlocked ? 'text-gray-500 dark:text-gray-400' : 'text-gray-400 dark:text-gray-600';
+        const iconBgClass = isUnlocked ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400' : 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 grayscale';
 
         // Calculate Progress
         let currentProgress = 0;
@@ -1295,22 +1326,34 @@ function renderAchievements(game) {
 
         const percent = Math.min(100, Math.max(0, (currentProgress / ach.target) * 100));
         const displayProgress = Math.min(currentProgress, ach.target);
-        const barColor = isUnlocked ? 'bg-green-500' : 'bg-blue-500';
+        const barColor = isUnlocked ? 'bg-yellow-500' : 'bg-blue-500';
 
         return `
-            <div class="p-3 rounded-lg border ${containerClass} transition-all">
-                <div class="flex items-center gap-3 mb-2">
-                    <div class="text-2xl flex-shrink-0">${ach.icon}</div>
-                    <div class="flex-grow min-w-0">
-                        <h4 class="text-sm font-bold ${titleClass} truncate">${ach.title}</h4>
-                        <p class="text-xs ${descClass} truncate">${ach.desc}</p>
+            <div class="relative p-3 rounded-xl border ${containerClass} transition-all duration-300 hover:shadow-md hover:-translate-y-1 group">
+                <div class="flex items-start gap-3">
+                    <div class="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-xl ${iconBgClass} shadow-sm">
+                        ${ach.icon}
                     </div>
-                    ${isUnlocked ? '<span class="text-green-500 text-lg">✓</span>' : '<span class="text-xs text-gray-400">Locked</span>'}
+                    <div class="flex-grow min-w-0">
+                        <div class="flex justify-between items-start">
+                            <h4 class="text-sm font-bold ${titleClass} truncate pr-2">${ach.title}</h4>
+                            ${isUnlocked 
+                                ? '<span class="text-green-600 bg-green-100 dark:bg-green-900/30 px-1.5 py-0.5 rounded-full text-[10px] font-bold border border-green-200 dark:border-green-800">สำเร็จ</span>' 
+                                : '<span class="text-gray-500 bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded-full text-[10px] font-bold border border-gray-200 dark:border-gray-600">ล็อค</span>'}
+                        </div>
+                        <p class="text-xs ${descClass} mt-0.5 mb-2 line-clamp-1">${ach.desc}</p>
+                        
+                        <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 overflow-hidden">
+                            <div class="${barColor} h-1.5 rounded-full transition-all duration-500 relative" style="width: ${percent}%">
+                                ${isUnlocked ? '<div class="absolute inset-0 bg-white/20 animate-pulse"></div>' : ''}
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center mt-1">
+                            <span class="text-[10px] ${descClass} font-mono">${displayProgress} / ${ach.target}</span>
+                            ${ach.rewardTitle ? `<span class="text-[10px] text-purple-600 dark:text-purple-400 font-medium flex items-center gap-1">🎁 ${ach.rewardTitle}</span>` : ''}
+                        </div>
+                    </div>
                 </div>
-                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 overflow-hidden">
-                    <div class="${barColor} h-1.5 rounded-full transition-all duration-500" style="width: ${percent}%"></div>
-                </div>
-                <div class="text-[10px] text-right mt-1 ${descClass}">${displayProgress} / ${ach.target}</div>
             </div>
         `;
     }).join('');
@@ -1562,6 +1605,83 @@ function getOrCreateTooltip(chart) {
     return tooltipEl;
 }
 
+/**
+ * Creates a flying animation of the item icon from the modal to the shop button/user hub.
+ * @param {string} icon - The emoji/icon to animate.
+ * @param {HTMLElement} startElement - The starting element (usually the icon in the modal).
+ */
+function animateItemToBag(icon, startElement) {
+    // 1. Determine Target (Shop button or User Hub)
+    const shopBtn = document.getElementById('goto-shop-btn');
+    const userHubBtn = document.getElementById('user-hub-btn');
+    
+    // Prefer the shop button if it's visible in the viewport
+    let target = userHubBtn;
+    if (shopBtn) {
+        const rect = shopBtn.getBoundingClientRect();
+        if (rect.top >= 0 && rect.left >= 0 && 
+            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && 
+            rect.right <= (window.innerWidth || document.documentElement.clientWidth)) {
+            target = shopBtn;
+        }
+    }
+
+    if (!startElement || !target) return;
+
+    // 2. Create Flying Element
+    const flyer = document.createElement('div');
+    flyer.textContent = icon;
+    flyer.style.position = 'fixed';
+    flyer.style.fontSize = '4rem'; // Large icon
+    flyer.style.zIndex = '10000';
+    flyer.style.pointerEvents = 'none';
+    flyer.style.transition = 'all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1)';
+    
+    const startRect = startElement.getBoundingClientRect();
+    
+    // Center of start element
+    const startX = startRect.left + startRect.width / 2;
+    const startY = startRect.top + startRect.height / 2;
+
+    flyer.style.left = `${startX}px`;
+    flyer.style.top = `${startY}px`;
+    flyer.style.transform = 'translate(-50%, -50%) scale(1)';
+    flyer.style.opacity = '1';
+
+    document.body.appendChild(flyer);
+
+    // 3. Animate
+    // Force reflow to ensure start position is applied
+    void flyer.offsetWidth;
+
+    requestAnimationFrame(() => {
+        const targetRect = target.getBoundingClientRect();
+        const targetX = targetRect.left + targetRect.width / 2;
+        const targetY = targetRect.top + targetRect.height / 2;
+
+        flyer.style.left = `${targetX}px`;
+        flyer.style.top = `${targetY}px`;
+        flyer.style.transform = 'translate(-50%, -50%) scale(0.2)'; // Shrink
+        flyer.style.opacity = '0'; // Fade out
+    });
+
+    // 4. Cleanup & Target Feedback
+    flyer.addEventListener('transitionend', () => {
+        flyer.remove();
+        
+        // Bounce effect on target
+        if (target.animate) {
+            target.animate([
+                { transform: 'scale(1)' },
+                { transform: 'scale(1.2)' },
+                { transform: 'scale(1)' }
+            ], {
+                duration: 300,
+                easing: 'ease-out'
+            });
+        }
+    });
+}
 function externalTooltipHandler(context) {
     // Tooltip Element
     const { chart, tooltip } = context;

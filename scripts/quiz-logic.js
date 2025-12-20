@@ -1,6 +1,6 @@
 import { ModalHandler } from './modal-handler.js';
 import { shuffleArray } from './utils.js';
-import { Gamification, SHOP_ITEMS } from './gamification.js';
+import { Gamification, SHOP_ITEMS, PROFICIENCY_GROUPS } from './gamification.js';
 import { showToast } from './toast.js';
 
 // state: Stores all dynamic data of the quiz
@@ -1375,6 +1375,7 @@ function showResults() {
   let newAchievements = [];
   let physicsXP = 0;
   let earthXP = 0;
+  const topicXPs = {};
 
   // NEW: Calculate correct answer types for quests
   let correctTheory = 0;
@@ -1402,6 +1403,19 @@ function showResults() {
                 points = 5;
             }
             xpEarned += points;
+
+            // Calculate Topic XP
+            let subCatStr = '';
+            if (ans.subCategory) {
+                if (typeof ans.subCategory === 'string') subCatStr = ans.subCategory;
+                else if (ans.subCategory.main) subCatStr = ans.subCategory.main;
+            }
+            for (const [groupKey, groupDef] of Object.entries(PROFICIENCY_GROUPS)) {
+                if (groupDef.keywords.some(k => subCatStr.includes(k))) {
+                    topicXPs[groupDef.field] = (topicXPs[groupDef.field] || 0) + points;
+                    break;
+                }
+            }
             
             // ตรวจสอบหมวดวิชาของข้อนี้
             let qCategory = 'General';
@@ -1427,7 +1441,7 @@ function showResults() {
 
     // บันทึกผล XP ลงในระบบ Gamification
     if (typeof game.submitQuizResult === 'function') {
-        const result = game.submitQuizResult(xpEarned, physicsXP, earthXP, percentage, state.questionCount, state.isCustomQuiz);
+        const result = game.submitQuizResult(xpEarned, physicsXP, earthXP, percentage, state.questionCount, state.isCustomQuiz, topicXPs);
         levelResult = { overall: result.overall, physics: result.physics, earth: result.earth };
         newBadges = result.newBadges || [];
         newAchievements = result.newAchievements || [];

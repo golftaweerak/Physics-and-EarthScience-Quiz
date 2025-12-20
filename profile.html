@@ -19,6 +19,10 @@
             transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
             overflow: hidden;
         }
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
     </style>
 </head>
 
@@ -30,7 +34,7 @@
         <!-- Profile Header -->
         <div
             class="max-w-5xl mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden mb-8 border border-gray-200 dark:border-gray-700/60">
-            <div class="h-32 bg-gradient-to-r from-blue-500 to-purple-600"></div>
+            <div class="h-24 bg-gradient-to-r from-blue-500 to-purple-600"></div>
             <div class="px-6 pb-6 relative">
                 <div class="flex flex-col md:flex-row items-center md:items-end -mt-12 mb-4 gap-4">
                     <div class="w-24 h-24 rounded-full bg-white dark:bg-gray-800 p-0.5 shadow-lg z-10 relative group">
@@ -80,20 +84,21 @@
                                 </svg>
                             </button>
                         </div>
-                        <div class="flex items-center justify-center md:justify-start gap-2 mt-1">
-                            <p id="profile-title-display"
-                                class="text-sm font-bold text-purple-600 dark:text-purple-400 hidden"></p>
+                        <div class="flex flex-wrap items-center justify-center md:justify-start gap-2 mt-2">
                             <button id="edit-title-btn"
-                                class="text-[10px] bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 px-2 py-0.5 rounded-full text-gray-600 dark:text-gray-300 transition-colors"
-                                title="เปลี่ยนฉายา">เปลี่ยนฉายา</button>
-                        </div>
-                        <div class="flex items-center justify-center md:justify-start gap-2 mt-1">
-                            <p id="profile-theme-display" class="text-xs text-gray-500 dark:text-gray-400">🎨 ธีม:
-                                มาตรฐาน</p>
+                                class="text-xs bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 px-3 py-1 rounded-full text-gray-600 dark:text-gray-300 transition-colors border border-gray-200 dark:border-gray-600 flex items-center gap-1"
+                                title="เปลี่ยนฉายา">🏷️ เปลี่ยนฉายา</button>
+                            
                             <button id="edit-theme-btn"
-                                class="text-[10px] bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 px-2 py-0.5 rounded-full text-gray-600 dark:text-gray-300 transition-colors"
-                                title="เปลี่ยนธีม">เปลี่ยน</button>
+                                class="text-xs bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 px-3 py-1 rounded-full text-gray-600 dark:text-gray-300 transition-colors border border-gray-200 dark:border-gray-600"
+                                title="เปลี่ยนธีม">🎨 ธีม: มาตรฐาน</button>
                         </div>
+                    </div>
+                    <div class="flex-shrink-0 mt-4 md:mt-0 md:mb-1">
+                        <a href="#shop-section" id="goto-shop-btn" class="group relative inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-full text-xs font-bold shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5">
+                            <span class="text-sm relative z-10 group-hover:rotate-12 transition-transform duration-300 drop-shadow">🛒</span> 
+                            <span class="relative z-10 drop-shadow">ร้านค้า</span>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -102,44 +107,50 @@
         <!-- NEW: Gamification Dashboard -->
         <section id="gamification-dashboard" class="max-w-5xl mx-auto bg-white dark:bg-gray-800/50 p-6 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 relative overflow-hidden mb-8">
             <!-- Background decoration -->
-            <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-blue-500/10 rounded-full blur-xl pointer-events-none"></div>
-            <div class="absolute bottom-0 left-0 -mb-4 -ml-4 w-32 h-32 bg-purple-500/10 rounded-full blur-xl pointer-events-none"></div>
+            <div class="absolute top-0 right-0 -mt-10 -mr-10 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute bottom-0 left-0 -mb-10 -ml-10 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
             <div class="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6 items-center mb-6">
                 <!-- Level & XP -->
                 <div class="col-span-2 flex items-center gap-4 sm:gap-6">
                     <div class="relative flex-shrink-0">
                         <!-- Level Circle -->
-                        <div class="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-3xl shadow-lg ring-4 ring-blue-100 dark:ring-blue-900/30">
+                        <div class="w-24 h-24 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-4xl shadow-xl ring-4 ring-blue-50 dark:ring-blue-900/20 relative overflow-hidden">
+                            <div class="absolute inset-0 bg-white/10 backdrop-blur-[1px]"></div>
                             <span id="user-level">1</span>
                         </div>
-                        <div class="absolute -bottom-2 -right-2 bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-1 rounded-full shadow-sm border border-white dark:border-gray-800">
+                        <div class="absolute -bottom-3 -right-3 bg-yellow-400 text-yellow-900 text-xs font-black px-3 py-1 rounded-full shadow-md border-2 border-white dark:border-gray-800 transform rotate-[-5deg]">
                             LVL
                         </div>
                     </div>
                     <div class="flex-grow min-w-0">
-                        <h3 id="user-rank-title" class="text-lg sm:text-xl font-bold text-gray-800 dark:text-white font-kanit truncate">ผู้สังเกตการณ์ฝึกหัด</h3>
-                        <div class="flex justify-between text-sm text-gray-500 dark:text-gray-400 mb-1 font-mono">
-                            <span>XP: <span id="current-xp">0</span></span>
-                            <span>Goal: <span id="next-level-xp">100</span></span>
+                        <h3 id="user-rank-title" class="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white font-kanit truncate mb-1">ผู้สังเกตการณ์ฝึกหัด</h3>
+                        <div class="flex justify-between text-sm font-medium text-gray-500 dark:text-gray-400 mb-2 font-mono">
+                            <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-blue-500"></span> XP: <span id="current-xp" class="text-gray-700 dark:text-gray-200">0</span></span>
+                            <span class="flex items-center gap-1">Goal: <span id="next-level-xp" class="text-gray-700 dark:text-gray-200">100</span> <span class="w-2 h-2 rounded-full bg-gray-300 dark:bg-gray-600"></span></span>
                         </div>
                         <!-- Progress Bar -->
-                        <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 overflow-hidden">
-                            <div id="xp-progress-bar" class="bg-gradient-to-r from-blue-500 to-purple-500 h-3 rounded-full transition-all duration-1000" style="width: 0%"></div>
+                        <div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-4 overflow-hidden shadow-inner border border-gray-200 dark:border-gray-600">
+                            <div id="xp-progress-bar" class="bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 h-4 rounded-full transition-all duration-1000 relative" style="width: 0%">
+                                <div class="absolute inset-0 bg-white/20 w-full h-full animate-[shimmer_2s_infinite]"></div>
+                            </div>
                         </div>
                         <!-- NEW: Quest display -->
-                        <div id="next-level-quest-container" class="text-xs text-gray-500 dark:text-gray-400 mt-1.5 text-center md:text-left hidden">
-                            <span>ภารกิจถัดไป:</span>
-                            <span id="next-level-quest-desc" class="font-semibold"></span>
-                            <span id="next-level-quest-progress" class="font-mono ml-1"></span>
+                        <div id="next-level-quest-container" class="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center md:text-left hidden bg-gray-50 dark:bg-gray-700/50 px-3 py-1.5 rounded-lg inline-block border border-gray-100 dark:border-gray-600">
+                            <span class="text-blue-500 dark:text-blue-400 font-bold">Next:</span>
+                            <span id="next-level-quest-desc" class="font-medium text-gray-700 dark:text-gray-300"></span>
+                            <span id="next-level-quest-progress" class="font-mono ml-1 text-gray-600 dark:text-gray-400"></span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Badges -->
-                <div class="border-t md:border-t-0 md:border-l border-gray-200 dark:border-gray-700 pt-4 md:pt-0 md:pl-6">
-                    <h4 class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">เหรียญรางวัลล่าสุด</h4>
-                    <div id="recent-badges" class="flex gap-3 flex-wrap">
+                <div class="border-t md:border-t-0 md:border-l border-gray-200 dark:border-gray-700 pt-6 md:pt-0 md:pl-8 flex flex-col justify-center">
+                    <h4 class="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-4 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1.323l3.954 1.582 1.699-3.177a1 1 0 011.827 0l1.699 3.177 3.954-1.582A1 1 0 0117 5.773V15a1 1 0 01-1 1H4a1 1 0 01-1-1V5.773a1 1 0 01.867-1.452l3.954 1.582 1.699-3.177a1 1 0 011.827 0z" clip-rule="evenodd" /></svg>
+                        เหรียญรางวัลล่าสุด
+                    </h4>
+                    <div id="recent-badges" class="flex gap-3 flex-wrap justify-start">
                         <!-- Badges injected by JS -->
                         <div class="animate-pulse w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
                     </div>
@@ -147,23 +158,25 @@
             </div>
 
             <!-- Divider -->
-            <hr class="border-gray-200 dark:border-gray-700 my-6 relative z-10">
+            <hr class="border-gray-100 dark:border-gray-700/60 my-8 relative z-10">
 
             <!-- Track Progress & Daily Quests Grid -->
             <div class="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div>
-                    <h4 class="text-lg font-bold text-gray-800 dark:text-white font-kanit mb-4 flex items-center gap-2">
-                        <span class="text-xl">📊</span> ความก้าวหน้าแต่ละสายวิชา
+                    <h4 class="text-base font-bold text-gray-800 dark:text-white font-kanit mb-4 flex items-center gap-2">
+                        <span class="p-1.5 bg-blue-100 dark:bg-blue-900/30 rounded-lg text-blue-600 dark:text-blue-400"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg></span>
+                        ความก้าวหน้าแต่ละสายวิชา
                     </h4>
-                    <div id="track-progress-container" class="space-y-4">
+                    <div id="track-progress-container" class="space-y-5">
                         <!-- Injected by JS -->
                     </div>
                 </div>
                 <div>
-                    <h4 class="text-lg font-bold text-gray-800 dark:text-white font-kanit mb-4 flex items-center gap-2">
-                        <span class="text-xl">📜</span> ภารกิจประจำวัน
+                    <h4 class="text-base font-bold text-gray-800 dark:text-white font-kanit mb-4 flex items-center gap-2">
+                        <span class="p-1.5 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg text-yellow-600 dark:text-yellow-400"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg></span>
+                        ภารกิจประจำวัน
                     </h4>
-                    <div id="profile-daily-quests-container" class="space-y-3">
+                    <div id="profile-daily-quests-container" class="space-y-4">
                         <!-- Injected by JS -->
                     </div>
                 </div>
@@ -286,13 +299,15 @@
                     class="bg-white dark:bg-gray-800 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700/60 overflow-hidden">
                     <div class="p-6 flex justify-between items-center cursor-pointer collapsible-header hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
                         data-target="achievements-content">
-                        <h2 class="text-xl font-bold font-kanit">ความสำเร็จ (Achievements)</h2>
-                        <svg class="w-6 h-6 transform transition-transform duration-200 chevron-icon text-gray-400"
+                        <h2 class="text-xl font-bold font-kanit flex items-center gap-2">
+                            <span class="text-2xl">🏆</span> ความสำเร็จ (Achievements)
+                        </h2>
+                        <svg class="w-6 h-6 transform transition-transform duration-200 chevron-icon text-gray-400 -rotate-90"
                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
                     </div>
-                    <div id="achievements-content" class="collapsible-content" style="max-height: 2000px; opacity: 1;">
+                    <div id="achievements-content" class="collapsible-content" style="max-height: 0px; opacity: 0;">
                         <div class="px-6 pb-6">
                             <div id="profile-achievements-list" class="space-y-3">
                                 <!-- Injected by JS -->
@@ -302,27 +317,31 @@
                 </section>
 
                 <!-- Shop Section -->
-                <section
-                    class="bg-white dark:bg-gray-800 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden">
-                    <div class="p-6 flex justify-between items-center cursor-pointer collapsible-header hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+                <section id="shop-section"
+                    class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden mb-10 transition-all duration-300 hover:shadow-2xl">
+                    <div class="p-6 sm:p-8 flex justify-between items-center cursor-pointer collapsible-header hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors"
                         data-target="shop-content">
                         <div class="flex items-center gap-4 flex-grow">
-                            <h2 class="text-xl font-bold font-kanit flex items-center gap-2">
-                                <span class="text-2xl">🛒</span> ร้านค้าแลกของรางวัล (XP Shop)
-                            </h2>
+                            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-2xl shadow-lg">
+                                🛒
+                            </div>
+                            <div>
+                                <h2 class="text-xl font-bold font-kanit text-gray-800 dark:text-white">ร้านค้าแลกของรางวัล</h2>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">ใช้ XP แลกไอเทมและของตกแต่ง</p>
+                            </div>
                             <div
-                                class="bg-blue-100 dark:bg-blue-900/30 px-3 py-1 rounded-full text-blue-700 dark:text-blue-300 text-sm font-bold ml-auto sm:ml-0">
-                                XP ของคุณ: <span id="shop-user-xp">0</span>
+                                class="bg-blue-50 dark:bg-blue-900/20 px-4 py-1.5 rounded-full text-blue-600 dark:text-blue-300 text-sm font-bold ml-auto border border-blue-100 dark:border-blue-800 flex items-center gap-2">
+                                <span>XP:</span> <span id="shop-user-xp" class="text-lg">0</span>
                             </div>
                         </div>
-                        <svg class="w-6 h-6 transform transition-transform duration-200 chevron-icon text-gray-400 ml-2"
+                        <svg class="w-6 h-6 transform transition-transform duration-200 chevron-icon text-gray-400 ml-4 -rotate-90"
                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
                     </div>
-                    <div id="shop-content" class="collapsible-content" style="max-height: 2000px; opacity: 1;">
-                        <div class="px-6 pb-6">
-                            <div id="shop-items-grid" class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div id="shop-content" class="collapsible-content" style="max-height: 0px; opacity: 0;">
+                        <div class="px-6 pb-8 sm:px-8">
+                            <div id="shop-items-grid" class="space-y-6">
                                 <!-- Items injected by JS -->
                             </div>
                         </div>
@@ -358,16 +377,16 @@
                 </section>
 
                 <section
-                    class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700/60 overflow-hidden">
+                    class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700/60">
                     <div class="p-6 flex justify-between items-center cursor-pointer collapsible-header hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
                         data-target="badges-content">
                         <h2 class="text-xl font-bold font-kanit">เหรียญรางวัล (Badges)</h2>
-                        <svg class="w-6 h-6 transform transition-transform duration-200 chevron-icon text-gray-400"
+                        <svg class="w-6 h-6 transform transition-transform duration-200 chevron-icon text-gray-400 -rotate-90"
                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
                     </div>
-                    <div id="badges-content" class="collapsible-content" style="max-height: 2000px; opacity: 1;">
+                    <div id="badges-content" class="collapsible-content" style="max-height: 0px; opacity: 0;">
                         <div class="px-6 pb-6">
                             <div id="profile-badges-grid" class="grid grid-cols-3 gap-4">
                                 <!-- Injected by JS -->
@@ -382,12 +401,12 @@
                     <div class="p-6 flex justify-between items-center cursor-pointer collapsible-header hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
                         data-target="quest-history-content">
                         <h2 class="text-xl font-bold font-kanit">ประวัติภารกิจ</h2>
-                        <svg class="w-6 h-6 transform transition-transform duration-200 chevron-icon text-gray-400"
+                        <svg class="w-6 h-6 transform transition-transform duration-200 chevron-icon text-gray-400 -rotate-90"
                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
                     </div>
-                    <div id="quest-history-content" class="collapsible-content" style="max-height: 2000px; opacity: 1;">
+                    <div id="quest-history-content" class="collapsible-content" style="max-height: 0px; opacity: 0;">
                         <div class="px-6 pb-6">
                             <div id="profile-quest-history"
                                 class="space-y-2 max-h-80 overflow-y-auto modern-scrollbar pr-2">

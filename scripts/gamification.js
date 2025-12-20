@@ -52,6 +52,52 @@ export const LEVELS = XP_THRESHOLDS.map((t, i) => ({
     title: TRACK_TITLES.overall[i] || "Unknown"
 }));
 
+// NEW: Proficiency Groups (Shared definition)
+export const PROFICIENCY_GROUPS = {
+    'Mechanics': { 
+        label: 'กลศาสตร์', 
+        field: 'mechanicsXP',
+        track: 'physics',
+        keywords: ['บทที่ 1:', 'บทที่ 2:', 'บทที่ 3:', 'บทที่ 4:', 'บทที่ 5:', 'บทที่ 6:', 'บทที่ 7:', 'บทที่ 8:', 'บทที่ 15:', 'ธรรมชาติทางฟิสิกส์', 'การเคลื่อนที่', 'แรง', 'สมดุล', 'งาน', 'โมเมนตัม', 'ของแข็ง'] 
+    },
+    'Electricity': { 
+        label: 'ไฟฟ้าและแม่เหล็ก', 
+        field: 'electricityXP',
+        track: 'physics',
+        keywords: ['บทที่ 12:', 'บทที่ 13:', 'บทที่ 14:', 'ไฟฟ้า', 'แม่เหล็ก'] 
+    },
+    'WavesLight': { 
+        label: 'คลื่นและแสง', 
+        field: 'wavesLightXP',
+        track: 'physics',
+        keywords: ['บทที่ 9:', 'บทที่ 10:', 'บทที่ 11:', 'บทที่ 17:', 'คลื่น', 'เสียง', 'แสง'] 
+    },
+    'ModernHeat': { 
+        label: 'สสารและฟิสิกส์ยุคใหม่', 
+        field: 'modernHeatXP',
+        track: 'physics',
+        keywords: ['บทที่ 16:', 'บทที่ 18:', 'บทที่ 19:', 'ความร้อน', 'อะตอม', 'นิวเคลียร์'] 
+    },
+    'Astronomy': { 
+        label: 'ดาราศาสตร์', 
+        field: 'astronomyXP',
+        track: 'earth',
+        keywords: ['เอกภพ', 'กาแล็กซี', 'ดาวฤกษ์', 'ระบบสุริยะ', 'เทคโนโลยีอวกาศ', 'ทรงกลมฟ้า', 'ดาวเคราะห์', 'ดาราศาสตร์'] 
+    },
+    'Geology': { 
+        label: 'ธรณีวิทยา', 
+        field: 'geologyXP',
+        track: 'earth',
+        keywords: ['โครงสร้างโลก', 'แปรสัณฐาน', 'ธรณี', 'หิน', 'แร่', 'แผนที่', 'ดิน', 'ทรัพยากรธรณี'] 
+    },
+    'Meteorology': { 
+        label: 'อุตุนิยมวิทยา', 
+        field: 'meteorologyXP',
+        track: 'earth',
+        keywords: ['ลมฟ้าอากาศ', 'ภูมิอากาศ', 'อากาศ', 'หมุนเวียน', 'เมฆ', 'พยากรณ์', 'สมุทร', 'บรรยากาศ', 'อุตุนิยมวิทยา'] 
+    }
+};
+
 // กำหนดเหรียญรางวัล (Badges)
 export const BADGES = [
     { id: 'first_quiz', icon: '🎯', name: 'จุดเริ่มต้น', desc: 'ทำแบบทดสอบครั้งแรกสำเร็จ', tier: 'bronze' },
@@ -308,6 +354,14 @@ export class Gamification {
             perfectScores: 0,
             highScores80: 0,
             weekendQuizzesCompleted: 0,
+            // Proficiency XPs
+            mechanicsXP: 0,
+            electricityXP: 0,
+            wavesLightXP: 0,
+            modernHeatXP: 0,
+            astronomyXP: 0,
+            geologyXP: 0,
+            meteorologyXP: 0,
         };
     }
 
@@ -358,6 +412,7 @@ export class Gamification {
         let earthXP = 0;
         let completed = 0;
         let totalCorrect = 0;
+        const topicXPs = {};
 
         // วนลูปดูข้อมูลทั้งหมดใน LocalStorage
         for (let i = 0; i < localStorage.length; i++) {
@@ -393,6 +448,26 @@ export class Gamification {
                             completed++;
                         }
 
+                        // Calculate Topic XP
+                        data.userAnswers.forEach((ans, index) => {
+                            if (ans && ans.isCorrect) {
+                                const question = data.shuffledQuestions[index];
+                                const points = (question && (question.type === 'multiple-select' || question.type === 'fill-in-number')) ? 5 : 4;
+                                
+                                let subCatStr = '';
+                                if (ans.subCategory) {
+                                    if (typeof ans.subCategory === 'string') subCatStr = ans.subCategory;
+                                    else if (ans.subCategory.main) subCatStr = ans.subCategory.main;
+                                }
+                                for (const [groupKey, groupDef] of Object.entries(PROFICIENCY_GROUPS)) {
+                                    if (groupDef.keywords.some(k => subCatStr.includes(k))) {
+                                        topicXPs[groupDef.field] = (topicXPs[groupDef.field] || 0) + points;
+                                        break;
+                                    }
+                                }
+                            }
+                        });
+
                         // แยกสายวิชา (พยายามเดาจากข้อมูลที่มี)
                         let category = 'General';
                         const firstAns = data.userAnswers.find(a => a);
@@ -424,6 +499,11 @@ export class Gamification {
             this.state.quizzesCompleted = completed;
             this.state.totalCorrectAnswers = totalCorrect;
             
+            // Apply calculated topic XPs
+            for (const [field, xp] of Object.entries(topicXPs)) {
+                this.state[field] = xp;
+            }
+
             // ตรวจสอบและปลดล็อกเหรียญรางวัลจากข้อมูลเก่าทันที
             this.checkBadges(0); 
             this.saveState();
@@ -1033,7 +1113,7 @@ export class Gamification {
     }
 
     // ฟังก์ชันใหม่: บันทึกผลการทำข้อสอบโดยรับค่า XP แยกตามสายวิชา
-    submitQuizResult(totalXP, physicsXP, earthXP, percentage, questionCount, isCustomQuiz) {
+    submitQuizResult(totalXP, physicsXP, earthXP, percentage, questionCount, isCustomQuiz, topicXPs = {}) {
         const oldLevel = this.state.level || 1;
         const oldPhysics = this.getPhysicsLevel();
         const oldEarth = this.getEarthLevel();
@@ -1042,6 +1122,12 @@ export class Gamification {
         this.state.physicsXP += physicsXP;
         this.state.earthXP += earthXP;
         this.state.quizzesCompleted += 1;
+
+        // Update Topic XPs
+        for (const [field, xp] of Object.entries(topicXPs)) {
+            if (this.state[field] === undefined) this.state[field] = 0;
+            this.state[field] += xp;
+        }
 
         // NEW: Check for weekend quiz completion
         const day = new Date().getDay(); // 0 = Sunday, 6 = Saturday
