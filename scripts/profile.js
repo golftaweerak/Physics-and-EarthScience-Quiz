@@ -627,7 +627,12 @@ function setupLeaderboardSystem(game) {
 
         } catch (error) {
             console.error("Leaderboard error:", error);
-            listContainer.innerHTML = `<div class="text-center py-8 text-red-500 text-sm">ไม่สามารถโหลดข้อมูลได้<br>(ต้องเชื่อมต่ออินเทอร์เน็ต)</div>`;
+            let msg = 'ไม่สามารถโหลดข้อมูลได้<br>(ต้องเชื่อมต่ออินเทอร์เน็ต)';
+            // เช็ค Error 404 เพื่อแจ้งเตือนเรื่อง Config
+            if (error.message && error.message.includes('404')) {
+                msg = 'ไม่พบฐานข้อมูล (404)<br>กรุณาตรวจสอบ Project ID หรือชื่อ Database';
+            }
+            listContainer.innerHTML = `<div class="text-center py-8 text-red-500 text-sm">${msg}</div>`;
         }
     };
 

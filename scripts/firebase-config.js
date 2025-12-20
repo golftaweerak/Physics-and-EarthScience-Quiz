@@ -19,6 +19,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const auth = getAuth(app);
+// หากฐานข้อมูลของคุณชื่ออื่นที่ไม่ใช่ (default) ให้ระบุชื่อตรงนี้ เช่น getFirestore(app, "my-database-name")
 const db = getFirestore(app);
 const googleProvider = new GoogleAuthProvider();
 
