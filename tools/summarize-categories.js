@@ -32,14 +32,37 @@ function flattenQuestions(data) {
   return allQuestions;
 }
 
+/**
+ * Recursively finds all files in a directory.
+ * @param {string} dirPath - The directory to search.
+ * @param {Array} arrayOfFiles - Accumulator for file paths.
+ * @returns {Array} List of full file paths.
+ */
+function getAllFiles(dirPath, arrayOfFiles = []) {
+  const files = fs.readdirSync(dirPath);
+
+  files.forEach((file) => {
+    const fullPath = path.join(dirPath, file);
+    if (fs.statSync(fullPath).isDirectory()) {
+      getAllFiles(fullPath, arrayOfFiles);
+    } else {
+      arrayOfFiles.push(fullPath);
+    }
+  });
+
+  return arrayOfFiles;
+}
+
 async function main() {
   console.log("--- Starting Category Summary Script ---");
 
   // 1. Get all quiz data files
-  const allFiles = fs.readdirSync(DATA_DIR);
-  const quizFiles = allFiles.filter(
-    (file) =>
-      file.endsWith("-data.js") && !["sub-category-data.js", "template-data.js"].includes(file)
+  const allFilePaths = getAllFiles(DATA_DIR);
+  const quizFiles = allFilePaths.filter(
+    (filePath) => {
+      const fileName = path.basename(filePath);
+      return fileName.endsWith("-data.js") && !["sub-category-data.js", "template-data.js"].includes(fileName);
+    }
   );
 
   // Structure to hold questions: Map<MainCategory, Map<SpecificCategory, Array<Question>>>
@@ -48,8 +71,8 @@ async function main() {
   let uncategorizedCount = 0;
 
   // 2. Iterate over each quiz file to count questions
-  for (const fileName of quizFiles) {
-    const filePath = path.join(DATA_DIR, fileName);
+  for (const filePath of quizFiles) {
+    const fileName = path.basename(filePath);
 
     try {
       const quizDataModule = await import(pathToFileURL(filePath).href);
