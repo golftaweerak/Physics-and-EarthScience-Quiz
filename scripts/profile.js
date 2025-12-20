@@ -228,6 +228,18 @@ function renderUserInfo(game) {
     // Update display name
     const nameEl = document.getElementById('profile-display-name');
     if (nameEl) nameEl.textContent = game.state.displayName || 'ผู้เรียน (Guest)';
+
+    // Update email
+    const emailEl = document.getElementById('profile-email-display');
+    if (emailEl) {
+        const user = game.authManager.currentUser;
+        if (user && user.email) {
+            emailEl.textContent = user.email;
+            emailEl.classList.remove('hidden');
+        } else {
+            emailEl.classList.add('hidden');
+        }
+    }
     
     // Update avatar display
     const avatarEl = document.getElementById('profile-avatar-display');

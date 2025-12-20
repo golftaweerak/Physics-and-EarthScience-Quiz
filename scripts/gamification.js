@@ -503,6 +503,19 @@ export class Gamification {
 
     updateHeaderAvatar() {
         const profileLink = document.getElementById('main-header-profile-link');
+        
+        // Update Header Email
+        const headerEmailEl = document.getElementById('user-hub-email');
+        if (headerEmailEl) {
+            const user = this.authManager.currentUser;
+            if (user && user.email) {
+                headerEmailEl.textContent = user.email;
+                headerEmailEl.classList.remove('hidden');
+            } else {
+                headerEmailEl.classList.add('hidden');
+            }
+        }
+
         if (profileLink) {
             const avatar = this.state.avatar || '🧑‍🎓';
             const level = this.getCurrentLevel().level;
