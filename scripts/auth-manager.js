@@ -182,22 +182,54 @@ class AuthManagerInternal {
         }
 
         if (!docSnap.exists()) {
-            // กรณี: ผู้ใช้ใหม่บน Cloud แต่มีข้อมูลในเครื่อง (ผู้เรียนเก่าเพิ่งล็อกอิน)
+            // กรณี: ผู้ใช้ใหม่บน Cloud (หรือเพิ่งล็อกอินครั้งแรก)
+            console.log("Creating new user data on cloud...");
+
+            // เตรียมข้อมูลเริ่มต้นจาก Google Profile
+            let initialData = {
+                displayName: user.displayName || "User",
+                avatar: user.photoURL || '🧑‍🎓', // ใช้รูปจาก Google หรือค่าเริ่มต้น
+                email: user.email || "",
+                xp: 0,
+                level: 1,
+                badges: [],
+                quizzesCompleted: 0,
+                streak: 0,
+                lastLogin: new Date().toDateString(),
+            };
+
+            // ถ้ามีข้อมูลในเครื่อง (ผู้เรียนเก่าเพิ่งล็อกอิน) ให้ Merge ข้อมูลเดิมเข้าไป
             if (localData) {
-                // ให้อัปโหลดข้อมูลในเครื่องขึ้น Cloud ทันที
                 console.log("Migrating local data to cloud...");
-                await setDoc(userRef, localData);
+                initialData = { ...initialData, ...localData };
                 
-                // สร้าง Leaderboard entry ด้วย
-                if (localData.totalXP) {
-                    await setDoc(doc(db, "leaderboard", user.uid), {
-                        displayName: user.displayName,
-                        photoURL: user.photoURL,
-                        totalXP: localData.totalXP,
-                        level: localData.level || 1,
-                        lastUpdated: new Date()
-                    });
+                // ถ้าชื่อใน Local เป็น Guest ให้ใช้ชื่อจาก Google ดีกว่า
+                if (localData.displayName === 'ผู้เรียน (Guest)' && user.displayName) {
+                    initialData.displayName = user.displayName;
                 }
+                // ถ้า Avatar ใน Local เป็น Default ให้ใช้รูปจาก Google
+                if ((!localData.avatar || localData.avatar === '🧑‍🎓') && user.photoURL) {
+                    initialData.avatar = user.photoURL;
+                }
+            }
+
+            // บันทึกลง Firestore
+            await setDoc(userRef, initialData);
+            
+            // สร้าง Leaderboard entry
+            await setDoc(doc(db, "leaderboard", user.uid), {
+                displayName: initialData.displayName,
+                photoURL: initialData.avatar,
+                totalXP: initialData.xp || 0,
+                level: initialData.level || 1,
+                lastUpdated: new Date()
+            });
+            
+            // อัปเดต LocalStorage ให้ตรงกันทันที
+            localStorage.setItem(this.LOCAL_STORAGE_KEY, JSON.stringify(initialData));
+            this.updateLastSyncTime();
+
+            if (localData) {
                 alert("ซิงค์ข้อมูลเก่าของคุณขึ้นระบบเรียบร้อยแล้ว!");
             }
         } else {
