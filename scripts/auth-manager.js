@@ -52,12 +52,24 @@ class AuthManagerInternal {
                 showToast('ออกจากระบบสำเร็จ', 'คุณได้ออกจากระบบเรียบร้อยแล้ว', '👋');
             }
         }
+
+        if (sessionStorage.getItem('login_toast')) {
+            sessionStorage.removeItem('login_toast');
+            const showLoginToast = () => showToast('เข้าสู่ระบบสำเร็จ', 'ยินดีต้อนรับกลับมา!', '🎉');
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', showLoginToast);
+            } else {
+                showLoginToast();
+            }
+        }
     }
 
     // ฟังก์ชัน Login
     async login() {
         try {
             const result = await signInWithPopup(auth, googleProvider);
+            sessionStorage.setItem('login_toast', 'true');
+            window.location.reload();
             return result.user;
         } catch (error) {
             console.error("Login failed:", error);
