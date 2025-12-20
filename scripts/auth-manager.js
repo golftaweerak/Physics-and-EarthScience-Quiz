@@ -26,8 +26,16 @@ class AuthManagerInternal {
             this.currentUser = user;
             if (user) {
                 console.log("User signed in:", user.uid);
-                await this.syncLocalToCloud(user);
-                await this.syncHistory(user); // ซิงค์ประวัติการทำข้อสอบ
+                
+                // Add delay to allow connection to stabilize
+                await new Promise(resolve => setTimeout(resolve, 1000));
+
+                try {
+                    await this.syncLocalToCloud(user);
+                    await this.syncHistory(user); // ซิงค์ประวัติการทำข้อสอบ
+                } catch (e) {
+                    console.warn("Data sync failed:", e);
+                }
             } else {
                 console.log("User signed out");
             }
@@ -55,7 +63,14 @@ class AuthManagerInternal {
 
         if (sessionStorage.getItem('login_toast')) {
             sessionStorage.removeItem('login_toast');
-            const showLoginToast = () => showToast('เข้าสู่ระบบสำเร็จ', 'ยินดีต้อนรับกลับมา!', '🎉');
+            
+            // ตรวจสอบว่าอยู่หน้า Profile แล้วหรือยัง และกำหนด URL ให้ถูกต้องตามโฟลเดอร์ที่อยู่
+            const isProfilePage = window.location.pathname.includes('profile.html');
+            const isInQuizFolder = window.location.pathname.includes('/quiz/');
+            const profileUrl = isInQuizFolder ? '../profile.html' : './profile.html';
+            const action = isProfilePage ? null : { label: 'ไปที่หน้า Profile', url: profileUrl };
+
+            const showLoginToast = () => showToast('เข้าสู่ระบบสำเร็จ', 'ยินดีต้อนรับกลับมา!', '🎉', 'success', action);
             if (document.readyState === 'loading') {
                 document.addEventListener('DOMContentLoaded', showLoginToast);
             } else {
@@ -69,7 +84,17 @@ class AuthManagerInternal {
         try {
             const result = await signInWithPopup(auth, googleProvider);
             sessionStorage.setItem('login_toast', 'true');
-            window.location.reload();
+            
+            // Redirect to profile if on homepage (and not in a quiz subfolder), otherwise reload to preserve context
+            const path = window.location.pathname;
+            const isHomePage = (path.endsWith('/') || path.endsWith('index.html')) && !path.includes('/quiz/');
+            
+            if (isHomePage) {
+                window.location.href = './profile.html';
+            } else {
+                window.location.reload();
+            }
+            
             return result.user;
         } catch (error) {
             console.error("Login failed:", error);
@@ -141,7 +166,7 @@ class AuthManagerInternal {
      * @param {number} maxRetries - Maximum number of retries
      * @param {number} baseDelay - Initial delay in ms
      */
-    async retryOperation(operation, maxRetries = 3, baseDelay = 1000) {
+    async retryOperation(operation, maxRetries = 3, baseDelay = 2000) {
         let lastError;
         for (let i = 0; i < maxRetries; i++) {
             try {

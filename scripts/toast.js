@@ -4,8 +4,9 @@
  * @param {string} message - ข้อความรายละเอียด
  * @param {string} icon - ไอคอน (Emoji หรือ HTML string)
  * @param {string} type - ประเภท ('success', 'gold', 'info') เพื่อกำหนดสีขอบ
+ * @param {object} action - (Optional) ออบเจกต์ปุ่มแอคชั่น { label: string, url: string }
  */
-export function showToast(title, message, icon = '🔔', type = 'success') {
+export function showToast(title, message, icon = '🔔', type = 'success', action = null) {
     let container = document.getElementById('toast-container');
     
     // ถ้ายังไม่มี Container ให้สร้างใหม่
@@ -27,11 +28,21 @@ export function showToast(title, message, icon = '🔔', type = 'success') {
     // ใช้ Tailwind CSS สำหรับ Animation และ Styling
     toast.className = `pointer-events-auto bg-white dark:bg-gray-800 border-l-4 ${borderClass} shadow-lg rounded-r-lg p-4 flex items-start gap-3 transform transition-all duration-500 translate-x-full opacity-0 max-w-sm w-80`;
     
+    let actionHtml = '';
+    if (action && action.label && action.url) {
+        actionHtml = `
+            <a href="${action.url}" class="mt-2 inline-block px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded transition-colors shadow-sm no-underline">
+                ${action.label}
+            </a>
+        `;
+    }
+
     toast.innerHTML = `
         <div class="text-2xl flex-shrink-0">${icon}</div>
         <div class="flex-grow">
             <h4 class="font-bold text-gray-800 dark:text-gray-100 text-sm font-kanit">${title}</h4>
             <p class="text-xs text-gray-600 dark:text-gray-400 mt-0.5 leading-snug">${message}</p>
+            ${actionHtml}
         </div>
     `;
 
