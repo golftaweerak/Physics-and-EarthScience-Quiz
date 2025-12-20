@@ -284,10 +284,10 @@ export class Gamification {
                 if (data) {
                     // Merge ข้อมูลจาก Cloud เข้ากับ Default State เพื่อความสมบูรณ์
                     this.state = { ...this.getDefaultState(), ...data };
-                    // ตรวจสอบ Streak และอัปเดต UI
-                    this.updateStreak();
-                    this.onStateUpdated();
                 }
+                // ตรวจสอบ Streak และอัปเดต UI (ทำเสมอเพื่อให้สถานะ Login เปลี่ยน)
+                this.updateStreak();
+                this.onStateUpdated();
             } catch (error) {
                 console.error("Failed to load user data on auth change (client might be offline):", error);
                 // Even if cloud fails, we can still proceed with local data.
