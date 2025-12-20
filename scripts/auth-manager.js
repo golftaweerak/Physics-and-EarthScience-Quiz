@@ -123,6 +123,35 @@ class AuthManagerInternal {
         return this.currentUser;
     }
 
+    /**
+     * Helper function to retry Firestore operations on failure
+     * @param {Function} operation - Async function to execute
+     * @param {number} maxRetries - Maximum number of retries
+     * @param {number} baseDelay - Initial delay in ms
+     */
+    async retryOperation(operation, maxRetries = 3, baseDelay = 1000) {
+        let lastError;
+        for (let i = 0; i < maxRetries; i++) {
+            try {
+                return await operation();
+            } catch (error) {
+                lastError = error;
+                // Retry on network errors or unavailable service
+                const isRetryable = error.code === 'unavailable' || 
+                                    error.message?.includes('offline') || 
+                                    error.message?.includes('transport') ||
+                                    error.message?.includes('network');
+                
+                if (!isRetryable) throw error;
+                
+                const delay = baseDelay * Math.pow(2, i);
+                console.warn(`Firestore operation failed (attempt ${i + 1}/${maxRetries}). Retrying in ${delay}ms...`, error);
+                await new Promise(resolve => setTimeout(resolve, delay));
+            }
+        }
+        throw lastError;
+    }
+
     // --- ส่วนจัดการข้อมูล (Data Sync) ---
 
     // ฟังก์ชันหลักสำหรับโหลดข้อมูล (ใช้แทนการดึง localStorage โดยตรง)
@@ -130,14 +159,19 @@ class AuthManagerInternal {
         if (this.currentUser) {
             // ถ้าล็อกอิน ให้ดึงจาก Firestore
             const docRef = doc(db, "users", this.currentUser.uid);
-            const docSnap = await getDoc(docRef);
             
-            if (docSnap.exists()) {
-                const cloudData = docSnap.data();
-                // อัปเดตลง LocalStorage ด้วยเพื่อให้โค้ดเดิมทำงานต่อได้ (Hybrid)
-                localStorage.setItem(this.LOCAL_STORAGE_KEY, JSON.stringify(cloudData));
-                this.updateLastSyncTime();
-                return cloudData;
+            try {
+                const docSnap = await this.retryOperation(() => getDoc(docRef));
+                
+                if (docSnap.exists()) {
+                    const cloudData = docSnap.data();
+                    // อัปเดตลง LocalStorage ด้วยเพื่อให้โค้ดเดิมทำงานต่อได้ (Hybrid)
+                    localStorage.setItem(this.LOCAL_STORAGE_KEY, JSON.stringify(cloudData));
+                    this.updateLastSyncTime();
+                    return cloudData;
+                }
+            } catch (error) {
+                console.warn("Failed to load cloud data after retries, falling back to local:", error);
             }
         }
         
@@ -156,19 +190,19 @@ class AuthManagerInternal {
             try {
                 const userRef = doc(db, "users", this.currentUser.uid);
                 // ใช้ setDoc แบบ merge: true เพื่อไม่ให้ข้อมูลอื่นหาย
-                await setDoc(userRef, data, { merge: true });
+                await this.retryOperation(() => setDoc(userRef, data, { merge: true }));
                 this.updateLastSyncTime();
                 
                 // อัปเดต Leaderboard (ถ้ามี)
                 if (data.totalXP) {
                     const leaderboardRef = doc(db, "leaderboard", this.currentUser.uid);
-                    await setDoc(leaderboardRef, {
+                    await this.retryOperation(() => setDoc(leaderboardRef, {
                         displayName: this.currentUser.displayName || "Anonymous",
                         photoURL: this.currentUser.photoURL,
                         totalXP: data.totalXP,
                         level: data.level || 1,
                         lastUpdated: new Date()
-                    }, { merge: true });
+                    }, { merge: true }));
                 }
             } catch (e) {
                 console.error("Error saving to cloud:", e);
@@ -183,23 +217,23 @@ class AuthManagerInternal {
 
         const localData = JSON.parse(localDataString);
         const userRef = doc(db, "users", user.uid);
-        const docSnap = await getDoc(userRef);
+        const docSnap = await this.retryOperation(() => getDoc(userRef));
 
         if (!docSnap.exists()) {
             // กรณี: ผู้ใช้ใหม่บน Cloud แต่มีข้อมูลในเครื่อง (ผู้เรียนเก่าเพิ่งล็อกอิน)
             // ให้อัปโหลดข้อมูลในเครื่องขึ้น Cloud ทันที
             console.log("Migrating local data to cloud...");
-            await setDoc(userRef, localData);
+            await this.retryOperation(() => setDoc(userRef, localData));
             
             // สร้าง Leaderboard entry ด้วย
             if (localData.totalXP) {
-                await setDoc(doc(db, "leaderboard", user.uid), {
+                await this.retryOperation(() => setDoc(doc(db, "leaderboard", user.uid), {
                     displayName: user.displayName,
                     photoURL: user.photoURL,
                     totalXP: localData.totalXP,
                     level: localData.level || 1,
                     lastUpdated: new Date()
-                });
+                }));
             }
             alert("ซิงค์ข้อมูลเก่าของคุณขึ้นระบบเรียบร้อยแล้ว!");
         } else {
@@ -303,7 +337,7 @@ class AuthManagerInternal {
         
         try {
             // 1. ดึงข้อมูลจาก Cloud มาเทียบ
-            const cloudSnapshot = await getDocs(historyRef);
+            const cloudSnapshot = await this.retryOperation(() => getDocs(historyRef));
             const cloudMap = new Map();
             cloudSnapshot.forEach(doc => {
                 cloudMap.set(doc.id, doc.data());
@@ -351,7 +385,7 @@ class AuthManagerInternal {
             });
 
             if (batchCount > 0) {
-                await batch.commit();
+                await this.retryOperation(() => batch.commit());
                 console.log(`Uploaded ${batchCount} quiz history items.`);
             }
             
@@ -369,7 +403,7 @@ class AuthManagerInternal {
         try {
             // บันทึกลง Subcollection 'quiz_history' โดยใช้ key เป็น ID เอกสาร
             const docRef = doc(db, "users", this.currentUser.uid, "quiz_history", key);
-            await setDoc(docRef, data, { merge: true });
+            await this.retryOperation(() => setDoc(docRef, data, { merge: true }));
             this.updateLastSyncTime();
         } catch (e) {
             console.error("Error saving quiz history item:", e);

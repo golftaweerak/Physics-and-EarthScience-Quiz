@@ -536,7 +536,7 @@ function setupLeaderboardSystem(game) {
         try {
             const usersRef = collection(db, 'users');
             const q = query(usersRef, orderBy(type, 'desc'), limit(10));
-            const querySnapshot = await getDocs(q);
+            const querySnapshot = await game.authManager.retryOperation(() => getDocs(q));
             
             const leaderboard = [];
             querySnapshot.forEach((doc) => {
@@ -561,7 +561,7 @@ function setupLeaderboardSystem(game) {
                     const userScore = game.state[type] || 0;
                     // Count users with higher score
                     const rankQuery = query(usersRef, where(type, '>', userScore));
-                    const snapshot = await getCountFromServer(rankQuery);
+                    const snapshot = await game.authManager.retryOperation(() => getCountFromServer(rankQuery));
                     const rank = snapshot.data().count + 1;
 
                     userRankData = {
