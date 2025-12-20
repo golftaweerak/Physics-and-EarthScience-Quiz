@@ -254,6 +254,10 @@ export class Gamification {
                     // ตรวจสอบ Streak และอัปเดต UI
                     this.updateStreak();
                     this.onStateUpdated();
+                } else {
+                    // กรณีไม่พบข้อมูล (เช่น Logout แล้วไม่มีข้อมูล Guest) ให้รีเซ็ตเป็นค่าเริ่มต้น
+                    this.state = this.getDefaultState();
+                    this.onStateUpdated();
                 }
             } catch (error) {
                 console.error("Failed to load user data on auth change (client might be offline):", error);
