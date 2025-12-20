@@ -2,7 +2,7 @@
 // ใช้ CDN URL เพื่อให้ทำงานได้บน Browser โดยไม่ต้องตั้งค่า Bundler เพิ่มเติม
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
-import { getAuth, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getAuth, GoogleAuthProvider, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -22,5 +22,11 @@ const auth = getAuth(app);
 // หากฐานข้อมูลของคุณชื่ออื่นที่ไม่ใช่ (default) ให้ระบุชื่อตรงนี้ เช่น getFirestore(app, "my-database-name")
 const db = getFirestore(app);
 const googleProvider = new GoogleAuthProvider();
+
+// NEW: ตั้งค่า Persistence เพื่อแก้ปัญหา Cross-Origin และ Tracking Prevention
+setPersistence(auth, browserLocalPersistence)
+  .catch((error) => {
+    console.error("Auth persistence error:", error.code, error.message);
+  });
 
 export { app, analytics, auth, db, googleProvider };
