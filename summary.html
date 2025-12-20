@@ -24,6 +24,17 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="./scripts/summary-loader.js" type="module"></script>
     <link rel="icon" href="./assets/icons/exam.png" type="image/png">
+    <script type="module">
+        import { auth } from './scripts/firebase-config.js';
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        onAuthStateChanged(auth, (user) => {
+            if (!user || !user.email || !user.email.endsWith('@promma.ac.th')) {
+                alert('ขออภัย หน้าสรุปผลคะแนนสงวนสิทธิ์เฉพาะบัญชี @promma.ac.th เท่านั้น');
+                window.location.href = 'index.html';
+            }
+        });
+    </script>
 </head>
 
 <body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 font-sans">
