@@ -88,6 +88,27 @@ function findQuizArrayInModule(quizModule) {
   return Object.values(quizModule).find(val => Array.isArray(val)) || null;
 }
 
+/**
+ * Recursively finds all files in a directory.
+ * @param {string} dirPath - The directory to search.
+ * @param {Array} arrayOfFiles - Accumulator for file paths.
+ * @returns {Array} List of full file paths.
+ */
+function getAllFiles(dirPath, arrayOfFiles = []) {
+  const files = fs.readdirSync(dirPath);
+
+  files.forEach((file) => {
+    const fullPath = path.join(dirPath, file);
+    if (fs.statSync(fullPath).isDirectory()) {
+      getAllFiles(fullPath, arrayOfFiles);
+    } else {
+      arrayOfFiles.push(fullPath);
+    }
+  });
+
+  return arrayOfFiles;
+}
+
 async function main() {
   console.log("--- 🚀 Starting Sub-category Validation Script ---");
   const startTime = performance.now();
@@ -99,37 +120,41 @@ async function main() {
   const sortedPrefixKeys = Object.keys(quizPrefixInfo).sort((a, b) => b.length - a.length);
 
   // 2. Get all quiz data files
-  const allFiles = fs.readdirSync(DATA_DIR);
+  const allFiles = getAllFiles(DATA_DIR);
   const quizFiles = allFiles.filter(
-    (file) => file.endsWith("-data.js") && !file.startsWith("template-") && !file.startsWith("sub-category-")
+    (filePath) => {
+      const fileName = path.basename(filePath);
+      return fileName.endsWith("-data.js") && !fileName.startsWith("template-") && !fileName.startsWith("sub-category-");
+    }
   );
 
   // 3. Process all files in parallel
-  const processingPromises = quizFiles.map(async (fileName) => {
+  const processingPromises = quizFiles.map(async (filePath) => {
+    const fileName = path.basename(filePath);
+    const relativePath = path.relative(DATA_DIR, filePath);
     const prefix = sortedPrefixKeys.find(key => fileName.toLowerCase().startsWith(key));
     const info = quizPrefixInfo[prefix];
     const fileErrors = [];
 
     if (!info || !info.mainCategory) {
-      console.log(`\n- Skipping validation for ${fileName} (no mainCategory defined in quizPrefixInfo).`);
-      return { fileName, errors: fileErrors };
+      console.log(`\n- Skipping validation for ${relativePath} (no mainCategory defined in quizPrefixInfo).`);
+      return { fileName: relativePath, errors: fileErrors };
     }
 
     const mainCategoryKey = info.mainCategory;
     const validChapters = validationData.get(mainCategoryKey);
 
     if (!validChapters) {
-      fileErrors.push({ File: fileName, ID: 'N/A', Error: `Main category "${mainCategoryKey}" not found in syllabus data.` });
-      return { fileName, errors: fileErrors };
+      fileErrors.push({ File: relativePath, ID: 'N/A', Error: `Main category "${mainCategoryKey}" not found in syllabus data.` });
+      return { fileName: relativePath, errors: fileErrors };
     }
 
-    const filePath = path.join(DATA_DIR, fileName);
     const quizDataModule = await import(pathToFileURL(filePath).href + `?v=${Date.now()}`);
     const quizData = findQuizArrayInModule(quizDataModule);
 
     if (!quizData) {
-      fileErrors.push({ File: fileName, ID: 'N/A', Error: `Could not find an iterable quizData array. Please check the file's export structure.` });
-      return { fileName, errors: fileErrors };
+      fileErrors.push({ File: relativePath, ID: 'N/A', Error: `Could not find an iterable quizData array. Please check the file's export structure.` });
+      return { fileName: relativePath, errors: fileErrors };
     }
 
     for (const item of quizData) {
@@ -140,7 +165,7 @@ async function main() {
         const { subCategory } = question;
 
         if (!subCategory || typeof subCategory !== 'object' || !subCategory.main) {
-          fileErrors.push({ File: fileName, ID: questionIdForTable, Error: 'Missing or invalid subCategory object (must have a `main` property).' });
+          fileErrors.push({ File: relativePath, ID: questionIdForTable, Error: 'Missing or invalid subCategory object (must have a `main` property).' });
           continue;
         }
 
@@ -149,7 +174,7 @@ async function main() {
 
         // Step 1: Validate the chapter (subCategory.main)
         if (!validChapters.has(chapterTitle)) {
-          fileErrors.push({ File: fileName, ID: questionIdForTable, Error: `Invalid Chapter (main): "${chapterTitle}"` });
+          fileErrors.push({ File: relativePath, ID: questionIdForTable, Error: `Invalid Chapter (main): "${chapterTitle}"` });
           continue; // No point in checking specific topic if chapter is wrong
         }
 
@@ -160,11 +185,11 @@ async function main() {
         if (validTopicsNormalized.size > 0 && !validTopicsNormalized.has(specificTopic)) {
           // Only report error if there are specific topics defined for this chapter.
           // If validTopics is empty, it means any specific topic is acceptable (or not defined).
-          fileErrors.push({ File: fileName, ID: questionIdForTable, Error: `Invalid Topic (specific): "${specificTopic}" for chapter "${chapterTitle}"` });
+          fileErrors.push({ File: relativePath, ID: questionIdForTable, Error: `Invalid Topic (specific): "${specificTopic}" for chapter "${chapterTitle}"` });
         }
       }
     }
-    return { fileName, errors: fileErrors };
+    return { fileName: relativePath, errors: fileErrors };
   });
 
   const results = await Promise.all(processingPromises);
