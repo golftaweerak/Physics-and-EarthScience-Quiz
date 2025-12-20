@@ -33,8 +33,18 @@ class AuthManagerInternal {
             this.currentUser = user;
             if (user) {
                 console.log("User signed in:", user.uid);
-                await this.syncLocalToCloud(user);
-                await this.syncHistory(user); // ซิงค์ประวัติการทำข้อสอบ
+                
+                // FIX: ครอบด้วย try-catch เพื่อให้ระบบทำงานต่อได้แม้การซิงค์จะล้มเหลว (เช่น เน็ตหลุด)
+                try {
+                    await this.syncLocalToCloud(user);
+                } catch (e) {
+                    console.warn("Sync local to cloud failed (might be offline):", e);
+                }
+                try {
+                    await this.syncHistory(user); // ซิงค์ประวัติการทำข้อสอบ
+                } catch (e) {
+                    console.warn("Sync history failed (might be offline):", e);
+                }
             } else {
                 console.log("User signed out");
             }
