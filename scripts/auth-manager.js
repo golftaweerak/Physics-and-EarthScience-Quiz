@@ -1,6 +1,6 @@
 // scripts/auth-manager.js
 import { auth, db, googleProvider } from './firebase-config.js';
-import { signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { signInWithRedirect, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { doc, getDoc, setDoc, updateDoc, collection, getDocs, writeBatch, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 class AuthManagerInternal {
@@ -42,8 +42,7 @@ class AuthManagerInternal {
     // ฟังก์ชัน Login
     async login() {
         try {
-            const result = await signInWithPopup(auth, googleProvider);
-            return result.user;
+            await signInWithRedirect(auth, googleProvider);
         } catch (error) {
             console.error("Login failed:", error);
             throw error;
