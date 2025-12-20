@@ -6,6 +6,7 @@ import { quizList } from "../data/quizzes-list.js";
 import { authManager } from './auth-manager.js';
 import { db } from './firebase-config.js';
 import { doc, setDoc, getDocs, collection, writeBatch, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { showToast } from './toast.js';
 
 /**
  * Safely retrieves and parses the list of custom quizzes from localStorage.
@@ -1139,7 +1140,7 @@ export function initializeCustomQuizHandler() {
         selectedQuestions = uniqueQuestions;
 
         if (selectedQuestions.length === 0) {
-            alert("กรุณาเลือกคำถามอย่างน้อย 1 ข้อ");
+            showToast("ข้อผิดพลาด", "กรุณาเลือกคำถามอย่างน้อย 1 ข้อ", "⚠️", "error");
             if (startBtn) {
                 startBtn.disabled = false;
                 startBtn.innerHTML = 'เริ่มทำแบบทดสอบ';
@@ -1183,7 +1184,7 @@ export function initializeCustomQuizHandler() {
         window.location.href = `./quiz/index.html?id=${customQuiz.customId}`;
         } catch (error) {
             console.error("Error starting custom quiz:", error);
-            alert("เกิดข้อผิดพลาดในการเริ่มทำแบบทดสอบ: " + error.message);
+            showToast("เกิดข้อผิดพลาด", "ไม่สามารถเริ่มทำแบบทดสอบได้: " + error.message, "❌", "error");
             if (startBtn) {
                 startBtn.disabled = false;
                 startBtn.innerHTML = 'เริ่มทำแบบทดสอบ';
@@ -1198,7 +1199,7 @@ export function initializeCustomQuizHandler() {
         const maxQuestions = allInputs.reduce((sum, input) => sum + parseInt(input.max, 10), 0);
         
         if (maxQuestions === 0) {
-            alert("ไม่มีคำถามให้เลือก");
+            showToast("ไม่พบข้อมูล", "ไม่มีคำถามให้เลือกในหมวดหมู่นี้", "⚠️", "info");
             return;
         }
 
@@ -1207,7 +1208,7 @@ export function initializeCustomQuizHandler() {
 
         let targetCount = parseInt(userInput, 10);
         if (isNaN(targetCount) || targetCount <= 0) {
-            alert("กรุณาระบุจำนวนที่ถูกต้อง");
+            showToast("ข้อมูลไม่ถูกต้อง", "กรุณาระบุจำนวนตัวเลขที่ถูกต้อง", "⚠️", "error");
             return;
         }
         
@@ -1401,7 +1402,7 @@ export function initializeCustomQuizHandler() {
 
         const numPerChapter = parseInt(numPerChapterInput, 10);
         if (isNaN(numPerChapter) || numPerChapter < 0) {
-            alert("กรุณาระบุจำนวนที่ถูกต้อง");
+            showToast("ข้อมูลไม่ถูกต้อง", "กรุณาระบุจำนวนตัวเลขที่ถูกต้อง", "⚠️", "error");
             return;
         }
 
@@ -1445,6 +1446,6 @@ export function initializeCustomQuizHandler() {
         });
 
         updateTotalCount();
-        alert(`สุ่มเลือกคำถามแบบสมดุลสำหรับ ${groupName} สำเร็จ! เพิ่มมาทั้งหมด ${totalAdded} ข้อ`);
+        showToast("สำเร็จ", `สุ่มเลือกคำถามแบบสมดุลสำหรับ ${groupName} เพิ่มมาทั้งหมด ${totalAdded} ข้อ`, "✅", "success");
     }
 }

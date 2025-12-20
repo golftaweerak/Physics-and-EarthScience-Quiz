@@ -82,7 +82,10 @@ export const BADGES = [
     { id: 'xp_10k', icon: '💰', name: 'ผู้สั่งสมประสบการณ์', desc: 'มี XP รวมสะสมครบ 10,000', tier: 'gold' },
     { id: 'dual_expert', icon: '⚖️', name: 'ผู้รอบรู้สองศาสตร์', desc: 'ถึงเลเวล 5 ทั้งสายฟิสิกส์และวิทย์โลก', tier: 'gold' },
     { id: 'shop_spender', icon: '🛍️', name: 'นักช้อป', desc: 'ซื้อสินค้าในร้านค้าครบ 5 ชิ้น', tier: 'silver' },
-    { id: 'weekend_learner', icon: '🏖️', name: 'ขยันวันหยุด', desc: 'เข้าใช้งานในวันเสาร์หรืออาทิตย์', tier: 'bronze' }
+    { id: 'weekend_learner_3', icon: '🏖️', name: 'นักเรียนวันหยุด', desc: 'ทำแบบทดสอบในวันหยุดสุดสัปดาห์ครบ 3 ครั้ง', tier: 'bronze' },
+    { id: 'weekend_learner_5', icon: '🏕️', name: 'ขยันสุดสัปดาห์', desc: 'ทำแบบทดสอบในวันหยุดสุดสัปดาห์ครบ 5 ครั้ง', tier: 'silver' },
+    { id: 'weekend_learner_10', icon: '🏝️', name: 'เจ้าแห่งวันหยุด', desc: 'ทำแบบทดสอบในวันหยุดสุดสัปดาห์ครบ 10 ครั้ง', tier: 'gold' },
+    { id: 'weekend_learner_15', icon: '🎉', name: 'ตำนานสุดสัปดาห์', desc: 'ทำแบบทดสอบในวันหยุดสุดสัปดาห์ครบ 15 ครั้ง', tier: 'gold' }
 ];
 
 // กำหนดภารกิจประจำวัน (Daily Quests)
@@ -304,6 +307,7 @@ export class Gamification {
             correctStreak: 0,
             perfectScores: 0,
             highScores80: 0,
+            weekendQuizzesCompleted: 0,
         };
     }
 
@@ -970,12 +974,6 @@ export class Gamification {
             this.state.streak = 1;
         }
         
-        // Check Weekend Badge
-        const day = new Date().getDay();
-        if ((day === 0 || day === 6) && !this.state.badges.includes('weekend_learner')) {
-            this.state.badges.push('weekend_learner');
-        }
-
         this.state.lastLogin = today;
         this.updateLevel(); // Check if streak quest completion triggers level up
         this.saveState();
@@ -1044,11 +1042,21 @@ export class Gamification {
         this.state.physicsXP += physicsXP;
         this.state.earthXP += earthXP;
         this.state.quizzesCompleted += 1;
+
+        // NEW: Check for weekend quiz completion
+        const day = new Date().getDay(); // 0 = Sunday, 6 = Saturday
+        if (day === 0 || day === 6) {
+            this.state.weekendQuizzesCompleted = (this.state.weekendQuizzesCompleted || 0) + 1;
+        }
         
         // NEW: Call the stats update function here
         this.updateEndQuizStats(percentage, questionCount, isCustomQuiz);
 
         this.updateLevel();
+
+        // Check for new badges and achievements. This also saves the state.
+        const newBadges = this.checkBadges(percentage, questionCount, isCustomQuiz);
+        const newAchievements = this.checkAchievements();
         
         const newLevelInfo = this.getCurrentLevel();
         const newPhysics = this.getPhysicsLevel();
@@ -1057,7 +1065,9 @@ export class Gamification {
         return {
             overall: { leveledUp: newLevelInfo.level > oldLevel, info: newLevelInfo },
             physics: { leveledUp: newPhysics.level > oldPhysics.level, info: newPhysics },
-            earth: { leveledUp: newEarth.level > oldEarth.level, info: newEarth }
+            earth: { leveledUp: newEarth.level > oldEarth.level, info: newEarth },
+            newBadges: newBadges,
+            newAchievements: newAchievements
         };
     }
 
@@ -1075,6 +1085,9 @@ export class Gamification {
         
         const completedQuests = [];
 
+        // NEW: Check eligibility for quests that depend on score
+        const isEligibleForStats = !stats.isCustomQuiz || (stats.isCustomQuiz && stats.questionCount >= 20);
+
         this.state.activeQuests.forEach(q => {
             if (q.completed) return;
 
@@ -1089,8 +1102,10 @@ export class Gamification {
                     progressMade = stats.totalQuestions || 0;
                 }
             } else if (q.type === 'high_score') {
-                const threshold = q.threshold || 80;
-                if (stats.percentage >= threshold) progressMade = 1;
+                if (isEligibleForStats) {
+                    const threshold = q.threshold || 80;
+                    if (stats.percentage >= threshold) progressMade = 1;
+                }
             } else if (q.type === 'correct_answers_type') {
                 if (q.questionType === 'theory') {
                     progressMade = stats.correctTheory || 0;
@@ -1252,6 +1267,12 @@ export class Gamification {
         
         // 8. Dual Expert
         if (this.getPhysicsLevel().level >= 5 && this.getEarthLevel().level >= 5) unlock('dual_expert');
+
+        // 9. Weekend Learner
+        if ((this.state.weekendQuizzesCompleted || 0) >= 3) unlock('weekend_learner_3');
+        if ((this.state.weekendQuizzesCompleted || 0) >= 5) unlock('weekend_learner_5');
+        if ((this.state.weekendQuizzesCompleted || 0) >= 10) unlock('weekend_learner_10');
+        if ((this.state.weekendQuizzesCompleted || 0) >= 15) unlock('weekend_learner_15');
 
         this.saveState();
         return newBadges;

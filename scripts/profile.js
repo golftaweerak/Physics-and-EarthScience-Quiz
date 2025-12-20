@@ -1201,6 +1201,10 @@ function getBadgeProgress(game, badgeId) {
             const p = game.getPhysicsLevel().level;
             const e = game.getEarthLevel().level;
             return { current: Math.min(p, e), target: 5, label: 'Lv (Min)' };
+        case 'weekend_learner_3': return { current: state.weekendQuizzesCompleted || 0, target: 3, label: 'ครั้ง' };
+        case 'weekend_learner_5': return { current: state.weekendQuizzesCompleted || 0, target: 5, label: 'ครั้ง' };
+        case 'weekend_learner_10': return { current: state.weekendQuizzesCompleted || 0, target: 10, label: 'ครั้ง' };
+        case 'weekend_learner_15': return { current: state.weekendQuizzesCompleted || 0, target: 15, label: 'ครั้ง' };
         case 'marathon_runner':
             return { current: state.badges.includes('marathon_runner') ? 1 : 0, target: 1, label: '' };
         default: return null;

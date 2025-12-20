@@ -198,6 +198,8 @@ export function init(quizData, storageKey, quizTitle, customTime, action) {
     usedCut1: false,
     usedRangeHint: false,
     usedTolerance: false,
+    isCustomQuiz: false, // NEW
+    questionCount: 0,    // NEW
   };
 
   // --- 3. Initial Setup ---
@@ -205,6 +207,10 @@ export function init(quizData, storageKey, quizTitle, customTime, action) {
   powerupBuyModalHandler = new ModalHandler('powerup-buy-modal');
   bindEventListeners();
   initializeSound();
+  // NEW: Set quiz metadata
+  state.isCustomQuiz = storageKey.startsWith('quizState-custom_');
+  state.questionCount = quizData.length;
+
   checkForSavedQuiz(action); // This will check localStorage and either show the start screen or a resume prompt.
   setupPowerUpUI(); // Setup the power-up bar
 }
@@ -1421,13 +1427,17 @@ function showResults() {
 
     // บันทึกผล XP ลงในระบบ Gamification
     if (typeof game.submitQuizResult === 'function') {
-        levelResult = game.submitQuizResult(xpEarned, physicsXP, earthXP);
+        const result = game.submitQuizResult(xpEarned, physicsXP, earthXP, percentage, state.questionCount, state.isCustomQuiz);
+        levelResult = { overall: result.overall, physics: result.physics, earth: result.earth };
+        newBadges = result.newBadges || [];
+        newAchievements = result.newAchievements || [];
     } else {
         // Fallback กรณีไม่มีฟังก์ชันใหม่
-        levelResult = game.addXP(xpEarned, 'General');
+        levelResult = game.addXP(xpEarned, 'General', percentage, state.questionCount, state.isCustomQuiz);
+        // In fallback, we still need to check badges and achievements separately
+        newBadges = game.checkBadges(percentage, state.questionCount, state.isCustomQuiz);
+        newAchievements = game.checkAchievements();
     }
-
-    newBadges = game.checkBadges(percentage);
 
     // --- DAILY QUEST: Update Progress ---
     // สำหรับ Quest ยังคงใช้หมวดหมู่หลักของแบบทดสอบ (จากข้อแรก) เพื่อความง่ายในการตรวจสอบเงื่อนไข "ทำแบบทดสอบหมวด..."
@@ -1449,7 +1459,9 @@ function showResults() {
             category: questCategory,
             percentage: percentage,
             correctTheory: correctTheory,
-            correctCalculation: correctCalculation
+            correctCalculation: correctCalculation,
+            questionCount: state.questionCount,
+            isCustomQuiz: state.isCustomQuiz
         });
         
         // รองรับรูปแบบการคืนค่าใหม่ { completed: [], newAchievements: [] }
