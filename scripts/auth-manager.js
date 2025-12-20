@@ -1,6 +1,6 @@
 // scripts/auth-manager.js
 import { auth, db, googleProvider } from './firebase-config.js';
-import { signInWithRedirect, signOut, onAuthStateChanged, getRedirectResult } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { doc, getDoc, setDoc, updateDoc, collection, getDocs, writeBatch, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 class AuthManagerInternal {
@@ -19,43 +19,13 @@ class AuthManagerInternal {
     }
 
     init() {
-        // ตรวจสอบผลลัพธ์จากการ Redirect (กรณี Login กลับมา) เพื่อดักจับ Error
-        getRedirectResult(auth)
-            .then((result) => {
-                if (result) console.log("Redirect Login Success:", result.user?.uid);
-            })
-            .catch((error) => {
-                console.error("Redirect Login Error:", error);
-                alert("การเข้าสู่ระบบขัดข้อง: " + (error.message || "Unknown error") + "\nหากปัญหายังเกิดซ้ำ โปรดลองเปลี่ยน Browser หรือปิด AdBlock");
-            });
-
         onAuthStateChanged(auth, async (user) => {
             this.isInitialized = true;
             this.currentUser = user;
             if (user) {
                 console.log("User signed in:", user.uid);
-                
-                // Dispatch event to show loading state on UI
-                window.dispatchEvent(new CustomEvent('auth-sync-start'));
-
-                // FIX: ครอบด้วย try-catch เพื่อให้ระบบทำงานต่อได้แม้การซิงค์จะล้มเหลว (เช่น เน็ตหลุด)
-                try {
-                    await this.syncLocalToCloud(user);
-                } catch (e) {
-                    console.warn("Sync local to cloud failed (might be offline):", e);
-                    // เพิ่มการแจ้งเตือนที่ชัดเจนเมื่อไม่พบฐานข้อมูล
-                    if (e.code === 'not-found' || (e.message && e.message.includes('404'))) {
-                        alert("เชื่อมต่อฐานข้อมูลไม่สำเร็จ (404)\n\nสาเหตุ: ยังไม่ได้สร้าง Firestore Database ใน Firebase Console\n\nวิธีแก้: ไปที่ Firebase Console > Build > Firestore Database แล้วกด 'Create database'");
-                    }
-                }
-                try {
-                    await this.syncHistory(user); // ซิงค์ประวัติการทำข้อสอบ
-                } catch (e) {
-                    console.warn("Sync history failed (might be offline):", e);
-                }
-                
-                // Dispatch event to hide loading state
-                window.dispatchEvent(new CustomEvent('auth-sync-end'));
+                await this.syncLocalToCloud(user);
+                await this.syncHistory(user); // ซิงค์ประวัติการทำข้อสอบ
             } else {
                 console.log("User signed out");
             }
@@ -72,13 +42,8 @@ class AuthManagerInternal {
     // ฟังก์ชัน Login
     async login() {
         try {
-            // Force sign out first to ensure account picker works and clear old session
-            try {
-                await signOut(auth);
-            } catch (e) {
-                console.warn("Pre-login sign out failed:", e);
-            }
-            await signInWithRedirect(auth, googleProvider);
+            const result = await signInWithPopup(auth, googleProvider);
+            return result.user;
         } catch (error) {
             console.error("Login failed:", error);
             throw error;
@@ -89,7 +54,6 @@ class AuthManagerInternal {
     async logout() {
         try {
             await signOut(auth);
-            localStorage.removeItem(this.LOCAL_STORAGE_KEY); // ล้างข้อมูล Gamification ในเครื่อง
             // Optional: ล้างหน้าจอหรือรีโหลด
             window.location.reload();
         } catch (error) {
@@ -120,22 +84,16 @@ class AuthManagerInternal {
     // ฟังก์ชันหลักสำหรับโหลดข้อมูล (ใช้แทนการดึง localStorage โดยตรง)
     async loadUserData() {
         if (this.currentUser) {
-            try {
-                // ถ้าล็อกอิน ให้ดึงจาก Firestore
-                const docRef = doc(db, "users", this.currentUser.uid);
-                const docSnap = await getDoc(docRef);
-                
-                if (docSnap.exists()) {
-                    const cloudData = docSnap.data();
-                    console.log("Loaded user data from cloud:", cloudData);
-                    // อัปเดตลง LocalStorage ด้วยเพื่อให้โค้ดเดิมทำงานต่อได้ (Hybrid)
-                    localStorage.setItem(this.LOCAL_STORAGE_KEY, JSON.stringify(cloudData));
-                    this.updateLastSyncTime();
-                    return cloudData;
-                }
-            } catch (e) {
-                console.warn("Failed to load from cloud, falling back to local:", e);
-                // Fall through to local storage load
+            // ถ้าล็อกอิน ให้ดึงจาก Firestore
+            const docRef = doc(db, "users", this.currentUser.uid);
+            const docSnap = await getDoc(docRef);
+            
+            if (docSnap.exists()) {
+                const cloudData = docSnap.data();
+                // อัปเดตลง LocalStorage ด้วยเพื่อให้โค้ดเดิมทำงานต่อได้ (Hybrid)
+                localStorage.setItem(this.LOCAL_STORAGE_KEY, JSON.stringify(cloudData));
+                this.updateLastSyncTime();
+                return cloudData;
             }
         }
         
@@ -177,73 +135,29 @@ class AuthManagerInternal {
     // ฟังก์ชัน Sync ข้อมูลเก่าขึ้น Cloud เมื่อล็อกอินครั้งแรก
     async syncLocalToCloud(user) {
         const localDataString = localStorage.getItem(this.LOCAL_STORAGE_KEY);
-        let localData = null;
-        try {
-            localData = localDataString ? JSON.parse(localDataString) : null;
-        } catch (e) {
-            console.warn("Invalid local data, skipping migration:", e);
-        }
-        
+        if (!localDataString) return; // ไม่มีข้อมูลเก่า ไม่ต้องทำอะไร
+
+        const localData = JSON.parse(localDataString);
         const userRef = doc(db, "users", user.uid);
-        let docSnap;
-        try {
-            docSnap = await getDoc(userRef);
-        } catch (e) {
-            console.error("Error fetching user doc in syncLocalToCloud:", e);
-            throw e;
-        }
+        const docSnap = await getDoc(userRef);
 
         if (!docSnap.exists()) {
-            // กรณี: ผู้ใช้ใหม่บน Cloud (หรือเพิ่งล็อกอินครั้งแรก)
-            console.log("Creating new user data on cloud...");
-
-            // เตรียมข้อมูลเริ่มต้นจาก Google Profile
-            let initialData = {
-                displayName: user.displayName || "User",
-                avatar: user.photoURL || '🧑‍🎓', // ใช้รูปจาก Google หรือค่าเริ่มต้น
-                email: user.email || "",
-                xp: 0,
-                level: 1,
-                badges: [],
-                quizzesCompleted: 0,
-                streak: 0,
-                lastLogin: new Date().toDateString(),
-            };
-
-            // ถ้ามีข้อมูลในเครื่อง (ผู้เรียนเก่าเพิ่งล็อกอิน) ให้ Merge ข้อมูลเดิมเข้าไป
-            if (localData) {
-                console.log("Migrating local data to cloud...");
-                initialData = { ...initialData, ...localData };
-                
-                // ถ้าชื่อใน Local เป็น Guest ให้ใช้ชื่อจาก Google ดีกว่า
-                if (localData.displayName === 'ผู้เรียน (Guest)' && user.displayName) {
-                    initialData.displayName = user.displayName;
-                }
-                // ถ้า Avatar ใน Local เป็น Default ให้ใช้รูปจาก Google
-                if ((!localData.avatar || localData.avatar === '🧑‍🎓') && user.photoURL) {
-                    initialData.avatar = user.photoURL;
-                }
-            }
-
-            // บันทึกลง Firestore
-            await setDoc(userRef, initialData);
+            // กรณี: ผู้ใช้ใหม่บน Cloud แต่มีข้อมูลในเครื่อง (ผู้เรียนเก่าเพิ่งล็อกอิน)
+            // ให้อัปโหลดข้อมูลในเครื่องขึ้น Cloud ทันที
+            console.log("Migrating local data to cloud...");
+            await setDoc(userRef, localData);
             
-            // สร้าง Leaderboard entry
-            await setDoc(doc(db, "leaderboard", user.uid), {
-                displayName: initialData.displayName,
-                photoURL: initialData.avatar,
-                totalXP: initialData.xp || 0,
-                level: initialData.level || 1,
-                lastUpdated: new Date()
-            });
-            
-            // อัปเดต LocalStorage ให้ตรงกันทันที
-            localStorage.setItem(this.LOCAL_STORAGE_KEY, JSON.stringify(initialData));
-            this.updateLastSyncTime();
-
-            if (localData) {
-                alert("ซิงค์ข้อมูลเก่าของคุณขึ้นระบบเรียบร้อยแล้ว!");
+            // สร้าง Leaderboard entry ด้วย
+            if (localData.totalXP) {
+                await setDoc(doc(db, "leaderboard", user.uid), {
+                    displayName: user.displayName,
+                    photoURL: user.photoURL,
+                    totalXP: localData.totalXP,
+                    level: localData.level || 1,
+                    lastUpdated: new Date()
+                });
             }
+            alert("ซิงค์ข้อมูลเก่าของคุณขึ้นระบบเรียบร้อยแล้ว!");
         } else {
             // กรณี: มีข้อมูลบน Cloud อยู่แล้ว (อาจจะเล่นเครื่องอื่นมา)
             // กลยุทธ์: ใช้ข้อมูลบน Cloud เป็นหลัก (Overwrite Local)
@@ -251,7 +165,6 @@ class AuthManagerInternal {
             console.log("Found cloud data, syncing to local...");
             const cloudData = docSnap.data();
             localStorage.setItem(this.LOCAL_STORAGE_KEY, JSON.stringify(cloudData));
-            this.updateLastSyncTime();
         }
     }
 

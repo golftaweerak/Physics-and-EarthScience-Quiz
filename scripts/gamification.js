@@ -196,7 +196,7 @@ function getAvatarFrameClass(avatar) {
     return 'ring-2 ring-green-500';
 }
 
-export function getLevelBorderClass(level) {
+function getLevelBorderClass(level) {
     if (level >= 20) return 'bg-gradient-to-br from-red-500 via-yellow-400 to-green-500 animate-pulse'; // Rainbow
     if (level >= 15) return 'bg-gradient-to-br from-cyan-300 to-blue-500'; // Diamond
     if (level >= 10) return 'bg-gradient-to-br from-yellow-300 to-amber-500'; // Gold
@@ -208,31 +208,6 @@ export class Gamification {
     constructor() {
         this.storageKey = 'app_gamification_data';
         this.authManager = authManager;
-
-        // Listen for auth sync events to show loading spinner on login button
-        window.addEventListener('auth-sync-start', () => {
-            const loginBtn = document.getElementById('user-hub-login-btn');
-            if (loginBtn) {
-                loginBtn.disabled = true;
-                if (!loginBtn.dataset.originalContent) {
-                    loginBtn.dataset.originalContent = loginBtn.innerHTML;
-                }
-                loginBtn.innerHTML = `
-                    <svg class="animate-spin h-4 w-4 text-gray-600 dark:text-gray-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                    <span>กำลังซิงค์...</span>
-                `;
-                loginBtn.classList.add('opacity-75', 'cursor-not-allowed');
-            }
-        });
-
-        window.addEventListener('auth-sync-end', () => {
-            const loginBtn = document.getElementById('user-hub-login-btn');
-            if (loginBtn && loginBtn.dataset.originalContent) {
-                loginBtn.innerHTML = loginBtn.dataset.originalContent;
-                loginBtn.disabled = false;
-                loginBtn.classList.remove('opacity-75', 'cursor-not-allowed');
-            }
-        });
 
         const isNewToGamification = !localStorage.getItem(this.storageKey);
         
@@ -270,24 +245,16 @@ export class Gamification {
 
         // เชื่อมต่อกับ AuthManager เพื่อโหลดข้อมูลเมื่อสถานะ Login เปลี่ยนแปลง
         this.authManager.onUserChange(async (user) => {
-            // กรณี Logout (user เป็น null) ให้รีเซ็ตทันทีและบันทึกทับ LocalStorage
-            if (!user) {
-                this.state = this.getDefaultState();
-                this.saveState(); 
-                this.onStateUpdated();
-                return;
-            }
-
             // โหลดข้อมูลล่าสุด (จะจัดการให้เองว่ามาจาก Cloud หรือ Local)
             try {
                 const data = await this.authManager.loadUserData();
                 if (data) {
                     // Merge ข้อมูลจาก Cloud เข้ากับ Default State เพื่อความสมบูรณ์
                     this.state = { ...this.getDefaultState(), ...data };
+                    // ตรวจสอบ Streak และอัปเดต UI
+                    this.updateStreak();
+                    this.onStateUpdated();
                 }
-                // ตรวจสอบ Streak และอัปเดต UI (ทำเสมอเพื่อให้สถานะ Login เปลี่ยน)
-                this.updateStreak();
-                this.onStateUpdated();
             } catch (error) {
                 console.error("Failed to load user data on auth change (client might be offline):", error);
                 // Even if cloud fails, we can still proceed with local data.
@@ -473,7 +440,6 @@ export class Gamification {
     // IMPROVEMENT: Centralized UI Update Trigger
     onStateUpdated() {
         this.updateHeaderAvatar();
-        this.updateUserMenu();
         this.applyTheme(this.state.selectedTheme);
         // Dispatch event for other components (e.g. profile page charts) to react
         window.dispatchEvent(new CustomEvent('gamification-updated', { detail: this.state }));
@@ -535,39 +501,9 @@ export class Gamification {
         return this.state.consumables ? (this.state.consumables[itemId] || 0) : 0;
     }
 
-    updateUserMenu() {
-        const emailEl = document.getElementById('user-hub-email');
-        const loginBtn = document.getElementById('user-hub-login-btn');
-        const logoutBtn = document.getElementById('user-hub-logout-btn');
-        const user = this.authManager.currentUser;
-
-        if (user) {
-            if (emailEl) {
-                emailEl.textContent = user.email;
-                emailEl.classList.remove('hidden');
-            }
-            if (loginBtn) loginBtn.classList.add('hidden');
-            if (logoutBtn) logoutBtn.classList.remove('hidden');
-        } else {
-            if (emailEl) {
-                emailEl.textContent = '';
-                emailEl.classList.add('hidden');
-            }
-            if (loginBtn) loginBtn.classList.remove('hidden');
-            if (logoutBtn) logoutBtn.classList.add('hidden');
-        }
-    }
-
     updateHeaderAvatar() {
         const profileLink = document.getElementById('main-header-profile-link');
         if (profileLink) {
-            // ปรับแต่งปุ่มแม่ (Parent Button) ให้ Padding น้อยลงเพื่อให้รูปใหญ่ขึ้นและเห็นกรอบชัดเจน
-            const parentBtn = profileLink.closest('button');
-            if (parentBtn) {
-                parentBtn.classList.remove('p-2');
-                parentBtn.classList.add('p-0.5');
-            }
-
             const avatar = this.state.avatar || '🧑‍🎓';
             const level = this.getCurrentLevel().level;
 

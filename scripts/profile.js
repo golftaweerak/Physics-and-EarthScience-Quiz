@@ -1,4 +1,4 @@
-import { Gamification, BADGES, ACHIEVEMENTS, SHOP_ITEMS, XP_THRESHOLDS, TRACK_TITLES, getLevelBorderClass } from './gamification.js';
+import { Gamification, BADGES, ACHIEVEMENTS, SHOP_ITEMS, XP_THRESHOLDS, TRACK_TITLES } from './gamification.js';
 import { getDetailedProgressForAllQuizzes, calculateStrengthsAndWeaknesses } from './data-manager.js';
 import { renderDailyQuests } from './daily-quests-renderer.js';
 import { ModalHandler } from './modal-handler.js';
@@ -82,6 +82,14 @@ function getTitleFromXP(xp, type) {
     const titles = TRACK_TITLES[track] || TRACK_TITLES.overall;
     const titleIndex = Math.min(level - 1, titles.length - 1);
     return titles[titleIndex];
+}
+
+function getLevelBorderClass(level) {
+    if (level >= 20) return 'bg-gradient-to-br from-red-500 via-yellow-400 to-green-500 animate-pulse'; // Rainbow
+    if (level >= 15) return 'bg-gradient-to-br from-cyan-300 to-blue-500'; // Diamond
+    if (level >= 10) return 'bg-gradient-to-br from-yellow-300 to-amber-500'; // Gold
+    if (level >= 5) return 'bg-gradient-to-br from-gray-300 to-blue-300'; // Silver/Blue
+    return 'bg-gray-300 dark:bg-gray-600'; // Bronze/Gray
 }
 
 function getAvatarFrameClass(avatar) {
@@ -619,12 +627,7 @@ function setupLeaderboardSystem(game) {
 
         } catch (error) {
             console.error("Leaderboard error:", error);
-            let msg = 'ไม่สามารถโหลดข้อมูลได้<br>(ต้องเชื่อมต่ออินเทอร์เน็ต)';
-            // เช็ค Error 404 เพื่อแจ้งเตือนเรื่อง Config
-            if (error.message && error.message.includes('404')) {
-                msg = 'ไม่พบฐานข้อมูล (404)<br>กรุณาตรวจสอบ Project ID หรือชื่อ Database';
-            }
-            listContainer.innerHTML = `<div class="text-center py-8 text-red-500 text-sm">${msg}</div>`;
+            listContainer.innerHTML = `<div class="text-center py-8 text-red-500 text-sm">ไม่สามารถโหลดข้อมูลได้<br>(ต้องเชื่อมต่ออินเทอร์เน็ต)</div>`;
         }
     };
 
