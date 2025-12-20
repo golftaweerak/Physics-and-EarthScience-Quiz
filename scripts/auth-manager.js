@@ -2,6 +2,7 @@
 import { auth, db, googleProvider } from './firebase-config.js';
 import { signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { doc, getDoc, setDoc, updateDoc, collection, getDocs, writeBatch, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { showToast } from './toast.js';
 
 class AuthManagerInternal {
     constructor() {
@@ -16,6 +17,7 @@ class AuthManagerInternal {
         });
         
         this.init();
+        this.handlePostLogout();
     }
 
     init() {
@@ -39,6 +41,19 @@ class AuthManagerInternal {
         });
     }
 
+    handlePostLogout() {
+        if (sessionStorage.getItem('logout_toast')) {
+            sessionStorage.removeItem('logout_toast');
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', () => {
+                    showToast('ออกจากระบบสำเร็จ', 'คุณได้ออกจากระบบเรียบร้อยแล้ว', '👋');
+                });
+            } else {
+                showToast('ออกจากระบบสำเร็จ', 'คุณได้ออกจากระบบเรียบร้อยแล้ว', '👋');
+            }
+        }
+    }
+
     // ฟังก์ชัน Login
     async login() {
         try {
@@ -54,10 +69,32 @@ class AuthManagerInternal {
     async logout() {
         try {
             await signOut(auth);
+            
+            // Clear main gamification data to prevent data leakage
+            localStorage.removeItem(this.LOCAL_STORAGE_KEY);
+            localStorage.removeItem('last_cloud_sync');
+
+            // Clear quiz history items
+            const keysToRemove = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key && key.startsWith('quizState-')) {
+                    keysToRemove.push(key);
+                }
+            }
+            keysToRemove.forEach(key => localStorage.removeItem(key));
+
+            // Clear SessionStorage to remove any temporary session data
+            sessionStorage.clear();
+
+            // Set flag to show toast after reload
+            sessionStorage.setItem('logout_toast', 'true');
+
             // Optional: ล้างหน้าจอหรือรีโหลด
             window.location.reload();
         } catch (error) {
             console.error("Logout failed:", error);
+            showToast('ออกจากระบบไม่สำเร็จ', 'เกิดข้อผิดพลาดในการออกจากระบบ', '❌', 'error');
         }
     }
 
