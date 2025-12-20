@@ -1,7 +1,7 @@
 // scripts/auth-manager.js
 import { auth, db, googleProvider } from './firebase-config.js';
 import { signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { doc, getDoc, setDoc, updateDoc, collection, getDocs, writeBatch, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { doc, getDoc, setDoc, updateDoc, collection, getDocs, writeBatch, deleteDoc, terminate } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { showToast } from './toast.js';
 
 class AuthManagerInternal {
@@ -69,6 +69,13 @@ class AuthManagerInternal {
     async logout() {
         try {
             await signOut(auth);
+            
+            // Terminate Firestore to prevent connection errors during cleanup
+            try {
+                await terminate(db);
+            } catch (e) {
+                console.warn("Firestore termination error:", e);
+            }
             
             // Clear main gamification data to prevent data leakage
             localStorage.removeItem(this.LOCAL_STORAGE_KEY);
