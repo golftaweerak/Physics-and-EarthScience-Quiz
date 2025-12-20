@@ -43,8 +43,9 @@ class AuthManagerInternal {
                     await this.syncLocalToCloud(user);
                 } catch (e) {
                     console.warn("Sync local to cloud failed (might be offline):", e);
-                    if (e.message && e.message.includes('404')) {
-                        console.error("Database connection error (404). Please check Firebase config.");
+                    // เพิ่มการแจ้งเตือนที่ชัดเจนเมื่อไม่พบฐานข้อมูล
+                    if (e.code === 'not-found' || (e.message && e.message.includes('404'))) {
+                        alert("เชื่อมต่อฐานข้อมูลไม่สำเร็จ (404)\n\nสาเหตุ: ยังไม่ได้สร้าง Firestore Database ใน Firebase Console\n\nวิธีแก้: ไปที่ Firebase Console > Build > Firestore Database แล้วกด 'Create database'");
                     }
                 }
                 try {
