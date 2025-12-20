@@ -20,9 +20,13 @@ class AuthManagerInternal {
 
     init() {
         // ตรวจสอบผลลัพธ์จากการ Redirect (กรณี Login กลับมา) เพื่อดักจับ Error
-        getRedirectResult(auth).catch((error) => {
-            console.error("Redirect Login Error:", error);
-        });
+        getRedirectResult(auth)
+            .then((result) => {
+                if (result) console.log("Redirect Login Success:", result.user?.uid);
+            })
+            .catch((error) => {
+                console.error("Redirect Login Error:", error);
+            });
 
         onAuthStateChanged(auth, async (user) => {
             this.isInitialized = true;
@@ -47,8 +51,7 @@ class AuthManagerInternal {
     // ฟังก์ชัน Login
     async login() {
         try {
-            // Force sign out first to ensure account picker works and clear old session
-            await signOut(auth);
+            // ไม่ต้อง signOut ก่อน เพราะเราตั้งค่า prompt: 'select_account' ไว้แล้ว
             await signInWithRedirect(auth, googleProvider);
         } catch (error) {
             console.error("Login failed:", error);
