@@ -1,6 +1,6 @@
 // scripts/auth-manager.js
 import { auth, db, googleProvider } from './firebase-config.js';
-import { signInWithRedirect, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { signInWithRedirect, signOut, onAuthStateChanged, getRedirectResult } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { doc, getDoc, setDoc, updateDoc, collection, getDocs, writeBatch, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 class AuthManagerInternal {
@@ -19,6 +19,11 @@ class AuthManagerInternal {
     }
 
     init() {
+        // ตรวจสอบผลลัพธ์จากการ Redirect (กรณี Login กลับมา) เพื่อดักจับ Error
+        getRedirectResult(auth).catch((error) => {
+            console.error("Redirect Login Error:", error);
+        });
+
         onAuthStateChanged(auth, async (user) => {
             this.isInitialized = true;
             this.currentUser = user;
@@ -42,6 +47,8 @@ class AuthManagerInternal {
     // ฟังก์ชัน Login
     async login() {
         try {
+            // Force sign out first to ensure account picker works and clear old session
+            await signOut(auth);
             await signInWithRedirect(auth, googleProvider);
         } catch (error) {
             console.error("Login failed:", error);

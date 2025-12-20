@@ -196,7 +196,7 @@ function getAvatarFrameClass(avatar) {
     return 'ring-2 ring-green-500';
 }
 
-function getLevelBorderClass(level) {
+export function getLevelBorderClass(level) {
     if (level >= 20) return 'bg-gradient-to-br from-red-500 via-yellow-400 to-green-500 animate-pulse'; // Rainbow
     if (level >= 15) return 'bg-gradient-to-br from-cyan-300 to-blue-500'; // Diamond
     if (level >= 10) return 'bg-gradient-to-br from-yellow-300 to-amber-500'; // Gold
@@ -536,6 +536,13 @@ export class Gamification {
     updateHeaderAvatar() {
         const profileLink = document.getElementById('main-header-profile-link');
         if (profileLink) {
+            // ปรับแต่งปุ่มแม่ (Parent Button) ให้ Padding น้อยลงเพื่อให้รูปใหญ่ขึ้นและเห็นกรอบชัดเจน
+            const parentBtn = profileLink.closest('button');
+            if (parentBtn) {
+                parentBtn.classList.remove('p-2');
+                parentBtn.classList.add('p-0.5');
+            }
+
             const avatar = this.state.avatar || '🧑‍🎓';
             const level = this.getCurrentLevel().level;
 
