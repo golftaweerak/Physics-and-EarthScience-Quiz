@@ -245,6 +245,14 @@ export class Gamification {
 
         // เชื่อมต่อกับ AuthManager เพื่อโหลดข้อมูลเมื่อสถานะ Login เปลี่ยนแปลง
         this.authManager.onUserChange(async (user) => {
+            // กรณี Logout (user เป็น null) ให้รีเซ็ตทันทีและบันทึกทับ LocalStorage
+            if (!user) {
+                this.state = this.getDefaultState();
+                this.saveState(); 
+                this.onStateUpdated();
+                return;
+            }
+
             // โหลดข้อมูลล่าสุด (จะจัดการให้เองว่ามาจาก Cloud หรือ Local)
             try {
                 const data = await this.authManager.loadUserData();
@@ -253,10 +261,6 @@ export class Gamification {
                     this.state = { ...this.getDefaultState(), ...data };
                     // ตรวจสอบ Streak และอัปเดต UI
                     this.updateStreak();
-                    this.onStateUpdated();
-                } else {
-                    // กรณีไม่พบข้อมูล (เช่น Logout แล้วไม่มีข้อมูล Guest) ให้รีเซ็ตเป็นค่าเริ่มต้น
-                    this.state = this.getDefaultState();
                     this.onStateUpdated();
                 }
             } catch (error) {

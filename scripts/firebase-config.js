@@ -2,7 +2,7 @@
 // ใช้ CDN URL เพื่อให้ทำงานได้บน Browser โดยไม่ต้องตั้งค่า Bundler เพิ่มเติม
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
-import { getAuth, GoogleAuthProvider, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getAuth, GoogleAuthProvider, setPersistence, browserLocalPersistence, signInWithPopup, signInWithRedirect } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -29,4 +29,4 @@ setPersistence(auth, browserLocalPersistence)
     console.error("Auth persistence error:", error.code, error.message);
   });
 
-export { app, analytics, auth, db, googleProvider };
+export { app, analytics, auth, db, googleProvider, signInWithPopup, signInWithRedirect };
