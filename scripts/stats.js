@@ -116,6 +116,214 @@ function calculateScoreTrend(stats) {
 }
 
 /**
+ * NEW: Calculates performance for each specific topic/learning outcome.
+ * @param {Array<object>} stats - The array of all quiz progress data.
+ * @returns {{best: object|null, worst: object|null}}
+ */
+function calculateTopicPerformance(stats) {
+    const performanceByTopic = {};
+
+    stats.forEach(stat => {
+        if (!stat.userAnswers || !stat.shuffledQuestions) return;
+        stat.userAnswers.forEach((answer, index) => {
+            if (!answer) return;
+            const question = stat.shuffledQuestions[index];
+            if (!question || !question.subCategory || !question.subCategory.specific) return;
+
+            const topics = Array.isArray(question.subCategory.specific) ? question.subCategory.specific : [question.subCategory.specific];
+
+            topics.forEach(topicName => {
+                const cleanTopicName = topicName.replace(/^ว\s[\d\.]+\sม\.[\d\/]+\s/, '').replace(/^\d+\.\s/, '').trim();
+                if (!performanceByTopic[cleanTopicName]) {
+                    performanceByTopic[cleanTopicName] = { correct: 0, total: 0 };
+                }
+                performanceByTopic[cleanTopicName].total++;
+                if (answer.isCorrect) {
+                    performanceByTopic[cleanTopicName].correct++;
+                }
+            });
+        });
+    });
+
+    const scoredTopics = Object.entries(performanceByTopic)
+        .map(([name, data]) => ({
+            name,
+            ...data,
+            score: data.total > 0 ? (data.correct / data.total) * 100 : 0,
+        }))
+        .filter(topic => topic.total >= 5); // Only consider topics with at least 5 questions
+
+    if (scoredTopics.length < 2) {
+        return { best: null, worst: null };
+    }
+
+    scoredTopics.sort((a, b) => b.score - a.score);
+
+    const best = scoredTopics[0];
+    const worst = scoredTopics[scoredTopics.length - 1];
+
+    // Ensure there's a meaningful difference to report
+    if (best && worst && best.score > worst.score) {
+        return { best, worst };
+    }
+
+    return { best: null, worst: null };
+}
+
+/**
+ * NEW: Calculates performance based on question type (theory vs. calculation).
+ * @param {Array<object>} stats - The array of all quiz progress data.
+ * @returns {{theory: object, calculation: object}}
+ */
+function calculateQuestionTypePerformance(stats) {
+    const performanceByType = { theory: { correct: 0, total: 0 }, calculation: { correct: 0, total: 0 } };
+    stats.forEach(stat => {
+        if (!stat.userAnswers || !stat.shuffledQuestions) return;
+        stat.userAnswers.forEach((answer, index) => {
+            if (!answer) return;
+            const question = stat.shuffledQuestions[index];
+            if (!question) return;
+            const type = question.type === 'fill-in-number' ? 'calculation' : 'theory';
+            performanceByType[type].total++;
+            if (answer.isCorrect) performanceByType[type].correct++;
+        });
+    });
+    const theoryScore = performanceByType.theory.total > 0 ? (performanceByType.theory.correct / performanceByType.theory.total) * 100 : 0;
+    const calcScore = performanceByType.calculation.total > 0 ? (performanceByType.calculation.correct / performanceByType.calculation.total) * 100 : 0;
+    return { theory: { ...performanceByType.theory, score: theoryScore }, calculation: { ...performanceByType.calculation, score: calcScore } };
+}
+
+/**
+ * NEW: Creates a styled card for displaying a single statistic.
+ * @param {string} value - The main value of the stat.
+ * @param {string} label - The label for the stat.
+ * @param {string} icon - The SVG icon HTML string.
+ * @param {string} theme - The color theme ('green', 'red', 'blue', 'purple', 'gray').
+ * @returns {HTMLElement} The created card element.
+ */
+function createStatCard(value, label, icon, theme) {
+    const themeClasses = {
+        green: { bg: "bg-green-100 dark:bg-green-900/40", text: "text-green-700 dark:text-green-300" },
+        red: { bg: "bg-red-100 dark:bg-red-900/40", text: "text-red-700 dark:text-red-300" },
+        blue: { bg: "bg-blue-100 dark:bg-blue-900/40", text: "text-blue-700 dark:text-blue-300" },
+        purple: { bg: "bg-purple-100 dark:bg-purple-900/40", text: "text-purple-700 dark:text-purple-400" },
+        gray: { bg: "bg-gray-100 dark:bg-gray-700/60", text: "text-gray-700 dark:text-gray-300" },
+    };
+    const classes = themeClasses[theme] || themeClasses.gray;
+
+    const card = document.createElement("div");
+    card.className = `flex items-center gap-4 p-4 bg-white dark:bg-gray-800/50 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700`;
+    card.innerHTML = `
+        <div class="flex-shrink-0 h-12 w-12 rounded-lg flex items-center justify-center ${classes.bg} ${classes.text}">
+            ${icon}
+        </div>
+        <div>
+            <p class="text-xl font-bold text-gray-800 dark:text-gray-200">${value}</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400">${label}</p>
+        </div>
+    `;
+    return card;
+}
+
+/**
+ * NEW: Renders in-depth statistics like average time per question.
+ * @param {Array<object>} allStats - The array of all quiz progress data.
+ */
+function renderInDepthStats(allStats) {
+    const container = document.getElementById('summary-cards-grid');
+    if (!container) return;
+
+    // --- 1. Calculate Average Time Per Question ---
+    let totalTimeSpentSeconds = 0;
+    let totalQuestionsAnswered = 0;
+
+    allStats.forEach(quiz => {
+        // Ensure the quiz has a recorded time and was actually attempted.
+        if (quiz.totalTimeSpent && quiz.shuffledQuestions && quiz.userAnswers && quiz.userAnswers.some(a => a !== null)) {
+            totalTimeSpentSeconds += quiz.totalTimeSpent;
+            totalQuestionsAnswered += quiz.shuffledQuestions.length;
+        }
+    });
+
+    const averageTimePerQuestion = totalQuestionsAnswered > 0
+        ? (totalTimeSpentSeconds / totalQuestionsAnswered)
+        : 0;
+    const timeIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" /></svg>`;
+
+    if (totalQuestionsAnswered > 0) {
+        const avgTimeCard = createStatCard(
+            `${averageTimePerQuestion.toFixed(1)} วิ/ข้อ`,
+            'เวลาเฉลี่ยต่อข้อ',
+            timeIcon,
+            'purple'
+        );
+        container.appendChild(avgTimeCard);
+    }
+
+    // --- 2. Calculate and Render Best/Worst Topics ---
+    const topicPerformance = calculateTopicPerformance(allStats);
+    if (topicPerformance.best) {
+        const bestTopicIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>`;
+        const bestTopicCard = createStatCard(`${topicPerformance.best.score.toFixed(0)}%`, `หัวข้อที่ถนัด: ${topicPerformance.best.name}`, bestTopicIcon, 'green');
+        container.appendChild(bestTopicCard);
+    }
+    if (topicPerformance.worst) {
+        const worstTopicIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" /></svg>`;
+        const worstTopicCard = createStatCard(`${topicPerformance.worst.score.toFixed(0)}%`, `ควรทบทวน: ${topicPerformance.worst.name}`, worstTopicIcon, 'red');
+        container.appendChild(worstTopicCard);
+    }
+
+    // --- 3. Calculate and Render Question Type Performance ---
+    const typePerformance = calculateQuestionTypePerformance(allStats);
+    const theoryIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" /><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd" /></svg>`;
+    const calcIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2H6zm1 2a1 1 0 000 2h6a1 1 0 100-2H7zM6 7a1 1 0 011-1h4a1 1 0 110 2H7a1 1 0 01-1-1zm0 3a1 1 0 100 2h4a1 1 0 100-2H6z" clip-rule="evenodd" /></svg>`;
+    
+    if (typePerformance.theory.total > 0) {
+        const theoryCard = createStatCard(`${typePerformance.theory.score.toFixed(0)}%`, `ความแม่นยำ (ทฤษฎี)`, theoryIcon, 'blue');
+        container.appendChild(theoryCard);
+    }
+    if (typePerformance.calculation.total > 0) {
+        const calcCard = createStatCard(`${typePerformance.calculation.score.toFixed(0)}%`, `ความแม่นยำ (คำนวณ)`, calcIcon, 'blue');
+        container.appendChild(calcCard);
+    }
+}
+
+/**
+ * NEW: Calculates the distribution of scores for completed quizzes.
+ * @param {Array<object>} stats - The array of stats from getAllStats.
+ * @returns {{labels: Array<string>, data: Array<number>}} An object for Chart.js.
+ */
+function calculateScoreDistribution(stats) {
+    const scoreBins = {
+        '0-9%': 0, '10-19%': 0, '20-29%': 0, '30-39%': 0, '40-49%': 0,
+        '50-59%': 0, '60-69%': 0, '70-79%': 0, '80-89%': 0, '90-100%': 0
+    };
+
+    stats.filter(s => s.isFinished).forEach(stat => {
+        const total = stat.shuffledQuestions?.length || 0;
+        const score = stat.score || 0;
+        if (total > 0) {
+            const percentage = (score / total) * 100;
+            if (percentage >= 90) scoreBins['90-100%']++;
+            else if (percentage >= 80) scoreBins['80-89%']++;
+            else if (percentage >= 70) scoreBins['70-79%']++;
+            else if (percentage >= 60) scoreBins['60-69%']++;
+            else if (percentage >= 50) scoreBins['50-59%']++;
+            else if (percentage >= 40) scoreBins['40-49%']++;
+            else if (percentage >= 30) scoreBins['30-39%']++;
+            else if (percentage >= 20) scoreBins['20-29%']++;
+            else if (percentage >= 10) scoreBins['10-19%']++;
+            else scoreBins['0-9%']++;
+        }
+    });
+
+    return {
+        labels: Object.keys(scoreBins),
+        data: Object.values(scoreBins)
+    };
+}
+
+/**
  * NEW: Renders the score trend line chart.
  * @param {object} trendData - Data from calculateScoreTrend.
  */
@@ -176,6 +384,70 @@ function renderScoreTrendChart(trendData) {
             maintainAspectRatio: false,
             scales: { y: { beginAtZero: true, max: 100, ticks: { color: textColor, callback: value => value + '%' }, grid: { color: gridColor } }, x: { ticks: { color: textColor }, grid: { display: false } } },
             plugins: { legend: { display: false }, tooltip: { callbacks: { label: context => ` คะแนน: ${context.raw.toFixed(1)}%` } } }
+        }
+    });
+}
+
+/**
+ * NEW: Renders the score distribution bar chart.
+ * @param {object} distributionData - Data from calculateScoreDistribution.
+ */
+function renderScoreDistributionChart(distributionData) {
+    const chartContainer = document.getElementById('score-distribution-chart')?.closest('section');
+    const ctx = document.getElementById('score-distribution-chart')?.getContext('2d');
+
+    if (ctx) {
+        const existingChart = Chart.getChart(ctx);
+        if (existingChart) existingChart.destroy();
+    }
+    if (!ctx || !chartContainer) return;
+
+    if (typeof Chart === 'undefined') {
+        console.warn("Chart.js is not loaded. Skipping score distribution chart.");
+        return;
+    }
+
+    const totalScores = distributionData.data.reduce((a, b) => a + b, 0);
+    if (totalScores === 0) {
+        chartContainer.innerHTML = `
+            <h2 class="text-xl font-bold font-kanit mb-4 text-center">การกระจายของคะแนน (Score Distribution)</h2>
+            <div class="flex items-center justify-center h-56">
+                <p class="text-center text-gray-500 dark:text-gray-400">ทำแบบทดสอบให้เสร็จเพื่อดูการกระจายของคะแนน</p>
+            </div>
+        `;
+        return;
+    }
+
+    const isDarkMode = document.documentElement.classList.contains('dark');
+    const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+    const textColor = isDarkMode ? '#e5e7eb' : '#1f2937';
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: distributionData.labels,
+            datasets: [{
+                label: 'จำนวนครั้ง',
+                data: distributionData.data,
+                backgroundColor: 'rgba(168, 85, 247, 0.7)',
+                borderColor: 'rgba(168, 85, 247, 1)',
+                borderWidth: 1,
+                borderRadius: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: { color: textColor, precision: 0 },
+                    title: { display: true, text: 'จำนวนครั้ง', color: textColor },
+                    grid: { color: gridColor }
+                },
+                x: { ticks: { color: textColor }, title: { display: true, text: 'ช่วงคะแนน', color: textColor }, grid: { display: false } }
+            },
+            plugins: { legend: { display: false }, tooltip: { callbacks: { label: context => ` จำนวน: ${context.raw} ครั้ง` } } }
         }
     });
 }
@@ -866,6 +1138,9 @@ export async function buildStatsPage() {
             // NEW calls for trend chart
             const trendData = calculateScoreTrend(allStats);
             renderScoreTrendChart(trendData);
+            renderInDepthStats(allStats);
+            const distributionData = calculateScoreDistribution(allStats);
+            renderScoreDistributionChart(distributionData);
 
             finishedQuizModalHandler = new ModalHandler('finished-quiz-modal');
             setupActionListeners();

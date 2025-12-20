@@ -125,6 +125,7 @@ export async function initializeProfile() {
     setupManualSync(game);
     setupLeaderboardSystem(game);
     setupShopAccordion(game);
+    setupBadgeInteractions(game);
 
     // 3. เรนเดอร์กราฟ (Asynchronous/ช้ากว่า)
     document.getElementById('radar-chart-loader')?.classList.remove('hidden');
@@ -1122,26 +1123,133 @@ function renderBadges(game) {
 
     container.innerHTML = BADGES.map(badge => {
         const isEarned = earnedBadgeIds.includes(badge.id);
-        const opacityClass = isEarned ? 'opacity-100' : 'opacity-40 grayscale';
+        const opacityClass = isEarned ? 'opacity-100' : 'opacity-70 grayscale';
         const borderClass = isEarned 
             ? (badge.tier === 'gold' ? 'border-yellow-400 bg-yellow-50 dark:bg-yellow-900/20' 
                 : badge.tier === 'silver' ? 'border-gray-400 bg-gray-50 dark:bg-gray-800' 
                 : 'border-orange-400 bg-orange-50 dark:bg-orange-900/20')
             : 'border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800';
 
+        let overlayHtml = '';
+        const progress = !isEarned ? getBadgeProgress(game, badge.id) : null;
+
+        if (!isEarned) {
+            if (progress) {
+                const percent = Math.min(100, Math.max(0, (progress.current / progress.target) * 100));
+                overlayHtml = `
+                    <div class="absolute inset-x-0 bottom-2 px-2 flex flex-col items-center z-10">
+                        <div class="w-full bg-gray-300 dark:bg-gray-600 rounded-full h-1.5 overflow-hidden shadow-sm">
+                            <div class="bg-blue-500 h-1.5 rounded-full transition-all duration-500" style="width: ${percent}%"></div>
+                        </div>
+                        <div class="text-[10px] font-bold text-gray-800 dark:text-white mt-1 bg-white/95 dark:bg-gray-900/90 px-2 py-0.5 rounded-full backdrop-blur-sm shadow-sm border border-gray-100 dark:border-gray-600">
+                            ${progress.current}/${progress.target} ${progress.label}
+                        </div>
+                    </div>
+                `;
+            } else {
+                overlayHtml = '<div class="absolute inset-0 flex items-center justify-center"><span class="text-xs font-bold text-gray-500 bg-white/80 dark:bg-black/80 px-2 py-1 rounded">Locked</span></div>';
+            }
+        }
+
         return `
-            <div class="flex flex-col items-center p-3 rounded-xl border-2 ${borderClass} ${opacityClass} transition-all duration-300 hover:scale-105 relative group">
+            <div class="badge-card flex flex-col items-center p-3 rounded-xl border-2 ${borderClass} ${opacityClass} transition-all duration-300 hover:scale-105 relative group cursor-pointer overflow-hidden" data-id="${badge.id}">
                 <div class="text-3xl mb-2">${badge.icon}</div>
-                <div class="text-xs font-bold text-center truncate w-full hidden lg:block">${badge.name}</div>
-                ${!isEarned ? '<div class="absolute inset-0 flex items-center justify-center"><span class="text-xs font-bold text-gray-500 bg-white/80 dark:bg-black/80 px-2 py-1 rounded">Locked</span></div>' : ''}
+                <div class="text-xs font-bold text-center truncate w-full hidden lg:block mb-3">${badge.name}</div>
+                ${overlayHtml}
                 
                 <!-- Tooltip -->
-                <div class="absolute bottom-full mb-2 hidden group-hover:block w-32 p-2 bg-gray-900 text-white text-xs rounded shadow-lg z-20 text-center pointer-events-none">
-                    ${badge.desc}
+                <div class="absolute bottom-full mb-2 hidden group-hover:block w-40 p-2 bg-gray-900 text-white text-xs rounded shadow-lg z-20 text-center pointer-events-none">
+                    <div class="font-bold text-yellow-400 mb-1">${badge.name}</div>
+                    <div>${badge.desc}</div>
+                    ${progress ? `<div class="mt-1 text-blue-300 pt-1 border-t border-gray-700">ความคืบหน้า: ${progress.current}/${progress.target} ${progress.label}</div>` : ''}
                 </div>
             </div>
         `;
     }).join('');
+}
+
+function getBadgeProgress(game, badgeId) {
+    const state = game.state;
+    switch (badgeId) {
+        case 'first_quiz': return { current: state.quizzesCompleted, target: 1, label: '' };
+        case 'perfect_score': return { current: state.perfectScores > 0 ? 1 : 0, target: 1, label: '' };
+        case 'streak_3': return { current: state.streak, target: 3, label: 'วัน' };
+        case 'streak_7': return { current: state.streak, target: 7, label: 'วัน' };
+        case 'streak_14': return { current: state.streak, target: 14, label: 'วัน' };
+        case 'streak_30': return { current: state.streak, target: 30, label: 'วัน' };
+        case 'streak_60': return { current: state.streak, target: 60, label: 'วัน' };
+        case 'quiz_master_5': return { current: state.quizzesCompleted, target: 5, label: 'ครั้ง' };
+        case 'quiz_master_10': return { current: state.quizzesCompleted, target: 10, label: 'ครั้ง' };
+        case 'quiz_master_25': return { current: state.quizzesCompleted, target: 25, label: 'ครั้ง' };
+        case 'quiz_master_50': return { current: state.quizzesCompleted, target: 50, label: 'ครั้ง' };
+        case 'quiz_master_100': return { current: state.quizzesCompleted, target: 100, label: 'ครั้ง' };
+        case 'high_scorer_3': return { current: state.highScores80 || 0, target: 3, label: 'ครั้ง' };
+        case 'high_scorer_5': return { current: state.highScores80 || 0, target: 5, label: 'ครั้ง' };
+        case 'high_scorer_10': return { current: state.highScores80 || 0, target: 10, label: 'ครั้ง' };
+        case 'perfect_scorer_3': return { current: state.perfectScores || 0, target: 3, label: 'ครั้ง' };
+        case 'perfect_scorer_5': return { current: state.perfectScores || 0, target: 5, label: 'ครั้ง' };
+        case 'physics_lover': return { current: game.getPhysicsLevel().level, target: 3, label: 'Lv' };
+        case 'physics_expert': return { current: game.getPhysicsLevel().level, target: 5, label: 'Lv' };
+        case 'physics_master': return { current: game.getPhysicsLevel().level, target: 10, label: 'Lv' };
+        case 'earth_lover': return { current: game.getEarthLevel().level, target: 3, label: 'Lv' };
+        case 'earth_expert': return { current: game.getEarthLevel().level, target: 5, label: 'Lv' };
+        case 'earth_master': return { current: game.getEarthLevel().level, target: 10, label: 'Lv' };
+        case 'xp_5k': return { current: state.xp, target: 5000, label: 'XP' };
+        case 'xp_10k': return { current: state.xp, target: 10000, label: 'XP' };
+        case 'shop_spender': return { current: game.getInventory().length, target: 5, label: 'ชิ้น' };
+        case 'dual_expert': 
+            const p = game.getPhysicsLevel().level;
+            const e = game.getEarthLevel().level;
+            return { current: Math.min(p, e), target: 5, label: 'Lv (Min)' };
+        case 'marathon_runner':
+            return { current: state.badges.includes('marathon_runner') ? 1 : 0, target: 1, label: '' };
+        default: return null;
+    }
+}
+
+function setupBadgeInteractions(game) {
+    const container = document.getElementById('profile-badges-grid');
+    const modal = new ModalHandler('badge-details-modal');
+    
+    if (!container) return;
+
+    container.addEventListener('click', (e) => {
+        const card = e.target.closest('.badge-card');
+        if (card) {
+            const badgeId = card.dataset.id;
+            const badge = BADGES.find(b => b.id === badgeId);
+            if (badge) {
+                const isEarned = game.state.badges.includes(badgeId);
+                
+                const iconEl = document.getElementById('badge-modal-icon');
+                const nameEl = document.getElementById('badge-modal-name');
+                const descEl = document.getElementById('badge-modal-desc');
+                const statusEl = document.getElementById('badge-modal-status');
+
+                if (iconEl) {
+                    iconEl.textContent = badge.icon;
+                    // ปรับ Effect รูปภาพตามสถานะ
+                    if (isEarned) {
+                        iconEl.classList.remove('grayscale', 'opacity-50');
+                    } else {
+                        iconEl.classList.add('grayscale', 'opacity-50');
+                    }
+                }
+                if (nameEl) nameEl.textContent = badge.name;
+                if (descEl) descEl.textContent = badge.desc;
+                
+                if (statusEl) {
+                    if (isEarned) {
+                        statusEl.innerHTML = '<span class="px-3 py-1 rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 text-sm font-bold">ได้รับแล้ว</span>';
+                    } else {
+                        statusEl.innerHTML = '<span class="px-3 py-1 rounded-full bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-400 text-sm font-bold">ยังไม่ได้รับ</span>';
+                    }
+                }
+                
+                modal.open();
+            }
+        }
+    });
 }
 
 function renderAchievements(game) {
@@ -1167,6 +1275,18 @@ function renderAchievements(game) {
             currentProgress = game.state.totalCorrectAnswers || 0;
         } else if (ach.type === 'total_quizzes') {
             currentProgress = game.state.quizzesCompleted || 0;
+        } else if (ach.type === 'total_items') {
+            currentProgress = game.getInventory().length;
+        } else if (ach.type === 'total_avatars') {
+            const inventory = game.getInventory();
+            currentProgress = inventory.filter(id => {
+                const item = SHOP_ITEMS.find(i => i.id === id);
+                return item && item.type === 'avatar';
+            }).length;
+        } else if (ach.type === 'high_scores_80') {
+            currentProgress = game.state.highScores80 || 0;
+        } else if (ach.type === 'perfect_scores') {
+            currentProgress = game.state.perfectScores || 0;
         }
 
         const percent = Math.min(100, Math.max(0, (currentProgress / ach.target) * 100));

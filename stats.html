@@ -63,10 +63,20 @@
             <div id="panel-overview" role="tabpanel" aria-labelledby="tab-overview" class="space-y-8">
 
                 <section id="summary-cards-container">
-                    <div id="summary-cards-grid" class="grid grid-cols-2 gap-4 sm:gap-6">
+                    <div id="summary-cards-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
                         <!-- Summary cards will be injected here by stats.js -->
                     </div>
                 </section>
+
+                <!-- NEW: Score Distribution Chart -->
+                <section
+                    class="bg-white dark:bg-gray-800/50 p-4 sm:p-6 rounded-xl shadow-md border border-gray-200 dark:border-gray-700">
+                    <h2 class="text-xl font-bold font-kanit mb-4 text-center">การกระจายของคะแนน (Score Distribution)</h2>
+                    <div class="relative h-72">
+                        <canvas id="score-distribution-chart"></canvas>
+                    </div>
+                </section>
+
                 <section
                     class="bg-white dark:bg-gray-800/50 p-4 sm:p-6 rounded-xl shadow-md border border-gray-200 dark:border-gray-700">
                     <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">

@@ -55,7 +55,13 @@ export const LEVELS = XP_THRESHOLDS.map((t, i) => ({
 // กำหนดเหรียญรางวัล (Badges)
 export const BADGES = [
     { id: 'first_quiz', icon: '🎯', name: 'จุดเริ่มต้น', desc: 'ทำแบบทดสอบครั้งแรกสำเร็จ', tier: 'bronze' },
-    { id: 'perfect_score', icon: '🏆', name: 'คะแนนเต็ม', desc: 'ได้คะแนน 100% ในแบบทดสอบใดก็ได้', tier: 'gold' },
+    { id: 'perfect_score', icon: '🏆', name: 'คะแนนเต็ม', desc: 'ได้คะแนน 100% ในแบบทดสอบที่เข้าเกณฑ์', tier: 'silver' },
+    { id: 'perfect_scorer_3', icon: '🏅', name: 'ผู้สมบูรณ์แบบ', desc: 'ได้คะแนน 100% จำนวน 3 ครั้งในแบบทดสอบที่เข้าเกณฑ์', tier: 'gold' },
+    { id: 'perfect_scorer_5', icon: '🎖️', name: 'เจ้าแห่งความสมบูรณ์', desc: 'ได้คะแนน 100% จำนวน 5 ครั้งในแบบทดสอบที่เข้าเกณฑ์', tier: 'gold' },
+    { id: 'high_scorer_3', icon: '⭐', name: 'ยอดเยี่ยม', desc: 'ได้คะแนนเกิน 80% จำนวน 3 ครั้งในแบบทดสอบที่เข้าเกณฑ์', tier: 'bronze' },
+    { id: 'high_scorer_5', icon: '🌟', name: 'ดาวเด่น', desc: 'ได้คะแนนเกิน 80% จำนวน 5 ครั้งในแบบทดสอบที่เข้าเกณฑ์', tier: 'silver' },
+    { id: 'high_scorer_10', icon: '🌠', name: 'ดาวจรัสฟ้า', desc: 'ได้คะแนนเกิน 80% จำนวน 10 ครั้งในแบบทดสอบที่เข้าเกณฑ์', tier: 'gold' },
+    { id: 'marathon_runner', icon: '🏃‍♂️', name: 'นักวิ่งมาราธอน', desc: 'ทำแบบทดสอบที่มี 50 ข้อขึ้นไปจนสำเร็จ', tier: 'silver' },
     { id: 'streak_3', icon: '🔥', name: 'ไฟแรง', desc: 'เข้าใช้งานต่อเนื่อง 3 วัน', tier: 'silver' },
     { id: 'streak_7', icon: '❤️‍🔥', name: 'ไฟลุกโชน', desc: 'เข้าใช้งานต่อเนื่อง 7 วัน', tier: 'gold' },
     { id: 'streak_14', icon: '📅', name: 'วินัยดีเยี่ยม', desc: 'เข้าใช้งานต่อเนื่อง 14 วัน', tier: 'gold' },
@@ -66,14 +72,17 @@ export const BADGES = [
     { id: 'quiz_master_25', icon: '🎓', name: 'บัณฑิตน้อย', desc: 'ทำแบบทดสอบครบ 25 ครั้ง', tier: 'gold' },
     { id: 'quiz_master_50', icon: '🧙‍♂️', name: 'จอมเวทย์ความรู้', desc: 'ทำแบบทดสอบครบ 50 ครั้ง', tier: 'gold' },
     { id: 'quiz_master_100', icon: '👑', name: 'เทพเจ้าแห่งการสอบ', desc: 'ทำแบบทดสอบครบ 100 ครั้ง', tier: 'gold' },
-    { id: 'high_scorer', icon: '⭐', name: 'ยอดเยี่ยม', desc: 'ได้คะแนนเกิน 80% จำนวน 3 ครั้ง', tier: 'gold' },
     { id: 'physics_lover', icon: '⚛️', name: 'รักฟิสิกส์', desc: 'ถึงเลเวล 3 ในสายฟิสิกส์', tier: 'silver' },
     { id: 'physics_expert', icon: '🌌', name: 'ผู้เชี่ยวชาญฟิสิกส์', desc: 'ถึงเลเวล 5 ในสายฟิสิกส์', tier: 'gold' },
     { id: 'physics_master', icon: '🪐', name: 'ปรมาจารย์ฟิสิกส์', desc: 'ถึงเลเวล 10 ในสายฟิสิกส์', tier: 'gold' },
     { id: 'earth_lover', icon: '🌍', name: 'รักษ์โลก', desc: 'ถึงเลเวล 3 ในสายวิทย์โลก', tier: 'silver' },
     { id: 'earth_expert', icon: '🌋', name: 'ผู้เชี่ยวชาญวิทย์โลก', desc: 'ถึงเลเวล 5 ในสายวิทย์โลก', tier: 'gold' },
     { id: 'earth_master', icon: '🏔️', name: 'จ้าวแห่งธรณี', desc: 'ถึงเลเวล 10 ในสายวิทย์โลก', tier: 'gold' },
-    { id: 'xp_10k', icon: '💰', name: 'ผู้สั่งสมประสบการณ์', desc: 'มี XP รวมสะสมครบ 10,000', tier: 'gold' }
+    { id: 'xp_5k', icon: '💵', name: 'เศรษฐีฝึกหัด', desc: 'มี XP รวมสะสมครบ 5,000', tier: 'silver' },
+    { id: 'xp_10k', icon: '💰', name: 'ผู้สั่งสมประสบการณ์', desc: 'มี XP รวมสะสมครบ 10,000', tier: 'gold' },
+    { id: 'dual_expert', icon: '⚖️', name: 'ผู้รอบรู้สองศาสตร์', desc: 'ถึงเลเวล 5 ทั้งสายฟิสิกส์และวิทย์โลก', tier: 'gold' },
+    { id: 'shop_spender', icon: '🛍️', name: 'นักช้อป', desc: 'ซื้อสินค้าในร้านค้าครบ 5 ชิ้น', tier: 'silver' },
+    { id: 'weekend_learner', icon: '🏖️', name: 'ขยันวันหยุด', desc: 'เข้าใช้งานในวันเสาร์หรืออาทิตย์', tier: 'bronze' }
 ];
 
 // กำหนดภารกิจประจำวัน (Daily Quests)
@@ -110,7 +119,12 @@ export const ACHIEVEMENTS = [
     { id: 'correct_2000', title: 'คอมพิวเตอร์มนุษย์', desc: 'ตอบถูกครบ 2,000 ข้อ', icon: '🤖', target: 2000, type: 'total_correct', rewardTitle: 'คอมพิวเตอร์มนุษย์' },
     { id: 'quiz_50', title: 'ผู้เจนจัดสนามสอบ', desc: 'ทำแบบทดสอบครบ 50 ครั้ง', icon: '📝', target: 50, type: 'total_quizzes', rewardTitle: 'เซียนข้อสอบ' },
     { id: 'quiz_100', title: 'ผู้พิชิตแบบทดสอบ', desc: 'ทำแบบทดสอบครบ 100 ครั้ง', icon: '💯', target: 100, type: 'total_quizzes', rewardTitle: 'ผู้พิชิต' },
-    { id: 'quiz_200', title: 'ตำนานเดินดิน', desc: 'ทำแบบทดสอบครบ 200 ครั้ง', icon: '🏛️', target: 200, type: 'total_quizzes', rewardTitle: 'ตำนานเดินดิน' }
+    { id: 'quiz_200', title: 'ตำนานเดินดิน', desc: 'ทำแบบทดสอบครบ 200 ครั้ง', icon: '🏛️', target: 200, type: 'total_quizzes', rewardTitle: 'ตำนานเดินดิน' },
+    { id: 'high_achiever_5', title: 'ผลงานโดดเด่น', desc: 'ทำคะแนนได้ 80% ขึ้นไป 5 ครั้ง', icon: '🌟', target: 5, type: 'high_scores_80', rewardTitle: 'ผู้มีผลงานโดดเด่น' },
+    { id: 'perfectionist_3', title: 'ผู้รักความสมบูรณ์แบบ', desc: 'ทำคะแนนเต็ม 100% ได้ 3 ครั้ง', icon: '🏅', target: 3, type: 'perfect_scores', rewardTitle: 'ผู้รักความสมบูรณ์แบบ' },
+    { id: 'collector_5', title: 'นักสะสมมือใหม่', desc: 'มีไอเทมในครอบครอง 5 ชิ้น', icon: '🎒', target: 5, type: 'total_items', rewardTitle: 'นักสะสม' },
+    { id: 'collector_10', title: 'นักสะสมตัวยง', desc: 'มีไอเทมในครอบครอง 10 ชิ้น', icon: '📦', target: 10, type: 'total_items', rewardTitle: 'คลังสมบัติ' },
+    { id: 'avatar_5', title: 'แฟชั่นนิสต้า', desc: 'มีอวตารครอบครอง 5 แบบ', icon: '🎭', target: 5, type: 'total_avatars', rewardTitle: 'แฟชั่นนิสต้า' }
 ];
 
 // กำหนดสินค้าในร้านค้า (Shop Items)
@@ -479,6 +493,13 @@ export class Gamification {
             if (this.state.inventory.includes(itemId)) return { success: false, message: "คุณมีสินค้านี้แล้ว" };
             this.state.xp -= item.cost;
             this.state.inventory.push(itemId);
+            
+            // Check Shop Badges
+            if (this.state.inventory.length >= 5 && !this.state.badges.includes('shop_spender')) {
+                this.state.badges.push('shop_spender');
+            }
+            
+            this.checkAchievements();
             this.saveState();
             return { success: true, message: `ซื้อ ${item.name} สำเร็จ!`, item };
         }
@@ -948,6 +969,12 @@ export class Gamification {
             // ถ้าขาดช่วง หรือเพิ่งเริ่มใหม่
             this.state.streak = 1;
         }
+        
+        // Check Weekend Badge
+        const day = new Date().getDay();
+        if ((day === 0 || day === 6) && !this.state.badges.includes('weekend_learner')) {
+            this.state.badges.push('weekend_learner');
+        }
 
         this.state.lastLogin = today;
         this.updateLevel(); // Check if streak quest completion triggers level up
@@ -955,12 +982,23 @@ export class Gamification {
     }
 
     // ฟังก์ชันเพิ่ม XP (เรียกใช้เมื่อทำข้อสอบเสร็จ)
-    addXP(amount, category = '') {
+    addXP(amount, category = '', percentage = 0, questionCount = 0, isCustomQuiz = false) {
         const oldLevel = this.state.level || 1;
         const oldPhysics = this.getPhysicsLevel();
         const oldEarth = this.getEarthLevel();
 
         this.state.xp += amount;
+
+        // NEW: Update score-based stats based on eligibility
+        const isEligibleForStats = !isCustomQuiz || (isCustomQuiz && questionCount >= 20);
+        if (isEligibleForStats) {
+            if (percentage === 100) {
+                this.state.perfectScores = (this.state.perfectScores || 0) + 1;
+            }
+            if (percentage >= 80) {
+                this.state.highScores80 = (this.state.highScores80 || 0) + 1;
+            }
+        }
         
         // ตรวจสอบสายวิชาจาก category
         let isPhysics = false;
@@ -980,7 +1018,7 @@ export class Gamification {
 
         this.updateLevel();
 
-        this.saveState();
+        this.checkBadges(percentage, questionCount, isCustomQuiz);
 
         const newLevelInfo = this.getCurrentLevel();
         const newPhysics = this.getPhysicsLevel();
@@ -997,7 +1035,7 @@ export class Gamification {
     }
 
     // ฟังก์ชันใหม่: บันทึกผลการทำข้อสอบโดยรับค่า XP แยกตามสายวิชา
-    submitQuizResult(totalXP, physicsXP, earthXP) {
+    submitQuizResult(totalXP, physicsXP, earthXP, percentage, questionCount, isCustomQuiz) {
         const oldLevel = this.state.level || 1;
         const oldPhysics = this.getPhysicsLevel();
         const oldEarth = this.getEarthLevel();
@@ -1007,10 +1045,11 @@ export class Gamification {
         this.state.earthXP += earthXP;
         this.state.quizzesCompleted += 1;
         
+        // NEW: Call the stats update function here
+        this.updateEndQuizStats(percentage, questionCount, isCustomQuiz);
+
         this.updateLevel();
         
-        this.saveState();
-
         const newLevelInfo = this.getCurrentLevel();
         const newPhysics = this.getPhysicsLevel();
         const newEarth = this.getEarthLevel();
@@ -1109,6 +1148,22 @@ export class Gamification {
             } else if (ach.type === 'total_quizzes') {
                 if (this.state.quizzesCompleted >= ach.target) achieved = true;
             }
+            // New Achievement Types
+            else if (ach.type === 'high_scores_80') {
+                if ((this.state.highScores80 || 0) >= ach.target) achieved = true;
+            }
+            else if (ach.type === 'perfect_scores') {
+                if ((this.state.perfectScores || 0) >= ach.target) achieved = true;
+            }
+            else if (ach.type === 'total_items') {
+                if (this.state.inventory.length >= ach.target) achieved = true;
+            } else if (ach.type === 'total_avatars') {
+                const avatarCount = this.state.inventory.filter(id => {
+                    const item = SHOP_ITEMS.find(i => i.id === id);
+                    return item && item.type === 'avatar';
+                }).length;
+                if (avatarCount >= ach.target) achieved = true;
+            }
 
             if (achieved) {
                 this.state.unlockedAchievements.push(ach.id);
@@ -1138,7 +1193,7 @@ export class Gamification {
     }
 
     // ฟังก์ชันตรวจสอบและปลดล็อก Badge
-    checkBadges(lastQuizScorePercent) {
+    checkBadges(lastQuizScorePercent, questionCount = 0, isCustomQuiz = false) {
         const newBadges = [];
         
         // Helper เพื่อปลดล็อก
@@ -1149,27 +1204,41 @@ export class Gamification {
             }
         };
 
+        const isEligibleForStats = !isCustomQuiz || (isCustomQuiz && questionCount >= 20);
+
         // 1. First Quiz
         if (this.state.quizzesCompleted >= 1) unlock('first_quiz');
 
-        // 2. Perfect Score
-        if (lastQuizScorePercent === 100) unlock('perfect_score');
+        // 2. Score based badges
+        if (isEligibleForStats) {
+            if (lastQuizScorePercent === 100) unlock('perfect_score');
+        }
+        
+        if ((this.state.highScores80 || 0) >= 3) unlock('high_scorer_3');
+        if ((this.state.highScores80 || 0) >= 5) unlock('high_scorer_5');
+        if ((this.state.highScores80 || 0) >= 10) unlock('high_scorer_10');
+        
+        if ((this.state.perfectScores || 0) >= 3) unlock('perfect_scorer_3');
+        if ((this.state.perfectScores || 0) >= 5) unlock('perfect_scorer_5');
 
-        // 3. Quiz Master (5 Quizzes)
+        // 3. Marathon runner
+        if (questionCount >= 50) unlock('marathon_runner');
+
+        // 4. Quiz Master (5 Quizzes)
         if (this.state.quizzesCompleted >= 5) unlock('quiz_master_5');
         if (this.state.quizzesCompleted >= 10) unlock('quiz_master_10');
         if (this.state.quizzesCompleted >= 25) unlock('quiz_master_25');
         if (this.state.quizzesCompleted >= 50) unlock('quiz_master_50');
         if (this.state.quizzesCompleted >= 100) unlock('quiz_master_100');
 
-        // 4. Streak 3 Days (ไฟแรง)
+        // 5. Streak 3 Days (ไฟแรง)
         if (this.state.streak >= 3) unlock('streak_3');
         if (this.state.streak >= 7) unlock('streak_7');
         if (this.state.streak >= 14) unlock('streak_14');
         if (this.state.streak >= 30) unlock('streak_30');
         if (this.state.streak >= 60) unlock('streak_60');
 
-        // 5. Level based badges
+        // 6. Level based badges
         if (this.getPhysicsLevel().level >= 3) unlock('physics_lover');
         if (this.getPhysicsLevel().level >= 5) unlock('physics_expert');
         if (this.getPhysicsLevel().level >= 10) unlock('physics_master');
@@ -1177,8 +1246,12 @@ export class Gamification {
         if (this.getEarthLevel().level >= 5) unlock('earth_expert');
         if (this.getEarthLevel().level >= 10) unlock('earth_master');
 
-        // 6. XP based badges
+        // 7. XP based badges
+        if (this.state.xp >= 5000) unlock('xp_5k');
         if (this.state.xp >= 10000) unlock('xp_10k');
+        
+        // 8. Dual Expert
+        if (this.getPhysicsLevel().level >= 5 && this.getEarthLevel().level >= 5) unlock('dual_expert');
 
         this.saveState();
         return newBadges;

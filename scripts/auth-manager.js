@@ -18,6 +18,7 @@ class AuthManagerInternal {
         
         this.init();
         this.handlePostLogout();
+        this.setupNetworkListeners();
     }
 
     init() {
@@ -77,6 +78,56 @@ class AuthManagerInternal {
                 showLoginToast();
             }
         }
+    }
+
+    setupNetworkListeners() {
+        const updateStatus = () => {
+            const statusEl = document.getElementById('header-network-status');
+            if (!statusEl) return;
+
+            if (navigator.onLine) {
+                // Online: Show briefly
+                statusEl.innerHTML = `
+                    <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-green-100 dark:bg-green-900/30 border border-green-200 dark:border-green-800 shadow-sm">
+                        <span class="relative flex h-2 w-2">
+                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                          <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                        </span>
+                        <span class="text-[10px] font-bold text-green-700 dark:text-green-300">ONLINE</span>
+                    </div>
+                `;
+                statusEl.classList.remove('hidden');
+                
+                if (this.onlineStatusTimeout) clearTimeout(this.onlineStatusTimeout);
+                this.onlineStatusTimeout = setTimeout(() => {
+                    statusEl.classList.add('hidden');
+                }, 3000);
+            } else {
+                // Offline: Show permanently
+                if (this.onlineStatusTimeout) clearTimeout(this.onlineStatusTimeout);
+                statusEl.innerHTML = `
+                    <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-red-100 dark:bg-red-900/30 border border-red-200 dark:border-red-800 shadow-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-red-600 dark:text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M13.477 14.89A6 6 0 015.11 6.524l1.414 1.414a4 4 0 005.656 5.656l1.298 1.297zm-7.98 1.122a1 1 0 001.414 1.415l11.314-11.315a1 1 0 00-1.414-1.414L5.497 16.012z" clip-rule="evenodd" />
+                        </svg>
+                        <span class="text-[10px] font-bold text-red-700 dark:text-red-300">OFFLINE</span>
+                    </div>
+                `;
+                statusEl.classList.remove('hidden');
+            }
+        };
+
+        window.addEventListener('online', updateStatus);
+        window.addEventListener('offline', updateStatus);
+        
+        // Check periodically for header element injection
+        const checkHeader = setInterval(() => {
+            const statusEl = document.getElementById('header-network-status');
+            if (statusEl) {
+                clearInterval(checkHeader);
+                if (!navigator.onLine) updateStatus();
+            }
+        }, 1000);
     }
 
     // ฟังก์ชัน Login

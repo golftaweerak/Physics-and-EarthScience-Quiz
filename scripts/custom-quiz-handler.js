@@ -496,6 +496,12 @@ export function initializeCustomQuizHandler() {
             total += parseInt(input.value, 10) || 0;
         });
         if (totalCountDisplay) totalCountDisplay.textContent = total;
+
+        const badgeConditionEl = document.getElementById("custom-quiz-badge-condition");
+        if (badgeConditionEl) {
+            // Show the message if total is > 0 and < 20. Hide otherwise.
+            badgeConditionEl.classList.toggle('hidden', total === 0 || total >= 20);
+        }
     }
 
     /**
@@ -509,6 +515,9 @@ export function initializeCustomQuizHandler() {
                 <div class="p-6 bg-gray-50 dark:bg-gray-900/50 rounded-xl border border-gray-200 dark:border-gray-700 text-center shadow-sm">
                     <p class="text-sm font-medium text-gray-500 dark:text-gray-400">จำนวนข้อที่เลือก</p>
                     <p id="total-question-count" class="text-5xl font-bold text-blue-600 dark:text-blue-400 transition-all duration-300">0</p>
+                    <div id="custom-quiz-badge-condition" class="mt-3 p-2 bg-yellow-100 dark:bg-yellow-900/40 border border-yellow-200 dark:border-yellow-800/50 rounded-lg text-xs text-yellow-800 dark:text-yellow-300 hidden">
+                        <span class="font-bold">หมายเหตุ:</span> ต้องมีอย่างน้อย 20 ข้อ เพื่อรับเหรียญรางวัลและบันทึกสถิติคะแนน (เช่น คะแนนเต็ม, 80%+)
+                    </div>
                 </div>    
     
                 <!-- Random Selection -->
