@@ -110,16 +110,21 @@ class AuthManagerInternal {
     // ฟังก์ชันหลักสำหรับโหลดข้อมูล (ใช้แทนการดึง localStorage โดยตรง)
     async loadUserData() {
         if (this.currentUser) {
-            // ถ้าล็อกอิน ให้ดึงจาก Firestore
-            const docRef = doc(db, "users", this.currentUser.uid);
-            const docSnap = await getDoc(docRef);
-            
-            if (docSnap.exists()) {
-                const cloudData = docSnap.data();
-                // อัปเดตลง LocalStorage ด้วยเพื่อให้โค้ดเดิมทำงานต่อได้ (Hybrid)
-                localStorage.setItem(this.LOCAL_STORAGE_KEY, JSON.stringify(cloudData));
-                this.updateLastSyncTime();
-                return cloudData;
+            try {
+                // ถ้าล็อกอิน ให้ดึงจาก Firestore
+                const docRef = doc(db, "users", this.currentUser.uid);
+                const docSnap = await getDoc(docRef);
+                
+                if (docSnap.exists()) {
+                    const cloudData = docSnap.data();
+                    // อัปเดตลง LocalStorage ด้วยเพื่อให้โค้ดเดิมทำงานต่อได้ (Hybrid)
+                    localStorage.setItem(this.LOCAL_STORAGE_KEY, JSON.stringify(cloudData));
+                    this.updateLastSyncTime();
+                    return cloudData;
+                }
+            } catch (e) {
+                console.warn("Failed to load from cloud, falling back to local:", e);
+                // Fall through to local storage load
             }
         }
         
@@ -161,29 +166,30 @@ class AuthManagerInternal {
     // ฟังก์ชัน Sync ข้อมูลเก่าขึ้น Cloud เมื่อล็อกอินครั้งแรก
     async syncLocalToCloud(user) {
         const localDataString = localStorage.getItem(this.LOCAL_STORAGE_KEY);
-        if (!localDataString) return; // ไม่มีข้อมูลเก่า ไม่ต้องทำอะไร
-
-        const localData = JSON.parse(localDataString);
+        const localData = localDataString ? JSON.parse(localDataString) : null;
+        
         const userRef = doc(db, "users", user.uid);
         const docSnap = await getDoc(userRef);
 
         if (!docSnap.exists()) {
             // กรณี: ผู้ใช้ใหม่บน Cloud แต่มีข้อมูลในเครื่อง (ผู้เรียนเก่าเพิ่งล็อกอิน)
-            // ให้อัปโหลดข้อมูลในเครื่องขึ้น Cloud ทันที
-            console.log("Migrating local data to cloud...");
-            await setDoc(userRef, localData);
-            
-            // สร้าง Leaderboard entry ด้วย
-            if (localData.totalXP) {
-                await setDoc(doc(db, "leaderboard", user.uid), {
-                    displayName: user.displayName,
-                    photoURL: user.photoURL,
-                    totalXP: localData.totalXP,
-                    level: localData.level || 1,
-                    lastUpdated: new Date()
-                });
+            if (localData) {
+                // ให้อัปโหลดข้อมูลในเครื่องขึ้น Cloud ทันที
+                console.log("Migrating local data to cloud...");
+                await setDoc(userRef, localData);
+                
+                // สร้าง Leaderboard entry ด้วย
+                if (localData.totalXP) {
+                    await setDoc(doc(db, "leaderboard", user.uid), {
+                        displayName: user.displayName,
+                        photoURL: user.photoURL,
+                        totalXP: localData.totalXP,
+                        level: localData.level || 1,
+                        lastUpdated: new Date()
+                    });
+                }
+                alert("ซิงค์ข้อมูลเก่าของคุณขึ้นระบบเรียบร้อยแล้ว!");
             }
-            alert("ซิงค์ข้อมูลเก่าของคุณขึ้นระบบเรียบร้อยแล้ว!");
         } else {
             // กรณี: มีข้อมูลบน Cloud อยู่แล้ว (อาจจะเล่นเครื่องอื่นมา)
             // กลยุทธ์: ใช้ข้อมูลบน Cloud เป็นหลัก (Overwrite Local)
