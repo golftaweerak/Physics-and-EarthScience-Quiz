@@ -44,9 +44,19 @@ async function quickCheckDuplicates() {
   const __dirname = path.dirname(fileURLToPath(import.meta.url));
   const dataDir = path.resolve(__dirname, "..", "data");
 
-  const files = await fs.readdir(dataDir);
-  const dataFiles = files.filter(
-    (file) => file.endsWith("-data.js") && file !== "sub-category-data.js"
+  // Helper to recursively get files
+  async function getFiles(dir) {
+    const dirents = await fs.readdir(dir, { withFileTypes: true });
+    const files = await Promise.all(dirents.map((dirent) => {
+      const res = path.resolve(dir, dirent.name);
+      return dirent.isDirectory() ? getFiles(res) : res;
+    }));
+    return files.flat();
+  }
+
+  const allFiles = await getFiles(dataDir);
+  const dataFiles = allFiles.filter(
+    (file) => file.endsWith("-data.js") && !file.endsWith("sub-category-data.js")
   );
 
   const seenQuestions = new Map();
@@ -55,8 +65,8 @@ async function quickCheckDuplicates() {
 
   console.log("\n🔍 Quick Check: Finding EXACT DUPLICATES...");
 
-  for (const file of dataFiles) {
-    const filePath = path.join(dataDir, file);
+  for (const filePath of dataFiles) {
+    const relativePath = path.relative(dataDir, filePath);
     const fileUrl = `${pathToFileURL(filePath).href}?v=${Date.now()}`;
     try {
       const module = await import(fileUrl);
@@ -76,14 +86,14 @@ async function quickCheckDuplicates() {
           duplicateCount++;
           const firstSeen = seenQuestions.get(uniqueKey);
           console.error(`\n❗️ DUPLICATE #${duplicateCount}: "${questionText.substring(0, 80)}..."`);
-          console.error(`  - Found in: ${file} (#${q.number})`);
+          console.error(`  - Found in: ${relativePath} (#${q.number})`);
           console.error(`  - First seen in: ${firstSeen.file} (#${firstSeen.number})`);
         } else {
-          seenQuestions.set(uniqueKey, { file, number: q.number });
+          seenQuestions.set(uniqueKey, { file: relativePath, number: q.number });
         }
       }
     } catch (e) {
-      console.error(`\n❌ Error importing file: ${file}`, e);
+      console.error(`\n❌ Error importing file: ${relativePath}`, e);
     }
   }
 
