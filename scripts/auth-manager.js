@@ -34,6 +34,9 @@ class AuthManagerInternal {
             if (user) {
                 console.log("User signed in:", user.uid);
                 
+                // Dispatch event to show loading state on UI
+                window.dispatchEvent(new CustomEvent('auth-sync-start'));
+
                 // FIX: ครอบด้วย try-catch เพื่อให้ระบบทำงานต่อได้แม้การซิงค์จะล้มเหลว (เช่น เน็ตหลุด)
                 try {
                     await this.syncLocalToCloud(user);
@@ -45,6 +48,9 @@ class AuthManagerInternal {
                 } catch (e) {
                     console.warn("Sync history failed (might be offline):", e);
                 }
+                
+                // Dispatch event to hide loading state
+                window.dispatchEvent(new CustomEvent('auth-sync-end'));
             } else {
                 console.log("User signed out");
             }
