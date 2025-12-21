@@ -310,6 +310,54 @@ export const quizList = [
     "subCategory": "แนวข้อสอบ"
   },
   {
+    "id": "ess_basic/ess_basic_m6_ch1-1",
+    "title": "เอกภพและกาแล็กซี (ชุดที่ 1)",
+    "amount": 30,
+    "description": "บทที่ 1: เอกภพและกาแล็กซี (กำเนิดเอกภพ, หลักฐานบิกแบง, กาแล็กซีทางช้างเผือก)",
+    "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_ch1-1",
+    "storageKey": "quizState-ess_basic_m6_ch1-1",
+    "icon": "./assets/icons/galaxy (1).png",
+    "altText": "ไอคอนสำหรับ ess_basic_m6_ch1-1",
+    "category": "EarthSpaceScienceBasic",
+    "subCategory": "เอกภพและกาแล็กซี"
+  },
+  {
+    "id": "ess_basic/ess_basic_m6_ch1-2",
+    "title": "เอกภพและกาแล็กซี (ชุดที่ 2)",
+    "amount": 30,
+    "description": "บทที่ 1: เอกภพและกาแล็กซี (เน้นรายละเอียดทฤษฎี, กฎของฮับเบิล, และโครงสร้างกาแล็กซี)",
+    "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_ch1-2",
+    "storageKey": "quizState-ess_basic_m6_ch1-2",
+    "icon": "./assets/icons/galaxy (1).png",
+    "altText": "ไอคอนสำหรับ ess_basic_m6_ch1-2",
+    "category": "EarthSpaceScienceBasic",
+    "subCategory": "เอกภพและกาแล็กซี"
+  },
+  {
+    "id": "ess_basic/ess_basic_m6_ch2-1",
+    "title": "ดาวฤกษ์ (ชุดที่ 1)",
+    "amount": 30,
+    "description": "บทที่ 2: ดาวฤกษ์ (กำเนิด, สมบัติ, และวิวัฒนาการ)",
+    "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_ch2-1",
+    "storageKey": "quizState-ess_basic_m6_ch2-1",
+    "icon": "./assets/icons/star.png",
+    "altText": "ไอคอนสำหรับ ess_basic_m6_ch2-1",
+    "category": "EarthSpaceScienceBasic",
+    "subCategory": "ดาวฤกษ์"
+  },
+  {
+    "id": "ess_basic/ess_basic_m6_ch2-2",
+    "title": "ดาวฤกษ์ (ชุดที่ 2)",
+    "amount": 30,
+    "description": "บทที่ 2: ดาวฤกษ์ (สมบัติ, วิวัฒนาการ, และแผนภาพ H-R)",
+    "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_ch2-2",
+    "storageKey": "quizState-ess_basic_m6_ch2-2",
+    "icon": "./assets/icons/star.png",
+    "altText": "ไอคอนสำหรับ ess_basic_m6_ch2-2",
+    "category": "EarthSpaceScienceBasic",
+    "subCategory": "ดาวฤกษ์"
+  },
+  {
     "id": "ess_adv/ess_adv_m4_ch1-1",
     "title": "โครงสร้างโลก (ชุดที่ 1)",
     "amount": 30,
