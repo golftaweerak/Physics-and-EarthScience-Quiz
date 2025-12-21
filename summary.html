@@ -19,6 +19,10 @@
             if (!user.email || !user.email.endsWith('@promma.ac.th')) {
                 // ใช้ฟังก์ชันรอ Element เพราะ modals_common.html อาจจะยังโหลดไม่เสร็จ
                 const showModal = () => {
+                    // ซ่อนเนื้อหาหลักทันทีเพื่อความปลอดภัยและป้องกันการมองเห็น
+                    const mainContent = document.querySelector('main');
+                    if (mainContent) mainContent.classList.add('hidden');
+
                     const modal = document.getElementById('access-denied-modal');
                     if (modal) {
                         modal.classList.remove('hidden');
