@@ -334,6 +334,18 @@ export const quizList = [
     "subCategory": "เอกภพและกาแล็กซี"
   },
   {
+    "id": "ess_basic/ess_basic_m6_ch1-3",
+    "title": "เอกภพและกาแล็กซี (ชุดที่ 3)",
+    "amount": 30,
+    "description": "บทที่ 1: เอกภพและกาแล็กซี (เน้นการวิเคราะห์และรูปแบบข้อสอบที่หลากหลาย)",
+    "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_ch1-3",
+    "storageKey": "quizState-ess_basic_m6_ch1-3",
+    "icon": "./assets/icons/galaxy (1).png",
+    "altText": "ไอคอนสำหรับ ess_basic_m6_ch1-3",
+    "category": "EarthSpaceScienceBasic",
+    "subCategory": "เอกภพและกาแล็กซี"
+  },
+  {
     "id": "ess_basic/ess_basic_m6_ch2-1",
     "title": "ดาวฤกษ์ (ชุดที่ 1)",
     "amount": 30,
@@ -354,6 +366,18 @@ export const quizList = [
     "storageKey": "quizState-ess_basic_m6_ch2-2",
     "icon": "./assets/icons/star.png",
     "altText": "ไอคอนสำหรับ ess_basic_m6_ch2-2",
+    "category": "EarthSpaceScienceBasic",
+    "subCategory": "ดาวฤกษ์"
+  },
+  {
+    "id": "ess_basic/ess_basic_m6_ch2-3",
+    "title": "ดาวฤกษ์ (ชุดที่ 3)",
+    "amount": 30,
+    "description": "บทที่ 2: ดาวฤกษ์ (เน้นการวิเคราะห์และรูปแบบข้อสอบที่หลากหลาย)",
+    "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_ch2-3",
+    "storageKey": "quizState-ess_basic_m6_ch2-3",
+    "icon": "./assets/icons/star.png",
+    "altText": "ไอคอนสำหรับ ess_basic_m6_ch2-3",
     "category": "EarthSpaceScienceBasic",
     "subCategory": "ดาวฤกษ์"
   },
