@@ -23,6 +23,33 @@
     <link rel="stylesheet" href="./styles/bundle.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="./scripts/summary-loader.js" type="module"></script>
+    <script type="module">
+        import { authManager } from './scripts/auth-manager.js';
+
+        authManager.waitForAuthReady().then(user => {
+            if (!user) {
+                window.location.href = './index.html';
+                return;
+            }
+            if (!user.email || !user.email.endsWith('@promma.ac.th')) {
+                // ใช้ฟังก์ชันรอ Element เพราะ modals_common.html อาจจะยังโหลดไม่เสร็จ
+                const showModal = () => {
+                    const modal = document.getElementById('access-denied-modal');
+                    if (modal) {
+                        modal.classList.remove('hidden');
+                        setTimeout(() => {
+                            modal.classList.remove('opacity-0');
+                            const content = modal.querySelector('.transform');
+                            if(content) content.classList.replace('scale-95', 'scale-100');
+                        }, 10);
+                    } else {
+                        setTimeout(showModal, 100); // ลองใหม่ใน 100ms
+                    }
+                };
+                showModal();
+            }
+        });
+    </script>
     <link rel="icon" href="./assets/icons/exam.png" type="image/png">
 </head>
 
