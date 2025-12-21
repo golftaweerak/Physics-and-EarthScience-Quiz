@@ -286,6 +286,18 @@ export const quizList = [
     "subCategory": "แนวข้อสอบ"
   },
   {
+    "id": "ess_basic/ess_basic_m6_mid2-review-4",
+    "title": "แนวข้อสอบกลางภาค เทอม 2 ชุดที่ 4",
+    "amount": 40,
+    "description": "แนวข้อสอบทบทวนกลางภาค เทอม 2 ชุดที่ 4  ครอบคลุมเนื้อหาบทที่ 6 (การแปรสัณฐาน) และบทที่ 7 (ธรณีพิบัติภัย)",
+    "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_mid2-review-4",
+    "storageKey": "quizState-ess_basic_m6_mid2-review-4",
+    "icon": "./assets/icons/earth.png",
+    "altText": "ไอคอนสำหรับ ess_basic_m6_mid2-review-4",
+    "category": "EarthSpaceScienceBasic",
+    "subCategory": "แนวข้อสอบ"
+  },
+  {
     "id": "ess_basic/ess_basic_m6_final-review-1",
     "title": "แนวข้อสอบปลายภาค เทอม 1 ชุดที่ 1",
     "amount": 20,
@@ -380,6 +392,18 @@ export const quizList = [
     "altText": "ไอคอนสำหรับ ess_basic_m6_ch2-3",
     "category": "EarthSpaceScienceBasic",
     "subCategory": "ดาวฤกษ์"
+  },
+  {
+    "id": "ess_basic/ess_basic_m6_ch3-1",
+    "title": "ระบบสุริยะ (ชุดที่ 1)",
+    "amount": 30,
+    "description": "บทที่ 3: ระบบสุริยะ (กำเนิด, เขตเอื้อชีวิต, และปรากฏการณ์บนดวงอาทิตย์)",
+    "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_ch3-1",
+    "storageKey": "quizState-ess_basic_m6_ch3-1",
+    "icon": "./assets/icons/solar-system.png",
+    "altText": "ไอคอนสำหรับ ess_basic_m6_ch3-1",
+    "category": "EarthSpaceScienceBasic",
+    "subCategory": "ระบบสุริยะ"
   },
   {
     "id": "ess_adv/ess_adv_m4_ch1-1",
