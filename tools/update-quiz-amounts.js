@@ -33,7 +33,9 @@ async function loadQuizList(quizListPath) {
 }
 
 async function getActualAmount(quiz, dataDir) {
-  const dataFilePath = path.resolve(dataDir, `${quiz.id}-data.js`);
+  // Split the quiz.id to handle subdirectories correctly and robustly.
+  const pathSegments = `${quiz.id}-data.js`.split('/');
+  const dataFilePath = path.join(dataDir, ...pathSegments);
   try {
     const dataFileUrl = `${pathToFileURL(dataFilePath).href}?v=${Date.now()}`;
     const { quizItems } = await import(dataFileUrl);
@@ -42,6 +44,9 @@ async function getActualAmount(quiz, dataDir) {
     // Gracefully handle missing data files, but log other critical errors.
     if (error.code !== "ERR_MODULE_NOT_FOUND") {
       console.error(`- ERROR processing ${quiz.id}:`, error.message);
+    } else {
+      // Add a specific warning for not found files to make debugging easier.
+      console.warn(`- WARNING: Data file not found for quiz ID '${quiz.id}' at path: ${dataFilePath}`);
     }
     return null; // Return null to indicate the file couldn't be processed
   }

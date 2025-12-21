@@ -120,6 +120,7 @@ export function initializeCustomQuizHandler() {
     const customQuizModal = new ModalHandler("custom-quiz-modal");
     const customQuizHubModal = new ModalHandler("custom-quiz-hub-modal");
     const completedModal = new ModalHandler('completed-quiz-modal');
+    const randomAllModal = new ModalHandler("random-all-modal");
     const confirmModal = new ModalHandler("confirm-action-modal");
     const confirmModalTitle = document.getElementById("confirm-modal-title");
     const confirmModalDescription = document.getElementById("confirm-modal-description");
@@ -204,6 +205,33 @@ export function initializeCustomQuizHandler() {
         const fillColor = isDarkMode ? fillColorDark : fillColorLight;
 
         slider.style.background = `linear-gradient(to right, ${fillColor} ${percentage}%, ${trackColor} ${percentage}%)`;
+    }
+
+    // --- Random All Modal Logic ---
+    const randomAllInput = document.getElementById('random-all-input');
+    const randomAllSlider = document.getElementById('random-all-slider');
+    const randomAllConfirmBtn = document.getElementById('random-all-confirm-btn');
+
+    if (randomAllInput && randomAllSlider) {
+        randomAllInput.addEventListener('input', () => {
+            let val = parseInt(randomAllInput.value, 10);
+            if (val > parseInt(randomAllInput.max)) val = parseInt(randomAllInput.max);
+            if (val < parseInt(randomAllInput.min)) val = parseInt(randomAllInput.min);
+            randomAllSlider.value = val;
+            updateSliderTrack(randomAllSlider);
+        });
+        randomAllSlider.addEventListener('input', () => {
+            randomAllInput.value = randomAllSlider.value;
+            updateSliderTrack(randomAllSlider);
+        });
+    }
+
+    if (randomAllConfirmBtn) {
+        randomAllConfirmBtn.addEventListener('click', () => {
+             const val = parseInt(document.getElementById('random-all-input').value, 10);
+             executeRandomSelection(val);
+             randomAllModal.close();
+        });
     }
 
     if (!createCustomQuizBtn || !customQuizModal.modal || !customQuizHubModal.modal) {
@@ -494,7 +522,7 @@ export function initializeCustomQuizHandler() {
     function updateTotalCount() {
         const totalCountDisplay = document.getElementById("total-question-count");
         let total = 0;
-        document.querySelectorAll('#custom-quiz-category-selection input[type="number"]').forEach(input => {
+        document.querySelectorAll('#custom-quiz-category-selection input[type="number"][data-type]').forEach(input => {
             total += parseInt(input.value, 10) || 0;
         });
         if (totalCountDisplay) totalCountDisplay.textContent = total;
@@ -587,12 +615,8 @@ export function initializeCustomQuizHandler() {
                 </div>    
     
                 <!-- Random Selection -->
-                <div class="p-4 bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm">
+                <div class="p-4 bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm space-y-3">
                     <button id="custom-quiz-random-btn" class="w-full flex items-center justify-center gap-2 px-4 py-2 bg-purple-100 text-purple-700 dark:bg-purple-900/50 dark:text-purple-300 rounded-lg hover:bg-purple-200 dark:hover:bg-purple-800/70 text-sm font-bold transition">สุ่มทั้งหมด</button>
-                    <button id="custom-quiz-random-balanced-btn" class="w-full flex items-center justify-center gap-2 px-4 py-2 mt-2 bg-teal-100 text-teal-700 dark:bg-teal-900/50 dark:text-teal-300 rounded-lg hover:bg-teal-200 dark:hover:bg-teal-800/70 text-sm font-bold transition">
-                        <svg class="h-5 w-5" width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M8 5a1 1 0 100 2h5.586l-1.293 1.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L13.586 5H8zM12 15a1 1 0 100-2H6.414l1.293-1.293a1 1 0 10-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L6.414 15H12z" /></svg>
-                        <span>สุ่มแบบสมดุล</span>
-                    </button>
                 </div>
 
                 <!-- Timer Options -->
@@ -917,12 +941,30 @@ export function initializeCustomQuizHandler() {
             const groupBtn = target.closest('button[data-action="random-group"]');
             if (groupBtn) {
                 const groupType = groupBtn.dataset.group;
-                handleSubjectGroupRandom(groupType);
+                // Find input in the same container
+                const container = groupBtn.closest('div.flex');
+                const input = container.querySelector('input.random-per-chapter-input');
+                const count = input ? parseInt(input.value, 10) : null;
+                
+                handleSubjectGroupRandom(groupType, count, false); // false = per chapter mode
             }
 
             // Handle "Random Selection" button
             if (target.id === 'custom-quiz-random-btn' || target.closest('#custom-quiz-random-btn')) {
                 handleRandomSelection();
+            }
+
+            // NEW: Handle the new "Random All" button inside the generator
+            if (target.id === 'generator-random-all-btn' || target.closest('#generator-random-all-btn')) {
+                handleRandomSelection();
+            }
+
+            // NEW: Handle quick select total buttons (5, 10, 15, 20)
+            const quickGroupBtn = target.closest('button[data-action="random-group-quick"]');
+            if (quickGroupBtn) {
+                const groupType = quickGroupBtn.dataset.group;
+                const totalCount = parseInt(quickGroupBtn.dataset.value, 10);
+                handleSubjectGroupRandom(groupType, totalCount, true); // true = total count mode
             }
 
             // Handle "Clear All" button in the summary panel (this is the one at the bottom of the sidebar)
@@ -1048,7 +1090,20 @@ export function initializeCustomQuizHandler() {
 
                 let chapterAccordionsHTML = '';
                 chapters.forEach(chapter => {
-                    const topics = (chapter[topicKey] || []).sort((a, b) => a.localeCompare(b, 'th'));
+                    // Clone topics from syllabus to avoid mutation and allow adding extras
+                    let topics = [...(chapter[topicKey] || [])].sort((a, b) => a.localeCompare(b, 'th'));
+
+                    // Check for topics in data that are NOT in syllabus (e.g. "Uncategorized")
+                    const chapterData = groupedQuestions[subjectKey]?.[chapter.title];
+                    if (chapterData) {
+                        const knownTopics = new Set(topics);
+                        Object.keys(chapterData).forEach(dataTopic => {
+                            if (!knownTopics.has(dataTopic)) {
+                                topics.push(dataTopic);
+                            }
+                        });
+                    }
+
                     const topicControlsHTML = topics.map(topic => {
                         const counts = groupedQuestions[subjectKey]?.[chapter.title]?.[topic] || { theory: [], calculation: [] };
                         return createSpecificTopicControlHTML(subjectKey, chapter.title, topic, {
@@ -1090,6 +1145,167 @@ export function initializeCustomQuizHandler() {
                         </div>`;
                 }
             });
+
+            // Helper to calculate available questions for a group
+            const getAvailableCount = (groupType) => {
+                let count = 0;
+                const mappings = getGroupMappings(groupType);
+                
+                if (mappings.subjects) {
+                    mappings.subjects.forEach(subject => {
+                        if (groupedQuestions[subject]) {
+                            Object.values(groupedQuestions[subject]).forEach(chapter => {
+                                Object.values(chapter).forEach(topic => {
+                                    count += (topic.theory?.length || 0) + (topic.calculation?.length || 0);
+                                });
+                            });
+                        }
+                    });
+                } else if (mappings.mappings) {
+                    mappings.mappings.forEach(map => {
+                        if (groupedQuestions[map.subject]) {
+                            map.chapters.forEach(chapterTitle => {
+                                if (groupedQuestions[map.subject][chapterTitle]) {
+                                    Object.values(groupedQuestions[map.subject][chapterTitle]).forEach(topic => {
+                                        count += (topic.theory?.length || 0) + (topic.calculation?.length || 0);
+                                    });
+                                }
+                            });
+                        }
+                    });
+                }
+                return count;
+            };
+
+            // Helper to generate random control row
+            const createRandomRow = (label, groupType, color) => {
+                const available = getAvailableCount(groupType);
+                const disabled = available === 0;
+                
+                return `
+                <div class="specific-topic-control py-3 px-4 border-t border-gray-200 dark:border-gray-700/50 ${disabled ? 'opacity-50 pointer-events-none' : ''}">
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="font-medium text-gray-700 dark:text-gray-200 text-sm flex-grow">
+                            ${label} <span class="text-xs font-normal text-gray-500 dark:text-gray-400 ml-1">(มี ${available} ข้อ)</span>
+                        </label>
+                    </div>
+                    <div class="mt-2 space-y-2">
+                        <!-- Quick Select Row (Total) -->
+                        <div class="flex items-center justify-between gap-2">
+                            <span class="text-xs text-gray-500 dark:text-gray-400 w-20">สุ่มด่วน<br>(รวม)</span>
+                            <div class="flex-grow flex flex-wrap justify-end gap-1">
+                                <button data-action="random-group-quick" data-group="${groupType}" data-value="5" class="px-2 py-0.5 text-xs font-medium text-gray-600 bg-gray-100 dark:text-gray-300 dark:bg-gray-700/60 rounded-full hover:bg-${color}-100 hover:text-${color}-700 dark:hover:bg-${color}-900/50 dark:hover:text-${color}-300 transition-colors">5</button>
+                                <button data-action="random-group-quick" data-group="${groupType}" data-value="10" class="px-2 py-0.5 text-xs font-medium text-gray-600 bg-gray-100 dark:text-gray-300 dark:bg-gray-700/60 rounded-full hover:bg-${color}-100 hover:text-${color}-700 dark:hover:bg-${color}-900/50 dark:hover:text-${color}-300 transition-colors">10</button>
+                                <button data-action="random-group-quick" data-group="${groupType}" data-value="20" class="px-2 py-0.5 text-xs font-medium text-gray-600 bg-gray-100 dark:text-gray-300 dark:bg-gray-700/60 rounded-full hover:bg-${color}-100 hover:text-${color}-700 dark:hover:bg-${color}-900/50 dark:hover:text-${color}-300 transition-colors">20</button>
+                                <button data-action="random-group-quick" data-group="${groupType}" data-value="30" class="px-2 py-0.5 text-xs font-medium text-gray-600 bg-gray-100 dark:text-gray-300 dark:bg-gray-700/60 rounded-full hover:bg-${color}-100 hover:text-${color}-700 dark:hover:bg-${color}-900/50 dark:hover:text-${color}-300 transition-colors">30</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Per Chapter Row -->
+                        <div class="flex items-center justify-between gap-2">
+                             <span class="text-xs text-gray-500 dark:text-gray-400 w-20">เฉลี่ย<br>(ต่อบท)</span>
+                             <div class="flex items-center gap-2 justify-end flex-grow">
+                                <input type="number" min="1" max="20" value="2" class="random-per-chapter-input w-14 py-1 px-1 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900/50 text-center font-semibold text-sm text-${color}-600 dark:text-${color}-400 focus:ring-${color}-500 focus:border-${color}-500" placeholder="ข้อ">
+                                <button data-action="random-group" data-group="${groupType}" class="px-3 py-1 bg-${color}-100 text-${color}-700 dark:bg-${color}-900/50 dark:text-${color}-300 rounded-full text-xs font-bold hover:bg-${color}-200 dark:hover:bg-${color}-800 transition-colors">
+                                    สุ่ม
+                                </button>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+                `;
+            };
+
+            // Add the "Subject Group Random" accordion at the end
+            categoryHTML += `
+                <div class="subject-container bg-white dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+                    <div class="subject-accordion-toggle p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors" role="button" aria-expanded="false">
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center gap-3 min-w-0">
+                                <div class="h-8 w-8 flex-shrink-0 flex items-center justify-center bg-purple-100 dark:bg-purple-900/50 rounded-full text-purple-600 dark:text-purple-300">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg>
+                                </div>
+                                <span class="font-bold text-lg text-gray-800 dark:text-gray-100 truncate">สร้างชุดข้อสอบ (Test Generator)</span>
+                            </div>
+                            <svg class="chevron-icon h-6 w-6 text-gray-500 dark:text-gray-400 transition-transform duration-300 flex-shrink-0" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                        </div>
+                    </div>
+                    <div class="chapters-container grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-in-out">
+                        <div class="overflow-hidden pt-2">
+
+                            <!-- NEW "Random All" Button -->
+                            <div class="px-2 pb-4">
+                                <button id="generator-random-all-btn" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-purple-100 text-purple-700 dark:bg-purple-900/50 dark:text-purple-300 rounded-lg hover:bg-purple-200 dark:hover:bg-purple-800/70 text-sm font-bold transition shadow-sm border border-purple-200 dark:border-purple-800">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M15.312 11.424a5.5 5.5 0 01-9.201-4.42 5.5 5.5 0 017.777-7.777 5.5 5.5 0 014.42 9.201l-1.586 1.586a.75.75 0 11-1.06-1.06l1.586-1.586a4 4 0 00-5.657-5.657 4 4 0 00-6.682 3.218 4 4 0 003.218 6.682l2.33-2.33a.75.75 0 011.06 1.06l-2.33 2.33a5.5 5.5 0 01-7.777-7.777 5.5 5.5 0 019.201 4.42l-1.586 1.586a.75.75 0 11-1.06 1.06l1.586-1.586z" clip-rule="evenodd" />
+                                        <path fill-rule="evenodd" d="M4.688 8.576a5.5 5.5 0 019.201 4.42 5.5 5.5 0 01-7.777 7.777 5.5 5.5 0 01-4.42-9.201l1.586-1.586a.75.75 0 111.06 1.06l-1.586 1.586a4 4 0 005.657 5.657 4 4 0 006.682-3.218 4 4 0 00-3.218-6.682l-2.33 2.33a.75.75 0 01-1.06-1.06l2.33-2.33a5.5 5.5 0 017.777 7.777 5.5 5.5 0 01-9.201-4.42l1.586-1.586a.75.75 0 111.06-1.06l-1.586 1.586z" clip-rule="evenodd" />
+                                    </svg>
+                                    สุ่มจากทุกวิชา (Random All)
+                                </button>
+                            </div>
+                            
+                            <!-- Physics Group (Accordion) -->
+                            <div class="bg-gray-50 dark:bg-gray-800/30 rounded-lg mx-2 mb-2 border border-gray-200 dark:border-gray-700/50 overflow-hidden">
+                                <div class="chapter-accordion-toggle flex justify-between items-center cursor-pointer p-3 hover:bg-gray-100 dark:hover:bg-gray-700/40 transition-colors">
+                                    <h4 class="text-base font-bold text-gray-800 dark:text-gray-200 font-kanit">ฟิสิกส์ (Physics)</h4>
+                                    <svg class="chevron-icon h-5 w-5 text-gray-500 dark:text-gray-400 transition-transform duration-300 flex-shrink-0" width="20" height="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                                </div>
+                                <div class="specific-topics-container grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-in-out">
+                                    <div class="overflow-hidden bg-white dark:bg-gray-800/50">
+                                        ${createRandomRow('ฟิสิกส์ (รวมทุกระดับชั้น)', 'physics', 'red')}
+                                        ${createRandomRow('ฟิสิกส์ ม.4', 'physics-m4', 'red')}
+                                        ${createRandomRow('ฟิสิกส์ ม.5', 'physics-m5', 'orange')}
+                                        ${createRandomRow('ฟิสิกส์ ม.6', 'physics-m6', 'amber')}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Earth Science Basic (Accordion) -->
+                            <div class="bg-gray-50 dark:bg-gray-800/30 rounded-lg mx-2 mb-2 border border-gray-200 dark:border-gray-700/50 overflow-hidden">
+                                <div class="chapter-accordion-toggle flex justify-between items-center cursor-pointer p-3 hover:bg-gray-100 dark:hover:bg-gray-700/40 transition-colors">
+                                    <h4 class="text-base font-bold text-gray-800 dark:text-gray-200 font-kanit">วิทย์โลก (พื้นฐาน)</h4>
+                                    <svg class="chevron-icon h-5 w-5 text-gray-500 dark:text-gray-400 transition-transform duration-300 flex-shrink-0" width="20" height="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                                </div>
+                                <div class="specific-topics-container grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-in-out">
+                                    <div class="overflow-hidden bg-white dark:bg-gray-800/50">
+                                        ${createRandomRow('วิทย์โลก (พื้นฐาน) ทั้งหมด', 'earth-basic', 'green')}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Earth Science Advanced (Accordion) -->
+                            <div class="bg-gray-50 dark:bg-gray-800/30 rounded-lg mx-2 mb-2 border border-gray-200 dark:border-gray-700/50 overflow-hidden">
+                                <div class="chapter-accordion-toggle flex justify-between items-center cursor-pointer p-3 hover:bg-gray-100 dark:hover:bg-gray-700/40 transition-colors">
+                                    <h4 class="text-base font-bold text-gray-800 dark:text-gray-200 font-kanit">วิทย์โลก (เพิ่มเติม)</h4>
+                                    <svg class="chevron-icon h-5 w-5 text-gray-500 dark:text-gray-400 transition-transform duration-300 flex-shrink-0" width="20" height="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                                </div>
+                                <div class="specific-topics-container grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-in-out">
+                                    <div class="overflow-hidden bg-white dark:bg-gray-800/50">
+                                        ${createRandomRow('วิทย์โลก (เพิ่มเติม) ทั้งหมด', 'earth-advanced', 'indigo')}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Specific Topics (Accordion) -->
+                            <div class="bg-gray-50 dark:bg-gray-800/30 rounded-lg mx-2 mb-2 border border-gray-200 dark:border-gray-700/50 overflow-hidden">
+                                <div class="chapter-accordion-toggle flex justify-between items-center cursor-pointer p-3 hover:bg-gray-100 dark:hover:bg-gray-700/40 transition-colors">
+                                    <h4 class="text-base font-bold text-gray-800 dark:text-gray-200 font-kanit">หัวข้อเฉพาะ (Specific Topics)</h4>
+                                    <svg class="chevron-icon h-5 w-5 text-gray-500 dark:text-gray-400 transition-transform duration-300 flex-shrink-0" width="20" height="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                                </div>
+                                <div class="specific-topics-container grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-in-out">
+                                    <div class="overflow-hidden bg-white dark:bg-gray-800/50">
+                                        ${createRandomRow('ดาราศาสตร์ (Astronomy)', 'astronomy', 'purple')}
+                                        ${createRandomRow('ธรณีวิทยา (Geology)', 'geology', 'amber')}
+                                        ${createRandomRow('สมุทรศาสตร์ (Oceanography)', 'oceanography', 'teal')}
+                                        ${createRandomRow('อุตุนิยมวิทยา (Meteorology)', 'meteorology', 'blue')}
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            `;
 
             const mainContentArea = customQuizModal.modal.querySelector('#custom-quiz-main-content');
             const sidebarArea = customQuizModal.modal.querySelector('#custom-quiz-sidebar');
@@ -1267,8 +1483,8 @@ export function initializeCustomQuizHandler() {
     }
 
     function handleRandomSelection() {
-        const allInputs = Array.from(document.querySelectorAll('#custom-quiz-category-selection input[type="number"]'));
-        if (allInputs.length === 0) return;
+        const allInputs = Array.from(document.querySelectorAll('#custom-quiz-category-selection input[type="number"][data-type]'));
+        if (allInputs.length === 0) { return; }
 
         const maxQuestions = allInputs.reduce((sum, input) => sum + parseInt(input.max, 10), 0);
         
@@ -1277,19 +1493,40 @@ export function initializeCustomQuizHandler() {
             return;
         }
 
-        const userInput = prompt(`ระบุจำนวนข้อที่ต้องการสุ่ม (สูงสุด ${maxQuestions} ข้อ):`, Math.min(30, maxQuestions));
-        if (userInput === null) return;
-
-        let targetCount = parseInt(userInput, 10);
-        if (isNaN(targetCount) || targetCount <= 0) {
-            showToast("ข้อมูลไม่ถูกต้อง", "กรุณาระบุจำนวนตัวเลขที่ถูกต้อง", "⚠️", "error");
-            return;
+        // Setup Modal
+        const modalInput = document.getElementById('random-all-input');
+        const modalSlider = document.getElementById('random-all-slider');
+        const maxDisplay = document.getElementById('random-all-max-display');
+        
+        if (modalInput && modalSlider && maxDisplay) {
+            const defaultVal = Math.min(20, maxQuestions);
+            
+            modalInput.max = maxQuestions;
+            modalInput.value = defaultVal;
+            
+            modalSlider.max = maxQuestions;
+            modalSlider.value = defaultVal;
+            
+            maxDisplay.textContent = maxQuestions;
+            
+            updateSliderTrack(modalSlider);
+            
+            // Force high z-index to ensure it appears above the custom quiz modal
+            if (randomAllModal.modal) randomAllModal.modal.style.zIndex = '105';
+            randomAllModal.open();
         }
+    }
+
+    function executeRandomSelection(targetCount) {
+        const allInputs = Array.from(document.querySelectorAll('#custom-quiz-category-selection input[type="number"][data-type]'));
+        const maxQuestions = allInputs.reduce((sum, input) => sum + parseInt(input.max, 10), 0);
         
         if (targetCount > maxQuestions) targetCount = maxQuestions;
 
         // Reset
-        allInputs.forEach(input => input.value = 0);
+        document.querySelectorAll('#custom-quiz-category-selection input[type="number"][data-type]').forEach(input => {
+            if (input.value !== '0') { input.value = 0; }
+        });
 
         let currentCount = 0;
         // Create a pool of available inputs (indices)
@@ -1447,34 +1684,77 @@ export function initializeCustomQuizHandler() {
         observer.observe(confirmModalEl, { attributes: true, attributeFilter: ['class'] });
     }
 
+    // Robustly handle z-index for the random all modal to ensure it stays on top
+    if (randomAllModal.modal) {
+        const observer = new MutationObserver(() => {
+            if (randomAllModal.modal.classList.contains('hidden')) {
+                randomAllModal.modal.style.zIndex = '';
+            }
+        });
+        observer.observe(randomAllModal.modal, { attributes: true, attributeFilter: ['class'] });
+    }
+
     // Initialize the delegated event listeners once
     bindCustomQuizModalEvents();
 
     /**
+     * Helper to define group mappings for random generation
+     */
+    function getGroupMappings(groupType) {
+        const mappings = {
+            'physics': { subjects: ['PhysicsM4', 'PhysicsM5', 'PhysicsM6'] },
+            'physics-m4': { subjects: ['PhysicsM4'] },
+            'physics-m5': { subjects: ['PhysicsM5'] },
+            'physics-m6': { subjects: ['PhysicsM6'] },
+            'earth-basic': { subjects: ['EarthSpaceScienceBasic'] },
+            'earth-advanced': { subjects: ['EarthSpaceScienceAdvance'] },
+            'astronomy': {
+                mappings: [
+                    { subject: 'EarthSpaceScienceBasic', chapters: ['เอกภพและกาแล็กซี', 'ดาวฤกษ์', 'ระบบสุริยะ', 'เทคโนโลยีอวกาศ'] },
+                    { subject: 'EarthSpaceScienceAdvance', chapters: ['เอกภพและกาแล็กซี', 'ดาวฤกษ์', 'ระบบสุริยะ', 'ทรงกลมฟ้า', 'การเคลื่อนที่ปรากฏของดาวเคราะห์', 'เทคโนโลยีอวกาศและการประยุกต์ใช้'] }
+                ]
+            },
+            'geology': {
+                mappings: [
+                    { subject: 'EarthSpaceScienceBasic', chapters: ['โครงสร้างโลก', 'การแปรสัณฐานของแผ่นธรณี', 'ธรณีพิบัติภัย'] },
+                    { subject: 'EarthSpaceScienceAdvance', chapters: ['โครงสร้างโลก', 'ธรณีแปรสัณฐาน', 'ธรณีพิบัติภัย', 'ลำดับชั้นหิน', 'ทรัพยากรธรณี', 'แผนที่'] }
+                ]
+            },
+            'meteorology': {
+                mappings: [
+                    { subject: 'EarthSpaceScienceBasic', chapters: ['ลมฟ้าอากาศและภูมิอากาศ', 'การเปลี่ยนแปลงภูมิอากาศ', 'ข้อมูลและสารสนเทศทางอุตุนิยมวิทยา'] },
+                    { subject: 'EarthSpaceScienceAdvance', chapters: ['อากาศ', 'การหมุนเวียนของระบบลมของโลก', 'เสถียรภาพอากาศและแนวปะทะอากาศ', 'การเปลี่ยนแปลงภูมิอากาศของโลก', 'การพยากรณ์อากาศ'] }
+                ]
+            },
+            'oceanography': {
+                mappings: [
+                    { subject: 'EarthSpaceScienceBasic', chapters: ['ลมฟ้าอากาศและภูมิอากาศ'] }, // Includes ocean circulation
+                    { subject: 'EarthSpaceScienceAdvance', chapters: ['การหมุนเวียนของน้ำในมหาสมุทร'] }
+                ]
+            }
+        };
+        return mappings[groupType] || {};
+    }
+
+    /**
      * NEW: Handles balanced random question selection for specific subject groups.
      * @param {string} groupType - The type of group ('physics', 'earth-basic', 'earth-advanced').
+     * @param {number|null} countOverride - If provided, this is the target count.
+     * @param {boolean} isTotalCount - If true, countOverride is the TOTAL questions for the group. If false, it's per chapter.
      */
-    function handleSubjectGroupRandom(groupType) {
-        let subjectKeys = [];
-        let groupName = "";
+    function handleSubjectGroupRandom(groupType, countOverride = null, isTotalCount = false) {
+        const groupMapping = getGroupMappings(groupType);
+        const groupName = groupType; // Simplified for brevity, could map to display name
 
-        if (groupType === 'physics') {
-            subjectKeys = ['PhysicsM4', 'PhysicsM5', 'PhysicsM6'];
-            groupName = "ฟิสิกส์ (ม.4-6)";
-        } else if (groupType === 'earth-basic') {
-            subjectKeys = ['EarthSpaceScienceBasic'];
-            groupName = "วิทย์โลก (พื้นฐาน)";
-        } else if (groupType === 'earth-advanced') {
-            subjectKeys = ['EarthSpaceScienceAdvance'];
-            groupName = "วิทย์โลก (เพิ่มเติม)";
+        let numPerChapter;
+        if (countOverride !== null) {
+            numPerChapter = countOverride;
         } else {
-            return;
+            const numPerChapterInput = prompt(`ระบุจำนวนข้อที่ต้องการสุ่ม 'ต่อหนึ่งบท' จากกลุ่ม ${groupName}:`, "2");
+            if (numPerChapterInput === null) return;
+            numPerChapter = parseInt(numPerChapterInput, 10);
         }
 
-        const numPerChapterInput = prompt(`ระบุจำนวนข้อที่ต้องการสุ่ม 'ต่อหนึ่งบท' จากกลุ่ม ${groupName}:`, "2");
-        if (numPerChapterInput === null) return;
-
-        const numPerChapter = parseInt(numPerChapterInput, 10);
         if (isNaN(numPerChapter) || numPerChapter < 0) {
             showToast("ข้อมูลไม่ถูกต้อง", "กรุณาระบุจำนวนตัวเลขที่ถูกต้อง", "⚠️", "error");
             return;
@@ -1487,39 +1767,102 @@ export function initializeCustomQuizHandler() {
 
         let totalAdded = 0;
 
-        subjectKeys.forEach(subjectKey => {
-            const syllabus = getSyllabusForCategory(subjectKey);
-            if (!syllabus) return;
+        // Collect all relevant inputs first
+        let targetInputs = [];
 
-            const chapters = syllabus.units ? syllabus.units.flatMap(u => u.chapters) : (syllabus.chapters || []);
+        if (groupMapping.subjects) {
+            groupMapping.subjects.forEach(subjectKey => {
+                const inputs = Array.from(document.querySelectorAll(`#custom-quiz-category-selection input[type="number"][data-subject="${subjectKey}"]`));
+                targetInputs.push(...inputs);
+            });
+        } else if (groupMapping.mappings) {
+            groupMapping.mappings.forEach(map => {
+                map.chapters.forEach(chapterTitle => {
+                    const inputs = Array.from(document.querySelectorAll(`#custom-quiz-category-selection input[type="number"][data-subject="${map.subject}"][data-chapter="${chapterTitle}"]`));
+                    targetInputs.push(...inputs);
+                });
+            });
+        }
+
+        // Filter inputs that have questions available
+        let availableInputs = targetInputs.map(input => ({ 
+            input, 
+            max: parseInt(input.max, 10),
+            current: parseInt(input.value, 10) || 0
+        })).filter(item => item.max > 0);
+
+        if (availableInputs.length === 0) {
+            showToast("ไม่พบข้อมูล", "ไม่มีคำถามในกลุ่มที่เลือก", "⚠️", "info");
+            return;
+        }
+
+        if (isTotalCount) {
+            // Mode: Total Random (Distribute numPerChapter across the whole group)
+            let currentTotal = 0;
+            const targetTotal = numPerChapter;
             
-            chapters.forEach(chapter => {
-                const chapterTitle = chapter.title;
-                // Select inputs for this chapter within this subject
-                const chapterInputs = Array.from(document.querySelectorAll(`#custom-quiz-category-selection input[type="number"][data-subject="${subjectKey}"][data-chapter="${chapterTitle}"]`));
-                
-                // Filter inputs that actually have questions (max > 0)
-                let availableInputs = chapterInputs.map(input => ({ input, max: parseInt(input.max, 10) })).filter(item => item.max > 0);
-                
-                // Calculate total available questions in this chapter
-                const totalAvailableInChapter = availableInputs.reduce((sum, item) => sum + item.max, 0);
-                let chapterTargetCount = Math.min(numPerChapter, totalAvailableInChapter);
+            // Reset inputs in this group first
+            availableInputs.forEach(item => {
+                item.input.value = 0;
+                item.current = 0;
+            });
 
-                for (let i = 0; i < chapterTargetCount; i++) {
-                    // Filter out inputs that are full
-                    availableInputs = availableInputs.filter(item => parseInt(item.input.value, 10) < item.max);
-                    
-                    if (availableInputs.length === 0) break;
+            while (currentTotal < targetTotal && availableInputs.length > 0) {
+                // Pick a random input from the available pool
+                const randIndex = Math.floor(Math.random() * availableInputs.length);
+                const item = availableInputs[randIndex];
 
-                    const randIndex = Math.floor(Math.random() * availableInputs.length);
-                    const item = availableInputs[randIndex];
-                    item.input.value = parseInt(item.input.value, 10) + 1;
+                if (item.current < item.max) {
+                    item.current++;
+                    item.input.value = item.current;
+                    currentTotal++;
+                    totalAdded++;
+                } else {
+                    // This input is full, remove from pool
+                    availableInputs.splice(randIndex, 1);
+                }
+            }
+        } else {
+            // Mode: Per Chapter (Original logic, but applied to the filtered inputs)
+            // We need to group inputs by chapter to apply the limit per chapter
+            // But since the inputs are specific topics (theory/calc), we distribute the 'per chapter' count among them.
+            
+            // Simplified approach: Distribute 'numPerChapter' to EACH chapter found in the inputs.
+            // Since we flattened the inputs, we need to regroup them by chapter to do this accurately.
+            // However, for simplicity and UX, let's treat 'Per Chapter' as 'Per Topic Input' limit or similar?
+            // No, 'Per Chapter' implies we want X questions from Chapter 1, X from Chapter 2.
+            
+            // Re-implementing per-chapter logic using the gathered inputs:
+            const inputsByChapter = availableInputs.reduce((acc, item) => {
+                const key = `${item.input.dataset.subject}_${item.input.dataset.chapter}`;
+                if (!acc[key]) acc[key] = [];
+                acc[key].push(item);
+                return acc;
+            }, {});
+
+            Object.values(inputsByChapter).forEach(chapterItems => {
+                const totalAvailableInChapter = chapterItems.reduce((sum, item) => sum + item.max, 0);
+                const targetForThisChapter = Math.min(numPerChapter, totalAvailableInChapter);
+                let addedToChapter = 0;
+
+                // Reset chapter inputs
+                chapterItems.forEach(item => { item.input.value = 0; item.current = 0; });
+
+                while (addedToChapter < targetForThisChapter) {
+                    const validItems = chapterItems.filter(item => item.current < item.max);
+                    if (validItems.length === 0) break;
+
+                    const randIndex = Math.floor(Math.random() * validItems.length);
+                    const item = validItems[randIndex];
+                    item.current++;
+                    item.input.value = item.current;
+                    addedToChapter++;
                     totalAdded++;
                 }
             });
-        });
+        }
 
         updateTotalCount();
-        showToast("สำเร็จ", `สุ่มเลือกคำถามแบบสมดุลสำหรับ ${groupName} เพิ่มมาทั้งหมด ${totalAdded} ข้อ`, "✅", "success");
+        showToast("สำเร็จ", `สุ่มเลือกคำถามเพิ่มมาทั้งหมด ${totalAdded} ข้อ`, "✅", "success");
     }
 }
