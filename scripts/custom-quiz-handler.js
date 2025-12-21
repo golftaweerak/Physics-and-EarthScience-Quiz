@@ -2,7 +2,6 @@
 import { ModalHandler } from "./modal-handler.js";
 import { fetchAllQuizData, getQuizProgress, categoryDetails as allCategoryDetails } from "./data-manager.js";
 import { getSyllabusForCategory } from "./syllabus-manager.js";
-import { quizList } from "../data/quizzes-list.js";
 import { authManager } from './auth-manager.js';
 import { db } from './firebase-config.js';
 import { doc, setDoc, getDocs, collection, writeBatch, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -168,6 +167,8 @@ export function initializeCustomQuizHandler() {
     let activeQuizUrl = '';
     let activeStorageKey = '';
     let onConfirmAction = null;
+    let isBadgeDismissed = false;
+    let hasShownSuccess = false;
 
     // Apply the modern scrollbar class to the modal bodies.
     try {
@@ -500,8 +501,75 @@ export function initializeCustomQuizHandler() {
 
         const badgeConditionEl = document.getElementById("custom-quiz-badge-condition");
         if (badgeConditionEl) {
-            // Show the message if total is > 0 and < 20. Hide otherwise.
-            badgeConditionEl.classList.toggle('hidden', total === 0 || total >= 20);
+            if (isBadgeDismissed) {
+                badgeConditionEl.classList.add('hidden');
+                return;
+            }
+
+            const contentContainer = badgeConditionEl.querySelector('#badge-content-container') || badgeConditionEl.querySelector('div.flex');
+
+            if (total === 0) {
+                // Hide immediately if 0
+                badgeConditionEl.classList.add('hidden');
+                hasShownSuccess = false;
+            } else if (total < 20) {
+                // Warning State (Yellow)
+                badgeConditionEl.classList.remove('hidden', 'opacity-0', 'translate-y-[-20px]');
+                badgeConditionEl.classList.add('opacity-100', 'translate-y-0');
+                
+                // Reset styling to Yellow
+                badgeConditionEl.classList.remove('bg-green-50/95', 'dark:bg-green-900/90', 'border-green-500');
+                badgeConditionEl.classList.remove('bg-white/95', 'dark:bg-gray-800/95'); // Remove default white
+                badgeConditionEl.classList.add('bg-yellow-50/95', 'dark:bg-yellow-900/80', 'border-yellow-400');
+
+                if (contentContainer) {
+                    contentContainer.innerHTML = `
+                        <svg class="h-6 w-6 text-yellow-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <div>
+                            <p class="font-bold text-gray-800 dark:text-gray-100 text-sm">คำแนะนำ</p>
+                            <p class="text-xs text-gray-600 dark:text-gray-300 mt-1">ต้องมีอย่างน้อย 20 ข้อ เพื่อรับเหรียญรางวัลและบันทึกสถิติคะแนน</p>
+                        </div>
+                    `;
+                }
+                hasShownSuccess = false;
+            } else {
+                // Success State (Green) - Show only once when reaching target
+                if (!hasShownSuccess) {
+                    badgeConditionEl.classList.remove('hidden', 'opacity-0', 'translate-y-[-20px]');
+                    badgeConditionEl.classList.add('opacity-100', 'translate-y-0');
+
+                    // Change styling to Green
+                    badgeConditionEl.classList.remove('bg-white/95', 'dark:bg-gray-800/95'); // Remove default white
+                    badgeConditionEl.classList.remove('bg-yellow-50/95', 'dark:bg-yellow-900/80', 'border-yellow-400'); // Remove yellow
+                    badgeConditionEl.classList.add('bg-green-50/95', 'dark:bg-green-900/90', 'border-green-500');
+
+                    if (contentContainer) {
+                        contentContainer.innerHTML = `
+                            <svg class="h-6 w-6 text-green-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <div>
+                                <p class="font-bold text-gray-800 dark:text-gray-100 text-sm">ยอดเยี่ยม!</p>
+                                <p class="text-xs text-gray-600 dark:text-gray-300 mt-1">ครบ 20 ข้อแล้ว พร้อมรับเหรียญรางวัล</p>
+                            </div>
+                        `;
+                    }
+                    hasShownSuccess = true;
+
+                    // Auto hide after 3 seconds
+                    setTimeout(() => {
+                        if (hasShownSuccess && !isBadgeDismissed) {
+                            badgeConditionEl.classList.remove('opacity-100', 'translate-y-0');
+                            badgeConditionEl.classList.add('opacity-0', 'translate-y-[-20px]');
+                            setTimeout(() => {
+                                if (hasShownSuccess) badgeConditionEl.classList.add('hidden');
+                            }, 500); // Wait for transition
+                        }
+                    }, 3000);
+                }
+            }
         }
     }
 
@@ -516,9 +584,6 @@ export function initializeCustomQuizHandler() {
                 <div class="p-6 bg-gray-50 dark:bg-gray-900/50 rounded-xl border border-gray-200 dark:border-gray-700 text-center shadow-sm">
                     <p class="text-sm font-medium text-gray-500 dark:text-gray-400">จำนวนข้อที่เลือก</p>
                     <p id="total-question-count" class="text-5xl font-bold text-blue-600 dark:text-blue-400 transition-all duration-300">0</p>
-                    <div id="custom-quiz-badge-condition" class="mt-3 p-2 bg-yellow-100 dark:bg-yellow-900/40 border border-yellow-200 dark:border-yellow-800/50 rounded-lg text-xs text-yellow-800 dark:text-yellow-300 hidden">
-                        <span class="font-bold">หมายเหตุ:</span> ต้องมีอย่างน้อย 20 ข้อ เพื่อรับเหรียญรางวัลและบันทึกสถิติคะแนน (เช่น คะแนนเต็ม, 80%+)
-                    </div>
                 </div>    
     
                 <!-- Random Selection -->
@@ -641,6 +706,14 @@ export function initializeCustomQuizHandler() {
 
         container.addEventListener('click', (e) => {
             const target = e.target;
+
+            // Handle close badge button
+            if (target.closest('#close-badge-condition-btn')) {
+                isBadgeDismissed = true;
+                const badgeEl = document.getElementById("custom-quiz-badge-condition");
+                if (badgeEl) badgeEl.classList.add('hidden');
+                return;
+            }
 
             // Handle subject-level quick select
             const subjectSelectBtn = target.closest('button[data-quick-select-subject]');
@@ -919,6 +992,8 @@ export function initializeCustomQuizHandler() {
             </svg>
             กำลังโหลดข้อมูล...`;
         triggerElement.disabled = true;
+        isBadgeDismissed = false; // Reset badge state
+        hasShownSuccess = false; // Reset success state
         customQuizModal.open(triggerElement); // Open modal immediately to show loading inside
 
         try {
@@ -930,8 +1005,7 @@ export function initializeCustomQuizHandler() {
             // Group questions by subject, chapter, and specific topic, and count types
             const groupedQuestions = allQuestions.reduce((acc, q) => {
                 if (q.subCategory && q.subCategory.main && q.subCategory.specific) {
-                    const quizInfo = quizList.find(ql => ql.title === q.sourceQuizTitle);
-                    const subjectKey = quizInfo ? quizInfo.category : 'Uncategorized';
+                    const subjectKey = q.sourceQuizCategory || 'Uncategorized';
                     const questionType = q.type === 'fill-in-number' ? 'calculation' : 'theory';
 
                     const specifics = Array.isArray(q.subCategory.specific) ? q.subCategory.specific : [q.subCategory.specific];
