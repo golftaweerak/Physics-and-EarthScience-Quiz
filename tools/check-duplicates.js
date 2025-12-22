@@ -27,13 +27,14 @@ const SIMILARITY_THRESHOLD_OPTIONS = 0.75;  // e.g., 75% same options
  * A generator function to flatten the quiz items structure.
  * It yields each individual question object, whether it's a standalone question
  * or nested within a scenario.
- * @param {Array<Object>} quizItems - The array of items from a data file.
+ * @param {Array<Object>} items - The array of items from a data file.
  */
-function* getAllQuestions(quizItems) {
-    for (const item of quizItems) {
-        if (item.type === "scenario" && Array.isArray(item.questions)) {
-            yield* item.questions; // Use yield* to delegate to another generator/iterable
-        } else if (item.type === "question" || item.question) { // Also handle items that are implicitly questions
+function* getAllQuestions(items) {
+    for (const item of items) {
+        if (!item) continue;
+        if ((item.type === "scenario" || item.type === "case-study") && Array.isArray(item.questions)) {
+            yield* getAllQuestions(item.questions);
+        } else if (item.question) {
             yield item;
         }
     }
@@ -188,10 +189,20 @@ async function checkDuplicatesAndSimilarities() {
             continue;
         }
 
-        const quizItems = module.quizItems;
+        let quizItems = module.quizItems || module.quizScenarios || module.quizData || module.default;
+
+        // Handle case where quizData is an object with a questions property (from generator)
+        if (quizItems && !Array.isArray(quizItems) && Array.isArray(quizItems.questions)) {
+            quizItems = quizItems.questions;
+        }
+
+        // Fallback: try to find any exported array if the named ones aren't found or aren't arrays
+        if (!quizItems || !Array.isArray(quizItems)) {
+            quizItems = Object.values(module).find((val) => Array.isArray(val));
+        }
 
         if (!quizItems) {
-            console.warn(chalk.yellow(`⚠️  Could not find 'quizItems' array in ${file}. Skipping.`),);
+            console.warn(chalk.yellow(`⚠️  Could not find valid quiz data array in ${file}. Skipping.`),);
             continue;
         }
 

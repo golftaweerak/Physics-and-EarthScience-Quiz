@@ -76,7 +76,12 @@ async function main() {
 
     try {
       const quizDataModule = await import(pathToFileURL(filePath).href);
-      let quizData = quizDataModule.default || quizDataModule.quizData;
+      let quizData = quizDataModule.quizItems || quizDataModule.quizScenarios || quizDataModule.quizData || quizDataModule.default;
+
+      // Handle case where quizData is an object with a questions property (from generator)
+      if (quizData && !Array.isArray(quizData) && Array.isArray(quizData.questions)) {
+        quizData = quizData.questions;
+      }
 
       if (!Array.isArray(quizData)) {
         quizData = Object.values(quizDataModule).find((val) => Array.isArray(val));

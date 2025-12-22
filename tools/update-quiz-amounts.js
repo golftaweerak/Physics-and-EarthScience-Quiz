@@ -15,7 +15,7 @@ function countQuestions(quizItems) {
     return 0;
   }
   return quizItems.reduce((count, item) => {
-    if (item.type === "scenario" && Array.isArray(item.questions)) {
+    if ((item.type === "scenario" || item.type === "case-study") && Array.isArray(item.questions)) {
       return count + item.questions.length;
     }
     if (item.type === "question" || item.question) {
@@ -38,8 +38,19 @@ async function getActualAmount(quiz, dataDir) {
   const dataFilePath = path.join(dataDir, ...pathSegments);
   try {
     const dataFileUrl = `${pathToFileURL(dataFilePath).href}?v=${Date.now()}`;
-    const { quizItems } = await import(dataFileUrl);
-    return countQuestions(quizItems);
+    const module = await import(dataFileUrl);
+    let quizItems = module.quizItems || module.quizScenarios || module.quizData || module.default;
+
+    // Handle case where quizData is an object with a questions property
+    if (quizItems && !Array.isArray(quizItems) && Array.isArray(quizItems.questions)) {
+      quizItems = quizItems.questions;
+    }
+
+    // Fallback for other potential exports
+    if (!Array.isArray(quizItems)) {
+      quizItems = Object.values(module).find(val => Array.isArray(val));
+    }
+    return countQuestions(quizItems || []);
   } catch (error) {
     // Gracefully handle missing data files, but log other critical errors.
     if (error.code !== "ERR_MODULE_NOT_FOUND") {

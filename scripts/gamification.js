@@ -3,6 +3,7 @@
 import { authManager } from './auth-manager.js';
 
 // กำหนดเกณฑ์ XP สำหรับทุกสาย (ใช้เกณฑ์เดียวกันเพื่อความง่าย)
+// แต่ละเลเวลจะมีเงื่อนไข (Quest) ที่ต้องทำให้สำเร็จก่อนจึงจะเลื่อนระดับได้
 export const XP_THRESHOLDS = [
     { level: 1, xp: 0, quest: null }, // No quest to reach level 1
     { level: 2, xp: 100, quest: { type: 'correct_streak', target: 10, desc: 'ตอบคำถามถูกติดต่อกัน 10 ข้อ' } },
@@ -14,19 +15,22 @@ export const XP_THRESHOLDS = [
     { level: 8, xp: 3000, quest: { type: 'physics_level', target: 5, desc: 'ไปให้ถึงเลเวล 5 ในสายฟิสิกส์' } },
     { level: 9, xp: 4000, quest: { type: 'earth_level', target: 5, desc: 'ไปให้ถึงเลเวล 5 ในสายวิทย์โลก' } },
     { level: 10, xp: 5500, quest: { type: 'quizzes_completed', target: 30, desc: 'ทำแบบทดสอบให้ครบ 30 ครั้ง' } },
-    { level: 11, xp: 7500, quest: null },
-    { level: 12, xp: 10000, quest: null },
-    { level: 13, xp: 13000, quest: null },
-    { level: 14, xp: 16500, quest: null },
-    { level: 15, xp: 20500, quest: null },
-    { level: 16, xp: 25000, quest: null },
-    { level: 17, xp: 30000, quest: null },
-    { level: 18, xp: 36000, quest: null },
-    { level: 19, xp: 43000, quest: null },
-    { level: 20, xp: 50000, quest: null }
+    { level: 11, xp: 7500, quest: { type: 'high_scores_80', target: 10, desc: 'ทำคะแนนได้ 80% ขึ้นไป 10 ครั้ง' } },
+    { level: 12, xp: 10000, quest: { type: 'correct_streak', target: 30, desc: 'ตอบคำถามถูกติดต่อกัน 30 ข้อ' } },
+    { level: 13, xp: 13000, quest: { type: 'quizzes_completed', target: 50, desc: 'ทำแบบทดสอบให้ครบ 50 ครั้ง' } },
+    { level: 14, xp: 16500, quest: { type: 'perfect_scores', target: 5, desc: 'ทำคะแนนเต็ม 100% ให้ได้ 5 ครั้ง' } },
+    { level: 15, xp: 20500, quest: { type: 'physics_level', target: 10, desc: 'ไปให้ถึงเลเวล 10 ในสายฟิสิกส์' } },
+    { level: 16, xp: 25000, quest: { type: 'earth_level', target: 10, desc: 'ไปให้ถึงเลเวล 10 ในสายวิทย์โลก' } },
+    { level: 17, xp: 30000, quest: { type: 'high_scores_80', target: 20, desc: 'ทำคะแนนได้ 80% ขึ้นไป 20 ครั้ง' } },
+    { level: 18, xp: 36000, quest: { type: 'quizzes_completed', target: 100, desc: 'ทำแบบทดสอบให้ครบ 100 ครั้ง' } },
+    { level: 19, xp: 43000, quest: { type: 'correct_streak', target: 50, desc: 'ตอบคำถามถูกติดต่อกัน 50 ข้อ' } },
+    { level: 20, xp: 50000, quest: { type: 'perfect_scores', target: 10, desc: 'ทำคะแนนเต็ม 100% ให้ได้ 10 ครั้ง' } }
 ];
 
-// ชื่อยศสำหรับแต่ละสาย
+// ชื่อยศสำหรับแต่ละสาย (Titles)
+// ผู้เล่นจะได้รับฉายาตามเลเวลที่ทำได้ในแต่ละสาย (Overall, Physics, Earth Science)
+// โดยระบบจะเลือกฉายาจาก Array นี้ตามลำดับเลเวล (Level 1 = Index 0)
+// หากเลเวลเกินจำนวนฉายาที่มี จะใช้ฉายาสูงสุดที่มีอยู่
 export const TRACK_TITLES = {
     overall: [
         "ผู้เริ่มต้น (Novice)", "นักสำรวจ (Explorer)", "ผู้รอบรู้ (Scholar)", 
