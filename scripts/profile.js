@@ -1398,45 +1398,66 @@ async function renderRadarChart(game) {
     }
 
     try {
-        // 1. Fetch and Aggregate Data
-        const allProgress = await getDetailedProgressForAllQuizzes();
+        // --- Caching Logic ---
+        const CACHE_KEY = 'radar_chart_data_cache';
+        const LAST_COMPLETED_KEY = 'last_quiz_completed_timestamp'; // This key should be updated when a quiz is finished
+        
+        const lastCompletionTime = localStorage.getItem(LAST_COMPLETED_KEY) || '0';
+        const cachedItem = localStorage.getItem(CACHE_KEY);
+        const cachedData = cachedItem ? JSON.parse(cachedItem) : null;
+
+        let stats;
+
+        if (cachedData && cachedData.timestamp >= lastCompletionTime) {
+            // Use cached data
+            console.log("Using cached radar chart data.");
+            stats = cachedData.stats;
+        } else {
+            // Recalculate data
+            console.log("Recalculating radar chart data for caching.");
+            const allProgress = await getDetailedProgressForAllQuizzes();
     
-        // Initialize stats based on new groups
-        const stats = {};
-        Object.keys(PROFICIENCY_GROUPS).forEach(key => {
-            stats[key] = { correct: 0, total: 0, quizzes: new Set() };
-        });
-        stats['General'] = { correct: 0, total: 0, quizzes: new Set() }; // Fallback
-    
-        allProgress.forEach(quiz => {
-            if (!quiz.userAnswers) return;
-
-            quiz.userAnswers.forEach(ans => { 
-                if (ans) {
-                    // Determine sub-category string
-                    let subCatStr = '';
-                    if (ans.subCategory) {
-                        if (typeof ans.subCategory === 'string') subCatStr = ans.subCategory;
-                        else if (ans.subCategory.main) subCatStr = ans.subCategory.main;
-                    }
-                    
-                    // Find matching group
-                    let matchedGroup = 'General';
-                    const matches = (text, keywords) => keywords.some(k => text.includes(k));
-
-                    for (const [groupKey, groupDef] of Object.entries(PROFICIENCY_GROUPS)) {
-                        if (matches(subCatStr, groupDef.keywords)) {
-                            matchedGroup = groupKey;
-                            break;
-                        }
-                    }
-
-                    stats[matchedGroup].total++;
-                    if (ans.isCorrect) stats[matchedGroup].correct++;
-                    stats[matchedGroup].quizzes.add(quiz);
-                }
+            const newStats = {};
+            Object.keys(PROFICIENCY_GROUPS).forEach(key => {
+                newStats[key] = { correct: 0, total: 0 };
             });
-        });
+            newStats['General'] = { correct: 0, total: 0 };
+    
+            allProgress.forEach(quiz => {
+                if (!quiz.userAnswers) return;
+
+                quiz.userAnswers.forEach(ans => { 
+                    if (ans) {
+                        let subCatStr = '';
+                        if (ans.subCategory) {
+                            if (typeof ans.subCategory === 'string') subCatStr = ans.subCategory;
+                            else if (ans.subCategory.main) subCatStr = ans.subCategory.main;
+                        }
+                        
+                        let matchedGroup = 'General';
+                        const matches = (text, keywords) => keywords.some(k => text.includes(k));
+
+                        for (const [groupKey, groupDef] of Object.entries(PROFICIENCY_GROUPS)) {
+                            if (matches(subCatStr, groupDef.keywords)) {
+                                matchedGroup = groupKey;
+                                break;
+                            }
+                        }
+
+                        newStats[matchedGroup].total++;
+                        if (ans.isCorrect) newStats[matchedGroup].correct++;
+                    }
+                });
+            });
+
+            stats = newStats; // Assign for rendering
+
+            // Save to cache
+            localStorage.setItem(CACHE_KEY, JSON.stringify({
+                timestamp: new Date().getTime(),
+                stats: stats 
+            }));
+        }
 
         // 2. Calculate Percentages 
         const labels = Object.values(PROFICIENCY_GROUPS).map(g => g.label);
