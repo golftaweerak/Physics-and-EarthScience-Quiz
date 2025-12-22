@@ -1,5 +1,15 @@
+import { authManager } from './auth-manager.js';
+
 async function main() {
     try {
+        // รอตรวจสอบสถานะล็อกอินก่อน
+        const user = await authManager.waitForAuthReady();
+        
+        // ถ้าไม่ได้ล็อกอิน หรือ ไม่ใช่อีเมลโรงเรียน ไม่ต้องโหลดข้อมูล (ประหยัด Quota)
+        if (!user || !user.email || !user.email.endsWith('@promma.ac.th')) {
+            return; 
+        }
+
         const { loadComponent } = await import('./component-loader.js');
         // Load shared HTML components
         await Promise.all([
