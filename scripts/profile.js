@@ -204,7 +204,12 @@ function renderUserInfo(game) {
     if (emailEl) {
         const user = game.authManager.currentUser;
         if (user && user.email) {
-            emailEl.textContent = user.email;
+            emailEl.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 inline-block mr-1.5 -mt-0.5 opacity-70" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                    <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                </svg>${user.email}
+            `;
             emailEl.classList.remove('hidden');
         } else {
             emailEl.classList.add('hidden');
@@ -1071,7 +1076,7 @@ function renderShop(game) {
             }
 
         return `
-            <div class="shop-item-card relative bg-gray-50 dark:bg-gray-700/30 p-3 rounded-2xl border border-transparent hover:border-blue-300 dark:hover:border-blue-500 flex flex-col items-center text-center transition-all duration-300 hover:shadow-lg hover:-translate-y-1 cursor-pointer group" data-id="${item.id}">
+            <div class="shop-item-card relative bg-gray-50 dark:bg-gray-700/30 p-3 rounded-xl border border-transparent hover:border-blue-300 dark:hover:border-blue-500 flex flex-col items-center text-center transition-all duration-300 hover:shadow-lg hover:-translate-y-1 cursor-pointer group" data-id="${item.id}">
                 ${quantityBadge}
                 <div class="w-12 h-12 mb-2 rounded-full bg-white dark:bg-gray-800 flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform duration-300">
                     <div class="text-2xl transform group-hover:rotate-12 transition-transform duration-300">${item.icon}</div>
@@ -1084,7 +1089,7 @@ function renderShop(game) {
 
         // Accordion Structure
         return `
-            <div class="shop-category bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
+            <div class="shop-category bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
                 <button class="w-full flex justify-between items-center p-4 bg-gradient-to-r from-gray-50 to-white dark:from-gray-800 dark:to-gray-700/50 hover:from-blue-50 hover:to-white dark:hover:from-gray-700 dark:hover:to-gray-700 transition-all shop-category-header group" data-target="shop-cat-${cat.type}">
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 rounded-full bg-white dark:bg-gray-700 flex items-center justify-center shadow-sm text-xl group-hover:scale-110 transition-transform">${cat.icon}</div>
