@@ -2,26 +2,31 @@ import { authManager } from './auth-manager.js';
 
 async function main() {
     try {
-        // รอตรวจสอบสถานะล็อกอินก่อน
-        const user = await authManager.waitForAuthReady();
-        
-        // ถ้าไม่ได้ล็อกอิน หรือ ไม่ใช่อีเมลโรงเรียน ไม่ต้องโหลดข้อมูล (ประหยัด Quota)
-        if (!user || !user.email || !user.email.endsWith('@promma.ac.th')) {
-            return; 
-        }
-
+        // 1. โหลด Component ที่จำเป็นสำหรับทุกหน้าเสมอ (Header, Footer, Modals)
+        // เพื่อให้ Modal 'access-denied' พร้อมใช้งานทันที
         const { loadComponent } = await import('./component-loader.js');
-        // Load shared HTML components
         await Promise.all([
             loadComponent('#main_header-placeholder', './components/main_header.html'),
             loadComponent('#footer-placeholder', './components/footer.html'),
             loadComponent('#modals-placeholder', './components/modals_common.html')
         ]);
 
+        // 2. เริ่มการทำงานของ Component ทั่วไป (เช่น Dark mode, Dropdown)
         const { initializeCommonComponents } = await import('./common-init.js');
-        // Initialize common functionalities
         await initializeCommonComponents();
 
+        // 3. รอตรวจสอบสถานะล็อกอินและสิทธิ์
+        const user = await authManager.waitForAuthReady();
+        
+        // 4. ถ้าไม่ใช่เมลโรงเรียน ให้หยุดการทำงานที่นี่ (สคริปต์ใน summary.html จะแสดง Modal เอง)
+        if (!user || !user.email || !user.email.endsWith('@promma.ac.th')) {
+            // ซ่อน Spinner ที่กำลังโหลด เพราะเราจะไม่โหลดข้อมูลต่อ
+            const loadingSpinner = document.getElementById('loading-spinner');
+            if (loadingSpinner) loadingSpinner.style.display = 'none';
+            return; 
+        }
+
+        // 5. ถ้ามีสิทธิ์ ให้โหลดข้อมูลสรุปผลต่อ
         const { initializeSummaryPage } = await import('./summary-handler.js');
         // Build the summary page content
         await initializeSummaryPage();
