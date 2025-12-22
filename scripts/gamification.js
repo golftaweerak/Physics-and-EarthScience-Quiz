@@ -272,11 +272,11 @@ function getAvatarFrameClass(avatar) {
     return 'ring-2 ring-green-500';
 }
 
-function getLevelBorderClass(level) {
+export function getLevelBorderClass(level) {
     if (level >= 20) return 'bg-gradient-to-br from-red-500 via-yellow-400 to-green-500 animate-pulse'; // Rainbow
     if (level >= 15) return 'bg-gradient-to-br from-cyan-300 to-blue-500'; // Diamond
     if (level >= 10) return 'bg-gradient-to-br from-yellow-300 to-amber-500'; // Gold
-    if (level >= 5) return 'bg-gradient-to-br from-gray-300 to-blue-300'; // Silver/Blue
+    if (level >= 5) return 'bg-gradient-to-br from-blue-400 to-cyan-500'; // Sapphire
     return 'bg-gray-300 dark:bg-gray-600'; // Bronze/Gray
 }
 

@@ -1,13 +1,13 @@
 import { authManager } from './auth-manager.js';
 import { db } from './firebase-config.js';
 import { collection, query, orderBy, limit, getDocs, where, getCountFromServer } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import { XP_THRESHOLDS, TRACK_TITLES, PROFICIENCY_GROUPS } from './gamification.js';
+import { XP_THRESHOLDS, TRACK_TITLES, PROFICIENCY_GROUPS, getLevelBorderClass } from './gamification.js';
 
-function getTitleFromXP(xp, type) {
+function getLevelInfoForLeaderboard(xp, type) {
     let track = 'overall';
     if (type === 'physicsXP') track = 'physics';
     if (type === 'earthXP') track = 'earth';
-    
+
     // Map specific proficiency fields to their main tracks
     for (const group of Object.values(PROFICIENCY_GROUPS)) {
         if (group.field === type) {
@@ -15,7 +15,7 @@ function getTitleFromXP(xp, type) {
             break;
         }
     }
-    
+
     let level = 1;
     for (const threshold of XP_THRESHOLDS) {
         if (xp >= threshold.xp) {
@@ -24,10 +24,21 @@ function getTitleFromXP(xp, type) {
             break;
         }
     }
-    
+
     const titles = TRACK_TITLES[track] || TRACK_TITLES.overall;
     const titleIndex = Math.min(level - 1, titles.length - 1);
-    return titles[titleIndex];
+    const title = titles[titleIndex];
+
+    const currentLevelData = XP_THRESHOLDS[level - 1];
+    const nextLevelData = XP_THRESHOLDS[level] || null;
+    let progressPercent = 100;
+    if (nextLevelData && currentLevelData) {
+        const range = nextLevelData.xp - currentLevelData.xp;
+        const gained = xp - currentLevelData.xp;
+        progressPercent = range > 0 ? Math.min(100, Math.max(0, (gained / range) * 100)) : 100;
+    }
+
+    return { level, title, progressPercent };
 }
 
 export async function initializeLeaderboard() {
@@ -139,28 +150,61 @@ export async function initializeLeaderboard() {
                     </div>
                 `;
 
+                let score;
+                if (isMe && user.score !== undefined) {
+                    score = user.score;
+                } else {
+                    score = user[type] || 0;
+                    // On-the-fly calculation to fix display for stale data
+                    if (type === 'physicsXP') {
+                        let calculatedPhysicsXP = 0;
+                        for (const group of Object.values(PROFICIENCY_GROUPS)) {
+                            if (group.track === 'physics') {
+                                calculatedPhysicsXP += (user[group.field] || 0);
+                            }
+                        }
+                        score = Math.max(score, calculatedPhysicsXP);
+                    } else if (type === 'earthXP') {
+                        let calculatedEarthXP = 0;
+                        for (const group of Object.values(PROFICIENCY_GROUPS)) {
+                            if (group.track === 'earth') {
+                                calculatedEarthXP += (user[group.field] || 0);
+                            }
+                        }
+                        score = Math.max(score, calculatedEarthXP);
+                    }
+                }
+
+                const scoreFormatted = score.toLocaleString();
+                const levelInfo = getLevelInfoForLeaderboard(score, type);
+
                 const avatar = user.avatar || '🧑‍🎓';
                 const isImage = avatar.includes('/') || avatar.includes('.');
-                const avatarHtml = isImage 
-                    ? `<img src="${avatar}" class="w-12 h-12 rounded-full object-cover border-2 border-white dark:border-gray-700 shadow-md">`
-                    : `<span class="text-4xl">${avatar}</span>`;
+                const avatarContent = isImage 
+                    ? `<img src="${avatar}" class="w-full h-full rounded-full object-cover">`
+                    : `<span class="text-3xl">${avatar}</span>`;
+                
+                const levelBorderClass = getLevelBorderClass(levelInfo.level);
 
-                const score = isMe && user.score !== undefined ? user.score : (user[type] || 0);
-                const scoreFormatted = score.toLocaleString();
-                const rankTitle = getTitleFromXP(score, type);
+                const avatarHtml = `
+                    <div class="w-12 h-12 rounded-full p-0.5 shadow-md ${levelBorderClass}">
+                        <div class="w-full h-full rounded-full bg-white dark:bg-gray-800 flex items-center justify-center overflow-hidden">
+                            ${avatarContent}
+                        </div>
+                    </div>
+                `;
 
                 return `
                     <div class="flex items-center gap-4 p-3 rounded-xl ${isMe ? 'bg-blue-50 border-2 border-blue-200 dark:bg-blue-900/30 dark:border-blue-700 shadow-lg scale-[1.01] z-10 relative' : 'bg-white dark:bg-gray-800/60 border border-gray-200 dark:border-gray-700/80 hover:bg-gray-50 dark:hover:bg-gray-700/60'} transition-all duration-200">
                         <div class="flex-shrink-0">${rankDisplay}</div>
-                        <div class="flex-shrink-0">
-                            ${avatarHtml}
-                        </div>
+                        <div class="flex-shrink-0">${avatarHtml}</div>
                         <div class="flex-grow min-w-0 flex flex-col justify-center">
                             <div class="font-bold text-lg text-gray-800 dark:text-gray-200 truncate">
                                 ${user.displayName || 'ผู้เรียน'} ${isMe ? '<span class="text-sm text-blue-600 dark:text-blue-400 ml-1">(คุณ)</span>' : ''}
                             </div>
                             <div class="text-sm text-gray-500 dark:text-gray-400 flex flex-wrap items-center gap-x-2">
-                                <span class="text-blue-600 dark:text-blue-400 font-medium whitespace-nowrap">${rankTitle}</span>
+                                <span class="font-bold text-gray-600 dark:text-gray-300">(Lv.${levelInfo.level})</span>
+                                <span class="text-blue-600 dark:text-blue-400 font-medium whitespace-nowrap">${levelInfo.title}</span>
                                 ${user.selectedTitle ? `<span class="hidden sm:inline text-gray-400 dark:text-gray-600">•</span> <span class="truncate max-w-[150px] sm:max-w-none">《 ${user.selectedTitle} 》</span>` : ''}
                             </div>
                         </div>

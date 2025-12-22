@@ -1,4 +1,4 @@
-import { Gamification, BADGES, ACHIEVEMENTS, SHOP_ITEMS, XP_THRESHOLDS, TRACK_TITLES, PROFICIENCY_GROUPS } from './gamification.js';
+import { Gamification, BADGES, ACHIEVEMENTS, SHOP_ITEMS, XP_THRESHOLDS, TRACK_TITLES, PROFICIENCY_GROUPS, getLevelBorderClass } from './gamification.js';
 import { getDetailedProgressForAllQuizzes, calculateStrengthsAndWeaknesses } from './data-manager.js';
 import { renderDailyQuests } from './daily-quests-renderer.js';
 import { ModalHandler } from './modal-handler.js';
@@ -51,14 +51,6 @@ function getTitleFromXP(xp, type) {
     const titles = TRACK_TITLES[track] || TRACK_TITLES.overall;
     const titleIndex = Math.min(level - 1, titles.length - 1);
     return titles[titleIndex];
-}
-
-function getLevelBorderClass(level) {
-    if (level >= 20) return 'bg-gradient-to-br from-red-500 via-yellow-400 to-green-500 animate-pulse'; // Rainbow
-    if (level >= 15) return 'bg-gradient-to-br from-cyan-300 to-blue-500'; // Diamond
-    if (level >= 10) return 'bg-gradient-to-br from-yellow-300 to-amber-500'; // Gold
-    if (level >= 5) return 'bg-gradient-to-br from-gray-300 to-blue-300'; // Silver/Blue
-    return 'bg-gray-300 dark:bg-gray-600'; // Bronze/Gray
 }
 
 function getAvatarFrameClass(avatar) {
@@ -589,15 +581,31 @@ function setupLeaderboardSystem(game) {
                 if (rank === 2) rankDisplay = `<span class="text-xl sm:text-2xl">🥈</span>`;
                 if (rank === 3) rankDisplay = `<span class="text-xl sm:text-2xl">🥉</span>`;
 
-                const avatar = user.avatar || '🧑‍🎓';
-                const isImage = avatar.includes('/') || avatar.includes('.');
-                const avatarHtml = isImage 
-                    ? `<img src="${avatar}" class="w-8 h-8 sm:w-10 sm:h-10 rounded-full object-cover border border-gray-200">`
-                    : `<span class="text-2xl sm:text-3xl">${avatar}</span>`;
-
                 const score = isMe && user.score !== undefined ? user.score : (user[type] || 0);
                 const scoreFormatted = score.toLocaleString();
-                const rankTitle = getTitleFromXP(score, type);
+                
+                let track = 'overall';
+                if (type === 'physicsXP') track = 'physics';
+                if (type === 'earthXP') track = 'earth';
+                
+                const levelInfo = game.getLevelInfo(score, track);
+                const rankTitle = levelInfo.title;
+                const level = levelInfo.level;
+
+                const avatar = user.avatar || '🧑‍🎓';
+                const isImage = avatar.includes('/') || avatar.includes('.');
+                const avatarContent = isImage 
+                    ? `<img src="${avatar}" class="w-full h-full rounded-full object-cover">`
+                    : `<span class="text-2xl sm:text-3xl">${avatar}</span>`;
+                
+                const levelBorderClass = getLevelBorderClass(level);
+                const avatarHtml = `
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full p-0.5 shadow-md ${levelBorderClass}">
+                        <div class="w-full h-full rounded-full bg-white dark:bg-gray-800 flex items-center justify-center overflow-hidden">
+                            ${avatarContent}
+                        </div>
+                    </div>
+                `;
 
                 return `
                     <div class="flex items-center gap-2 sm:gap-4 p-2 sm:p-3 rounded-lg ${isMe ? 'bg-blue-50 border border-blue-200 dark:bg-blue-900/20 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-900/30 hover:shadow-md hover:scale-[1.02] z-10 relative' : 'hover:bg-gray-50 dark:hover:bg-gray-700/30'} transition-all duration-200">
