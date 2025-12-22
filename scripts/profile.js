@@ -32,6 +32,7 @@ const THEME_HUES = {
 let lastSyncTime = null;
 let previousXP = null;
 let previousAvatar = null;
+let previousTitle = null;
 
 function getTitleFromXP(xp, type) {
     let track = 'overall';
@@ -134,8 +135,15 @@ export async function initializeProfile() {
 
 function renderUserInfo(game) {
     const overall = game.getCurrentLevel();
+    const currentTitle = overall.title;
+
+    // NEW: Check for title change and show toast
+    if (previousTitle !== null && previousTitle !== currentTitle) {
+        showToast('ปลดล็อกฉายาใหม่!', `คุณได้รับฉายา: "${currentTitle}"`, '🌟', 'gold');
+    }
+
     const rankTitleEl = document.getElementById('user-rank-title');
-    if (rankTitleEl) rankTitleEl.textContent = `${overall.title} (Lv.${overall.level})`;
+    if (rankTitleEl) rankTitleEl.textContent = `${currentTitle} (Lv.${overall.level})`;
 
     const levelEl = document.getElementById('user-level');
     if (levelEl) levelEl.textContent = overall.level;
@@ -276,6 +284,7 @@ function renderUserInfo(game) {
     }
 
     renderRecentBadges(game);
+    previousTitle = currentTitle;
     previousXP = currentXP;
 }
 
