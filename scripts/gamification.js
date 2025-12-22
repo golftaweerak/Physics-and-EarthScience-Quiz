@@ -325,19 +325,49 @@ export class Gamification {
             try {
                 const data = await this.authManager.loadUserData();
                 if (data) {
-                    // Merge ข้อมูลจาก Cloud เข้ากับ Default State เพื่อความสมบูรณ์
+                    // Merge data from Cloud with Default State for completeness
                     this.state = { ...this.getDefaultState(), ...data };
+
+                    // --- Data Consistency Check & Correction ---
+                    let needsSave = false;
+                    let calculatedPhysicsXP = 0;
+                    let calculatedEarthXP = 0;
+
+                    for (const group of Object.values(PROFICIENCY_GROUPS)) {
+                        const groupXP = this.state[group.field] || 0;
+                        if (group.track === 'physics') {
+                            calculatedPhysicsXP += groupXP;
+                        } else if (group.track === 'earth') {
+                            calculatedEarthXP += groupXP;
+                        }
+                    }
+
+                    // If the stored main track XP is less than the sum of its parts, correct it.
+                    if (this.state.physicsXP < calculatedPhysicsXP) {
+                        console.log(`Correcting physicsXP from ${this.state.physicsXP} to ${calculatedPhysicsXP}`);
+                        this.state.physicsXP = calculatedPhysicsXP;
+                        needsSave = true;
+                    }
+                    if (this.state.earthXP < calculatedEarthXP) {
+                        console.log(`Correcting earthXP from ${this.state.earthXP} to ${calculatedEarthXP}`);
+                        this.state.earthXP = calculatedEarthXP;
+                        needsSave = true;
+                    }
 
                     // Auto-update name from Google account on first login (if still default)
                     if (user) {
                         const isDefaultName = this.state.displayName === 'ผู้เรียน (Guest)' || !this.state.displayName;
                         if (isDefaultName) {
                             this.state.displayName = user.displayName || (user.email ? user.email.split('@')[0] : 'ผู้เรียน');
-                            this.saveState();
+                            needsSave = true;
                         }
                     }
 
-                    // ตรวจสอบ Streak และอัปเดต UI
+                    if (needsSave) {
+                        this.saveState(); // Save corrected data back to the cloud
+                    }
+
+                    // Check Streak and update UI
                     this.updateStreak();
                     this.onStateUpdated();
                 }
