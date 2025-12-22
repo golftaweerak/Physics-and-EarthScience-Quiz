@@ -61,7 +61,7 @@ export async function initializeLeaderboard() {
 
             const currentUser = authManager?.currentUser;
             const currentUserId = currentUser ? currentUser.uid : null;
-            const localState = JSON.parse(localStorage.getItem('app_gamification_data') || '{}');
+            const localState = await authManager.loadUserData() || {};
 
             const userInTop50 = leaderboard.some(u => u.id === currentUserId);
             let userRankData = null;
