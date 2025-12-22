@@ -448,6 +448,9 @@ export class Gamification {
                     // NEW: Check for shuffledQuestions to ensure we can calculate XP accurately
                     if (data && data.userAnswers && data.shuffledQuestions) {
                         let calculatedXp = 0;
+                        let quizPhysicsXP = 0;
+                        let quizEarthXP = 0;
+
                         data.userAnswers.forEach((ans, index) => {
                             if (ans && ans.isCorrect) {
                                 const question = data.shuffledQuestions[index];
@@ -486,28 +489,38 @@ export class Gamification {
                                 for (const [groupKey, groupDef] of Object.entries(PROFICIENCY_GROUPS)) {
                                     if (groupDef.keywords.some(k => subCatStr.includes(k))) {
                                         topicXPs[groupDef.field] = (topicXPs[groupDef.field] || 0) + points;
+                                        
+                                        // NEW: Accumulate track XP based on proficiency group
+                                        if (groupDef.track === 'physics') quizPhysicsXP += points;
+                                        if (groupDef.track === 'earth') quizEarthXP += points;
+                                        
                                         break;
                                     }
                                 }
                             }
                         });
 
-                        // แยกสายวิชา (พยายามเดาจากข้อมูลที่มี)
-                        let category = 'General';
-                        const firstAns = data.userAnswers.find(a => a);
-                        if (firstAns) {
-                            if (firstAns.sourceQuizCategory) category = firstAns.sourceQuizCategory;
-                            else if (firstAns.subCategory) {
-                                category = typeof firstAns.subCategory === 'object' ? firstAns.subCategory.main : firstAns.subCategory;
+                        // ถ้ายังระบุสายวิชาไม่ได้จาก Proficiency Group ให้ลองดูจากหมวดหมู่หรือชื่อไฟล์
+                        if (quizPhysicsXP === 0 && quizEarthXP === 0) {
+                            let category = 'General';
+                            const firstAns = data.userAnswers.find(a => a);
+                            if (firstAns) {
+                                if (firstAns.sourceQuizCategory) category = firstAns.sourceQuizCategory;
+                                else if (firstAns.subCategory) {
+                                    category = typeof firstAns.subCategory === 'object' ? firstAns.subCategory.main : firstAns.subCategory;
+                                }
+                            }
+                            
+                            const lowerCat = String(category).toLowerCase();
+                            if (lowerCat.includes('physics') || lowerCat.includes('ฟิสิกส์') || key.includes('phy_')) {
+                                quizPhysicsXP = calculatedXp;
+                            } else if (lowerCat.includes('earth') || lowerCat.includes('astronomy') || lowerCat.includes('space') || lowerCat.includes('โลก') || lowerCat.includes('ดาราศาสตร์') || lowerCat.includes('วิทย์โลก') || key.includes('ess_')) {
+                                quizEarthXP = calculatedXp;
                             }
                         }
-                        
-                        const lowerCat = String(category).toLowerCase();
-                        if (lowerCat.includes('physics') || lowerCat.includes('ฟิสิกส์')) {
-                            physicsXP += xp;
-                        } else if (lowerCat.includes('earth') || lowerCat.includes('astronomy') || lowerCat.includes('space') || lowerCat.includes('โลก') || lowerCat.includes('ดาราศาสตร์') || lowerCat.includes('วิทย์โลก')) {
-                            earthXP += xp;
-                        }
+
+                        physicsXP += quizPhysicsXP;
+                        earthXP += quizEarthXP;
                     }
                 } catch (e) {
                     console.warn("Skipping invalid quiz state during sync:", key);
