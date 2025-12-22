@@ -16,13 +16,12 @@
                 window.location.href = './index.html';
                 return;
             }
+            
+            const mainContent = document.getElementById('main-content');
+
             if (!user.email || !user.email.endsWith('@promma.ac.th')) {
                 // ใช้ฟังก์ชันรอ Element เพราะ modals_common.html อาจจะยังโหลดไม่เสร็จ
                 const showModal = () => {
-                    // ซ่อนเนื้อหาหลักทันทีเพื่อความปลอดภัยและป้องกันการมองเห็น
-                    const mainContent = document.querySelector('main');
-                    if (mainContent) mainContent.classList.add('hidden');
-
                     const modal = document.getElementById('access-denied-modal');
                     if (modal) {
                         modal.classList.remove('hidden');
@@ -36,6 +35,9 @@
                     }
                 };
                 showModal();
+            } else {
+                // อนุญาตให้เข้าถึง: แสดงเนื้อหาหลัก
+                if (mainContent) mainContent.classList.remove('hidden');
             }
         });
     </script>
@@ -46,7 +48,7 @@
     <div id="main_header-placeholder"></div>
     <div id="modals-placeholder"></div>
 
-    <main class="container mx-auto px-4 pb-8" style="padding-top: var(--header-height-offset, 5rem);">
+    <main id="main-content" class="container mx-auto px-4 pb-8 hidden" style="padding-top: var(--header-height-offset, 5rem);">
         <header class="mb-8">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white font-kanit">ภาพรวมคะแนน:
                 <br>รายวิชาวิทยาศาสตร์โลกและอวกาศ ม.4
