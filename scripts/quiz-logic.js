@@ -1410,9 +1410,18 @@ function showResults() {
                 if (typeof ans.subCategory === 'string') subCatStr = ans.subCategory;
                 else if (ans.subCategory.main) subCatStr = ans.subCategory.main;
             }
+
+            let isPhysics = false;
+            let isEarth = false;
+
             for (const [groupKey, groupDef] of Object.entries(PROFICIENCY_GROUPS)) {
                 if (groupDef.keywords.some(k => subCatStr.includes(k))) {
                     topicXPs[groupDef.field] = (topicXPs[groupDef.field] || 0) + points;
+                    
+                    // Check track from proficiency group
+                    if (groupDef.track === 'physics') isPhysics = true;
+                    if (groupDef.track === 'earth') isEarth = true;
+
                     break;
                 }
             }
@@ -1426,9 +1435,19 @@ function showResults() {
             }
             
             const lowerCat = String(qCategory).toLowerCase();
-            if (lowerCat.includes('physics') || lowerCat.includes('ฟิสิกส์')) {
+            
+            // Fallback check using category name or ID prefix
+            if (!isPhysics && (lowerCat.includes('physics') || lowerCat.includes('ฟิสิกส์') || lowerCat.includes('phy_'))) {
+                isPhysics = true;
+            }
+            
+            if (!isEarth && (lowerCat.includes('earth') || lowerCat.includes('astronomy') || lowerCat.includes('space') || lowerCat.includes('โลก') || lowerCat.includes('ดาราศาสตร์') || lowerCat.includes('วิทย์โลก') || lowerCat.includes('ess_'))) {
+                isEarth = true;
+            }
+
+            if (isPhysics) {
                 physicsXP += points;
-            } else if (lowerCat.includes('earth') || lowerCat.includes('astronomy') || lowerCat.includes('space') || lowerCat.includes('โลก') || lowerCat.includes('ดาราศาสตร์') || lowerCat.includes('วิทย์โลก')) {
+            } else if (isEarth) {
                 earthXP += points;
             }
         }
