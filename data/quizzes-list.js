@@ -975,7 +975,7 @@ export const quizList = [
   {
     "id": "phy_m5/phy_m5_ch13-3",
     "title": "ไฟฟ้ากระแส (ชุดที่ 3)",
-    "amount": 22,
+    "amount": 30,
     "description": "บทที่ 13: ไฟฟ้ากระแส (พลังงานไฟฟ้า, การประยุกต์, และวงจรผสม)",
     "url": "./quiz/index.html?id=phy_m5/phy_m5_ch13-3",
     "storageKey": "quizState-phy_m5_ch13-3",
