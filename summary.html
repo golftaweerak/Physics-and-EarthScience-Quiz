@@ -12,20 +12,27 @@
         import { authManager } from './scripts/auth-manager.js';
 
         authManager.waitForAuthReady().then(user => {
-            if (!user) {
-                window.location.href = './index.html';
-                return;
-            }
-            
             const mainContent = document.getElementById('main-content');
+            const isSchoolEmail = user && user.email && user.email.endsWith('@promma.ac.th');
 
-            if (!user.email || !user.email.endsWith('@promma.ac.th')) {
-                // ใช้ฟังก์ชันรอ Element เพราะ modals_common.html อาจจะยังโหลดไม่เสร็จ
+            if (isSchoolEmail) {
+                // อนุญาตให้เข้าถึง: แสดงเนื้อหาหลัก
+                if (mainContent) mainContent.classList.remove('hidden');
+            } else {
+                // ไม่มีสิทธิ์: แสดง Modal (สำหรับ user ที่ไม่ได้ล็อกอิน หรืออีเมลผิด)
                 let attempts = 0;
                 const showModal = () => {
                     const modal = document.getElementById('access-denied-modal');
                     if (modal) {
                         modal.classList.remove('hidden');
+                        const loginBtn = document.getElementById('access-denied-login-btn');
+                        if (loginBtn) {
+                            loginBtn.addEventListener('click', () => {
+                                // เมื่อกดปุ่ม ให้เรียกฟังก์ชัน login จาก authManager
+                                authManager.login();
+                            });
+                        }
+
                         requestAnimationFrame(() => {
                             requestAnimationFrame(() => {
                                 modal.classList.remove('opacity-0');
@@ -35,7 +42,6 @@
                         });
                     } else {
                         attempts++;
-                        // Fallback: ถ้าไม่เจอ Modal ภายใน 3 วินาที ให้สร้างขึ้นมาเองเพื่อป้องกันหน้าขาว
                         if (attempts > 30) {
                             document.body.insertAdjacentHTML('beforeend', `
                                 <div class="fixed inset-0 z-[99999] flex items-center justify-center bg-black/90 backdrop-blur-md font-sarabun">
@@ -51,9 +57,6 @@
                     }
                 };
                 showModal();
-            } else {
-                // อนุญาตให้เข้าถึง: แสดงเนื้อหาหลัก
-                if (mainContent) mainContent.classList.remove('hidden');
             }
         });
     </script>
