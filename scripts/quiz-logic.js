@@ -1561,6 +1561,9 @@ function showResults() {
 
   // Save the final state. This is important for the 'view results' feature.
   saveQuizState();
+
+  // Update timestamp to invalidate profile chart cache
+  localStorage.setItem('last_quiz_completed_timestamp', new Date().getTime());
 }
 
 /**
