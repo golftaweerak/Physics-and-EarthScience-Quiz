@@ -349,7 +349,14 @@ function setupNameEditSystem(game) {
 
             // Disable save button if not enough XP
             if (saveBtn) {
-                if (game.state.xp < NAME_CHANGE_COST) {
+                const isFree = game.state.freeNameChangeAvailable;
+
+                if (isFree) {
+                    saveBtn.disabled = false;
+                    saveBtn.innerHTML = `<span>บันทึก (ฟรี 1 ครั้ง)</span>`;
+                    saveBtn.classList.remove('opacity-50', 'cursor-not-allowed', 'bg-gray-400');
+                    saveBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+                } else if (game.state.xp < NAME_CHANGE_COST) {
                     saveBtn.disabled = true;
                     saveBtn.innerHTML = `<span>ต้องการ ${NAME_CHANGE_COST} XP</span>`;
                     saveBtn.classList.add('opacity-50', 'cursor-not-allowed', 'bg-gray-400');
@@ -370,18 +377,28 @@ function setupNameEditSystem(game) {
 
     if (saveBtn && nameInput) {
         const saveName = () => {
-            if (game.state.xp < NAME_CHANGE_COST) {
+            const isFree = game.state.freeNameChangeAvailable;
+
+            if (!isFree && game.state.xp < NAME_CHANGE_COST) {
                 showToast('XP ไม่พอ', `คุณต้องการ ${NAME_CHANGE_COST} XP เพื่อเปลี่ยนชื่อ`, '⚠️', 'error');
                 return;
             }
 
             const newName = nameInput.value.trim();
             if (newName) {
-                game.state.xp -= NAME_CHANGE_COST;
+                let toastMsg = '';
+                if (isFree) {
+                    game.state.freeNameChangeAvailable = false;
+                    toastMsg = `เปลี่ยนชื่อเรียบร้อยแล้ว (ฟรี)`;
+                } else {
+                    game.state.xp -= NAME_CHANGE_COST;
+                    toastMsg = `เปลี่ยนชื่อเรียบร้อยแล้ว (-${NAME_CHANGE_COST} XP)`;
+                }
+
                 game.setDisplayName(newName);
                 renderUserInfo(game);
                 nameModal.close();
-                showToast('บันทึกสำเร็จ', `เปลี่ยนชื่อเรียบร้อยแล้ว (-${NAME_CHANGE_COST} XP)`, '✏️');
+                showToast('บันทึกสำเร็จ', toastMsg, '✏️');
             } else {
                 showToast('ข้อผิดพลาด', 'กรุณาระบุชื่อ', '⚠️', 'error');
             }

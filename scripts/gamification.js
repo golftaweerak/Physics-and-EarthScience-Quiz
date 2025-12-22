@@ -314,6 +314,16 @@ export class Gamification {
                 if (data) {
                     // Merge ข้อมูลจาก Cloud เข้ากับ Default State เพื่อความสมบูรณ์
                     this.state = { ...this.getDefaultState(), ...data };
+
+                    // Auto-update name from Google account on first login (if still default)
+                    if (user) {
+                        const isDefaultName = this.state.displayName === 'ผู้เรียน (Guest)' || !this.state.displayName;
+                        if (isDefaultName) {
+                            this.state.displayName = user.displayName || (user.email ? user.email.split('@')[0] : 'ผู้เรียน');
+                            this.saveState();
+                        }
+                    }
+
                     // ตรวจสอบ Streak และอัปเดต UI
                     this.updateStreak();
                     this.onStateUpdated();
@@ -362,6 +372,7 @@ export class Gamification {
             astronomyXP: 0,
             geologyXP: 0,
             meteorologyXP: 0,
+            freeNameChangeAvailable: true,
         };
     }
 
