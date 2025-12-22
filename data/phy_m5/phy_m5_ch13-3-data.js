@@ -344,5 +344,5 @@ export const quizItems = [
       }
     ]
   },
-  // ... (Additional questions to reach 30 items would follow similar patterns of theory and calculation)
+
 ];

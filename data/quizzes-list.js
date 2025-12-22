@@ -964,10 +964,21 @@ export const quizList = [
   {
     "id": "phy_m5/phy_m5_ch13-2",
     "title": "ไฟฟ้ากระแส (ชุดที่ 2)",
-    "amount": 20,
+    "amount": 30,
     "description": "บทที่ 13: ไฟฟ้ากระแส (วงจรซับซ้อน, กฎของเคอร์ชอฟ, เครื่องมือวัด)",
     "url": "./quiz/index.html?id=phy_m5/phy_m5_ch13-2",
     "storageKey": "quizState-phy_m5_ch13-2",
+    "icon": "./assets/icons/electric-current.png",
+    "category": "PhysicsM5",
+    "subCategory": "บทที่ 13: ไฟฟ้ากระแส"
+  },
+  {
+    "id": "phy_m5/phy_m5_ch13-3",
+    "title": "ไฟฟ้ากระแส (ชุดที่ 3)",
+    "amount": 22,
+    "description": "บทที่ 13: ไฟฟ้ากระแส (พลังงานไฟฟ้า, การประยุกต์, และวงจรผสม)",
+    "url": "./quiz/index.html?id=phy_m5/phy_m5_ch13-3",
+    "storageKey": "quizState-phy_m5_ch13-3",
     "icon": "./assets/icons/electric-current.png",
     "category": "PhysicsM5",
     "subCategory": "บทที่ 13: ไฟฟ้ากระแส"
