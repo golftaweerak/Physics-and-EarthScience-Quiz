@@ -16,6 +16,7 @@ const THEME_COLORS = {
     'theme-sunset': { border: '#ea580c', background: 'rgba(234, 88, 12, 0.2)', point: '#ea580c' },
     'theme-ocean': { border: '#0891b2', background: 'rgba(8, 145, 178, 0.2)', point: '#0891b2' },
     'theme-berry': { border: '#db2777', background: 'rgba(219, 39, 119, 0.2)', point: '#db2777' },
+    'theme-sakura': { border: '#f43f5e', background: 'rgba(244, 63, 94, 0.2)', point: '#f43f5e' },
     'theme-midnight': { border: '#475569', background: 'rgba(71, 85, 105, 0.2)', point: '#475569' },
     'default': { border: 'rgba(59, 130, 246, 1)', background: 'rgba(59, 130, 246, 0.2)', point: 'rgba(59, 130, 246, 1)' }
 };
@@ -975,7 +976,23 @@ function setupShopSystem(game) {
                     if (iconEl) iconEl.textContent = item.icon;
                     if (titleEl) titleEl.textContent = item.name;
                     if (typeEl) typeEl.textContent = item.type === 'avatar' ? 'Avatar' : (item.type === 'theme' ? 'Theme' : 'Title');
-                    if (descEl) descEl.textContent = item.desc;
+                    
+                    if (descEl) {
+                        if (item.type === 'theme') {
+                            descEl.innerHTML = `<span>${item.desc}</span>
+                            <div class="mt-4 text-left text-xs sm:text-sm bg-gray-50 dark:bg-gray-700/50 p-3 rounded-lg border border-gray-200 dark:border-gray-600">
+                                <span class="font-bold block mb-1 text-gray-700 dark:text-gray-200">สิ่งที่เปลี่ยนแปลง:</span>
+                                <ul class="list-disc list-inside space-y-0.5 text-gray-600 dark:text-gray-400">
+                                    <li>สีหลักของปุ่มและไอคอน</li>
+                                    <li>สีพื้นหลังและส่วนหัว (Header)</li>
+                                    <li>สีไฮไลท์ข้อความและ Scrollbar</li>
+                                    <li>เอฟเฟกต์เงาและการไล่ระดับสี</li>
+                                </ul>
+                            </div>`;
+                        } else {
+                            descEl.textContent = item.desc;
+                        }
+                    }
                     
                     const inventory = game.getInventory();
                     const isOwned = inventory.includes(item.id);

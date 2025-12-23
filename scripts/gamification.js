@@ -263,6 +263,7 @@ export const SHOP_ITEMS = [
     
     // 2000 XP
     { id: 'title_master', type: 'title', name: 'ปรมาจารย์', icon: '🎓', cost: 2000, value: 'ปรมาจารย์', desc: 'ฉายาขั้นสูง' },
+    { id: 'theme_sakura', type: 'theme', name: 'ซากุระ (Sakura)', icon: '🌸', cost: 2000, value: 'theme-sakura', desc: 'ธีมสีชมพูอ่อนหวาน' },
     
     // 5000 XP
     { id: 'title_rich', type: 'title', name: 'เศรษฐี XP', icon: '💰', cost: 5000, value: 'เศรษฐี XP', desc: 'ฉายาสำหรับผู้มั่งคั่ง' },
@@ -797,11 +798,12 @@ export class Gamification {
         style.id = 'gamification-theme-styles';
         
         const themes = {
-            'forest': { main: '#059669', hover: '#047857', light_bg: '#d1fae5', dark_bg: 'rgba(6, 78, 59, 0.5)' },
-            'sunset': { main: '#ea580c', hover: '#c2410c', light_bg: '#ffedd5', dark_bg: 'rgba(124, 45, 18, 0.5)' },
-            'ocean': { main: '#0891b2', hover: '#0e7490', light_bg: '#cffafe', dark_bg: 'rgba(22, 78, 99, 0.5)' },
-            'berry': { main: '#db2777', hover: '#be185d', light_bg: '#fce7f3', dark_bg: 'rgba(131, 24, 67, 0.5)' },
-            'midnight': { main: '#475569', hover: '#334155', light_bg: '#f1f5f9', dark_bg: 'rgba(30, 41, 59, 0.8)' }
+            'forest': { main: '#059669', hover: '#047857', secondary: '#34d399', light_bg: '#d1fae5', dark_bg: 'rgba(6, 78, 59, 0.5)', ring: '#34d399' },
+            'sunset': { main: '#ea580c', hover: '#c2410c', secondary: '#f59e0b', light_bg: '#ffedd5', dark_bg: 'rgba(124, 45, 18, 0.5)', ring: '#fbbf24' },
+            'ocean': { main: '#0891b2', hover: '#0e7490', secondary: '#22d3ee', light_bg: '#cffafe', dark_bg: 'rgba(22, 78, 99, 0.5)', ring: '#67e8f9' },
+            'berry': { main: '#db2777', hover: '#be185d', secondary: '#c026d3', light_bg: '#fce7f3', dark_bg: 'rgba(131, 24, 67, 0.5)', ring: '#e879f9' },
+            'sakura': { main: '#f43f5e', hover: '#e11d48', secondary: '#fb7185', light_bg: '#ffe4e6', dark_bg: 'rgba(159, 18, 57, 0.5)', ring: '#fda4af' },
+            'midnight': { main: '#475569', hover: '#334155', secondary: '#64748b', light_bg: '#f1f5f9', dark_bg: 'rgba(30, 41, 59, 0.8)', ring: '#94a3b8' }
         };
 
         // เพิ่ม Animation Styles
@@ -863,10 +865,24 @@ export class Gamification {
             allStyles += `
                 /* --- ${themeName.toUpperCase()} THEME OVERRIDES --- */
 
+                /* Global Selection Color */
+                .theme-${themeName} ::selection {
+                    background-color: ${colors.main};
+                    color: white;
+                }
+
+                /* Scrollbar (Webkit) */
+                .theme-${themeName} ::-webkit-scrollbar-thumb {
+                    background-color: ${colors.secondary};
+                    border-radius: 10px;
+                }
+
                 /* === 1. Main UI & Quiz Page Accent (replaces blue) === */
                 .theme-${themeName} .bg-blue-500,
                 .theme-${themeName} .bg-blue-600,
                 .theme-${themeName} .dark\\:bg-blue-600,
+                .theme-${themeName} .bg-indigo-500,
+                .theme-${themeName} .bg-indigo-600,
                 .theme-${themeName} input[type="radio"]:checked,
                 .theme-${themeName} input[type="checkbox"]:checked {
                     background-color: ${colors.main} !important;
@@ -875,18 +891,25 @@ export class Gamification {
 
                 .theme-${themeName} .hover\\:bg-blue-600:hover,
                 .theme-${themeName} .hover\\:bg-blue-700:hover,
-                .theme-${themeName} .dark\\:hover\\:bg-blue-700:hover {
+                .theme-${themeName} .dark\\:hover\\:bg-blue-700:hover,
+                .theme-${themeName} .hover\\:bg-indigo-600:hover,
+                .theme-${themeName} .hover\\:bg-indigo-700:hover {
                     background-color: ${colors.hover} !important;
                 }
 
                 .theme-${themeName} .text-blue-500,
                 .theme-${themeName} .text-blue-600,
+                .theme-${themeName} .text-blue-700,
                 .theme-${themeName} .dark\\:text-blue-400,
-                .theme-${themeName} .dark\\:text-blue-300 {
+                .theme-${themeName} .dark\\:text-blue-300,
+                .theme-${themeName} .text-indigo-600,
+                .theme-${themeName} .text-indigo-700 {
                     color: ${colors.main} !important;
                 }
 
                 .theme-${themeName} .border-blue-500,
+                .theme-${themeName} .border-blue-600,
+                .theme-${themeName} .border-indigo-500,
                 .theme-${themeName} .has-\\[\\:checked\\]\\:border-blue-500:checked {
                     border-color: ${colors.main} !important;
                 }
@@ -895,15 +918,21 @@ export class Gamification {
                      border-color: ${colors.main} !important;
                 }
 
-                .theme-${themeName} .focus\\:ring-blue-500:focus {
-                    --tw-ring-color: ${colors.main} !important;
+                .theme-${themeName} .focus\\:ring-blue-500:focus,
+                .theme-${themeName} .focus\\:ring-indigo-500:focus {
+                    --tw-ring-color: ${colors.ring} !important;
                 }
 
                 .theme-${themeName} .bg-blue-100,
-                .theme-${themeName} .dark\\:bg-blue-900\\/30 {
+                .theme-${themeName} .bg-blue-50,
+                .theme-${themeName} .bg-indigo-50,
+                .theme-${themeName} .bg-indigo-100,
+                .theme-${themeName} .dark\\:bg-blue-900\\/30,
+                .theme-${themeName} .dark\\:bg-indigo-900\\/30 {
                     background-color: ${colors.light_bg} !important;
                 }
                 .theme-${themeName} .dark .bg-blue-100, 
+                .theme-${themeName} .dark .bg-blue-50,
                 .theme-${themeName} .dark\\:bg-blue-900\\/50 {
                     background-color: ${colors.dark_bg} !important;
                 }
@@ -911,11 +940,31 @@ export class Gamification {
                 .theme-${themeName} .hover\\:bg-blue-200:hover { background-color: ${colors.main} !important; opacity: 0.2; }
                 .theme-${themeName} .dark\\:hover\\:bg-blue-800:hover { background-color: ${colors.hover} !important; opacity: 0.4; }
 
+                /* === 2. Gradients (Profile Header, Progress Bars) === */
+                .theme-${themeName} .from-blue-500,
+                .theme-${themeName} .from-blue-600,
+                .theme-${themeName} .from-indigo-500 {
+                    --tw-gradient-from: ${colors.main} !important;
+                    --tw-gradient-to: ${colors.secondary} !important;
+                    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+                }
+
+                .theme-${themeName} .to-purple-600,
+                .theme-${themeName} .to-indigo-500,
+                .theme-${themeName} .to-blue-600 {
+                    --tw-gradient-to: ${colors.secondary} !important;
+                }
+
                 /* === 2. Index Page Card Hovers === */
                 .theme-${themeName} .quiz-card:hover {
                     border-color: ${colors.main} !important;
                     --tw-shadow-color: ${colors.main} !important;
+                    box-shadow: 0 10px 15px -3px ${colors.light_bg}, 0 4px 6px -2px ${colors.light_bg} !important;
                 }
+                .theme-${themeName} .dark .quiz-card:hover {
+                    box-shadow: 0 10px 15px -3px ${colors.dark_bg}, 0 4px 6px -2px ${colors.dark_bg} !important;
+                }
+
                 .theme-${themeName} .quiz-card:hover h3 {
                     color: ${colors.main} !important;
                 }
@@ -924,6 +973,46 @@ export class Gamification {
                 }
                 .theme-${themeName} .dark .quiz-card:hover .section-icon-container {
                     background-color: ${colors.dark_bg} !important;
+                }
+
+                /* === 3. Quiz Page Specifics (Buttons & UI) === */
+                /* Primary Action Buttons (Next, Start, Restart, Review, Back) */
+                .theme-${themeName} #next-btn,
+                .theme-${themeName} #review-btn,
+                .theme-${themeName} #back-to-result-btn,
+                .theme-${themeName} #restart-btn,
+                .theme-${themeName} #start-btn {
+                    background-color: ${colors.main} !important;
+                    color: white !important;
+                    border-color: transparent !important;
+                }
+                .theme-${themeName} #next-btn:hover,
+                .theme-${themeName} #review-btn:hover,
+                .theme-${themeName} #back-to-result-btn:hover,
+                .theme-${themeName} #restart-btn:hover,
+                .theme-${themeName} #start-btn:hover {
+                    background-color: ${colors.hover} !important;
+                    box-shadow: 0 4px 12px ${colors.dark_bg} !important;
+                }
+
+                /* Secondary Action Buttons (Prev, Skip) */
+                .theme-${themeName} #prev-btn,
+                .theme-${themeName} #skip-btn {
+                    background-color: ${colors.light_bg} !important;
+                    color: ${colors.main} !important;
+                    border: 1px solid ${colors.main} !important;
+                }
+                .theme-${themeName} #prev-btn:hover,
+                .theme-${themeName} #skip-btn:hover {
+                    background-color: ${colors.main} !important;
+                    color: white !important;
+                }
+
+                /* Option Buttons Hover Effect */
+                .theme-${themeName} .option-btn:hover:not(:disabled) {
+                    border-color: ${colors.main} !important;
+                    background-color: ${colors.light_bg} !important;
+                    color: ${colors.main} !important;
                 }
             `;
         }
