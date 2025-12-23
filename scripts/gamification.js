@@ -204,7 +204,7 @@ export const SHOP_ITEMS = [
     { id: 'avatar_newmoon', type: 'avatar', name: 'จันทร์ดับ', icon: '🌑', cost: 150, value: '🌑', desc: 'อวตารดวงจันทร์ในคืนเดือนมืด' },
     { id: 'avatar_star', type: 'avatar', name: 'ดาว', icon: '⭐', cost: 150, value: '⭐', desc: 'อวตารดวงดาวเปล่งประกาย' },
     { id: 'avatar_frog', type: 'avatar', name: 'กบ', icon: '🐸', cost: 150, value: '🐸', desc: 'อวตารกบ' },
-    { id: 'avatar_hamster', type: 'avatar', name: 'หนู', icon: '🐹', cost: 250, value: '🐹', desc: 'อวตารหนูแฮมสเตอร์' },
+    { id: 'avatar_hamster', type: 'avatar', name: 'แฮมสเตอร์', icon: '🐹', cost: 150, value: '🐹', desc: 'อวตารหนูแฮมสเตอร์' },
     { id: 'item_time_freeze', type: 'consumable', name: 'หยุดเวลา', icon: '❄️', cost: 150, value: 'time_freeze', desc: 'หยุดเวลาชั่วคราว 30 วินาที' },
     
     // 200 XP
@@ -216,12 +216,14 @@ export const SHOP_ITEMS = [
     { id: 'avatar_dog', type: 'avatar', name: 'สุนัข', icon: '🐶', cost: 250, value: '🐶', desc: 'อวตารเพื่อนผู้ซื่อสัตย์' },
     { id: 'avatar_cat', type: 'avatar', name: 'แมว', icon: '😺', cost: 250, value: '😺', desc: 'อวตารแมวเหมียว' },
     { id: 'avatar_monkey', type: 'avatar', name: 'ลิง', icon: '🐵', cost: 250, value: '🐵', desc: 'อวตารลิง' },
+    { id: 'avatar_koala', type: 'avatar', name: 'โคอาลา', icon: '🐨', cost: 250, value: '🐨', desc: 'อวตารโคอาลา' },
     { id: 'item_xp_2x', type: 'consumable', name: 'คูณ XP x2', icon: '✨', cost: 250, value: 'xp_2x', desc: 'ได้รับ XP 2 เท่าเมื่อทำแบบทดสอบจบ' },
     { id: 'item_undo', type: 'consumable', name: 'แก้ตัวใหม่', icon: '↩️', cost: 250, value: 'undo', desc: 'กลับไปตอบข้อที่เพิ่งตอบผิดได้อีกครั้ง' },
     
     // 300 XP
     { id: 'avatar_rocket', type: 'avatar', name: 'จรวด', icon: '🚀', cost: 300, value: '🚀', desc: 'อวตารจรวดทะยานฟ้า' },
     { id: 'avatar_microbe', type: 'avatar', name: 'จุลินทรีย์', icon: '🦠', cost: 300, value: '🦠', desc: 'อวตารสิ่งมีชีวิตขนาดเล็ก' },
+    
     { id: 'title_scholar', type: 'title', name: 'ผู้ใฝ่รู้', icon: '📚', cost: 300, value: 'ผู้ใฝ่รู้', desc: 'ฉายาสำหรับผู้รักการเรียน' },
     
     // 350 XP
@@ -247,6 +249,7 @@ export const SHOP_ITEMS = [
     
     // 800 XP
     { id: 'avatar_ninja', type: 'avatar', name: 'นินจา', icon: '🥷', cost: 800, value: '🥷', desc: 'นักรบเงา' },
+    { id: 'avatar_trex', type: 'avatar', name: 'T-rex', icon: '🦖', cost: 800, value: '🦖', desc: 'อวตารT-rex' },
     { id: 'theme_sunset', type: 'theme', name: 'พระอาทิตย์ตก (Sunset)', icon: '🌅', cost: 800, value: 'theme-sunset', desc: 'ธีมสีส้มอบอุ่น' },
     { id: 'theme_ocean', type: 'theme', name: 'มหาสมุทร (Ocean)', icon: '🌊', cost: 800, value: 'theme-ocean', desc: 'ธีมสีฟ้าน้ำทะเล' },
     
@@ -256,6 +259,7 @@ export const SHOP_ITEMS = [
     
     // 1200 XP
     { id: 'avatar_unicorn', type: 'avatar', name: 'ยูนิคอร์น', icon: '🦄', cost: 1200, value: '🦄', desc: 'สัตว์วิเศษหายาก' },
+    
     
     // 2000 XP
     { id: 'title_master', type: 'title', name: 'ปรมาจารย์', icon: '🎓', cost: 2000, value: 'ปรมาจารย์', desc: 'ฉายาขั้นสูง' },
