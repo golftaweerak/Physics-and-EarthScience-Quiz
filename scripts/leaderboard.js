@@ -191,7 +191,7 @@ export async function initializeLeaderboard() {
                 const avatarFrameClass = getAvatarFrameClass(avatar, 'small');
 
                 const avatarHtml = `
-                    <div class="w-12 h-12 rounded-full p-[2px] shadow-md ${levelBorderClass}">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full p-0.5 shadow-md ${levelBorderClass}">
                         <div class="w-full h-full rounded-full bg-white dark:bg-gray-800 flex items-center justify-center overflow-hidden ${avatarFrameClass}">
                             ${avatarContent}
                         </div>

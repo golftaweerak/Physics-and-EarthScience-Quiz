@@ -809,7 +809,7 @@ export class Gamification {
 
             // Create nested structure: Level Border (Outer) -> Avatar Frame (Inner) -> Content
             profileLink.innerHTML = `
-                <div class="w-full h-full rounded-full p-[3px] ${levelBorderClass} shadow-sm transition-all duration-300">
+                <div class="w-full h-full rounded-full p-0.5 ${levelBorderClass} shadow-sm transition-all duration-300">
                     <div class="w-full h-full rounded-full bg-white dark:bg-gray-800 flex items-center justify-center overflow-hidden ${avatarFrameClass}">
                         ${contentHtml}
                     </div>
@@ -861,7 +861,15 @@ export class Gamification {
             'ocean': { main: '#0891b2', hover: '#0e7490', secondary: '#22d3ee', light_bg: '#cffafe', dark_bg: 'rgba(22, 78, 99, 0.5)', ring: '#67e8f9' },
             'berry': { main: '#db2777', hover: '#be185d', secondary: '#c026d3', light_bg: '#fce7f3', dark_bg: 'rgba(131, 24, 67, 0.5)', ring: '#e879f9' },
             'sakura': { main: '#f43f5e', hover: '#e11d48', secondary: '#fb7185', light_bg: '#ffe4e6', dark_bg: 'rgba(159, 18, 57, 0.5)', ring: '#fda4af' },
-            'midnight': { main: '#475569', hover: '#334155', secondary: '#64748b', light_bg: '#f1f5f9', dark_bg: 'rgba(30, 41, 59, 0.8)', ring: '#94a3b8' }
+            'midnight': { 
+                main: '#475569',        // Slate 600 - Used for buttons and light-mode text
+                hover: '#334155',       // Slate 700
+                secondary: '#64748b',   // Slate 500
+                light_bg: '#f1f5f9',    // Slate 100
+                dark_bg: 'rgba(30, 41, 59, 0.8)', // Slate 800
+                ring: '#94a3b8',        // Slate 400
+                dark_text: '#94a3b8'    // NEW: Slate 400 for text in dark mode for better contrast
+            }
         };
 
         // เพิ่ม Animation Styles
@@ -920,6 +928,8 @@ export class Gamification {
         `;
 
         for (const [themeName, colors] of Object.entries(themes)) {
+            const darkTextColor = colors.dark_text || colors.main;
+
             allStyles += `
                 /* --- ${themeName.toUpperCase()} THEME OVERRIDES --- */
 
@@ -955,14 +965,24 @@ export class Gamification {
                     background-color: ${colors.hover} !important;
                 }
 
+                /* Text colors (default for light mode) */
                 .theme-${themeName} .text-blue-500,
                 .theme-${themeName} .text-blue-600,
                 .theme-${themeName} .text-blue-700,
-                .theme-${themeName} .dark\\:text-blue-400,
-                .theme-${themeName} .dark\\:text-blue-300,
                 .theme-${themeName} .text-indigo-600,
                 .theme-${themeName} .text-indigo-700 {
                     color: ${colors.main} !important;
+                }
+
+                /* Dark mode specific text colors */
+                .theme-${themeName} .dark .text-blue-500,
+                .theme-${themeName} .dark .text-blue-600,
+                .theme-${themeName} .dark .text-blue-700,
+                .theme-${themeName} .dark .text-indigo-600,
+                .theme-${themeName} .dark .text-indigo-700,
+                .theme-${themeName} .dark\\:text-blue-400,
+                .theme-${themeName} .dark\\:text-blue-300 {
+                    color: ${darkTextColor} !important;
                 }
 
                 .theme-${themeName} .border-blue-500,

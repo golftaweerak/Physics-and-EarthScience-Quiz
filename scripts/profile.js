@@ -21,15 +21,6 @@ const THEME_COLORS = {
     'default': { border: 'rgba(59, 130, 246, 1)', background: 'rgba(59, 130, 246, 0.2)', point: 'rgba(59, 130, 246, 1)' }
 };
 
-// Base Hues for History Chart Lines based on Theme
-const THEME_HUES = {
-    'theme-forest': 160, // Green
-    'theme-sunset': 25,  // Orange
-    'theme-ocean': 190,  // Cyan
-    'theme-berry': 330,  // Pink
-    'theme-midnight': 220 // Slate/Blue-ish
-};
-
 let lastSyncTime = null;
 let previousXP = null;
 let previousAvatar = null;
@@ -214,7 +205,7 @@ function renderUserInfo(game) {
 
         // NEW: Update level border (outer ring)
         const levelBorderClass = getLevelBorderClass(overall.level);
-        levelFrameEl.className = 'w-full h-full rounded-full p-2 transition-all duration-300'; // Reset and use p-2 for visibility
+        levelFrameEl.className = 'w-full h-full rounded-full p-1 transition-all duration-300'; // Reset and use p-1 for visibility
         levelFrameEl.classList.add(...levelBorderClass.split(' '));
     }
 
@@ -587,7 +578,7 @@ function setupLeaderboardSystem(game) {
                 const levelBorderClass = getLevelBorderClass(level);
                 const avatarFrameClass = getAvatarFrameClass(avatar, 'small');
                 const avatarHtml = `
-                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full p-[2px] shadow-md ${levelBorderClass}">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full p-0.5 shadow-md ${levelBorderClass}">
                         <div class="w-full h-full rounded-full bg-white dark:bg-gray-800 flex items-center justify-center overflow-hidden ${avatarFrameClass}">
                             ${avatarContent}
                         </div>
