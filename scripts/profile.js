@@ -1,4 +1,4 @@
-import { Gamification, BADGES, ACHIEVEMENTS, SHOP_ITEMS, XP_THRESHOLDS, TRACK_TITLES, PROFICIENCY_GROUPS, getLevelBorderClass } from './gamification.js';
+import { Gamification, BADGES, ACHIEVEMENTS, SHOP_ITEMS, XP_THRESHOLDS, TRACK_TITLES, PROFICIENCY_GROUPS, getLevelBorderClass, getAvatarFrameClass } from './gamification.js';
 import { getDetailedProgressForAllQuizzes, calculateStrengthsAndWeaknesses } from './data-manager.js';
 import { renderDailyQuests } from './daily-quests-renderer.js';
 import { ModalHandler } from './modal-handler.js';
@@ -34,15 +34,6 @@ let lastSyncTime = null;
 let previousXP = null;
 let previousAvatar = null;
 let previousTitle = null;
-
-function getAvatarFrameClass(avatar) {
-    const shopItem = SHOP_ITEMS.find(i => i.value === avatar && i.type === 'avatar');
-    if (!shopItem) return 'ring-2 ring-gray-200 dark:ring-gray-700'; // Default
-
-    if (shopItem.cost >= 1000) return 'ring-4 ring-yellow-400 shadow-lg shadow-yellow-400/50 legendary-frame';
-    if (shopItem.cost >= 500) return 'ring-4 ring-purple-500 shadow-md shadow-purple-500/30';
-    return 'ring-4 ring-green-500';
-}
 
 export async function initializeProfile() {
     const game = new Gamification();

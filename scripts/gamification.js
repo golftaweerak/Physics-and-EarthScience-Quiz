@@ -270,7 +270,7 @@ export const SHOP_ITEMS = [
     { id: 'theme_dark', type: 'theme', name: 'รัตติกาล (Midnight)', icon: '🌑', cost: 5000, value: 'theme-midnight', desc: 'ธีมสีมืดลึกลับ' },
 ];
 
-function getAvatarFrameClass(avatar) {
+export function getAvatarFrameClass(avatar) {
     const shopItem = SHOP_ITEMS.find(i => i.value === avatar && i.type === 'avatar');
     if (!shopItem) return 'ring-2 ring-gray-200 dark:ring-gray-700'; // Default
 
@@ -298,6 +298,8 @@ export class Gamification {
         this.state = this.loadState();
         
         // NEW: ตรวจสอบความถูกต้องของข้อมูลทันทีที่โหลดจาก LocalStorage
+        // ฟังก์ชันนี้จะช่วยแก้ปัญหา Data Inconsistency เช่น XP รวมน้อยกว่า XP ย่อย
+        // ซึ่งอาจเกิดจากการซิงค์ข้อมูลผิดพลาดในเวอร์ชันก่อนหน้า
         if (this.ensureConsistency()) {
             this.saveState();
         }
@@ -343,6 +345,7 @@ export class Gamification {
 
                     // --- Data Consistency Check & Correction ---
                     // เรียกใช้ฟังก์ชันตรวจสอบความถูกต้องที่สร้างขึ้นใหม่
+                    // เพื่อให้มั่นใจว่าข้อมูลจาก Cloud ถูกต้องก่อนนำไปใช้งาน
                     let needsSave = this.ensureConsistency();
 
                     // Auto-update name from Google account on first login (if still default)
@@ -373,6 +376,8 @@ export class Gamification {
     }
 
     // เพิ่มฟังก์ชันใหม่สำหรับตรวจสอบความถูกต้องของข้อมูล XP
+    // Logic: วนลูปหาผลรวม XP ของแต่ละหมวดย่อย (Proficiency) แล้วเทียบกับ XP หลัก (Physics/Earth)
+    // หาก XP หลักน้อยกว่าผลรวม (ซึ่งเป็นไปไม่ได้ในทางทฤษฎี) ระบบจะปรับค่า XP หลักให้เท่ากับผลรวมทันที
     ensureConsistency() {
         let needsSave = false;
         let calculatedPhysicsXP = 0;
@@ -495,12 +500,16 @@ export class Gamification {
     }
 
     // ฟังก์ชันสำหรับดึงข้อมูลการทำโจทย์เก่าๆ มาคำนวณเป็น XP เริ่มต้น
+    // Logic: สแกน LocalStorage หา key ที่ขึ้นต้นด้วย 'quizState-'
+    // แล้วคำนวณ XP ย้อนหลังให้ผู้ใช้ที่เคยเล่นก่อนมีระบบ Gamification
     syncProgress() {
         let totalXP = 0;
         let physicsXP = 0;
         let earthXP = 0;
         let completed = 0;
         let totalCorrect = 0;
+        let perfectScores = 0;
+        let highScores80 = 0;
         const topicXPs = {};
 
         // วนลูปดูข้อมูลทั้งหมดใน LocalStorage
@@ -538,6 +547,14 @@ export class Gamification {
                         const answered = data.userAnswers.filter(a => a).length;
                         if (totalQ > 0 && answered >= totalQ) {
                             completed++;
+
+                            // คำนวณสถิติย้อนหลัง
+                            const percentage = Math.round((correctCount / totalQ) * 100);
+                            const isCustom = key.includes('custom');
+                            if (!isCustom || (isCustom && totalQ >= 20)) {
+                                if (percentage === 100) perfectScores++;
+                                if (percentage >= 80) highScores80++;
+                            }
                         }
 
                         // Calculate Topic XP
@@ -600,6 +617,8 @@ export class Gamification {
             this.state.earthXP = earthXP;
             this.state.quizzesCompleted = completed;
             this.state.totalCorrectAnswers = totalCorrect;
+            this.state.perfectScores = perfectScores;
+            this.state.highScores80 = highScores80;
             
             // Apply calculated topic XPs
             for (const [field, xp] of Object.entries(topicXPs)) {
@@ -1039,6 +1058,8 @@ export class Gamification {
     }
 
     updateEndQuizStats(percentage, questionCount = 0, isCustomQuiz = false) {
+        // Logic: ตรวจสอบเงื่อนไขก่อนบันทึกสถิติ Perfect Score หรือ High Score
+        // หากเป็น Custom Quiz ต้องมีอย่างน้อย 20 ข้อจึงจะนับสถิติ (ป้องกันการปั๊มสถิติด้วยโจทย์ 1 ข้อ)
         // Check eligibility: Custom quizzes need at least 20 questions
         const isEligible = !isCustomQuiz || (isCustomQuiz && questionCount >= 20);
         
@@ -1255,23 +1276,15 @@ export class Gamification {
     }
 
     // ฟังก์ชันเพิ่ม XP (เรียกใช้เมื่อทำข้อสอบเสร็จ)
-    addXP(amount, category = '', percentage = 0, questionCount = 0, isCustomQuiz = false) {
+    // NOTE: ฟังก์ชันนี้ถูกปรับปรุงให้ใช้สำหรับ "ให้รางวัล XP" ทั่วไป (เช่น จาก Quest)
+    // โดยจะไม่นับจำนวน quizzesCompleted เพิ่ม เพื่อป้องกันการนับซ้ำซ้อนกับ submitQuizResult
+    addXP(amount, category = '') {
         const oldLevel = this.state.level || 1;
         const oldPhysics = this.getPhysicsLevel();
         const oldEarth = this.getEarthLevel();
 
         this.state.xp += amount;
 
-        // NEW: Update score-based stats based on eligibility
-        const isEligibleForStats = !isCustomQuiz || (isCustomQuiz && questionCount >= 20);
-        if (isEligibleForStats) {
-            if (percentage === 100) {
-                this.state.perfectScores = (this.state.perfectScores || 0) + 1;
-            }
-            if (percentage >= 80) {
-                this.state.highScores80 = (this.state.highScores80 || 0) + 1;
-            }
-        }
         
         // ตรวจสอบสายวิชาจาก category
         let isPhysics = false;
@@ -1287,11 +1300,10 @@ export class Gamification {
             isEarth = true;
         }
 
-        this.state.quizzesCompleted += 1;
-
         this.updateLevel();
 
-        this.checkBadges(percentage, questionCount, isCustomQuiz);
+        // ตรวจสอบ Badge ที่เกี่ยวกับ XP สะสม (ส่ง 0 ไปเพราะไม่ได้มาจากการทำข้อสอบ)
+        this.checkBadges(0, 0, false);
 
         const newLevelInfo = this.getCurrentLevel();
         const newPhysics = this.getPhysicsLevel();
@@ -1308,6 +1320,8 @@ export class Gamification {
     }
 
     // ฟังก์ชันใหม่: บันทึกผลการทำข้อสอบโดยรับค่า XP แยกตามสายวิชา
+    // นี่คือฟังก์ชันหลักที่ quiz-logic.js เรียกใช้เมื่อส่งคำตอบ
+    // จัดการทั้ง XP, สถิติรายข้อ, และการปลดล็อก Badge/Achievement ในที่เดียว
     submitQuizResult(totalXP, physicsXP, earthXP, percentage, questionCount, isCustomQuiz, topicXPs = {}) {
         const oldLevel = this.state.level || 1;
         const oldPhysics = this.getPhysicsLevel();
@@ -1353,6 +1367,7 @@ export class Gamification {
     }
 
     // ฟังก์ชันอัปเดตความคืบหน้าภารกิจ
+    // Logic: รับ stats จากการทำข้อสอบ แล้ววนลูปตรวจสอบกับ Active Quests ของผู้ใช้
     updateQuest(stats) {
         if (!this.state.activeQuests) return { completed: [], newAchievements: [] };
 
@@ -1405,7 +1420,7 @@ export class Gamification {
                 if (q.progress >= q.target) {
                     q.progress = q.target;
                     q.completed = true;
-                    this.addXP(q.xp, 'General'); // ให้รางวัล XP
+                    this.addXP(q.xp, 'General'); // ให้รางวัล XP (เรียกใช้ addXP แบบใหม่ที่ไม่นับ quiz เพิ่ม)
                     completedQuests.push({ completed: true, quest: q });
 
                     // บันทึกลงประวัติ (History)
@@ -1431,6 +1446,7 @@ export class Gamification {
         return { completed: completedQuests, newAchievements };
     }
 
+    // ตรวจสอบความสำเร็จระยะยาว (Achievements) เช่น เลเวล 20, ตอบถูกครบ 1000 ข้อ
     checkAchievements() {
         const newUnlocks = [];
         ACHIEVEMENTS.forEach(ach => {
@@ -1489,6 +1505,7 @@ export class Gamification {
     }
 
     // ฟังก์ชันตรวจสอบและปลดล็อก Badge
+    // Logic: ตรวจสอบเงื่อนไขต่างๆ และมอบเหรียญรางวัลหากยังไม่เคยได้รับ
     checkBadges(lastQuizScorePercent, questionCount = 0, isCustomQuiz = false) {
         const newBadges = [];
         

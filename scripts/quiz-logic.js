@@ -1458,18 +1458,10 @@ function showResults() {
     earthXP *= state.xpMultiplier;
 
     // บันทึกผล XP ลงในระบบ Gamification
-    if (typeof game.submitQuizResult === 'function') {
-        const result = game.submitQuizResult(xpEarned, physicsXP, earthXP, percentage, state.questionCount, state.isCustomQuiz, topicXPs);
-        levelResult = { overall: result.overall, physics: result.physics, earth: result.earth };
-        newBadges = result.newBadges || [];
-        newAchievements = result.newAchievements || [];
-    } else {
-        // Fallback กรณีไม่มีฟังก์ชันใหม่
-        levelResult = game.addXP(xpEarned, 'General', percentage, state.questionCount, state.isCustomQuiz);
-        // In fallback, we still need to check badges and achievements separately
-        newBadges = game.checkBadges(percentage, state.questionCount, state.isCustomQuiz);
-        newAchievements = game.checkAchievements();
-    }
+    const result = game.submitQuizResult(xpEarned, physicsXP, earthXP, percentage, state.questionCount, state.isCustomQuiz, topicXPs);
+    levelResult = { overall: result.overall, physics: result.physics, earth: result.earth };
+    newBadges = result.newBadges || [];
+    newAchievements = result.newAchievements || [];
 
     // --- DAILY QUEST: Update Progress ---
     // สำหรับ Quest ยังคงใช้หมวดหมู่หลักของแบบทดสอบ (จากข้อแรก) เพื่อความง่ายในการตรวจสอบเงื่อนไข "ทำแบบทดสอบหมวด..."
