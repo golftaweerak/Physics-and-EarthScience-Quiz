@@ -710,6 +710,12 @@ function setupShopShortcut() {
         // หน่วงเวลาเล็กน้อยเพื่อให้ browser ได้ render layout ใหม่ก่อนเลื่อนจอ
         setTimeout(() => {
             shopSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            // Highlight effect: เพิ่มขอบสีเหลืองและขยายขนาดเล็กน้อยชั่วคราว
+            shopSection.classList.add('ring-4', 'ring-yellow-400', 'scale-[1.02]', 'z-10');
+            setTimeout(() => {
+                shopSection.classList.remove('ring-4', 'ring-yellow-400', 'scale-[1.02]', 'z-10');
+            }, 1500);
         }, 50);
     });
 }
