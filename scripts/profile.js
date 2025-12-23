@@ -35,25 +35,6 @@ let previousXP = null;
 let previousAvatar = null;
 let previousTitle = null;
 
-function getTitleFromXP(xp, type) {
-    let track = 'overall';
-    if (type === 'physicsXP') track = 'physics';
-    if (type === 'earthXP') track = 'earth';
-    
-    let level = 1;
-    for (const threshold of XP_THRESHOLDS) {
-        if (xp >= threshold.xp) {
-            level = threshold.level;
-        } else {
-            break;
-        }
-    }
-    
-    const titles = TRACK_TITLES[track] || TRACK_TITLES.overall;
-    const titleIndex = Math.min(level - 1, titles.length - 1);
-    return titles[titleIndex];
-}
-
 function getAvatarFrameClass(avatar) {
     const shopItem = SHOP_ITEMS.find(i => i.value === avatar && i.type === 'avatar');
     if (!shopItem) return 'ring-2 ring-gray-200 dark:ring-gray-700'; // Default

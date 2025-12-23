@@ -485,6 +485,54 @@ class AuthManagerInternal {
         }
     }
 
+    // --- ส่วนจัดการแบบทดสอบที่สร้างเอง (Custom Quiz Sync) ---
+
+    async saveCustomQuiz(quizData) {
+        if (!this.currentUser) return;
+        try {
+            const docRef = doc(db, "users", this.currentUser.uid, "custom_quizzes", quizData.customId);
+            await this.retryOperation(() => setDoc(docRef, quizData));
+            this.updateLastSyncTime();
+            console.log(`Synced custom quiz ${quizData.customId} to cloud.`);
+        } catch (e) {
+            console.error("Error saving custom quiz to cloud:", e);
+            throw e;
+        }
+    }
+
+    async deleteCustomQuiz(quizData) {
+        if (!this.currentUser || !quizData || !quizData.customId) return;
+        try {
+            const batch = writeBatch(db);
+            const quizDefRef = doc(db, "users", this.currentUser.uid, "custom_quizzes", quizData.customId);
+            batch.delete(quizDefRef);
+
+            // Also delete associated progress if it exists
+            if (quizData.storageKey) {
+                const progressRef = doc(db, "users", this.currentUser.uid, "quiz_history", quizData.storageKey);
+                batch.delete(progressRef);
+            }
+            
+            await this.retryOperation(() => batch.commit());
+            console.log(`Deleted custom quiz ${quizData.customId} and its history from cloud.`);
+        } catch (e) {
+            console.error("Error deleting custom quiz from cloud:", e);
+            throw e;
+        }
+    }
+
+    async updateCustomQuiz(customId, dataToUpdate) {
+        if (!this.currentUser || !customId) return;
+        try {
+            const docRef = doc(db, "users", this.currentUser.uid, "custom_quizzes", customId);
+            await this.retryOperation(() => updateDoc(docRef, dataToUpdate));
+            this.updateLastSyncTime();
+        } catch (e) {
+            console.error(`Error updating custom quiz ${customId} in cloud:`, e);
+            throw e;
+        }
+    }
+
     // ฟังก์ชันบันทึกประวัติรายข้อ (เรียกใช้ตอนทำข้อสอบ)
     async saveQuizHistoryItem(key, data) {
         if (!this.currentUser) return;

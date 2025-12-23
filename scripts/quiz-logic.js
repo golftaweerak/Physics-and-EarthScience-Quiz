@@ -1392,7 +1392,6 @@ function showResults() {
 
   try {
     const game = state.game; // Use the instance from state
-    game.updateEndQuizStats(percentage);
     
     state.userAnswers.forEach((ans, index) => {
         if (ans && ans.isCorrect) {

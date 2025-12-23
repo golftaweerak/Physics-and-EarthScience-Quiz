@@ -2,9 +2,7 @@
 import { ModalHandler } from "./modal-handler.js";
 import { fetchAllQuizData, getQuizProgress, categoryDetails as allCategoryDetails } from "./data-manager.js";
 import { getSyllabusForCategory } from "./syllabus-manager.js";
-import { authManager } from './auth-manager.js';
-import { db } from './firebase-config.js';
-import { doc, setDoc, getDocs, collection, writeBatch, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { authManager } from './auth-manager.js'; // authManager now handles db operations
 import { showToast } from './toast.js';
 
 /**
@@ -21,6 +19,7 @@ export async function getSavedCustomQuizzes() {
     try {
         const parsed = JSON.parse(savedQuizzesJSON);
         let localQuizzes = Array.isArray(parsed) ? parsed : [];
+        const { db, collection, getDocs, writeBatch, doc } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js");
 
         // If logged in, perform sync
         if (authManager.currentUser) {
@@ -97,12 +96,9 @@ async function createAndSaveCustomQuiz(quizData) {
     // Sync to cloud if logged in
     if (authManager.currentUser) {
         try {
-            const docRef = doc(db, 'users', authManager.currentUser.uid, 'custom_quizzes', newCustomQuiz.customId);
-            await setDoc(docRef, newCustomQuiz);
+            await authManager.saveCustomQuiz(newCustomQuiz);
         } catch (error) {
-            // Log the error but don't block the user. The quiz is saved locally.
-            // This is a workaround for potential Firestore permission issues.
-            console.warn("Could not sync custom quiz to Firestore. It will be available on this device only.", error);
+            console.warn("Could not sync new custom quiz to Firestore. It will be available on this device only.", error);
         }
     }
 
@@ -242,24 +238,20 @@ export function initializeCustomQuizHandler() {
 
     async function deleteCustomQuiz(customId) {
         let savedQuizzes = await getSavedCustomQuizzes();
-        const quizToDelete = savedQuizzes.find((q) => q.customId === customId);
-        if (quizToDelete?.storageKey) {
-            localStorage.removeItem(quizToDelete.storageKey);
-        }
+        const quizToDelete = savedQuizzes.find(q => q.customId === customId);
+        if (!quizToDelete) return;
+
+        // Local Deletion
+        if (quizToDelete.storageKey) localStorage.removeItem(quizToDelete.storageKey);
         const updatedQuizzes = savedQuizzes.filter((q) => q.customId !== customId);
         localStorage.setItem("customQuizzesList", JSON.stringify(updatedQuizzes));
 
         // Sync deletion to cloud
         if (authManager.currentUser) {
-            const user = authManager.currentUser;
-            // Delete quiz definition
-            const quizDefRef = doc(db, 'users', user.uid, 'custom_quizzes', customId);
-            await deleteDoc(quizDefRef);
-
-            // Delete quiz progress from history
-            if (quizToDelete?.storageKey) {
-                const progressRef = doc(db, 'users', user.uid, 'quiz_history', quizToDelete.storageKey);
-                await deleteDoc(progressRef);
+            try {
+                await authManager.deleteCustomQuiz(quizToDelete);
+            } catch (error) {
+                console.warn("Could not sync custom quiz deletion to Firestore.", error);
             }
         }
         await renderCustomQuizList();
@@ -274,10 +266,11 @@ export function initializeCustomQuizHandler() {
 
             // NEW: Sync title change to cloud
             if (authManager.currentUser) {
-                const docRef = doc(db, 'users', authManager.currentUser.uid, 'custom_quizzes', customId);
-                await updateDoc(docRef, {
-                    title: newTitle.trim()
-                });
+                try {
+                    await authManager.updateCustomQuiz(customId, { title: newTitle.trim() });
+                } catch (error) {
+                    console.warn("Could not sync custom quiz title update to Firestore.", error);
+                }
             }
         }
     }
