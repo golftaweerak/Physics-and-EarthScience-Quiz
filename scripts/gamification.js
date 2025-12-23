@@ -1038,14 +1038,19 @@ export class Gamification {
         this.saveState();
     }
 
-    updateEndQuizStats(percentage) {
-        if (percentage === 100) {
-            this.state.perfectScores = (this.state.perfectScores || 0) + 1;
+    updateEndQuizStats(percentage, questionCount = 0, isCustomQuiz = false) {
+        // Check eligibility: Custom quizzes need at least 20 questions
+        const isEligible = !isCustomQuiz || (isCustomQuiz && questionCount >= 20);
+        
+        if (isEligible) {
+            if (percentage === 100) {
+                this.state.perfectScores = (this.state.perfectScores || 0) + 1;
+            }
+            if (percentage >= 80) {
+                this.state.highScores80 = (this.state.highScores80 || 0) + 1;
+            }
+            // No need to call saveState() here as it will be called later in the flow (e.g., by checkBadges)
         }
-        if (percentage >= 80) {
-            this.state.highScores80 = (this.state.highScores80 || 0) + 1;
-        }
-        this.saveState();
     }
 
     isQuestCompleted(quest) {

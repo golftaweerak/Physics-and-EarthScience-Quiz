@@ -533,6 +533,46 @@ class AuthManagerInternal {
         }
     }
 
+    // ฟังก์ชันซิงค์รายการ Custom Quiz (เรียกจาก custom-quiz-handler.js)
+    async syncCustomQuizzes(localQuizzes) {
+        if (!this.currentUser) return localQuizzes;
+
+        try {
+            const customQuizzesRef = collection(db, 'users', this.currentUser.uid, 'custom_quizzes');
+            const cloudSnapshot = await this.retryOperation(() => getDocs(customQuizzesRef));
+            
+            const cloudQuizzesMap = new Map();
+            cloudSnapshot.forEach(doc => cloudQuizzesMap.set(doc.id, doc.data()));
+
+            const localQuizzesMap = new Map(localQuizzes.map(q => [q.customId, q]));
+            const batch = writeBatch(db);
+            let hasCloudUploads = false;
+
+            // 1. Upload Local -> Cloud (ถ้า Cloud ไม่มี)
+            for (const localQuiz of localQuizzes) {
+                if (!cloudQuizzesMap.has(localQuiz.customId)) {
+                    const docRef = doc(customQuizzesRef, localQuiz.customId);
+                    batch.set(docRef, localQuiz);
+                    hasCloudUploads = true;
+                }
+            }
+            if (hasCloudUploads) await this.retryOperation(() => batch.commit());
+
+            // 2. Merge Cloud -> Local (เอาของ Cloud มาเติมใส่ Local)
+            const mergedQuizzes = [...localQuizzes];
+            cloudQuizzesMap.forEach((cloudQuiz, customId) => {
+                if (!localQuizzesMap.has(customId)) {
+                    mergedQuizzes.push(cloudQuiz);
+                }
+            });
+
+            return mergedQuizzes;
+        } catch (e) {
+            console.error("Error syncing custom quizzes:", e);
+            return localQuizzes; // คืนค่าเดิมถ้ามีปัญหา
+        }
+    }
+
     // ฟังก์ชันบันทึกประวัติรายข้อ (เรียกใช้ตอนทำข้อสอบ)
     async saveQuizHistoryItem(key, data) {
         if (!this.currentUser) return;

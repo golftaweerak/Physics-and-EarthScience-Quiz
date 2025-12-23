@@ -19,32 +19,11 @@ export async function getSavedCustomQuizzes() {
     try {
         const parsed = JSON.parse(savedQuizzesJSON);
         let localQuizzes = Array.isArray(parsed) ? parsed : [];
-        const { db, collection, getDocs, writeBatch, doc } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js");
 
         // If logged in, perform sync
         if (authManager.currentUser) {
-            const user = authManager.currentUser;
-            const customQuizzesRef = collection(db, 'users', user.uid, 'custom_quizzes');
-            const cloudSnapshot = await getDocs(customQuizzesRef);
-            const cloudQuizzesMap = new Map();
-            cloudSnapshot.forEach(doc => cloudQuizzesMap.set(doc.id, doc.data()));
-
-            const localQuizzesMap = new Map(localQuizzes.map(q => [q.customId, q]));
-            const batch = writeBatch(db);
-            let hasCloudUploads = false;
-
-            for (const localQuiz of localQuizzes) {
-                if (!cloudQuizzesMap.has(localQuiz.customId)) {
-                    const docRef = doc(customQuizzesRef, localQuiz.customId);
-                    batch.set(docRef, localQuiz);
-                    hasCloudUploads = true;
-                }
-            }
-            if (hasCloudUploads) await batch.commit();
-
-            cloudQuizzesMap.forEach((cloudQuiz, customId) => {
-                if (!localQuizzesMap.has(customId)) localQuizzes.push(cloudQuiz);
-            });
+            // Delegate sync logic to AuthManager
+            localQuizzes = await authManager.syncCustomQuizzes(localQuizzes);
             
             localStorage.setItem("customQuizzesList", JSON.stringify(localQuizzes));
         }
