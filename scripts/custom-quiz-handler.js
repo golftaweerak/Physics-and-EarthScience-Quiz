@@ -1603,6 +1603,13 @@ export function initializeCustomQuizHandler() {
                     event.preventDefault();
                     activeQuizUrl = startLink.href;
                     activeStorageKey = quiz.storageKey;
+
+                    // NEW: Set the modal title to provide context
+                    const modalTitleEl = document.getElementById('completed-modal-title');
+                    if (modalTitleEl) {
+                        modalTitleEl.textContent = `แบบทดสอบ: "${quiz.title}"`;
+                    }
+
                     completedModal.open(startLink);
                 }
                 // If not finished, the default 'a' tag behavior will handle navigation.

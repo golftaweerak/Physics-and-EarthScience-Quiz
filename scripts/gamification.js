@@ -270,14 +270,15 @@ export const SHOP_ITEMS = [
     { id: 'theme_dark', type: 'theme', name: 'รัตติกาล (Midnight)', icon: '🌑', cost: 5000, value: 'theme-midnight', desc: 'ธีมสีมืดลึกลับ' },
 ];
 
-export function getAvatarFrameClass(avatar) {
+export function getAvatarFrameClass(avatar, size = 'default') { // 'default' or 'small'
     const shopItem = SHOP_ITEMS.find(i => i.value === avatar && i.type === 'avatar');
     if (!shopItem) return 'ring-2 ring-gray-200 dark:ring-gray-700'; // Default
 
-    // Use ring-2 for the smaller header icon
-    if (shopItem.cost >= 1000) return 'ring-2 ring-yellow-400 legendary-frame';
-    if (shopItem.cost >= 500) return 'ring-2 ring-purple-500';
-    return 'ring-2 ring-green-500';
+    const ringWidth = size === 'small' ? 'ring-1' : 'ring-2';
+
+    if (shopItem.cost >= 1000) return `${ringWidth} ring-yellow-400 legendary-frame`;
+    if (shopItem.cost >= 500) return `${ringWidth} ring-purple-500`;
+    return `${ringWidth} ring-green-500`;
 }
 
 export function getLevelBorderClass(level) {
@@ -804,12 +805,12 @@ export class Gamification {
             }
 
             const levelBorderClass = getLevelBorderClass(level);
-            const avatarFrameClass = getAvatarFrameClass(avatar);
+            const avatarFrameClass = getAvatarFrameClass(avatar, 'small');
 
             // Create nested structure: Level Border (Outer) -> Avatar Frame (Inner) -> Content
             profileLink.innerHTML = `
                 <div class="w-full h-full rounded-full p-[3px] ${levelBorderClass} shadow-sm transition-all duration-300">
-                    <div class="w-full h-full rounded-full bg-white dark:bg-gray-800 flex items-center justify-center overflow-hidden ${avatarFrameClass.replace('ring-2', 'ring-1')}">
+                    <div class="w-full h-full rounded-full bg-white dark:bg-gray-800 flex items-center justify-center overflow-hidden ${avatarFrameClass}">
                         ${contentHtml}
                     </div>
                 </div>

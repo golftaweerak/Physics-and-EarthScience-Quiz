@@ -188,11 +188,11 @@ export async function initializeLeaderboard() {
                     : `<span class="text-3xl">${avatar}</span>`;
                 
                 const levelBorderClass = getLevelBorderClass(level);
-                const avatarFrameClass = getAvatarFrameClass(avatar);
+                const avatarFrameClass = getAvatarFrameClass(avatar, 'small');
 
                 const avatarHtml = `
                     <div class="w-12 h-12 rounded-full p-[2px] shadow-md ${levelBorderClass}">
-                        <div class="w-full h-full rounded-full bg-white dark:bg-gray-800 flex items-center justify-center overflow-hidden ${avatarFrameClass.replace('ring-2', 'ring-1')}">
+                        <div class="w-full h-full rounded-full bg-white dark:bg-gray-800 flex items-center justify-center overflow-hidden ${avatarFrameClass}">
                             ${avatarContent}
                         </div>
                     </div>
