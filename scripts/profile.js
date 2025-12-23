@@ -694,9 +694,23 @@ function setupShopShortcut() {
             shopContent.style.maxHeight = shopContent.scrollHeight + "px";
             shopContent.style.opacity = "1";
             if (icon) icon.classList.remove('-rotate-90');
+
+            // FIX: เพิ่ม listener เพื่อรอให้ animation เปิดจบก่อน
+            // แล้วจึงปลดล็อกความสูง (max-height: none) เพื่อให้ accordion ย่อยขยายตัวได้
+            const onTransitionEnd = () => {
+                if (shopContent.style.opacity === "1") { // ตรวจสอบว่ายังเปิดอยู่
+                    shopContent.style.maxHeight = "none";
+                    shopContent.style.overflow = "visible";
+                }
+                shopContent.removeEventListener('transitionend', onTransitionEnd);
+            };
+            shopContent.addEventListener('transitionend', onTransitionEnd);
         }
 
-        shopSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // หน่วงเวลาเล็กน้อยเพื่อให้ browser ได้ render layout ใหม่ก่อนเลื่อนจอ
+        setTimeout(() => {
+            shopSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 50);
     });
 }
 
