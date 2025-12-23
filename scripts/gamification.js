@@ -289,6 +289,11 @@ export class Gamification {
         
         this.state = this.loadState();
         
+        // NEW: ตรวจสอบความถูกต้องของข้อมูลทันทีที่โหลดจาก LocalStorage
+        if (this.ensureConsistency()) {
+            this.saveState();
+        }
+        
         const today = new Date().toDateString();
         if (this.state.lastQuestDate !== today) {
             this.state.activeQuests = this.generateDailyQuests();
@@ -329,30 +334,8 @@ export class Gamification {
                     this.state = { ...this.getDefaultState(), ...data };
 
                     // --- Data Consistency Check & Correction ---
-                    let needsSave = false;
-                    let calculatedPhysicsXP = 0;
-                    let calculatedEarthXP = 0;
-
-                    for (const group of Object.values(PROFICIENCY_GROUPS)) {
-                        const groupXP = this.state[group.field] || 0;
-                        if (group.track === 'physics') {
-                            calculatedPhysicsXP += groupXP;
-                        } else if (group.track === 'earth') {
-                            calculatedEarthXP += groupXP;
-                        }
-                    }
-
-                    // If the stored main track XP is less than the sum of its parts, correct it.
-                    if (this.state.physicsXP < calculatedPhysicsXP) {
-                        console.log(`Correcting physicsXP from ${this.state.physicsXP} to ${calculatedPhysicsXP}`);
-                        this.state.physicsXP = calculatedPhysicsXP;
-                        needsSave = true;
-                    }
-                    if (this.state.earthXP < calculatedEarthXP) {
-                        console.log(`Correcting earthXP from ${this.state.earthXP} to ${calculatedEarthXP}`);
-                        this.state.earthXP = calculatedEarthXP;
-                        needsSave = true;
-                    }
+                    // เรียกใช้ฟังก์ชันตรวจสอบความถูกต้องที่สร้างขึ้นใหม่
+                    let needsSave = this.ensureConsistency();
 
                     // Auto-update name from Google account on first login (if still default)
                     if (user) {
@@ -379,6 +362,50 @@ export class Gamification {
                 this.onStateUpdated();
             }
         });
+    }
+
+    // เพิ่มฟังก์ชันใหม่สำหรับตรวจสอบความถูกต้องของข้อมูล XP
+    ensureConsistency() {
+        let needsSave = false;
+        let calculatedPhysicsXP = 0;
+        let calculatedEarthXP = 0;
+
+        // 1. ตรวจสอบว่าค่า XP หลักเป็นตัวเลข
+        if (typeof this.state.xp !== 'number') { this.state.xp = Number(this.state.xp) || 0; needsSave = true; }
+        if (typeof this.state.physicsXP !== 'number') { this.state.physicsXP = Number(this.state.physicsXP) || 0; needsSave = true; }
+        if (typeof this.state.earthXP !== 'number') { this.state.earthXP = Number(this.state.earthXP) || 0; needsSave = true; }
+
+        // 2. คำนวณผลรวม XP จากหมวดย่อย (Proficiency Groups)
+        for (const group of Object.values(PROFICIENCY_GROUPS)) {
+            const groupXP = Number(this.state[group.field]) || 0;
+            
+            // แก้ไขค่าใน state ให้เป็นตัวเลขถ้าจำเป็น
+            if (this.state[group.field] !== groupXP && this.state[group.field] !== undefined) {
+                this.state[group.field] = groupXP;
+                needsSave = true;
+            }
+
+            if (group.track === 'physics') {
+                calculatedPhysicsXP += groupXP;
+            } else if (group.track === 'earth') {
+                calculatedEarthXP += groupXP;
+            }
+        }
+
+        // 3. แก้ไข XP ของสายวิชาหลักหากน้อยกว่าผลรวมของหมวดย่อย
+        // (XP หลักอาจจะมากกว่าได้ หากได้จากโจทย์ทั่วไป แต่ห้ามน้อยกว่า)
+        if (this.state.physicsXP < calculatedPhysicsXP) {
+            console.log(`Correcting physicsXP from ${this.state.physicsXP} to ${calculatedPhysicsXP}`);
+            this.state.physicsXP = calculatedPhysicsXP;
+            needsSave = true;
+        }
+        if (this.state.earthXP < calculatedEarthXP) {
+            console.log(`Correcting earthXP from ${this.state.earthXP} to ${calculatedEarthXP}`);
+            this.state.earthXP = calculatedEarthXP;
+            needsSave = true;
+        }
+
+        return needsSave;
     }
 
     getDefaultState() {
