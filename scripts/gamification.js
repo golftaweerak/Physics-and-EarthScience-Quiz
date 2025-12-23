@@ -418,6 +418,27 @@ export class Gamification {
             needsSave = true;
         }
 
+        // 4. Reconcile Total XP with the sum of its parts (Physics, Earth, General)
+        // This ensures that data from older versions (without generalXP) is corrected.
+        const sumOfParts = (this.state.physicsXP || 0) + (this.state.earthXP || 0) + (this.state.generalXP || 0);
+
+        if (this.state.xp < sumOfParts) {
+            // This case is unlikely but indicates a major inconsistency.
+            // The total XP should never be less than the sum of its components.
+            // We correct the total XP to match the sum.
+            console.log(`Correcting total XP upwards from ${this.state.xp} to ${sumOfParts}`);
+            this.state.xp = sumOfParts;
+            needsSave = true;
+        } else if (this.state.xp > sumOfParts) {
+            // This is the more likely case for older data:
+            // Total XP was incremented, but the parts (especially generalXP) were not.
+            // We attribute the difference to generalXP.
+            const difference = this.state.xp - sumOfParts;
+            console.log(`Attributing unaccounted ${difference} XP to generalXP.`);
+            this.state.generalXP = (this.state.generalXP || 0) + difference;
+            needsSave = true;
+        }
+
         return needsSave;
     }
 
@@ -456,6 +477,7 @@ export class Gamification {
             geologyXP: 0,
             meteorologyXP: 0,
             freeNameChangeAvailable: true,
+            generalXP: 0, // NEW: For XP from quests or non-track sources
         };
     }
 
@@ -511,6 +533,8 @@ export class Gamification {
         let perfectScores = 0;
         let highScores80 = 0;
         const topicXPs = {};
+        let weekendQuizzes = 0;
+        let generalQuizXP = 0;
 
         // วนลูปดูข้อมูลทั้งหมดใน LocalStorage
         for (let i = 0; i < localStorage.length; i++) {
@@ -554,6 +578,15 @@ export class Gamification {
                             if (!isCustom || (isCustom && totalQ >= 20)) {
                                 if (percentage === 100) perfectScores++;
                                 if (percentage >= 80) highScores80++;
+                            }
+
+                            // Check for weekend completion based on timestamp
+                            if (data.lastAttemptTimestamp) {
+                                const date = new Date(data.lastAttemptTimestamp);
+                                const day = date.getDay();
+                                if (day === 0 || day === 6) {
+                                    weekendQuizzes++;
+                                }
                             }
                         }
 
@@ -601,6 +634,9 @@ export class Gamification {
                             }
                         }
 
+                        // The difference is general XP
+                        generalQuizXP += (calculatedXp - quizPhysicsXP - quizEarthXP);
+
                         physicsXP += quizPhysicsXP;
                         earthXP += quizEarthXP;
                     }
@@ -619,6 +655,8 @@ export class Gamification {
             this.state.totalCorrectAnswers = totalCorrect;
             this.state.perfectScores = perfectScores;
             this.state.highScores80 = highScores80;
+            this.state.weekendQuizzesCompleted = weekendQuizzes;
+            this.state.generalXP = generalQuizXP;
             
             // Apply calculated topic XPs
             for (const [field, xp] of Object.entries(topicXPs)) {
@@ -1279,10 +1317,6 @@ export class Gamification {
     // NOTE: ฟังก์ชันนี้ถูกปรับปรุงให้ใช้สำหรับ "ให้รางวัล XP" ทั่วไป (เช่น จาก Quest)
     // โดยจะไม่นับจำนวน quizzesCompleted เพิ่ม เพื่อป้องกันการนับซ้ำซ้อนกับ submitQuizResult
     addXP(amount, category = '') {
-        const oldLevel = this.state.level || 1;
-        const oldPhysics = this.getPhysicsLevel();
-        const oldEarth = this.getEarthLevel();
-
         this.state.xp += amount;
 
         
@@ -1298,38 +1332,32 @@ export class Gamification {
         } else if (lowerCat.includes('earth') || lowerCat.includes('astronomy') || lowerCat.includes('space') || lowerCat.includes('โลก') || lowerCat.includes('ดาราศาสตร์') || lowerCat.includes('วิทย์โลก')) {
             this.state.earthXP += amount;
             isEarth = true;
+        } else {
+            // XP ที่ไม่มีหมวดหมู่ชัดเจน (เช่น จากเควส) จะถูกนับเป็น General XP
+            this.state.generalXP = (this.state.generalXP || 0) + amount;
         }
 
         this.updateLevel();
 
         // ตรวจสอบ Badge ที่เกี่ยวกับ XP สะสม (ส่ง 0 ไปเพราะไม่ได้มาจากการทำข้อสอบ)
         this.checkBadges(0, 0, false);
-
-        const newLevelInfo = this.getCurrentLevel();
-        const newPhysics = this.getPhysicsLevel();
-        const newEarth = this.getEarthLevel();
-
-        return {
-            leveledUp: newLevelInfo.level > oldLevel, // For backward compatibility
-            newLevel: newLevelInfo, // For backward compatibility
-            // Detailed results
-            overall: { leveledUp: newLevel.level > oldLevel.level, info: newLevel },
-            physics: { leveledUp: isPhysics && newPhysics.level > oldPhysics.level, info: newPhysics },
-            earth: { leveledUp: isEarth && newEarth.level > oldEarth.level, info: newEarth }
-        };
     }
 
     // ฟังก์ชันใหม่: บันทึกผลการทำข้อสอบโดยรับค่า XP แยกตามสายวิชา
     // นี่คือฟังก์ชันหลักที่ quiz-logic.js เรียกใช้เมื่อส่งคำตอบ
     // จัดการทั้ง XP, สถิติรายข้อ, และการปลดล็อก Badge/Achievement ในที่เดียว
     submitQuizResult(totalXP, physicsXP, earthXP, percentage, questionCount, isCustomQuiz, topicXPs = {}) {
-        const oldLevel = this.state.level || 1;
+        const oldLevelInfo = this.getCurrentLevel();
         const oldPhysics = this.getPhysicsLevel();
         const oldEarth = this.getEarthLevel();
+
+        // คำนวณ XP ที่ไม่เข้าพวก (ไม่ใช่ทั้งฟิสิกส์และวิทย์โลก)
+        const nonTrackXP = totalXP - physicsXP - earthXP;
 
         this.state.xp += totalXP;
         this.state.physicsXP += physicsXP;
         this.state.earthXP += earthXP;
+        this.state.generalXP = (this.state.generalXP || 0) + nonTrackXP;
         this.state.quizzesCompleted += 1;
 
         // Update Topic XPs
@@ -1358,7 +1386,7 @@ export class Gamification {
         const newEarth = this.getEarthLevel();
 
         return {
-            overall: { leveledUp: newLevelInfo.level > oldLevel, info: newLevelInfo },
+            overall: { leveledUp: newLevelInfo.level > oldLevelInfo.level, info: newLevelInfo },
             physics: { leveledUp: newPhysics.level > oldPhysics.level, info: newPhysics },
             earth: { leveledUp: newEarth.level > oldEarth.level, info: newEarth },
             newBadges: newBadges,
@@ -1420,7 +1448,8 @@ export class Gamification {
                 if (q.progress >= q.target) {
                     q.progress = q.target;
                     q.completed = true;
-                    this.addXP(q.xp, 'General'); // ให้รางวัล XP (เรียกใช้ addXP แบบใหม่ที่ไม่นับ quiz เพิ่ม)
+                    // Use the quest's category for XP, fallback to 'General'
+                    this.addXP(q.xp, q.category || 'General');
                     completedQuests.push({ completed: true, quest: q });
 
                     // บันทึกลงประวัติ (History)

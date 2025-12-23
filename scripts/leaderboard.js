@@ -1,7 +1,7 @@
 import { authManager } from './auth-manager.js';
 import { db } from './firebase-config.js';
 import { collection, query, orderBy, limit, getDocs, where, getCountFromServer } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import { XP_THRESHOLDS, TRACK_TITLES, PROFICIENCY_GROUPS, getLevelBorderClass } from './gamification.js';
+import { XP_THRESHOLDS, TRACK_TITLES, PROFICIENCY_GROUPS, getLevelBorderClass, getAvatarFrameClass } from './gamification.js';
 
 function getLevelInfoForLeaderboard(xp, type) {
     let track = 'overall';
@@ -28,17 +28,7 @@ function getLevelInfoForLeaderboard(xp, type) {
     const titles = TRACK_TITLES[track] || TRACK_TITLES.overall;
     const titleIndex = Math.min(level - 1, titles.length - 1);
     const title = titles[titleIndex];
-
-    const currentLevelData = XP_THRESHOLDS[level - 1];
-    const nextLevelData = XP_THRESHOLDS[level] || null;
-    let progressPercent = 100;
-    if (nextLevelData && currentLevelData) {
-        const range = nextLevelData.xp - currentLevelData.xp;
-        const gained = xp - currentLevelData.xp;
-        progressPercent = range > 0 ? Math.min(100, Math.max(0, (gained / range) * 100)) : 100;
-    }
-
-    return { level, title, progressPercent };
+    return { level, title };
 }
 
 export async function initializeLeaderboard() {
@@ -175,8 +165,21 @@ export async function initializeLeaderboard() {
                     }
                 }
 
-                const scoreFormatted = score.toLocaleString();
-                const levelInfo = getLevelInfoForLeaderboard(score, type);
+                const scoreFormatted = score.toLocaleString();                
+                let level, rankTitle;
+
+                if (type === 'xp') {
+                    // For 'overall' XP, use the user's actual stored level, as it depends on quests.
+                    level = user.level || 1;
+                    const titles = TRACK_TITLES.overall;
+                    const titleIndex = Math.min(level - 1, titles.length - 1);
+                    rankTitle = titles[titleIndex];
+                } else {
+                    // For specific tracks, level is calculated purely from XP.
+                    const levelInfo = getLevelInfoForLeaderboard(score, type);
+                    level = levelInfo.level;
+                    rankTitle = levelInfo.title;
+                }
 
                 const avatar = user.avatar || '🧑‍🎓';
                 const isImage = avatar.includes('/') || avatar.includes('.');
@@ -184,11 +187,12 @@ export async function initializeLeaderboard() {
                     ? `<img src="${avatar}" class="w-full h-full rounded-full object-cover">`
                     : `<span class="text-3xl">${avatar}</span>`;
                 
-                const levelBorderClass = getLevelBorderClass(levelInfo.level);
+                const levelBorderClass = getLevelBorderClass(level);
+                const avatarFrameClass = getAvatarFrameClass(avatar);
 
                 const avatarHtml = `
-                    <div class="w-12 h-12 rounded-full p-0.5 shadow-md ${levelBorderClass}">
-                        <div class="w-full h-full rounded-full bg-white dark:bg-gray-800 flex items-center justify-center overflow-hidden">
+                    <div class="w-12 h-12 rounded-full p-[2px] shadow-md ${levelBorderClass}">
+                        <div class="w-full h-full rounded-full bg-white dark:bg-gray-800 flex items-center justify-center overflow-hidden ${avatarFrameClass.replace('ring-2', 'ring-1')}">
                             ${avatarContent}
                         </div>
                     </div>
@@ -203,8 +207,8 @@ export async function initializeLeaderboard() {
                                 ${user.displayName || 'ผู้เรียน'} ${isMe ? '<span class="text-sm text-blue-600 dark:text-blue-400 ml-1">(คุณ)</span>' : ''}
                             </div>
                             <div class="text-sm text-gray-500 dark:text-gray-400 flex flex-wrap items-center gap-x-2">
-                                <span class="font-bold text-gray-600 dark:text-gray-300">(Lv.${levelInfo.level})</span>
-                                <span class="text-blue-600 dark:text-blue-400 font-medium whitespace-nowrap">${levelInfo.title}</span>
+                                <span class="font-bold text-gray-600 dark:text-gray-300">(Lv.${level})</span>
+                                <span class="text-blue-600 dark:text-blue-400 font-medium whitespace-nowrap">${rankTitle}</span>
                                 ${user.selectedTitle ? `<span class="hidden sm:inline text-gray-400 dark:text-gray-600">•</span> <span class="truncate max-w-[150px] sm:max-w-none">《 ${user.selectedTitle} 》</span>` : ''}
                             </div>
                         </div>

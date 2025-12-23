@@ -540,7 +540,8 @@ function setupLeaderboardSystem(game) {
                         avatar: game.state.avatar,
                         selectedTitle: game.state.selectedTitle,
                         score: userScore,
-                        isMe: true
+                        isMe: true,
+                        level: game.state.level // เพิ่ม level เพื่อให้ renderRow ใช้งานได้
                     };
                 } catch (err) {
                     console.warn("Failed to fetch user rank:", err);
@@ -561,9 +562,21 @@ function setupLeaderboardSystem(game) {
                 if (type === 'physicsXP') track = 'physics';
                 if (type === 'earthXP') track = 'earth';
                 
-                const levelInfo = game.getLevelInfo(score, track);
-                const rankTitle = levelInfo.title;
-                const level = levelInfo.level;
+                let level = 1;
+                let rankTitle = 'ผู้เริ่มต้น';
+
+                if (track === 'overall') {
+                    // FIX: สำหรับ Overall ให้ใช้ level ของ user นั้นๆ โดยตรง (เพราะ level ไม่ได้ขึ้นกับ XP อย่างเดียวแล้ว)
+                    level = user.level || 1;
+                    const titles = TRACK_TITLES.overall;
+                    const titleIndex = Math.min(Math.max(0, level - 1), titles.length - 1);
+                    rankTitle = titles[titleIndex];
+                } else {
+                    // สำหรับสายวิชาอื่น คำนวณจาก XP ได้เลย
+                    const levelInfo = game.getLevelInfo(score, track);
+                    level = levelInfo.level;
+                    rankTitle = levelInfo.title;
+                }
 
                 const avatar = user.avatar || '🧑‍🎓';
                 const isImage = avatar.includes('/') || avatar.includes('.');
@@ -572,9 +585,10 @@ function setupLeaderboardSystem(game) {
                     : `<span class="text-2xl sm:text-3xl">${avatar}</span>`;
                 
                 const levelBorderClass = getLevelBorderClass(level);
+                const avatarFrameClass = getAvatarFrameClass(avatar);
                 const avatarHtml = `
-                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full p-0.5 shadow-md ${levelBorderClass}">
-                        <div class="w-full h-full rounded-full bg-white dark:bg-gray-800 flex items-center justify-center overflow-hidden">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full p-[2px] shadow-md ${levelBorderClass}">
+                        <div class="w-full h-full rounded-full bg-white dark:bg-gray-800 flex items-center justify-center overflow-hidden ${avatarFrameClass.replace('ring-2', 'ring-1')}">
                             ${avatarContent}
                         </div>
                     </div>

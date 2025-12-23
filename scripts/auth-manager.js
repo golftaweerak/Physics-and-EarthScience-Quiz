@@ -23,10 +23,29 @@ class AuthManagerInternal {
 
     init() {
         onAuthStateChanged(auth, async (user) => {
+            const previousUser = this.currentUser; // เก็บสถานะผู้ใช้ก่อนหน้า
             this.isInitialized = true;
             this.currentUser = user;
             if (user) {
                 console.log("User signed in:", user.uid);
+                
+                // NEW: ตรวจสอบว่ามีการสลับบัญชีหรือไม่ (Switching Account)
+                // ถ้ามีผู้ใช้ก่อนหน้า และไม่ตรงกับผู้ใช้ใหม่ ให้ล้างข้อมูลในเครื่องทิ้งเพื่อไม่ให้ข้อมูลปนกัน
+                if (previousUser && previousUser.uid !== user.uid) {
+                    console.log("Account switched. Clearing local data to prevent merge.");
+                    localStorage.removeItem(this.LOCAL_STORAGE_KEY);
+                    localStorage.removeItem('last_cloud_sync');
+                    localStorage.removeItem('customQuizzesList');
+                    
+                    const keysToRemove = [];
+                    for (let i = 0; i < localStorage.length; i++) {
+                        const key = localStorage.key(i);
+                        if (key && key.startsWith('quizState-')) {
+                            keysToRemove.push(key);
+                        }
+                    }
+                    keysToRemove.forEach(k => localStorage.removeItem(k));
+                }
                 
                 // Add delay to allow connection to stabilize
                 await new Promise(resolve => setTimeout(resolve, 1000));
