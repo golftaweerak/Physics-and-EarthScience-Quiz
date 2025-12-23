@@ -14,7 +14,7 @@ export function showToast(title, message, icon = '🔔', type = 'success', actio
         container = document.createElement('div');
         container.id = 'toast-container';
         // Fixed position ขวาล่าง, z-index สูงเพื่อให้ลอยอยู่บนสุด
-        container.className = 'fixed bottom-4 right-4 z-[100] flex flex-col gap-3 pointer-events-none'; 
+        container.className = 'fixed bottom-4 right-4 z-[200] flex flex-col gap-3 pointer-events-none'; 
         document.body.appendChild(container);
     }
 
@@ -26,7 +26,7 @@ export function showToast(title, message, icon = '🔔', type = 'success', actio
     else if (type === 'error') borderClass = 'border-red-500';
 
     // ใช้ Tailwind CSS สำหรับ Animation และ Styling
-    toast.className = `pointer-events-auto bg-white dark:bg-gray-800 border-l-4 ${borderClass} shadow-lg rounded-r-lg p-4 flex items-start gap-3 transform transition-all duration-500 translate-x-full opacity-0 max-w-sm w-80`;
+    toast.className = `pointer-events-auto bg-white dark:bg-gray-800 border-l-4 ${borderClass} shadow-lg rounded-r-lg p-4 flex items-start gap-3 transform transition-all duration-500 translate-x-full opacity-0 max-w-sm w-80 max-w-[90vw]`;
     
     let actionHtml = '';
     if (action && action.label && action.url) {
