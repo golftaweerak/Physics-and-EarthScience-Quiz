@@ -7,7 +7,7 @@ import { collection, query, orderBy, limit, getDocs, where, getCountFromServer }
 import { db } from './firebase-config.js';
 
 const AVATARS = [
-    '🧑‍🎓', '👩‍🎓', '👨‍🔬', '👩‍🔬', '👨‍🚀', '👩‍🚀', '👽', '🤖'
+    '🧑‍🎓', '👩‍🎓', '👨‍🔬', '👩‍🔬', '👨‍🚀', '👩‍🚀', '👽', '🤖','👻','💩'
 ];
 
 // Theme colors for Radar Chart
