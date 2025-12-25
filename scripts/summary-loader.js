@@ -18,8 +18,11 @@ async function main() {
         // 3. รอตรวจสอบสถานะล็อกอินและสิทธิ์
         const user = await authManager.waitForAuthReady();
         
-        // 4. ถ้าไม่ใช่เมลโรงเรียน ให้หยุดการทำงานที่นี่ (สคริปต์ใน summary.html จะแสดง Modal เอง)
-        if (!user || !user.email || !user.email.endsWith('@promma.ac.th')) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const isDevMode = urlParams.get('dev') === 'true';
+
+        // 4. ถ้าไม่ใช่เมลโรงเรียน และไม่ได้อยู่ในโหมด dev ให้หยุดการทำงาน
+        if (!isDevMode && (!user || !user.email || !user.email.endsWith('@promma.ac.th'))) {
             // ซ่อน Spinner ที่กำลังโหลด เพราะเราจะไม่โหลดข้อมูลต่อ
             const loadingSpinner = document.getElementById('loading-spinner');
             if (loadingSpinner) loadingSpinner.style.display = 'none';
