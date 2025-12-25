@@ -1457,48 +1457,32 @@ function showResults() {
     physicsXP *= state.xpMultiplier;
     earthXP *= state.xpMultiplier;
 
-    // บันทึกผล XP ลงในระบบ Gamification
-    const result = game.submitQuizResult(xpEarned, physicsXP, earthXP, percentage, state.questionCount, state.isCustomQuiz, topicXPs);
-    levelResult = { overall: result.overall, physics: result.physics, earth: result.earth };
-    newBadges = result.newBadges || [];
-    newAchievements = result.newAchievements || [];
-
-    // --- DAILY QUEST: Update Progress ---
-    // สำหรับ Quest ยังคงใช้หมวดหมู่หลักของแบบทดสอบ (จากข้อแรก) เพื่อความง่ายในการตรวจสอบเงื่อนไข "ทำแบบทดสอบหมวด..."
+    // --- NEW: Prepare quest stats object ---
     const firstAnswer = state.userAnswers.find(a => a);
     let questCategory = 'General';
     if (firstAnswer) {
         if (firstAnswer.sourceQuizCategory) {
             questCategory = firstAnswer.sourceQuizCategory;
         } else if (firstAnswer.subCategory) {
-            // Handle both string and object formats for subCategory
             questCategory = typeof firstAnswer.subCategory === 'object' ? firstAnswer.subCategory.main : firstAnswer.subCategory;
         }
     }
+    const questStats = {
+        correctAnswers: correctAnswers,
+        totalQuestions: totalQuestions,
+        category: questCategory,
+        percentage: percentage,
+        correctTheory: correctTheory,
+        correctCalculation: correctCalculation,
+        questionCount: state.questionCount,
+        isCustomQuiz: state.isCustomQuiz
+    };
 
-    if (typeof game.updateQuest === 'function') {
-        const result = game.updateQuest({
-            correctAnswers: correctAnswers,
-            totalQuestions: totalQuestions,
-            category: questCategory,
-            percentage: percentage,
-            correctTheory: correctTheory,
-            correctCalculation: correctCalculation,
-            questionCount: state.questionCount,
-            isCustomQuiz: state.isCustomQuiz
-        });
-        
-        // รองรับรูปแบบการคืนค่าใหม่ { completed: [], newAchievements: [] }
-        if (result && result.completed && Array.isArray(result.completed)) {
-            completedQuests = result.completed;
-            newAchievements = result.newAchievements || [];
-        } else if (Array.isArray(result)) {
-            // รองรับรูปแบบเก่า (เผื่อไว้)
-            completedQuests = result;
-        } else if (result && result.completed) {
-            completedQuests = [result]; // รูปแบบเก่ามาก
-        }
-    }
+    const result = game.submitQuizResult(xpEarned, physicsXP, earthXP, percentage, state.questionCount, state.isCustomQuiz, topicXPs, questStats);
+    levelResult = { overall: result.overall, physics: result.physics, earth: result.earth };
+    newBadges = result.newBadges || [];
+    newAchievements = result.newAchievements || [];
+    completedQuests = result.completedQuests || [];
 
     // Play Sounds for Gamification
     if (state.isSoundEnabled && levelResult) {

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet System Test</title>
+    <link rel="stylesheet" href="./styles/bundle.css">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 p-4 sm:p-8 font-kanit">
+    <div class="max-w-md mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+        <div class="mb-2">
+            <a href="./profile.html" class="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                กลับหน้าโปรไฟล์
+            </a>
+        </div>
+        <h1 class="text-2xl font-bold text-center mb-4">2D Pixel Pet Test</h1>
+
+        <!-- Pet Display Area -->
+        <div id="pet-display-container" class="relative text-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg h-80 cursor-pointer group mb-6 overflow-hidden">
+            <canvas id="pet-canvas" class="absolute inset-0 w-full h-full"></canvas> <!-- Canvas acts as a background -->
+            <!-- Wrapper to place UI on top of the canvas -->
+            <div class="relative z-10 flex flex-col justify-between h-full p-2">
+                <div>
+                    <h3 id="pet-display-name" class="text-xl font-bold text-gray-900 dark:text-white drop-shadow-md"></h3>
+                </div>
+                <div class="w-full max-w-xs mx-auto">
+                    <p class="text-sm text-gray-700 dark:text-gray-200 drop-shadow">
+                        Level: <span id="pet-display-level">1</span> | 
+                        XP: <span id="pet-display-xp">0</span> / <span id="pet-display-next-xp">500</span>
+                    </p>
+                    <div class="w-full bg-gray-200/50 dark:bg-gray-600/50 rounded-full h-2.5 mt-2 backdrop-blur-sm border border-white/20">
+                        <div id="pet-display-xp-bar" class="bg-green-500 h-full rounded-full" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="absolute bottom-2 left-1/2 -translate-x-1/2 bg-black/30 text-white text-xs px-2 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">คลิกเพื่อทักทาย!</div>
+        </div>
+
+        <!-- Controls -->
+        <div class="space-y-4">
+            <div>
+                <label for="pet-select" class="block text-sm font-medium text-gray-700 dark:text-gray-300">เลือกสัตว์เลี้ยง:</label>
+                <select id="pet-select" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white dark:bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    <!-- Options will be added by JS -->
+                </select>
+            </div>
+            <button id="add-xp-btn" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg">
+                Add 150 XP
+            </button>
+            <button id="feed-pet-btn" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg">
+                ให้อาหาร 🍖
+            </button>
+            <button id="reset-pet-btn" class="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg">
+                Reset Pet
+            </button>
+        </div>
+    </div>
+
+    <script src="./scripts/pet-system-test.js" type="module"></script>
+</body>
+</html>

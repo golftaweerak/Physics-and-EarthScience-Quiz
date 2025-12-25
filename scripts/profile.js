@@ -26,8 +26,8 @@ let previousXP = null;
 let previousAvatar = null;
 let previousTitle = null;
 
-export async function initializeProfile() {
-    const game = new Gamification();
+export async function initializeProfile(gameInstance) {
+    const game = gameInstance || new Gamification();
     
     // 1. เรนเดอร์ UI ทั่วไปทันที (รวดเร็ว)
     renderUserInfo(game);
@@ -120,8 +120,6 @@ function renderUserInfo(game) {
     }
 
     // Update Level Progress Bar & Quest
-    // const nextLevelNumEl = document.getElementById('next-level-number'); // Removed in new design
-    // const currentLevelXpDisplayEl = document.getElementById('current-level-xp-display'); // Removed
     const nextLevelTargetXpEl = document.getElementById('next-level-xp');
     const progressBarEl = document.getElementById('xp-progress-bar');
     const questContainerEl = document.getElementById('next-level-quest-container');
@@ -157,8 +155,6 @@ function renderUserInfo(game) {
         }
     }
 
-    // Quizzes count removed from header in new design
-    
     // Update display name
     const nameEl = document.getElementById('profile-display-name');
     if (nameEl) nameEl.textContent = game.state.displayName || 'ผู้เรียน (Guest)';
@@ -1610,54 +1606,6 @@ function animateValue(obj, start, end, duration) {
         }
     };
     obj.animationId = window.requestAnimationFrame(step);
-}
-
-function showProficiencyDetails(label, data) {
-    const modal = new ModalHandler('proficiency-modal');
-    const titleEl = document.getElementById('proficiency-modal-title');
-    const contentEl = document.getElementById('proficiency-modal-content');
-    
-    if (titleEl) titleEl.textContent = `รายการข้อสอบ: ${label}`;
-    
-    if (contentEl) {
-        if (data.quizzes.size === 0) {
-            contentEl.innerHTML = '<p class="text-center text-gray-500 dark:text-gray-400 py-4">ยังไม่มีประวัติการทำข้อสอบในหมวดหมู่นี้</p>';
-        } else {
-            const quizzes = Array.from(data.quizzes).sort((a, b) => (b.lastAttemptTimestamp || 0) - (a.lastAttemptTimestamp || 0));
-            contentEl.innerHTML = quizzes.map(quiz => {
-                // Calculate score for this specific quiz
-                const score = quiz.score || 0;
-                const total = quiz.shuffledQuestions ? quiz.shuffledQuestions.length : (quiz.amount || 0);
-                const percent = total > 0 ? Math.round((score / total) * 100) : 0;
-                const date = quiz.lastAttemptTimestamp ? new Date(quiz.lastAttemptTimestamp).toLocaleDateString('th-TH') : 'ไม่ระบุ';
-                
-                // Determine URL
-                let quizUrl = quiz.url;
-                if (!quizUrl && (quiz.id || quiz.customId)) {
-                    quizUrl = `./quiz/index.html?id=${quiz.id || quiz.customId}`;
-                }
-
-                let scoreClass = 'text-red-500';
-                if (percent >= 80) scoreClass = 'text-green-500';
-                else if (percent >= 50) scoreClass = 'text-yellow-500';
-
-                return `
-                    <a href="${quizUrl || '#'}" class="block p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                        <div class="flex justify-between items-start">
-                            <h4 class="font-bold text-gray-800 dark:text-gray-200 text-sm mb-1">${quiz.title}</h4>
-                            <span class="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">${date}</span>
-                        </div>
-                        <div class="flex justify-between items-center mt-2">
-                            <span class="text-xs text-gray-500 dark:text-gray-400">${quiz.category || 'ทั่วไป'}</span>
-                            <span class="text-sm font-bold ${scoreClass}">${score}/${total} (${percent}%)</span>
-                        </div>
-                    </a>
-                `;
-            }).join('');
-        }
-    }
-    
-    modal.open();
 }
 
 function getOrCreateTooltip(chart) {
