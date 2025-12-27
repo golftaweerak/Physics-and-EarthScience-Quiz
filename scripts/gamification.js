@@ -49,7 +49,7 @@ export const TRACK_TITLES = {
         "ผู้ควบคุมเอกภพคู่ขนาน", "ผู้เขียนกฎฟิสิกส์ใหม่", "ผู้หลอมรวมพลังงาน", "ไอน์สไตน์กลับชาติมาเกิด"
     ],
     earth: [
-        "นักสำรวจหิน", "ผู้เชี่ยวชาญธรณี", "นักอุตุนิยมวิทยา", 
+        "นักสำรวจหิน", "ผู้เชี่ยวชาญธรณี", "นักอุตุนิยมวิทยา",
         "ผู้หยั่งรู้ดินฟ้า", "นักดาราศาสตร์", "ผู้พิทักษ์ไกอา", 
         "ผู้ท่องอวกาศ", "ผู้หยั่งรู้จักรวาล", "หนึ่งเดียวกับธรรมชาติ", "ผู้สร้างดวงดาว",
         "นักธรณีฟิสิกส์", "ผู้ควบคุมแผ่นเปลือกโลก", "ผู้บัญชาการลมฟ้า",
@@ -294,6 +294,26 @@ export const SHOP_ITEMS = [
     { id: 'theme_dark', type: 'theme', name: 'รัตติกาล (Midnight)', icon: '🌑', cost: 5000, value: 'theme-midnight', desc: 'ธีมสีมืดลึกลับ' },
 ];
 
+// NEW: Pet System Constants
+export const PET_TYPES = {
+    'dog': { id: 'dog', name: 'สุนัข', icon: '🐶', stages: ['egg', 'dog_baby', 'dog_adult'] }, // Using sprite names
+    'cat': { id: 'cat', name: 'แมว', icon: '😺', stages: ['egg', 'cat_baby', 'cat_adult'] },
+    'dragon': { id: 'dragon', name: 'มังกร', icon: '🐉', stages: ['egg', 'dragon_baby', 'dragon_adult'] }
+};
+
+export const PET_LEVELS = [
+    { level: 1, xp: 0, stage: 0 },      // Egg
+    { level: 2, xp: 500, stage: 1 },   // Baby
+    { level: 3, xp: 1500, stage: 1 },
+    { level: 4, xp: 3000, stage: 2 },  // Adult
+    { level: 5, xp: 5000, stage: 2 },
+    { level: 6, xp: 7500, stage: 2 },
+    { level: 7, xp: 10000, stage: 2 },
+    { level: 8, xp: 15000, stage: 2 },
+    { level: 9, xp: 22000, stage: 2 },
+    { level: 10, xp: 30000, stage: 2 },
+];
+
 export function getAvatarFrameClass(avatar, size = 'default') { // 'default' or 'small'
     const shopItem = SHOP_ITEMS.find(i => i.value === avatar && i.type === 'avatar');
     if (!shopItem) return 'ring-2 ring-gray-200 dark:ring-gray-700'; // Default
@@ -341,6 +361,9 @@ export class Gamification {
         // and the user just came back online.
         this.updateLevel();
         this.saveState();
+
+        // NEW: Pet System Initialization
+        this.levelUpPet(true); // Initial check without saving
         
         if (isNewToGamification) {
             this.syncProgress();
@@ -497,6 +520,13 @@ export class Gamification {
             mechanicsXP: 0,
             electricityXP: 0,
             wavesLightXP: 0,
+            pet: {
+                type: 'dog',
+                name: 'เพื่อนซี้สี่ขา',
+                xp: 0,
+                level: 1,
+                stageIndex: 0
+            },
             modernHeatXP: 0,
             astronomyXP: 0,
             geologyXP: 0,
@@ -1132,10 +1162,14 @@ export class Gamification {
     }
 
     resetProgress() {
-        this.authManager.resetGamificationData();
-        this.state = this.loadState(); // Reloads defaults
-        // No need to save state, as the goal is to wipe it.
-        // The page reload in profile.js will handle getting a fresh state.
+        const defaultState = this.getDefaultState();
+        // Preserve displayName, avatar, and theme on reset
+        defaultState.displayName = this.state.displayName;
+        defaultState.avatar = this.state.avatar;
+        defaultState.selectedTheme = this.state.selectedTheme;
+        
+        this.state = defaultState;
+        this.saveState();
     }
 
     incrementCorrectStreak() {
@@ -1426,6 +1460,13 @@ export class Gamification {
         const oldPhysics = this.getPhysicsLevel();
         const oldEarth = this.getEarthLevel();
 
+        // NEW: Add Pet XP
+        if (this.state.pet && totalXP > 0) {
+            const petXpGained = Math.floor(totalXP * 0.25); // Pet gets 25% of user's XP
+            this.state.pet.xp += petXpGained;
+            this.levelUpPet();
+        }
+
         // คำนวณ XP ที่ไม่เข้าพวก (ไม่ใช่ทั้งฟิสิกส์และวิทย์โลก)
         const nonTrackXP = totalXP - physicsXP - earthXP;
 
@@ -1601,6 +1642,58 @@ export class Gamification {
             }
         });
         return newUnlocks;
+    }
+
+    // NEW: Pet level up logic
+    levelUpPet(isInitialCheck = false) {
+        if (!this.state.pet) return false;
+
+        let newLevelData = null;
+        for (const levelData of PET_LEVELS) {
+            if (this.state.pet.xp >= levelData.xp) {
+                newLevelData = levelData;
+            } else {
+                break;
+            }
+        }
+
+        let leveledUp = false;
+        if (newLevelData && newLevelData.level > this.state.pet.level) {
+            console.log(`Pet leveled up! ${this.state.pet.level} -> ${newLevelData.level}`);
+            this.state.pet.level = newLevelData.level;
+            this.state.pet.stageIndex = newLevelData.stage;
+            leveledUp = true;
+            
+            // Don't save during initial constructor check
+            if (!isInitialCheck) {
+                this.saveState();
+            }
+        }
+        return leveledUp;
+    }
+
+    // NEW: Get current pet info for rendering
+    getPetInfo() {
+        if (!this.state.pet) {
+            this.state.pet = this.getDefaultState().pet;
+        }
+        const petData = PET_TYPES[this.state.pet.type];
+        if (!petData) return null;
+
+        const currentLevelData = PET_LEVELS.find(l => l.level === this.state.pet.level) || PET_LEVELS[0];
+        const nextLevelData = PET_LEVELS.find(l => l.level === this.state.pet.level + 1);
+
+        const xpForThisLevel = this.state.pet.xp - currentLevelData.xp;
+        const xpNeededForNextLevel = nextLevelData ? (nextLevelData.xp - currentLevelData.xp) : 0;
+        const progressPercent = xpNeededForNextLevel > 0 ? (xpForThisLevel / xpNeededForNextLevel) * 100 : 100;
+
+        return {
+            ...this.state.pet,
+            spriteName: petData.stages[this.state.pet.stageIndex],
+            icon: petData.icon,
+            progressPercent: Math.min(100, progressPercent),
+            nextLevelXP: nextLevelData ? nextLevelData.xp : this.state.pet.xp
+        };
     }
 
     checkCategoryMatch(quizCat, questCat) {
