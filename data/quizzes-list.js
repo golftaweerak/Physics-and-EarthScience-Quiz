@@ -824,6 +824,17 @@ export const quizList = [
     "subCategory": "บทที่ 6: โมเมนตัมและการชน"
   },
   {
+    "id": "phy_m4/phy_m4_ch6-6",
+    "title": "โมเมนตัมและการชน (ชุดที่ 6)",
+    "amount": 30,
+    "description": "บทที่ 6: โมเมนตัมและการชน (ชุดที่ 6 - เน้นโมเมนตัม, การเปลี่ยนแปลงโมเมนตัม และแรงดล)",
+    "url": "./quiz/index.html?id=phy_m4/phy_m4_ch6-6",
+    "storageKey": "quizState-phy_m4_ch6-6",
+    "icon": "./assets/icons/collision.png",
+    "category": "PhysicsM4",
+    "subCategory": "บทที่ 6: โมเมนตัมและการชน"
+  },
+  {
     "id": "phy_m4/phy_m4_ch7-1",
     "title": "การเคลื่อนที่แนวโค้ง (ชุดที่ 1)",
     "amount": 40,
