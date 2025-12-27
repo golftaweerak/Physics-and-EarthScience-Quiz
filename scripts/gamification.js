@@ -162,7 +162,10 @@ export const BADGES = [
     { id: 'weekend_learner_3', icon: '🏖️', name: 'นักเรียนวันหยุด', desc: 'ทำแบบทดสอบในวันหยุดสุดสัปดาห์ครบ 3 ครั้ง', tier: 'bronze' },
     { id: 'weekend_learner_5', icon: '🏕️', name: 'ขยันสุดสัปดาห์', desc: 'ทำแบบทดสอบในวันหยุดสุดสัปดาห์ครบ 5 ครั้ง', tier: 'silver' },
     { id: 'weekend_learner_10', icon: '🏝️', name: 'เจ้าแห่งวันหยุด', desc: 'ทำแบบทดสอบในวันหยุดสุดสัปดาห์ครบ 10 ครั้ง', tier: 'gold' },
-    { id: 'weekend_learner_15', icon: '🎉', name: 'ตำนานสุดสัปดาห์', desc: 'ทำแบบทดสอบในวันหยุดสุดสัปดาห์ครบ 15 ครั้ง', tier: 'gold' }
+    { id: 'weekend_learner_15', icon: '🎉', name: 'ตำนานสุดสัปดาห์', desc: 'ทำแบบทดสอบในวันหยุดสุดสัปดาห์ครบ 15 ครั้ง', tier: 'gold' },
+    // Proficiency Badges
+    { id: 'mechanics_expert', icon: '⚙️', name: 'ผู้เชี่ยวชาญกลศาสตร์', desc: 'มี XP สายกลศาสตร์ครบ 1,000', tier: 'silver' },
+    { id: 'astronomy_expert', icon: '🔭', name: 'ผู้เชี่ยวชาญดาราศาสตร์', desc: 'มี XP สายดาราศาสตร์ครบ 1,000', tier: 'silver' }
 ];
 
 // กำหนดภารกิจประจำวัน (Daily Quests)
@@ -217,6 +220,9 @@ export const SHOP_ITEMS = [
     // 100 XP
     { id: 'item_5050', type: 'consumable', name: 'ตัวช่วย 50/50', icon: '✂️', cost: 100, value: '5050', desc: 'ตัดตัวเลือกที่ผิดออก 2 ตัวเลือก' },
     
+    // 120 XP
+    { id: 'item_streak_freeze', type: 'consumable', name: 'Streak Freeze', icon: '🧊', cost: 120, value: 'streak_freeze', desc: 'ป้องกัน Streak หายเมื่อไม่ได้เข้าใช้งาน 1 วัน (ใช้รักษาสถิติ)' },
+
     // 150 XP
     { id: 'avatar_earth', type: 'avatar', name: 'โลก', icon: '🌍', cost: 150, value: '🌍', desc: 'อวตารโลกสีคราม' },
     { id: 'avatar_newmoon', type: 'avatar', name: 'จันทร์ดับ', icon: '🌑', cost: 150, value: '🌑', desc: 'อวตารดวงจันทร์ในคืนเดือนมืด' },
@@ -1331,12 +1337,12 @@ export class Gamification {
 
     // ฟังก์ชันอัปเดต Streak (เรียกใช้ใน constructor)
     updateStreak() {
-        const today = new Date().toDateString();
-        const lastLogin = this.state.lastLogin;
+        const today = new Date();
+        const todayStr = today.toDateString();
+        const lastLoginStr = this.state.lastLogin;
 
-        // ถ้าเข้าใช้งานวันนี้ไปแล้ว
-        if (lastLogin === today) {
-            // กรณีเป็นผู้ใช้ใหม่หรือเพิ่งเริ่มระบบ streak ให้ตั้งค่าเริ่มต้นเป็น 1
+        // ถ้าเข้าใช้งานวันนี้ไปแล้ว หรือเป็นผู้ใช้ใหม่
+        if (lastLoginStr === todayStr) {
             if (this.state.streak === 0) {
                 this.state.streak = 1;
                 this.saveState();
@@ -1344,18 +1350,36 @@ export class Gamification {
             return;
         }
 
-        const yesterday = new Date();
-        yesterday.setDate(yesterday.getDate() - 1);
-        
-        // เช็คว่าเข้าใช้งานเมื่อวานหรือไม่
-        if (lastLogin === yesterday.toDateString()) {
+        // คำนวณระยะห่างของวัน (Difference in days)
+        const lastLoginDate = lastLoginStr ? new Date(lastLoginStr) : new Date();
+        // Reset time part for accurate day calculation
+        const t1 = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
+        const t2 = new Date(lastLoginDate.getFullYear(), lastLoginDate.getMonth(), lastLoginDate.getDate()).getTime();
+        const diffDays = Math.floor((t1 - t2) / (1000 * 60 * 60 * 24));
+
+        if (diffDays === 1) {
+            // เข้าใช้งานต่อเนื่อง (เมื่อวานเข้า วันนี้เข้า)
             this.state.streak = (this.state.streak || 0) + 1;
+        } else if (diffDays > 1) {
+            // ขาดช่วงไป (Missed days) -> ตรวจสอบ Streak Freeze
+            const freezeCount = this.state.consumables['item_streak_freeze'] || 0;
+            
+            if (freezeCount > 0) {
+                // ใช้ไอเทมเพื่อรักษาสถิติ
+                this.state.consumables['item_streak_freeze']--;
+                // ไม่เพิ่ม Streak แต่ไม่รีเซ็ต (Maintain current streak)
+                console.log("Streak Freeze used! Streak maintained at:", this.state.streak);
+                // Optional: แจ้งเตือนผู้ใช้ว่ามีการใช้ไอเทม (อาจต้องใช้ Event Dispatch หากไม่มี UI library ในนี้)
+            } else {
+                // ไม่มีไอเทม -> รีเซ็ต Streak
+                this.state.streak = 1;
+            }
         } else {
-            // ถ้าขาดช่วง หรือเพิ่งเริ่มใหม่
+            // กรณีอื่นๆ (เช่น diffDays <= 0 ซึ่งไม่ควรเกิด หรือครั้งแรกจริงๆ)
             this.state.streak = 1;
         }
         
-        this.state.lastLogin = today;
+        this.state.lastLogin = todayStr;
         this.updateLevel(); // Check if streak quest completion triggers level up
         this.saveState();
     }
@@ -1656,6 +1680,10 @@ export class Gamification {
         if ((this.state.weekendQuizzesCompleted || 0) >= 5) unlock('weekend_learner_5');
         if ((this.state.weekendQuizzesCompleted || 0) >= 10) unlock('weekend_learner_10');
         if ((this.state.weekendQuizzesCompleted || 0) >= 15) unlock('weekend_learner_15');
+
+        // 10. Proficiency Badges (New)
+        if ((this.state.mechanicsXP || 0) >= 1000) unlock('mechanics_expert');
+        if ((this.state.astronomyXP || 0) >= 1000) unlock('astronomy_expert');
 
         // REMOVED: this.saveState();
         return newBadges;
