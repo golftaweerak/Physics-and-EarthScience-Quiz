@@ -202,6 +202,10 @@
 
     <script src="./scripts/stats-loader.js" type="module"></script>
     <script type="module">
+        // Import and instantiate Gamification to manage user state and UI elements like the header avatar.
+        import { Gamification } from './scripts/gamification.js';
+        new Gamification();
+
         // แสดงการแจ้งเตือนเมื่อมีการซิงค์ข้อมูลสำเร็จ (รับ Event จาก AuthManager)
         const toast = document.getElementById('sync-toast');
         window.addEventListener('auth-synced', () => {

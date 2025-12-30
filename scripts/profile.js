@@ -5,6 +5,7 @@ import { ModalHandler } from './modal-handler.js';
 import { showToast } from './toast.js';
 import { collection, query, orderBy, limit, getDocs, where, getCountFromServer } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { db } from './firebase-config.js';
+import { PixelPetRenderer } from './pixel-pet-renderer.js';
 
 const AVATARS = [
     '🧑‍🎓', '👩‍🎓', '👨‍🔬', '👩‍🔬', '👨‍🚀', '👩‍🚀', '👽', '🤖','👻','💩'
@@ -21,14 +22,32 @@ const THEME_COLORS = {
     'default': { border: 'rgba(59, 130, 246, 1)', background: 'rgba(59, 130, 246, 0.2)', point: 'rgba(59, 130, 246, 1)' }
 };
 
+/**
+ * Centralized function to get theme colors for Chart.js based on the current theme.
+ * @param {Gamification} game - The gamification instance.
+ * @returns {{gridColor: string, textColor: string, themeColors: object}}
+ */
+function getChartJsTheme(game) {
+    const isDark = document.documentElement.classList.contains('dark');
+    const gridColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+    const textColor = isDark ? '#e5e7eb' : '#374151';
+    const currentThemeName = game?.state?.selectedTheme;
+    const themeColors = THEME_COLORS[currentThemeName] || THEME_COLORS['default'];
+
+    return { gridColor, textColor, themeColors };
+}
+
+
 let lastSyncTime = null;
 let previousXP = null;
 let previousAvatar = null;
+let petRenderer = null;
 let previousTitle = null;
 
 export async function initializeProfile(gameInstance) {
     const game = gameInstance || new Gamification();
     
+    petRenderer = new PixelPetRenderer('profile-pet-canvas');
     // 1. เรนเดอร์ UI ทั่วไปทันที (รวดเร็ว)
     renderUserInfo(game);
     renderTrackProgress(game);
@@ -38,6 +57,7 @@ export async function initializeProfile(gameInstance) {
     renderShop(game);
     renderDailyQuests('profile-daily-quests-container');
     renderSyncStatus(game);
+    updatePet(game, petRenderer);
 
     // 2. ติดตั้งระบบต่างๆ
     setupShopSystem(game);
@@ -51,6 +71,7 @@ export async function initializeProfile(gameInstance) {
     setupLeaderboardSystem(game);
     setupShopAccordion(game);
     setupShopShortcut();
+    setupPetInteraction(petRenderer);
     setupBadgeInteractions(game);
 
     // 3. เรนเดอร์กราฟ (Asynchronous/ช้ากว่า)
@@ -77,6 +98,7 @@ export async function initializeProfile(gameInstance) {
         renderAchievements(game);
         renderQuestHistory(game);
         renderShop(game);
+        updatePet(game, petRenderer);
         renderSyncStatus(game);
 
         // Re-render charts to reflect merged data
@@ -87,6 +109,43 @@ export async function initializeProfile(gameInstance) {
         ]);
         setupRefreshChartsSystem(game); // Re-setup in case elements were re-rendered
     });
+}
+
+function updatePet(game, renderer) {
+    if (!renderer) return;
+    const petInfo = game.getPetInfo();
+    if (!petInfo) return;
+
+    renderer.setPet(petInfo.type, petInfo.stageIndex);
+
+    // Check for temporary mood from quiz results
+    if (game.state.pet.moodExpires > Date.now()) {
+        renderer.setBaseMood(game.state.pet.mood);
+    } else {
+        // Revert to normal mood if expired
+        renderer.setBaseMood('normal');
+    }
+}
+
+/**
+ * Animates a numeric value in a specified element and applies a temporary color flash.
+ * @param {string} elementId - The ID of the element to update.
+ * @param {number|null} startValue - The starting value for the animation.
+* @param {number} endValue - The final value.
+ */
+function animateXpDisplay(elementId, startValue, endValue) {
+    const el = document.getElementById(elementId);
+    if (!el) return;
+
+    if (startValue !== null && startValue !== endValue) {
+        animateValue(el, startValue, endValue, 1000);
+        const isDecrease = endValue < startValue;
+        const colorClass = isDecrease ? 'text-red-500' : 'text-green-500';
+        el.classList.add(colorClass, 'scale-125', 'inline-block', 'transition-transform');
+        setTimeout(() => el.classList.remove(colorClass, 'scale-125'), 500);
+    } else {
+        el.textContent = endValue.toLocaleString();
+    }
 }
 
 function renderUserInfo(game) {
@@ -105,19 +164,7 @@ function renderUserInfo(game) {
     if (levelEl) levelEl.textContent = overall.level;
 
     const currentXP = game.state.xp;
-    const totalXpEl = document.getElementById('current-xp');
-    
-    if (totalXpEl) {
-        if (previousXP !== null && previousXP !== currentXP) {
-            animateValue(totalXpEl, previousXP, currentXP, 1000);
-            const isDecrease = currentXP < previousXP;
-            const colorClass = isDecrease ? 'text-red-500' : 'text-green-500';
-            totalXpEl.classList.add(colorClass, 'scale-125', 'inline-block', 'transition-transform');
-            setTimeout(() => totalXpEl.classList.remove(colorClass, 'scale-125'), 500);
-        } else {
-            totalXpEl.textContent = currentXP.toLocaleString();
-        }
-    }
+    animateXpDisplay('current-xp', previousXP, currentXP);
 
     // Update Level Progress Bar & Quest
     const nextLevelTargetXpEl = document.getElementById('next-level-xp');
@@ -216,18 +263,7 @@ function renderUserInfo(game) {
     }
 
     // Update Shop XP
-    const shopXpEl = document.getElementById('shop-user-xp');
-    if (shopXpEl) {
-        if (previousXP !== null && previousXP !== currentXP) {
-            animateValue(shopXpEl, previousXP, currentXP, 1000);
-            const isDecrease = currentXP < previousXP;
-            const colorClass = isDecrease ? 'text-red-500' : 'text-green-500';
-            shopXpEl.classList.add(colorClass, 'scale-125', 'inline-block', 'transition-transform');
-            setTimeout(() => shopXpEl.classList.remove(colorClass, 'scale-125'), 500);
-        } else {
-            shopXpEl.textContent = currentXP.toLocaleString();
-        }
-    }
+    animateXpDisplay('shop-user-xp', previousXP, currentXP);
 
     // Update Theme Display (Optional, maybe just a text or icon)
     const themeBtn = document.getElementById('edit-theme-btn');
@@ -238,6 +274,15 @@ function renderUserInfo(game) {
     renderRecentBadges(game);
     previousTitle = currentTitle;
     previousXP = currentXP;
+}
+
+function setupPetInteraction(renderer) {
+    const container = document.getElementById('profile-pet-container');
+    if (container && renderer) {
+        container.addEventListener('click', () => {
+            renderer.playAnimation('interact', 500);
+        });
+    }
 }
 
 function renderSyncStatus(game) {
@@ -1452,8 +1497,17 @@ async function renderRadarChart(game) {
         const LAST_COMPLETED_KEY = 'last_quiz_completed_timestamp'; // This key should be updated when a quiz is finished
         
         const lastCompletionTime = localStorage.getItem(LAST_COMPLETED_KEY) || '0';
+        let cachedData = null;
         const cachedItem = localStorage.getItem(CACHE_KEY);
-        const cachedData = cachedItem ? JSON.parse(cachedItem) : null;
+        //const cachedData = cachedItem ? JSON.parse(cachedItem) : null;
+        if (cachedItem) {
+            try {
+                cachedData = JSON.parse(cachedItem);
+            } catch (e) {
+                console.warn('Could not parse radar chart cache. Recalculating...', e);
+                localStorage.removeItem(CACHE_KEY); // Clear corrupted cache
+            }
+        }
 
         let stats;
 
@@ -1988,7 +2042,30 @@ async function renderStrengthsWeaknesses() {
     }
 
     try {
-        const { strengths, weaknesses } = await calculateStrengthsAndWeaknesses();
+        const CACHE_KEY = 'strengths_weaknesses_cache';
+        const LAST_COMPLETED_KEY = 'last_quiz_completed_timestamp';
+
+        const lastCompletionTime = localStorage.getItem(LAST_COMPLETED_KEY) || '0';
+        let cachedData = null;
+        const cachedItem = localStorage.getItem(CACHE_KEY);
+        if (cachedItem) {
+            try {
+                cachedData = JSON.parse(cachedItem);
+            } catch (e) {
+                console.warn('Could not parse strengths/weaknesses cache. Recalculating...', e);
+                localStorage.removeItem(CACHE_KEY);
+            }
+        }
+
+        let analysis;
+        if (cachedData && cachedData.timestamp >= lastCompletionTime) {
+            analysis = cachedData.analysis;
+        } else {
+            analysis = await calculateStrengthsAndWeaknesses();
+            localStorage.setItem(CACHE_KEY, JSON.stringify({ timestamp: new Date().getTime(), analysis: analysis }));
+        }
+
+        const { strengths, weaknesses } = analysis;
 
         if (strengths.length > 0) {
             strengthsList.innerHTML = strengths.map(s => `

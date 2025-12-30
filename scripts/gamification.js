@@ -298,7 +298,14 @@ export const SHOP_ITEMS = [
 export const PET_TYPES = {
     'dog': { id: 'dog', name: 'สุนัข', icon: '🐶', stages: ['egg', 'dog_baby', 'dog_adult'] }, // Using sprite names
     'cat': { id: 'cat', name: 'แมว', icon: '😺', stages: ['egg', 'cat_baby', 'cat_adult'] },
-    'dragon': { id: 'dragon', name: 'มังกร', icon: '🐉', stages: ['egg', 'dragon_baby', 'dragon_adult'] }
+    'dragon': { id: 'dragon', name: 'มังกร', icon: '🐉', stages: ['egg', 'dragon_baby', 'dragon_adult'] },
+    // Evolved Forms (Branching)
+    'dog_physics': { id: 'dog_physics', name: 'Robo-Dog', icon: '🤖', stages: ['egg', 'dog_baby', 'dog_physics'] },
+    'dog_earth': { id: 'dog_earth', name: 'Gaia Dog', icon: '🌿', stages: ['egg', 'dog_baby', 'dog_earth'] },
+    'cat_physics': { id: 'cat_physics', name: 'Quantum Cat', icon: '⚛️', stages: ['egg', 'cat_baby', 'cat_physics'] },
+    'cat_earth': { id: 'cat_earth', name: 'Geo Cat', icon: '🍄', stages: ['egg', 'cat_baby', 'cat_earth'] },
+    'dragon_physics': { id: 'dragon_physics', name: 'Mecha Dragon', icon: '🚀', stages: ['egg', 'dragon_baby', 'dragon_physics'] },
+    'dragon_earth': { id: 'dragon_earth', name: 'Elder Dragon', icon: '🏔️', stages: ['egg', 'dragon_baby', 'dragon_earth'] }
 };
 
 export const PET_LEVELS = [
@@ -523,6 +530,8 @@ export class Gamification {
             pet: {
                 type: 'dog',
                 name: 'เพื่อนซี้สี่ขา',
+                mood: 'normal',
+                moodExpires: 0,
                 xp: 0,
                 level: 1,
                 stageIndex: 0
@@ -774,6 +783,12 @@ export class Gamification {
 
     equipTheme(themeValue) {
         this.state.selectedTheme = themeValue;
+        this.saveState();
+    }
+
+    setPetMood(mood, durationInMs) {
+        this.state.pet.mood = mood;
+        this.state.pet.moodExpires = Date.now() + durationInMs;
         this.saveState();
     }
 
@@ -1663,6 +1678,24 @@ export class Gamification {
             this.state.pet.level = newLevelData.level;
             this.state.pet.stageIndex = newLevelData.stage;
             leveledUp = true;
+
+            // --- Branching Evolution Logic (At Level 4) ---
+            if (this.state.pet.level === 4) {
+                const baseType = this.state.pet.type.split('_')[0]; // dog, cat, dragon
+                if (['dog', 'cat', 'dragon'].includes(baseType)) {
+                    const phys = this.state.physicsXP || 0;
+                    const earth = this.state.earthXP || 0;
+                    
+                    let newType = baseType;
+                    if (phys > earth) newType = `${baseType}_physics`;
+                    else if (earth > phys) newType = `${baseType}_earth`;
+                    
+                    if (newType !== baseType && PET_TYPES[newType]) {
+                        console.log(`Pet Evolving! ${baseType} -> ${newType}`);
+                        this.state.pet.type = newType;
+                    }
+                }
+            }
             
             // Don't save during initial constructor check
             if (!isInitialCheck) {

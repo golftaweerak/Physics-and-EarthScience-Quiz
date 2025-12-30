@@ -16,7 +16,8 @@ export class PixelPetRenderer {
         this.particles = []; // Store active particles (hearts)
         
         this.lastFrameTime = 0;
-        this.mood = 'normal'; // internal state: normal, happy, shock, sleep
+        this.mood = 'normal'; // internal animation state: normal, happy, shock, sleep
+        this.baseMood = 'normal'; // external state from game logic: normal, happy, sad
         this.animationState = 'idle'; // 'idle', 'interact', 'happy', 'eat'
         this.animationTimer = 0;
         this.animationDuration = 0;
@@ -55,6 +56,17 @@ export class PixelPetRenderer {
                 outline: '#90A4AE', main: '#ECEFF1', shadow: '#B0BEC5',
                 light: '#FFFFFF', white: '#FFFFFF', nose: '#CFD8DC',
                 cheek: '#ECEFF1', eye: '#263238'
+            },
+            // Evolved Palettes
+            'physics': { 
+                outline: '#263238', main: '#90A4AE', shadow: '#546E7A',
+                light: '#CFD8DC', white: '#80DEEA', nose: '#F44336', // Cyan glowing parts
+                cheek: '#B0BEC5', eye: '#00BCD4' // Glowing eyes
+            },
+            'earth': { 
+                outline: '#33691E', main: '#8D6E63', shadow: '#5D4037',
+                light: '#A1887F', white: '#DCEDC8', nose: '#795548',
+                cheek: '#AED581', eye: '#558B2F'
             }
         };
 
@@ -64,6 +76,11 @@ export class PixelPetRenderer {
             window.addEventListener('resize', () => this.resize());
             this.startLoop();
         }
+    }
+
+    /** Sets the base mood of the pet, which is used when no other animation is active. */
+    setBaseMood(mood) {
+        this.baseMood = mood || 'normal';
     }
 
     // --- Private Drawing Methods ---
@@ -89,7 +106,32 @@ export class PixelPetRenderer {
         this._drawRect(x + 6, y + 10, 4, 2, C.shadow);
     }
 
-    _drawCat(ctx, palette, stage) {
+    /**
+     * Draws the common body and paw structure for pets like dogs and cats.
+     * This refactoring reduces code duplication.
+     */
+    _drawBaseBody(ctx, C, bodyY, bellyYOffset, bellyHeight) {
+        const x = 0;
+        // Body
+        this._drawRect(x + 2, bodyY, 28, 16, C.main);
+        this._drawRect(x + 4, bodyY - 2, 24, 20, C.main);
+        this._drawRect(x + 8, bodyY + bellyYOffset, 16, bellyHeight, C.white); // Belly
+
+        // Paws
+        this._drawRect(x + 6, bodyY + 14, 6, 6, C.outline);
+        this._drawRect(x + 20, bodyY + 14, 6, 6, C.outline);
+        this._drawRect(x + 7, bodyY + 15, 4, 4, C.white);
+        this._drawRect(x + 21, bodyY + 15, 4, 4, C.white);
+    }
+
+    _drawBaseHead(ctx, C, hx, hy, hw, hh) {
+        // Face Shape
+        this._drawRect(hx + 2, hy, hw - 4, hh, C.main);
+        this._drawRect(hx, hy + 2, hw, hh - 4, C.main);
+        this._drawRect(hx + 1, hy + 1, hw - 2, hh - 2, C.main);
+    }
+
+    _drawCat(ctx, palette, stage, variant) {
         const x = 0, y = 0;
         const C = palette;
         const isBaby = stage < 2;
@@ -103,16 +145,9 @@ export class PixelPetRenderer {
         this._drawRect(x + 24 + tailWag, bodyY - 16, 6, 18, C.main); 
         this._drawRect(x + 24 + tailWag, bodyY - 19, 6, 6, C.white); 
 
-        // 2. Body & Paws
-        this._drawRect(x + 2, bodyY, 28, 16, C.main);
-        this._drawRect(x + 4, bodyY - 2, 24, 20, C.main);
-        this._drawRect(x + 8, bodyY + 3, 16, 12, C.white);
-        this._drawRect(x + 6, bodyY + 14, 6, 6, C.outline);
-        this._drawRect(x + 20, bodyY + 14, 6, 6, C.outline);
-        this._drawRect(x + 7, bodyY + 15, 4, 4, C.white);
-        this._drawRect(x + 21, bodyY + 15, 4, 4, C.white);
+        // 2. Body & Paws (Refactored)
+        this._drawBaseBody(ctx, C, bodyY, 3, 12);
 
-        // 3. Head
         let hx = x - 4; 
         let hy = headY + 5;
         let hw = 40;
@@ -126,10 +161,14 @@ export class PixelPetRenderer {
         this._drawRect(hx + 30, hy - 6, 6, 8, C.main);
         this._drawRect(hx + 28, hy - 4, 10, 6, C.main);
 
-        // Face Shape
-        this._drawRect(hx + 2, hy, hw - 4, hh, C.main);
-        this._drawRect(hx, hy + 2, hw, hh - 4, C.main);
-        this._drawRect(hx + 1, hy + 1, hw - 2, hh - 2, C.main);
+        // Variant Accessories
+        if (variant === 'physics') {
+            this._drawRect(hx + 10, hy - 6, 20, 2, C.white); // Visor band
+            this._drawRect(hx + 18, hy - 10, 4, 4, C.nose); // Red sensor
+        }
+
+        // Face Shape (Refactored)
+        this._drawBaseHead(ctx, C, hx, hy, hw, hh);
 
         // Stripes
         this._drawRect(hx + 18, hy, 4, 6, C.shadow);
@@ -149,7 +188,7 @@ export class PixelPetRenderer {
         let ey = hy + 12;
         let spacing = 16; 
 
-        if (this.mood === 'sleep') {
+        if (this.mood === 'sleep' || this.mood === 'sad') {
             this._drawRect(ex, ey + 4, 6, 2, C.outline);
             this._drawRect(ex + spacing, ey + 4, 6, 2, C.outline);
         } else if (this.mood === 'happy') {
@@ -173,18 +212,29 @@ export class PixelPetRenderer {
 
         // Nose & Mouth
         this._drawRect(hx + 19, hy + 23, 2, 2, C.nose);
-        if (this.mood !== 'shock') {
+        if (this.mood === 'shock') {
+             this._drawRect(hx + 18, hy + 25, 4, 4, C.eye); 
+        } else if (this.mood !== 'sad') {
             this._drawRect(hx + 17, hy + 26, 1, 1, C.outline);
             this._drawRect(hx + 18, hy + 27, 1, 1, C.outline);
             this._drawRect(hx + 19, hy + 26, 2, 1, C.outline);
             this._drawRect(hx + 21, hy + 27, 1, 1, C.outline);
             this._drawRect(hx + 22, hy + 26, 1, 1, C.outline);
         } else {
-             this._drawRect(hx + 18, hy + 25, 4, 4, C.eye); 
+            // Sad mouth
+            this._drawRect(hx + 17, hy + 27, 6, 1, C.outline);
+            this._drawRect(hx + 16, hy + 26, 1, 1, C.outline);
+            this._drawRect(hx + 23, hy + 26, 1, 1, C.outline);
+        }
+
+        if (variant === 'earth') {
+            // Leaf on head
+            this._drawRect(hx + 20, hy - 6, 2, 6, '#33691E');
+            this._drawRect(hx + 22, hy - 8, 6, 4, '#76FF03');
         }
     }
 
-    _drawDog(ctx, palette, stage) {
+    _drawDog(ctx, palette, stage, variant) {
         const x = 0, y = 0;
         const C = palette;
         const isBaby = stage < 2;
@@ -198,18 +248,9 @@ export class PixelPetRenderer {
         this._drawRect(x + 23 + tailWag, bodyY - 11, 4, 14, C.main);
         this._drawRect(x + 23 + tailWag, bodyY - 14, 4, 4, C.white); // Tip
 
-        // 2. Body
-        this._drawRect(x + 2, bodyY, 28, 16, C.main);
-        this._drawRect(x + 4, bodyY - 2, 24, 20, C.main);
-        this._drawRect(x + 8, bodyY + 2, 16, 14, C.white); // Belly
+        // 2. Body & Paws (Refactored)
+        this._drawBaseBody(ctx, C, bodyY, 2, 14);
 
-        // 3. Paws
-        this._drawRect(x + 6, bodyY + 14, 6, 6, C.outline);
-        this._drawRect(x + 20, bodyY + 14, 6, 6, C.outline);
-        this._drawRect(x + 7, bodyY + 15, 4, 4, C.white);
-        this._drawRect(x + 21, bodyY + 15, 4, 4, C.white);
-
-        // 4. Head
         let hx = x - 4;
         let hy = headY + 5;
         let hw = 40;
@@ -219,17 +260,21 @@ export class PixelPetRenderer {
         this._drawRect(hx - 2, hy + 4, 6, 12, C.shadow); // Left Ear
         this._drawRect(hx + 36, hy + 4, 6, 12, C.shadow); // Right Ear
 
-        // Face Shape
-        this._drawRect(hx + 2, hy, hw - 4, hh, C.main);
-        this._drawRect(hx, hy + 2, hw, hh - 4, C.main);
-        this._drawRect(hx + 1, hy + 1, hw - 2, hh - 2, C.main);
+        // Variant Accessories
+        if (variant === 'physics') {
+            this._drawRect(hx + 38, hy - 4, 2, 10, '#CFD8DC'); // Antenna pole
+            this._drawRect(hx + 37, hy - 6, 4, 4, '#F44336'); // Antenna bulb
+        }
+
+        // Face Shape (Refactored)
+        this._drawBaseHead(ctx, C, hx, hy, hw, hh);
 
         // Eyes
         let ex = hx + 8;
         let ey = hy + 10;
         let spacing = 16;
         
-        if (this.mood === 'sleep') {
+        if (this.mood === 'sleep' || this.mood === 'sad') {
             this._drawRect(ex, ey + 4, 6, 2, C.outline);
             this._drawRect(ex + spacing, ey + 4, 6, 2, C.outline);
         } else {
@@ -246,9 +291,15 @@ export class PixelPetRenderer {
         this._drawRect(hx + 18, hy + 19, 4, 3, C.nose);
         this._drawRect(hx + 18, hy + 23, 1, 3, C.outline); // Mouth line
         this._drawRect(hx + 16, hy + 25, 8, 1, C.outline); // Mouth smile
+
+        if (variant === 'earth') {
+            // Flower
+            this._drawRect(hx + 6, hy - 2, 8, 8, '#F06292');
+            this._drawRect(hx + 8, hy, 4, 4, '#FFEB3B');
+        }
     }
 
-    _drawDragon(ctx, palette, stage) {
+    _drawDragon(ctx, palette, stage, variant) {
         const x = 0, y = 0;
         const C = palette;
         const isBaby = stage < 2;
@@ -288,6 +339,11 @@ export class PixelPetRenderer {
         // Snout/Nostrils
         this._drawRect(hx + 14, hy + 20, 2, 4, C.shadow);
         this._drawRect(hx + 24, hy + 20, 2, 4, C.shadow);
+
+        if (variant === 'physics') {
+            // Jetpack wings
+            this._drawRect(x - 12, bodyY - 4, 4, 12, '#B0BEC5');
+        }
     }
 
     _drawFood(ctx, type) {
@@ -516,7 +572,7 @@ export class PixelPetRenderer {
         
         // Calculate scale to fit the pet within the canvas
         // We need to fit roughly 96 units horizontally (movement) and 80 units vertically
-        const scale = Math.max(2, Math.floor(Math.min(w / 96, h / 80)));
+        const scale = Math.max(1, Math.floor(Math.min(w / 96, h / 80)));
 
         ctx.clearRect(0, 0, w, h);
 
@@ -547,52 +603,63 @@ export class PixelPetRenderer {
         const shadowScale = 1.0 - Math.min(0.6, Math.abs(yOffset - bob) / (scale * 5));
         ctx.fillStyle = `rgba(0,0,0,${0.1 * shadowScale})`;
         ctx.beginPath();
-        ctx.ellipse(w / 2, shadowY, shadowW / 2, shadowH / 2, 0, 0, Math.PI * 2);
+        ctx.ellipse(w / 2 + (this.walkOffset * scale), shadowY, shadowW / 2, shadowH / 2, 0, 0, Math.PI * 2);
         ctx.fill();
         
-        // --- Flip Context if walking left ---
+        // --- Main Pet Drawing with Transformations ---
         ctx.save();
-        if (this.animationState === 'eat' && this.eatDirection === -1) {
-            const centerX = startX + petWidth / 2;
-            ctx.translate(centerX, 0);
+        ctx.translate(startX, startY);
+        ctx.scale(scale, scale);
+
+        // Flip Context if walking left (must be done after translating to the pet's position)
+        if ((this.animationState === 'eat' || this.animationState === 'walk') && this.eatDirection === -1) {
+            const petLogicalWidth = 32;
+            ctx.translate(petLogicalWidth, 0);
             ctx.scale(-1, 1);
-            ctx.translate(-centerX, 0);
         }
+
+        // --- Determine Variant & Palette ---
+        const baseType = this.petType.split('_')[0];
+        const variant = this.petType.split('_')[1] || 'normal'; // normal, physics, earth
+
+        let palette = this.palettes[baseType] || this.palettes.dog;
+        if (variant === 'physics') palette = this.palettes.physics;
+        if (variant === 'earth') palette = this.palettes.earth;
 
         // --- Select and Draw Pet ---
         if (this.stage === 0) {
-            this._drawEgg(ctx, startX, startY, scale, this.palettes.egg);
+            this._drawEgg(this.ctx, this.palettes.egg);
         } else {
-            const palette = this.palettes[this.petType] || this.palettes.dog;
-            switch (this.petType) {
+            // Use baseType for switching logic
+            switch (baseType) {
                 case 'cat':
-                    this._drawCat(ctx, startX, startY, scale, palette, this.stage);
+                    this._drawCat(this.ctx, palette, this.stage, variant);
                     break;
                 case 'dog':
-                    this._drawDog(ctx, startX, startY, scale, palette, this.stage);
+                    this._drawDog(this.ctx, palette, this.stage, variant);
                     break;
                 case 'dragon':
-                    this._drawDragon(ctx, startX, startY, scale, palette, this.stage);
+                    this._drawDragon(this.ctx, palette, this.stage, variant);
                     break;
             }
+        }
+        ctx.restore(); // Restore from pet drawing transformations
 
-            // วาดอาหารเมื่ออยู่ในสถานะกิน
-            if (this.animationState === 'eat') {
-                let foodType = 'bone';
-                if (this.petType === 'cat') foodType = 'fish';
-                if (this.petType === 'dragon') foodType = 'meat';
-                
-                // ตำแหน่งอาหาร (Fixed relative to screen center, where pet walks TO)
-                // Pet walks 24 units. Food is placed at 48 units from center to be in front of pet.
-                const baseCenter = (w - petWidth) / 2 + xOffset;
-                const foodX = baseCenter + (48 * scale); 
-                const foodY = startY + (40 * scale); // Keep Y relative to pet ground level
-                
-                // Only draw food if not walking away
-                if (this.eatPhase !== 'walk_out') {
-                    this._drawFood(ctx, foodX, foodY, scale, foodType);
-                }
-            }
+        // --- Draw Food (in original coordinate space) ---
+        if (this.animationState === 'eat' && this.eatPhase !== 'walk_out') {
+            let foodType = 'bone';
+            const baseType = this.petType.split('_')[0];
+            if (baseType === 'cat') foodType = 'fish';
+            if (baseType === 'dragon') foodType = 'meat';
+            
+            const foodX = w / 2 + (48 * scale * this.eatDirection);
+            const foodY = startY + (40 * scale);
+            
+            ctx.save();
+            ctx.translate(foodX, foodY);
+            ctx.scale(scale, scale);
+            this._drawFood(this.ctx, foodType);
+            ctx.restore();
         }
 
         // --- Spawn Hearts Logic ---
@@ -603,7 +670,7 @@ export class PixelPetRenderer {
                 this.particles.push({
                     x: centerX + (Math.random() * 20 - 10) * scale,
                     y: centerY,
-                    speed: (Math.random() * 1 + 0.5) * scale,
+                    speed: (Math.random() * 1 + 0.5),
                     life: 1.0,
                     scale: scale
                 });
@@ -615,5 +682,12 @@ export class PixelPetRenderer {
         this.particles.forEach(p => {
             this._drawHeart(ctx, p.x, p.y, Math.max(1, p.scale/2), p.life);
         });
+
+        // --- Draw Speech Bubble ---
+        if (this.speechBubble) {
+            const bubbleX = startX + (petWidth / 2);
+            const bubbleY = startY;
+            this._drawSpeechBubble(ctx, bubbleX, bubbleY, scale, this.speechBubble.text);
+        }
     }
 }

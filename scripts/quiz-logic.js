@@ -1370,6 +1370,14 @@ function showResults() {
   // --- GAMIFICATION: Calculate XP and Check Badges ---
   let xpEarned = 0;
   let levelResult = null;
+
+  // NEW: Set Pet Mood based on score
+  if (percentage >= 80) {
+    state.game.setPetMood('happy', 15000); // Happy for 15 seconds
+  } else if (percentage < 50) {
+    state.game.setPetMood('sad', 15000); // Sad for 15 seconds
+  }
+
   let newBadges = [];
   let completedQuests = [];
   let newAchievements = [];
