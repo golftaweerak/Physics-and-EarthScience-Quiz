@@ -229,11 +229,13 @@ export const SHOP_ITEMS = [
     { id: 'avatar_star', type: 'avatar', name: 'ดาว', icon: '⭐', cost: 150, value: '⭐', desc: 'อวตารดวงดาวเปล่งประกาย' },
     { id: 'avatar_frog', type: 'avatar', name: 'กบ', icon: '🐸', cost: 150, value: '🐸', desc: 'อวตารกบ' },
     { id: 'avatar_hamster', type: 'avatar', name: 'แฮมสเตอร์', icon: '🐹', cost: 150, value: '🐹', desc: 'อวตารหนูแฮมสเตอร์' },
+    { id: 'avatar_bunny', type: 'avatar', name: 'กระต่าย', icon: '🐰', cost: 150, value: '🐰', desc: 'อวตารกระต่ายน้อย' },
     { id: 'item_time_freeze', type: 'consumable', name: 'หยุดเวลา', icon: '❄️', cost: 150, value: 'time_freeze', desc: 'หยุดเวลาชั่วคราว 30 วินาที' },
     
     // 200 XP
     { id: 'avatar_saturn', type: 'avatar', name: 'ดาวเสาร์', icon: '🪐', cost: 200, value: '🪐', desc: 'อวตารดาวเคราะห์มีวงแหวน' },
     { id: 'avatar_comet', type: 'avatar', name: 'ดาวหาง', icon: '☄️', cost: 200, value: '☄️', desc: 'อวตารดาวหางผู้มาเยือน' },
+    { id: 'avatar_pinata', type: 'avatar', name: 'pinata', icon: '🪅', cost: 200, value: '🪅', desc: 'อวตารปีนตา' },
     
     // 250 XP
     { id: 'avatar_sun', type: 'avatar', name: 'ดวงอาทิตย์', icon: '☀️', cost: 250, value: '☀️', desc: 'อวตารดาวฤกษ์ศูนย์กลาง' },
