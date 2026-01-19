@@ -14,38 +14,3 @@ export function shuffleArray(array) {
   }
   return array;
 }
-
-/**
- * Escapes HTML special characters to prevent XSS.
- * @param {string} text The text to escape.
- * @returns {string} The escaped text.
- */
-export function escapeHtml(text) {
-  if (typeof text !== 'string') return text;
-  return text
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-}
-
-/**
- * Unregisters all service workers and clears all caches, then reloads the page.
- * Useful for forcing an update when a new version is deployed.
- */
-export async function clearServiceWorkerCache() {
-  if ('serviceWorker' in navigator) {
-    const registrations = await navigator.serviceWorker.getRegistrations();
-    for (const registration of registrations) {
-      await registration.unregister();
-    }
-  }
-  if ('caches' in window) {
-    const keys = await caches.keys();
-    for (const key of keys) {
-      await caches.delete(key);
-    }
-  }
-  window.location.reload();
-}

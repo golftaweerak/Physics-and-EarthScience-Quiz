@@ -1,65 +1,8 @@
 import { initializeDarkMode } from './dark-mode.js';
+import { initializeDropdown } from './dropdown.js';
+import { initializeMenu } from './menu-handler.js';
 import { initializeDevTools } from './dev-tools-handler.js';
 import { authManager } from './auth-manager.js';
-import { challengeManager } from './challenge-manager.js';
-
-let isDocumentClickListenerAdded = false;
-
-/**
- * Initializes all header dropdown menus with robust open/close and outside-click logic.
- */
-function initializeHeaderMenus() {
-    const setupMenu = (btnId, dropdownId) => {
-        const btn = document.getElementById(btnId);
-        const dropdown = document.getElementById(dropdownId);
-        
-        if (!btn || !dropdown) return;
-
-        if (btn.dataset.menuInitialized) return;
-        btn.dataset.menuInitialized = 'true';
-        
-        btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const isHidden = dropdown.classList.contains('hidden');
-            
-            document.querySelectorAll('[id$="-dropdown"]').forEach(d => {
-                if (d.id !== dropdownId && !d.classList.contains('hidden')) {
-                    d.classList.remove('opacity-100', 'scale-100');
-                    d.classList.add('opacity-0', 'scale-95');
-                    setTimeout(() => d.classList.add('hidden'), 200);
-                }
-            });
-
-            if (isHidden) {
-                dropdown.classList.remove('hidden');
-                requestAnimationFrame(() => {
-                    dropdown.classList.remove('opacity-0', 'scale-95');
-                    dropdown.classList.add('opacity-100', 'scale-100');
-                });
-            } else {
-                dropdown.classList.remove('opacity-100', 'scale-100');
-                dropdown.classList.add('opacity-0', 'scale-95');
-                setTimeout(() => dropdown.classList.add('hidden'), 200);
-            }
-        });
-    };
-
-    setupMenu('main-menu-btn', 'main-menu-dropdown');
-    setupMenu('user-hub-btn', 'user-hub-dropdown');
-
-    if (!isDocumentClickListenerAdded) {
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('button[id$="-btn"]') && !e.target.closest('div[id$="-dropdown"]')) {
-                document.querySelectorAll('div[id$="-dropdown"]:not(.hidden)').forEach(dropdown => {
-                    dropdown.classList.remove('opacity-100', 'scale-100');
-                    dropdown.classList.add('opacity-0', 'scale-95');
-                    setTimeout(() => dropdown.classList.add('hidden'), 200);
-                });
-            }
-        });
-        isDocumentClickListenerAdded = true;
-    }
-}
 
 /**
  * Sets up the dynamic header height adjustment.
@@ -122,24 +65,60 @@ function setupHeaderHeightAdjustment() {
 }
 
 /**
+ * Initializes the authentication UI elements in the header.
+ * Handles login/logout buttons and user avatar display.
+ */
+function initializeAuthUI() {
+    const loginBtn = document.getElementById('user-hub-login-btn');
+    const logoutBtn = document.getElementById('user-hub-logout-btn');
+
+    if (loginBtn) {
+        loginBtn.addEventListener('click', () => authManager.login().catch(err => alert("Login failed: " + err.message)));
+    }
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => authManager.logout());
+    }
+
+    authManager.onUserChange(user => {
+        if (user) {
+            if (loginBtn) loginBtn.classList.add('hidden');
+            if (logoutBtn) logoutBtn.classList.remove('hidden');
+        } else {
+            if (loginBtn) loginBtn.classList.remove('hidden');
+            if (logoutBtn) logoutBtn.classList.add('hidden');
+        }
+    });
+}
+
+/**
+ * Updates the text and icon of the dark mode toggle button in the user hub.
+ */
+function updateDarkModeButton() {
+    const darkModeBtn = document.getElementById('dark-mode-toggle');
+    if (!darkModeBtn) return;
+
+    const isDark = document.documentElement.classList.contains('dark');
+    const icon = isDark 
+        ? `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z" clip-rule="evenodd" /></svg>`
+        : `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" /></svg>`;
+    const text = isDark ? 'โหมดสว่าง' : 'โหมดมืด';
+    darkModeBtn.innerHTML = `${icon} <span>${text}</span>`;
+}
+
+/**
  * Initializes all components and functionalities that are common across multiple pages.
  * This includes dark mode, the main navigation menu, and the copyright year.
  */
 export async function initializeCommonComponents() {
     initializeDarkMode();
-    initializeHeaderMenus();
-    initializeDevTools(); // Initialize dev tools access on all pages
-    
-    // Initialize Challenge Manager (Lobby System)
-    challengeManager.init();
+    updateDarkModeButton(); // Set initial text/icon
 
-    // Dynamic Import for menu-handler
-    try {
-        const { initializeMenu } = await import('./menu-handler.js');
-        initializeMenu();
-    } catch (error) {
-        console.warn("Could not initialize menu (menu-handler.js might have errors):", error);
-    }
+    // Assumes the main menu button and dropdown have these IDs on all pages where this is called.
+    initializeDropdown('main-menu-btn', 'main-menu-dropdown');
+    initializeDropdown('user-hub-btn', 'user-hub-dropdown');
+    await initializeMenu();
+    initializeDevTools(); // Initialize dev tools access on all pages
+    initializeAuthUI(); // Initialize authentication UI globally
 
     // Setup header height adjustment globally for all pages
     setupHeaderHeightAdjustment();
@@ -150,55 +129,10 @@ export async function initializeCommonComponents() {
         yearSpan.textContent = new Date().getFullYear();
     }
 
-    // --- User Hub Auth Buttons ---
-    const loginBtn = document.getElementById('user-hub-login-btn');
-    const logoutBtn = document.getElementById('user-hub-logout-btn');
-    const mobileLogoutBtn = document.getElementById('mobile-logout-btn');
-    const userEmailEl = document.getElementById('user-hub-email');
-    const profileLink = document.getElementById('main-header-profile-link');
-
-    if (loginBtn) loginBtn.addEventListener('click', () => authManager.login());
-    if (logoutBtn) logoutBtn.addEventListener('click', () => authManager.logout());
-    if (mobileLogoutBtn) mobileLogoutBtn.addEventListener('click', () => authManager.logout());
-
-    const updateAuthUI = (user) => {
-        if (user) {
-            if (profileLink && user.photoURL) {
-                profileLink.innerHTML = `<img src="${user.photoURL}" alt="Profile" class="w-full h-full rounded-full object-cover">`;
-            }
-            
-            if (loginBtn) loginBtn.classList.add('hidden');
-            if (logoutBtn) logoutBtn.classList.remove('hidden');
-            if (mobileLogoutBtn) mobileLogoutBtn.classList.remove('hidden');
-            
-            if (userEmailEl) {
-                userEmailEl.textContent = user.email;
-                userEmailEl.classList.remove('hidden');
-            }
-        } else {
-            if (profileLink) {
-                profileLink.innerHTML = `
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
-                `;
-            }
-
-            if (loginBtn) loginBtn.classList.remove('hidden');
-            if (logoutBtn) logoutBtn.classList.add('hidden');
-            if (mobileLogoutBtn) mobileLogoutBtn.classList.add('hidden');
-            
-            if (userEmailEl) {
-                userEmailEl.classList.add('hidden');
-                userEmailEl.textContent = '';
-            }
-        }
-    };
-
-    // Optimistic Update
-    const cachedUser = authManager.getCachedUser();
-    if (cachedUser) updateAuthUI(cachedUser);
-
-    // Real Update
-    authManager.onUserChange(updateAuthUI);
+    // Add listener to update dark mode button text on click
+    const darkModeBtn = document.getElementById('dark-mode-toggle');
+    if (darkModeBtn) {
+        // The main click logic is in dark-mode.js, we just update the text after it runs.
+        darkModeBtn.addEventListener('click', () => setTimeout(updateDarkModeButton, 50));
+    }
 }

@@ -9,7 +9,7 @@
 @layer base {
   option {
     background-color: white;
-    color: #1f2937;
+    color: #111827;
   }
   .dark option {
     background-color: #1f2937;
@@ -29,7 +29,7 @@ body {
   font-family: "Sarabun", sans-serif;
   word-break: thai;
   background-color: white;
-  color: #1f2937;
+  color: #111827;
   animation: fade-in 0.5s ease-in-out;
 }
 
@@ -213,10 +213,6 @@ body.dark {
     margin-top: 0.75rem;
     margin-bottom: 0.75rem;
     border-radius: 0.5rem;
-  }
-
-  #join-room-code-input {
-    @apply text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-800 border-gray-300 dark:border-gray-600;
   }
 }
 
@@ -493,13 +489,6 @@ body.dark {
     animation: option-select-pop 0.3s ease-out;
   }
 
-  .btn-press-anim {
-    transition: transform 0.1s ease-in-out;
-  }
-  .btn-press-anim:active {
-    transform: scale(0.95);
-  }
-
 .correct {
   background-color: #22c55e !important;
   color: white !important;
@@ -705,14 +694,5 @@ body.dark {
 
 .anim-shake {
     animation: shake-horizontal 0.5s cubic-bezier(.36,.07,.19,.97) both;
-}
-
-@keyframes wiggle {
-    0%, 100% { transform: rotate(-6deg); }
-    50% { transform: rotate(6deg); }
-}
-
-.animate-wiggle {
-    animation: wiggle 2s ease-in-out infinite;
 }
 }

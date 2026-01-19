@@ -342,16 +342,10 @@ export function getLevelBorderClass(level) {
     return 'bg-gray-300 dark:bg-gray-600'; // Bronze/Gray
 }
 
-let instance = null;
-
 export class Gamification {
     constructor() {
-        if (instance) return instance;
-        instance = this;
-
         this.storageKey = 'app_gamification_data';
         this.authManager = authManager;
-        this.lastSubmissionTime = 0; // Prevent duplicate submissions
 
         const isNewToGamification = !localStorage.getItem(this.storageKey);
         
@@ -550,7 +544,6 @@ export class Gamification {
             meteorologyXP: 0,
             freeNameChangeAvailable: true,
             generalXP: 0, // NEW: For XP from quests or non-track sources
-            totalSpentXP: 0, // NEW: Track total XP spent
         };
     }
 
@@ -801,42 +794,29 @@ export class Gamification {
         this.saveState();
     }
 
-    // NEW: Spend XP function to track total spent
-    spendXP(amount) {
-        if (this.state.xp >= amount) {
-            this.state.xp -= amount;
-            this.state.totalSpentXP = (this.state.totalSpentXP || 0) + amount;
-            this.saveState();
-            return true;
-        }
-        return false;
-    }
-
     buyItem(itemId) {
         const item = SHOP_ITEMS.find(i => i.id === itemId);
         if (!item) return { success: false, message: "ไม่พบสินค้า" };
         if (this.state.xp < item.cost) return { success: false, message: "XP ไม่เพียงพอ" };
 
-        // Check ownership for non-consumables
-        if (item.type !== 'consumable' && this.state.inventory.includes(itemId)) {
-            return { success: false, message: "คุณมีสินค้านี้แล้ว" };
-        }
-
-        if (this.spendXP(item.cost)) {
-            if (item.type === 'consumable') {
-                this.state.consumables[itemId] = (this.state.consumables[itemId] || 0) + 1;
-            } else {
-                this.state.inventory.push(itemId);
-                // Check Shop Badges
-                if (this.state.inventory.length >= 5 && !this.state.badges.includes('shop_spender')) {
-                    this.state.badges.push('shop_spender');
-                }
-                this.checkAchievements();
+        if (item.type === 'consumable') {
+            this.state.xp -= item.cost;
+            this.state.consumables[itemId] = (this.state.consumables[itemId] || 0) + 1;
+            this.saveState();
+            return { success: true, message: `ซื้อ ${item.name} สำเร็จ! (มี: ${this.state.consumables[itemId]})`, item };
+        } else {
+            if (this.state.inventory.includes(itemId)) return { success: false, message: "คุณมีสินค้านี้แล้ว" };
+            this.state.xp -= item.cost;
+            this.state.inventory.push(itemId);
+            
+            // Check Shop Badges
+            if (this.state.inventory.length >= 5 && !this.state.badges.includes('shop_spender')) {
+                this.state.badges.push('shop_spender');
             }
+            
+            this.checkAchievements();
             this.saveState();
             return { success: true, message: `ซื้อ ${item.name} สำเร็จ!`, item };
-        } else {
-            return { success: false, message: "XP ไม่เพียงพอ" };
         }
     }
 
@@ -1492,15 +1472,7 @@ export class Gamification {
     // ฟังก์ชันใหม่: บันทึกผลการทำข้อสอบโดยรับค่า XP แยกตามสายวิชา
     // นี่คือฟังก์ชันหลักที่ quiz-logic.js เรียกใช้เมื่อส่งคำตอบ
     // จัดการทั้ง XP, สถิติรายข้อ, และการปลดล็อก Badge/Achievement ในที่เดียว
-    submitQuizResult(totalXP, percentage, questionCount, isCustomQuiz, topicXPs = {}, questStats = {}) {
-        // Debounce check to prevent double submission
-        const now = Date.now();
-        if (now - this.lastSubmissionTime < 2000) {
-            console.warn("Duplicate submission prevented");
-            return null;
-        }
-        this.lastSubmissionTime = now;
-
+    submitQuizResult(totalXP, physicsXP, earthXP, percentage, questionCount, isCustomQuiz, topicXPs = {}, questStats = {}) {
         const oldLevelInfo = this.getCurrentLevel();
         const oldPhysics = this.getPhysicsLevel();
         const oldEarth = this.getEarthLevel();
@@ -1510,15 +1482,6 @@ export class Gamification {
             const petXpGained = Math.floor(totalXP * 0.25); // Pet gets 25% of user's XP
             this.state.pet.xp += petXpGained;
             this.levelUpPet();
-        }
-
-        // Calculate track XP from topicXPs
-        let physicsXP = 0;
-        let earthXP = 0;
-        for (const [groupKey, groupDef] of Object.entries(PROFICIENCY_GROUPS)) {
-            const xp = topicXPs[groupDef.field] || 0;
-            if (groupDef.track === 'physics') physicsXP += xp;
-            if (groupDef.track === 'earth') earthXP += xp;
         }
 
         // คำนวณ XP ที่ไม่เข้าพวก (ไม่ใช่ทั้งฟิสิกส์และวิทย์โลก)
@@ -1696,120 +1659,6 @@ export class Gamification {
             }
         });
         return newUnlocks;
-    }
-
-    // NEW: Recalculate stats from history (Fixes sync issues)
-    recalculateFromHistory() {
-        let totalXP = 0;
-        let physicsXP = 0;
-        let earthXP = 0;
-        let completed = 0;
-        let totalCorrect = 0;
-        let perfectScores = 0;
-        let highScores80 = 0;
-        let weekendQuizzes = 0;
-        let generalQuizXP = 0;
-
-        // Reset proficiency stats
-        for (const group of Object.values(PROFICIENCY_GROUPS)) {
-            this.state[group.field] = 0;
-        }
-
-        for (let i = 0; i < localStorage.length; i++) {
-            const key = localStorage.key(i);
-            if (key && key.startsWith('quizState-')) {
-                try {
-                    const data = JSON.parse(localStorage.getItem(key));
-                    if (data && data.userAnswers && data.shuffledQuestions) {
-                        let calculatedXp = 0;
-                        let quizPhysicsXP = 0;
-                        let quizEarthXP = 0;
-
-                        data.userAnswers.forEach((ans, index) => {
-                            if (ans && ans.isCorrect) {
-                                const question = data.shuffledQuestions[index];
-                                const points = (question && (question.type === 'multiple-select' || question.type === 'fill-in-number')) ? 5 : 4;
-                                calculatedXp += points;
-
-                                // Topic XP
-                                let subCatStr = '';
-                                if (ans.subCategory) {
-                                    if (typeof ans.subCategory === 'string') subCatStr = ans.subCategory;
-                                    else if (ans.subCategory.main) subCatStr = ans.subCategory.main;
-                                }
-                                for (const [groupKey, groupDef] of Object.entries(PROFICIENCY_GROUPS)) {
-                                    if (groupDef.keywords.some(k => subCatStr.includes(k))) {
-                                        this.state[groupDef.field] = (this.state[groupDef.field] || 0) + points;
-                                        if (groupDef.track === 'physics') quizPhysicsXP += points;
-                                        if (groupDef.track === 'earth') quizEarthXP += points;
-                                        break;
-                                    }
-                                }
-                            }
-                        });
-
-                        // Fallback category check
-                        if (quizPhysicsXP === 0 && quizEarthXP === 0) {
-                             let category = 'General';
-                             const firstAns = data.userAnswers.find(a => a);
-                             if (firstAns) {
-                                 if (firstAns.sourceQuizCategory) category = firstAns.sourceQuizCategory;
-                                 else if (firstAns.subCategory) {
-                                     category = typeof firstAns.subCategory === 'object' ? firstAns.subCategory.main : firstAns.subCategory;
-                                 }
-                             }
-                             const lowerCat = String(category).toLowerCase();
-                             if (lowerCat.includes('physics') || lowerCat.includes('ฟิสิกส์') || key.includes('phy_')) quizPhysicsXP = calculatedXp;
-                             else if (lowerCat.includes('earth') || lowerCat.includes('astronomy') || lowerCat.includes('space') || lowerCat.includes('โลก') || lowerCat.includes('ดาราศาสตร์') || lowerCat.includes('วิทย์โลก') || key.includes('ess_')) quizEarthXP = calculatedXp;
-                        }
-
-                        generalQuizXP += (calculatedXp - quizPhysicsXP - quizEarthXP);
-                        physicsXP += quizPhysicsXP;
-                        earthXP += quizEarthXP;
-                        totalCorrect += (data.score || 0);
-
-                        const totalQ = data.shuffledQuestions.length;
-                        const answered = data.userAnswers.filter(a => a).length;
-                        if (totalQ > 0 && answered >= totalQ) {
-                            completed++;
-                            const percentage = Math.round(((data.score || 0) / totalQ) * 100);
-                            const isCustom = key.includes('custom');
-                            if (!isCustom || (isCustom && totalQ >= 20)) {
-                                if (percentage === 100) perfectScores++;
-                                if (percentage >= 80) highScores80++;
-                            }
-                            if (data.lastAttemptTimestamp) {
-                                const date = new Date(data.lastAttemptTimestamp);
-                                const day = date.getDay();
-                                if (day === 0 || day === 6) weekendQuizzes++;
-                            }
-                        }
-                    }
-                } catch (e) { console.error(e); }
-            }
-        }
-
-        this.state.physicsXP = physicsXP;
-        this.state.earthXP = earthXP;
-        // Preserve existing generalXP as it might contain quest rewards not in quiz history
-        this.state.generalXP = Math.max(this.state.generalXP, generalQuizXP);
-        
-        const totalCalculated = physicsXP + earthXP + this.state.generalXP;
-        const spent = this.state.totalSpentXP || 0;
-        this.state.xp = Math.max(0, totalCalculated - spent);
-        
-        this.state.quizzesCompleted = completed;
-        this.state.totalCorrectAnswers = totalCorrect;
-        this.state.perfectScores = perfectScores;
-        this.state.highScores80 = highScores80;
-        this.state.weekendQuizzesCompleted = weekendQuizzes;
-
-        this.updateLevel();
-        this.checkBadges(0);
-        this.checkAchievements();
-        this.saveState();
-
-        return { totalXP: this.state.xp, completed };
     }
 
     // NEW: Pet level up logic

@@ -2,14 +2,11 @@ import { authManager } from './auth-manager.js';
 import { db } from './firebase-config.js';
 import { collection, query, orderBy, limit, getDocs, where, getCountFromServer } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { XP_THRESHOLDS, TRACK_TITLES, PROFICIENCY_GROUPS, getLevelBorderClass, getAvatarFrameClass } from './gamification.js';
-import { SiteConfig } from './site-config.js';
-import { escapeHtml } from './utils.js';
 
 function getLevelInfoForLeaderboard(xp, type) {
     let track = 'overall';
-    
-    const configCat = SiteConfig.categories.find(c => c.id === type);
-    if (configCat && configCat.track) track = configCat.track;
+    if (type === 'physicsXP') track = 'physics';
+    if (type === 'earthXP') track = 'earth';
 
     // Map specific proficiency fields to their main tracks
     for (const group of Object.values(PROFICIENCY_GROUPS)) {
@@ -40,10 +37,6 @@ export async function initializeLeaderboard() {
     
     if (!listContainer || tabs.length === 0) return;
 
-    // รอให้ระบบ Auth ตรวจสอบสถานะเสร็จสิ้นก่อน เพื่อให้รู้ว่าผู้ใช้ล็อกอินอยู่หรือไม่
-    // (Guest ก็จะผ่านขั้นตอนนี้โดยได้ค่า user เป็น null)
-    await authManager.waitForAuthReady();
-
     const renderList = async (type) => {
         listContainer.innerHTML = `
             <div class="flex flex-col items-center justify-center h-64 text-gray-500">
@@ -53,8 +46,7 @@ export async function initializeLeaderboard() {
         `;
 
         try {
-            // ดึงข้อมูล Leaderboard (ทุกคนอ่านได้ตามกฎ Firestore)
-            const usersRef = collection(db, 'leaderboard');
+            const usersRef = collection(db, 'users');
             const q = query(usersRef, orderBy(type, 'desc'), limit(50)); // Fetch top 50
             const querySnapshot = await authManager.retryOperation(() => getDocs(q));
             
@@ -63,26 +55,29 @@ export async function initializeLeaderboard() {
                 leaderboard.push({ id: doc.id, ...doc.data() });
             });
 
+            if (leaderboard.length === 0) {
+                listContainer.innerHTML = `<div class="text-center py-16 text-gray-500">ยังไม่มีข้อมูลการจัดอันดับ</div>`;
+                return;
+            }
+
             const currentUser = authManager?.currentUser;
             const currentUserId = currentUser ? currentUser.uid : null;
             const localState = await authManager.loadUserData() || {};
 
-            const userInTop50 = currentUserId && leaderboard.some(u => u.id === currentUserId);
+            const userInTop50 = leaderboard.some(u => u.id === currentUserId);
             let userRankData = null;
 
-            // FIX: อนุญาตให้ Guest ที่มีคะแนนเห็นอันดับตัวเองได้
-            const userScore = localState[type] || 0;
-            if (!userInTop50 && (currentUserId || userScore > 0)) {
+            if (!userInTop50 && currentUserId) {
                 try {
-                    // นับจำนวนคนที่มีคะแนนมากกว่าเรา เพื่อหาอันดับ
-                    const rankQuery = query(collection(db, 'leaderboard'), where(type, '>', userScore));
+                    const userScore = localState[type] || 0;
+                    const rankQuery = query(usersRef, where(type, '>', userScore));
                     const snapshot = await authManager.retryOperation(() => getCountFromServer(rankQuery));
                     const rank = snapshot.data().count + 1;
 
                     userRankData = {
                         rank: rank,
-                        id: currentUserId || 'guest', // ใช้ ID 'guest' สำหรับผู้ที่ไม่ได้ล็อกอิน
-                        displayName: localState.displayName || 'ผู้เรียน (Guest)',
+                        id: currentUserId,
+                        displayName: localState.displayName,
                         avatar: localState.avatar,
                         selectedTitle: localState.selectedTitle,
                         score: userScore,
@@ -95,9 +90,7 @@ export async function initializeLeaderboard() {
 
             // --- Rank Change Logic (Local Tracking) ---
             let myRankChange = null;
-            // FIX: เปิดใช้งานการติดตามอันดับสำหรับ Guest ด้วย
-            const trackingId = currentUserId || 'guest';
-            if (trackingId) {
+            if (currentUserId) {
                 let currentRank = null;
                 if (userInTop50) {
                     currentRank = leaderboard.findIndex(u => u.id === currentUserId) + 1;
@@ -106,7 +99,7 @@ export async function initializeLeaderboard() {
                 }
 
                 if (currentRank) {
-                    const storageKey = `lb_last_rank_${type}_${trackingId}`;
+                    const storageKey = `lb_last_rank_${type}_${currentUserId}`;
                     const lastData = JSON.parse(localStorage.getItem(storageKey));
                     
                     if (lastData) {
@@ -122,7 +115,7 @@ export async function initializeLeaderboard() {
             const renderRow = (user, rank, isMe) => {
                 // Rank Change UI
                 let changeHtml = '';
-                const change = isMe ? myRankChange : (user.rankChange || null);
+                const change = isMe ? myRankChange : (user.rankChange || null); // Support future server-side data for others
                 
                 if (change !== null && change !== 0) {
                     const isUp = change > 0;
@@ -154,21 +147,21 @@ export async function initializeLeaderboard() {
                     score = user[type] || 0;
                     // On-the-fly calculation to fix display for stale data
                     if (type === 'physicsXP') {
-                        let calculatedXP = 0;
+                        let calculatedPhysicsXP = 0;
                         for (const group of Object.values(PROFICIENCY_GROUPS)) {
                             if (group.track === 'physics') {
-                                calculatedXP += (user[group.field] || 0);
+                                calculatedPhysicsXP += (user[group.field] || 0);
                             }
                         }
-                        score = Math.max(score, calculatedXP);
+                        score = Math.max(score, calculatedPhysicsXP);
                     } else if (type === 'earthXP') {
-                        let calculatedXP = 0;
+                        let calculatedEarthXP = 0;
                         for (const group of Object.values(PROFICIENCY_GROUPS)) {
                             if (group.track === 'earth') {
-                                calculatedXP += (user[group.field] || 0);
+                                calculatedEarthXP += (user[group.field] || 0);
                             }
                         }
-                        score = Math.max(score, calculatedXP);
+                        score = Math.max(score, calculatedEarthXP);
                     }
                 }
 
@@ -176,11 +169,13 @@ export async function initializeLeaderboard() {
                 let level, rankTitle;
 
                 if (type === 'xp') {
+                    // For 'overall' XP, use the user's actual stored level, as it depends on quests.
                     level = user.level || 1;
                     const titles = TRACK_TITLES.overall;
                     const titleIndex = Math.min(level - 1, titles.length - 1);
                     rankTitle = titles[titleIndex];
                 } else {
+                    // For specific tracks, level is calculated purely from XP.
                     const levelInfo = getLevelInfoForLeaderboard(score, type);
                     level = levelInfo.level;
                     rankTitle = levelInfo.title;
@@ -209,12 +204,12 @@ export async function initializeLeaderboard() {
                         <div class="flex-shrink-0">${avatarHtml}</div>
                         <div class="flex-grow min-w-0 flex flex-col justify-center">
                             <div class="font-bold text-lg text-gray-800 dark:text-gray-200 truncate">
-                                ${escapeHtml(user.displayName) || 'ผู้เรียน'} ${isMe ? '<span class="text-sm text-blue-600 dark:text-blue-400 ml-1">(คุณ)</span>' : ''}
+                                ${user.displayName || 'ผู้เรียน'} ${isMe ? '<span class="text-sm text-blue-600 dark:text-blue-400 ml-1">(คุณ)</span>' : ''}
                             </div>
                             <div class="text-sm text-gray-500 dark:text-gray-400 flex flex-wrap items-center gap-x-2">
                                 <span class="font-bold text-gray-600 dark:text-gray-300">(Lv.${level})</span>
                                 <span class="text-blue-600 dark:text-blue-400 font-medium whitespace-nowrap">${rankTitle}</span>
-                                ${user.selectedTitle ? `<span class="hidden sm:inline text-gray-400 dark:text-gray-600">•</span> <span class="truncate max-w-[150px] sm:max-w-none">《 ${escapeHtml(user.selectedTitle)} 》</span>` : ''}
+                                ${user.selectedTitle ? `<span class="hidden sm:inline text-gray-400 dark:text-gray-600">•</span> <span class="truncate max-w-[150px] sm:max-w-none">《 ${user.selectedTitle} 》</span>` : ''}
                             </div>
                         </div>
                         <div class="flex-shrink-0 text-right">
@@ -227,12 +222,7 @@ export async function initializeLeaderboard() {
                 `;
             };
 
-            let listHtml = '';
-            if (leaderboard.length > 0) {
-                listHtml = leaderboard.map((user, index) => renderRow(user, index + 1, user.id === currentUserId)).join('');
-            } else {
-                listHtml = `<div class="text-center py-8 text-gray-400">ยังไม่มีผู้เล่นอื่นในกระดานนี้</div>`;
-            }
+            let listHtml = leaderboard.map((user, index) => renderRow(user, index + 1, user.id === currentUserId)).join('');
 
             if (userRankData) {
                 listHtml += `
@@ -249,12 +239,7 @@ export async function initializeLeaderboard() {
 
         } catch (error) {
             console.error("Leaderboard error:", error);
-            if (error.code === 'permission-denied') {
-                // ข้อความนี้จะแสดงเฉพาะเมื่อ Rules ผิดพลาดจริงๆ (ปกติ Guest ควรอ่านได้)
-                listContainer.innerHTML = `<div class="text-center py-16 text-gray-500">กรุณาเข้าสู่ระบบเพื่อดูอันดับ</div>`;
-            } else {
-                listContainer.innerHTML = `<div class="text-center py-16 text-red-500">ไม่สามารถโหลดข้อมูลได้<br>กรุณาตรวจสอบการเชื่อมต่ออินเทอร์เน็ต</div>`;
-            }
+            listContainer.innerHTML = `<div class="text-center py-16 text-red-500">ไม่สามารถโหลดข้อมูลได้<br>กรุณาตรวจสอบการเชื่อมต่ออินเทอร์เน็ต</div>`;
         }
     };
 

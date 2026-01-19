@@ -36,6 +36,7 @@ async function main() {
     try {
         const { initializeCommonComponents } = await import('./common-init.js');
         await initializeCommonComponents();
+    await initializeCommonComponents();
     } catch (error) {
         // This is considered non-critical for the preview page's core function.
         console.warn("A non-critical error occurred during common component initialization.", error);

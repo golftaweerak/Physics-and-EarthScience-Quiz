@@ -1,78 +1,50 @@
 
 import { ModalHandler } from "./modal-handler.js";
 import { fetchAllQuizData, getQuizProgress, categoryDetails as allCategoryDetails } from "./data-manager.js";
+import { getSyllabusForCategory } from "./syllabus-manager.js";
 import { authManager } from './auth-manager.js'; // authManager now handles db operations
 import { showToast } from './toast.js';
-import { escapeHtml } from './utils.js';
-import { getSyllabusForCategory } from './syllabus-manager.js';
-
-let isSyncingCustomQuizzes = false;
-let isHandlerInitialized = false;
 
 /**
  * Safely retrieves and parses the list of custom quizzes from localStorage.
  * If the user is logged in, it syncs the local list with Firestore.
  * @returns {Array} An array of custom quiz objects, or an empty array if none exist or data is corrupt.
  */
-export function getSavedCustomQuizzes() {
-    const savedQuizzesJSON = localStorage.getItem("customQuizzesList");
-    let localQuizzes = [];
+export async function getSavedCustomQuizzes() {
+    // Wait for auth state to be determined
+    await authManager.waitForAuthReady();
 
-    if (savedQuizzesJSON) {
-        try {
-            const parsed = JSON.parse(savedQuizzesJSON);
-            localQuizzes = Array.isArray(parsed) ? parsed : [];
-        } catch (error) {
-            console.error("Could not parse customQuizzesList from localStorage. The data might be corrupted.", error);
-            // Attempt to back up the corrupted data for recovery.
-            try {
-                const backupKey = `customQuizzesList_corrupted_backup_${Date.now()}`;
-                localStorage.setItem(backupKey, savedQuizzesJSON);
-                console.warn(`Backed up corrupted quiz list to localStorage with key: ${backupKey}`);
-            } catch (backupError) {
-                console.error("Failed to back up corrupted quiz list.", backupError);
-            }
-            // Remove the corrupted item to prevent future errors.
-            localStorage.removeItem("customQuizzesList");
-            localQuizzes = [];
+    const savedQuizzesJSON = localStorage.getItem("customQuizzesList");    
+    if (!savedQuizzesJSON) return [];
+    try {
+        const parsed = JSON.parse(savedQuizzesJSON);
+        let localQuizzes = Array.isArray(parsed) ? parsed : [];
+
+        // If logged in, perform sync
+        if (authManager.currentUser) {
+            // Delegate sync logic to AuthManager
+            localQuizzes = await authManager.syncCustomQuizzes(localQuizzes);
+            
+            localStorage.setItem("customQuizzesList", JSON.stringify(localQuizzes));
         }
+
+        return localQuizzes;
+    } catch (error) {
+        console.error("Could not parse customQuizzesList from localStorage. The data might be corrupted.", error);
+
+        // Attempt to back up the corrupted data for recovery.
+        try {
+            const backupKey = `customQuizzesList_corrupted_backup_${Date.now()}`;
+            localStorage.setItem(backupKey, savedQuizzesJSON);
+            console.warn(`Backed up corrupted quiz list to localStorage with key: ${backupKey}`);
+        } catch (backupError) {
+            console.error("Failed to back up corrupted quiz list.", backupError);
+        }
+
+        // Remove the corrupted item to prevent future errors.
+        localStorage.removeItem("customQuizzesList");
+        return [];
     }
-
-    // Background Sync (Fire and Forget)
-    if (!isSyncingCustomQuizzes) {
-        (async () => {
-            isSyncingCustomQuizzes = true;
-            try {
-                await authManager.waitForAuthReady();
-                if (authManager.currentUser) {
-                    const syncedQuizzes = await authManager.syncCustomQuizzes(localQuizzes);
-                    
-                    // FIX: Race Condition - Re-read localStorage to check for new quizzes created during sync
-                    const currentLocalJSON = localStorage.getItem("customQuizzesList");
-                    if (currentLocalJSON) {
-                        const currentLocal = JSON.parse(currentLocalJSON);
-                        const syncedIds = new Set(syncedQuizzes.map(q => q.customId));
-                        
-                        // Merge newly created quizzes (that are in local but not in sync result yet)
-                        currentLocal.forEach(q => {
-                            if (!syncedIds.has(q.customId)) {
-                                syncedQuizzes.push(q);
-                            }
-                        });
-                    }
-
-                    localStorage.setItem("customQuizzesList", JSON.stringify(syncedQuizzes));
-                    window.dispatchEvent(new CustomEvent('custom-quizzes-synced', { detail: syncedQuizzes }));
-                }
-            } catch (e) {
-                console.warn("Background sync of custom quizzes failed:", e);
-            } finally {
-                isSyncingCustomQuizzes = false;
-            }
-        })();
-    }
-
-    return localQuizzes;
 }
 
 /**
@@ -96,7 +68,7 @@ async function createAndSaveCustomQuiz(quizData) {
         altText: 'ไอคอนแบบทดสอบที่สร้างเอง'
     };
 
-    let savedQuizzes = getSavedCustomQuizzes();
+    let savedQuizzes = await getSavedCustomQuizzes();
     savedQuizzes.push(newCustomQuiz);
     localStorage.setItem("customQuizzesList", JSON.stringify(savedQuizzes));
 
@@ -116,8 +88,8 @@ async function createAndSaveCustomQuiz(quizData) {
  * Initializes all functionality related to creating and managing custom quizzes.
  */
 export function initializeCustomQuizHandler() {
-    if (isHandlerInitialized) return; // Prevent double initialization
-    isHandlerInitialized = true;
+    // ... (existing code) ...
+    let quizDataCache = null; // Cache for fetched quiz data
 
     // --- 1. Cache Elements & Initialize Modals ---
     const customQuizModal = new ModalHandler("custom-quiz-modal");
@@ -158,7 +130,6 @@ export function initializeCustomQuizHandler() {
 
     // --- UI Enhancements: Adjust padding for floating UI ---
     function adjustScrollableContentPadding() {
-        if (!customQuizModal.modal) return;
         const scrollableContent = customQuizModal.modal.querySelector('.overflow-y-auto');
         if (scrollableContent) {
             // Add enough padding at the bottom of the scrollable area to ensure
@@ -169,16 +140,11 @@ export function initializeCustomQuizHandler() {
     }
 
     // --- State Management ---
+    let activeQuizUrl = '';
+    let activeStorageKey = '';
     let onConfirmAction = null;
     let isBadgeDismissed = false;
     let hasShownSuccess = false;
-    const CUI_STATE = {
-        quizDataCache: null,
-        groupedQuestionsCache: null,
-        scenariosCache: null,
-        activeQuizUrl: null,
-        activeStorageKey: null
-    };
 
     // Apply the modern scrollbar class to the modal bodies.
     try {
@@ -244,14 +210,13 @@ export function initializeCustomQuizHandler() {
     }
 
     if (!createCustomQuizBtn || !customQuizModal.modal || !customQuizHubModal.modal) {
-        console.warn("Custom quiz elements or modals not found. Skipping initialization.");
         return; // Exit if essential elements are missing
     }
 
     // --- 2. Core Logic Functions ---
 
     async function deleteCustomQuiz(customId) {
-        let savedQuizzes = getSavedCustomQuizzes();
+        let savedQuizzes = await getSavedCustomQuizzes();
         const quizToDelete = savedQuizzes.find(q => q.customId === customId);
         if (!quizToDelete) return;
 
@@ -272,7 +237,7 @@ export function initializeCustomQuizHandler() {
     }
 
     async function updateCustomQuizTitle(customId, newTitle) {
-        let savedQuizzes = getSavedCustomQuizzes();
+        let savedQuizzes = await getSavedCustomQuizzes();
         const quizIndex = savedQuizzes.findIndex((q) => q.customId === customId);
         if (quizIndex > -1) {
             savedQuizzes[quizIndex].title = newTitle.trim();
@@ -363,7 +328,7 @@ export function initializeCustomQuizHandler() {
     }
 
     async function renderCustomQuizList() {
-        const savedQuizzes = getSavedCustomQuizzes();
+        const savedQuizzes = await getSavedCustomQuizzes();
 
         // Sort quizzes by creation date (newest first)
         savedQuizzes.sort((a, b) => {
@@ -397,7 +362,7 @@ export function initializeCustomQuizHandler() {
                 <div class="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-600 dark:text-gray-400">
                     <div class="flex items-start" title="หมวดหมู่">
                         <svg class="h-3.5 w-3.5 mr-1.5 flex-shrink-0 text-gray-400 dark:text-gray-500" width="14" height="14" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 12V7a4 4 0 014-4z" /></svg>
-                        <span class="truncate">${escapeHtml(quiz.categoryDisplay) || 'ทั่วไป'}</span>
+                        <span class="truncate">${quiz.categoryDisplay || 'ทั่วไป'}</span>
                     </div>
                     <div class="flex items-center" title="รูปแบบการจับเวลา">
                         <svg class="h-3.5 w-3.5 mr-1.5 flex-shrink-0 text-gray-400 dark:text-gray-500" width="14" height="14" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -412,7 +377,7 @@ export function initializeCustomQuizHandler() {
                         <span>${creationDate}</span>
                     </div>
                 </div>
-                ${quiz.description ? `<p class="mt-2 text-xs text-gray-500 dark:text-gray-400 italic border-l-2 border-gray-300 dark:border-gray-600 pl-2">"${escapeHtml(quiz.description)}"</p>` : ''}
+                ${quiz.description ? `<p class="mt-2 text-xs text-gray-500 dark:text-gray-400 italic border-l-2 border-gray-300 dark:border-gray-600 pl-2">"${quiz.description}"</p>` : ''}
             `;
 
             let footerHtml;
@@ -450,7 +415,7 @@ export function initializeCustomQuizHandler() {
                         <div class="flex-grow min-w-0">
                             <div data-title-display class="flex justify-between items-start gap-2">
                                 <div class="flex-grow min-w-0">
-                                    <p class="font-bold text-gray-800 dark:text-gray-100 truncate">${escapeHtml(quiz.title)}</p>
+                                    <p class="font-bold text-gray-800 dark:text-gray-100 truncate">${quiz.title}</p>
                                 </div>
                                 <div data-view-controls class="flex items-center gap-1 flex-shrink-0">
                                     <button data-action="edit" aria-label="แก้ไขชื่อ" class="p-2 text-gray-500 hover:bg-yellow-100 hover:text-yellow-600 dark:hover:bg-yellow-900/50 dark:hover:text-yellow-400 rounded-full transition"><svg class="h-5 w-5 pointer-events-none" width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg></button>
@@ -668,7 +633,7 @@ export function initializeCustomQuizHandler() {
     }
 
     function bindCustomQuizModalEvents() {
-        const container = customQuizModal.modal;
+        const container = customQuizModal.modal; // Listen on the whole modal for delegated events
         if (!container) return;
 
         // Use event delegation for better performance
@@ -1046,17 +1011,17 @@ export function initializeCustomQuizHandler() {
         customQuizModal.open(triggerElement); // Open modal immediately to show loading inside
 
         try {
-            if (!CUI_STATE.quizDataCache) {
-                CUI_STATE.quizDataCache = await fetchAllQuizData();
+            if (!quizDataCache) {
+                quizDataCache = await fetchAllQuizData();
             }
-            const { allQuestions, scenarios } = CUI_STATE.quizDataCache;
+            const { allQuestions } = quizDataCache;
 
             // Group questions by subject, chapter, and specific topic, and count types
             const groupedQuestions = allQuestions.reduce((acc, q) => {
-                const subjectKey = q.sourceQuizCategory || 'Uncategorized';
-                const questionType = q.type === 'fill-in-number' ? 'calculation' : 'theory';
-
                 if (q.subCategory && q.subCategory.main && q.subCategory.specific) {
+                    const subjectKey = q.sourceQuizCategory || 'Uncategorized';
+                    const questionType = q.type === 'fill-in-number' ? 'calculation' : 'theory';
+
                     const specifics = Array.isArray(q.subCategory.specific) ? q.subCategory.specific : [q.subCategory.specific];
 
                     specifics.forEach(specificTopic => {
@@ -1075,33 +1040,17 @@ export function initializeCustomQuizHandler() {
                             group[questionType].push(q);
                         }
                     });
-                } else if (q.subCategory && typeof q.subCategory === 'string') {
-                    // Fallback for string-based subCategory (Legacy support)
-                    const chapter = q.subCategory;
-                    const specificTopic = 'ทั่วไป'; // Default topic
-
-                    if (!acc[subjectKey]) acc[subjectKey] = {};
-                    if (!acc[subjectKey][chapter]) acc[subjectKey][chapter] = {};
-                    if (!acc[subjectKey][chapter][specificTopic]) {
-                        acc[subjectKey][chapter][specificTopic] = { theory: [], calculation: [] };
-                    }
-                    const group = acc[subjectKey][chapter][specificTopic];
-                    if (!group[questionType].some(existingQ => existingQ.question === q.question)) {
-                        group[questionType].push(q);
-                    }
                 }
                 return acc;
             }, {});
 
-            CUI_STATE.groupedQuestionsCache = groupedQuestions;
-            CUI_STATE.scenariosCache = scenarios;
-            
             let categoryHTML = '';
             const sortedSubjects = Object.keys(allCategoryDetails).sort((a, b) => (allCategoryDetails[a].order || 99) - (allCategoryDetails[b].order || 99));
 
             sortedSubjects.forEach(subjectKey => {
-               const subjectDetails = allCategoryDetails[subjectKey];
-                if (!subjectDetails || !groupedQuestions[subjectKey]) {
+                const syllabus = getSyllabusForCategory(subjectKey);
+                const subjectDetails = allCategoryDetails[subjectKey];                
+                if (!syllabus || !subjectDetails || !groupedQuestions[subjectKey]) {
                     return;
                 }
 
@@ -1109,13 +1058,7 @@ export function initializeCustomQuizHandler() {
                 const isBasicSubject = subjectKey.includes('Basic') || subjectKey.startsWith('Physics');
                 const topicKey = isBasicSubject ? 'learningOutcomes' : 'specificTopics';
 
-                const syllabus = getSyllabusForCategory(subjectKey);
-                let chapters = [];
-                if (syllabus) {
-                    chapters = syllabus.units ? syllabus.units.flatMap(u => u.chapters) : (syllabus.chapters || []);
-                } else {
-                    chapters = Object.keys(groupedQuestions[subjectKey]).map(title => ({ title }));
-                }
+                const chapters = syllabus.units ? syllabus.units.flatMap(u => u.chapters) : (syllabus.chapters || []);
 
                 let chapterAccordionsHTML = '';
                 chapters.forEach(chapter => {
@@ -1398,7 +1341,7 @@ export function initializeCustomQuizHandler() {
             }
         });
 
-        if (!CUI_STATE.quizDataCache) {
+        if (!quizDataCache) {
             console.error("Quiz data has not been loaded. Cannot start quiz.");
             if (startBtn) {
                 startBtn.disabled = false;
@@ -1407,7 +1350,7 @@ export function initializeCustomQuizHandler() {
             return;
         }
 
-        const { allQuestions, scenarios } = CUI_STATE.quizDataCache;
+        const { allQuestions, scenarios } = quizDataCache;
         let selectedQuestions = [];
 
         for (const [subject, chapters] of Object.entries(counts)) {
@@ -1422,9 +1365,6 @@ export function initializeCustomQuizHandler() {
                         if (typeof q.subCategory === 'object' && q.subCategory.specific) {
                             const specificsInQuestion = Array.isArray(q.subCategory.specific) ? q.subCategory.specific : [q.subCategory.specific];
                             return specificsInQuestion.includes(specific);
-                        } else if (typeof q.subCategory === 'string') {
-                            // Match legacy string format
-                            return specific === 'ทั่วไป';
                         }
                         
                         return false;
@@ -1512,175 +1452,6 @@ export function initializeCustomQuizHandler() {
                 startBtn.innerHTML = 'เริ่มทำแบบทดสอบ';
             }
         }
-    }
-
-    /**
-     * Helper to define group mappings for random generation
-     */
-    function getGroupMappings(groupType) {
-        const mappings = {
-            'physics': { subjects: ['PhysicsM4', 'PhysicsM5', 'PhysicsM6'] },
-            'physics-m4': { subjects: ['PhysicsM4'] },
-            'physics-m5': { subjects: ['PhysicsM5'] },
-            'physics-m6': { subjects: ['PhysicsM6'] },
-            'earth-basic': { subjects: ['EarthSpaceScienceBasic'] },
-            'earth-advanced': { subjects: ['EarthSpaceScienceAdvance'] },
-            'astronomy': {
-                mappings: [
-                    { subject: 'EarthSpaceScienceBasic', chapters: ['เอกภพและกาแล็กซี', 'ดาวฤกษ์', 'ระบบสุริยะ', 'เทคโนโลยีอวกาศ'] },
-                    { subject: 'EarthSpaceScienceAdvance', chapters: ['เอกภพและกาแล็กซี', 'ดาวฤกษ์', 'ระบบสุริยะ', 'ทรงกลมฟ้า', 'การเคลื่อนที่ปรากฏของดาวเคราะห์', 'เทคโนโลยีอวกาศและการประยุกต์ใช้'] }
-                ]
-            },
-            'geology': {
-                mappings: [
-                    { subject: 'EarthSpaceScienceBasic', chapters: ['โครงสร้างโลก', 'การแปรสัณฐานของแผ่นธรณี', 'ธรณีพิบัติภัย'] },
-                    { subject: 'EarthSpaceScienceAdvance', chapters: ['โครงสร้างโลก', 'ธรณีแปรสัณฐาน', 'ธรณีพิบัติภัย', 'ลำดับชั้นหิน', 'ทรัพยากรธรณี', 'แผนที่'] }
-                ]
-            },
-            'meteorology': {
-                mappings: [
-                    { subject: 'EarthSpaceScienceBasic', chapters: ['ลมฟ้าอากาศและภูมิอากาศ', 'การเปลี่ยนแปลงภูมิอากาศ', 'ข้อมูลและสารสนเทศทางอุตุนิยมวิทยา'] },
-                    { subject: 'EarthSpaceScienceAdvance', chapters: ['อากาศ', 'การหมุนเวียนของระบบลมของโลก', 'เสถียรภาพอากาศและแนวปะทะอากาศ', 'การเปลี่ยนแปลงภูมิอากาศของโลก', 'การพยากรณ์อากาศ'] }
-                ]
-            },
-            'oceanography': {
-                mappings: [
-                    { subject: 'EarthSpaceScienceBasic', chapters: ['ลมฟ้าอากาศและภูมิอากาศ'] }, // Includes ocean circulation
-                    { subject: 'EarthSpaceScienceAdvance', chapters: ['การหมุนเวียนของน้ำในมหาสมุทร'] }
-                ]
-            }
-        };
-        return mappings[groupType] || {};
-    }
-
-    /**
-     * NEW: Handles balanced random question selection for specific subject groups.
-     * @param {string} groupType - The type of group ('physics', 'earth-basic', 'earth-advanced').
-     * @param {number|null} countOverride - If provided, this is the target count.
-     * @param {boolean} isTotalCount - If true, countOverride is the TOTAL questions for the group. If false, it's per chapter.
-     */
-    function handleSubjectGroupRandom(groupType, countOverride = null, isTotalCount = false) {
-        const groupMapping = getGroupMappings(groupType);
-        const groupName = groupType; // Simplified for brevity, could map to display name
-
-        let numPerChapter;
-        if (countOverride !== null) {
-            numPerChapter = countOverride;
-        } else {
-            const numPerChapterInput = prompt(`ระบุจำนวนข้อที่ต้องการสุ่ม 'ต่อหนึ่งบท' จากกลุ่ม ${groupName}:`, "2");
-            if (numPerChapterInput === null) return;
-            numPerChapter = parseInt(numPerChapterInput, 10);
-        }
-
-        if (isNaN(numPerChapter) || numPerChapter < 0) {
-            showToast("ข้อมูลไม่ถูกต้อง", "กรุณาระบุจำนวนตัวเลขที่ถูกต้อง", "⚠️", "error");
-            return;
-        }
-
-        // Reset all inputs first to avoid confusion
-        document.querySelectorAll('#custom-quiz-category-selection input[type="number"]').forEach(input => {
-            if (input.value !== '0') { input.value = 0; }
-        });
-
-        let totalAdded = 0;
-
-        // Collect all relevant inputs first
-        let targetInputs = [];
-
-        if (groupMapping.subjects) {
-            groupMapping.subjects.forEach(subjectKey => {
-                const inputs = Array.from(document.querySelectorAll(`#custom-quiz-category-selection input[type="number"][data-subject="${subjectKey}"]`));
-                targetInputs.push(...inputs);
-            });
-        } else if (groupMapping.mappings) {
-            groupMapping.mappings.forEach(map => {
-                map.chapters.forEach(chapterTitle => {
-                    const inputs = Array.from(document.querySelectorAll(`#custom-quiz-category-selection input[type="number"][data-subject="${map.subject}"][data-chapter="${chapterTitle}"]`));
-                    targetInputs.push(...inputs);
-                });
-            });
-        }
-
-        // Filter inputs that have questions available
-        let availableInputs = targetInputs.map(input => ({ 
-            input, 
-            max: parseInt(input.max, 10),
-            current: parseInt(input.value, 10) || 0
-        })).filter(item => item.max > 0);
-
-        if (availableInputs.length === 0) {
-            showToast("ไม่พบข้อมูล", "ไม่มีคำถามในกลุ่มที่เลือก", "⚠️", "info");
-            return;
-        }
-
-        if (isTotalCount) {
-            // Mode: Total Random (Distribute numPerChapter across the whole group)
-            let currentTotal = 0;
-            const targetTotal = numPerChapter;
-            
-            // Reset inputs in this group first
-            availableInputs.forEach(item => {
-                item.input.value = 0;
-                item.current = 0;
-            });
-
-            while (currentTotal < targetTotal && availableInputs.length > 0) {
-                // Pick a random input from the available pool
-                const randIndex = Math.floor(Math.random() * availableInputs.length);
-                const item = availableInputs[randIndex];
-
-                if (item.current < item.max) {
-                    item.current++;
-                    item.input.value = item.current;
-                    currentTotal++;
-                    totalAdded++;
-                } else {
-                    // This input is full, remove from pool
-                    availableInputs.splice(randIndex, 1);
-                }
-            }
-        } else {
-            // Mode: Per Chapter (Original logic, but applied to the filtered inputs)
-            // We need to group inputs by chapter to apply the limit per chapter
-            // But since the inputs are specific topics (theory/calc), we distribute the 'per chapter' count among them.
-            
-            // Simplified approach: Distribute 'numPerChapter' to EACH chapter found in the inputs.
-            // Since we flattened the inputs, we need to regroup them by chapter to do this accurately.
-            // However, for simplicity and UX, let's treat 'Per Chapter' as 'Per Topic Input' limit or similar?
-            // No, 'Per Chapter' implies we want X questions from Chapter 1, X from Chapter 2.
-            
-            // Re-implementing per-chapter logic using the gathered inputs:
-            const inputsByChapter = availableInputs.reduce((acc, item) => {
-                const key = `${item.input.dataset.subject}_${item.input.dataset.chapter}`;
-                if (!acc[key]) acc[key] = [];
-                acc[key].push(item);
-                return acc;
-            }, {});
-
-            Object.values(inputsByChapter).forEach(chapterItems => {
-                const totalAvailableInChapter = chapterItems.reduce((sum, item) => sum + item.max, 0);
-                const targetForThisChapter = Math.min(numPerChapter, totalAvailableInChapter);
-                let addedToChapter = 0;
-
-                // Reset chapter inputs
-                chapterItems.forEach(item => { item.input.value = 0; item.current = 0; });
-
-                while (addedToChapter < targetForThisChapter) {
-                    const validItems = chapterItems.filter(item => item.current < item.max);
-                    if (validItems.length === 0) break;
-
-                    const randIndex = Math.floor(Math.random() * validItems.length);
-                    const item = validItems[randIndex];
-                    item.current++;
-                    item.input.value = item.current;
-                    addedToChapter++;
-                    totalAdded++;
-                }
-            });
-        }
-
-        updateTotalCount();
-        showToast("สำเร็จ", `สุ่มเลือกคำถามเพิ่มมาทั้งหมด ${totalAdded} ข้อ`, "✅", "success");
     }
 
     function handleRandomSelection() {
