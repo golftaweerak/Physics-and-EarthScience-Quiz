@@ -1,7 +1,11 @@
 import { ModalHandler } from './modal-handler.js';
-import { shuffleArray } from './utils.js';
-import { Gamification, SHOP_ITEMS, PROFICIENCY_GROUPS } from './gamification.js';
+import { shuffleArray, escapeHtml } from './utils.js';
+import { Gamification, SHOP_ITEMS, PROFICIENCY_GROUPS, BADGES } from './gamification.js';
 import { showToast } from './toast.js';
+import { db } from './firebase-config.js';
+import { doc, onSnapshot, runTransaction } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { challengeManager } from './challenge-manager.js';
+import { SiteConfig } from './site-config.js'; // Added missing import
 
 // state: Stores all dynamic data of the quiz
 let state = {};
@@ -11,6 +15,8 @@ let elements = {};
 let resumeModalHandler;
 // handler: For power-up buy modal
 let powerupBuyModalHandler;
+// interval: For confetti animation
+let confettiInterval = null;
 // config: Stores all static configuration and constants
 const config = {
   soundOnIcon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" /></svg>`,
@@ -75,6 +81,157 @@ function getCategoryNames(subCategory) {
   return { main: 'ไม่มีหมวดหมู่', specific: null }; // Fallback for unknown formats
 }
 
+function injectQuizAnimations() {
+    if (document.getElementById('quiz-animations-style')) return;
+    const style = document.createElement('style');
+    style.id = 'quiz-animations-style';
+    style.innerHTML = `
+        @keyframes screen-shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        .anim-screen-shake {
+            animation: screen-shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+        }
+        @keyframes screen-shake-hard {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            10% { transform: translate(-10px, -10px) rotate(-5deg); }
+            20% { transform: translate(10px, 10px) rotate(5deg); }
+            30% { transform: translate(-10px, 10px) rotate(-5deg); }
+            40% { transform: translate(10px, -10px) rotate(5deg); }
+            50% { transform: translate(-5px, 0px) rotate(-3deg); }
+            60% { transform: translate(5px, 0px) rotate(3deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
+        }
+        .anim-screen-shake-hard {
+            animation: screen-shake-hard 0.5s ease-in-out both;
+        }
+        @keyframes red-flash {
+            0%, 100% { box-shadow: inset 0 0 0 0 transparent; }
+            50% { box-shadow: inset 0 0 0 200vmax rgba(220, 38, 38, 0.4); }
+        }
+        .anim-red-flash {
+            animation: red-flash 0.5s ease-in-out both;
+        }
+        @keyframes score-pop-up {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); color: #22c55e; }
+            100% { transform: scale(1); }
+        }
+        .anim-score-pop {
+            animation: score-pop-up 0.6s ease-out;
+        }
+        @keyframes heart-break-anim {
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+            15% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+            30% { transform: translate(-50%, -50%) scale(1) rotate(-5deg); }
+            45% { transform: translate(-50%, -50%) scale(1) rotate(5deg); }
+            60% { transform: translate(-50%, -50%) scale(1.1) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) scale(2); opacity: 0; filter: blur(4px); }
+        }
+        .anim-heart-break {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            font-size: 8rem;
+            z-index: 9999;
+            pointer-events: none;
+            animation: heart-break-anim 1.5s ease-out forwards;
+            text-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        @keyframes badge-pop-in {
+            0% { transform: scale(0) rotate(-45deg); opacity: 0; }
+            60% { transform: scale(1.2) rotate(10deg); opacity: 1; }
+            80% { transform: scale(0.9) rotate(-5deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+        .anim-badge-pop {
+            animation: badge-pop-in 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        @keyframes shine-rotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        .anim-shine-rotate {
+            animation: shine-rotate 20s linear infinite;
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+function triggerSurvivalShake() {
+    const element = document.body;
+    element.classList.remove('anim-screen-shake-hard', 'anim-red-flash');
+    void element.offsetWidth; // Force reflow
+    element.classList.add('anim-screen-shake-hard', 'anim-red-flash');
+    
+    setTimeout(() => {
+        element.classList.remove('anim-screen-shake-hard', 'anim-red-flash');
+    }, 500);
+}
+
+function triggerHeartBreak() {
+    const heart = document.createElement('div');
+    heart.textContent = '💔';
+    heart.className = 'anim-heart-break';
+    document.body.appendChild(heart);
+    
+    setTimeout(() => {
+        heart.remove();
+    }, 1500);
+}
+
+function showBadgeUnlockPopup(badges) {
+    if (!badges || badges.length === 0) return;
+
+    const overlay = document.createElement('div');
+    overlay.className = 'fixed inset-0 z-[200] flex items-center justify-center bg-black/80 backdrop-blur-sm transition-opacity duration-300 opacity-0';
+    overlay.id = 'badge-unlock-overlay';
+    
+    let currentIndex = 0;
+
+    const showNext = () => {
+        if (currentIndex >= badges.length) {
+            overlay.classList.remove('opacity-100');
+            overlay.classList.add('opacity-0');
+            setTimeout(() => overlay.remove(), 300);
+            return;
+        }
+
+        const badge = badges[currentIndex];
+        
+        overlay.innerHTML = `
+            <div class="bg-white dark:bg-gray-800 rounded-3xl p-8 text-center shadow-2xl transform scale-0 max-w-sm w-full mx-4 relative overflow-hidden border-4 border-yellow-400 badge-card-popup">
+                <div class="absolute top-1/2 left-1/2 w-[200%] h-[200%] bg-[conic-gradient(from_0deg_at_50%_50%,transparent_0deg,rgba(250,204,21,0.2)_20deg,transparent_40deg,rgba(250,204,21,0.2)_60deg,transparent_80deg,rgba(250,204,21,0.2)_100deg,transparent_120deg,rgba(250,204,21,0.2)_140deg,transparent_160deg,rgba(250,204,21,0.2)_180deg,transparent_200deg,rgba(250,204,21,0.2)_220deg,transparent_240deg,rgba(250,204,21,0.2)_260deg,transparent_280deg,rgba(250,204,21,0.2)_300deg,transparent_320deg,rgba(250,204,21,0.2)_340deg,transparent_360deg)] anim-shine-rotate pointer-events-none"></div>
+                <div class="relative z-10 flex flex-col items-center">
+                    <div class="text-xs font-bold text-yellow-600 dark:text-yellow-400 uppercase tracking-widest mb-4 bg-yellow-100 dark:bg-yellow-900/30 px-3 py-1 rounded-full">New Badge Unlocked!</div>
+                    <div class="text-9xl mb-6 anim-badge-pop drop-shadow-xl filter">${badge.icon}</div>
+                    <h3 class="text-3xl font-bold text-gray-900 dark:text-white mb-2 font-kanit">${badge.name}</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-8 text-sm leading-relaxed">${badge.desc}</p>
+                    <button id="badge-claim-btn" class="px-8 py-3 bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white font-bold rounded-full shadow-lg transform transition hover:scale-105 active:scale-95 w-full">
+                        ${currentIndex < badges.length - 1 ? 'ถัดไป' : 'เยี่ยมเลย!'}
+                    </button>
+                </div>
+            </div>
+        `;
+
+        const btn = overlay.querySelector('#badge-claim-btn');
+        btn.onclick = () => {
+            currentIndex++;
+            showNext();
+        };
+    };
+
+    document.body.appendChild(overlay);
+    
+    requestAnimationFrame(() => {
+        overlay.classList.remove('opacity-0');
+        overlay.classList.add('opacity-100');
+        showNext();
+    });
+}
+
 function ensurePowerUpModalExists() {
     if (document.getElementById('powerup-buy-modal')) return;
     const modalHTML = `
@@ -87,21 +244,8 @@ function ensurePowerUpModalExists() {
                 <div id="powerup-modal-icon" class="text-6xl mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded-full"></div>
                 <h3 id="powerup-modal-title" class="text-2xl font-bold text-gray-900 dark:text-white font-kanit mb-2"></h3>
                 <p id="powerup-modal-desc" class="text-gray-600 dark:text-gray-300 mb-4 text-sm"></p>
-                
-                <div class="flex items-center gap-4 mb-6 text-sm">
-                    <div class="bg-blue-100 dark:bg-blue-900/30 px-3 py-1 rounded-full text-blue-700 dark:text-blue-300 font-bold">
-                        มี: <span id="powerup-user-xp">0 XP</span>
-                    </div>
-                    <div class="text-gray-400">→</div>
-                    <div class="bg-red-100 dark:bg-red-900/30 px-3 py-1 rounded-full text-red-700 dark:text-red-300 font-bold">
-                        จ่าย: <span id="powerup-item-cost">0 XP</span>
-                    </div>
-                </div>
-
-                <div class="w-full flex gap-3">
-                    <button data-modal-close class="flex-1 py-2 rounded-xl bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-bold hover:bg-gray-300 dark:hover:bg-gray-600 transition">ยกเลิก</button>
-                    <button id="powerup-confirm-buy-btn" class="flex-1 py-2 rounded-xl bg-blue-600 text-white font-bold hover:bg-blue-700 transition shadow-md">ยืนยัน</button>
-                </div>
+                <div class="flex items-center gap-4 mb-6 text-sm"><div class="bg-blue-100 dark:bg-blue-900/30 px-3 py-1 rounded-full text-blue-700 dark:text-blue-300 font-bold">มี: <span id="powerup-user-xp">0 XP</span></div><div class="text-gray-400">→</div><div class="bg-red-100 dark:bg-red-900/30 px-3 py-1 rounded-full text-red-700 dark:text-red-300 font-bold">จ่าย: <span id="powerup-item-cost">0 XP</span></div></div>
+                <div class="w-full flex gap-3"><button data-modal-close class="flex-1 py-2 rounded-xl bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-bold hover:bg-gray-300 dark:hover:bg-gray-600 transition">ยกเลิก</button><button id="powerup-confirm-buy-btn" class="flex-1 py-2 rounded-xl bg-blue-600 text-white font-bold hover:bg-blue-700 transition shadow-md">ยืนยัน</button></div>
             </div>
         </div>
     </div>`;
@@ -111,14 +255,44 @@ function ensurePowerUpModalExists() {
 /**
  * Initializes the entire quiz application.
  * This function is the main entry point for the quiz logic, called by quiz-loader.js.
+ *
  * @param {Array} quizData - The array of question objects for the quiz.
  * @param {string} storageKey - The key for storing progress in localStorage.
  * @param {string} quizTitle - The title of the current quiz.
  * @param {number|null} customTime - Custom time in seconds, if provided.
  */
-export function init(quizData, storageKey, quizTitle, customTime, action) {
-  // Ensure the power-up modal exists in the DOM
+export function init(quizData, storageKey, quizTitle, customTime, action, disableShuffle = false, lives = 1) {
   ensurePowerUpModalExists();
+  injectQuizAnimations();
+
+  // Cleanup previous listeners and timers
+  if (state.lobbyUnsubscribe) {
+      state.lobbyUnsubscribe();
+      state.lobbyUnsubscribe = null;
+  }
+  if (state.timerId) {
+      clearInterval(state.timerId);
+      state.timerId = null;
+  }
+  if (state.freezeTimeout) {
+      clearTimeout(state.freezeTimeout);
+  }
+  if (confettiInterval) {
+      clearInterval(confettiInterval);
+      confettiInterval = null;
+  }
+  // Cleanup UI elements
+  ['team-score-counter', 'quiz-players-list', 'team-progress-container', 'survival-lives-display'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.remove();
+  });
+
+  // Reuse existing handlers if possible, or create new ones if needed (though init usually runs once per page load)
+  if (!resumeModalHandler) resumeModalHandler = new ModalHandler('resume-modal');
+  if (!powerupBuyModalHandler) powerupBuyModalHandler = new ModalHandler('powerup-buy-modal');
+
+  const basePath = window.location.pathname.includes('/quiz/') ? '../' : './';
+
 
   // --- 1. Element Caching ---
   elements = {
@@ -154,7 +328,6 @@ export function init(quizData, storageKey, quizTitle, customTime, action) {
     timerDisplay: document.getElementById("timer-display"),
     timerValue: document.getElementById("timer-value"),
     // Cache the container for the main action buttons (Next/Prev)
-    // Cache the container for the main action buttons (Next/Prev)
     actionContainer: document.getElementById("next-btn")?.parentElement,
     quizTitleDisplay: document.getElementById("quiz-title-display"),
     // New hint elements
@@ -174,6 +347,7 @@ export function init(quizData, storageKey, quizTitle, customTime, action) {
   // --- 2. State Initialization ---
   state = {
     quizData: quizData, // Use data passed from the loader
+    basePath: basePath, // Use base path passed from the loader
     storageKey: storageKey, // Use key passed from the loader
     quizTitle: quizTitle || "แบบทดสอบ",
     customTime: customTime, // Store custom time
@@ -182,10 +356,10 @@ export function init(quizData, storageKey, quizTitle, customTime, action) {
     shuffledQuestions: [],
     userAnswers: [],
     isSoundEnabled: true, // This will be initialized properly later
-    correctSound: new Audio("../assets/audio/correct.mp3"),
-    incorrectSound: new Audio("../assets/audio/incorrect.mp3"),
-    levelUpSound: new Audio("../assets/audio/level-up.mp3"), // Added missing sound
-    badgeSound: new Audio("../assets/audio/badge-unlock.mp3"), // Added missing sound
+    correctSound: new Audio(`${basePath}assets/audio/correct.mp3`),
+    incorrectSound: new Audio(`${basePath}assets/audio/incorrect.mp3`),
+    levelUpSound: new Audio(`${basePath}assets/audio/level-up.mp3`),
+    badgeSound: new Audio(`${basePath}assets/audio/badge-unlock.mp3`),
     timerMode: "none",
     timeLeft: 0,
     timerId: null,
@@ -200,19 +374,30 @@ export function init(quizData, storageKey, quizTitle, customTime, action) {
     usedTolerance: false,
     isCustomQuiz: false, // NEW
     questionCount: 0,    // NEW
+    lobbyId: null,       // NEW: For Real-time Challenge
+    mode: null,          // NEW: 'challenge' or 'coop'
+    currentTeamScore: 0, // NEW: Track team score
+    disableShuffle: disableShuffle,
+    action: action,
+    isQuizFinished: false,
+    lives: lives,
   };
+  state.isProcessingNext = false; // NEW: Lock for next button
 
   // --- 3. Initial Setup ---
-  resumeModalHandler = new ModalHandler('resume-modal');
-  powerupBuyModalHandler = new ModalHandler('powerup-buy-modal');
   bindEventListeners();
   initializeSound();
   // NEW: Set quiz metadata
   state.isCustomQuiz = storageKey.startsWith('quizState-custom_');
   state.questionCount = quizData.length;
 
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('lobbyId')) state.lobbyId = urlParams.get('lobbyId');
+  state.mode = urlParams.get('mode');
+
   checkForSavedQuiz(action); // This will check localStorage and either show the start screen or a resume prompt.
-  setupPowerUpUI(); // Setup the power-up bar
+  setupPowerUpUI();
+  if (state.lobbyId) setupLobbyListener();
 }
 
 /**
@@ -224,6 +409,7 @@ function updateNextButtonAppearance(action) {
 
     const isLastQuestion = state.currentQuestionIndex === state.shuffledQuestions.length - 1;
     const isAnswered = state.userAnswers[state.currentQuestionIndex] !== null;
+    const isSpeedRunWin = state.mode === 'time-attack' && state.score >= 10;
 
     let buttonText = 'ข้อต่อไป';
     let buttonIcon = config.icons.next;
@@ -233,7 +419,7 @@ function updateNextButtonAppearance(action) {
         buttonText = 'ส่งคำตอบ';
         buttonIcon = config.icons.submit;
         buttonTitle = 'ส่งคำตอบ';
-    } else if (isLastQuestion && isAnswered) {
+    } else if ((isLastQuestion && isAnswered) || isSpeedRunWin) {
         buttonText = 'ดูผลสรุป';
         buttonIcon = config.icons.submit; // Using the submit icon for "finish" is fine.
         buttonTitle = 'ดูผลสรุป';
@@ -297,6 +483,21 @@ function setFloatingNav(active) {
       elements.quizScreen.style.paddingBottom = '';
     }
   }
+}
+
+function updateLivesUI() {
+    if (state.mode !== 'survival') return;
+    
+    let livesContainer = document.getElementById('survival-lives-display');
+    if (!livesContainer) {
+        livesContainer = document.createElement('div');
+        livesContainer.id = 'survival-lives-display';
+        livesContainer.className = "font-kanit text-lg font-bold text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 px-3 py-1 rounded-lg border border-red-200 dark:border-red-800 transition-all duration-300 transform ml-2 whitespace-nowrap flex-shrink-0";
+        if (elements.scoreCounter && elements.scoreCounter.parentNode) {
+            elements.scoreCounter.parentNode.insertBefore(livesContainer, elements.scoreCounter.nextSibling);
+        }
+    }
+    livesContainer.innerHTML = `❤️ ${state.lives}`;
 }
 
 // --- UI / Rendering Functions ---
@@ -440,8 +641,9 @@ function createCheckboxOption(optionText, previousAnswer) {
  */
 function setupPowerUpUI() {
     // Create container if it doesn't exist
-    if (!document.getElementById('power-up-bar')) {
-        const container = document.createElement('div');
+    let container = document.getElementById('power-up-bar');
+    if (!container) {
+        container = document.createElement('div');
         container.id = 'power-up-bar';
         container.className = 'flex flex-wrap justify-center gap-3 mb-6 px-2';
         
@@ -450,8 +652,8 @@ function setupPowerUpUI() {
         if (questionContainer && questionContainer.parentNode) {
             questionContainer.parentNode.insertBefore(container, questionContainer);
         }
-        elements.powerUpContainer = container;
     }
+    elements.powerUpContainer = container;
 }
 
 /**
@@ -464,7 +666,8 @@ function renderPowerUps(animateItemId = null) {
     const isNumberQuestion = currentQuestion && currentQuestion.type === 'fill-in-number';
     const hasOptions = currentQuestion && (currentQuestion.options || currentQuestion.choices);
 
-    const consumables = SHOP_ITEMS.filter(i => i.type === 'consumable');
+    // Filter out 'item_streak_freeze' as it is a passive item, not usable in quiz
+    const consumables = SHOP_ITEMS.filter(i => i.type === 'consumable' && i.id !== 'item_streak_freeze');
     
     elements.powerUpContainer.innerHTML = consumables.map(item => {
         // Filter items based on question type
@@ -508,9 +711,9 @@ function renderPowerUps(animateItemId = null) {
 
         return `
             <button class="power-up-btn ${btnClass}" data-id="${item.id}" ${isDisabled ? 'disabled' : ''} title="${item.name}">
-                <span class="text-xl lg:text-base leading-none">${item.icon}</span>
+                <span class="text-2xl lg:text-xl flex items-center justify-center">${item.icon}</span>
                 <span class="hidden lg:inline text-sm font-bold">${item.name}</span>
-                <span class="absolute -top-2 -right-2 lg:static lg:top-auto lg:right-auto bg-gray-100 dark:bg-gray-600 text-gray-800 dark:text-gray-200 px-1.5 py-0.5 rounded-full text-[10px] lg:text-xs font-bold min-w-[1.25rem] text-center border border-gray-200 dark:border-gray-500 shadow-sm z-10">
+                <span class="absolute -top-2 -right-2 bg-gray-100 dark:bg-gray-600 text-gray-800 dark:text-gray-200 px-1.5 py-0.5 rounded-full text-[10px] lg:text-xs font-bold min-w-[1.25rem] text-center border border-gray-200 dark:border-gray-500 shadow-sm z-10">
                     ${isUsed ? '✓' : count}
                 </span>
             </button>
@@ -734,13 +937,16 @@ function showQuestion() {
 
 function apply5050() {
     const currentQuestion = state.shuffledQuestions[state.currentQuestionIndex];
-    const correctAnswer = String(currentQuestion.answer).trim();
+    // Normalize correct answer to an array of strings to handle both single and multiple answers
+    const correctAnswers = Array.isArray(currentQuestion.answer) 
+        ? currentQuestion.answer.map(a => String(a).trim()) 
+        : [String(currentQuestion.answer).trim()];
     
     // Get all option buttons/checkboxes
     const optionElements = Array.from(elements.options.children);
     const wrongOptions = optionElements.filter(el => {
         const val = el.tagName === 'BUTTON' ? el.dataset.optionValue : el.querySelector('input').value;
-        return val.trim() !== correctAnswer;
+        return !correctAnswers.includes(val.trim());
     });
 
     // Shuffle and pick 2 to hide
@@ -757,12 +963,14 @@ function apply5050() {
 
 function applyCut1() {
     const currentQuestion = state.shuffledQuestions[state.currentQuestionIndex];
-    const correctAnswer = String(currentQuestion.answer).trim();
+    const correctAnswers = Array.isArray(currentQuestion.answer) 
+        ? currentQuestion.answer.map(a => String(a).trim()) 
+        : [String(currentQuestion.answer).trim()];
     
     const optionElements = Array.from(elements.options.children);
     const wrongOptions = optionElements.filter(el => {
         const val = el.tagName === 'BUTTON' ? el.dataset.optionValue : el.querySelector('input').value;
-        return val.trim() !== correctAnswer && el.style.opacity !== '0.3';
+        return !correctAnswers.includes(val.trim()) && el.style.opacity !== '0.3';
     });
 
     if (wrongOptions.length > 0) {
@@ -1215,43 +1423,50 @@ function showNextQuestion() {
  * Central handler for the main action button (Next/Submit).
  */
 function handleNextButtonClick() {
-  const isAnswered = state.userAnswers[state.currentQuestionIndex] !== null;
+  if (state.isProcessingNext) return;
+  state.isProcessingNext = true;
 
-  // If the current question is not answered, it must be a 'submit' action.
-  if (!isAnswered) {
-    const currentQuestion = state.shuffledQuestions[state.currentQuestionIndex];
-    if (!currentQuestion) {
-      showResults(); // Fallback
+  try {
+    const isAnswered = state.userAnswers[state.currentQuestionIndex] !== null;
+
+    // If the current question is not answered, it must be a 'submit' action.
+    if (!isAnswered) {
+      const currentQuestion = state.shuffledQuestions[state.currentQuestionIndex];
+      if (!currentQuestion) {
+        showResults(); // Fallback
+        return;
+      }
+      // Evaluate the answer based on type
+      switch (currentQuestion.type) {
+        case 'multiple-select':
+          evaluateMultipleAnswer();
+          break;
+        case 'fill-in':
+          evaluateFillInAnswer();
+          break;
+        case 'fill-in-number':
+          evaluateFillInNumberAnswer();
+          break;
+        default:
+          // This case should not be reached for a 'submit' button.
+          // As a safe fallback, we'll just move on.
+          console.warn(`handleNextButtonClick called for an unanswered question of unhandled type: ${currentQuestion.type}`);
+          showNextQuestion();
+          break;
+      }
       return;
     }
-    // Evaluate the answer based on type
-    switch (currentQuestion.type) {
-      case 'multiple-select':
-        evaluateMultipleAnswer();
-        break;
-      case 'fill-in':
-        evaluateFillInAnswer();
-        break;
-      case 'fill-in-number':
-        evaluateFillInNumberAnswer();
-        break;
-      default:
-        // This case should not be reached for a 'submit' button.
-        // As a safe fallback, we'll just move on.
-        console.warn(`handleNextButtonClick called for an unanswered question of unhandled type: ${currentQuestion.type}`);
-        showNextQuestion();
-        break;
+
+    // If we reach here, the question has been answered.
+    const isLastQuestion = state.currentQuestionIndex === state.shuffledQuestions.length - 1;
+
+    if (isLastQuestion) {
+      showResults();
+    } else {
+      showNextQuestion();
     }
-    return;
-  }
-
-  // If we reach here, the question has been answered.
-  const isLastQuestion = state.currentQuestionIndex === state.shuffledQuestions.length - 1;
-
-  if (isLastQuestion) {
-    showResults();
-  } else {
-    showNextQuestion();
+  } finally {
+    setTimeout(() => { state.isProcessingNext = false; }, 300);
   }
 }
 
@@ -1366,6 +1581,12 @@ function showResults() {
 
   // Get the appropriate message and icon based on the score
   const resultInfo = getResultInfo(percentage);
+
+  if (state.mode === 'time-attack' && state.score >= 10) {
+      resultInfo = { ...resultInfo };
+      resultInfo.title = "Speed Run สำเร็จ! ⚡";
+      resultInfo.message = `สุดยอด! คุณตอบถูกครบ 10 ข้อแล้ว (ความแม่นยำ ${percentage}%)`;
+  }
 
   // --- GAMIFICATION: Calculate XP and Check Badges ---
   let xpEarned = 0;
@@ -1486,15 +1707,19 @@ function showResults() {
         isCustomQuiz: state.isCustomQuiz
     };
 
-    const result = game.submitQuizResult(xpEarned, physicsXP, earthXP, percentage, state.questionCount, state.isCustomQuiz, topicXPs, questStats);
-    levelResult = { overall: result.overall, physics: result.physics, earth: result.earth };
+    const result = game.submitQuizResult(xpEarned, percentage, state.questionCount, state.isCustomQuiz, topicXPs, questStats);
+    levelResult = result;
     newBadges = result.newBadges || [];
     newAchievements = result.newAchievements || [];
     completedQuests = result.completedQuests || [];
 
     // Play Sounds for Gamification
     if (state.isSoundEnabled && levelResult) {
-        if (levelResult.overall?.leveledUp || levelResult.physics?.leveledUp || levelResult.earth?.leveledUp) {
+        let anyLevelUp = levelResult.overall?.leveledUp;
+        if (levelResult.tracks) {
+            Object.values(levelResult.tracks).forEach(t => { if (t.leveledUp) anyLevelUp = true; });
+        }
+        if (anyLevelUp) {
             if (state.levelUpSound) {
                 state.levelUpSound.currentTime = 0;
                 state.levelUpSound.play().catch(e => console.warn("Could not play level up sound", e));
@@ -1548,7 +1773,8 @@ function showResults() {
     levelResult,
     newBadges,
     physicsXP,
-    earthXP
+    earthXP,
+    trackXPs: {} // Placeholder if needed
   };
 
   // Clean up old results and build the new layout
@@ -1866,21 +2092,22 @@ function buildResultsLayout(resultInfo, stats) {
         },
     ];
     
-    if (stats.physicsXP > 0) items.push({ 
-        label: 'ฟิสิกส์', 
-        value: stats.physicsXP, 
-        color: 'text-purple-600 dark:text-purple-400', 
-        progress: stats.levelResult?.physics.info,
-        progressColor: 'bg-purple-500',
-        delay: 150 
-    });
-    if (stats.earthXP > 0) items.push({ 
-        label: 'วิทย์โลก', 
-        value: stats.earthXP, 
-        color: 'text-teal-600 dark:text-teal-400', 
-        progress: stats.levelResult?.earth.info,
-        progressColor: 'bg-teal-500',
-        delay: 300 
+    // Dynamic rendering from SiteConfig
+    const colors = ['text-purple-600 dark:text-purple-400', 'text-teal-600 dark:text-teal-400', 'text-pink-600 dark:text-pink-400', 'text-orange-600 dark:text-orange-400'];
+    const bgColors = ['bg-purple-500', 'bg-teal-500', 'bg-pink-500', 'bg-orange-500'];
+
+    SiteConfig.categories.forEach((cat, index) => {
+        const xp = stats.trackXPs[cat.track] || 0;
+        if (xp > 0) {
+             items.push({
+                label: cat.label,
+                value: xp,
+                color: colors[index % colors.length],
+                progress: stats.levelResult?.tracks?.[cat.track]?.info,
+                progressColor: bgColors[index % bgColors.length],
+                delay: 150 * (index + 1)
+             });
+        }
     });
     
     items.forEach(item => {
@@ -1967,6 +2194,19 @@ function buildResultsLayout(resultInfo, stats) {
     elements.reviewBtn.classList.add("hidden");
   }
 
+  // NEW: Add Lobby Button if in Challenge Mode
+  if (state.lobbyId) {
+      const actionContainer = elements.restartBtn ? elements.restartBtn.parentElement : null;
+      if (actionContainer && !document.getElementById('lobby-return-btn')) {
+          const lobbyBtn = document.createElement('button');
+          lobbyBtn.id = 'lobby-return-btn';
+          lobbyBtn.className = "w-full sm:w-auto px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold shadow-md transition-all transform hover:scale-105 flex items-center justify-center gap-2 mb-3 sm:mb-0 order-first sm:order-none";
+          lobbyBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" /></svg><span>🏆 ดูอันดับรวม (Lobby)</span>`;
+          lobbyBtn.onclick = () => { challengeManager.joinLobby(state.lobbyId); };
+          actionContainer.insertBefore(lobbyBtn, actionContainer.firstChild);
+      }
+  }
+
   renderMath(layoutContainer); // Render math only in the new results layout
 }
 function getIncorrectAnswers() {
@@ -1981,6 +2221,7 @@ function startQuiz() {
   clearSavedState();
   state.sessionStartTime = Date.now(); // Record start time for the session
   state.totalTimeSpent = 0; // Reset total time spent for a new quiz
+  state.isQuizFinished = false; // NEW: Reset finished state
 
   // Only read timer mode if the controls are visible (i.e., on the start screen).
   // On restart, it will reuse the previously selected mode.
@@ -1994,7 +2235,11 @@ function startQuiz() {
   // Filter out any potential null or undefined questions from the source data
   // to prevent errors during the quiz, especially in the results analysis.
   const validQuizData = state.quizData.filter(q => q);
-  state.shuffledQuestions = shuffleArray([...validQuizData]);
+  if (state.disableShuffle) {
+      state.shuffledQuestions = [...validQuizData];
+  } else {
+      state.shuffledQuestions = shuffleArray([...validQuizData]);
+  }
 
   switchScreen(elements.quizScreen);
   elements.quizTitleDisplay.textContent = state.quizTitle;
@@ -2016,6 +2261,7 @@ function startQuiz() {
   elements.scoreCounter.textContent = `คะแนน: ${state.score}`;
 
   showQuestion();
+  updateLivesUI();
   saveQuizState();
 }
 
@@ -2216,6 +2462,8 @@ function loadStateFromSave(savedState) {
   state.timeLeft = savedState.timeLeft || 0;
   state.initialTime = savedState.initialTime || 0;
   state.totalTimeSpent = savedState.totalTimeSpent || 0; // Load accumulated time
+  if (savedState.lives !== undefined) state.lives = savedState.lives;
+  if (savedState.xpMultiplier !== undefined) state.xpMultiplier = savedState.xpMultiplier;
 
   // Update the score display on the UI to reflect the loaded score.
   elements.scoreCounter.textContent = `คะแนน: ${state.score}`;
@@ -2242,6 +2490,8 @@ function saveQuizState() {
     initialTime: state.initialTime,
     totalTimeSpent: state.totalTimeSpent,
     lastAttemptTimestamp: Date.now(), // Add timestamp for recency tracking
+    lives: state.lives,
+    xpMultiplier: state.xpMultiplier,
   };
   try {
     localStorage.setItem(state.storageKey, JSON.stringify(stateToSave));
@@ -2253,6 +2503,78 @@ function saveQuizState() {
   if (state.game && state.game.authManager) {
       state.game.authManager.saveQuizHistoryItem(state.storageKey, stateToSave);
   }
+
+  // NEW: Sync score to Lobby (Real-time)
+  if (state.lobbyId) {
+        const isWinner = (state.mode === 'time-attack' && state.score >= 10);
+        sendScoreToLobby(isWinner);
+  }
+}
+
+/**
+ * Sends the current player's score and progress to the Firestore lobby document.
+ * Can also trigger the end of the game if the win condition is met.
+ * @param {boolean} [isWinner=false] - Set to true if this player has met the win condition.
+ */
+async function sendScoreToLobby(isWinner = false) {
+    if (!state.lobbyId || !state.game.authManager.currentUser) return;
+
+    try {
+        const lobbyRef = doc(db, 'lobbies', state.lobbyId);
+        
+        // Use transaction to prevent race conditions when multiple players update scores simultaneously
+        await runTransaction(db, async (transaction) => {
+            const snapshot = await transaction.get(lobbyRef);
+            if (!snapshot.exists()) return;
+
+            const data = snapshot.data();
+            const players = data.players || [];
+            const uid = state.game.authManager.currentUser.uid;
+
+            // Determine last answer status
+            let lastAnswerStatus = null;
+            const currentAns = state.userAnswers[state.currentQuestionIndex];
+            if (currentAns) {
+                lastAnswerStatus = currentAns.isCorrect ? 'correct' : 'incorrect';
+            }
+
+            // Survival Mode Elimination
+            let isEliminated = false;
+            const currentPlayer = players.find(p => p.uid === uid);
+            if (currentPlayer && currentPlayer.eliminated) isEliminated = true;
+            
+            if (state.mode === 'survival' && lastAnswerStatus === 'incorrect' && state.lives <= 0) {
+                isEliminated = true;
+            }
+            
+            const updatedPlayers = players.map(p => {
+                if (p.uid === uid) {
+                    return { 
+                        ...p, 
+                        score: state.score,
+                        progress: state.currentQuestionIndex + 1,
+                        totalQuestions: state.questionCount || state.shuffledQuestions.length,
+                        lastAnswerStatus: lastAnswerStatus,
+                        eliminated: isEliminated
+                    };
+                }
+                return p;
+            });
+            
+            const updateData = { players: updatedPlayers };
+
+            // If this player is the winner and the game isn't already finished, update the lobby status.
+            if (isWinner && data.status !== 'finished') {
+                updateData.status = 'finished';
+                updateData.winnerUid = uid;
+                updateData.winnerName = state.game.authManager.currentUser.displayName;
+            }
+            transaction.update(lobbyRef, updateData);
+        });
+    } catch (e) {
+        console.error("Lobby sync error:", e);
+        showToast('การเชื่อมต่อขัดข้อง', 'ไม่สามารถส่งคะแนนไปยังเซิร์ฟเวอร์ได้ กรุณาตรวจสอบอินเทอร์เน็ต', '⚠️', 'error');
+    }
 }
 
 function clearSavedState() {
@@ -2509,6 +2831,16 @@ function handleTimeUp() {
       Array.from(elements.options.children).forEach((button) => (button.disabled = true));
     }
 
+    if (state.mode === 'survival') {
+        state.lives--;
+        updateLivesUI();
+        if (state.lives <= 0) {
+            triggerSurvivalShake(); triggerHeartBreak();
+            showToast('Game Over', 'หมดเวลา! คุณใช้โควตาหัวใจหมดแล้ว', '💀', 'error');
+            setTimeout(() => showResults(), 1500);
+        } else { triggerSurvivalShake(); showToast('หมดเวลา!', `เหลือหัวใจ ${state.lives} ดวง`, '💔', 'warning'); }
+    }
+
     // Common actions for any per-question timeout
     saveQuizState();
     elements.nextBtn.classList.remove("hidden");
@@ -2544,19 +2876,21 @@ function initializeSound() {
 // --- Event Binding ---
 
 function bindEventListeners() {
+  const replaceWithClone = (el) => {
+      if (!el) return null;
+      const newEl = el.cloneNode(true);
+      el.parentNode.replaceChild(newEl, el);
+      return newEl;
+  };
   // The main action button now has a central handler.
   if (elements.skipBtn) {
     elements.skipBtn.addEventListener("click", skipQuestion);
   }
-  elements.nextBtn.addEventListener("click", handleNextButtonClick);
-  if (elements.nextBtn) elements.nextBtn.addEventListener("click", handleNextButtonClick);
+  if (elements.nextBtn) {
+    elements.nextBtn.addEventListener("click", handleNextButtonClick);
+  }
 
   // Keep other listeners as they are.
-  elements.startBtn.addEventListener("click", startQuiz);
-  elements.prevBtn.addEventListener("click", showPreviousQuestion);
-  elements.restartBtn.addEventListener("click", startQuiz);
-  elements.reviewBtn.addEventListener("click", showReview);
-  elements.backToResultBtn.addEventListener("click", backToResult);
   if (elements.startBtn) elements.startBtn.addEventListener("click", startQuiz);
   if (elements.prevBtn) elements.prevBtn.addEventListener("click", showPreviousQuestion);
   if (elements.restartBtn) elements.restartBtn.addEventListener("click", startQuiz);
@@ -2569,4 +2903,112 @@ function bindEventListeners() {
   if (elements.hintBtn) {
     elements.hintBtn.addEventListener("click", showHint);
   }
+}
+
+function setupLobbyListener() {
+    const scoreCounter = elements.scoreCounter;
+    if (!scoreCounter) return;
+    let teamScoreEl = null;
+    if (state.mode === 'coop') {
+        teamScoreEl = document.createElement('div');
+        teamScoreEl.id = 'team-score-counter';
+        teamScoreEl.className = "font-kanit text-sm sm:text-lg font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/20 px-2 py-0.5 sm:px-3 sm:py-1 rounded-lg border border-indigo-200 dark:border-indigo-800 transition-all duration-300 transform ml-1 sm:ml-2 whitespace-nowrap flex-shrink-0";
+        teamScoreEl.innerHTML = `🤝 ทีม: 0`;
+        if (scoreCounter.parentNode) scoreCounter.parentNode.insertBefore(teamScoreEl, scoreCounter.nextSibling);
+        elements.teamScoreDisplay = teamScoreEl;
+    }
+    if (!document.getElementById('quiz-players-list')) {
+        const playersListEl = document.createElement('div');
+        playersListEl.id = 'quiz-players-list';
+        playersListEl.className = "fixed top-24 right-4 z-30 flex flex-col gap-2 max-w-[200px] pointer-events-none transition-all duration-300"; 
+        document.body.appendChild(playersListEl);
+    }
+    let teamProgressBar = document.getElementById('team-progress-bar');
+    if (!teamProgressBar) {
+        const container = document.createElement('div');
+        container.id = 'team-progress-container';
+        container.className = "fixed top-0 left-0 w-full h-1.5 z-[60] bg-gray-200 dark:bg-gray-800";
+        teamProgressBar = document.createElement('div');
+        teamProgressBar.id = 'team-progress-bar';
+        const gradient = state.mode === 'coop' ? "bg-gradient-to-r from-green-400 to-blue-500" : "bg-gradient-to-r from-orange-400 to-red-500";
+        teamProgressBar.className = `h-full ${gradient} transition-all duration-700 ease-out shadow-sm`;
+        teamProgressBar.style.width = '0%';
+        container.appendChild(teamProgressBar);
+        document.body.appendChild(container);
+    }
+    let previousPlayersData = {};
+    let isFirstLoad = true;
+    const lobbyRef = doc(db, 'lobbies', state.lobbyId);
+    state.lobbyUnsubscribe = onSnapshot(lobbyRef, (docSnapshot) => {
+        if (docSnapshot.exists()) {
+            const data = docSnapshot.data();
+            if (data.status === 'finished') {
+                if (state.lobbyUnsubscribe) { state.lobbyUnsubscribe(); state.lobbyUnsubscribe = null; }
+                if (state.activeScreen !== elements.resultScreen) {
+                    const winnerName = data.winnerName || 'ผู้เล่นอื่น';
+                    if (state.mode === 'time-attack') showToast('จบเกม!', `${winnerName} เข้าเส้นชัยแล้ว!`, '🏁');
+                    else showToast('จบเกม!', `การแข่งขันสิ้นสุดลงแล้ว`, '🏁');
+                    setTimeout(() => showResults(), 1000);
+                }
+                return;
+            }
+            const players = data.players || [];
+            const totalScore = players.reduce((sum, p) => sum + (p.score || 0), 0);
+            state.currentTeamScore = totalScore;
+            if (state.mode === 'coop' && teamScoreEl) {
+                const currentDisplayScore = parseInt(teamScoreEl.dataset.score || 0);
+                if (totalScore !== currentDisplayScore) {
+                    animateValue(teamScoreEl, currentDisplayScore, totalScore, 1000, '🤝 ทีม: ');
+                    teamScoreEl.dataset.score = totalScore;
+                    teamScoreEl.classList.add('scale-110', 'bg-indigo-100', 'dark:bg-indigo-800');
+                    setTimeout(() => { teamScoreEl.classList.remove('scale-110', 'bg-indigo-100', 'dark:bg-indigo-800'); }, 300);
+                }
+            }
+            if (teamProgressBar) {
+                const totalQ = state.questionCount || 1;
+                let progressPercent = 0;
+                if (state.mode === 'coop') {
+                    const totalProgress = players.reduce((sum, p) => sum + (p.progress || 0), 0);
+                    const playerCount = players.length || 1;
+                    progressPercent = (totalProgress / (totalQ * playerCount)) * 100;
+                } else if (state.mode === 'time-attack') {
+                    const maxScore = Math.max(...players.map(p => p.score || 0));
+                    progressPercent = (maxScore / 10) * 100; 
+                } else {
+                    const maxProgress = Math.max(...players.map(p => p.progress || 0));
+                    progressPercent = (maxProgress / totalQ) * 100;
+                }
+                teamProgressBar.style.width = `${Math.min(100, Math.max(0, progressPercent))}%`;
+            }
+            const scoreChangedPlayers = new Set();
+            if (!isFirstLoad) {
+                players.forEach(p => { const oldScore = previousPlayersData[p.uid]?.score || 0; if (p.score > oldScore) scoreChangedPlayers.add(p.uid); });
+            }
+            players.forEach(p => previousPlayersData[p.uid] = { ...p });
+            isFirstLoad = false;
+            updatePlayersListUI(players, scoreChangedPlayers);
+        }
+    });
+}
+
+function updatePlayersListUI(players, scoreChangedPlayers = new Set()) {
+    const container = document.getElementById('quiz-players-list');
+    if (!container) return;
+    const myUid = state.game.authManager.currentUser?.uid;
+    const sortedPlayers = [...players].sort((a, b) => (b.score || 0) - (a.score || 0));
+    container.innerHTML = sortedPlayers.map(p => {
+        const isMe = p.uid === myUid;
+        if (isMe) return '';
+        const score = p.score || 0;
+        const lastStatus = p.lastAnswerStatus;
+        const isScoreChanged = scoreChangedPlayers.has(p.uid);
+        let statusHtml = ''; let bgClass = 'bg-white/90 dark:bg-gray-800/90 border-gray-200 dark:border-gray-700'; let textClass = 'text-gray-800 dark:text-gray-200';
+        if (lastStatus === 'correct') { statusHtml = '<span class="text-lg animate-bounce">✅</span>'; bgClass = 'bg-green-100/90 dark:bg-green-900/80 border-green-300 dark:border-green-700'; textClass = 'text-green-900 dark:text-green-100'; }
+        else if (lastStatus === 'incorrect') { statusHtml = '<span class="text-lg animate-pulse">❌</span>'; bgClass = 'bg-red-100/90 dark:bg-red-900/80 border-red-300 dark:border-red-700'; textClass = 'text-red-900 dark:text-red-100'; }
+        const avatar = p.avatar || '🧑‍🎓';
+        const isImage = avatar.includes('/') || avatar.includes('.');
+        const avatarHtml = isImage ? `<img src="${escapeHtml(avatar)}" class="w-8 h-8 rounded-full object-cover border border-gray-300 dark:border-gray-600">` : `<span class="text-xl">${escapeHtml(avatar)}</span>`;
+        const scoreClass = isScoreChanged ? 'anim-score-pop font-bold text-green-600 dark:text-green-400' : `opacity-80 ${textClass}`;
+        return `<div class="flex items-center gap-3 p-2 rounded-xl border shadow-sm transition-all duration-500 ${bgClass} backdrop-blur-sm transform translate-x-0"><div class="flex-shrink-0">${avatarHtml}</div><div class="flex-grow min-w-0"><div class="text-xs font-bold ${textClass} truncate max-w-[100px]">${escapeHtml(p.name)}</div><div class="text-[10px] font-mono ${scoreClass}">${score} pts</div></div><div class="flex-shrink-0">${statusHtml}</div></div>`;
+    }).join('');
 }

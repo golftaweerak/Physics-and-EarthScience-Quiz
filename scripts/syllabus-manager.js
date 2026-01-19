@@ -7,7 +7,11 @@ import { PHYSICS_SYLLABUS, EARTH_SCIENCE_BASIC_SYLLABUS, EARTH_SCIENCE_ADVANCE_S
  * @returns {object|null} The syllabus object or null if not found.
  */
 export function getSyllabusForCategory(categoryKey) {
+    // เพิ่มการตรวจสอบค่าว่างเพื่อความปลอดภัย
+    if (!categoryKey) return null;
+
     if (categoryKey.startsWith('PhysicsM')) {
+        // แปลง 'PhysicsM4' -> 'm4' เพื่อให้ตรงกับ key ใน PHYSICS_SYLLABUS
         const gradeKey = categoryKey.replace('PhysicsM', 'm');
         return PHYSICS_SYLLABUS[gradeKey] || null;
     }

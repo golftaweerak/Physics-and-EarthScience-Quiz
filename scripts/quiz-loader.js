@@ -1,6 +1,8 @@
 
 import { init as initQuizApp } from './quiz-logic.js';
 import { getSavedCustomQuizzes } from './custom-quiz-handler.js';
+import { db } from './firebase-config.js';
+import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 /**
  * Populates the common elements of the quiz page (titles, descriptions).
@@ -15,11 +17,64 @@ function populatePage(title, description) {
     if (startScreenDesc) startScreenDesc.textContent = description;
 }
 
+/**
+ * Helper function to process raw quiz data (handling scenarios, etc.)
+ * @param {Array} data Raw data from the module
+ * @param {object} quizInfo Info about the source quiz (title, category)
+ * @returns {Array} Processed questions array
+ */
+function processQuizData(data, quizInfo) {
+    const processed = [];
+    for (const item of data) {
+        if (!item) continue;
+    
+        if (item.type === 'scenario' && Array.isArray(item.questions)) {
+            // It's a scenario, prepend its title and description to each of its questions.
+            const title = item.title || '';
+            const rawDescription = item.description || '';
+            const description = rawDescription.replace(/(src\s*=\s*["'])\/?assets\//g, '$1../assets/').replace(/\n/g, '<br>');
+    
+            for (const question of item.questions) {
+                if (question) { // Ensure question is not null/undefined
+                    processed.push({
+                        ...question,
+                        type: question.type || 'question',
+                        question: `<div class="p-4 mb-4 bg-gray-100 dark:bg-gray-800 border-l-4 border-blue-500 rounded-r-lg"><p class="font-bold text-lg">${title}</p><div class="mt-2 text-gray-700 dark:text-gray-300">${description}</div></div>${question.question}`,
+                        sourceQuizTitle: quizInfo.title,
+                        sourceQuizCategory: quizInfo.category
+                    });
+                }
+            }
+        } else {
+            // Standalone question
+            processed.push({
+                ...item,
+                type: item.type || 'question',
+                sourceQuizTitle: quizInfo.title,
+                sourceQuizCategory: quizInfo.category
+            });
+        }
+    }
+    return processed;
+}
+
+// Simple seeded random number generator
+function mulberry32(a) {
+    return function() {
+      var t = a += 0x6D2B79F5;
+      t = Math.imul(t ^ (t >>> 15), t | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    }
+}
+
 export async function initializeQuiz() {
     const { quizList } = await import(`../data/quizzes-list.js?v=${Date.now()}`);
 
     const urlParams = new URLSearchParams(window.location.search);
+    const seedParam = urlParams.get('seed');
     const quizId = urlParams.get('id');
+    const lobbyId = urlParams.get('lobbyId');
     const action = urlParams.get('action'); // Get the action from URL, e.g., 'view_results'
 
     // If the action is to view results, immediately hide the start screen
@@ -31,10 +86,42 @@ export async function initializeQuiz() {
         }
     }
 
+    // --- NEW: Fetch Lobby Config if available ---
+    let lobbyConfig = null;
+    if (lobbyId) {
+        try {
+            const lobbyRef = doc(db, 'lobbies', lobbyId);
+            const lobbySnap = await getDoc(lobbyRef);
+            if (lobbySnap.exists()) {
+                lobbyConfig = lobbySnap.data().quizConfig;
+            }
+        } catch (e) {
+            console.error("Error fetching lobby config:", e);
+        }
+    }
+
     // --- NEW: Handle Custom Quiz ---
     if (quizId && quizId.startsWith('custom_')) {
-        const allCustomQuizzes = await getSavedCustomQuizzes();
-        const customQuizData = allCustomQuizzes.find(q => q.customId === quizId);
+        let customQuizData = null;
+
+        // 1. Try Local Storage first (Host or local play)
+        const allCustomQuizzes = getSavedCustomQuizzes();
+        customQuizData = allCustomQuizzes.find(q => q.customId === quizId);
+
+        // 2. If not found locally and we are in a lobby, try fetching from Firestore
+        if (!customQuizData && lobbyConfig) {
+            if (lobbyConfig.customQuestions) {
+                customQuizData = {
+                    customId: quizId,
+                    title: lobbyConfig.title,
+                    description: lobbyConfig.description,
+                    questions: lobbyConfig.customQuestions,
+                    timerMode: lobbyConfig.timerMode || 'none',
+                    customTime: lobbyConfig.customTime || null,
+                    storageKey: `quizState-${quizId}`
+                };
+            }
+        }
 
         if (!customQuizData) {
             handleQuizError("ไม่พบข้อมูลแบบทดสอบ", `ไม่พบข้อมูลแบบทดสอบที่สร้างเองสำหรับ ID: ${quizId}`);
@@ -51,8 +138,82 @@ export async function initializeQuiz() {
             if (selectedTimerInput) selectedTimerInput.checked = true;
         }
 
-        initQuizApp(customQuizData.questions, customQuizData.storageKey, customQuizData.title, customQuizData.customTime, action);
+        // Override with lobby settings if present (for host updates)
+        let finalTimerMode = customQuizData.timerMode;
+        let finalCustomTime = customQuizData.customTime;
+        let lives = 1;
+        if (lobbyConfig) {
+            finalTimerMode = lobbyConfig.timerMode || 'none';
+            finalCustomTime = lobbyConfig.customTime;
+            lives = lobbyConfig.lives || 1;
+        }
+
+        // Apply lobby timer settings to UI if different
+        if (lobbyConfig) {
+             const timerOptions = document.getElementById('timer-options');
+             if (timerOptions) {
+                 timerOptions.classList.add('hidden');
+                 const selectedTimerInput = document.querySelector(`input[name="timer-mode"][value="${finalTimerMode}"]`);
+                 if (selectedTimerInput) selectedTimerInput.checked = true;
+             }
+        }
+
+        initQuizApp(customQuizData.questions, customQuizData.storageKey, customQuizData.title, finalCustomTime, action, false, lives);
         return; // Stop further execution
+    }
+
+    // --- NEW: Handle Random Quiz (for Challenge Mode) ---
+    if (quizId === 'random') {
+        try {
+            const amount = parseInt(urlParams.get('amount')) || 20;
+            const seed = parseInt(urlParams.get('seed')) || Date.now();
+            
+            populatePage("แบบทดสอบสุ่ม (Challenge)", "แบบทดสอบที่สุ่มจากคลังข้อสอบทั้งหมด");
+
+            // Load all quizzes concurrently
+            const promises = quizList.map(q => import(`../data/${q.id}-data.js?v=${Date.now()}`).then(m => ({ module: m, info: q })).catch(e => null));
+            const results = await Promise.all(promises);
+            
+            let allQuestions = [];
+            results.forEach(res => {
+                if (res && res.module) {
+                    const data = res.module.quizItems || res.module.quizData || [];
+                    allQuestions = allQuestions.concat(processQuizData(data, res.info));
+                }
+            });
+
+            // Shuffle using seed
+            const rng = mulberry32(seed);
+            for (let i = allQuestions.length - 1; i > 0; i--) {
+                const j = Math.floor(rng() * (i + 1));
+                [allQuestions[i], allQuestions[j]] = [allQuestions[j], allQuestions[i]];
+            }
+
+            // Slice to amount
+            const selectedQuestions = allQuestions.slice(0, amount);
+
+            // Init Quiz
+            let customTime = null;
+            let lives = 1;
+            if (lobbyConfig) {
+                const timerOptions = document.getElementById('timer-options');
+                if (timerOptions) {
+                    timerOptions.classList.add('hidden');
+                    const selectedTimerInput = document.querySelector(`input[name="timer-mode"][value="${lobbyConfig.timerMode}"]`);
+                    if (selectedTimerInput) selectedTimerInput.checked = true;
+                }
+                customTime = lobbyConfig.customTime;
+                lives = lobbyConfig.lives || 1;
+            }
+
+            initQuizApp(selectedQuestions, `quizState-challenge-${seed}`, "Challenge Mode", customTime, action, true, lives);
+            return;
+
+        } catch (error) {
+            console.error("Error generating random quiz:", error);
+            handleQuizError("เกิดข้อผิดพลาด", "ไม่สามารถสร้างแบบทดสอบสุ่มได้");
+            return;
+        }
     }
 
     if (!quizId) {
@@ -81,39 +242,15 @@ export async function initializeQuiz() {
             return;
         }
 
-        // Process the loaded data. This unified logic handles all supported formats:
-        // - A flat array of questions.
-        // - An array of scenario objects.
-        // - A mixed array of questions and scenarios.
-        const processedQuizData = [];
-        for (const item of data) {
-            if (!item) continue;
-        
-            if (item.type === 'scenario' && Array.isArray(item.questions)) {
-                // It's a scenario, prepend its title and description to each of its questions.
-                const title = item.title || '';
-                const rawDescription = item.description || '';
-                const description = rawDescription.replace(/(src\s*=\s*["'])\/?assets\//g, '$1../assets/').replace(/\n/g, '<br>');
-        
-                for (const question of item.questions) {
-                    if (question) { // Ensure question is not null/undefined
-                        processedQuizData.push({
-                            ...question,
-                            type: question.type || 'question',
-                            question: `<div class="p-4 mb-4 bg-gray-100 dark:bg-gray-800 border-l-4 border-blue-500 rounded-r-lg"><p class="font-bold text-lg">${title}</p><div class="mt-2 text-gray-700 dark:text-gray-300">${description}</div></div>${question.question}`,
-                            sourceQuizTitle: quizInfo.title,
-                            sourceQuizCategory: quizInfo.category
-                        });
-                    }
-                }
-            } else {
-                // Standalone question
-                processedQuizData.push({
-                    ...item,
-                    type: item.type || 'question',
-                    sourceQuizTitle: quizInfo.title,
-                    sourceQuizCategory: quizInfo.category
-                });
+        let processedQuizData = processQuizData(data, quizInfo);
+
+        // --- NEW: Shuffle specific quiz if seed exists (for Challenge/Coop fairness) ---
+        if (seedParam) {
+            const seed = parseInt(seedParam);
+            const rng = mulberry32(seed);
+            for (let i = processedQuizData.length - 1; i > 0; i--) {
+                const j = Math.floor(rng() * (i + 1));
+                [processedQuizData[i], processedQuizData[j]] = [processedQuizData[j], processedQuizData[i]];
             }
         }
 
@@ -142,7 +279,19 @@ export async function initializeQuiz() {
         }
 
         // 6. Initialize the quiz logic with the processed data
-        initQuizApp(processedQuizData, quizInfo.storageKey, quizInfo.title, null, action);
+        let customTime = null;
+        let lives = 1;
+        if (lobbyConfig) {
+            const timerOptions = document.getElementById('timer-options');
+            if (timerOptions) {
+                timerOptions.classList.add('hidden');
+                const selectedTimerInput = document.querySelector(`input[name="timer-mode"][value="${lobbyConfig.timerMode}"]`);
+                if (selectedTimerInput) selectedTimerInput.checked = true;
+            }
+            customTime = lobbyConfig.customTime;
+            lives = lobbyConfig.lives || 1;
+        }
+        initQuizApp(processedQuizData, quizInfo.storageKey, quizInfo.title, customTime, action, !!seedParam, lives);
 
     } catch (error) {
         console.error(`Error loading quiz data for ID ${quizId}:`, error);

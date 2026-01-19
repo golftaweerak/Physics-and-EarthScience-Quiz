@@ -2,6 +2,7 @@ import { initializeDarkMode } from './dark-mode.js';
 import { initializeDevTools } from './dev-tools-handler.js';
 import { authManager } from './auth-manager.js';
 import { challengeManager } from './challenge-manager.js';
+// ลบ static import ของ menu-handler ออก เพื่อป้องกัน error ตั้งแต่ต้นไฟล์
 
 let isDocumentClickListenerAdded = false;
 
@@ -62,78 +63,18 @@ function initializeHeaderMenus() {
 }
 
 /**
- * Sets up the dynamic header height adjustment.
- * This ensures the content padding matches the fixed header height on all devices.
- */
-function setupHeaderHeightAdjustment() {
-    const hardcodedHeader = document.getElementById("main-header");
-    const dynamicPlaceholder = document.getElementById("main_header-placeholder");
-
-    const updateHeight = (element) => {
-        if (element) {
-            const headerHeight = element.offsetHeight;
-            document.documentElement.style.setProperty(
-                "--header-height-offset",
-                `${headerHeight + 16}px` // Add 16px buffer
-            );
-        }
-    };
-
-    if (hardcodedHeader) {
-        // Case 1: Hardcoded Header (index.html)
-        const resizeObserver = new ResizeObserver(() => updateHeight(hardcodedHeader));
-        resizeObserver.observe(hardcodedHeader);
-        updateHeight(hardcodedHeader); // Initial set
-    } else if (dynamicPlaceholder) {
-        // Case 2: Dynamic Header (other pages)
-        const setHeaderHeightProperty = () => {
-            const headerNode = dynamicPlaceholder.firstElementChild;
-            if (headerNode) {
-                updateHeight(headerNode);
-            }
-        };
-
-        const resizeObserver = new ResizeObserver(setHeaderHeightProperty);
-
-        const attachObserver = () => {
-            const headerNode = dynamicPlaceholder.firstElementChild;
-            if (headerNode) {
-                setHeaderHeightProperty();
-                resizeObserver.observe(headerNode);
-            }
-        };
-
-        // 1. Try to attach immediately
-        attachObserver();
-
-        // Use MutationObserver to detect when the header content is loaded into the placeholder.
-        const mutationObserver = new MutationObserver((mutations) => {
-            for (const mutation of mutations) {
-                if (mutation.addedNodes.length > 0) {
-                    // If new content is added, re-attach observer
-                    resizeObserver.disconnect();
-                    attachObserver();
-                }
-            }
-        });
-        // Start observing the placeholder.
-        mutationObserver.observe(dynamicPlaceholder, { childList: true });
-    }
-}
-
-/**
  * Initializes all components and functionalities that are common across multiple pages.
- * This includes dark mode, the main navigation menu, and the copyright year.
  */
 export async function initializeCommonComponents() {
     initializeDarkMode();
     initializeHeaderMenus();
-    initializeDevTools(); // Initialize dev tools access on all pages
-    
+    initializeDevTools();
+
     // Initialize Challenge Manager (Lobby System)
     challengeManager.init();
 
-    // Dynamic Import for menu-handler
+    // ใช้ Dynamic Import สำหรับ menu-handler
+    // ถ้าไฟล์นี้มีปัญหา จะไม่ทำให้ส่วนอื่นของเว็บพังไปด้วย
     try {
         const { initializeMenu } = await import('./menu-handler.js');
         initializeMenu();
@@ -141,10 +82,7 @@ export async function initializeCommonComponents() {
         console.warn("Could not initialize menu (menu-handler.js might have errors):", error);
     }
 
-    // Setup header height adjustment globally for all pages
-    setupHeaderHeightAdjustment();
-
-    // Set copyright year in the footer
+    // Set copyright year
     const yearSpan = document.getElementById("copyright-year");
     if (yearSpan) {
         yearSpan.textContent = new Date().getFullYear();
@@ -153,14 +91,21 @@ export async function initializeCommonComponents() {
     // --- User Hub Auth Buttons ---
     const loginBtn = document.getElementById('user-hub-login-btn');
     const logoutBtn = document.getElementById('user-hub-logout-btn');
-    const mobileLogoutBtn = document.getElementById('mobile-logout-btn');
+    const mobileLogoutBtn = document.getElementById('mobile-logout-btn'); // NEW: Handle mobile button
     const userEmailEl = document.getElementById('user-hub-email');
     const profileLink = document.getElementById('main-header-profile-link');
 
-    if (loginBtn) loginBtn.addEventListener('click', () => authManager.login());
-    if (logoutBtn) logoutBtn.addEventListener('click', () => authManager.logout());
-    if (mobileLogoutBtn) mobileLogoutBtn.addEventListener('click', () => authManager.logout());
+    if (loginBtn) {
+        loginBtn.addEventListener('click', () => authManager.login());
+    }
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => authManager.logout());
+    }
+    if (mobileLogoutBtn) {
+        mobileLogoutBtn.addEventListener('click', () => authManager.logout());
+    }
 
+    // Helper function to update UI instantly
     const updateAuthUI = (user) => {
         if (user) {
             if (profileLink && user.photoURL) {
@@ -195,10 +140,12 @@ export async function initializeCommonComponents() {
         }
     };
 
-    // Optimistic Update
+    // 1. Optimistic Update: Show cached user data immediately (Zero Latency)
     const cachedUser = authManager.getCachedUser();
-    if (cachedUser) updateAuthUI(cachedUser);
+    if (cachedUser) {
+        updateAuthUI(cachedUser);
+    }
 
-    // Real Update
+    // 2. Real Update: Update when Firebase confirms auth state
     authManager.onUserChange(updateAuthUI);
 }

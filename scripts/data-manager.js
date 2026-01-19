@@ -6,35 +6,7 @@
 // Single source of truth for all category metadata.
 export const categoryDetails = {
   // Main categories for the index page accordion
-  // สีเทาน้ำเงิน (Blue Gray): สื่อถึงความสุขุม น่าเชื่อถือ เหมาะสำหรับหมวดทบทวน
-  AstronomyReview: {
-    title: "ทบทวน (Review)",
-    icon: "./assets/icons/study.png",
-    order: 1,
-    color: "border-gray-500",
-    cardGlow: "hover:shadow-gray-400/40",
-    logoGlow: "group-hover:shadow-gray-400/40",
-  },
-  // สีฟ้า (Sky): สื่อถึงท้องฟ้าและดาราศาสตร์โดยตรง
-  AstronomyPOSN: {
-    title: "ดาราศาสตร์ (Astronomy)",
-    displayName: "ดาราศาสตร์ (Astronomy)",
-    icon: "./assets/icons/astronomy.png",
-    order: 2,
-    color: "border-indigo-500",
-    cardGlow: "hover:shadow-indigo-500/30",
-    logoGlow: "group-hover:shadow-indigo-500/40",
-  },
-  // สีเขียวมะนาว (Lime): สื่อถึง "โลก" และธรรมชาติที่สดใส
-  EarthScience: {
-    title: "วิทยาศาสตร์โลกและอวกาศ (Earth & Space Science)",
-    displayName: "วิทยาศาสตร์โลกและอวกาศ (Earth & Space Science)",
-    icon: "./assets/icons/earth.png",
-    order: 3,
-    color: "border-teal-500",
-    cardGlow: "hover:shadow-teal-500/30",
-    logoGlow: "group-hover:shadow-teal-500/40",
-  },
+
   // สีส้ม (Orange): สื่อถึงความคิดสร้างสรรค์และความรู้ที่เข้าถึงง่าย
   GeneralKnowledge: {
     title: "ความรู้ทั่วไป",
@@ -45,16 +17,7 @@ export const categoryDetails = {
     cardGlow: "hover:shadow-orange-500/30",
     logoGlow: "group-hover:shadow-orange-500/40",
   },
-  // สีชมพูกุหลาบ (Rose): สื่อถึงความท้าทายที่น่าตื่นเต้นและโดดเด่น
-  ChallengePOSN: {
-    title: "ข้อสอบท้าทาย (มีได้หลายคำตอบ)",
-    displayName: "ข้อสอบท้าทาย (มีหลายคำตอบ)",
-    icon: "./assets/icons/trophy-star.png", // แนะนำให้ใช้ไอคอนใหม่ เช่น รูปถ้วยรางวัล
-    order: 5,
-    color: "border-rose-400",
-    cardGlow: "hover:shadow-rose-400/30",
-    logoGlow: "group-hover:shadow-rose-400/40",
-  },
+
   // --- Physics Categories by Grade ---
   PhysicsM4: {
     title: "ฟิสิกส์ ม.4",

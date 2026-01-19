@@ -2,12 +2,13 @@ import { authManager } from './auth-manager.js';
 import { db } from './firebase-config.js';
 import { collection, query, orderBy, limit, getDocs, where, getCountFromServer } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { XP_THRESHOLDS, TRACK_TITLES, PROFICIENCY_GROUPS, getLevelBorderClass, getAvatarFrameClass } from './gamification.js';
-import { SiteConfig } from './site-config.js';
 import { escapeHtml } from './utils.js';
+import { SiteConfig } from './site-config.js';
 
 function getLevelInfoForLeaderboard(xp, type) {
     let track = 'overall';
     
+    // Dynamic track lookup from SiteConfig
     const configCat = SiteConfig.categories.find(c => c.id === type);
     if (configCat && configCat.track) track = configCat.track;
 
@@ -36,15 +37,47 @@ function getLevelInfoForLeaderboard(xp, type) {
 
 export async function initializeLeaderboard() {
     const listContainer = document.getElementById('leaderboard-list-full');
-    const tabs = document.querySelectorAll('.leaderboard-tab');
+    const tabsContainer = document.getElementById('leaderboard-tabs-container');
+    const earthSciDropdownBtn = document.getElementById('earth-science-dropdown-btn');
+    const earthSciDropdown = document.getElementById('earth-science-dropdown');
+    const earthSciBtnLabel = document.getElementById('earth-science-btn-label');
     
-    if (!listContainer || tabs.length === 0) return;
+    if (!listContainer || !tabsContainer) return;
+    
+    // --- Dynamic Tabs Generation ---
+    tabsContainer.innerHTML = ''; // Clear existing static tabs
 
-    // รอให้ระบบ Auth ตรวจสอบสถานะเสร็จสิ้นก่อน เพื่อให้รู้ว่าผู้ใช้ล็อกอินอยู่หรือไม่
-    // (Guest ก็จะผ่านขั้นตอนนี้โดยได้ค่า user เป็น null)
-    await authManager.waitForAuthReady();
+    // 1. Total XP Tab (Always present)
+    const totalTab = document.createElement('button');
+    totalTab.className = "leaderboard-tab whitespace-nowrap py-2 px-4 rounded-full text-sm font-bold transition-all bg-blue-600 text-white shadow-md";
+    totalTab.dataset.type = "xp";
+    totalTab.dataset.mainTab = "true";
+    totalTab.textContent = "คะแนนรวม";
+    tabsContainer.appendChild(totalTab);
+
+    // 2. Config Categories
+    if (SiteConfig.categories) {
+        SiteConfig.categories.forEach(cat => {
+            const btn = document.createElement('button');
+            btn.className = "leaderboard-tab whitespace-nowrap py-2 px-4 rounded-full text-sm font-bold transition-all bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600";
+            btn.dataset.type = cat.id; // Field name in Firestore
+            btn.dataset.mainTab = "true";
+            btn.textContent = cat.label || cat.name;
+            tabsContainer.appendChild(btn);
+        });
+    }
 
     const renderList = async (type) => {
+        // FIX: Whitelist allowed sort fields to prevent NoSQL Injection (Arbitrary Sort)
+        const configTypes = SiteConfig.categories.map(c => c.id);
+        const allowedTypes = ['xp', ...configTypes];
+        
+        if (!allowedTypes.includes(type)) {
+            console.error("Invalid leaderboard type requested:", type);
+            listContainer.innerHTML = `<div class="text-center py-16 text-red-500">ข้อมูลไม่ถูกต้อง</div>`;
+            return;
+        }
+
         listContainer.innerHTML = `
             <div class="flex flex-col items-center justify-center h-64 text-gray-500">
                 <svg class="animate-spin h-8 w-8 mb-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
@@ -53,7 +86,6 @@ export async function initializeLeaderboard() {
         `;
 
         try {
-            // ดึงข้อมูล Leaderboard (ทุกคนอ่านได้ตามกฎ Firestore)
             const usersRef = collection(db, 'leaderboard');
             const q = query(usersRef, orderBy(type, 'desc'), limit(50)); // Fetch top 50
             const querySnapshot = await authManager.retryOperation(() => getDocs(q));
@@ -63,26 +95,29 @@ export async function initializeLeaderboard() {
                 leaderboard.push({ id: doc.id, ...doc.data() });
             });
 
+            if (leaderboard.length === 0) {
+                listContainer.innerHTML = `<div class="text-center py-16 text-gray-500">ยังไม่มีข้อมูลการจัดอันดับ</div>`;
+                return;
+            }
+
             const currentUser = authManager?.currentUser;
             const currentUserId = currentUser ? currentUser.uid : null;
             const localState = await authManager.loadUserData() || {};
 
-            const userInTop50 = currentUserId && leaderboard.some(u => u.id === currentUserId);
+            const userInTop50 = leaderboard.some(u => u.id === currentUserId);
             let userRankData = null;
 
-            // FIX: อนุญาตให้ Guest ที่มีคะแนนเห็นอันดับตัวเองได้
-            const userScore = localState[type] || 0;
-            if (!userInTop50 && (currentUserId || userScore > 0)) {
+            if (!userInTop50 && currentUserId) {
                 try {
-                    // นับจำนวนคนที่มีคะแนนมากกว่าเรา เพื่อหาอันดับ
-                    const rankQuery = query(collection(db, 'leaderboard'), where(type, '>', userScore));
+                    const userScore = localState[type] || 0;
+                    const rankQuery = query(usersRef, where(type, '>', userScore));
                     const snapshot = await authManager.retryOperation(() => getCountFromServer(rankQuery));
                     const rank = snapshot.data().count + 1;
 
                     userRankData = {
                         rank: rank,
-                        id: currentUserId || 'guest', // ใช้ ID 'guest' สำหรับผู้ที่ไม่ได้ล็อกอิน
-                        displayName: localState.displayName || 'ผู้เรียน (Guest)',
+                        id: currentUserId,
+                        displayName: localState.displayName,
                         avatar: localState.avatar,
                         selectedTitle: localState.selectedTitle,
                         score: userScore,
@@ -95,9 +130,7 @@ export async function initializeLeaderboard() {
 
             // --- Rank Change Logic (Local Tracking) ---
             let myRankChange = null;
-            // FIX: เปิดใช้งานการติดตามอันดับสำหรับ Guest ด้วย
-            const trackingId = currentUserId || 'guest';
-            if (trackingId) {
+            if (currentUserId) {
                 let currentRank = null;
                 if (userInTop50) {
                     currentRank = leaderboard.findIndex(u => u.id === currentUserId) + 1;
@@ -106,7 +139,7 @@ export async function initializeLeaderboard() {
                 }
 
                 if (currentRank) {
-                    const storageKey = `lb_last_rank_${type}_${trackingId}`;
+                    const storageKey = `lb_last_rank_${type}_${currentUserId}`;
                     const lastData = JSON.parse(localStorage.getItem(storageKey));
                     
                     if (lastData) {
@@ -122,7 +155,7 @@ export async function initializeLeaderboard() {
             const renderRow = (user, rank, isMe) => {
                 // Rank Change UI
                 let changeHtml = '';
-                const change = isMe ? myRankChange : (user.rankChange || null);
+                const change = isMe ? myRankChange : (user.rankChange || null); // Support future server-side data for others
                 
                 if (change !== null && change !== 0) {
                     const isUp = change > 0;
@@ -153,22 +186,18 @@ export async function initializeLeaderboard() {
                 } else {
                     score = user[type] || 0;
                     // On-the-fly calculation to fix display for stale data
-                    if (type === 'physicsXP') {
+                    // Generic calculation based on track defined in SiteConfig
+                    const configCat = SiteConfig.categories.find(c => c.id === type);
+                    if (configCat && configCat.track) {
                         let calculatedXP = 0;
+                        let hasSubGroups = false;
                         for (const group of Object.values(PROFICIENCY_GROUPS)) {
-                            if (group.track === 'physics') {
+                            if (group.track === configCat.track) {
                                 calculatedXP += (user[group.field] || 0);
+                                hasSubGroups = true;
                             }
                         }
-                        score = Math.max(score, calculatedXP);
-                    } else if (type === 'earthXP') {
-                        let calculatedXP = 0;
-                        for (const group of Object.values(PROFICIENCY_GROUPS)) {
-                            if (group.track === 'earth') {
-                                calculatedXP += (user[group.field] || 0);
-                            }
-                        }
-                        score = Math.max(score, calculatedXP);
+                        if (hasSubGroups) score = Math.max(score, calculatedXP);
                     }
                 }
 
@@ -176,11 +205,13 @@ export async function initializeLeaderboard() {
                 let level, rankTitle;
 
                 if (type === 'xp') {
+                    // For 'overall' XP, use the user's actual stored level, as it depends on quests.
                     level = user.level || 1;
                     const titles = TRACK_TITLES.overall;
                     const titleIndex = Math.min(level - 1, titles.length - 1);
                     rankTitle = titles[titleIndex];
                 } else {
+                    // For specific tracks, level is calculated purely from XP.
                     const levelInfo = getLevelInfoForLeaderboard(score, type);
                     level = levelInfo.level;
                     rankTitle = levelInfo.title;
@@ -189,8 +220,8 @@ export async function initializeLeaderboard() {
                 const avatar = user.avatar || '🧑‍🎓';
                 const isImage = avatar.includes('/') || avatar.includes('.');
                 const avatarContent = isImage 
-                    ? `<img src="${avatar}" class="w-full h-full rounded-full object-cover">`
-                    : `<span class="text-3xl">${avatar}</span>`;
+                    ? `<img src="${escapeHtml(avatar)}" class="w-full h-full rounded-full object-cover">`
+                    : `<span class="text-3xl">${escapeHtml(avatar)}</span>`;
                 
                 const levelBorderClass = getLevelBorderClass(level);
                 const avatarFrameClass = getAvatarFrameClass(avatar, 'small');
@@ -227,12 +258,7 @@ export async function initializeLeaderboard() {
                 `;
             };
 
-            let listHtml = '';
-            if (leaderboard.length > 0) {
-                listHtml = leaderboard.map((user, index) => renderRow(user, index + 1, user.id === currentUserId)).join('');
-            } else {
-                listHtml = `<div class="text-center py-8 text-gray-400">ยังไม่มีผู้เล่นอื่นในกระดานนี้</div>`;
-            }
+            let listHtml = leaderboard.map((user, index) => renderRow(user, index + 1, user.id === currentUserId)).join('');
 
             if (userRankData) {
                 listHtml += `
@@ -249,21 +275,44 @@ export async function initializeLeaderboard() {
 
         } catch (error) {
             console.error("Leaderboard error:", error);
-            if (error.code === 'permission-denied') {
-                // ข้อความนี้จะแสดงเฉพาะเมื่อ Rules ผิดพลาดจริงๆ (ปกติ Guest ควรอ่านได้)
-                listContainer.innerHTML = `<div class="text-center py-16 text-gray-500">กรุณาเข้าสู่ระบบเพื่อดูอันดับ</div>`;
-            } else {
-                listContainer.innerHTML = `<div class="text-center py-16 text-red-500">ไม่สามารถโหลดข้อมูลได้<br>กรุณาตรวจสอบการเชื่อมต่ออินเทอร์เน็ต</div>`;
-            }
+            listContainer.innerHTML = `<div class="text-center py-16 text-red-500">ไม่สามารถโหลดข้อมูลได้<br>กรุณาตรวจสอบการเชื่อมต่ออินเทอร์เน็ต</div>`;
         }
     };
 
-    tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            tabs.forEach(t => t.className = "leaderboard-tab whitespace-nowrap py-2 px-4 rounded-full text-sm font-bold transition-all bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600");
-            tab.className = "leaderboard-tab whitespace-nowrap py-2 px-4 rounded-full text-sm font-bold transition-all bg-blue-600 text-white shadow-md";
-            renderList(tab.dataset.type);
+    const activeTabClasses = ['bg-blue-600', 'text-white', 'shadow-md'];
+    const inactiveTabClasses = ['bg-gray-100', 'dark:bg-gray-700', 'text-gray-600', 'dark:text-gray-300', 'hover:bg-gray-200', 'dark:hover:bg-gray-600'];
+
+    tabsContainer.addEventListener('click', (e) => {
+        const clickedTab = e.target.closest('.leaderboard-tab');
+        if (!clickedTab) return;
+
+        e.preventDefault();
+        const type = clickedTab.dataset.type;
+        const label = clickedTab.dataset.label;
+
+        // ถ้าไม่มี type (เช่น เป็นปุ่มเปิด Dropdown เฉยๆ) ให้หยุดการทำงานส่วนนี้
+        if (!type) return;
+
+        // Deactivate all main tabs
+        tabsContainer.querySelectorAll('[data-main-tab="true"]').forEach(t => {
+            t.classList.remove(...activeTabClasses);
+            t.classList.add(...inactiveTabClasses);
         });
+
+        // If a dropdown item was clicked
+        if (label) {
+            if (earthSciDropdownBtn) {
+                earthSciDropdownBtn.classList.remove(...inactiveTabClasses);
+                earthSciDropdownBtn.classList.add(...activeTabClasses);
+            }
+            if (earthSciBtnLabel) earthSciBtnLabel.textContent = label;
+            if (earthSciDropdown) earthSciDropdown.classList.add('hidden');
+        } else { // A main tab was clicked
+            clickedTab.classList.remove(...inactiveTabClasses);
+            clickedTab.classList.add(...activeTabClasses);
+        }
+
+        renderList(type);
     });
 
     renderList('xp');

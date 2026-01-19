@@ -2,17 +2,40 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     
-    // กฎสำหรับ Collection 'users'
-    match /users/{userId} {
-      // อนุญาตให้ทุกคนอ่านข้อมูลพื้นฐาน (สำหรับ Leaderboard)
+    // 1. Leaderboard: ทุกคนอ่านได้ (Public) แต่เจ้าของบัญชีเท่านั้นที่แก้ไขได้
+    // กฎนี้อนุญาตให้ Guest เห็นอันดับได้
+    match /leaderboard/{userId} {
       allow read: if true;
-      
-      // อนุญาตให้เจ้าของบัญชีแก้ไขข้อมูลของตนเองได้
       allow write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // 2. Users: ข้อมูลส่วนตัว เจ้าของบัญชีเท่านั้นที่เข้าถึงได้
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
 
       // กฎสำหรับ Subcollections ทั้งหมดภายใต้ users (เช่น custom_quizzes, quiz_history)
       match /{document=**} {
         allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+    }
+
+    // 3. Challenge / Lobby System
+    match /lobbies/{lobbyId} {
+      // อนุญาตให้อ่าน สร้าง และอัปเดตได้ถ้าล็อกอินแล้ว
+      allow read, create, update: if request.auth != null;
+      
+      // อนุญาตให้ลบได้เฉพาะ Host (เจ้าของห้อง) เท่านั้น
+      allow delete: if request.auth != null && request.auth.uid == resource.data.hostId;
+
+      // Chat Messages
+      match /messages/{messageId} {
+        allow read, create: if request.auth != null;
+      }
+
+      // Typing Indicators & Presence (Heartbeat)
+      // ส่วนนี้สำคัญ! รองรับ subcollection อื่นๆ เช่น typing และ presence
+      match /{subcollection}/{docId} {
+        allow read, write: if request.auth != null;
       }
     }
   }
