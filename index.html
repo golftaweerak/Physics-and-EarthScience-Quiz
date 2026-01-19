@@ -190,6 +190,10 @@
     <main class="container mx-auto px-4 pb-8 md:pb-12 flex-grow"
         style="padding-top: var(--header-height-offset, 5rem);">
 
+        <!-- Category selection buttons are injected here by app-loader.js -->
+        <header id="header-placeholder" class="mb-8 font-kanit fade-in-up" aria-label="เลือกหมวดวิชา">
+            <!-- Content is loaded dynamically by app-loader.js -->
+        </header>
 
         <!-- Header for the quiz list section, populated by main.js -->
         <div id="quiz-list-header" class="max-w-4xl mx-auto mt-8 mb-4 hidden flex justify-between items-center">
@@ -263,6 +267,24 @@
     <script type="module">
         import { Gamification } from './scripts/gamification.js';
         new Gamification();
+        import { ChallengeManager } from './scripts/challenge-manager.js';
+        
+        // Initialize ChallengeManager only after modals are loaded to prevent errors
+        const initChallengeManager = () => {
+            if (document.getElementById('challenge-menu-modal')) {
+                new ChallengeManager();
+            } else {
+                const observer = new MutationObserver((mutations, obs) => {
+                    if (document.getElementById('challenge-menu-modal')) {
+                        new ChallengeManager();
+                        obs.disconnect();
+                    }
+                });
+                const placeholder = document.getElementById('modals-placeholder');
+                if (placeholder) observer.observe(placeholder, { childList: true, subtree: true });
+            }
+        };
+        initChallengeManager();
 
         // แสดงการแจ้งเตือนเมื่อมีการซิงค์ข้อมูลสำเร็จ (รับ Event จาก AuthManager)
         const toast = document.getElementById('sync-toast');
