@@ -21,6 +21,8 @@ export class PixelPetRenderer {
         this.animationState = 'idle'; // 'idle', 'interact', 'happy', 'eat'
         this.animationTimer = 0;
         this.animationDuration = 0;
+        this.shouldSpawnHearts = false;
+        this.animationFrameId = null;
 
         // --- Pet Properties ---
         this.petType = 'dog';
@@ -67,14 +69,41 @@ export class PixelPetRenderer {
                 outline: '#33691E', main: '#8D6E63', shadow: '#5D4037',
                 light: '#A1887F', white: '#DCEDC8', nose: '#795548',
                 cheek: '#AED581', eye: '#558B2F'
+            },
+            // VSCode Pets Style
+            'clippy': {
+                outline: '#37474F', main: '#B0BEC5', shadow: '#78909C',
+                light: '#ECEFF1', white: '#FFFFFF', nose: '#263238', // Eyebrows
+                cheek: '#FFCDD2', eye: '#000000'
+            },
+            'snake': {
+                outline: '#1B5E20', main: '#4CAF50', shadow: '#2E7D32',
+                light: '#81C784', white: '#FFFFFF', nose: '#D32F2F', // Tongue
+                cheek: '#A5D6A7', eye: '#000000'
+            },
+            'duck': {
+                outline: '#E65100', main: '#FFEB3B', shadow: '#FBC02D',
+                light: '#FFF9C4', white: '#FFFFFF', nose: '#FF9800', // Beak
+                cheek: '#FFE0B2', eye: '#000000'
             }
         };
 
         // เริ่มต้นการทำงาน
         if (this.canvas) {
             this.resize();
-            window.addEventListener('resize', () => this.resize());
+            this.resizeHandler = () => this.resize();
+            window.addEventListener('resize', this.resizeHandler);
             this.startLoop();
+        }
+    }
+
+    /** Cleans up event listeners and stops the animation loop. Call this when the component is unmounted. */
+    destroy() {
+        if (this.resizeHandler) {
+            window.removeEventListener('resize', this.resizeHandler);
+        }
+        if (this.animationFrameId) {
+            cancelAnimationFrame(this.animationFrameId);
         }
     }
 
@@ -346,6 +375,65 @@ export class PixelPetRenderer {
         }
     }
 
+    _drawClippy(ctx, palette) {
+        const x = 4, y = 10;
+        const C = palette;
+        // Wire body (Paperclip shape)
+        this._drawRect(x, y + 10, 4, 20, C.outline); // Left vertical
+        this._drawRect(x + 2, y + 30, 16, 4, C.outline); // Bottom curve
+        this._drawRect(x + 16, y + 6, 4, 26, C.outline); // Right vertical
+        this._drawRect(x + 6, y + 4, 12, 4, C.outline); // Top curve
+        
+        // Inner loop
+        this._drawRect(x + 6, y + 8, 4, 18, C.outline); // Inner Left
+        this._drawRect(x + 8, y + 24, 6, 4, C.outline); // Inner Bottom
+        this._drawRect(x + 12, y + 16, 4, 10, C.outline); // Inner Right
+
+        // Fill (Main color)
+        this._drawRect(x + 1, y + 10, 2, 20, C.main);
+        this._drawRect(x + 2, y + 31, 16, 2, C.main);
+        this._drawRect(x + 17, y + 6, 2, 26, C.main);
+        this._drawRect(x + 6, y + 5, 12, 2, C.main);
+        this._drawRect(x + 7, y + 8, 2, 18, C.main);
+        this._drawRect(x + 8, y + 25, 6, 2, C.main);
+        this._drawRect(x + 13, y + 16, 2, 10, C.main);
+
+        // Eyes & Eyebrows
+        const ey = y + 12;
+        const browY = ey - 4 + Math.sin(this.frameCount * 0.1) * 1;
+        
+        this._drawRect(x + 6, ey, 4, 4, C.eye); // Left Eye
+        this._drawRect(x + 14, ey + 2, 4, 4, C.eye); // Right Eye
+        this._drawRect(x + 7, ey + 1, 1, 1, C.white);
+        this._drawRect(x + 5, browY, 6, 2, C.nose); // Left Brow
+        this._drawRect(x + 13, browY + 1, 6, 2, C.nose); // Right Brow
+    }
+
+    _drawSnake(ctx, palette) {
+        const x = 2, y = 20;
+        const C = palette;
+        // Coiled Body
+        this._drawRect(x + 4, y + 12, 24, 8, C.shadow); 
+        this._drawRect(x + 6, y + 6, 20, 8, C.main); 
+        // Head (Bobbing)
+        const headY = y - 4 + Math.sin(this.frameCount * 0.1) * 2;
+        this._drawRect(x + 10, headY, 14, 12, C.main);
+        this._drawRect(x + 12, headY + 2, 2, 4, C.eye);
+        this._drawRect(x + 20, headY + 2, 2, 4, C.eye);
+        // Tongue
+        if (this.frameCount % 60 < 10) this._drawRect(x + 16, headY + 12, 2, 6, C.nose);
+    }
+
+    _drawDuck(ctx, palette) {
+        const x = 4, y = 16;
+        const C = palette;
+        this._drawRect(x + 4, y + 12, 24, 12, C.main); // Body
+        this._drawRect(x + 10, y + 16 + Math.sin(this.frameCount * 0.2) * 2, 12, 6, C.shadow); // Wing
+        this._drawRect(x + 16, y, 14, 14, C.main); // Head
+        this._drawRect(x + 28, y + 6, 6, 4, C.nose); // Beak
+        this._drawRect(x + 22, y + 4, 2, 4, C.eye); // Eye
+    }
+
     _drawFood(ctx, type) {
         const x = 0, y = 0;
         const bob = Math.sin(this.frameCount * 0.5); // Animation ลอยขึ้นลง
@@ -477,9 +565,9 @@ export class PixelPetRenderer {
             this.update(delta);
             this.render();
 
-            requestAnimationFrame(loop);
+            this.animationFrameId = requestAnimationFrame(loop);
         };
-        requestAnimationFrame(loop);
+        this.animationFrameId = requestAnimationFrame(loop);
     }
 
     update(delta) {
@@ -641,6 +729,15 @@ export class PixelPetRenderer {
                 case 'dragon':
                     this._drawDragon(this.ctx, palette, this.stage, variant);
                     break;
+                case 'clippy':
+                    this._drawClippy(this.ctx, palette);
+                    break;
+                case 'snake':
+                    this._drawSnake(this.ctx, palette);
+                    break;
+                case 'duck':
+                    this._drawDuck(this.ctx, palette);
+                    break;
             }
         }
         ctx.restore(); // Restore from pet drawing transformations
@@ -651,6 +748,8 @@ export class PixelPetRenderer {
             const baseType = this.petType.split('_')[0];
             if (baseType === 'cat') foodType = 'fish';
             if (baseType === 'dragon') foodType = 'meat';
+            if (baseType === 'snake') foodType = 'meat';
+            if (baseType === 'duck') foodType = 'fish';
             
             const foodX = w / 2 + (48 * scale * this.eatDirection);
             const foodY = startY + (40 * scale);
