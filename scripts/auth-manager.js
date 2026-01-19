@@ -30,6 +30,9 @@ class AuthManagerInternal {
 
     init() {
         this.unsubscribeAuth = onAuthStateChanged(auth, async (user) => {
+            // NEW: Notify immediately for UI updates (e.g. Profile page status)
+            window.dispatchEvent(new CustomEvent('auth-change-detected', { detail: user }));
+
             const previousUser = this.currentUser; // เก็บสถานะผู้ใช้ก่อนหน้า
             if (user) {
                 console.log("User signed in:", user.uid);

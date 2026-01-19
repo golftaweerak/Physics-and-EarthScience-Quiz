@@ -49,6 +49,12 @@ let activeShopTab = 'consumable'; // NEW: Track active shop tab
 export async function initializeProfile(gameInstance) {
     const game = gameInstance || new Gamification();
     
+    // Initialize lastSyncTime from storage for immediate display
+    const storedSyncTime = localStorage.getItem('last_cloud_sync');
+    if (storedSyncTime) {
+        lastSyncTime = new Date(storedSyncTime);
+    }
+
     // 1. เรนเดอร์ UI ทั่วไปทันที (รวดเร็ว)
     renderUserInfo(game);
     renderTrackProgress(game);
@@ -114,11 +120,31 @@ export async function initializeProfile(gameInstance) {
 
     window.addEventListener('gamification-updated', gamificationUpdateHandler);
 
-    // NEW: Direct Auth Listener to ensure Sync Status updates immediately
-    // This fixes the issue where status remains "Guest (Local)" while data is loading
+    // NEW: Listen for immediate auth detection to update UI state
+    window.addEventListener('auth-change-detected', (e) => {
+        const user = e.detail;
+        if (user) {
+             // Update Sync Status to "Syncing..." immediately
+             const statusEl = document.getElementById('connection-status');
+             if (statusEl) {
+                statusEl.innerHTML = `
+                    <span class="w-2 h-2 rounded-full bg-yellow-400 animate-pulse"></span>
+                    <span class="text-yellow-700 dark:text-yellow-300 text-[10px] sm:text-xs">กำลังซิงค์...</span>
+                `;
+                statusEl.className = "flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800";
+             }
+             // Update Email immediately
+             const emailEl = document.getElementById('profile-email-display');
+             if (emailEl && user.email) {
+                emailEl.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 inline-block mr-1.5 -mt-0.5 opacity-70" viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" /><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" /></svg>${escapeHtml(user.email)}`;
+                emailEl.classList.remove('hidden');
+             }
+        }
+    });
+
+    // Existing listener for when data is fully ready (switches to "Cloud Synced")
     game.authManager.onUserChange(() => {
         renderSyncStatus(game);
-        // We also call renderUserInfo to update email immediately
         renderUserInfo(game);
     });
 }
@@ -205,7 +231,8 @@ function renderUserInfo(game) {
     // Update email
     const emailEl = document.getElementById('profile-email-display');
     if (emailEl) {
-        const user = game.authManager.currentUser;
+        // FIX: Use cached user for immediate display to prevent "Guest" flash
+        const user = game.authManager.currentUser || game.authManager.getCachedUser();
         if (user && user.email) {
             emailEl.innerHTML = `
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 inline-block mr-1.5 -mt-0.5 opacity-70" viewBox="0 0 20 20" fill="currentColor">
@@ -285,7 +312,9 @@ function renderSyncStatus(game) {
     wrapper.classList.remove('hidden');
 
     // Access authManager from game instance if available
-    const user = game.authManager?.currentUser; 
+    const verifiedUser = game.authManager?.currentUser;
+    const cachedUser = game.authManager?.getCachedUser();
+    const user = verifiedUser || cachedUser;
     const isOnline = navigator.onLine;
 
     if (!user) {
@@ -298,11 +327,21 @@ function renderSyncStatus(game) {
         if (lastSyncEl) lastSyncEl.textContent = "";
     } else {
         if (isOnline) {
-             statusEl.innerHTML = `
-                <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                <span class="text-green-700 dark:text-green-300 text-[10px] sm:text-xs">Cloud Synced</span>
-            `;
-            statusEl.className = "flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800";
+            if (!verifiedUser && cachedUser) {
+                // Connecting state (Cached but not verified yet)
+                statusEl.innerHTML = `
+                   <span class="w-2 h-2 rounded-full bg-yellow-400 animate-pulse"></span>
+                   <span class="text-yellow-700 dark:text-yellow-300 text-[10px] sm:text-xs">กำลังเชื่อมต่อ...</span>
+               `;
+               statusEl.className = "flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800";
+           } else {
+                // Verified and Online
+                statusEl.innerHTML = `
+                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                    <span class="text-green-700 dark:text-green-300 text-[10px] sm:text-xs">Cloud Synced</span>
+                `;
+                statusEl.className = "flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800";
+           }
         } else {
              statusEl.innerHTML = `
                 <span class="w-2 h-2 rounded-full bg-yellow-500"></span>
