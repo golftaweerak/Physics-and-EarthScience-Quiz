@@ -479,8 +479,8 @@ class AuthManagerInternal {
                         photoURL: user.photoURL,
                         xp: localData.xp || localData.totalXP || 0,
                         level: localData.level || 1,
-                        astronomyTrackXP: localData.astronomyTrackXP || 0,
-                        earthTrackXP: localData.earthTrackXP || 0,
+                        physicsXP: localData.physicsXP || 0,
+                        earthXP: localData.earthXP || 0,
                         astronomyXP: localData.astronomyXP || 0,
                         geologyXP: localData.geologyXP || 0,
                         meteorologyXP: localData.meteorologyXP || 0,
@@ -526,13 +526,13 @@ class AuthManagerInternal {
                             ? (cloudData.xp || 0) + (localData.xp || 0) 
                             : Math.max(cloudData.xp || 0, localData.xp || 0),
                         
-                        astronomyTrackXP: mergeStrategy === 'sum'
-                            ? (cloudData.astronomyTrackXP || 0) + (localData.astronomyTrackXP || 0)
-                            : Math.max(cloudData.astronomyTrackXP || 0, localData.astronomyTrackXP || 0),
+                        physicsXP: mergeStrategy === 'sum'
+                            ? (cloudData.physicsXP || 0) + (localData.physicsXP || 0)
+                            : Math.max(cloudData.physicsXP || 0, localData.physicsXP || 0),
                             
-                        earthTrackXP: mergeStrategy === 'sum'
-                            ? (cloudData.earthTrackXP || 0) + (localData.earthTrackXP || 0)
-                            : Math.max(cloudData.earthTrackXP || 0, localData.earthTrackXP || 0),
+                        earthXP: mergeStrategy === 'sum'
+                            ? (cloudData.earthXP || 0) + (localData.earthXP || 0)
+                            : Math.max(cloudData.earthXP || 0, localData.earthXP || 0),
                             
                         generalXP: mergeStrategy === 'sum'
                             ? (cloudData.generalXP || 0) + (localData.generalXP || 0)

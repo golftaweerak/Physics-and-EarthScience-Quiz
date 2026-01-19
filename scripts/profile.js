@@ -113,6 +113,14 @@ export async function initializeProfile(gameInstance) {
     };
 
     window.addEventListener('gamification-updated', gamificationUpdateHandler);
+
+    // NEW: Direct Auth Listener to ensure Sync Status updates immediately
+    // This fixes the issue where status remains "Guest (Local)" while data is loading
+    game.authManager.onUserChange(() => {
+        renderSyncStatus(game);
+        // We also call renderUserInfo to update email immediately
+        renderUserInfo(game);
+    });
 }
 
 /**

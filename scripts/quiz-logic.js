@@ -714,7 +714,7 @@ function renderPowerUps(animateItemId = null) {
                 <span class="text-2xl lg:text-xl flex items-center justify-center">${item.icon}</span>
                 <span class="hidden lg:inline text-sm font-bold">${item.name}</span>
                 <span class="absolute -top-2 -right-2 bg-gray-100 dark:bg-gray-600 text-gray-800 dark:text-gray-200 px-1.5 py-0.5 rounded-full text-[10px] lg:text-xs font-bold min-w-[1.25rem] text-center border border-gray-200 dark:border-gray-500 shadow-sm z-10">
-                    ${isUsed ? '✓' : count}
+                    ${count}
                 </span>
             </button>
         `;
