@@ -17,6 +17,7 @@ class AuthManagerInternal {
         this.onlineStatusTimeout = null; // เก็บ timeout ID สำหรับซ่อน status
         this.isSyncing = false; // NEW: ป้องกันการ Sync ซ้ำซ้อน
         this.saveTimeout = null; // NEW: สำหรับ Debounce การบันทึกข้อมูล
+        this.quizHistorySaveTimeout = null; // NEW: สำหรับ Debounce การบันทึกประวัติรายข้อ
         
         // Promise เพื่อรอให้ตรวจสอบ Auth เสร็จสิ้นครั้งแรก
         this.authReadyPromise = new Promise((resolve) => {
@@ -253,6 +254,11 @@ class AuthManagerInternal {
             if (this.saveTimeout) {
                 clearTimeout(this.saveTimeout);
                 this.saveTimeout = null;
+            }
+            // NEW: Clear pending quiz history save timeout
+            if (this.quizHistorySaveTimeout) {
+                clearTimeout(this.quizHistorySaveTimeout);
+                this.quizHistorySaveTimeout = null;
             }
 
             await signOut(auth);
@@ -658,6 +664,15 @@ class AuthManagerInternal {
     // ฟังก์ชันซิงค์ประวัติทั้งหมด (ทำงานตอนล็อกอิน)
     async syncHistory(user) {
         if (!user) return;
+
+        // NEW: Throttle sync - ป้องกันการโหลดซ้ำถ้าระยะเวลาห่างกันไม่ถึง 5 นาที
+        const lastSync = localStorage.getItem('last_history_sync');
+        if (lastSync) {
+            const diff = Date.now() - new Date(lastSync).getTime();
+            if (diff < 5 * 60 * 1000) { // 5 นาที
+                return;
+            }
+        }
         
         const historyRef = collection(db, "users", user.uid, "quiz_history");
         
@@ -730,6 +745,9 @@ class AuthManagerInternal {
             if (hasChanges) {
                 this.updateLastSyncTime();
             }
+            
+            // Update sync timestamp
+            localStorage.setItem('last_history_sync', new Date().toISOString());
         } catch (e) {
             console.error("Error syncing history:", e);
         }
@@ -864,14 +882,22 @@ class AuthManagerInternal {
              console.warn("Invalid history key for saving:", key);
              return;
         }
-        try {
-            // บันทึกลง Subcollection 'quiz_history' โดยใช้ key เป็น ID เอกสาร
-            const docRef = doc(db, "users", this.currentUser.uid, "quiz_history", key);
-            await this.retryOperation(() => setDoc(docRef, data, { merge: true }));
-            this.updateLastSyncTime();
-        } catch (e) {
-            console.error("Error saving quiz history item:", e);
-        }
+
+        // NEW: Debounce logic - รอ 2 วินาทีหลังจากการแก้ไขล่าสุดค่อยบันทึก
+        if (this.quizHistorySaveTimeout) clearTimeout(this.quizHistorySaveTimeout);
+
+        this.quizHistorySaveTimeout = setTimeout(async () => {
+            try {
+                // บันทึกลง Subcollection 'quiz_history' โดยใช้ key เป็น ID เอกสาร
+                const docRef = doc(db, "users", this.currentUser.uid, "quiz_history", key);
+                // Clone data เพื่อป้องกันค่าเปลี่ยนระหว่างรอ
+                const dataToSave = JSON.parse(JSON.stringify(data));
+                await this.retryOperation(() => setDoc(docRef, dataToSave, { merge: true }));
+                this.updateLastSyncTime();
+            } catch (e) {
+                console.error("Error saving quiz history item:", e);
+            }
+        }, 2000);
     }
 
     // ฟังก์ชันทำลาย instance และเคลียร์ listener ทั้งหมด
@@ -892,6 +918,11 @@ class AuthManagerInternal {
         // 3. Clear Intervals & Timeouts
         if (this.networkCheckInterval) clearInterval(this.networkCheckInterval);
         if (this.onlineStatusTimeout) clearTimeout(this.onlineStatusTimeout);
+
+        if (this.quizHistorySaveTimeout) {
+            clearTimeout(this.quizHistorySaveTimeout);
+            this.quizHistorySaveTimeout = null;
+        }
 
         this.networkCheckInterval = null;
         this.onlineStatusTimeout = null;
