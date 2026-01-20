@@ -9,6 +9,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;700&family=Sarabun:wght@400;700&display=swap"
     rel="stylesheet" />
+  <!-- Meta Tags for SEO and Sharing -->
+  <meta name="description" content="แบบทดสอบวิชาฟิสิกส์ และวิชาวิทยาศาสตร์โลกและอวกาศ ฝึกทำโจทย์และดูเฉลยละเอียด">
+  <meta property="og:title" content="ทำแบบทดสอบ - Physics & Earth Science Quiz">
+  <meta property="og:image" content="../assets/icons/exam.png">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
     integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"
@@ -29,12 +33,18 @@
 </head>
 
 <body
-  class="pt-24 md:pt-28 bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-300 p-4">
-  <div class="max-w-3xl mx-auto">
+  class="pt-24 md:pt-28 bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-300 p-4 flex flex-col min-h-screen"
+  style="padding-top: var(--header-height-offset, 7rem);">
+  <noscript>
+    <div class="max-w-3xl mx-auto p-4 mb-4 bg-red-100 text-red-700 rounded-lg text-center font-kanit">
+      ⚠️ จำเป็นต้องเปิดใช้งาน JavaScript เพื่อทำแบบทดสอบ
+    </div>
+  </noscript>
+  <div class="max-w-3xl mx-auto w-full flex-grow flex flex-col">
     <!-- Header with buttons -->
     <div id="main_header-placeholder"></div>
 
-    <main id="quiz-container" class="bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-xl shadow-lg">
+    <main id="quiz-container" class="bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-xl shadow-lg flex-grow">
       <div id="start-screen">
         <h1 id="start-screen-title"
           class="text-2xl sm:text-3xl font-bold text-center text-gray-700 dark:text-gray-100 mb-4">
@@ -181,7 +191,7 @@
         </button>
       </div>
     </main>
-    <div id="footer-placeholder" class="mt-12"></div>
+    <div id="footer-placeholder" class="mt-12 mt-auto"></div>
   </div>
 
   <!-- Placeholder for all common modals -->
