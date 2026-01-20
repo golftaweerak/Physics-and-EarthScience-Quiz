@@ -11,24 +11,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "firebase": "^12.8.0",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
-    "@types/node": "^25.0.3",
-    "tailwindcss": "^4.1.18"
-  },
-  "main": "playwright.config.js",
-  "directories": {
-    "test": "tests"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/golftaweerak/Physics-and-EarthScience-Quiz.git"
-  },
-  "keywords": [],
-  "bugs": {
-    "url": "https://github.com/golftaweerak/Physics-and-EarthScience-Quiz/issues"
-  },
-  "homepage": "https://github.com/golftaweerak/Physics-and-EarthScience-Quiz#readme"
+    "@types/node": "^25.0.3"
+  }
 }

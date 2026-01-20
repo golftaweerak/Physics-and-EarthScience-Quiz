@@ -1,6 +1,8 @@
 /* c:\Users\golf_\OneDrive\Documents\GitHub\Physics-and-EarthScience-Quiz\styles\input.css */
 
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /* === BASE STYLES === */
   /* Ensure dropdown options are readable in dark mode on supported browsers */

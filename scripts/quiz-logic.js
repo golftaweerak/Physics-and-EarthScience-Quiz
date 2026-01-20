@@ -1,208 +1,7 @@
 import { ModalHandler } from './modal-handler.js';
-import { shuffleArray, escapeHtml } from './utils.js';
+import { shuffleArray } from './utils.js';
 import { Gamification, SHOP_ITEMS, PROFICIENCY_GROUPS } from './gamification.js';
 import { showToast } from './toast.js';
-import { db } from './firebase-config.js';
-import { doc, getDoc, updateDoc, onSnapshot, runTransaction } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import { challengeManager } from './challenge-manager.js';
-
-// Replacement for SiteConfig which is missing in this project
-const TRACK_CATEGORIES = [
-    { track: 'physics', label: 'ฟิสิกส์' },
-    { track: 'earth', label: 'วิทย์โลก' }
-];
-
-/**
- * Animates a numeric value in a specified element.
- * @param {HTMLElement} obj - The element to update.
- * @param {number} start - The starting value.
- * @param {number} end - The final value.
- * @param {number} duration - The animation duration in ms.
- * @param {string} [prefix=''] - A prefix to add before the number (e.g., '+').
- */
-function animateValue(obj, start, end, duration, prefix = '') {
-    if (!obj) return;
-    if (obj.animationId) cancelAnimationFrame(obj.animationId);
-    
-    let startTimestamp = null;
-    const step = (timestamp) => {
-        if (!startTimestamp) startTimestamp = timestamp;
-        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-        const ease = 1 - Math.pow(1 - progress, 4); // Ease out quart
-        const value = Math.floor(ease * (end - start) + start);
-        obj.textContent = prefix + value.toLocaleString();
-        if (progress < 1) obj.animationId = window.requestAnimationFrame(step);
-    };
-    obj.animationId = window.requestAnimationFrame(step);
-}
-
-function injectQuizAnimations() {
-    if (document.getElementById('quiz-animations-style')) return;
-    const style = document.createElement('style');
-    style.id = 'quiz-animations-style';
-    style.innerHTML = `
-        @keyframes screen-shake {
-            0%, 100% { transform: translateX(0); }
-            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-            20%, 40%, 60%, 80% { transform: translateX(5px); }
-        }
-        .anim-screen-shake {
-            animation: screen-shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
-        }
-        @keyframes screen-shake-hard {
-            0% { transform: translate(0, 0) rotate(0deg); }
-            10% { transform: translate(-10px, -10px) rotate(-5deg); }
-            20% { transform: translate(10px, 10px) rotate(5deg); }
-            30% { transform: translate(-10px, 10px) rotate(-5deg); }
-            40% { transform: translate(10px, -10px) rotate(5deg); }
-            50% { transform: translate(-5px, 0px) rotate(-3deg); }
-            60% { transform: translate(5px, 0px) rotate(3deg); }
-            100% { transform: translate(0, 0) rotate(0deg); }
-        }
-        .anim-screen-shake-hard {
-            animation: screen-shake-hard 0.5s ease-in-out both;
-        }
-        @keyframes red-flash {
-            0%, 100% { box-shadow: inset 0 0 0 0 transparent; }
-            50% { box-shadow: inset 0 0 0 200vmax rgba(220, 38, 38, 0.4); }
-        }
-        .anim-red-flash {
-            animation: red-flash 0.5s ease-in-out both;
-        }
-        @keyframes score-pop-up {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.3); color: #22c55e; }
-            100% { transform: scale(1); }
-        }
-        .anim-score-pop {
-            animation: score-pop-up 0.6s ease-out;
-        }
-        /* NEW: Shimmer effect for progress bar */
-        @keyframes progress-shimmer {
-            0% { background-position: 150% 0; }
-            100% { background-position: -50% 0; }
-        }
-        .anim-progress-shimmer {
-            background-image: linear-gradient(90deg, 
-                #6366f1 0%, 
-                #a855f7 25%, 
-                #ffffff 50%, 
-                #ec4899 75%,
-                #6366f1 100%) !important;
-            background-size: 200% 100% !important;
-            animation: progress-shimmer 0.8s linear forwards;
-        }
-        @keyframes heart-break-anim {
-            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
-            15% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
-            30% { transform: translate(-50%, -50%) scale(1) rotate(-5deg); }
-            45% { transform: translate(-50%, -50%) scale(1) rotate(5deg); }
-            60% { transform: translate(-50%, -50%) scale(1.1) rotate(0deg); }
-            100% { transform: translate(-50%, -50%) scale(2); opacity: 0; filter: blur(4px); }
-        }
-        .anim-heart-break {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            font-size: 8rem;
-            z-index: 9999;
-            pointer-events: none;
-            animation: heart-break-anim 1.5s ease-out forwards;
-            text-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        }
-        @keyframes badge-pop-in {
-            0% { transform: scale(0) rotate(-45deg); opacity: 0; }
-            60% { transform: scale(1.2) rotate(10deg); opacity: 1; }
-            80% { transform: scale(0.9) rotate(-5deg); }
-            100% { transform: scale(1) rotate(0deg); }
-        }
-        .anim-badge-pop {
-            animation: badge-pop-in 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
-        @keyframes shine-rotate {
-            from { transform: translate(-50%, -50%) rotate(0deg); }
-            to { transform: translate(-50%, -50%) rotate(360deg); }
-        }
-        .anim-shine-rotate {
-            animation: shine-rotate 20s linear infinite;
-        }
-    `;
-    document.head.appendChild(style);
-}
-
-function triggerSurvivalShake() {
-    const element = document.body;
-    element.classList.remove('anim-screen-shake-hard', 'anim-red-flash');
-    void element.offsetWidth; // Force reflow
-    element.classList.add('anim-screen-shake-hard', 'anim-red-flash');
-    
-    setTimeout(() => {
-        element.classList.remove('anim-screen-shake-hard', 'anim-red-flash');
-    }, 500);
-}
-
-function triggerHeartBreak() {
-    const heart = document.createElement('div');
-    heart.textContent = '💔';
-    heart.className = 'anim-heart-break';
-    document.body.appendChild(heart);
-    
-    setTimeout(() => {
-        heart.remove();
-    }, 1500);
-}
-
-function showBadgeUnlockPopup(badges) {
-    if (!badges || badges.length === 0) return;
-
-    const overlay = document.createElement('div');
-    overlay.className = 'fixed inset-0 z-[200] flex items-center justify-center bg-black/80 backdrop-blur-sm transition-opacity duration-300 opacity-0';
-    overlay.id = 'badge-unlock-overlay';
-    
-    let currentIndex = 0;
-
-    const showNext = () => {
-        if (currentIndex >= badges.length) {
-            overlay.classList.remove('opacity-100');
-            overlay.classList.add('opacity-0');
-            setTimeout(() => overlay.remove(), 300);
-            return;
-        }
-
-        const badge = badges[currentIndex];
-        
-        overlay.innerHTML = `
-            <div class="bg-white dark:bg-gray-800 rounded-3xl p-8 text-center shadow-2xl transform scale-0 max-w-sm w-full mx-4 relative overflow-hidden border-4 border-yellow-400 badge-card-popup">
-                <div class="absolute top-1/2 left-1/2 w-[200%] h-[200%] bg-[conic-gradient(from_0deg_at_50%_50%,transparent_0deg,rgba(250,204,21,0.2)_20deg,transparent_40deg,rgba(250,204,21,0.2)_60deg,transparent_80deg,rgba(250,204,21,0.2)_100deg,transparent_120deg,rgba(250,204,21,0.2)_140deg,transparent_160deg,rgba(250,204,21,0.2)_180deg,transparent_200deg,rgba(250,204,21,0.2)_220deg,transparent_240deg,rgba(250,204,21,0.2)_260deg,transparent_280deg,rgba(250,204,21,0.2)_300deg,transparent_320deg,rgba(250,204,21,0.2)_340deg,transparent_360deg)] anim-shine-rotate pointer-events-none"></div>
-                <div class="relative z-10 flex flex-col items-center">
-                    <div class="text-xs font-bold text-yellow-600 dark:text-yellow-400 uppercase tracking-widest mb-4 bg-yellow-100 dark:bg-yellow-900/30 px-3 py-1 rounded-full">New Badge Unlocked!</div>
-                    <div class="text-9xl mb-6 anim-badge-pop drop-shadow-xl filter">${badge.icon}</div>
-                    <h3 class="text-3xl font-bold text-gray-900 dark:text-white mb-2 font-kanit">${badge.name}</h3>
-                    <p class="text-gray-600 dark:text-gray-300 mb-8 text-sm leading-relaxed">${badge.desc}</p>
-                    <button id="badge-claim-btn" class="px-8 py-3 bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white font-bold rounded-full shadow-lg transform transition hover:scale-105 active:scale-95 w-full">
-                        ${currentIndex < badges.length - 1 ? 'ถัดไป' : 'เยี่ยมเลย!'}
-                    </button>
-                </div>
-            </div>
-        `;
-
-        const btn = overlay.querySelector('#badge-claim-btn');
-        btn.onclick = () => {
-            currentIndex++;
-            showNext();
-        };
-    };
-
-    document.body.appendChild(overlay);
-    
-    requestAnimationFrame(() => {
-        overlay.classList.remove('opacity-0');
-        overlay.classList.add('opacity-100');
-        showNext();
-    });
-}
-
-let confettiInterval = null; // Module-level variable to track confetti interval
 
 // state: Stores all dynamic data of the quiz
 let state = {};
@@ -301,7 +100,7 @@ function ensurePowerUpModalExists() {
 
                 <div class="w-full flex gap-3">
                     <button data-modal-close class="flex-1 py-2 rounded-xl bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-bold hover:bg-gray-300 dark:hover:bg-gray-600 transition">ยกเลิก</button>
-                    <button id="powerup-confirm-buy-btn" data-modal-confirm data-modal-autofocus class="flex-1 py-2 rounded-xl bg-blue-600 text-white font-bold hover:bg-blue-700 transition shadow-md">ยืนยัน</button>
+                    <button id="powerup-confirm-buy-btn" class="flex-1 py-2 rounded-xl bg-blue-600 text-white font-bold hover:bg-blue-700 transition shadow-md">ยืนยัน</button>
                 </div>
             </div>
         </div>
@@ -317,64 +116,9 @@ function ensurePowerUpModalExists() {
  * @param {string} quizTitle - The title of the current quiz.
  * @param {number|null} customTime - Custom time in seconds, if provided.
  */
-export function init(quizData, storageKey, quizTitle, customTime, action, disableShuffle = false, lives = 1) {
+export function init(quizData, storageKey, quizTitle, customTime, action) {
   // Ensure the power-up modal exists in the DOM
   ensurePowerUpModalExists();
-  injectQuizAnimations();
-
-  // NOTE: Gamification is now a Singleton, so we don't destroy it here.
-  // It persists across the application lifecycle.
-
-  // FIX: Cleanup previous Firestore listener to prevent memory leaks
-  if (state.lobbyUnsubscribe) {
-      state.lobbyUnsubscribe();
-      state.lobbyUnsubscribe = null;
-  }
-
-  // FIX: Cleanup previous Timer to prevent multiple timers running
-  if (state.timerId) {
-      clearInterval(state.timerId);
-      state.timerId = null;
-  }
-
-  // FIX: Cleanup previous Freeze Timeout to prevent it from resuming timer in new game
-  if (state.freezeTimeout) {
-      clearTimeout(state.freezeTimeout);
-  }
-
-  // FIX: Cleanup previous Confetti Interval
-  if (confettiInterval) {
-      clearInterval(confettiInterval);
-      confettiInterval = null;
-  }
-
-  // FIX: Cleanup previous Team Score Element to prevent duplication
-  const oldTeamScoreEl = document.getElementById('team-score-counter');
-  if (oldTeamScoreEl) {
-      oldTeamScoreEl.remove();
-  }
-
-  // FIX: Cleanup floating UI elements appended to body to prevent ghosts
-  const oldPlayersList = document.getElementById('quiz-players-list');
-  if (oldPlayersList) {
-      oldPlayersList.remove();
-  }
-  const oldTeamProgressBar = document.getElementById('team-progress-container');
-  if (oldTeamProgressBar) {
-      oldTeamProgressBar.remove();
-  }
-
-  // FIX: Cleanup Survival Lives Display to prevent it from persisting in other modes
-  const oldLivesDisplay = document.getElementById('survival-lives-display');
-  if (oldLivesDisplay) {
-      oldLivesDisplay.remove();
-  }
-
-  // NEW: Cleanup previous modal handlers
-  if (resumeModalHandler) resumeModalHandler.destroy();
-  if (powerupBuyModalHandler) powerupBuyModalHandler.destroy();
-
-  const basePath = window.location.pathname.includes('/quiz/') ? '../' : './';
 
   // --- 1. Element Caching ---
   elements = {
@@ -430,7 +174,6 @@ export function init(quizData, storageKey, quizTitle, customTime, action, disabl
   // --- 2. State Initialization ---
   state = {
     quizData: quizData, // Use data passed from the loader
-    basePath: basePath, // Store basePath for use in other functions
     storageKey: storageKey, // Use key passed from the loader
     quizTitle: quizTitle || "แบบทดสอบ",
     customTime: customTime, // Store custom time
@@ -439,10 +182,10 @@ export function init(quizData, storageKey, quizTitle, customTime, action, disabl
     shuffledQuestions: [],
     userAnswers: [],
     isSoundEnabled: true, // This will be initialized properly later
-    correctSound: new Audio(`${basePath}assets/audio/correct.mp3`),
-    incorrectSound: new Audio(`${basePath}assets/audio/incorrect.mp3`),
-    levelUpSound: new Audio(`${basePath}assets/audio/level-up.mp3`), // Added missing sound
-    badgeSound: new Audio(`${basePath}assets/audio/badge-unlock.mp3`), // Added missing sound
+    correctSound: new Audio("../assets/audio/correct.mp3"),
+    incorrectSound: new Audio("../assets/audio/incorrect.mp3"),
+    levelUpSound: new Audio("../assets/audio/level-up.mp3"), // Added missing sound
+    badgeSound: new Audio("../assets/audio/badge-unlock.mp3"), // Added missing sound
     timerMode: "none",
     timeLeft: 0,
     timerId: null,
@@ -457,15 +200,7 @@ export function init(quizData, storageKey, quizTitle, customTime, action, disabl
     usedTolerance: false,
     isCustomQuiz: false, // NEW
     questionCount: 0,    // NEW
-    lobbyId: null,       // NEW: For Real-time Challenge
-    mode: null,          // NEW: 'challenge' or 'coop'
-    currentTeamScore: 0, // NEW: Track team score
-    disableShuffle: disableShuffle, // NEW: Flag to prevent re-shuffling
-    action: action, // NEW: Store action to check if viewing results
-    isQuizFinished: false, // NEW: Prevent double submission
-    lives: lives, // NEW: Survival Lives
   };
-  state.isProcessingNext = false; // NEW: Lock for next button
 
   // --- 3. Initial Setup ---
   resumeModalHandler = new ModalHandler('resume-modal');
@@ -476,18 +211,8 @@ export function init(quizData, storageKey, quizTitle, customTime, action, disabl
   state.isCustomQuiz = storageKey.startsWith('quizState-custom_');
   state.questionCount = quizData.length;
 
-  const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.get('lobbyId')) {
-      state.lobbyId = urlParams.get('lobbyId');
-  }
-  state.mode = urlParams.get('mode');
-
   checkForSavedQuiz(action); // This will check localStorage and either show the start screen or a resume prompt.
   setupPowerUpUI(); // Setup the power-up bar
-
-  if (state.lobbyId) {
-      setupLobbyListener();
-  }
 }
 
 /**
@@ -499,7 +224,6 @@ function updateNextButtonAppearance(action) {
 
     const isLastQuestion = state.currentQuestionIndex === state.shuffledQuestions.length - 1;
     const isAnswered = state.userAnswers[state.currentQuestionIndex] !== null;
-    const isSpeedRunWin = state.mode === 'time-attack' && state.score >= 10;
 
     let buttonText = 'ข้อต่อไป';
     let buttonIcon = config.icons.next;
@@ -509,7 +233,7 @@ function updateNextButtonAppearance(action) {
         buttonText = 'ส่งคำตอบ';
         buttonIcon = config.icons.submit;
         buttonTitle = 'ส่งคำตอบ';
-    } else if ((isLastQuestion && isAnswered) || isSpeedRunWin) {
+    } else if (isLastQuestion && isAnswered) {
         buttonText = 'ดูผลสรุป';
         buttonIcon = config.icons.submit; // Using the submit icon for "finish" is fine.
         buttonTitle = 'ดูผลสรุป';
@@ -573,22 +297,6 @@ function setFloatingNav(active) {
       elements.quizScreen.style.paddingBottom = '';
     }
   }
-}
-
-function updateLivesUI() {
-    if (state.mode !== 'survival') return;
-    
-    let livesContainer = document.getElementById('survival-lives-display');
-    if (!livesContainer) {
-        livesContainer = document.createElement('div');
-        livesContainer.id = 'survival-lives-display';
-        livesContainer.className = "font-kanit text-lg font-bold text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 px-3 py-1 rounded-lg border border-red-200 dark:border-red-800 transition-all duration-300 transform ml-2 whitespace-nowrap flex-shrink-0";
-        if (elements.scoreCounter && elements.scoreCounter.parentNode) {
-            elements.scoreCounter.parentNode.insertBefore(livesContainer, elements.scoreCounter.nextSibling);
-        }
-    }
-    
-    livesContainer.innerHTML = `❤️ ${state.lives}`;
 }
 
 // --- UI / Rendering Functions ---
@@ -732,207 +440,18 @@ function createCheckboxOption(optionText, previousAnswer) {
  */
 function setupPowerUpUI() {
     // Create container if it doesn't exist
-    let container = document.getElementById('power-up-bar');
-    if (!container) {
-        container = document.createElement('div');
+    if (!document.getElementById('power-up-bar')) {
+        const container = document.createElement('div');
         container.id = 'power-up-bar';
+        container.className = 'flex flex-wrap justify-center gap-3 mb-6 px-2';
         
         // Insert before the question container
         const questionContainer = document.getElementById('question');
         if (questionContainer && questionContainer.parentNode) {
             questionContainer.parentNode.insertBefore(container, questionContainer);
         }
+        elements.powerUpContainer = container;
     }
-    // FIX: ปรับ Layout เป็น Flex Wrap เพื่อให้ปุ่มเรียงตัวสวยงามไม่ว่าจะหน้าจอขนาดไหน
-    container.className = 'flex flex-wrap justify-center gap-2 sm:gap-3 mb-6 px-2 w-full max-w-4xl mx-auto';
-    elements.powerUpContainer = container;
-}
-
-function updatePlayersListUI(players, scoreChangedPlayers = new Set()) {
-    const container = document.getElementById('quiz-players-list');
-    if (!container) return;
-
-    const myUid = state.game.authManager.currentUser?.uid;
-
-    // Sort players by score descending
-    const sortedPlayers = [...players].sort((a, b) => (b.score || 0) - (a.score || 0));
-
-    container.innerHTML = sortedPlayers.map(p => {
-        const isMe = p.uid === myUid;
-        if (isMe) return ''; // Don't show myself in the floating list
-
-        const score = p.score || 0;
-        const lastStatus = p.lastAnswerStatus; // 'correct', 'incorrect', or null
-        const isScoreChanged = scoreChangedPlayers.has(p.uid);
-        
-        let statusHtml = '';
-        let bgClass = 'bg-white/90 dark:bg-gray-800/90 border-gray-200 dark:border-gray-700';
-        let textClass = 'text-gray-800 dark:text-gray-200';
-        
-        if (lastStatus === 'correct') {
-            statusHtml = '<span class="text-lg animate-bounce">✅</span>';
-            bgClass = 'bg-green-100/90 dark:bg-green-900/80 border-green-300 dark:border-green-700';
-            textClass = 'text-green-900 dark:text-green-100';
-        } else if (lastStatus === 'incorrect') {
-            statusHtml = '<span class="text-lg animate-pulse">❌</span>';
-            bgClass = 'bg-red-100/90 dark:bg-red-900/80 border-red-300 dark:border-red-700';
-            textClass = 'text-red-900 dark:text-red-100';
-        }
-
-        const avatar = p.avatar || '🧑‍🎓';
-        const isImage = avatar.includes('/') || avatar.includes('.');
-        const avatarHtml = isImage 
-            ? `<img src="${escapeHtml(avatar)}" class="w-8 h-8 rounded-full object-cover border border-gray-300 dark:border-gray-600">`
-            : `<span class="text-xl">${escapeHtml(avatar)}</span>`;
-
-        const scoreClass = isScoreChanged ? 'anim-score-pop font-bold text-green-600 dark:text-green-400' : `opacity-80 ${textClass}`;
-
-        return `
-            <div class="flex items-center gap-3 p-2 rounded-xl border shadow-sm transition-all duration-500 ${bgClass} backdrop-blur-sm transform translate-x-0">
-                <div class="flex-shrink-0">${avatarHtml}</div>
-                <div class="flex-grow min-w-0">
-                    <div class="text-xs font-bold ${textClass} truncate max-w-[100px]">${escapeHtml(p.name)}</div>
-                    <div class="text-[10px] font-mono ${scoreClass}">${score} pts</div>
-                </div>
-                <div class="flex-shrink-0">${statusHtml}</div>
-            </div>
-        `;
-    }).join('');
-}
-
-function setupLobbyListener() {
-    const scoreCounter = elements.scoreCounter;
-    if (!scoreCounter) return;
-
-    let teamScoreEl = null;
-    // Create Team Score Element (Only for Co-op)
-    if (state.mode === 'coop') {
-        teamScoreEl = document.createElement('div');
-        teamScoreEl.id = 'team-score-counter';
-        teamScoreEl.className = "font-kanit text-sm sm:text-lg font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/20 px-2 py-0.5 sm:px-3 sm:py-1 rounded-lg border border-indigo-200 dark:border-indigo-800 transition-all duration-300 transform ml-1 sm:ml-2 whitespace-nowrap flex-shrink-0";
-        teamScoreEl.innerHTML = `🤝 ทีม: 0`;
-        
-        // Insert after individual score
-        if (scoreCounter.parentNode) {
-            scoreCounter.parentNode.insertBefore(teamScoreEl, scoreCounter.nextSibling);
-        }
-        elements.teamScoreDisplay = teamScoreEl;
-    }
-
-    // Create Players List Container if not exists
-    if (!document.getElementById('quiz-players-list')) {
-        const playersListEl = document.createElement('div');
-        playersListEl.id = 'quiz-players-list';
-        playersListEl.className = "fixed top-24 right-4 z-30 flex flex-col gap-2 max-w-[200px] pointer-events-none transition-all duration-300"; 
-        document.body.appendChild(playersListEl);
-    }
-
-    // --- NEW: Team Progress Bar (Fixed Top) ---
-    let teamProgressBar = document.getElementById('team-progress-bar');
-    if (!teamProgressBar) {
-        const container = document.createElement('div');
-        container.id = 'team-progress-container';
-        container.className = "fixed top-0 left-0 w-full h-1.5 z-[60] bg-gray-200 dark:bg-gray-800";
-        
-        teamProgressBar = document.createElement('div');
-        teamProgressBar.id = 'team-progress-bar';
-        const gradient = state.mode === 'coop' ? "bg-gradient-to-r from-green-400 to-blue-500" : "bg-gradient-to-r from-orange-400 to-red-500";
-        teamProgressBar.className = `h-full ${gradient} transition-all duration-700 ease-out shadow-sm`;
-        teamProgressBar.style.width = '0%';
-        
-        container.appendChild(teamProgressBar);
-        document.body.appendChild(container);
-    }
-
-    let previousPlayersData = {};
-    let isFirstLoad = true;
-
-    const lobbyRef = doc(db, 'lobbies', state.lobbyId);
-    // Listen for real-time updates
-    state.lobbyUnsubscribe = onSnapshot(lobbyRef, (docSnapshot) => {
-        if (docSnapshot.exists()) {
-            const data = docSnapshot.data();
-
-            // NEW: Check if game has been declared finished by a player
-            if (data.status === 'finished') {
-                if (state.lobbyUnsubscribe) {
-                    state.lobbyUnsubscribe();
-                    state.lobbyUnsubscribe = null;
-                }
-                // Only switch if not already on the results screen to prevent double-triggers
-                if (state.activeScreen !== elements.resultScreen) {
-                    // แจ้งเตือนก่อนตัดจบเกม
-                    const winnerName = data.winnerName || 'ผู้เล่นอื่น';
-                    if (state.mode === 'time-attack') {
-                         showToast('จบเกม!', `${winnerName} เข้าเส้นชัยแล้ว!`, '🏁');
-                    } else {
-                         showToast('จบเกม!', `การแข่งขันสิ้นสุดลงแล้ว`, '🏁');
-                    }
-                    // หน่วงเวลาเล็กน้อยเพื่อให้เห็น Toast ก่อนตัดหน้า
-                    setTimeout(() => showResults(), 1000);
-                }
-                return; // Stop further processing for this snapshot
-            }
-
-            const players = data.players || [];
-            const totalScore = players.reduce((sum, p) => sum + (p.score || 0), 0);
-            
-            state.currentTeamScore = totalScore; // Update state for result screen
-            
-            // Update Team Score UI (Co-op only)
-            if (state.mode === 'coop' && teamScoreEl) {
-                const currentDisplayScore = parseInt(teamScoreEl.dataset.score || 0);
-                if (totalScore !== currentDisplayScore) {
-                    animateValue(teamScoreEl, currentDisplayScore, totalScore, 1000, '🤝 ทีม: ');
-                    teamScoreEl.dataset.score = totalScore;
-                    
-                    // Pop animation effect
-                    teamScoreEl.classList.add('scale-110', 'bg-indigo-100', 'dark:bg-indigo-800');
-                    setTimeout(() => {
-                        teamScoreEl.classList.remove('scale-110', 'bg-indigo-100', 'dark:bg-indigo-800');
-                    }, 300);
-                }
-            }
-
-            // Update Progress Bar
-            if (teamProgressBar) {
-                const totalQ = state.questionCount || 1;
-                let progressPercent = 0;
-                
-                if (state.mode === 'coop') {
-                    // Average progress of the team
-                    const totalProgress = players.reduce((sum, p) => sum + (p.progress || 0), 0);
-                    const playerCount = players.length || 1;
-                    progressPercent = (totalProgress / (totalQ * playerCount)) * 100;
-                } else if (state.mode === 'time-attack') {
-                    // Time Attack: Progress based on Leader's Score vs Target (10)
-                    // ใช้คะแนนสูงสุดในห้องเป็นตัวกำหนดความคืบหน้าของแถบ
-                    const maxScore = Math.max(...players.map(p => p.score || 0));
-                    progressPercent = (maxScore / 10) * 100; 
-                } else {
-                    // Challenge: Show Leader's progress
-                    const maxProgress = Math.max(...players.map(p => p.progress || 0));
-                    progressPercent = (maxProgress / totalQ) * 100;
-                }
-                teamProgressBar.style.width = `${Math.min(100, Math.max(0, progressPercent))}%`;
-            }
-
-            // Calculate changes for animation
-            const scoreChangedPlayers = new Set();
-            if (!isFirstLoad) {
-                players.forEach(p => {
-                    const oldScore = previousPlayersData[p.uid]?.score || 0;
-                    if (p.score > oldScore) scoreChangedPlayers.add(p.uid);
-                });
-            }
-            // Update cache
-            players.forEach(p => previousPlayersData[p.uid] = { ...p });
-            isFirstLoad = false;
-
-            // Update Players List UI (All modes)
-            updatePlayersListUI(players, scoreChangedPlayers);
-        }
-    });
 }
 
 /**
@@ -945,8 +464,7 @@ function renderPowerUps(animateItemId = null) {
     const isNumberQuestion = currentQuestion && currentQuestion.type === 'fill-in-number';
     const hasOptions = currentQuestion && (currentQuestion.options || currentQuestion.choices);
 
-    // FIX: กรอง item_streak_freeze ออก เพราะเป็น Passive Item ไม่ควรแสดงในห้องสอบ
-    const consumables = SHOP_ITEMS.filter(i => i.type === 'consumable' && i.id !== 'item_streak_freeze');
+    const consumables = SHOP_ITEMS.filter(i => i.type === 'consumable');
     
     elements.powerUpContainer.innerHTML = consumables.map(item => {
         // Filter items based on question type
@@ -955,10 +473,6 @@ function renderPowerUps(animateItemId = null) {
         }
         if (item.id === 'item_range_hint' || item.id === 'item_tolerance') {
             if (!isNumberQuestion) return '';
-        }
-        // FIX: ซ่อนไอเทมหยุดเวลาถ้าไม่ได้เล่นโหมดจับเวลา
-        if (item.id === 'item_time_freeze' && state.timerMode === 'none') {
-            return '';
         }
 
         const count = state.game.getItemCount(item.id);
@@ -975,8 +489,7 @@ function renderPowerUps(animateItemId = null) {
         const isTimerDisabled = state.timerMode === 'none';
         const isDisabled = isUsed || (isTimeFreeze && isTimerDisabled);
 
-        // FIX: ปรับปุ่มให้แสดงเฉพาะไอคอน (Square button)
-        let btnClass = "relative group flex items-center justify-center p-0 rounded-xl transition-all shadow-sm border-2 w-12 h-12 ";
+        let btnClass = "relative group flex items-center justify-center lg:justify-start gap-0 lg:gap-2 p-2 lg:px-3 lg:py-1.5 rounded-xl lg:rounded-full transition-all shadow-sm border-2 ";
         
         if (item.id === animateItemId) {
             btnClass += "anim-item-pop ";
@@ -994,19 +507,12 @@ function renderPowerUps(animateItemId = null) {
         }
 
         return `
-            <button class="power-up-btn ${btnClass}" data-id="${item.id}" ${isDisabled ? 'disabled' : ''}>
-                <span class="text-2xl leading-none">${item.icon}</span>
-                <span class="absolute -top-2 -right-2 bg-gray-100 dark:bg-gray-600 text-gray-800 dark:text-gray-200 px-1.5 py-0.5 rounded-full text-[10px] font-bold min-w-[1.25rem] text-center border border-gray-200 dark:border-gray-500 shadow-sm z-10 leading-none">
+            <button class="power-up-btn ${btnClass}" data-id="${item.id}" ${isDisabled ? 'disabled' : ''} title="${item.name}">
+                <span class="text-xl lg:text-base leading-none">${item.icon}</span>
+                <span class="hidden lg:inline text-sm font-bold">${item.name}</span>
+                <span class="absolute -top-2 -right-2 lg:static lg:top-auto lg:right-auto bg-gray-100 dark:bg-gray-600 text-gray-800 dark:text-gray-200 px-1.5 py-0.5 rounded-full text-[10px] lg:text-xs font-bold min-w-[1.25rem] text-center border border-gray-200 dark:border-gray-500 shadow-sm z-10">
                     ${isUsed ? '✓' : count}
                 </span>
-                
-                <!-- Custom Tooltip -->
-                <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-3 hidden group-hover:block w-max max-w-[200px] p-2.5 bg-gray-900/95 dark:bg-gray-800/95 text-white text-xs rounded-lg shadow-xl z-50 text-center pointer-events-none backdrop-blur-sm border border-gray-700/50">
-                    <div class="font-bold text-yellow-400 mb-1 text-sm">${item.name}</div>
-                    <div class="text-gray-200 font-normal leading-snug">${item.desc || ''}</div>
-                    <!-- Arrow -->
-                    <div class="absolute -bottom-1.5 left-1/2 transform -translate-x-1/2 w-3 h-3 bg-gray-900/95 dark:bg-gray-800/95 rotate-45 border-r border-b border-gray-700/50"></div>
-                </div>
             </button>
         `;
     }).join('');
@@ -1220,7 +726,6 @@ function showQuestion() {
 
   // Start per-question timer if the mode is selected
   if (state.timerMode === "perQuestion" && !previousAnswer) {
-    resetQuestionTimer(); // Reset time for new question
     startTimer();
   }
 
@@ -1301,13 +806,6 @@ function undoLastAnswer() {
     }
     // Reset answer state
     state.userAnswers[state.currentQuestionIndex] = null;
-
-    // FIX: Restore life in survival mode when undoing
-    if (state.mode === 'survival') {
-        state.lives++;
-        updateLivesUI();
-    }
-
     // Note: Score was not incremented for wrong answer, so no need to decrement.
     saveQuizState();
     
@@ -1421,6 +919,7 @@ function evaluateMultipleAnswer() {
     sourceQuizTitle: currentQuestion.sourceQuizTitle,
     sourceQuizCategory: currentQuestion.sourceQuizCategory
   };
+  saveQuizState();
 
   if (isCorrect) {
     state.score++;
@@ -1430,26 +929,7 @@ function evaluateMultipleAnswer() {
   } else {
     state.game.resetCorrectStreak();
     if (state.isSoundEnabled) state.incorrectSound.play().catch(e => console.error("Error playing sound:", e));
-
-    // Survival Mode Check
-    if (state.mode === 'survival') {
-        state.lives--;
-        updateLivesUI();
-        
-        if (state.lives <= 0) {
-            triggerSurvivalShake();
-            triggerHeartBreak();
-            showToast('Game Over', 'คุณใช้โควตาหัวใจหมดแล้ว!', '💀', 'error');
-            setTimeout(() => showResults(), 1500);
-        } else {
-            triggerSurvivalShake();
-            showToast('ตอบผิด!', `เหลือหัวใจ ${state.lives} ดวง`, '💔', 'warning');
-        }
-    }
   }
-
-  // FIX: Save state AFTER updating score and lives
-  saveQuizState();
 
   // Show feedback and disable options
   showFeedback(isCorrect, currentQuestion.explanation, correctAnswers);
@@ -1509,6 +989,7 @@ function evaluateFillInAnswer() {
     sourceQuizTitle: currentQuestion.sourceQuizTitle,
     sourceQuizCategory: currentQuestion.sourceQuizCategory
   };
+  saveQuizState();
 
   if (isCorrect) {
     state.score++;
@@ -1518,26 +999,7 @@ function evaluateFillInAnswer() {
   } else {
     state.game.resetCorrectStreak();
     if (state.isSoundEnabled) state.incorrectSound.play().catch(e => console.error("Error playing sound:", e));
-
-    // Survival Mode Check
-    if (state.mode === 'survival') {
-        state.lives--;
-        updateLivesUI();
-        
-        if (state.lives <= 0) {
-            triggerSurvivalShake();
-            triggerHeartBreak();
-            showToast('Game Over', 'คุณใช้โควตาหัวใจหมดแล้ว!', '💀', 'error');
-            setTimeout(() => showResults(), 1500);
-        } else {
-            triggerSurvivalShake();
-            showToast('ตอบผิด!', `เหลือหัวใจ ${state.lives} ดวง`, '💔', 'warning');
-        }
-    }
   }
-
-  // FIX: Save state AFTER updating score and lives
-  saveQuizState();
 
   // Show feedback
   showFeedback(isCorrect, currentQuestion.explanation, currentQuestion.answer.join(' หรือ '));
@@ -1597,6 +1059,7 @@ function evaluateFillInNumberAnswer() {
     sourceQuizTitle: currentQuestion.sourceQuizTitle,
     sourceQuizCategory: currentQuestion.sourceQuizCategory
   };
+  saveQuizState();
 
   if (isCorrect) {
     state.score++;
@@ -1610,26 +1073,7 @@ function evaluateFillInNumberAnswer() {
     answerInput.classList.add('bg-red-100', 'dark:bg-red-900/30', 'border-red-500', 'dark:border-red-600', 'text-red-800', 'dark:text-red-400', 'anim-shake');
     state.game.resetCorrectStreak();
     if (state.isSoundEnabled) state.incorrectSound.play().catch(e => console.error("Error playing sound:", e));
-
-    // Survival Mode Check
-    if (state.mode === 'survival') {
-        state.lives--;
-        updateLivesUI();
-        
-        if (state.lives <= 0) {
-            triggerSurvivalShake();
-            triggerHeartBreak();
-            showToast('Game Over', 'คุณใช้โควตาหัวใจหมดแล้ว!', '💀', 'error');
-            setTimeout(() => showResults(), 1500);
-        } else {
-            triggerSurvivalShake();
-            showToast('ตอบผิด!', `เหลือหัวใจ ${state.lives} ดวง`, '💔', 'warning');
-        }
-    }
   }
-
-  // FIX: Save state AFTER updating score and lives
-  saveQuizState();
 
   showFeedback(isCorrect, currentQuestion.explanation, formattedCorrectAnswer);
   updateNextButtonAppearance('next');
@@ -1679,6 +1123,9 @@ function selectAnswer(e) {
     sourceQuizCategory: state.shuffledQuestions[state.currentQuestionIndex]?.sourceQuizCategory
   };
 
+  // Save state immediately after an answer is recorded for better data persistence.
+  saveQuizState();
+
   if (correct) {
     state.score++;
     elements.scoreCounter.textContent = `คะแนน: ${state.score}`;
@@ -1693,26 +1140,7 @@ function selectAnswer(e) {
       state.incorrectSound
         .play()
         .catch((e) => console.error("Error playing sound:", e));
-
-    // Survival Mode Check
-    if (state.mode === 'survival') {
-        state.lives--;
-        updateLivesUI();
-        
-        if (state.lives <= 0) {
-            triggerSurvivalShake();
-            triggerHeartBreak();
-            showToast('Game Over', 'คุณใช้โควตาหัวใจหมดแล้ว!', '💀', 'error');
-            setTimeout(() => showResults(), 1500);
-        } else {
-            triggerSurvivalShake();
-            showToast('ตอบผิด!', `เหลือหัวใจ ${state.lives} ดวง`, '💔', 'warning');
-        }
-    }
   }
-
-  // FIX: Save state AFTER updating score and lives to prevent race condition in Lobby Sync
-  saveQuizState();
 
   // Show feedback and disable all options
   showFeedback(
@@ -1787,54 +1215,43 @@ function showNextQuestion() {
  * Central handler for the main action button (Next/Submit).
  */
 function handleNextButtonClick() {
-  // NEW: Prevent double clicking
-  if (state.isProcessingNext) return;
-  state.isProcessingNext = true;
+  const isAnswered = state.userAnswers[state.currentQuestionIndex] !== null;
 
-  try {
-    const isAnswered = state.userAnswers[state.currentQuestionIndex] !== null;
-
-    // If the current question is not answered, it must be a 'submit' action.
-    if (!isAnswered) {
-      const currentQuestion = state.shuffledQuestions[state.currentQuestionIndex];
-      if (!currentQuestion) {
-        showResults(); // Fallback
-        return;
-      }
-      // Evaluate the answer based on type
-      switch (currentQuestion.type) {
-        case 'multiple-select':
-          evaluateMultipleAnswer();
-          break;
-        case 'fill-in':
-          evaluateFillInAnswer();
-          break;
-        case 'fill-in-number':
-          evaluateFillInNumberAnswer();
-          break;
-        default:
-          // This case should not be reached for a 'submit' button.
-          // As a safe fallback, we'll just move on.
-          console.warn(`handleNextButtonClick called for an unanswered question of unhandled type: ${currentQuestion.type}`);
-          showNextQuestion();
-          break;
-      }
+  // If the current question is not answered, it must be a 'submit' action.
+  if (!isAnswered) {
+    const currentQuestion = state.shuffledQuestions[state.currentQuestionIndex];
+    if (!currentQuestion) {
+      showResults(); // Fallback
       return;
     }
-
-    // If we reach here, the question has been answered.
-    const isLastQuestion = state.currentQuestionIndex === state.shuffledQuestions.length - 1;
-    const isSpeedRunWin = state.mode === 'time-attack' && state.score >= 10;
-
-    if (isLastQuestion || isSpeedRunWin) {
-      showResults();
-    } else {
-      showNextQuestion();
+    // Evaluate the answer based on type
+    switch (currentQuestion.type) {
+      case 'multiple-select':
+        evaluateMultipleAnswer();
+        break;
+      case 'fill-in':
+        evaluateFillInAnswer();
+        break;
+      case 'fill-in-number':
+        evaluateFillInNumberAnswer();
+        break;
+      default:
+        // This case should not be reached for a 'submit' button.
+        // As a safe fallback, we'll just move on.
+        console.warn(`handleNextButtonClick called for an unanswered question of unhandled type: ${currentQuestion.type}`);
+        showNextQuestion();
+        break;
     }
-  } catch (error) {
-    console.error("Error in handleNextButtonClick:", error);
-  } finally {
-    setTimeout(() => { state.isProcessingNext = false; }, 300); // Release lock after delay
+    return;
+  }
+
+  // If we reach here, the question has been answered.
+  const isLastQuestion = state.currentQuestionIndex === state.shuffledQuestions.length - 1;
+
+  if (isLastQuestion) {
+    showResults();
+  } else {
+    showNextQuestion();
   }
 }
 
@@ -1850,18 +1267,10 @@ function showPreviousQuestion() {
 
 // --- NEW: Function to display the final results screen ---
 function showResults() {
-  // NEW: Prevent double submission (unless viewing past results)
-  if (state.isQuizFinished && state.action !== 'view_results') return;
-  state.isQuizFinished = true;
-
   stopTimer(); // Stop any running timers.
   setFloatingNav(false); // Deactivate the floating navigation bar
 
-  let totalQuestions = state.shuffledQuestions.length;
-  if (state.mode === 'time-attack') {
-      totalQuestions = state.userAnswers.filter(a => a !== null).length;
-  }
-
+  const totalQuestions = state.shuffledQuestions.length;
   const correctAnswers = state.score;
   const incorrectAnswersCount = totalQuestions - correctAnswers;
   const percentage = totalQuestions > 0 ? Math.round((correctAnswers / totalQuestions) * 100) : 0;
@@ -1956,165 +1365,172 @@ function showResults() {
   }
 
   // Get the appropriate message and icon based on the score
-  let resultInfo = getResultInfo(percentage);
-
-  if (state.mode === 'time-attack' && state.score >= 10) {
-      resultInfo = { ...resultInfo };
-      resultInfo.title = "Speed Run สำเร็จ! ⚡";
-      resultInfo.message = `สุดยอด! คุณตอบถูกครบ 10 ข้อแล้ว (ความแม่นยำ ${percentage}%)`;
-  }
+  const resultInfo = getResultInfo(percentage);
 
   // --- GAMIFICATION: Calculate XP and Check Badges ---
   let xpEarned = 0;
   let levelResult = null;
+
+  // NEW: Set Pet Mood based on score
+  if (percentage >= 80) {
+    state.game.setPetMood('happy', 15000); // Happy for 15 seconds
+  } else if (percentage < 50) {
+    state.game.setPetMood('sad', 15000); // Sad for 15 seconds
+  }
+
   let newBadges = [];
   let completedQuests = [];
   let newAchievements = [];
+  let physicsXP = 0;
+  let earthXP = 0;
   const topicXPs = {};
 
-  // NEW: Only process gamification if not viewing past results
-  if (state.action !== 'view_results') {
-      // NEW: Calculate correct answer types for quests
-      let correctTheory = 0;
-      let correctCalculation = 0;
-      state.userAnswers.forEach((ans, index) => {
-          if (ans && ans.isCorrect) {
-              const question = state.shuffledQuestions[index];
-              if (question) {
-                  if (question.type === 'fill-in-number') correctCalculation++;
-                  else correctTheory++;
-              }
-          }
-      });
-
-      try {
-        const game = state.game; // Use the instance from state
-
-        state.userAnswers.forEach((ans, index) => {
-          if (!ans || !ans.isCorrect) return;
-
+  // NEW: Calculate correct answer types for quests
+  let correctTheory = 0;
+  let correctCalculation = 0;
+  state.userAnswers.forEach((ans, index) => {
+      if (ans && ans.isCorrect) {
           const question = state.shuffledQuestions[index];
-          let points = 4; // Default points
-          if (question && (question.type === 'multiple-select' || question.type === 'fill-in-number')) {
-            points = 5;
+          if (question) {
+              if (question.type === 'fill-in-number') correctCalculation++;
+              else correctTheory++;
           }
-          xpEarned += points;
+      }
+  });
 
-          // --- Topic & Track XP Calculation ---
-          let subCatStr = '';
-          if (ans.subCategory) {
-            if (typeof ans.subCategory === 'string') subCatStr = ans.subCategory;
-            else if (ans.subCategory.main) {
-                subCatStr = ans.subCategory.main;
-                // รวมหมวดหมู่ย่อยด้วยเพื่อให้การค้นหาแม่นยำขึ้น
-                if (ans.subCategory.specific) subCatStr += ' ' + ans.subCategory.specific;
+  try {
+    const game = state.game; // Use the instance from state
+    
+    state.userAnswers.forEach((ans, index) => {
+        if (ans && ans.isCorrect) {
+            const question = state.shuffledQuestions[index];
+            let points = 4; // Default for standard questions
+
+            if (question && (question.type === 'multiple-select' || question.type === 'fill-in-number')) {
+                points = 5;
             }
-          }
+            xpEarned += points;
 
-          for (const [groupKey, groupDef] of Object.entries(PROFICIENCY_GROUPS)) {
-            // FIX: ใช้ toLowerCase() เพื่อให้การตรวจสอบไม่ขึ้นกับตัวพิมพ์เล็ก-ใหญ่
-            if (groupDef.keywords.some(k => subCatStr.toLowerCase().includes(k.toLowerCase()))) {
-              topicXPs[groupDef.field] = (topicXPs[groupDef.field] || 0) + points;
-              break;
+            // Calculate Topic XP
+            let subCatStr = '';
+            if (ans.subCategory) {
+                if (typeof ans.subCategory === 'string') subCatStr = ans.subCategory;
+                else if (ans.subCategory.main) subCatStr = ans.subCategory.main;
             }
-          }
-        });
 
-        // Apply XP Multiplier
-        xpEarned *= state.xpMultiplier;
-        // FIX: Apply multiplier to topic XPs as well so tracks get the bonus correctly
-        for (const key in topicXPs) {
-            topicXPs[key] *= state.xpMultiplier;
-        }
+            let isPhysics = false;
+            let isEarth = false;
 
-        // --- NEW: Prepare quest stats object ---
-        const firstAnswer = state.userAnswers.find(a => a);
-        let questCategory = 'General';
-        if (firstAnswer) {
-            if (firstAnswer.sourceQuizCategory) {
-                questCategory = firstAnswer.sourceQuizCategory;
-            } else if (firstAnswer.subCategory) {
-                questCategory = typeof firstAnswer.subCategory === 'object' ? firstAnswer.subCategory.main : firstAnswer.subCategory;
-            }
-        }
-        const questStats = {
-            correctAnswers: correctAnswers,
-            totalQuestions: totalQuestions,
-            category: questCategory,
-            percentage: percentage,
-            correctTheory: correctTheory,
-            correctCalculation: correctCalculation,
-            questionCount: state.questionCount,
-            isCustomQuiz: state.isCustomQuiz,
-            quizId: state.storageKey ? state.storageKey.replace('quizState-', '') : ''
-        };
+            for (const [groupKey, groupDef] of Object.entries(PROFICIENCY_GROUPS)) {
+                if (groupDef.keywords.some(k => subCatStr.includes(k))) {
+                    topicXPs[groupDef.field] = (topicXPs[groupDef.field] || 0) + points;
+                    
+                    // Check track from proficiency group
+                    if (groupDef.track === 'physics') isPhysics = true;
+                    if (groupDef.track === 'earth') isEarth = true;
 
-        const result = game.submitQuizResult(xpEarned, percentage, state.questionCount, state.isCustomQuiz, topicXPs, questStats);
-        levelResult = result; // Use the full result object which now contains 'tracks'
-        newBadges = result.newBadges || [];
-        newAchievements = result.newAchievements || [];
-        completedQuests = result.completedQuests || [];
-
-        // Play Sounds for Gamification
-        if (state.isSoundEnabled && levelResult) {
-            let anyLevelUp = levelResult.overall?.leveledUp;
-            if (levelResult.tracks) {
-                Object.values(levelResult.tracks).forEach(t => {
-                    if (t.leveledUp) anyLevelUp = true;
-                });
+                    break;
+                }
             }
             
-            if (anyLevelUp) {
-                if (state.levelUpSound) {
-                    state.levelUpSound.currentTime = 0;
-                    state.levelUpSound.play().catch(e => console.warn("Could not play level up sound", e));
-                }
-            } else if (newBadges.length > 0) {
-                if (state.badgeSound) {
-                    state.badgeSound.currentTime = 0;
-                    state.badgeSound.play().catch(e => console.warn("Could not play badge sound", e));
-                }
+            // ตรวจสอบหมวดวิชาของข้อนี้
+            let qCategory = 'General';
+            if (ans.sourceQuizCategory) {
+                qCategory = ans.sourceQuizCategory;
+            } else if (ans.subCategory) {
+                qCategory = typeof ans.subCategory === 'object' ? ans.subCategory.main : ans.subCategory;
+            }
+            
+            const lowerCat = String(qCategory).toLowerCase();
+            
+            // Fallback check using category name or ID prefix
+            if (!isPhysics && (lowerCat.includes('physics') || lowerCat.includes('ฟิสิกส์') || lowerCat.includes('phy_'))) {
+                isPhysics = true;
+            }
+            
+            if (!isEarth && (lowerCat.includes('earth') || lowerCat.includes('astronomy') || lowerCat.includes('space') || lowerCat.includes('โลก') || lowerCat.includes('ดาราศาสตร์') || lowerCat.includes('วิทย์โลก') || lowerCat.includes('ess_'))) {
+                isEarth = true;
+            }
+
+            if (isPhysics) {
+                physicsXP += points;
+            } else if (isEarth) {
+                earthXP += points;
             }
         }
-      } catch (error) {
-        console.error("Gamification error:", error);
-      }
+    });
 
-      // --- Show Toast Notifications ---
-      if (levelResult?.overall?.leveledUp) {
-        showToast('Level Up!', `ยินดีด้วย! เลเวลรวมของคุณคือ ${levelResult.overall.info.level}`, '🎉', 'gold');
-      }
-      
-      if (completedQuests.length > 0) {
-          completedQuests.forEach(res => {
-              showToast('ภารกิจประจำวันสำเร็จ!', `${res.quest.desc} (+${res.quest.xp} XP)`, '📜', 'gold');
-          });
-      }
+    // Apply XP Multiplier
+    xpEarned *= state.xpMultiplier;
+    physicsXP *= state.xpMultiplier;
+    earthXP *= state.xpMultiplier;
 
-      if (newAchievements.length > 0) {
-          newAchievements.forEach(ach => {
-              showToast('ปลดล็อกความสำเร็จ!', `${ach.title}: ${ach.desc}`, ach.icon, 'success');
-          });
-      }
-      
-      if (newBadges.length > 0) {
-          newBadges.forEach(badge => {
-              showToast('ได้รับเหรียญรางวัลใหม่', `${badge.name}`, badge.icon, 'success');
-          });
-          showBadgeUnlockPopup(newBadges);
-      }
+    // --- NEW: Prepare quest stats object ---
+    const firstAnswer = state.userAnswers.find(a => a);
+    let questCategory = 'General';
+    if (firstAnswer) {
+        if (firstAnswer.sourceQuizCategory) {
+            questCategory = firstAnswer.sourceQuizCategory;
+        } else if (firstAnswer.subCategory) {
+            questCategory = typeof firstAnswer.subCategory === 'object' ? firstAnswer.subCategory.main : firstAnswer.subCategory;
+        }
+    }
+    const questStats = {
+        correctAnswers: correctAnswers,
+        totalQuestions: totalQuestions,
+        category: questCategory,
+        percentage: percentage,
+        correctTheory: correctTheory,
+        correctCalculation: correctCalculation,
+        questionCount: state.questionCount,
+        isCustomQuiz: state.isCustomQuiz
+    };
+
+    const result = game.submitQuizResult(xpEarned, physicsXP, earthXP, percentage, state.questionCount, state.isCustomQuiz, topicXPs, questStats);
+    levelResult = { overall: result.overall, physics: result.physics, earth: result.earth };
+    newBadges = result.newBadges || [];
+    newAchievements = result.newAchievements || [];
+    completedQuests = result.completedQuests || [];
+
+    // Play Sounds for Gamification
+    if (state.isSoundEnabled && levelResult) {
+        if (levelResult.overall?.leveledUp || levelResult.physics?.leveledUp || levelResult.earth?.leveledUp) {
+            if (state.levelUpSound) {
+                state.levelUpSound.currentTime = 0;
+                state.levelUpSound.play().catch(e => console.warn("Could not play level up sound", e));
+            }
+        } else if (newBadges.length > 0) {
+            if (state.badgeSound) {
+                state.badgeSound.currentTime = 0;
+                state.badgeSound.play().catch(e => console.warn("Could not play badge sound", e));
+            }
+        }
+    }
+  } catch (error) {
+    console.error("Gamification error:", error);
   }
 
-  // NEW: Calculate display XP dynamically based on PROFICIENCY_GROUPS
-  // This ensures that if new groups are added to gamification.js, they are automatically included here.
-  const trackXPs = {};
-  TRACK_CATEGORIES.forEach(cat => trackXPs[cat.track] = 0);
+  // --- Show Toast Notifications ---
+  if (levelResult?.overall?.leveledUp) {
+    showToast('Level Up!', `ยินดีด้วย! เลเวลรวมของคุณคือ ${levelResult.overall.info.level}: ${levelResult.overall.info.title}`, '🎉', 'gold');
+  }
+  
+  if (completedQuests.length > 0) {
+      completedQuests.forEach(res => {
+          showToast('ภารกิจประจำวันสำเร็จ!', `${res.quest.desc} (+${res.quest.xp} XP)`, '📜', 'gold');
+      });
+  }
 
-  for (const group of Object.values(PROFICIENCY_GROUPS)) {
-      const xp = topicXPs[group.field] || 0;
-      if (trackXPs[group.track] !== undefined) {
-          trackXPs[group.track] += xp;
-      }
+  if (newAchievements.length > 0) {
+      newAchievements.forEach(ach => {
+          showToast('ปลดล็อกความสำเร็จ!', `${ach.title}: ${ach.desc}`, ach.icon, 'success');
+      });
+  }
+  
+  if (newBadges.length > 0) {
+      newBadges.forEach(badge => {
+          showToast('ได้รับเหรียญรางวัลใหม่', `${badge.name}`, badge.icon, 'success');
+      });
   }
 
   // Prepare stats object for the layout builder
@@ -2131,7 +1547,8 @@ function showResults() {
     xpEarned,
     levelResult,
     newBadges,
-    trackXPs // Pass the dynamic track XPs
+    physicsXP,
+    earthXP
   };
 
   // Clean up old results and build the new layout
@@ -2162,8 +1579,6 @@ function triggerConfetti() {
     return;
   }
 
-  if (confettiInterval) clearInterval(confettiInterval); // Clear existing if any
-
   const duration = 3 * 1000; // 3 seconds
   const animationEnd = Date.now() + duration;
   const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 1000 };
@@ -2172,13 +1587,11 @@ function triggerConfetti() {
     return Math.random() * (max - min) + min;
   }
 
-  confettiInterval = setInterval(function () {
+  const interval = setInterval(function () {
     const timeLeft = animationEnd - Date.now();
 
     if (timeLeft <= 0) {
-      clearInterval(confettiInterval);
-      confettiInterval = null;
-      return;
+      return clearInterval(interval);
     }
 
     const particleCount = 50 * (timeLeft / duration);
@@ -2263,6 +1676,72 @@ function createStatItem(value, label, icon, theme) {
 }
 
 /**
+ * Renders a horizontal bar chart showing the score for each main category in the results.
+ * @param {object} categoryStats - The stats object grouped by category.
+ */
+function renderResultCategoryChart(categoryStats) {
+  const chartCanvas = document.getElementById('result-category-chart');
+  if (!chartCanvas) return;
+
+  // Check if Chart.js is loaded to prevent crash
+  if (typeof Chart === 'undefined') {
+    console.warn("Chart.js is not loaded. Skipping chart rendering.");
+    return;
+  }
+
+  try {
+    const ctx = chartCanvas.getContext('2d');
+
+    const sortedCategories = Object.entries(categoryStats).sort((a, b) => a[0].localeCompare(b[0], 'th'));
+
+    const labels = sortedCategories.map(([name, _]) => name);
+    const scores = sortedCategories.map(([_, data]) => data.total > 0 ? (data.correct / data.total) * 100 : 0);
+
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'คะแนน (%)',
+          data: scores,
+          backgroundColor: scores.map(score => score >= 75 ? 'rgba(34, 197, 94, 0.7)' : score >= 50 ? 'rgba(245, 158, 11, 0.7)' : 'rgba(239, 68, 68, 0.7)'),
+          borderColor: scores.map(score => score >= 75 ? '#16a34a' : score >= 50 ? '#d97706' : '#dc2626'),
+          borderWidth: 1,
+          borderRadius: 4,
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: {
+            beginAtZero: true,
+            max: 100,
+            ticks: {
+              color: document.documentElement.classList.contains('dark') ? '#d1d5db' : '#374151',
+              callback: value => value + '%'
+            }
+          },
+          y: {
+            ticks: {
+              color: document.documentElement.classList.contains('dark') ? '#d1d5db' : '#374151',
+              font: { family: "'Kanit', sans-serif" }
+            }
+          }
+        },
+        plugins: {
+          legend: { display: false },
+          tooltip: { callbacks: { label: context => `คะแนน: ${context.raw.toFixed(1)}% (${categoryStats[context.label].correct}/${categoryStats[context.label].total} ข้อ)` } }
+        }
+      }
+    });
+  } catch (error) {
+    console.error("Error rendering chart:", error);
+  }
+}
+
+/**
  * Builds the modern, responsive layout for the result screen.
  * @param {object} resultInfo The object containing the title, message, and icon for the result.
  * @param {object} stats An object with all calculated statistics (scores, percentage, time).
@@ -2283,20 +1762,6 @@ function buildResultsLayout(resultInfo, stats) {
         <p class="mt-2 text-lg text-gray-600 dark:text-gray-300">${resultInfo.message}</p>
     `;
   layoutContainer.appendChild(messageContainer);
-
-  // NEW: Team Score Display for Coop Mode
-  if (state.mode === 'coop') {
-      const teamScoreContainer = document.createElement("div");
-      teamScoreContainer.className = "w-full max-w-md mx-auto p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-xl border border-indigo-200 dark:border-indigo-800 text-center shadow-sm -mt-4";
-      teamScoreContainer.innerHTML = `
-          <h3 class="text-lg font-bold text-indigo-800 dark:text-indigo-300 font-kanit flex items-center justify-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
-            คะแนนรวมทีม
-          </h3>
-          <p class="text-4xl font-bold text-indigo-600 dark:text-indigo-400 mt-2">${(state.currentTeamScore || 0).toLocaleString()}</p>
-      `;
-      layoutContainer.appendChild(teamScoreContainer);
-  }
 
   // --- 2. Data Container (for Circle + Stats) ---
   const dataContainer = document.createElement("div");
@@ -2368,6 +1833,19 @@ function buildResultsLayout(resultInfo, stats) {
   dataContainer.appendChild(statsContainer);
   layoutContainer.appendChild(dataContainer);
 
+  // --- 3. Category Performance Chart ---
+  if (stats.categoryStats && Object.keys(stats.categoryStats).length > 0) {
+    const chartContainer = document.createElement('div');
+    chartContainer.className = 'w-full p-6 bg-white dark:bg-gray-800/50 rounded-xl shadow-md border border-gray-200 dark:border-gray-700';
+    chartContainer.innerHTML = `
+            <h3 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4 font-kanit text-center">คะแนนตามหมวดหมู่</h3>
+            <div class="relative h-64">
+                <canvas id="result-category-chart"></canvas>
+            </div>
+        `;
+    layoutContainer.appendChild(chartContainer);
+  }
+
   // --- NEW: XP Breakdown Section with Animation ---
   if (stats.xpEarned > 0) {
     const xpSection = document.createElement('div');
@@ -2378,7 +1856,7 @@ function buildResultsLayout(resultInfo, stats) {
     xpGrid.className = "flex justify-center items-start gap-4 sm:gap-8";
     
     const items = [
-        {
+        { 
             label: 'รวม', 
             value: stats.xpEarned, 
             color: 'text-blue-600 dark:text-blue-400', 
@@ -2388,36 +1866,33 @@ function buildResultsLayout(resultInfo, stats) {
         },
     ];
     
-    // Dynamic rendering from TRACK_CATEGORIES
-    const colors = ['text-purple-600 dark:text-purple-400', 'text-teal-600 dark:text-teal-400', 'text-pink-600 dark:text-pink-400', 'text-orange-600 dark:text-orange-400'];
-    const bgColors = ['bg-purple-500', 'bg-teal-500', 'bg-pink-500', 'bg-orange-500'];
-
-    TRACK_CATEGORIES.forEach((cat, index) => {
-        const xp = stats.trackXPs[cat.track] || 0;
-        if (xp > 0) {
-             items.push({
-                label: cat.label,
-                value: xp,
-                color: colors[index % colors.length],
-                progress: stats.levelResult?.tracks?.[cat.track]?.info,
-                progressColor: bgColors[index % bgColors.length],
-                delay: 150 * (index + 1)
-             });
-        }
+    if (stats.physicsXP > 0) items.push({ 
+        label: 'ฟิสิกส์', 
+        value: stats.physicsXP, 
+        color: 'text-purple-600 dark:text-purple-400', 
+        progress: stats.levelResult?.physics.info,
+        progressColor: 'bg-purple-500',
+        delay: 150 
+    });
+    if (stats.earthXP > 0) items.push({ 
+        label: 'วิทย์โลก', 
+        value: stats.earthXP, 
+        color: 'text-teal-600 dark:text-teal-400', 
+        progress: stats.levelResult?.earth.info,
+        progressColor: 'bg-teal-500',
+        delay: 300 
     });
     
     items.forEach(item => {
         const el = document.createElement('div');
-        el.className = "flex flex-col items-center opacity-0 w-28";
-        el.style.animation = `xp-container-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) ${0.2 + item.delay / 1000}s forwards`;
+        el.className = "flex flex-col items-center transform scale-0 transition-transform duration-500 cubic-bezier(0.34, 1.56, 0.64, 1) w-28";
         
         let progressBarHtml = '';
-        let progressBarEl = null;
         if (item.progress && item.progress.nextLevelXP) {
             const xpNeeded = item.progress.nextLevelXP - item.progress.currentXP;
             progressBarHtml = `
                 <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 mt-2">
-                    <div class="${item.progressColor} h-1.5 rounded-full transition-all duration-1000 ease-out" style="width: 0%"></div>
+                    <div class="${item.progressColor} h-1.5 rounded-full" style="width: ${item.progress.progressPercent}%"></div>
                 </div>
                 <span class="text-[10px] text-gray-400 dark:text-gray-500 mt-1">อีก ${xpNeeded.toLocaleString()} XP</span>
             `;
@@ -2428,34 +1903,15 @@ function buildResultsLayout(resultInfo, stats) {
             `;
         }
 
-        const xpValueEl = document.createElement('span');
-        xpValueEl.className = `text-3xl font-bold ${item.color}`;
-        xpValueEl.textContent = `+0`;
-
-        const labelEl = document.createElement('span');
-        labelEl.className = 'text-xs text-gray-500 dark:text-gray-400 mt-1 font-medium';
-        labelEl.textContent = item.label;
-
-        el.appendChild(xpValueEl);
-        el.appendChild(labelEl);
-        el.insertAdjacentHTML('beforeend', progressBarHtml);
-
+        el.innerHTML = `
+            <span class="text-3xl font-bold ${item.color}">+${item.value}</span>
+            <span class="text-xs text-gray-500 dark:text-gray-400 mt-1 font-medium">${item.label}</span>
+            ${progressBarHtml}
+        `;
         xpGrid.appendChild(el);
         
         // Trigger animation
-        setTimeout(() => {
-            el.style.opacity = '1'; // Force visibility as a fallback
-            // Animate the value count-up
-            animateValue(xpValueEl, 0, item.value, 1500, '+');
-
-            // Animate the progress bar fill
-            if (item.progress && item.progress.nextLevelXP) {
-                const bar = el.querySelector(`.${item.progressColor}`);
-                if (bar) {
-                    bar.style.width = `${item.progress.progressPercent}%`;
-                }
-            }
-        }, 500 + item.delay);
+        setTimeout(() => el.classList.remove('scale-0'), 100 + item.delay);
     });
     
     xpSection.appendChild(xpGrid);
@@ -2495,80 +1951,12 @@ function buildResultsLayout(resultInfo, stats) {
     layoutContainer.appendChild(summaryContainer);
   }
 
-  // --- 5. Recommended Review (NEW) ---
-  const weakTopics = [];
-  if (stats.categoryStats) {
-      Object.entries(stats.categoryStats).forEach(([mainCat, mainData]) => {
-          if (mainData.subcategories) {
-              Object.entries(mainData.subcategories).forEach(([subName, subData]) => {
-                  if (subName !== '—' && subData.total > 0) {
-                      const incorrect = subData.total - subData.correct;
-                      if (incorrect > 0) {
-                          weakTopics.push({
-                              main: mainCat,
-                              sub: subName,
-                              incorrect: incorrect,
-                              total: subData.total,
-                              percentage: (subData.correct / subData.total) * 100
-                          });
-                      }
-                  }
-              });
-          }
-      });
-  }
-
-  // Sort by incorrect count (desc), then percentage (asc)
-  weakTopics.sort((a, b) => {
-      if (b.incorrect !== a.incorrect) return b.incorrect - a.incorrect;
-      return a.percentage - b.percentage;
-  });
-
-  const topWeakTopics = weakTopics.slice(0, 3);
-
-  if (topWeakTopics.length > 0) {
-      const reviewContainer = document.createElement('div');
-      reviewContainer.className = 'w-full max-w-2xl mx-auto mt-4 p-5 bg-red-50 dark:bg-red-900/20 rounded-xl border border-red-100 dark:border-red-800/50 shadow-sm';
-      
-      let reviewHtml = `
-          <div class="flex items-center gap-3 mb-4">
-              <div class="p-2 bg-white dark:bg-red-800 rounded-lg text-red-500 dark:text-red-200 shadow-sm">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                  </svg>
-              </div>
-              <div>
-                  <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100 font-kanit">บทเรียนที่ควรทบทวน</h3>
-                  <p class="text-xs text-gray-500 dark:text-gray-400">วิเคราะห์จากข้อที่ตอบผิด</p>
-              </div>
-          </div>
-          <div class="space-y-3">
-      `;
-
-      topWeakTopics.forEach(topic => {
-          reviewHtml += `
-              <div class="flex justify-between items-center p-3 bg-white dark:bg-gray-800 rounded-lg border border-red-100 dark:border-red-900/30 shadow-sm">
-                  <div class="flex-grow min-w-0 mr-4">
-                      <p class="text-sm font-bold text-gray-800 dark:text-gray-200 truncate">${topic.sub}</p>
-                      <p class="text-xs text-gray-500 dark:text-gray-400 truncate">${topic.main}</p>
-                  </div>
-                  <div class="text-right flex-shrink-0">
-                      <span class="inline-block px-2 py-1 bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300 text-xs font-bold rounded-md">
-                          ผิด ${topic.incorrect} ข้อ
-                      </span>
-                  </div>
-              </div>
-          `;
-      });
-
-      reviewHtml += `</div>`;
-      reviewContainer.innerHTML = reviewHtml;
-      layoutContainer.appendChild(reviewContainer);
-  }
-
   // --- 6. Assemble and Inject ---
   // Prepend to the result screen so it appears before the buttons
   elements.resultScreen.prepend(layoutContainer);
+
+  // --- 7. Render Chart ---
+  renderResultCategoryChart(stats.categoryStats);
 
   // --- 8. Final UI Updates ---
   // Show or hide the review button based on incorrect answers
@@ -2577,32 +1965,6 @@ function buildResultsLayout(resultInfo, stats) {
     elements.reviewBtn.classList.remove("hidden");
   } else {
     elements.reviewBtn.classList.add("hidden");
-  }
-
-  // NEW: Add Lobby Button if in Challenge Mode
-  if (state.lobbyId) {
-      // Try to find the container for action buttons. Usually parent of restartBtn.
-      const actionContainer = elements.restartBtn ? elements.restartBtn.parentElement : null;
-      
-      // Check if button already exists to avoid duplicates
-      if (actionContainer && !document.getElementById('lobby-return-btn')) {
-          const lobbyBtn = document.createElement('button');
-          lobbyBtn.id = 'lobby-return-btn';
-          // Styling to match other buttons but distinct
-          lobbyBtn.className = "w-full sm:w-auto px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold shadow-md transition-all transform hover:scale-105 flex items-center justify-center gap-2 mb-3 sm:mb-0 order-first sm:order-none";
-          lobbyBtn.innerHTML = `
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                  <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
-              </svg>
-              <span>🏆 ดูอันดับรวม (Lobby)</span>
-          `;
-          lobbyBtn.onclick = () => {
-              challengeManager.joinLobby(state.lobbyId);
-          };
-          
-          // Insert at the beginning of the action container so it's prominent
-          actionContainer.insertBefore(lobbyBtn, actionContainer.firstChild);
-      }
   }
 
   renderMath(layoutContainer); // Render math only in the new results layout
@@ -2619,7 +1981,6 @@ function startQuiz() {
   clearSavedState();
   state.sessionStartTime = Date.now(); // Record start time for the session
   state.totalTimeSpent = 0; // Reset total time spent for a new quiz
-  state.isQuizFinished = false; // NEW: Reset finished state
 
   // Only read timer mode if the controls are visible (i.e., on the start screen).
   // On restart, it will reuse the previously selected mode.
@@ -2633,12 +1994,7 @@ function startQuiz() {
   // Filter out any potential null or undefined questions from the source data
   // to prevent errors during the quiz, especially in the results analysis.
   const validQuizData = state.quizData.filter(q => q);
-  
-  if (state.disableShuffle) {
-      state.shuffledQuestions = [...validQuizData]; // Use exact order provided
-  } else {
-      state.shuffledQuestions = shuffleArray([...validQuizData]);
-  }
+  state.shuffledQuestions = shuffleArray([...validQuizData]);
 
   switchScreen(elements.quizScreen);
   elements.quizTitleDisplay.textContent = state.quizTitle;
@@ -2660,7 +2016,6 @@ function startQuiz() {
   elements.scoreCounter.textContent = `คะแนน: ${state.score}`;
 
   showQuestion();
-  updateLivesUI(); // Show lives if survival mode
   saveQuizState();
 }
 
@@ -2861,8 +2216,6 @@ function loadStateFromSave(savedState) {
   state.timeLeft = savedState.timeLeft || 0;
   state.initialTime = savedState.initialTime || 0;
   state.totalTimeSpent = savedState.totalTimeSpent || 0; // Load accumulated time
-  if (savedState.lives !== undefined) state.lives = savedState.lives; // FIX: Load lives
-  if (savedState.xpMultiplier !== undefined) state.xpMultiplier = savedState.xpMultiplier; // FIX: Load XP multiplier
 
   // Update the score display on the UI to reflect the loaded score.
   elements.scoreCounter.textContent = `คะแนน: ${state.score}`;
@@ -2889,8 +2242,6 @@ function saveQuizState() {
     initialTime: state.initialTime,
     totalTimeSpent: state.totalTimeSpent,
     lastAttemptTimestamp: Date.now(), // Add timestamp for recency tracking
-    lives: state.lives, // FIX: Persist lives to prevent reset on refresh
-    xpMultiplier: state.xpMultiplier, // FIX: Persist XP multiplier
   };
   try {
     localStorage.setItem(state.storageKey, JSON.stringify(stateToSave));
@@ -2902,79 +2253,6 @@ function saveQuizState() {
   if (state.game && state.game.authManager) {
       state.game.authManager.saveQuizHistoryItem(state.storageKey, stateToSave);
   }
-
-  // NEW: Sync score to Lobby (Real-time)
-  if (state.lobbyId) {
-        const isWinner = (state.mode === 'time-attack' && state.score >= 10);
-        sendScoreToLobby(isWinner);
-  }
-}
-
-/**
- * Sends the current player's score and progress to the Firestore lobby document.
- * Can also trigger the end of the game if the win condition is met.
- * @param {boolean} [isWinner=false] - Set to true if this player has met the win condition.
- */
-async function sendScoreToLobby(isWinner = false) {
-    if (!state.lobbyId || !state.game.authManager.currentUser) return;
-
-    try {
-        const lobbyRef = doc(db, 'lobbies', state.lobbyId);
-        
-        // Use transaction to prevent race conditions when multiple players update scores simultaneously
-        await runTransaction(db, async (transaction) => {
-            const snapshot = await transaction.get(lobbyRef);
-            if (!snapshot.exists()) return;
-
-            const data = snapshot.data();
-            const players = data.players || [];
-            const uid = state.game.authManager.currentUser.uid;
-
-            // Determine last answer status
-            let lastAnswerStatus = null;
-            const currentAns = state.userAnswers[state.currentQuestionIndex];
-            if (currentAns) {
-                lastAnswerStatus = currentAns.isCorrect ? 'correct' : 'incorrect';
-            }
-
-            // Survival Mode Elimination
-            let isEliminated = false;
-            // Find current player to check existing elimination status
-            const currentPlayer = players.find(p => p.uid === uid);
-            if (currentPlayer && currentPlayer.eliminated) {
-                isEliminated = true;
-            } else if (state.mode === 'survival' && lastAnswerStatus === 'incorrect' && state.lives <= 0) {
-                isEliminated = true;
-            }
-            
-            const updatedPlayers = players.map(p => {
-                if (p.uid === uid) {
-                    return { 
-                        ...p, 
-                        score: state.score,
-                        progress: state.currentQuestionIndex + 1,
-                        totalQuestions: state.questionCount || state.shuffledQuestions.length,
-                        lastAnswerStatus: lastAnswerStatus,
-                        eliminated: isEliminated
-                    };
-                }
-                return p;
-            });
-            
-            const updateData = { players: updatedPlayers };
-
-            // If this player is the winner and the game isn't already finished, update the lobby status.
-            if (isWinner && data.status !== 'finished') {
-                updateData.status = 'finished';
-                updateData.winnerUid = uid;
-                updateData.winnerName = state.game.authManager.currentUser.displayName;
-            }
-            transaction.update(lobbyRef, updateData);
-        });
-    } catch (e) {
-        console.error("Lobby sync error:", e);
-        showToast('การเชื่อมต่อขัดข้อง', 'ไม่สามารถส่งคะแนนไปยังเซิร์ฟเวอร์ได้ กรุณาตรวจสอบอินเทอร์เน็ต', '⚠️', 'error');
-    }
 }
 
 function clearSavedState() {
@@ -3133,27 +2411,6 @@ function startTimer() {
     elements.timerDisplay.classList.add("hidden");
     return;
   }
-
-  // FIX: ถ้าเวลาถูกหยุดอยู่ (Time Freeze) ไม่ต้องเริ่มนับถอยหลัง แต่ให้แสดงผลเวลา
-  if (state.isTimeFrozen) {
-      elements.timerDisplay.classList.remove("hidden");
-      updateTimerDisplay();
-      return;
-  }
-
-  // FIX: แยก Logic การรีเซ็ตเวลาออกจาก startTimer เพื่อไม่ให้เวลาเด้งกลับไปเต็มตอน Resume
-  // (Logic การตั้งค่า state.timeLeft ย้ายไปอยู่ที่ showQuestion หรือ init แทน)
-  
-  // ป้องกันการรันซ้ำ
-  if (state.timerId) clearInterval(state.timerId);
-
-  elements.timerDisplay.classList.remove("hidden");
-  updateTimerDisplay();
-  state.timerId = setInterval(tick, 1000);
-}
-
-// Helper function to reset time for per-question mode
-function resetQuestionTimer() {
   if (state.timerMode === "perQuestion") {
     // Use custom time if provided, otherwise use default
     state.timeLeft = (state.customTime && state.customTime > 0)
@@ -3161,27 +2418,21 @@ function resetQuestionTimer() {
       : config.timerDefaults.perQuestion;
     state.initialTime = state.timeLeft;
   }
+
+  elements.timerDisplay.classList.remove("hidden");
+  updateTimerDisplay();
+  state.timerId = setInterval(tick, 1000);
 }
 
 function freezeTime() {
     stopTimer();
     state.isTimeFrozen = true;
-    
-    // Clear existing timeout to prevent stacking
-    if (state.freezeTimeout) clearTimeout(state.freezeTimeout);
-
     if (elements.timerDisplay) elements.timerDisplay.classList.add('text-blue-500', 'animate-pulse');
     
-    state.freezeTimeout = setTimeout(() => {
+    setTimeout(() => {
         state.isTimeFrozen = false;
-        state.freezeTimeout = null;
-        
         if (elements.timerDisplay) elements.timerDisplay.classList.remove('text-blue-500', 'animate-pulse');
-        
-        // Resume timer only if quiz is active
-        if (!state.isQuizFinished && state.activeScreen === elements.quizScreen) {
-            startTimer(); 
-        }
+        state.timerId = setInterval(tick, 1000); // Resume timer
     }, 30000);
 }
 
@@ -3258,24 +2509,7 @@ function handleTimeUp() {
       Array.from(elements.options.children).forEach((button) => (button.disabled = true));
     }
 
-    // Survival Mode Check for Timeout
-    if (state.mode === 'survival') {
-        state.lives--;
-        updateLivesUI();
-        
-        if (state.lives <= 0) {
-            triggerSurvivalShake();
-            triggerHeartBreak();
-            showToast('Game Over', 'หมดเวลา! คุณใช้โควตาหัวใจหมดแล้ว', '💀', 'error');
-            setTimeout(() => showResults(), 1500);
-        } else {
-            triggerSurvivalShake();
-            showToast('หมดเวลา!', `เหลือหัวใจ ${state.lives} ดวง`, '💔', 'warning');
-        }
-    }
-
     // Common actions for any per-question timeout
-    // FIX: Save state AFTER updating lives
     saveQuizState();
     elements.nextBtn.classList.remove("hidden");
     updateNextButtonAppearance('next');
@@ -3310,30 +2544,12 @@ function initializeSound() {
 // --- Event Binding ---
 
 function bindEventListeners() {
-  // NEW: Helper to replace element with clone to strip old listeners
-  const replaceWithClone = (el) => {
-      if (!el) return null;
-      const newEl = el.cloneNode(true);
-      el.parentNode.replaceChild(newEl, el);
-      return newEl;
-  };
-
-  // Refresh elements with clones to ensure clean slate
-  if (elements.skipBtn) elements.skipBtn = replaceWithClone(elements.skipBtn);
-  elements.nextBtn = replaceWithClone(elements.nextBtn);
-  elements.startBtn = replaceWithClone(elements.startBtn);
-  elements.prevBtn = replaceWithClone(elements.prevBtn);
-  elements.restartBtn = replaceWithClone(elements.restartBtn);
-  elements.reviewBtn = replaceWithClone(elements.reviewBtn);
-  elements.backToResultBtn = replaceWithClone(elements.backToResultBtn);
-  if (elements.soundToggleBtn) elements.soundToggleBtn = replaceWithClone(elements.soundToggleBtn);
-  if (elements.hintBtn) elements.hintBtn = replaceWithClone(elements.hintBtn);
-
   // The main action button now has a central handler.
   if (elements.skipBtn) {
     elements.skipBtn.addEventListener("click", skipQuestion);
   }
   elements.nextBtn.addEventListener("click", handleNextButtonClick);
+  if (elements.nextBtn) elements.nextBtn.addEventListener("click", handleNextButtonClick);
 
   // Keep other listeners as they are.
   elements.startBtn.addEventListener("click", startQuiz);
@@ -3341,6 +2557,11 @@ function bindEventListeners() {
   elements.restartBtn.addEventListener("click", startQuiz);
   elements.reviewBtn.addEventListener("click", showReview);
   elements.backToResultBtn.addEventListener("click", backToResult);
+  if (elements.startBtn) elements.startBtn.addEventListener("click", startQuiz);
+  if (elements.prevBtn) elements.prevBtn.addEventListener("click", showPreviousQuestion);
+  if (elements.restartBtn) elements.restartBtn.addEventListener("click", startQuiz);
+  if (elements.reviewBtn) elements.reviewBtn.addEventListener("click", showReview);
+  if (elements.backToResultBtn) elements.backToResultBtn.addEventListener("click", backToResult);
   if (elements.soundToggleBtn) {
     elements.soundToggleBtn.addEventListener("click", toggleSound);
   }

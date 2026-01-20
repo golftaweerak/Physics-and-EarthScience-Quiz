@@ -3,11 +3,10 @@ module.exports = {
   content: [
     "./*.html",
     "./components/**/*.html",
-    "./quiz/**/*.html",
-    "./scripts/**/*.js",
-    "./sim/**/*.html",
-    "./sim/**/*.js",
-    // บรรทัดนี้ครอบคลุมทุกไฟล์ในโฟลเดอร์ scripts แล้ว (รวมถึง main.js, profile.js ฯลฯ)
+    // FIX: เจาะจงไฟล์ Script ที่มี UI Logic เพื่อป้องกันการสร้าง Class ขยะจากไฟล์ Data หรือ Logic อื่นๆ
+    "./scripts/main.js",
+    "./scripts/modal-handler.js",
+    "./quiz/**/*.html"
   ],
   // Safelist: ป้องกันไม่ให้ Tailwind ลบคลาสที่ถูกเรียกใช้ผ่านตัวแปร JS (Dynamic Classes)
   safelist: [
