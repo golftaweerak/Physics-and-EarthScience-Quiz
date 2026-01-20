@@ -301,12 +301,12 @@ class AuthManagerInternal {
                 this.updateLastSyncTime();
                 
                 // อัปเดต Leaderboard (ถ้ามี)
-                if (data.totalXP) {
+                if (data.xp !== undefined) {
                     const leaderboardRef = doc(db, "leaderboard", this.currentUser.uid);
                     await this.retryOperation(() => setDoc(leaderboardRef, {
                         displayName: this.currentUser.displayName || "Anonymous",
                         photoURL: this.currentUser.photoURL,
-                        totalXP: data.totalXP,
+                        xp: data.xp,
                         level: data.level || 1,
                         lastUpdated: new Date()
                     }, { merge: true }));
@@ -333,11 +333,11 @@ class AuthManagerInternal {
             await this.retryOperation(() => setDoc(userRef, localData));
             
             // สร้าง Leaderboard entry ด้วย
-            if (localData.totalXP) {
+            if (localData.xp !== undefined) {
                 await this.retryOperation(() => setDoc(doc(db, "leaderboard", user.uid), {
                     displayName: user.displayName,
                     photoURL: user.photoURL,
-                    totalXP: localData.totalXP,
+                    xp: localData.xp,
                     level: localData.level || 1,
                     lastUpdated: new Date()
                 }));
@@ -349,7 +349,17 @@ class AuthManagerInternal {
             // หรือถ้าคุณต้องการ Logic ที่ซับซ้อนกว่านี้ (เช่น เอา XP ที่มากกว่า) ก็แก้ตรงนี้ได้
             console.log("Found cloud data, syncing to local...");
             const cloudData = docSnap.data();
-            localStorage.setItem(this.LOCAL_STORAGE_KEY, JSON.stringify(cloudData));
+            
+            // Simple conflict resolution: Keep local if it has more XP (e.g. played offline)
+            const localXP = localData.xp || 0;
+            const cloudXP = cloudData.xp || 0;
+
+            if (localXP > cloudXP) {
+                console.log(`Local data has more XP (${localXP}) than cloud (${cloudXP}). Keeping local and syncing up.`);
+                await this.retryOperation(() => setDoc(userRef, localData, { merge: true }));
+            } else {
+                localStorage.setItem(this.LOCAL_STORAGE_KEY, JSON.stringify(cloudData));
+            }
         }
     }
 
