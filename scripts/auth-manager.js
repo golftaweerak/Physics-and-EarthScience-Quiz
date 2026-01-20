@@ -1,7 +1,7 @@
 // scripts/auth-manager.js
 import { auth, db, googleProvider } from './firebase-config.js';
 import { signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { doc, getDoc, setDoc, updateDoc, collection, getDocs, writeBatch, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { doc, getDoc, setDoc, updateDoc, collection, getDocs, writeBatch, deleteDoc, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { showToast } from './toast.js';
 
 class AuthManagerInternal {
@@ -675,10 +675,12 @@ class AuthManagerInternal {
         }
         
         const historyRef = collection(db, "users", user.uid, "quiz_history");
+        // NEW: Limit to 50 most recent items to improve performance and reduce bandwidth
+        const q = query(historyRef, orderBy('lastAttemptTimestamp', 'desc'), limit(50));
         
         try {
             // 1. ดึงข้อมูลจาก Cloud มาเทียบ
-            const cloudSnapshot = await this.retryOperation(() => getDocs(historyRef));
+            const cloudSnapshot = await this.retryOperation(() => getDocs(q));
             
             // NEW: Check if auth state changed during await
             if (!auth.currentUser || auth.currentUser.uid !== user.uid) {
