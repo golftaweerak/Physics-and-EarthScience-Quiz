@@ -23,6 +23,7 @@
 <body class="bg-gray-100 dark:bg-gray-900 transition-colors duration-300 font-sarabun flex flex-col min-h-screen">
 
     <!-- Hardcoded Header to prevent FOUC/Layout Shift -->
+    <div id="main_header-placeholder">
     <header id="main-header"
         class="fixed top-0 left-0 right-0 z-40 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm shadow-md transition-colors duration-300">
         <div class="container mx-auto flex items-center justify-between h-16 px-4">
@@ -203,6 +204,7 @@
             </div>
         </div>
     </header>
+    </div>
 
     <main class="container mx-auto px-4 pb-8 md:pb-12 flex-grow"
         style="padding-top: var(--header-height-offset, 5rem);">
@@ -284,16 +286,16 @@
     <script type="module">
         import { Gamification } from './scripts/gamification.js';
         new Gamification();
-        import { ChallengeManager } from './scripts/challenge-manager.js';
+        import { challengeManager } from './scripts/challenge-manager.js';
         
         // Initialize ChallengeManager only after modals are loaded to prevent errors
         const initChallengeManager = () => {
             if (document.getElementById('challenge-menu-modal')) {
-                new ChallengeManager();
+                challengeManager.init();
             } else {
                 const observer = new MutationObserver((mutations, obs) => {
                     if (document.getElementById('challenge-menu-modal')) {
-                        new ChallengeManager();
+                        challengeManager.init();
                         obs.disconnect();
                     }
                 });

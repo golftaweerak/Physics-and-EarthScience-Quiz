@@ -50,8 +50,7 @@ export class ChallengeManager {
         const basePath = window.location.pathname.includes('/quiz/') ? '../' : './';
         this.notificationSound = new Audio(`${basePath}assets/audio/notification.mp3`);
 
-        // Auto-init when instantiated
-        this.init();
+        // Auto-init removed to prevent race conditions with DOM loading. init() must be called manually.
     }
 
     init() {
