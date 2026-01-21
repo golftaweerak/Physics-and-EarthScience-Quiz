@@ -14,7 +14,7 @@ export async function getSavedCustomQuizzes() {
     // Wait for auth state to be determined
     await authManager.waitForAuthReady();
 
-    const savedQuizzesJSON = localStorage.getItem("customQuizzesList");    
+    const savedQuizzesJSON = localStorage.getItem("customQuizzesList");
     if (!savedQuizzesJSON) return [];
     try {
         const parsed = JSON.parse(savedQuizzesJSON);
@@ -24,7 +24,7 @@ export async function getSavedCustomQuizzes() {
         if (authManager.currentUser) {
             // Delegate sync logic to AuthManager
             localQuizzes = await authManager.syncCustomQuizzes(localQuizzes);
-            
+
             localStorage.setItem("customQuizzesList", JSON.stringify(localQuizzes));
         }
 
@@ -203,9 +203,9 @@ export function initializeCustomQuizHandler() {
 
     if (randomAllConfirmBtn) {
         randomAllConfirmBtn.addEventListener('click', () => {
-             const val = parseInt(document.getElementById('random-all-input').value, 10);
-             executeRandomSelection(val);
-             randomAllModal.close();
+            const val = parseInt(document.getElementById('random-all-input').value, 10);
+            executeRandomSelection(val);
+            randomAllModal.close();
         });
     }
 
@@ -516,7 +516,7 @@ export function initializeCustomQuizHandler() {
                 // Warning State (Yellow)
                 badgeConditionEl.classList.remove('hidden', 'opacity-0', 'translate-y-[-20px]');
                 badgeConditionEl.classList.add('opacity-100', 'translate-y-0');
-                
+
                 // Reset styling to Yellow
                 badgeConditionEl.classList.remove('bg-green-50/95', 'dark:bg-green-900/90', 'border-green-500');
                 badgeConditionEl.classList.remove('bg-white/95', 'dark:bg-gray-800/95'); // Remove default white
@@ -789,7 +789,7 @@ export function initializeCustomQuizHandler() {
                                 } else {
                                     // If we can't increment the one with the highest remainder, try the next one.
                                     // This is a simple fallback; a more complex one would re-sort and try again.
-                                    remainingDiff++; 
+                                    remainingDiff++;
                                 }
                             }
                         }
@@ -917,7 +917,7 @@ export function initializeCustomQuizHandler() {
                 const container = groupBtn.closest('div.flex');
                 const input = container.querySelector('input.random-per-chapter-input');
                 const count = input ? parseInt(input.value, 10) : null;
-                
+
                 handleSubjectGroupRandom(groupType, count, false); // false = per chapter mode
             }
 
@@ -1049,7 +1049,7 @@ export function initializeCustomQuizHandler() {
 
             sortedSubjects.forEach(subjectKey => {
                 const syllabus = getSyllabusForCategory(subjectKey);
-                const subjectDetails = allCategoryDetails[subjectKey];                
+                const subjectDetails = allCategoryDetails[subjectKey];
                 if (!syllabus || !subjectDetails || !groupedQuestions[subjectKey]) {
                     return;
                 }
@@ -1108,7 +1108,14 @@ export function initializeCustomQuizHandler() {
                                         <img src="${subjectDetails.icon}" class="h-8 w-8 flex-shrink-0" alt="${subjectDetails.displayName} icon">
                                         <span class="font-bold text-lg text-gray-800 dark:text-gray-100 truncate">${subjectDetails.displayName}</span>
                                     </div>
-                                    <svg class="chevron-icon h-6 w-6 text-gray-500 dark:text-gray-400 transition-transform duration-300 flex-shrink-0" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                                    <div class="flex items-center gap-3">
+                                        <button type="button" data-action="random-subject" data-subject-key="${subjectKey}" class="p-1.5 text-gray-400 hover:text-purple-500 hover:bg-purple-100 dark:hover:bg-purple-900/50 rounded-full transition-all" title="สุ่มข้อสอบในวิชานี้ (แบบกระจายทุกบท)">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                                            </svg>
+                                        </button>
+                                        <svg class="chevron-icon h-6 w-6 text-gray-500 dark:text-gray-400 transition-transform duration-300 flex-shrink-0" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                                    </div>
                                 </div>
                             </div>
                             <div class="chapters-container grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-in-out">
@@ -1122,7 +1129,7 @@ export function initializeCustomQuizHandler() {
             const getAvailableCount = (groupType) => {
                 let count = 0;
                 const mappings = getGroupMappings(groupType);
-                
+
                 if (mappings.subjects) {
                     mappings.subjects.forEach(subject => {
                         if (groupedQuestions[subject]) {
@@ -1153,7 +1160,7 @@ export function initializeCustomQuizHandler() {
             const createRandomRow = (label, groupType, color) => {
                 const available = getAvailableCount(groupType);
                 const disabled = available === 0;
-                
+
                 return `
                 <div class="specific-topic-control py-3 px-4 border-t border-gray-200 dark:border-gray-700/50 ${disabled ? 'opacity-50 pointer-events-none' : ''}">
                     <div class="flex justify-between items-center mb-2">
@@ -1311,7 +1318,7 @@ export function initializeCustomQuizHandler() {
     /**
      * Gathers user selections, creates a custom quiz object, and saves it.
      */
-    async function handleStartCustomQuiz() {        
+    async function handleStartCustomQuiz() {
         const startBtn = document.getElementById('custom-quiz-start-btn');
         if (startBtn) {
             startBtn.disabled = true;
@@ -1319,131 +1326,131 @@ export function initializeCustomQuizHandler() {
         }
 
         try {
-        const counts = {};
-        const subjectsInQuiz = new Set();
+            const counts = {};
+            const subjectsInQuiz = new Set();
 
-        document.querySelectorAll('#custom-quiz-category-selection input[type="number"][data-specific]').forEach(input => {
-            const count = parseInt(input.value, 10) || 0;
-            if (count > 0) {
-                const subject = input.dataset.subject;
-                const chapter = input.dataset.chapter;
-                const specific = input.dataset.specific;
-                const type = input.dataset.type; // 'theory' or 'calculation'
+            document.querySelectorAll('#custom-quiz-category-selection input[type="number"][data-specific]').forEach(input => {
+                const count = parseInt(input.value, 10) || 0;
+                if (count > 0) {
+                    const subject = input.dataset.subject;
+                    const chapter = input.dataset.chapter;
+                    const specific = input.dataset.specific;
+                    const type = input.dataset.type; // 'theory' or 'calculation'
 
-                if (!counts[subject]) counts[subject] = {};
-                if (!counts[subject][chapter]) counts[subject][chapter] = {};
-                if (!counts[subject][chapter][specific]) {
-                    counts[subject][chapter][specific] = { theory: 0, calculation: 0 };
+                    if (!counts[subject]) counts[subject] = {};
+                    if (!counts[subject][chapter]) counts[subject][chapter] = {};
+                    if (!counts[subject][chapter][specific]) {
+                        counts[subject][chapter][specific] = { theory: 0, calculation: 0 };
+                    }
+                    counts[subject][chapter][specific][type] = count;
+
+                    subjectsInQuiz.add(subject);
                 }
-                counts[subject][chapter][specific][type] = count;
+            });
 
-                subjectsInQuiz.add(subject);
+            if (!quizDataCache) {
+                console.error("Quiz data has not been loaded. Cannot start quiz.");
+                if (startBtn) {
+                    startBtn.disabled = false;
+                    startBtn.innerHTML = 'เริ่มทำแบบทดสอบ';
+                }
+                return;
             }
-        });
 
-        if (!quizDataCache) {
-            console.error("Quiz data has not been loaded. Cannot start quiz.");
-            if (startBtn) {
-                startBtn.disabled = false;
-                startBtn.innerHTML = 'เริ่มทำแบบทดสอบ';
-            }
-            return;
-        }
+            const { allQuestions, scenarios } = quizDataCache;
+            let selectedQuestions = [];
 
-        const { allQuestions, scenarios } = quizDataCache;
-        let selectedQuestions = [];
+            for (const [subject, chapters] of Object.entries(counts)) {
+                for (const [chapter, specifics] of Object.entries(chapters)) {
+                    for (const [specific, typeCounts] of Object.entries(specifics)) {
+                        // Filter the pool for this specific topic
+                        const topicPool = allQuestions.filter(q => {
+                            if (!q.subCategory) return false;
+                            const mainCat = (typeof q.subCategory === 'object') ? q.subCategory.main : q.subCategory;
+                            if (mainCat !== chapter) return false;
 
-        for (const [subject, chapters] of Object.entries(counts)) {
-            for (const [chapter, specifics] of Object.entries(chapters)) {
-                for (const [specific, typeCounts] of Object.entries(specifics)) {
-                    // Filter the pool for this specific topic
-                    const topicPool = allQuestions.filter(q => {                        
-                        if (!q.subCategory) return false;
-                        const mainCat = (typeof q.subCategory === 'object') ? q.subCategory.main : q.subCategory;
-                        if (mainCat !== chapter) return false;
+                            if (typeof q.subCategory === 'object' && q.subCategory.specific) {
+                                const specificsInQuestion = Array.isArray(q.subCategory.specific) ? q.subCategory.specific : [q.subCategory.specific];
+                                return specificsInQuestion.includes(specific);
+                            }
 
-                        if (typeof q.subCategory === 'object' && q.subCategory.specific) {
-                            const specificsInQuestion = Array.isArray(q.subCategory.specific) ? q.subCategory.specific : [q.subCategory.specific];
-                            return specificsInQuestion.includes(specific);
-                        }
-                        
-                        return false;
-                    });
+                            return false;
+                        });
 
-                    // Separate the pool by question type
-                    const theoryPool = topicPool.filter(q => q.type !== 'fill-in-number');
-                    const calculationPool = topicPool.filter(q => q.type === 'fill-in-number');
+                        // Separate the pool by question type
+                        const theoryPool = topicPool.filter(q => q.type !== 'fill-in-number');
+                        const calculationPool = topicPool.filter(q => q.type === 'fill-in-number');
 
-                    // Shuffle and slice for each type
-                    const chosenTheory = [...theoryPool].sort(() => 0.5 - Math.random()).slice(0, typeCounts.theory);
-                    const chosenCalculation = [...calculationPool].sort(() => 0.5 - Math.random()).slice(0, typeCounts.calculation);
+                        // Shuffle and slice for each type
+                        const chosenTheory = [...theoryPool].sort(() => 0.5 - Math.random()).slice(0, typeCounts.theory);
+                        const chosenCalculation = [...calculationPool].sort(() => 0.5 - Math.random()).slice(0, typeCounts.calculation);
 
-                    // Combine and reconstruct questions with scenario context
-                    const allChosenForTopic = [...chosenTheory, ...chosenCalculation];
-                    const reconstructed = allChosenForTopic.map(q => {
-                        if (q.scenarioId && scenarios && scenarios.has(q.scenarioId)) {
-                            const scenario = scenarios.get(q.scenarioId);
-                            const description = (scenario.description || '').replace(/\n/g, '<br>');                            
-                            return {
-                                ...q,
-                                question: `<div class="p-4 mb-4 bg-gray-100 dark:bg-gray-800 border-l-4 border-blue-500 rounded-r-lg"><p class="font-bold text-lg">${scenario.title}</p><div class="mt-2 text-gray-700 dark:text-gray-300">${description}</div></div>${q.question}`,
-                            };
-                        }
-                        return q;
-                    });
-                    selectedQuestions.push(...reconstructed);
+                        // Combine and reconstruct questions with scenario context
+                        const allChosenForTopic = [...chosenTheory, ...chosenCalculation];
+                        const reconstructed = allChosenForTopic.map(q => {
+                            if (q.scenarioId && scenarios && scenarios.has(q.scenarioId)) {
+                                const scenario = scenarios.get(q.scenarioId);
+                                const description = (scenario.description || '').replace(/\n/g, '<br>');
+                                return {
+                                    ...q,
+                                    question: `<div class="p-4 mb-4 bg-gray-100 dark:bg-gray-800 border-l-4 border-blue-500 rounded-r-lg"><p class="font-bold text-lg">${scenario.title}</p><div class="mt-2 text-gray-700 dark:text-gray-300">${description}</div></div>${q.question}`,
+                                };
+                            }
+                            return q;
+                        });
+                        selectedQuestions.push(...reconstructed);
+                    }
                 }
             }
-        }
 
-        // A more concise way to get unique questions if they are object references.
-        // This avoids the stringify/parse overhead.
-        const uniqueQuestions = [...new Map(selectedQuestions.map(item => [item.question, item])).values()];
-        selectedQuestions = uniqueQuestions;
+            // A more concise way to get unique questions if they are object references.
+            // This avoids the stringify/parse overhead.
+            const uniqueQuestions = [...new Map(selectedQuestions.map(item => [item.question, item])).values()];
+            selectedQuestions = uniqueQuestions;
 
-        if (selectedQuestions.length === 0) {
-            showToast("ข้อผิดพลาด", "กรุณาเลือกคำถามอย่างน้อย 1 ข้อ", "⚠️", "error");
-            if (startBtn) {
-                startBtn.disabled = false;
-                startBtn.innerHTML = 'เริ่มทำแบบทดสอบ';
+            if (selectedQuestions.length === 0) {
+                showToast("ข้อผิดพลาด", "กรุณาเลือกคำถามอย่างน้อย 1 ข้อ", "⚠️", "error");
+                if (startBtn) {
+                    startBtn.disabled = false;
+                    startBtn.innerHTML = 'เริ่มทำแบบทดสอบ';
+                }
+                return;
             }
-            return;
-        }
 
-        const timerMode = document.querySelector('input[name="custom-timer-mode"]:checked')?.value || 'none';
-        let customTime = null;
-        if (timerMode === 'overall') {
-            customTime = parseInt(document.getElementById('custom-timer-overall-minutes').value, 10) * 60;
-        } else if (timerMode === 'perQuestion') {
-            customTime = parseInt(document.getElementById('custom-timer-per-question-seconds').value, 10);
-        }
-
-        const descriptionParts = Object.values(counts).reduce((acc, chapters) => {
-            for (const [chapterTitle, specifics] of Object.entries(chapters)) {
-                const totalInChapter = Object.values(specifics).reduce((sum, typeCounts) => sum + (typeCounts.theory || 0) + (typeCounts.calculation || 0), 0);
-                acc[chapterTitle] = (acc[chapterTitle] || 0) + totalInChapter;
+            const timerMode = document.querySelector('input[name="custom-timer-mode"]:checked')?.value || 'none';
+            let customTime = null;
+            if (timerMode === 'overall') {
+                customTime = parseInt(document.getElementById('custom-timer-overall-minutes').value, 10) * 60;
+            } else if (timerMode === 'perQuestion') {
+                customTime = parseInt(document.getElementById('custom-timer-per-question-seconds').value, 10);
             }
-            return acc;
-        }, {});
 
-        const detailedDescription = Object.entries(descriptionParts).map(([title, count]) => {
-            return `${title}: ${count} ข้อ`;
-        }).join(' | ');
+            const descriptionParts = Object.values(counts).reduce((acc, chapters) => {
+                for (const [chapterTitle, specifics] of Object.entries(chapters)) {
+                    const totalInChapter = Object.values(specifics).reduce((sum, typeCounts) => sum + (typeCounts.theory || 0) + (typeCounts.calculation || 0), 0);
+                    acc[chapterTitle] = (acc[chapterTitle] || 0) + totalInChapter;
+                }
+                return acc;
+            }, {});
 
-        const subjectArray = Array.from(subjectsInQuiz);
-        const singleSubject = subjectArray.length === 1 ? subjectArray[0] : 'Custom';
+            const detailedDescription = Object.entries(descriptionParts).map(([title, count]) => {
+                return `${title}: ${count} ข้อ`;
+            }).join(' | ');
 
-        const customQuiz = await createAndSaveCustomQuiz({
-            title: `แบบทดสอบ (${new Date().toLocaleString('th-TH')})`,
-            questions: selectedQuestions,
-            description: detailedDescription,
-            timerMode: timerMode,
-            customTime: customTime,
-            category: singleSubject,
-            categoryDisplay: allCategoryDetails[singleSubject]?.displayName || 'แบบทดสอบที่สร้างเอง'
-        });
+            const subjectArray = Array.from(subjectsInQuiz);
+            const singleSubject = subjectArray.length === 1 ? subjectArray[0] : 'Custom';
 
-        window.location.href = `./quiz/index.html?id=${customQuiz.customId}`;
+            const customQuiz = await createAndSaveCustomQuiz({
+                title: `แบบทดสอบ (${new Date().toLocaleString('th-TH')})`,
+                questions: selectedQuestions,
+                description: detailedDescription,
+                timerMode: timerMode,
+                customTime: customTime,
+                category: singleSubject,
+                categoryDisplay: allCategoryDetails[singleSubject]?.displayName || 'แบบทดสอบที่สร้างเอง'
+            });
+
+            window.location.href = `./quiz/index.html?id=${customQuiz.customId}`;
         } catch (error) {
             console.error("Error starting custom quiz:", error);
             showToast("เกิดข้อผิดพลาด", "ไม่สามารถเริ่มทำแบบทดสอบได้: " + error.message, "❌", "error");
@@ -1459,7 +1466,7 @@ export function initializeCustomQuizHandler() {
         if (allInputs.length === 0) { return; }
 
         const maxQuestions = allInputs.reduce((sum, input) => sum + parseInt(input.max, 10), 0);
-        
+
         if (maxQuestions === 0) {
             showToast("ไม่พบข้อมูล", "ไม่มีคำถามให้เลือกในหมวดหมู่นี้", "⚠️", "info");
             return;
@@ -1469,20 +1476,20 @@ export function initializeCustomQuizHandler() {
         const modalInput = document.getElementById('random-all-input');
         const modalSlider = document.getElementById('random-all-slider');
         const maxDisplay = document.getElementById('random-all-max-display');
-        
+
         if (modalInput && modalSlider && maxDisplay) {
             const defaultVal = Math.min(20, maxQuestions);
-            
+
             modalInput.max = maxQuestions;
             modalInput.value = defaultVal;
-            
+
             modalSlider.max = maxQuestions;
             modalSlider.value = defaultVal;
-            
+
             maxDisplay.textContent = maxQuestions;
-            
+
             updateSliderTrack(modalSlider);
-            
+
             // Force high z-index to ensure it appears above the custom quiz modal
             if (randomAllModal.modal) randomAllModal.modal.style.zIndex = '105';
             randomAllModal.open();
@@ -1492,7 +1499,7 @@ export function initializeCustomQuizHandler() {
     function executeRandomSelection(targetCount) {
         const allInputs = Array.from(document.querySelectorAll('#custom-quiz-category-selection input[type="number"][data-type]'));
         const maxQuestions = allInputs.reduce((sum, input) => sum + parseInt(input.max, 10), 0);
-        
+
         if (targetCount > maxQuestions) targetCount = maxQuestions;
 
         // Reset
@@ -1508,7 +1515,7 @@ export function initializeCustomQuizHandler() {
             const randIndex = Math.floor(Math.random() * availableInputs.length);
             const item = availableInputs[randIndex];
             const input = allInputs[item.index];
-            
+
             const currentVal = parseInt(input.value, 10);
             input.value = currentVal + 1;
             currentCount++;
@@ -1677,6 +1684,74 @@ export function initializeCustomQuizHandler() {
     bindCustomQuizModalEvents();
 
     /**
+     * Handles random selection for a specific subject (all chapters).
+     * @param {string} subjectKey - The key of the subject.
+     */
+    function handleRandomSelectionForSubject(subjectKey) {
+        const numPerChapterInput = prompt(`ระบุจำนวนข้อที่ต้องการสุ่ม 'ต่อหนึ่งบท' สำหรับวิชานี้:`, "2");
+        if (numPerChapterInput === null) return;
+
+        const numPerChapter = parseInt(numPerChapterInput, 10);
+        if (isNaN(numPerChapter) || numPerChapter < 0) {
+            showToast("ข้อมูลไม่ถูกต้อง", "กรุณาระบุจำนวนตัวเลขที่ถูกต้อง", "⚠️", "error");
+            return;
+        }
+
+        // Get all inputs for this subject
+        const inputs = Array.from(document.querySelectorAll(`#custom-quiz-category-selection input[type="number"][data-subject="${subjectKey}"]`));
+
+        if (inputs.length === 0) {
+            showToast("ไม่พบข้อมูล", "ไม่พบหัวข้อสำหรับวิชานี้", "⚠️", "info");
+            return;
+        }
+
+        // Reset inputs for this subject
+        inputs.forEach(input => {
+            if (input.value !== '0') { input.value = 0; }
+        });
+
+        // Group inputs by chapter to distribute per-chapter limit
+        const inputsByChapter = inputs.reduce((acc, input) => {
+            const chap = input.dataset.chapter;
+            if (!acc[chap]) acc[chap] = [];
+            acc[chap].push(input);
+            return acc;
+        }, {});
+
+        let totalAdded = 0;
+
+        Object.values(inputsByChapter).forEach(chapterInputs => {
+            // Calculate total available questions in this chapter
+            const availableInChapter = chapterInputs.map(input => ({
+                input,
+                max: parseInt(input.max, 10),
+                current: 0
+            })).filter(item => item.max > 0);
+
+            const totalAvailable = availableInChapter.reduce((sum, item) => sum + item.max, 0);
+            const targetForChapter = Math.min(numPerChapter, totalAvailable);
+
+            let addedToChapter = 0;
+            while (addedToChapter < targetForChapter && availableInChapter.length > 0) {
+                const randIndex = Math.floor(Math.random() * availableInChapter.length);
+                const item = availableInChapter[randIndex];
+
+                if (item.current < item.max) {
+                    item.current++;
+                    item.input.value = item.current;
+                    addedToChapter++;
+                    totalAdded++;
+                } else {
+                    availableInChapter.splice(randIndex, 1);
+                }
+            }
+        });
+
+        updateTotalCount();
+        showToast("สำเร็จ", `สุ่มเลือกคำถามเพิ่มให้วิชานี้เรียบร้อยแล้ว (${totalAdded} ข้อ)`, "✅", "success");
+    }
+
+    /**
      * Helper to define group mappings for random generation
      */
     function getGroupMappings(groupType) {
@@ -1764,8 +1839,8 @@ export function initializeCustomQuizHandler() {
         }
 
         // Filter inputs that have questions available
-        let availableInputs = targetInputs.map(input => ({ 
-            input, 
+        let availableInputs = targetInputs.map(input => ({
+            input,
             max: parseInt(input.max, 10),
             current: parseInt(input.value, 10) || 0
         })).filter(item => item.max > 0);
@@ -1779,7 +1854,7 @@ export function initializeCustomQuizHandler() {
             // Mode: Total Random (Distribute numPerChapter across the whole group)
             let currentTotal = 0;
             const targetTotal = numPerChapter;
-            
+
             // Reset inputs in this group first
             availableInputs.forEach(item => {
                 item.input.value = 0;
@@ -1805,12 +1880,12 @@ export function initializeCustomQuizHandler() {
             // Mode: Per Chapter (Original logic, but applied to the filtered inputs)
             // We need to group inputs by chapter to apply the limit per chapter
             // But since the inputs are specific topics (theory/calc), we distribute the 'per chapter' count among them.
-            
+
             // Simplified approach: Distribute 'numPerChapter' to EACH chapter found in the inputs.
             // Since we flattened the inputs, we need to regroup them by chapter to do this accurately.
             // However, for simplicity and UX, let's treat 'Per Chapter' as 'Per Topic Input' limit or similar?
             // No, 'Per Chapter' implies we want X questions from Chapter 1, X from Chapter 2.
-            
+
             // Re-implementing per-chapter logic using the gathered inputs:
             const inputsByChapter = availableInputs.reduce((acc, item) => {
                 const key = `${item.input.dataset.subject}_${item.input.dataset.chapter}`;
