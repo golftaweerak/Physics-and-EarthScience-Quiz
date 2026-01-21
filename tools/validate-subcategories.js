@@ -17,6 +17,49 @@ const __dirname = path.dirname(__filename);
 // --- Main Configuration ---
 const DATA_DIR = path.join(__dirname, "../data");
 
+// --- Auto-correction Mapping ---
+const correctionMap = {
+  EarthSpaceScienceBasic: {
+    "ธรณีวิทยาโครงสร้าง และธรณีพิบัติภัย": "ธรณีพิบัติภัย",
+    "สมดุลพลังงานของโลก และดวงอาทิตย์": "สมดุลพลังงานของโลกและรังสี",
+    "ดาวฤกษ์ คุณสมบัติและวิวัฒนาการ": "สมบัติและวิวัฒนาการของดาวฤกษ์",
+    "แผนที่อากาศ และการพยากรณ์อากาศ": "แผนที่อากาศและการพยากรณ์อากาศ",
+    "ภาวะเรือนกระจก": "สมดุลพลังงานของโลกและรังสี",
+    "ธรณีวิทยาโครงสร้าง": "ธรณีสัณฐานและกระบวนการบนพื้นผิวโลก"
+  },
+  EarthSpaceScienceAdvance: {
+    "ปรากฏการณ์บนท้องฟ้า": "ปฏิสัมพันธ์ในระบบโลก-ดวงจันทร์-ดวงอาทิตย์",
+    "พิกัดและการเคลื่อนที่ของวัตถุท้องฟ้าเบื้องต้น": "ทรงกลมท้องฟ้าและระบบพิกัด",
+    "สมบัติของดาวฤกษ์": "สมบัติและวิวัฒนาการของดาวฤกษ์",
+    "ส่วนประกอบของกาแล็กซีและเอกภพ": "กาแล็กซีและเอกภพวิทยา",
+    "ตำแหน่งและลักษณะของดาวเคราะห์ในระบบสุริยะ": "ระบบสุริยะและองค์ประกอบ",
+    "ส่วนประกอบของระบบสุริยะ": "ระบบสุริยะและองค์ประกอบ",
+    "ระบบสุริยะ": "ระบบสุริยะและองค์ประกอบ",
+    "ข่าวสารทางดาราศาสตร์สมัยใหม่": "ข่าวสารและความก้าวหน้าทางดาราศาสตร์",
+    "ประวัติศาสตร์ดาราศาสตร์": "ข่าวสารและความก้าวหน้าทางดาราศาสตร์",
+    "ปฏิสัมพันธ์ภายในและผลกระทบต่อสิ่งแวดล้อมและสิ่งมีชีวิตบนโลก": "ปฏิสัมพันธ์ในระบบโลก-ดวงจันทร์-ดวงอาทิตย์",
+    "ดาวฤกษ์ คุณสมบัติและวิวัฒนาการ": "สมบัติและวิวัฒนาการของดาวฤกษ์",
+    "ลุ่มดาวฤกษ์และการใช้ประโยชน์": "กลุ่มดาวฤกษ์และการใช้ประโยชน์",
+    "พลังงานและโมเมนตัม": "กลศาสตร์พื้นฐาน (กฎของนิวตัน, งานและพลังงาน)",
+    "การเคลื่อนที่เป็นเส้นตรงและเส้นโค้ง": "กลศาสตร์พื้นฐาน (กฎของนิวตัน, งานและพลังงาน)",
+    "ฟังก์ชันตรีโกณมิติ": "คณิตศาสตร์สำหรับดาราศาสตร์ (พีชคณิต, เรขาคณิต, ตรีโกณมิติ)",
+    "กฎของ นิวตัน แรงและการเคลื่อนที่เบื้องต้น": "กลศาสตร์พื้นฐาน (กฎของนิวตัน, งานและพลังงาน)",
+    "ปฏิสัมพันธ์ในระบบโลก-ดวงจันทร์-ดวงอาทิตย์": "ปรากฏการณ์ในระบบสุริยะ (อุปราคา, น้ำขึ้นน้ำลง)",
+    "ทฤษฎีคลื่นแม่เหล็กไฟฟ้าเบื้องต้น": "คุณสมบัติของคลื่นแม่เหล็กไฟฟ้าและสเปกตรัม",
+    "พีชคณิตเบื้องต้น": "คณิตศาสตร์สำหรับดาราศาสตร์ (พีชคณิต, เรขาคณิต, ตรีโกณมิติ)",
+    "เรขาคณิตวงกลม วงรี": "คณิตศาสตร์สำหรับดาราศาสตร์ (พีชคณิต, เรขาคณิต, ตรีโกณมิติ)",
+    "ทรงกลมท้องฟ้าและระบบพิกัด": "ทรงกลมท้องฟ้าและระบบพิกัด",
+    "การคำนวณทางดาราศาสตร์": "การวิเคราะห์ข้อมูลและการคำนวณทางดาราศาสตร์",
+    "กลศาสตร์พื้นฐาน": "กลศาสตร์พื้นฐาน (กฎของนิวตัน, งานและพลังงาน)",
+    "คณิตศาสตร์สำหรับดาราศาสตร์": "คณิตศาสตร์สำหรับดาราศาสตร์ (พีชคณิต, เรขาคณิต, ตรีโกณมิติ)",
+  },
+};
+
+/**
+ * Escapes special characters in a string for use in a regular expression.
+ */
+const escapeRegExp = (string) => string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
 /**
  * Pre-processes syllabus data into a structured Map for efficient validation.
  * The structure is: Map<CategoryKey, Map<ChapterTitle, Set<SpecificTopic>>>
@@ -45,11 +88,11 @@ function preprocessValidationData() {
   // The basic syllabus is nested under a single grade key (e.g., 'm6') which contains 'units'.
   // Corrected: The structure has a 'units' array at the top level.
   if (EARTH_SCIENCE_BASIC_SYLLABUS && Array.isArray(EARTH_SCIENCE_BASIC_SYLLABUS.units)) {
-      EARTH_SCIENCE_BASIC_SYLLABUS.units.forEach(unit => {
-          unit.chapters.forEach(chapter => {
-              basicEarthMap.set(chapter.title, new Set(chapter.learningOutcomes || []));
-          });
+    EARTH_SCIENCE_BASIC_SYLLABUS.units.forEach(unit => {
+      unit.chapters.forEach(chapter => {
+        basicEarthMap.set(chapter.title, new Set(chapter.learningOutcomes || []));
       });
+    });
   }
   validationMap.set('EarthSpaceScienceBasic', basicEarthMap);
 
@@ -68,11 +111,11 @@ function preprocessValidationData() {
 
 /** Helper function to normalize topic strings by removing potential leading numbers like "1. " */
 function normalizeTopic(topic) {
-    if (typeof topic !== 'string') return '';
-    // Normalize by removing extra whitespace, newlines, and standardizing spaces.
-    // This handles both "1. Topic" and "ว 3.1 ม.6/1 Topic" formats by cleaning them up
-    // for a more reliable comparison.
-    return topic.replace(/\s+/g, ' ').trim();
+  if (typeof topic !== 'string') return '';
+  // Normalize by removing extra whitespace, newlines, and standardizing spaces.
+  // This handles both "1. Topic" and "ว 3.1 ม.6/1 Topic" formats by cleaning them up
+  // for a more reliable comparison.
+  return topic.replace(/\s+/g, ' ').trim();
 }
 
 /**
@@ -124,7 +167,10 @@ async function main() {
   const quizFiles = allFiles.filter(
     (filePath) => {
       const fileName = path.basename(filePath);
-      return fileName.endsWith("-data.js") && !fileName.startsWith("template-") && !fileName.startsWith("sub-category-");
+      return fileName.endsWith("-data.js") &&
+        !fileName.startsWith("template-") &&
+        !fileName.startsWith("sub-category-") &&
+        !fileName.startsWith("scores-data");
     }
   );
 
@@ -135,10 +181,13 @@ async function main() {
     const prefix = sortedPrefixKeys.find(key => fileName.toLowerCase().startsWith(key));
     const info = quizPrefixInfo[prefix];
     const fileErrors = [];
+    const fileCorrections = [];
+    let fileContent = null;
+    let fileModified = false;
 
     if (!info || !info.mainCategory) {
       console.log(`\n- Skipping validation for ${relativePath} (no mainCategory defined in quizPrefixInfo).`);
-      return { fileName: relativePath, errors: fileErrors };
+      return { fileName: relativePath, errors: fileErrors, corrections: fileCorrections, fileModified };
     }
 
     const mainCategoryKey = info.mainCategory;
@@ -146,7 +195,7 @@ async function main() {
 
     if (!validChapters) {
       fileErrors.push({ File: relativePath, ID: 'N/A', Error: `Main category "${mainCategoryKey}" not found in syllabus data.` });
-      return { fileName: relativePath, errors: fileErrors };
+      return { fileName: relativePath, errors: fileErrors, corrections: fileCorrections, fileModified };
     }
 
     const quizDataModule = await import(pathToFileURL(filePath).href + `?v=${Date.now()}`);
@@ -154,7 +203,7 @@ async function main() {
 
     if (!quizData) {
       fileErrors.push({ File: relativePath, ID: 'N/A', Error: `Could not find an iterable quizData array. Please check the file's export structure.` });
-      return { fileName: relativePath, errors: fileErrors };
+      return { fileName: relativePath, errors: fileErrors, corrections: fileCorrections, fileModified };
     }
 
     for (const item of quizData) {
@@ -185,20 +234,51 @@ async function main() {
         if (validTopicsNormalized.size > 0 && !validTopicsNormalized.has(specificTopic)) {
           // Only report error if there are specific topics defined for this chapter.
           // If validTopics is empty, it means any specific topic is acceptable (or not defined).
-          fileErrors.push({ File: relativePath, ID: questionIdForTable, Error: `Invalid Topic (specific): "${specificTopic}" for chapter "${chapterTitle}"` });
+
+          // Check for auto-correction
+          const rawSpecific = question.subCategory.specific;
+          const correction = correctionMap[mainCategoryKey]?.[rawSpecific];
+
+          if (correction) {
+            if (!fileContent) fileContent = fs.readFileSync(filePath, "utf-8");
+            const escapedOldCat = escapeRegExp(rawSpecific);
+            const oldCategoryRegex = new RegExp(`(['"])${escapedOldCat}(['"])`);
+
+            if (oldCategoryRegex.test(fileContent)) {
+              fileContent = fileContent.replace(oldCategoryRegex, `$1${correction}$2`);
+              fileModified = true;
+              fileCorrections.push({ File: relativePath, ID: questionIdForTable, Change: `"${rawSpecific}" -> "${correction}"` });
+            } else {
+              fileErrors.push({ File: relativePath, ID: questionIdForTable, Error: `Invalid Topic (specific): "${specificTopic}"`, Details: 'Auto-correction target found in data but replacement failed (check escaping).' });
+            }
+          } else {
+            fileErrors.push({ File: relativePath, ID: questionIdForTable, Error: `Invalid Topic (specific): "${specificTopic}" for chapter "${chapterTitle}"` });
+          }
         }
       }
     }
-    return { fileName: relativePath, errors: fileErrors };
+    return { fileName: relativePath, errors: fileErrors, corrections: fileCorrections, fileModified, newContent: fileContent, filePath };
   });
 
   const results = await Promise.all(processingPromises);
 
   // 4. Aggregate results and perform file writes
   const allErrors = results.flatMap(result => result.errors);
+  const allCorrections = results.flatMap(result => result.corrections);
+
+  for (const result of results) {
+    if (result.fileModified) {
+      fs.writeFileSync(result.filePath, result.newContent, "utf-8");
+    }
+  }
 
   // 5. Report final results
   console.log("\n--- ✅ Validation Complete ---");
+
+  if (allCorrections.length > 0) {
+    console.log(`\n--- 🔧 Auto-corrections Applyed (${allCorrections.length}) ---`);
+    console.table(allCorrections);
+  }
 
   if (allErrors.length > 0) {
     console.log(`\n--- ❗️ Found ${allErrors.length} Sub-category Error(s) ---`);

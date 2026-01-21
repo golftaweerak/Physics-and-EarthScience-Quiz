@@ -41,6 +41,23 @@ function* getAllQuestions(items) {
 }
 
 /**
+ * Recursively finds all files in a directory.
+ */
+async function getAllFiles(dirPath, arrayOfFiles = []) {
+    const files = await fs.readdir(dirPath);
+    for (const file of files) {
+        const fullPath = path.join(dirPath, file);
+        const stat = await fs.stat(fullPath);
+        if (stat.isDirectory()) {
+            await getAllFiles(fullPath, arrayOfFiles);
+        } else {
+            arrayOfFiles.push(fullPath);
+        }
+    }
+    return arrayOfFiles;
+}
+
+/**
  * Extracts the text content from a quiz option.
  * Handles both string options and object options (e.g., { text: '...' }).
  * @param {string|Object} opt - The option item.
@@ -153,9 +170,14 @@ async function checkDuplicatesAndSimilarities() {
         }
     }
 
-    const files = await fs.readdir(dataDir);
+    const allFilePaths = await getAllFiles(dataDir);
     // Exclude the sub-category definition file itself from the check
-    const dataFiles = files.filter((file) => file.endsWith("-data.js") && file !== 'sub-category-data.js');
+    const dataFiles = allFilePaths.filter((filePath) => {
+        const file = path.basename(filePath);
+        return file.endsWith("-data.js") &&
+            file !== 'sub-category-data.js' &&
+            !file.startsWith('scores-data');
+    });
 
     const seenQuestions = new Map();
     const uniqueQuestions = []; // To store unique questions for similarity check
@@ -165,7 +187,8 @@ async function checkDuplicatesAndSimilarities() {
     console.log(chalk.bold("\n🔍 PASS 1: Checking for EXACT DUPLICATES across relevant data files..."));
 
     // --- PASS 1: Find Duplicates and Collect Unique Questions ---
-    for (const file of dataFiles) {
+    for (const filePath of dataFiles) {
+        const file = path.basename(filePath);
         // --- Apply Prefix Filter ---
         // If validPrefixes is a Set and --all is not used, we apply the filter.
         if (validPrefixes && !checkAllFiles) {
@@ -177,7 +200,6 @@ async function checkDuplicatesAndSimilarities() {
         }
 
         checkedFileCount++;
-        const filePath = path.join(dataDir, file);
         // Use a cache-busting query string for dynamic import to get the latest file content
         const fileUrl = `${pathToFileURL(filePath).href}?v=${Date.now()}`;
         let module;
@@ -246,7 +268,7 @@ async function checkDuplicatesAndSimilarities() {
     // --- PASS 2: Find Similarities among Unique Questions ---
     let similarPairCount = 0;
     console.log(chalk.bold(`\n🔍 PASS 2: Checking for SIMILAR questions among ${uniqueQuestions.length} unique items...`));
-    console.log(chalk.gray(`   (Thresholds: Question > ${SIMILARITY_THRESHOLD_QUESTION*100}%, Options > ${SIMILARITY_THRESHOLD_OPTIONS*100}%)`));
+    console.log(chalk.gray(`   (Thresholds: Question > ${SIMILARITY_THRESHOLD_QUESTION * 100}%, Options > ${SIMILARITY_THRESHOLD_OPTIONS * 100}%)`));
 
     for (let i = 0; i < uniqueQuestions.length; i++) {
         for (let j = i + 1; j < uniqueQuestions.length; j++) {

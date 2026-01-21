@@ -1,0 +1,144 @@
+export const SiteConfig = {
+  // ข้อมูลทั่วไปของเว็บไซต์
+  appTitle: "แบบฝึกหัดฟิสิกส์ & วิทย์โลก",
+  appDescription: "คลับแห่งการเรียนรู้: รวมแบบฝึกหัดฟิสิกส์และวิทยาศาสตร์โลกสำหรับนักเรียนมัธยมปลาย พร้อมระบบ Gamification",
+  appKeywords: "Physics, Earth Science, แบบฝึกหัดฟิสิกส์, วิทย์โลก, ข้อสอบ, การเรียนรู้, SABA, Prommanusorn",
+  author: "Taweerak Thuhphuttha",
+
+  // หมวดหมู่รายวิชา (ใช้สำหรับตัวกรองและ Generator)
+  // keywords: คำค้นหาที่ใช้ระบุว่าข้อสอบชุดนี้ควรถูกนับคะแนนเข้าสายวิชาใด (ใช้ใน gamification.js)
+  categories: [
+    {
+      id: "physicsTrackXP",
+      name: "Physics",
+      label: "ฟิสิกส์",
+      track: "physics",
+      keywords: ['physics', 'ฟิสิกส์', 'phy_', 'mechanics', 'electricity', 'waves', 'nuclear', 'atom']
+    },
+    {
+      id: "earthTrackXP",
+      name: "EarthScience",
+      label: "วิทย์โลก & ดาราศาสตร์",
+      track: "earth",
+      keywords: ['earth', 'โลก', 'วิทย์โลก', 'geology', 'ธรณี', 'meteorology', 'อุตุนิยมวิทยา', 'oceanography', 'สมุทรศาสตร์', 'ess_', 'astro', 'astronomy', 'space', 'universe']
+    }
+  ],
+
+  // เกณฑ์ XP และเงื่อนไขการเลเวลอัพ (XP Thresholds & Quests)
+  xpThresholds: [
+    { level: 1, xp: 0, quest: null }, // No quest to reach level 1
+    { level: 2, xp: 100, quest: { type: 'correct_streak', target: 5, desc: 'ตอบคำถามถูกติดต่อกัน 5 ข้อ' } },
+    { level: 3, xp: 300, quest: { type: 'quizzes_completed', target: 3, desc: 'ทำแบบทดสอบให้ครบ 3 ครั้ง' } },
+    { level: 4, xp: 600, quest: { type: 'perfect_scores', target: 1, desc: 'ทำคะแนนเต็ม 100% ให้ได้ 1 ครั้ง' } },
+    { level: 5, xp: 1000, quest: { type: 'high_scores_80', target: 3, desc: 'ทำคะแนนได้ 80% ขึ้นไป 3 ครั้ง' } },
+    { level: 6, xp: 1500, quest: { type: 'quizzes_completed', target: 10, desc: 'ทำแบบทดสอบให้ครบ 10 ครั้ง' } },
+    { level: 7, xp: 2200, quest: { type: 'correct_streak', target: 15, desc: 'ตอบคำถามถูกติดต่อกัน 15 ข้อ' } },
+    { level: 8, xp: 3000, quest: { type: 'physics_level', target: 5, desc: 'ไปให้ถึงเลเวล 5 ในสายฟิสิกส์' } },
+    { level: 9, xp: 4000, quest: { type: 'earth_level', target: 5, desc: 'ไปให้ถึงเลเวล 5 ในสายวิทย์โลก' } },
+    { level: 10, xp: 5500, quest: { type: 'quizzes_completed', target: 20, desc: 'ทำแบบทดสอบให้ครบ 20 ครั้ง' } },
+    { level: 11, xp: 7500, quest: { type: 'high_scores_80', target: 10, desc: 'ทำคะแนนได้ 80% ขึ้นไป 10 ครั้ง' } },
+    { level: 12, xp: 10000, quest: { type: 'correct_streak', target: 25, desc: 'ตอบคำถามถูกติดต่อกัน 25 ข้อ' } },
+    { level: 13, xp: 13000, quest: { type: 'quizzes_completed', target: 40, desc: 'ทำแบบทดสอบให้ครบ 40 ครั้ง' } },
+    { level: 14, xp: 16500, quest: { type: 'perfect_scores', target: 5, desc: 'ทำคะแนนเต็ม 100% ให้ได้ 5 ครั้ง' } },
+    { level: 15, xp: 20500, quest: { type: 'physics_level', target: 10, desc: 'ไปให้ถึงเลเวล 10 ในสายฟิสิกส์' } },
+    { level: 16, xp: 25000, quest: { type: 'earth_level', target: 10, desc: 'ไปให้ถึงเลเวล 10 ในสายวิทย์โลก' } },
+    { level: 17, xp: 30000, quest: { type: 'high_scores_80', target: 20, desc: 'ทำคะแนนได้ 80% ขึ้นไป 20 ครั้ง' } },
+    { level: 18, xp: 36000, quest: { type: 'quizzes_completed', target: 80, desc: 'ทำแบบทดสอบให้ครบ 80 ครั้ง' } },
+    { level: 19, xp: 43000, quest: { type: 'correct_streak', target: 40, desc: 'ตอบคำถามถูกติดต่อกัน 40 ข้อ' } },
+    { level: 20, xp: 50000, quest: { type: 'perfect_scores', target: 10, desc: 'ทำคะแนนเต็ม 100% ให้ได้ 10 ครั้ง' } }
+  ],
+
+  // ชื่อยศสำหรับแต่ละสาย (Titles)
+  trackTitles: {
+    overall: [
+      "ผู้เริ่มต้น (Novice)", "นักสำรวจความรู้ (Seeker)", "ผู้ใฝ่เรียน (Learner)",
+      "นักคิดวิเคราะห์ (Thinker)", "ปราชญ์ฝึกหัด (Scholar)", "ผู้เชี่ยวชาญ (Expert)",
+      "อาจารย์ (Mentor)", "ศาสตราจารย์ (Professor)", "ปราชญ์เมธี (Sage)", "ผู้รอบรู้สรรพสิ่ง (Polymath)",
+      "ผู้หยั่งรู้ (The Seer)", "ผู้บรรลุ (The Enlightened)", "มหาปราชญ์แห่งยุค (Grand Sage)",
+      "ผู้พิทักษ์ความรู้ (Guardian of Wisdom)", "ตำนานที่ยังมีลมหายใจ (Living Legend)", "ผู้เหนือโลก (Transcendent)",
+      "หนึ่งเดียวในใต้หล้า (The One)", "เทพเจ้าแห่งปัญญา (God of Wisdom)", "ผู้สร้างสรรค์ (The Creator)", "อมตะ (Immortal)"
+    ],
+    physics: [
+      "นักฟิสิกส์ฝึกหัด", "ผู้สังเกตการณ์", "นักทดลอง",
+      "ผู้เข้าใจกลศาสตร์", "จ้าวแห่งแรง", "ผู้ควบคุมพลังงาน",
+      "วิศวกรแห่งความจริง", "ผู้เชี่ยวชาญคลื่น", "นักทฤษฎีควอนตัม", "ปรมาจารย์ฟิสิกส์",
+      "ผู้บิดเบือนกาลเวลา", "ผู้ท่องมิติ", "หนึ่งเดียวกับอะตอม",
+      "ผู้ไขความลับจักรวาล", "จ้าวแห่งแรงโน้มถ่วง", "ผู้สร้างกฎ",
+      "เทพอสูรฟิสิกส์", "ผู้หยั่งรู้ทุกสรรพสิ่ง", "ผู้ควบคุมสสาร", "กฎแห่งฟิสิกส์"
+    ],
+    earth: [
+      "นักสำรวจหิน", "ผู้สนใจธรณี", "นักอุตุนิยมวิทยาฝึกหัด",
+      "ผู้เชี่ยวชาญแผนที่", "นักธรณีวิทยา", "ผู้พยากรณ์อากาศ",
+      "นักสมุทรศาสตร์", "ผู้หยั่งรู้ใต้พิภพ", "จ้าวแห่งมหาสมุทร", "ปรมาจารย์วิทย์โลก",
+      "ผู้ควบคุมแผ่นเปลือกโลก", "ผู้บัญชาการพายุ", "ผู้พิทักษ์ทรัพยากร",
+      "ผู้สร้างภูเขา", "จ้าวแห่งวัฏจักร", "ผู้ไขปริศนาบรรพกาล",
+      "ผู้ติดตามดวงดาว", "เทพเจ้าแห่งผืนดิน", "ผู้สร้างโลก", "จิตวิญญาณแห่งไกอา"
+    ]
+  },
+
+  // กลุ่มรายวิชาย่อย (Proficiency Groups) - ใช้สำหรับคำนวณกราฟเรดาร์และสถิติ
+  proficiencyGroups: {
+    // --- Physics Groups ---
+    'Mechanics': {
+      label: 'กลศาสตร์',
+      field: 'mechanicsXP',
+      track: 'physics',
+      keywords: ['กลศาสตร์', 'การเคลื่อนที่', 'แรง', 'นิวตัน', 'สมดุล', 'งานและพลังงาน', 'โมเมนตัม', 'โพรเจกไทล์', 'วงกลม', 'ฮาร์มอนิก', 'mechanics', 'force', 'motion']
+    },
+    'Electromagnetism': {
+      label: 'ไฟฟ้าและแม่เหล็ก',
+      field: 'electromagnetismXP',
+      track: 'physics',
+      keywords: ['ไฟฟ้า', 'แม่เหล็ก', 'ประจุ', 'วงจร', 'กระแส', 'ความต้านทาน', 'ศักย์ไฟฟ้า', 'คาปาซิเตอร์', 'electric', 'magnetic', 'circuit']
+    },
+    'WavesAndOptics': {
+      label: 'คลื่นและแสง',
+      field: 'wavesAndOpticsXP',
+      track: 'physics',
+      keywords: ['คลื่น', 'เสียง', 'แสง', 'ทัศนอุปกรณ์', 'สะท้อน', 'หักเห', 'แทรกสอด', 'เลี้ยวเบน', 'wave', 'sound', 'light', 'optics']
+    },
+    'ModernPhysics': {
+      label: 'ฟิสิกส์แผนใหม่',
+      field: 'modernPhysicsXP',
+      track: 'physics',
+      keywords: ['อะตอม', 'นิวเคลียร์', 'กัมมันตภาพรังสี', 'ควอนตัม', 'สัมพัทธภาพ', 'ฟิชชัน', 'ฟิวชัน', 'atomic', 'nuclear', 'quantum']
+    },
+    'SolidsFluidsHeat': {
+      label: 'สสารและความร้อน',
+      field: 'matterAndHeatXP',
+      track: 'physics',
+      keywords: ['ของแข็ง', 'ของไหล', 'ความร้อน', 'ก๊าซ', 'อุณหพลศาสตร์', 'fluid', 'heat', 'thermodynamics']
+    },
+
+    // --- Earth Science Groups ---
+    'Astronomy': {
+      label: 'ดาราศาสตร์',
+      field: 'astronomyXP',
+      track: 'earth',
+      keywords: ['dara', 'astronomy', 'ดาราศาสตร์', 'เอกภพ', 'กาแล็กซี', 'ดาวฤกษ์', 'ระบบสุริยะ', 'ดาวเคราะห์', 'ทรงกลมฟ้า', 'พิกัด', 'กล้องโทรทรรศน์', 'สเปกตรัม', 'อวกาศ', 'เทคโนโลยีอวกาศ', 'space']
+    },
+    'Geology': {
+      label: 'ธรณีวิทยา',
+      field: 'geologyXP',
+      track: 'earth',
+      keywords: ['geology', 'ธรณี', 'หิน', 'แร่', 'วัฏจักรหิน', 'โครงสร้างโลก', 'แผ่นเปลือกโลก', 'ไหวสะเทือน', 'ภูเขาไฟ', 'ซากดึกดำบรรพ์', 'ลำดับชั้นหิน', 'ทรัพยากรธรณี', 'ดิน', 'แผนที่']
+    },
+    'Meteorology': {
+      label: 'อุตุนิยมวิทยา',
+      field: 'meteorologyXP',
+      track: 'earth',
+      keywords: ['meteorology', 'อุตุนิยมวิทยา', 'บรรยากาศ', 'ลม', 'ความกดอากาศ', 'เมฆ', 'หยาดน้ำฟ้า', 'พายุ', 'ภูมิอากาศ', 'แผนที่อากาศ', 'พยากรณ์', 'สมดุลพลังงาน']
+    },
+    'Oceanography': {
+      label: 'สมุทรศาสตร์',
+      field: 'oceanographyXP',
+      track: 'earth',
+      keywords: ['oceanography', 'สมุทร', 'น้ำทะเล', 'มหาสมุทร', 'ความเค็ม', 'กระแสน้ำ', 'น้ำขึ้นน้ำลง', 'คลื่น', 'ชายฝั่ง', 'นิเวศทางทะเล']
+    }
+  },
+
+  // ตั้งค่า UI
+  theme: {
+    primaryColor: "indigo", // Physics often uses blue/indigo
+  }
+};

@@ -6,55 +6,7 @@
 // Single source of truth for all category metadata.
 export const categoryDetails = {
   // Main categories for the index page accordion
-  // สีเทาน้ำเงิน (Blue Gray): สื่อถึงความสุขุม น่าเชื่อถือ เหมาะสำหรับหมวดทบทวน
-  AstronomyReview: {
-    title: "ทบทวน (Review)",
-    icon: "./assets/icons/study.png",
-    order: 1,
-    color: "border-gray-500",
-    cardGlow: "hover:shadow-gray-400/40",
-    logoGlow: "group-hover:shadow-gray-400/40",
-  },
-  // สีฟ้า (Sky): สื่อถึงท้องฟ้าและดาราศาสตร์โดยตรง
-  AstronomyPOSN: {
-    title: "ดาราศาสตร์ (Astronomy)",
-    displayName: "ดาราศาสตร์ (Astronomy)",
-    icon: "./assets/icons/astronomy.png",
-    order: 2,
-    color: "border-indigo-500",
-    cardGlow: "hover:shadow-indigo-500/30",
-    logoGlow: "group-hover:shadow-indigo-500/40",
-  },
-  // สีเขียวมะนาว (Lime): สื่อถึง "โลก" และธรรมชาติที่สดใส
-  EarthScience: {
-    title: "วิทยาศาสตร์โลกและอวกาศ (Earth & Space Science)",
-    displayName: "วิทยาศาสตร์โลกและอวกาศ (Earth & Space Science)",
-    icon: "./assets/icons/earth.png",
-    order: 3,
-    color: "border-teal-500",
-    cardGlow: "hover:shadow-teal-500/30",
-    logoGlow: "group-hover:shadow-teal-500/40",
-  },
-  // สีส้ม (Orange): สื่อถึงความคิดสร้างสรรค์และความรู้ที่เข้าถึงง่าย
-  GeneralKnowledge: {
-    title: "ความรู้ทั่วไป",
-    displayName: "ความรู้ทั่วไป (General)",
-    icon: "./assets/icons/idea.png", // แนะนำให้ใช้ไอคอนใหม่ เช่น รูปหลอดไฟ
-    order: 4,
-    color: "border-orange-500",
-    cardGlow: "hover:shadow-orange-500/30",
-    logoGlow: "group-hover:shadow-orange-500/40",
-  },
-  // สีชมพูกุหลาบ (Rose): สื่อถึงความท้าทายที่น่าตื่นเต้นและโดดเด่น
-  ChallengePOSN: {
-    title: "ข้อสอบท้าทาย (มีได้หลายคำตอบ)",
-    displayName: "ข้อสอบท้าทาย (มีหลายคำตอบ)",
-    icon: "./assets/icons/trophy-star.png", // แนะนำให้ใช้ไอคอนใหม่ เช่น รูปถ้วยรางวัล
-    order: 5,
-    color: "border-rose-400",
-    cardGlow: "hover:shadow-rose-400/30",
-    logoGlow: "group-hover:shadow-rose-400/40",
-  },
+
   // --- Physics Categories by Grade ---
   PhysicsM4: {
     title: "ฟิสิกส์ ม.4",
@@ -130,10 +82,10 @@ export const categoryDetails = {
  * @returns {string} The display name.
  */
 export function getCategoryDisplayName(categoryKey) {
-    const details = categoryDetails[categoryKey];
-    if (!details) return categoryKey; // Fallback to the key itself
-    // Use displayName if it exists, otherwise use title.
-    return details.displayName || details.title;
+  const details = categoryDetails[categoryKey];
+  if (!details) return categoryKey; // Fallback to the key itself
+  // Use displayName if it exists, otherwise use title.
+  return details.displayName || details.title;
 }
 
 
@@ -145,47 +97,49 @@ let mergedScoresCache = null;
  * @returns {Promise<Array<object>>} A promise that resolves to the merged student scores.
  */
 export async function getStudentScores() {
-    if (mergedScoresCache) {
-        return mergedScoresCache;
+  if (mergedScoresCache) {
+    return mergedScoresCache;
+  }
+
+  try {
+    // Parallelize the loading of base scores and overrides.
+    // 'scores-data.js' is required, so we let it throw if it fails.
+    // 'score-overrides.js' is optional, so we catch its error and return null.
+    const [baseScoresModule, overrideModule] = await Promise.all([
+      import('../data/scores-data.js'),
+      import('../data/score-overrides.js').catch(() => null)
+    ]);
+
+    const baseScores = baseScoresModule.studentScores;
+    let scoreOverrides = {};
+
+    // Process overrides if the module was loaded successfully
+    if (overrideModule && overrideModule.encryptedScoreOverrides && overrideModule.encryptedScoreOverrides.trim() !== "") {
+      try {
+        const decodedString = atob(overrideModule.encryptedScoreOverrides);
+        scoreOverrides = JSON.parse(decodedString);
+      } catch (parseError) {
+        console.error("Failed to decode or parse score-overrides.js. The data might be corrupt.", parseError);
+        scoreOverrides = {};
+      }
     }
 
-    try {
-        // Dynamically import base scores to ensure freshness if the file changes.
-        const { studentScores: baseScores } = await import(`../data/scores-data.js?v=${Date.now()}`);
-
-        // Dynamically and safely import overrides.
-        let scoreOverrides = {};
-        try { // This outer try-catch handles if the file doesn't exist at all.
-            const overrideModule = await import(`../data/score-overrides.js?v=${Date.now()}`);
-            if (overrideModule.encryptedScoreOverrides && overrideModule.encryptedScoreOverrides.trim() !== "") {
-                try { // This inner try-catch handles potential decoding/parsing errors.
-                    const decodedString = atob(overrideModule.encryptedScoreOverrides);
-                    scoreOverrides = JSON.parse(decodedString);
-                } catch (parseError) {
-                    console.error("Failed to decode or parse score-overrides.js. The data might be corrupt.", parseError);
-                    scoreOverrides = {}; // Reset to empty on error to prevent crashes.
-                }
-            }
-        } catch (e) {
-            console.log("Info: score-overrides.js not found. Using base scores.");
-        }
-
-        if (Object.keys(scoreOverrides).length === 0) {
-            mergedScoresCache = baseScores;
-            return baseScores;
-        }
-
-        // Perform a merge. Create new student objects for those with overrides.
-        const mergedScores = baseScores.map(student => 
-            scoreOverrides[student.id] ? { ...student, ...scoreOverrides[student.id] } : student
-        );
-
-        mergedScoresCache = mergedScores;
-        return mergedScores;
-    } catch (error) {
-        console.error("Failed to load or merge student scores:", error);
-        return []; // Return an empty array on failure.
+    if (Object.keys(scoreOverrides).length === 0) {
+      mergedScoresCache = baseScores;
+      return baseScores;
     }
+
+    // Perform a merge. Create new student objects for those with overrides.
+    const mergedScores = baseScores.map(student =>
+      scoreOverrides[student.id] ? { ...student, ...scoreOverrides[student.id] } : student
+    );
+
+    mergedScoresCache = mergedScores;
+    return mergedScores;
+  } catch (error) {
+    console.error("Failed to load or merge student scores:", error);
+    return []; // Return an empty array on failure.
+  }
 }
 
 /**
@@ -273,7 +227,7 @@ export function loadQuizState(storageKey) {
  * @returns {Promise<Array<object>>} An array of detailed progress objects.
  */
 export async function getDetailedProgressForAllQuizzes() {
-  const { quizList } = await import(`../data/quizzes-list.js?v=${Date.now()}`);
+  const { quizList } = await import(`../data/quizzes-list.js`);
   const { getSavedCustomQuizzes } = await import("./custom-quiz-handler.js");
 
   // Add timeout to prevent hanging
@@ -307,7 +261,7 @@ export async function getDetailedProgressForAllQuizzes() {
  * @returns {Promise<Array<object>>} An array of progress objects for all quizzes.
  */
 export async function getAllQuizProgress() {
-  const { quizList } = await import(`../data/quizzes-list.js?v=${Date.now()}`);
+  const { quizList } = await import(`../data/quizzes-list.js`);
   const { getSavedCustomQuizzes } = await import("./custom-quiz-handler.js");
 
   // Add timeout to prevent hanging
@@ -362,7 +316,7 @@ export async function fetchAllQuizData() {
 
   let quizList;
   try {
-    const module = await import(`../data/quizzes-list.js?v=${Date.now()}`);
+    const module = await import(`../data/quizzes-list.js`);
     quizList = module.quizList;
   } catch (error) {
     // Make the error more specific if the main list fails to load.
@@ -372,44 +326,44 @@ export async function fetchAllQuizData() {
   // Filter out any potential empty/falsy entries from the list to prevent errors.
   const validQuizList = Array.isArray(quizList) ? quizList.filter((quiz) => quiz) : [];
   const promises = validQuizList.map(async (quiz) => {
-    const scriptPath = `../data/${quiz.id}-data.js?v=${Date.now()}`;
+    const scriptPath = `../data/${quiz.id}-data.js`;
     try {
-        const module = await import(scriptPath);
-        const data = module.quizItems || module.quizScenarios || module.quizData || [];
+      const module = await import(scriptPath);
+      const data = module.quizItems || module.quizScenarios || module.quizData || [];
 
-        if (!Array.isArray(data)) {
-            console.warn(`Data for quiz ID "${quiz.id}" is not an array. Skipping.`);
-            return [];
+      if (!Array.isArray(data)) {
+        console.warn(`Data for quiz ID "${quiz.id}" is not an array. Skipping.`);
+        return [];
+      }
+
+      return data.flatMap((item) => {
+        if (!item) return [];
+
+        if (item.type === "scenario" && Array.isArray(item.questions)) {
+          const scenarioId = `${quiz.id}_${item.title.replace(/\s/g, "_")}`;
+          if (!scenariosCache.has(scenarioId)) {
+            scenariosCache.set(scenarioId, { title: item.title, description: item.description });
+          }
+          return item.questions.filter(q => q).map(q => ({
+            ...q,
+            subCategory: q.subCategory || item.subCategory || quiz.category,
+            sourceQuizCategory: quiz.category,
+            sourceQuizTitle: quiz.title,
+            scenarioId: scenarioId,
+          }));
         }
-
-        return data.flatMap((item) => {
-            if (!item) return [];
-
-            if (item.type === "scenario" && Array.isArray(item.questions)) {
-                const scenarioId = `${quiz.id}_${item.title.replace(/\s/g, "_")}`;
-                if (!scenariosCache.has(scenarioId)) {
-                    scenariosCache.set(scenarioId, { title: item.title, description: item.description });
-                }
-                return item.questions.filter(q => q).map(q => ({
-                    ...q,
-                    subCategory: q.subCategory || item.subCategory || quiz.category,
-                    sourceQuizCategory: quiz.category,
-                    sourceQuizTitle: quiz.title,
-                    scenarioId: scenarioId,
-                }));
-            }
-            return {
-                ...item,
-                subCategory: item.subCategory || quiz.category,
-                sourceQuizCategory: quiz.category,
-                sourceQuizTitle: quiz.title,
-            };
-        });
+        return {
+          ...item,
+          subCategory: item.subCategory || quiz.category,
+          sourceQuizCategory: quiz.category,
+          sourceQuizTitle: quiz.title,
+        };
+      });
     } catch (error) {
-        // Instead of throwing, log the error and return an empty array.
-        // This allows Promise.all to complete successfully even if some files are missing.
-        console.warn(`Could not load or parse data for quiz ID "${quiz.id}" from ${scriptPath}. Skipping. Error: ${error.message}`);
-        return []; // Return an empty array for this failed import
+      // Instead of throwing, log the error and return an empty array.
+      // This allows Promise.all to complete successfully even if some files are missing.
+      console.warn(`Could not load or parse data for quiz ID "${quiz.id}" from ${scriptPath}. Skipping. Error: ${error.message}`);
+      return []; // Return an empty array for this failed import
     }
   });
 
@@ -492,30 +446,44 @@ export async function calculateStrengthsAndWeaknesses() {
     quiz.userAnswers.forEach((answer) => {
       if (!answer) return;
 
-      // Determine the topic name (Main Category)
-      let topicName = "General";
+      // Determine the topic name(s)
+      // Prioritize specific sub-category to align with sub-category-data.js structure
+      let topics = [];
+
       if (answer.subCategory) {
-        if (typeof answer.subCategory === "object" && answer.subCategory.main) {
-          topicName = answer.subCategory.main;
+        if (typeof answer.subCategory === "object") {
+          if (answer.subCategory.specific) {
+            if (Array.isArray(answer.subCategory.specific)) {
+              topics = answer.subCategory.specific;
+            } else {
+              topics = [answer.subCategory.specific];
+            }
+          } else if (answer.subCategory.main) {
+            topics = [answer.subCategory.main];
+          }
         } else if (typeof answer.subCategory === "string") {
-          topicName = answer.subCategory;
+          topics = [answer.subCategory];
         }
       } else if (quiz.subCategory) {
         // Fallback to quiz level subCategory
-        topicName = quiz.subCategory;
+        topics = [quiz.subCategory];
       }
 
-      // Clean up topic name (remove prefixes like "บทที่ 1: ")
-      topicName = topicName.replace(/^บทที่\s*\d+:\s*/, "").trim();
+      if (topics.length === 0) topics = ["General"];
 
-      if (!topicStats[topicName]) {
-        topicStats[topicName] = { correct: 0, total: 0 };
-      }
+      topics.forEach(topicName => {
+        // Clean up topic name (remove prefixes like "บทที่ 1: ")
+        const cleanName = topicName.replace(/^บทที่\s*\d+:\s*/, "").trim();
 
-      topicStats[topicName].total++;
-      if (answer.isCorrect) {
-        topicStats[topicName].correct++;
-      }
+        if (!topicStats[cleanName]) {
+          topicStats[cleanName] = { correct: 0, total: 0 };
+        }
+
+        topicStats[cleanName].total++;
+        if (answer.isCorrect) {
+          topicStats[cleanName].correct++;
+        }
+      });
     });
   });
 

@@ -5,8 +5,8 @@ import { XP_THRESHOLDS, TRACK_TITLES, PROFICIENCY_GROUPS, getLevelBorderClass, g
 
 function getLevelInfoForLeaderboard(xp, type) {
     let track = 'overall';
-    if (type === 'physicsXP') track = 'physics';
-    if (type === 'earthXP') track = 'earth';
+    if (type === 'physicsTrackXP') track = 'physics';
+    if (type === 'earthTrackXP') track = 'earth';
 
     // Map specific proficiency fields to their main tracks
     for (const group of Object.values(PROFICIENCY_GROUPS)) {
@@ -34,7 +34,7 @@ function getLevelInfoForLeaderboard(xp, type) {
 export async function initializeLeaderboard() {
     const listContainer = document.getElementById('leaderboard-list-full');
     const tabs = document.querySelectorAll('.leaderboard-tab');
-    
+
     if (!listContainer || tabs.length === 0) return;
 
     const renderList = async (type) => {
@@ -49,7 +49,7 @@ export async function initializeLeaderboard() {
             const usersRef = collection(db, 'users');
             const q = query(usersRef, orderBy(type, 'desc'), limit(50)); // Fetch top 50
             const querySnapshot = await authManager.retryOperation(() => getDocs(q));
-            
+
             const leaderboard = [];
             querySnapshot.forEach((doc) => {
                 leaderboard.push({ id: doc.id, ...doc.data() });
@@ -101,12 +101,12 @@ export async function initializeLeaderboard() {
                 if (currentRank) {
                     const storageKey = `lb_last_rank_${type}_${currentUserId}`;
                     const lastData = JSON.parse(localStorage.getItem(storageKey));
-                    
+
                     if (lastData) {
                         // Calculate change: Old Rank - New Rank (e.g. 5 - 3 = +2 means Up 2)
                         myRankChange = lastData.rank - currentRank;
                     }
-                    
+
                     // Save current rank for next comparison
                     localStorage.setItem(storageKey, JSON.stringify({ rank: currentRank, timestamp: Date.now() }));
                 }
@@ -116,19 +116,19 @@ export async function initializeLeaderboard() {
                 // Rank Change UI
                 let changeHtml = '';
                 const change = isMe ? myRankChange : (user.rankChange || null); // Support future server-side data for others
-                
+
                 if (change !== null && change !== 0) {
                     const isUp = change > 0;
                     const colorClass = isUp ? 'text-green-500' : 'text-red-500';
                     const icon = isUp ? '▲' : '▼';
                     changeHtml = `<div class="text-[10px] font-bold ${colorClass} flex items-center justify-center -mt-1">${icon} ${Math.abs(change)}</div>`;
                 } else if (change === 0) {
-                     changeHtml = `<div class="text-[10px] font-bold text-gray-400 flex items-center justify-center -mt-1">-</div>`;
+                    changeHtml = `<div class="text-[10px] font-bold text-gray-400 flex items-center justify-center -mt-1">-</div>`;
                 }
 
                 let rankIcon = rank;
                 let rankClass = "text-gray-500 text-lg";
-                
+
                 if (rank === 1) { rankIcon = '🥇'; rankClass = "text-3xl"; }
                 else if (rank === 2) { rankIcon = '🥈'; rankClass = "text-3xl"; }
                 else if (rank === 3) { rankIcon = '🥉'; rankClass = "text-3xl"; }
@@ -146,7 +146,7 @@ export async function initializeLeaderboard() {
                 } else {
                     score = user[type] || 0;
                     // On-the-fly calculation to fix display for stale data
-                    if (type === 'physicsXP') {
+                    if (type === 'physicsTrackXP') {
                         let calculatedPhysicsXP = 0;
                         for (const group of Object.values(PROFICIENCY_GROUPS)) {
                             if (group.track === 'physics') {
@@ -154,7 +154,7 @@ export async function initializeLeaderboard() {
                             }
                         }
                         score = Math.max(score, calculatedPhysicsXP);
-                    } else if (type === 'earthXP') {
+                    } else if (type === 'earthTrackXP') {
                         let calculatedEarthXP = 0;
                         for (const group of Object.values(PROFICIENCY_GROUPS)) {
                             if (group.track === 'earth') {
@@ -165,7 +165,7 @@ export async function initializeLeaderboard() {
                     }
                 }
 
-                const scoreFormatted = score.toLocaleString();                
+                const scoreFormatted = score.toLocaleString();
                 let level, rankTitle;
 
                 if (type === 'xp') {
@@ -183,10 +183,10 @@ export async function initializeLeaderboard() {
 
                 const avatar = user.avatar || '🧑‍🎓';
                 const isImage = avatar.includes('/') || avatar.includes('.');
-                const avatarContent = isImage 
+                const avatarContent = isImage
                     ? `<img src="${avatar}" class="w-full h-full rounded-full object-cover">`
                     : `<span class="text-3xl">${avatar}</span>`;
-                
+
                 const levelBorderClass = getLevelBorderClass(level);
                 const avatarFrameClass = getAvatarFrameClass(avatar, 'small');
 

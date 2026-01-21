@@ -10,12 +10,12 @@ class AuthManagerInternal {
         this.onUserChangeCallbacks = [];
         this.isInitialized = false;
         this.LOCAL_STORAGE_KEY = 'app_gamification_data'; // คีย์หลักที่คุณใช้เก็บข้อมูลใน LocalStorage
-        
+
         // Promise เพื่อรอให้ตรวจสอบ Auth เสร็จสิ้นครั้งแรก
         this.authReadyPromise = new Promise((resolve) => {
             this.resolveAuthReady = resolve;
         });
-        
+
         this.init();
         this.handlePostLogout();
         this.setupNetworkListeners();
@@ -28,7 +28,7 @@ class AuthManagerInternal {
             this.currentUser = user;
             if (user) {
                 console.log("User signed in:", user.uid);
-                
+
                 // NEW: ตรวจสอบว่ามีการสลับบัญชีหรือไม่ (Switching Account)
                 // ถ้ามีผู้ใช้ก่อนหน้า และไม่ตรงกับผู้ใช้ใหม่ ให้ล้างข้อมูลในเครื่องทิ้งเพื่อไม่ให้ข้อมูลปนกัน
                 if (previousUser && previousUser.uid !== user.uid) {
@@ -36,7 +36,7 @@ class AuthManagerInternal {
                     localStorage.removeItem(this.LOCAL_STORAGE_KEY);
                     localStorage.removeItem('last_cloud_sync');
                     localStorage.removeItem('customQuizzesList');
-                    
+
                     const keysToRemove = [];
                     for (let i = 0; i < localStorage.length; i++) {
                         const key = localStorage.key(i);
@@ -46,13 +46,16 @@ class AuthManagerInternal {
                     }
                     keysToRemove.forEach(k => localStorage.removeItem(k));
                 }
-                
+
                 // Add delay to allow connection to stabilize
                 await new Promise(resolve => setTimeout(resolve, 1000));
 
                 try {
-                    await this.syncLocalToCloud(user);
-                    await this.syncHistory(user); // ซิงค์ประวัติการทำข้อสอบ
+                    // Optimized: Run sync operations in parallel
+                    await Promise.all([
+                        this.syncLocalToCloud(user),
+                        this.syncHistory(user)
+                    ]);
                 } catch (e) {
                     console.warn("Data sync failed:", e);
                 }
@@ -60,7 +63,7 @@ class AuthManagerInternal {
                 console.log("User signed out");
             }
             this.notifyUserChange(user);
-            
+
             // แจ้งว่า Auth ตรวจสอบเสร็จแล้ว (ไม่ว่าจะล็อกอินหรือไม่)
             if (this.resolveAuthReady) {
                 this.resolveAuthReady(user);
@@ -83,7 +86,7 @@ class AuthManagerInternal {
 
         if (sessionStorage.getItem('login_toast')) {
             sessionStorage.removeItem('login_toast');
-            
+
             // ตรวจสอบว่าอยู่หน้า Profile แล้วหรือยัง และกำหนด URL ให้ถูกต้องตามโฟลเดอร์ที่อยู่
             const isProfilePage = window.location.pathname.includes('profile.html');
             const isInQuizFolder = window.location.pathname.includes('/quiz/');
@@ -116,7 +119,7 @@ class AuthManagerInternal {
                     </div>
                 `;
                 statusEl.classList.remove('hidden');
-                
+
                 if (this.onlineStatusTimeout) clearTimeout(this.onlineStatusTimeout);
                 this.onlineStatusTimeout = setTimeout(() => {
                     statusEl.classList.add('hidden');
@@ -138,7 +141,7 @@ class AuthManagerInternal {
 
         window.addEventListener('online', updateStatus);
         window.addEventListener('offline', updateStatus);
-        
+
         // Check periodically for header element injection
         const checkHeader = setInterval(() => {
             const statusEl = document.getElementById('header-network-status');
@@ -154,17 +157,17 @@ class AuthManagerInternal {
         try {
             const result = await signInWithPopup(auth, googleProvider);
             sessionStorage.setItem('login_toast', 'true');
-            
+
             // Redirect to profile if on homepage (and not in a quiz subfolder), otherwise reload to preserve context
             const path = window.location.pathname;
             const isHomePage = (path.endsWith('/') || path.endsWith('index.html')) && !path.includes('/quiz/');
-            
+
             if (isHomePage) {
                 window.location.href = './profile.html';
             } else {
                 window.location.reload();
             }
-            
+
             return result.user;
         } catch (error) {
             console.error("Login failed:", error);
@@ -176,14 +179,14 @@ class AuthManagerInternal {
     async logout() {
         try {
             await signOut(auth);
-            
+
             // Terminate Firestore to prevent connection errors during cleanup
             try {
                 await terminate(db);
             } catch (e) {
                 console.warn("Firestore termination error:", e);
             }
-            
+
             // Clear main gamification data to prevent data leakage
             localStorage.removeItem(this.LOCAL_STORAGE_KEY);
             localStorage.removeItem('last_cloud_sync');
@@ -226,7 +229,9 @@ class AuthManagerInternal {
 
     // ฟังก์ชันสำหรับรอให้ Auth พร้อมใช้งาน
     async waitForAuthReady() {
-        await this.authReadyPromise;
+        // Fallback: If authReadyPromise takes too long (e.g. 2s), assume not logged in to unblock the UI
+        const timeout = new Promise(resolve => setTimeout(() => resolve(null), 2000));
+        await Promise.race([this.authReadyPromise, timeout]);
         return this.currentUser;
     }
 
@@ -244,13 +249,13 @@ class AuthManagerInternal {
             } catch (error) {
                 lastError = error;
                 // Retry on network errors or unavailable service
-                const isRetryable = error.code === 'unavailable' || 
-                                    error.message?.includes('offline') || 
-                                    error.message?.includes('transport') ||
-                                    error.message?.includes('network');
-                
+                const isRetryable = error.code === 'unavailable' ||
+                    error.message?.includes('offline') ||
+                    error.message?.includes('transport') ||
+                    error.message?.includes('network');
+
                 if (!isRetryable) throw error;
-                
+
                 const delay = baseDelay * Math.pow(2, i);
                 console.warn(`Firestore operation failed (attempt ${i + 1}/${maxRetries}). Retrying in ${delay}ms...`, error);
                 await new Promise(resolve => setTimeout(resolve, delay));
@@ -266,10 +271,10 @@ class AuthManagerInternal {
         if (this.currentUser) {
             // ถ้าล็อกอิน ให้ดึงจาก Firestore
             const docRef = doc(db, "users", this.currentUser.uid);
-            
+
             try {
                 const docSnap = await this.retryOperation(() => getDoc(docRef));
-                
+
                 if (docSnap.exists()) {
                     const cloudData = docSnap.data();
                     // อัปเดตลง LocalStorage ด้วยเพื่อให้โค้ดเดิมทำงานต่อได้ (Hybrid)
@@ -281,7 +286,7 @@ class AuthManagerInternal {
                 console.warn("Failed to load cloud data after retries, falling back to local:", error);
             }
         }
-        
+
         // ถ้าไม่ล็อกอิน หรือไม่มีข้อมูลบน Cloud ให้ดึงจาก LocalStorage
         const localData = localStorage.getItem(this.LOCAL_STORAGE_KEY);
         return localData ? JSON.parse(localData) : null;
@@ -299,7 +304,7 @@ class AuthManagerInternal {
                 // ใช้ setDoc แบบ merge: true เพื่อไม่ให้ข้อมูลอื่นหาย
                 await this.retryOperation(() => setDoc(userRef, data, { merge: true }));
                 this.updateLastSyncTime();
-                
+
                 // อัปเดต Leaderboard (ถ้ามี)
                 if (data.totalXP) {
                     const leaderboardRef = doc(db, "leaderboard", this.currentUser.uid);
@@ -331,7 +336,7 @@ class AuthManagerInternal {
             // ให้อัปโหลดข้อมูลในเครื่องขึ้น Cloud ทันที
             console.log("Migrating local data to cloud...");
             await this.retryOperation(() => setDoc(userRef, localData));
-            
+
             // สร้าง Leaderboard entry ด้วย
             if (localData.totalXP) {
                 await this.retryOperation(() => setDoc(doc(db, "leaderboard", user.uid), {
@@ -394,11 +399,11 @@ class AuthManagerInternal {
                 const batch = writeBatch(db);
                 const userDocRef = doc(db, "users", this.currentUser.uid);
                 const leaderboardDocRef = doc(db, "leaderboard", this.currentUser.uid);
-                
+
                 // ลบข้อมูลผู้ใช้และข้อมูลบน Leaderboard
                 batch.delete(userDocRef);
                 batch.delete(leaderboardDocRef);
-                
+
                 await batch.commit();
                 console.log("Deleted user gamification and leaderboard data from cloud.");
             } catch (e) {
@@ -439,9 +444,9 @@ class AuthManagerInternal {
     // ฟังก์ชันซิงค์ประวัติทั้งหมด (ทำงานตอนล็อกอิน)
     async syncHistory(user) {
         if (!user) return;
-        
+
         const historyRef = collection(db, "users", user.uid, "quiz_history");
-        
+
         try {
             // 1. ดึงข้อมูลจาก Cloud มาเทียบ
             const cloudSnapshot = await this.retryOperation(() => getDocs(historyRef));
@@ -462,7 +467,7 @@ class AuthManagerInternal {
                     try {
                         const localData = JSON.parse(localStorage.getItem(key));
                         const cloudData = cloudMap.get(key);
-                        
+
                         const localTime = localData.lastAttemptTimestamp || 0;
                         const cloudTime = cloudData ? (cloudData.lastAttemptTimestamp || 0) : -1;
 
@@ -495,7 +500,7 @@ class AuthManagerInternal {
                 await this.retryOperation(() => batch.commit());
                 console.log(`Uploaded ${batchCount} quiz history items.`);
             }
-            
+
             if (hasChanges) {
                 this.updateLastSyncTime();
             }
@@ -531,7 +536,7 @@ class AuthManagerInternal {
                 const progressRef = doc(db, "users", this.currentUser.uid, "quiz_history", quizData.storageKey);
                 batch.delete(progressRef);
             }
-            
+
             await this.retryOperation(() => batch.commit());
             console.log(`Deleted custom quiz ${quizData.customId} and its history from cloud.`);
         } catch (e) {
@@ -559,7 +564,7 @@ class AuthManagerInternal {
         try {
             const customQuizzesRef = collection(db, 'users', this.currentUser.uid, 'custom_quizzes');
             const cloudSnapshot = await this.retryOperation(() => getDocs(customQuizzesRef));
-            
+
             const cloudQuizzesMap = new Map();
             cloudSnapshot.forEach(doc => cloudQuizzesMap.set(doc.id, doc.data()));
 

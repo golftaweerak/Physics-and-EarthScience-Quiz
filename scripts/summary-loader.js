@@ -2,6 +2,9 @@ import { authManager } from './auth-manager.js';
 
 async function main() {
     try {
+        // 0. เริ่มตรวจสอบ Auth ทันที (Background) เพื่อไม่ให้เสียเวลา
+        const authPromise = authManager.waitForAuthReady();
+
         // 1. โหลด Component ที่จำเป็นสำหรับทุกหน้าเสมอ (Header, Footer, Modals)
         // เพื่อให้ Modal 'access-denied' พร้อมใช้งานทันที
         const { loadComponent } = await import('./component-loader.js');
@@ -15,9 +18,9 @@ async function main() {
         const { initializeCommonComponents } = await import('./common-init.js');
         await initializeCommonComponents();
 
-        // 3. รอตรวจสอบสถานะล็อกอินและสิทธิ์
-        const user = await authManager.waitForAuthReady();
-        
+        // 3. รอสถานะล็อกอินและสิทธิ์ (ซึ่งเริ่มทำงานไปแล้วตั้งแต่ต้น)
+        const user = await authPromise;
+
         const urlParams = new URLSearchParams(window.location.search);
         const isDevMode = urlParams.get('dev') === 'true';
 
@@ -26,7 +29,7 @@ async function main() {
             // ซ่อน Spinner ที่กำลังโหลด เพราะเราจะไม่โหลดข้อมูลต่อ
             const loadingSpinner = document.getElementById('loading-spinner');
             if (loadingSpinner) loadingSpinner.style.display = 'none';
-            return; 
+            return;
         }
 
         // 5. ถ้ามีสิทธิ์ ให้โหลดข้อมูลสรุปผลต่อ

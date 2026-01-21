@@ -1,62 +1,23 @@
 // scripts/gamification.js
 
 import { authManager } from './auth-manager.js';
+import { showToast } from './toast.js';
+import { escapeHtml } from './utils.js';
+import { SiteConfig } from './site-config.js';
 
 // กำหนดเกณฑ์ XP สำหรับทุกสาย (ใช้เกณฑ์เดียวกันเพื่อความง่าย)
 // แต่ละเลเวลจะมีเงื่อนไข (Quest) ที่ต้องทำให้สำเร็จก่อนจึงจะเลื่อนระดับได้
-export const XP_THRESHOLDS = [
-    { level: 1, xp: 0, quest: null }, // No quest to reach level 1
-    { level: 2, xp: 100, quest: { type: 'correct_streak', target: 10, desc: 'ตอบคำถามถูกติดต่อกัน 10 ข้อ' } },
-    { level: 3, xp: 300, quest: { type: 'quizzes_completed', target: 5, desc: 'ทำแบบทดสอบให้ครบ 5 ครั้ง' } },
-    { level: 4, xp: 600, quest: { type: 'perfect_scores', target: 1, desc: 'ทำคะแนนเต็ม 100% ให้ได้ 1 ครั้ง' } },
-    { level: 5, xp: 1000, quest: { type: 'high_scores_80', target: 3, desc: 'ทำคะแนนได้ 80% ขึ้นไป 3 ครั้ง' } },
-    { level: 6, xp: 1500, quest: { type: 'quizzes_completed', target: 15, desc: 'ทำแบบทดสอบให้ครบ 15 ครั้ง' } },
-    { level: 7, xp: 2200, quest: { type: 'correct_streak', target: 20, desc: 'ตอบคำถามถูกติดต่อกัน 20 ข้อ' } },
-    { level: 8, xp: 3000, quest: { type: 'physics_level', target: 5, desc: 'ไปให้ถึงเลเวล 5 ในสายฟิสิกส์' } },
-    { level: 9, xp: 4000, quest: { type: 'earth_level', target: 5, desc: 'ไปให้ถึงเลเวล 5 ในสายวิทย์โลก' } },
-    { level: 10, xp: 5500, quest: { type: 'quizzes_completed', target: 30, desc: 'ทำแบบทดสอบให้ครบ 30 ครั้ง' } },
-    { level: 11, xp: 7500, quest: { type: 'high_scores_80', target: 10, desc: 'ทำคะแนนได้ 80% ขึ้นไป 10 ครั้ง' } },
-    { level: 12, xp: 10000, quest: { type: 'correct_streak', target: 30, desc: 'ตอบคำถามถูกติดต่อกัน 30 ข้อ' } },
-    { level: 13, xp: 13000, quest: { type: 'quizzes_completed', target: 50, desc: 'ทำแบบทดสอบให้ครบ 50 ครั้ง' } },
-    { level: 14, xp: 16500, quest: { type: 'perfect_scores', target: 5, desc: 'ทำคะแนนเต็ม 100% ให้ได้ 5 ครั้ง' } },
-    { level: 15, xp: 20500, quest: { type: 'physics_level', target: 10, desc: 'ไปให้ถึงเลเวล 10 ในสายฟิสิกส์' } },
-    { level: 16, xp: 25000, quest: { type: 'earth_level', target: 10, desc: 'ไปให้ถึงเลเวล 10 ในสายวิทย์โลก' } },
-    { level: 17, xp: 30000, quest: { type: 'high_scores_80', target: 20, desc: 'ทำคะแนนได้ 80% ขึ้นไป 20 ครั้ง' } },
-    { level: 18, xp: 36000, quest: { type: 'quizzes_completed', target: 100, desc: 'ทำแบบทดสอบให้ครบ 100 ครั้ง' } },
-    { level: 19, xp: 43000, quest: { type: 'correct_streak', target: 50, desc: 'ตอบคำถามถูกติดต่อกัน 50 ข้อ' } },
-    { level: 20, xp: 50000, quest: { type: 'perfect_scores', target: 10, desc: 'ทำคะแนนเต็ม 100% ให้ได้ 10 ครั้ง' } }
-];
+export const XP_THRESHOLDS = SiteConfig.xpThresholds;
 
 // ชื่อยศสำหรับแต่ละสาย (Titles)
 // ผู้เล่นจะได้รับฉายาตามเลเวลที่ทำได้ในแต่ละสาย (Overall, Physics, Earth Science)
 // โดยระบบจะเลือกฉายาจาก Array นี้ตามลำดับเลเวล (Level 1 = Index 0)
 // หากเลเวลเกินจำนวนฉายาที่มี จะใช้ฉายาสูงสุดที่มีอยู่
-export const TRACK_TITLES = {
-    overall: [
-        "ผู้เริ่มต้น (Novice)", "นักสำรวจ (Explorer)", "ผู้รอบรู้ (Scholar)", 
-        "ผู้เชี่ยวชาญ (Expert)", "ปราชญ์ (Sage)", "ปรมาจารย์ (Master)", 
-        "ตำนาน (Legend)", "ผู้พิทักษ์ความรู้ (Guardian)", "มหาปราชญ์ (Grand Sage)", "เทพเจ้าแห่งปัญญา (God of Wisdom)",
-        "ผู้หยั่งรู้ (The Seer)", "ผู้บรรลุ (The Enlightened)", "ผู้รอบรู้จักรวาล (Cosmic Scholar)",
-        "ผู้พิทักษ์ดวงดาว (Stellar Guardian)", "ปรมาจารย์แห่งเอกภพ (Celestial Master)", "ผู้ถอดรหัสจักรวาล (Cosmic Decoder)",
-        "ผู้บัญชาการดวงดาว (Star Commander)", "ตำนานแห่งกาแล็กซี (Galactic Legend)", "ผู้สร้างเอกภพ (Universe Crafter)", "หนึ่งเดียวกับจักรวาล (The One with the Cosmos)"
-    ],
-    physics: [
-        "นักฟิสิกส์ฝึกหัด", "ผู้สนใจกลศาสตร์", "นักทดลอง", 
-        "ผู้เชี่ยวชาญทฤษฎี", "ปรมาจารย์ฟิสิกส์", "นิวตันกลับชาติมาเกิด", 
-        "ผู้ควบคุมแรง", "จ้าวแห่งควอนตัม", "ผู้บิดเบือนมิติ", "ผู้สร้างกฎจักรวาล",
-        "ผู้เชี่ยวชาญแรงโน้มถ่วง", "นักเดินทางข้ามเวลา", "ผู้ควบคุมปฏิสสาร",
-        "จ้าวแห่งสัมพัทธภาพ", "ผู้สร้างหลุมดำ", "ปรมาจารย์แห่งสตริง",
-        "ผู้ควบคุมเอกภพคู่ขนาน", "ผู้เขียนกฎฟิสิกส์ใหม่", "ผู้หลอมรวมพลังงาน", "ไอน์สไตน์กลับชาติมาเกิด"
-    ],
-    earth: [
-        "นักสำรวจหิน", "ผู้เชี่ยวชาญธรณี", "นักอุตุนิยมวิทยา",
-        "ผู้หยั่งรู้ดินฟ้า", "นักดาราศาสตร์", "ผู้พิทักษ์ไกอา", 
-        "ผู้ท่องอวกาศ", "ผู้หยั่งรู้จักรวาล", "หนึ่งเดียวกับธรรมชาติ", "ผู้สร้างดวงดาว",
-        "นักธรณีฟิสิกส์", "ผู้ควบคุมแผ่นเปลือกโลก", "ผู้บัญชาการลมฟ้า",
-        "ผู้สร้างระบบดาวเคราะห์", "นักสำรวจดาราจักร", "ผู้ค้นพบเนบิวลา",
-        "ผู้ควบคุมแก่นโลก", "ผู้พิทักษ์ชีวมณฑล", "ผู้สร้างโลก", "เทพเจ้าแห่งดวงดาว"
-    ]
-};
+export const TRACK_TITLES = SiteConfig.trackTitles;
+
+// DEPRECATED: Pet System Constants (Kept for backward compatibility)
+export const PET_TYPES = {};
+export const PET_LEVELS = [];
 
 // คงไว้เพื่อความเข้ากันได้ (Backward Compatibility) และใช้อ้างอิง
 export const LEVELS = XP_THRESHOLDS.map((t, i) => ({
@@ -66,75 +27,11 @@ export const LEVELS = XP_THRESHOLDS.map((t, i) => ({
 }));
 
 // NEW: Proficiency Groups (Shared definition)
-export const PROFICIENCY_GROUPS = {
-    'Mechanics': { 
-        label: 'กลศาสตร์', 
-        field: 'mechanicsXP',
-        track: 'physics',
-        keywords: ['บทที่ 1:', 'บทที่ 2:', 'บทที่ 3:', 'บทที่ 4:', 'บทที่ 5:', 'บทที่ 6:', 'บทที่ 7:', 'บทที่ 8:', 'บทที่ 15:', 'ธรรมชาติทางฟิสิกส์', 'การเคลื่อนที่', 'แรง', 'สมดุล', 'งาน', 'โมเมนตัม', 'ของแข็ง'] 
-    },
-    'Electricity': { 
-        label: 'ไฟฟ้าและแม่เหล็ก', 
-        field: 'electricityXP',
-        track: 'physics',
-        keywords: ['บทที่ 12:', 'บทที่ 13:', 'บทที่ 14:', 'ไฟฟ้า', 'แม่เหล็ก'] 
-    },
-    'WavesLight': { 
-        label: 'คลื่นและแสง', 
-        field: 'wavesLightXP',
-        track: 'physics',
-        keywords: ['บทที่ 9:', 'บทที่ 10:', 'บทที่ 11:', 'บทที่ 17:', 'คลื่น', 'เสียง', 'แสง'] 
-    },
-    'ModernHeat': { 
-        label: 'สสารและฟิสิกส์ยุคใหม่', 
-        field: 'modernHeatXP',
-        track: 'physics',
-        keywords: ['บทที่ 16:', 'บทที่ 18:', 'บทที่ 19:', 'ความร้อน', 'อะตอม', 'นิวเคลียร์'] 
-    },
-    'Astronomy': { 
-        label: 'ดาราศาสตร์', 
-        field: 'astronomyXP',
-        track: 'earth',
-        keywords: ['เอกภพ', 'กาแล็กซี', 'ดาวฤกษ์', 'ระบบสุริยะ', 'เทคโนโลยีอวกาศ', 'ทรงกลมฟ้า', 'ดาวเคราะห์', 'ดาราศาสตร์'] 
-    },
-    'Geology': { 
-        label: 'ธรณีวิทยา', 
-        field: 'geologyXP',
-        track: 'earth',
-        keywords: ['โครงสร้างโลก', 'แปรสัณฐาน', 'ธรณี', 'หิน', 'แร่', 'แผนที่', 'ดิน', 'ทรัพยากรธรณี'] 
-    },
-    'Meteorology': { 
-        label: 'อุตุนิยมวิทยา', 
-        field: 'meteorologyXP',
-        track: 'earth',
-        keywords: ['ลมฟ้าอากาศ', 'ภูมิอากาศ', 'อากาศ', 'หมุนเวียน', 'เมฆ', 'พยากรณ์', 'สมุทร', 'บรรยากาศ', 'อุตุนิยมวิทยา'] 
-    }
-};
+export const PROFICIENCY_GROUPS = SiteConfig.proficiencyGroups;
 
-// NEW: Theme definitions moved to a constant for reuse
-const THEME_DEFINITIONS = {
-    'forest': { main: '#059669', hover: '#047857', secondary: '#34d399', light_bg: '#d1fae5', dark_bg: 'rgba(6, 78, 59, 0.5)', ring: '#34d399' },
-    'sunset': { main: '#ea580c', hover: '#c2410c', secondary: '#f59e0b', light_bg: '#ffedd5', dark_bg: 'rgba(124, 45, 18, 0.5)', ring: '#fbbf24' },
-    'ocean': { main: '#0891b2', hover: '#0e7490', secondary: '#22d3ee', light_bg: '#cffafe', dark_bg: 'rgba(22, 78, 99, 0.5)', ring: '#67e8f9' },
-    'berry': { main: '#db2777', hover: '#be185d', secondary: '#c026d3', light_bg: '#fce7f3', dark_bg: 'rgba(131, 24, 67, 0.5)', ring: '#e879f9' },
-    'sakura': { main: '#f43f5e', hover: '#e11d48', secondary: '#fb7185', light_bg: '#ffe4e6', dark_bg: 'rgba(159, 18, 57, 0.5)', ring: '#fda4af' },
-    'midnight': { 
-        main: '#475569',        
-        hover: '#334155',       
-        secondary: '#64748b',   
-        light_bg: '#f1f5f9',    
-        dark_bg: 'rgba(30, 41, 59, 0.8)', 
-        ring: '#94a3b8',        
-        dark_text: '#94a3b8'    
-    }
-};
-
-// กำหนดเหรียญรางวัล (Badges)
 export const BADGES = [
-    { id: 'first_quiz', icon: '🎯', name: 'จุดเริ่มต้น', desc: 'ทำแบบทดสอบครั้งแรกสำเร็จ', tier: 'bronze' },
-    { id: 'perfect_score', icon: '🏆', name: 'คะแนนเต็ม', desc: 'ได้คะแนน 100% ในแบบทดสอบที่เข้าเกณฑ์', tier: 'silver' },
-    { id: 'perfect_scorer_3', icon: '🏅', name: 'ผู้สมบูรณ์แบบ', desc: 'ได้คะแนน 100% จำนวน 3 ครั้งในแบบทดสอบที่เข้าเกณฑ์', tier: 'gold' },
-    { id: 'perfect_scorer_5', icon: '🎖️', name: 'เจ้าแห่งความสมบูรณ์', desc: 'ได้คะแนน 100% จำนวน 5 ครั้งในแบบทดสอบที่เข้าเกณฑ์', tier: 'gold' },
+    { id: 'first_quiz', icon: '🥇', name: 'ก้าวแรก', desc: 'ทำแบบทดสอบจบครั้งแรก', tier: 'bronze' },
+    { id: 'perfect_score', icon: '💯', name: 'สมบูรณ์แบบ', desc: 'ทำคะแนนเต็ม 100% ในแบบทดสอบใดก็ได้ (ที่มี 20 ข้อขึ้นไป)', tier: 'gold' },
     { id: 'high_scorer_3', icon: '⭐', name: 'ยอดเยี่ยม', desc: 'ได้คะแนนเกิน 80% จำนวน 3 ครั้งในแบบทดสอบที่เข้าเกณฑ์', tier: 'bronze' },
     { id: 'high_scorer_5', icon: '🌟', name: 'ดาวเด่น', desc: 'ได้คะแนนเกิน 80% จำนวน 5 ครั้งในแบบทดสอบที่เข้าเกณฑ์', tier: 'silver' },
     { id: 'high_scorer_10', icon: '🌠', name: 'ดาวจรัสฟ้า', desc: 'ได้คะแนนเกิน 80% จำนวน 10 ครั้งในแบบทดสอบที่เข้าเกณฑ์', tier: 'gold' },
@@ -149,23 +46,30 @@ export const BADGES = [
     { id: 'quiz_master_25', icon: '🎓', name: 'บัณฑิตน้อย', desc: 'ทำแบบทดสอบครบ 25 ครั้ง', tier: 'gold' },
     { id: 'quiz_master_50', icon: '🧙‍♂️', name: 'จอมเวทย์ความรู้', desc: 'ทำแบบทดสอบครบ 50 ครั้ง', tier: 'gold' },
     { id: 'quiz_master_100', icon: '👑', name: 'เทพเจ้าแห่งการสอบ', desc: 'ทำแบบทดสอบครบ 100 ครั้ง', tier: 'gold' },
-    { id: 'physics_lover', icon: '⚛️', name: 'รักฟิสิกส์', desc: 'ถึงเลเวล 3 ในสายฟิสิกส์', tier: 'silver' },
-    { id: 'physics_expert', icon: '🌌', name: 'ผู้เชี่ยวชาญฟิสิกส์', desc: 'ถึงเลเวล 5 ในสายฟิสิกส์', tier: 'gold' },
-    { id: 'physics_master', icon: '🪐', name: 'ปรมาจารย์ฟิสิกส์', desc: 'ถึงเลเวล 10 ในสายฟิสิกส์', tier: 'gold' },
+
     { id: 'earth_lover', icon: '🌍', name: 'รักษ์โลก', desc: 'ถึงเลเวล 3 ในสายวิทย์โลก', tier: 'silver' },
     { id: 'earth_expert', icon: '🌋', name: 'ผู้เชี่ยวชาญวิทย์โลก', desc: 'ถึงเลเวล 5 ในสายวิทย์โลก', tier: 'gold' },
     { id: 'earth_master', icon: '🏔️', name: 'จ้าวแห่งธรณี', desc: 'ถึงเลเวล 10 ในสายวิทย์โลก', tier: 'gold' },
+    { id: 'physics_lover', icon: '⚛️', name: 'รักฟิสิกส์', desc: 'ถึงเลเวล 3 ในสายฟิสิกส์', tier: 'silver' },
+    { id: 'physics_expert', icon: '⚡', name: 'ผู้เชี่ยวชาญฟิสิกส์', desc: 'ถึงเลเวล 5 ในสายฟิสิกส์', tier: 'gold' },
+    { id: 'physics_master', icon: '🌌', name: 'ปรมาจารย์ฟิสิกส์', desc: 'ถึงเลเวล 10 ในสายฟิสิกส์', tier: 'gold' },
     { id: 'xp_5k', icon: '💵', name: 'เศรษฐีฝึกหัด', desc: 'มี XP รวมสะสมครบ 5,000', tier: 'silver' },
     { id: 'xp_10k', icon: '💰', name: 'ผู้สั่งสมประสบการณ์', desc: 'มี XP รวมสะสมครบ 10,000', tier: 'gold' },
-    { id: 'dual_expert', icon: '⚖️', name: 'ผู้รอบรู้สองศาสตร์', desc: 'ถึงเลเวล 5 ทั้งสายฟิสิกส์และวิทย์โลก', tier: 'gold' },
+    { id: 'dual_expert', icon: '⚖️', name: 'ผู้รอบรู้แบบวิทย์ฯ', desc: 'ถึงเลเวล 5 ทั้งสายฟิสิกส์และวิทย์โลก', tier: 'gold' },
     { id: 'shop_spender', icon: '🛍️', name: 'นักช้อป', desc: 'ซื้อสินค้าในร้านค้าครบ 5 ชิ้น', tier: 'silver' },
     { id: 'weekend_learner_3', icon: '🏖️', name: 'นักเรียนวันหยุด', desc: 'ทำแบบทดสอบในวันหยุดสุดสัปดาห์ครบ 3 ครั้ง', tier: 'bronze' },
     { id: 'weekend_learner_5', icon: '🏕️', name: 'ขยันสุดสัปดาห์', desc: 'ทำแบบทดสอบในวันหยุดสุดสัปดาห์ครบ 5 ครั้ง', tier: 'silver' },
     { id: 'weekend_learner_10', icon: '🏝️', name: 'เจ้าแห่งวันหยุด', desc: 'ทำแบบทดสอบในวันหยุดสุดสัปดาห์ครบ 10 ครั้ง', tier: 'gold' },
     { id: 'weekend_learner_15', icon: '🎉', name: 'ตำนานสุดสัปดาห์', desc: 'ทำแบบทดสอบในวันหยุดสุดสัปดาห์ครบ 15 ครั้ง', tier: 'gold' },
     // Proficiency Badges
+    { id: 'astronomy_expert', icon: '🔭', name: 'ผู้เชี่ยวชาญดาราศาสตร์', desc: 'มี XP สายดาราศาสตร์ครบ 1,000', tier: 'silver' },
+    { id: 'geology_expert', icon: '🪨', name: 'ผู้เชี่ยวชาญธรณี', desc: 'มี XP สายธรณีวิทยาครบ 1,000', tier: 'silver' },
+    { id: 'meteorology_expert', icon: '⛈️', name: 'ผู้เชี่ยวชาญอุตุฯ', desc: 'มี XP สายอุตุนิยมวิทยาครบ 1,000', tier: 'silver' },
+    { id: 'oceanography_expert', icon: '🌊', name: 'ผู้เชี่ยวชาญสมุทรฯ', desc: 'มี XP สายสมุทรศาสตร์ครบ 1,000', tier: 'silver' },
     { id: 'mechanics_expert', icon: '⚙️', name: 'ผู้เชี่ยวชาญกลศาสตร์', desc: 'มี XP สายกลศาสตร์ครบ 1,000', tier: 'silver' },
-    { id: 'astronomy_expert', icon: '🔭', name: 'ผู้เชี่ยวชาญดาราศาสตร์', desc: 'มี XP สายดาราศาสตร์ครบ 1,000', tier: 'silver' }
+    { id: 'electromagnetism_expert', icon: '⚡', name: 'ผู้เชี่ยวชาญไฟฟ้าแม่เหล็ก', desc: 'มี XP สายไฟฟ้าและแม่เหล็กครบ 1,000', tier: 'silver' },
+    { id: 'waves_expert', icon: '🔊', name: 'ผู้เชี่ยวชาญคลื่น', desc: 'มี XP สายคลื่นและแสงครบ 1,000', tier: 'silver' },
+    { id: 'modern_physics_expert', icon: '☢️', name: 'ผู้เชี่ยวชาญฟิสิกส์ใหม่', desc: 'มี XP สายฟิสิกส์อะตอม/นิวเคลียร์ครบ 1,000', tier: 'silver' }
 ];
 
 // กำหนดภารกิจประจำวัน (Daily Quests)
@@ -174,19 +78,20 @@ export const DAILY_QUESTS = [
     { id: 'quiz_2', desc: 'ทำแบบทดสอบให้จบ 2 ครั้ง', target: 2, type: 'quiz_complete', xp: 100 },
     { id: 'correct_10', desc: 'ตอบถูกให้ได้ 10 ข้อ', target: 10, type: 'correct_answers', xp: 80 },
     { id: 'correct_15', desc: 'ตอบถูกให้ได้ 15 ข้อ', target: 15, type: 'correct_answers', xp: 120 },
-    { id: 'physics_5', desc: 'ทำโจทย์ฟิสิกส์ 5 ข้อ', target: 5, type: 'questions_category', category: 'Physics', xp: 100 },
+    { id: 'astro_5', desc: 'ทำโจทย์ดาราศาสตร์ 5 ข้อ', target: 5, type: 'questions_category', category: 'Astronomy', xp: 100 },
     { id: 'earth_5', desc: 'ทำโจทย์วิทย์โลก 5 ข้อ', target: 5, type: 'questions_category', category: 'Earth', xp: 100 },
+    { id: 'physics_5', desc: 'ทำโจทย์ฟิสิกส์ 5 ข้อ', target: 5, type: 'questions_category', category: 'Physics', xp: 100 },
     { id: 'score_80', desc: 'ทำคะแนนให้ได้ 80% ขึ้นไป 1 ครั้ง', target: 1, type: 'high_score', threshold: 80, xp: 150 },
     { id: 'score_100', desc: 'ทำคะแนนเต็ม (100%) 1 ครั้ง', target: 1, type: 'high_score', threshold: 100, xp: 300 },
     // NEW QUEST TYPES
     { id: 'theory_10', desc: 'ตอบคำถามทฤษฎีให้ถูก 10 ข้อ', target: 10, type: 'correct_answers_type', questionType: 'theory', xp: 120 },
-    { id: 'calc_5', desc: 'ตอบคำถามคำนวณให้ถูก 5 ข้อ', target: 5, type: 'correct_answers_type', questionType: 'calculation', xp: 150 },
-    { id: 'physics_quiz_1', desc: 'ทำแบบทดสอบหมวดฟิสิกส์ 1 ครั้ง', target: 1, type: 'quiz_category', category: 'Physics', xp: 80 },
+    { id: 'astro_quiz_1', desc: 'ทำแบบทดสอบหมวดดาราศาสตร์ 1 ครั้ง', target: 1, type: 'quiz_category', category: 'Astronomy', xp: 80 },
     { id: 'earth_quiz_1', desc: 'ทำแบบทดสอบหมวดวิทย์โลก 1 ครั้ง', target: 1, type: 'quiz_category', category: 'Earth', xp: 80 },
+    { id: 'physics_quiz_1', desc: 'ทำแบบทดสอบหมวดฟิสิกส์ 1 ครั้ง', target: 1, type: 'quiz_category', category: 'Physics', xp: 80 },
+    { id: 'review_quiz_1', desc: 'ทำแบบทดสอบหมวดทบทวน 1 ครั้ง', target: 1, type: 'quiz_category', category: 'Review', xp: 80 },
     // More quests for variety
     { id: 'quiz_5', desc: 'ทำแบบทดสอบให้จบ 5 ครั้ง', target: 5, type: 'quiz_complete', xp: 250 },
     { id: 'correct_50', desc: 'ตอบถูกให้ได้ 50 ข้อ', target: 50, type: 'correct_answers', xp: 400 },
-    { id: 'physics_10', desc: 'ทำโจทย์ฟิสิกส์ 10 ข้อ', target: 10, type: 'questions_category', category: 'Physics', xp: 150 },
     { id: 'earth_10', desc: 'ทำโจทย์วิทย์โลก 10 ข้อ', target: 10, type: 'questions_category', category: 'Earth', xp: 150 }
 ];
 
@@ -216,10 +121,10 @@ export const SHOP_ITEMS = [
     { id: 'item_cut_1', type: 'consumable', name: 'ตัดช้อยส์ (25%)', icon: '🔪', cost: 50, value: 'cut_1', desc: 'ตัดตัวเลือกที่ผิดออก 1 ตัวเลือก' },
     { id: 'item_range_hint', type: 'consumable', name: 'สโคปคำตอบ', icon: '🎯', cost: 50, value: 'range_hint', desc: 'บอกช่วงของคำตอบที่ถูกต้อง (สำหรับข้อเขียนตัวเลข)' },
     { id: 'item_tolerance', type: 'consumable', name: 'ขยายเป้า', icon: '⭕', cost: 50, value: 'tolerance', desc: 'เพิ่มค่าความคลาดเคลื่อนที่ยอมรับได้ +/- 20% (สำหรับข้อเขียนตัวเลข)' },
-    
+
     // 100 XP
     { id: 'item_5050', type: 'consumable', name: 'ตัวช่วย 50/50', icon: '✂️', cost: 100, value: '5050', desc: 'ตัดตัวเลือกที่ผิดออก 2 ตัวเลือก' },
-    
+
     // 120 XP
     { id: 'item_streak_freeze', type: 'consumable', name: 'Streak Freeze', icon: '🧊', cost: 120, value: 'streak_freeze', desc: 'ป้องกัน Streak หายเมื่อไม่ได้เข้าใช้งาน 1 วัน (ใช้รักษาสถิติ)' },
 
@@ -231,12 +136,12 @@ export const SHOP_ITEMS = [
     { id: 'avatar_hamster', type: 'avatar', name: 'แฮมสเตอร์', icon: '🐹', cost: 150, value: '🐹', desc: 'อวตารหนูแฮมสเตอร์' },
     { id: 'avatar_bunny', type: 'avatar', name: 'กระต่าย', icon: '🐰', cost: 150, value: '🐰', desc: 'อวตารกระต่ายน้อย' },
     { id: 'item_time_freeze', type: 'consumable', name: 'หยุดเวลา', icon: '❄️', cost: 150, value: 'time_freeze', desc: 'หยุดเวลาชั่วคราว 30 วินาที' },
-    
+
     // 200 XP
     { id: 'avatar_saturn', type: 'avatar', name: 'ดาวเสาร์', icon: '🪐', cost: 200, value: '🪐', desc: 'อวตารดาวเคราะห์มีวงแหวน' },
     { id: 'avatar_comet', type: 'avatar', name: 'ดาวหาง', icon: '☄️', cost: 200, value: '☄️', desc: 'อวตารดาวหางผู้มาเยือน' },
     { id: 'avatar_pinata', type: 'avatar', name: 'pinata', icon: '🪅', cost: 200, value: '🪅', desc: 'อวตารปีนตา' },
-    
+
     // 250 XP
     { id: 'avatar_sun', type: 'avatar', name: 'ดวงอาทิตย์', icon: '☀️', cost: 250, value: '☀️', desc: 'อวตารดาวฤกษ์ศูนย์กลาง' },
     { id: 'avatar_dog', type: 'avatar', name: 'สุนัข', icon: '🐶', cost: 250, value: '🐶', desc: 'อวตารเพื่อนผู้ซื่อสัตย์' },
@@ -245,83 +150,115 @@ export const SHOP_ITEMS = [
     { id: 'avatar_koala', type: 'avatar', name: 'โคอาลา', icon: '🐨', cost: 250, value: '🐨', desc: 'อวตารโคอาลา' },
     { id: 'item_xp_2x', type: 'consumable', name: 'คูณ XP x2', icon: '✨', cost: 250, value: 'xp_2x', desc: 'ได้รับ XP 2 เท่าเมื่อทำแบบทดสอบจบ' },
     { id: 'item_undo', type: 'consumable', name: 'แก้ตัวใหม่', icon: '↩️', cost: 250, value: 'undo', desc: 'กลับไปตอบข้อที่เพิ่งตอบผิดได้อีกครั้ง' },
-    
+
     // 300 XP
     { id: 'avatar_rocket', type: 'avatar', name: 'จรวด', icon: '🚀', cost: 300, value: '🚀', desc: 'อวตารจรวดทะยานฟ้า' },
     { id: 'avatar_microbe', type: 'avatar', name: 'จุลินทรีย์', icon: '🦠', cost: 300, value: '🦠', desc: 'อวตารสิ่งมีชีวิตขนาดเล็ก' },
-    
+
     { id: 'title_scholar', type: 'title', name: 'ผู้ใฝ่รู้', icon: '📚', cost: 300, value: 'ผู้ใฝ่รู้', desc: 'ฉายาสำหรับผู้รักการเรียน' },
-    
+
     // 350 XP
     { id: 'avatar_satellite', type: 'avatar', name: 'ดาวเทียม', icon: '🛰️', cost: 350, value: '🛰️', desc: 'อวตารดาวเทียมสำรวจ' },
     { id: 'avatar_telescope', type: 'avatar', name: 'กล้องโทรทรรศน์', icon: '🔭', cost: 350, value: '🔭', desc: 'อวตารนักส่องดาว' },
-    
+
     // 400 XP
     { id: 'avatar_atom', type: 'avatar', name: 'อะตอม', icon: '⚛️', cost: 400, value: '⚛️', desc: 'อวตารโครงสร้างอะตอม' },
     { id: 'avatar_dna', type: 'avatar', name: 'ดีเอ็นเอ', icon: '🧬', cost: 400, value: '🧬', desc: 'อวตารเกลียวคู่' },
-    
+
     // 450 XP
     { id: 'avatar_owl', type: 'avatar', name: 'นกฮูก', icon: '🦉', cost: 450, value: '🦉', desc: 'อวตารนกฮูกผู้รอบรู้' },
     { id: 'avatar_fox', type: 'avatar', name: 'สุนัขจิ้งจอก', icon: '🦊', cost: 450, value: '🦊', desc: 'อวตารสุนัขจิ้งจอกเจ้าเล่ห์' },
-    
+
     // 500 XP
     { id: 'avatar_brain', type: 'avatar', name: 'สมอง', icon: '🧠', cost: 500, value: '🧠', desc: 'อวตารคลังปัญญา' },
     { id: 'avatar_wizard', type: 'avatar', name: 'พ่อมด', icon: '🧙', cost: 500, value: '🧙', desc: 'อวตารพ่อมดผู้ทรงพลัง' },
     { id: 'theme_forest', type: 'theme', name: 'ป่าไม้ (Forest)', icon: '🌲', cost: 500, value: 'theme-forest', desc: 'ธีมสีเขียวธรรมชาติ' },
-    
+
     // 600 XP
     { id: 'avatar_lion', type: 'avatar', name: 'สิงโต', icon: '🦁', cost: 600, value: '🦁', desc: 'อวตารเจ้าป่า' },
     { id: 'avatar_tiger', type: 'avatar', name: 'เสือ', icon: '🐯', cost: 600, value: '🐯', desc: 'อวตารพยัคฆ์' },
-    
+
     // 800 XP
     { id: 'avatar_ninja', type: 'avatar', name: 'นินจา', icon: '🥷', cost: 800, value: '🥷', desc: 'นักรบเงา' },
     { id: 'avatar_trex', type: 'avatar', name: 'T-rex', icon: '🦖', cost: 800, value: '🦖', desc: 'อวตารT-rex' },
     { id: 'theme_sunset', type: 'theme', name: 'พระอาทิตย์ตก (Sunset)', icon: '🌅', cost: 800, value: 'theme-sunset', desc: 'ธีมสีส้มอบอุ่น' },
     { id: 'theme_ocean', type: 'theme', name: 'มหาสมุทร (Ocean)', icon: '🌊', cost: 800, value: 'theme-ocean', desc: 'ธีมสีฟ้าน้ำทะเล' },
-    
+
     // 1000 XP
     { id: 'avatar_dragon', type: 'avatar', name: 'มังกร', icon: '🐉', cost: 1000, value: '🐉', desc: 'อวตารมังกรในตำนาน' },
     { id: 'theme_berry', type: 'theme', name: 'เบอร์รี่ (Berry)', icon: '🍇', cost: 1000, value: 'theme-berry', desc: 'ธีมสีม่วงสดใส' },
-    
+
     // 1200 XP
     { id: 'avatar_unicorn', type: 'avatar', name: 'ยูนิคอร์น', icon: '🦄', cost: 1200, value: '🦄', desc: 'สัตว์วิเศษหายาก' },
-    
-    
+
+
     // 2000 XP
     { id: 'title_master', type: 'title', name: 'ปรมาจารย์', icon: '🎓', cost: 2000, value: 'ปรมาจารย์', desc: 'ฉายาขั้นสูง' },
     { id: 'theme_sakura', type: 'theme', name: 'ซากุระ (Sakura)', icon: '🌸', cost: 2000, value: 'theme-sakura', desc: 'ธีมสีชมพูอ่อนหวาน' },
-    
+
     // 5000 XP
     { id: 'title_rich', type: 'title', name: 'เศรษฐี XP', icon: '💰', cost: 5000, value: 'เศรษฐี XP', desc: 'ฉายาสำหรับผู้มั่งคั่ง' },
     { id: 'theme_dark', type: 'theme', name: 'รัตติกาล (Midnight)', icon: '🌑', cost: 5000, value: 'theme-midnight', desc: 'ธีมสีมืดลึกลับ' },
 ];
 
-// NEW: Pet System Constants
-export const PET_TYPES = {
-    'dog': { id: 'dog', name: 'สุนัข', icon: '🐶', stages: ['egg', 'dog_baby', 'dog_adult'] }, // Using sprite names
-    'cat': { id: 'cat', name: 'แมว', icon: '😺', stages: ['egg', 'cat_baby', 'cat_adult'] },
-    'dragon': { id: 'dragon', name: 'มังกร', icon: '🐉', stages: ['egg', 'dragon_baby', 'dragon_adult'] },
-    // Evolved Forms (Branching)
-    'dog_physics': { id: 'dog_physics', name: 'Robo-Dog', icon: '🤖', stages: ['egg', 'dog_baby', 'dog_physics'] },
-    'dog_earth': { id: 'dog_earth', name: 'Gaia Dog', icon: '🌿', stages: ['egg', 'dog_baby', 'dog_earth'] },
-    'cat_physics': { id: 'cat_physics', name: 'Quantum Cat', icon: '⚛️', stages: ['egg', 'cat_baby', 'cat_physics'] },
-    'cat_earth': { id: 'cat_earth', name: 'Geo Cat', icon: '🍄', stages: ['egg', 'cat_baby', 'cat_earth'] },
-    'dragon_physics': { id: 'dragon_physics', name: 'Mecha Dragon', icon: '🚀', stages: ['egg', 'dragon_baby', 'dragon_physics'] },
-    'dragon_earth': { id: 'dragon_earth', name: 'Elder Dragon', icon: '🏔️', stages: ['egg', 'dragon_baby', 'dragon_earth'] }
+// --- ธีมสี (Theme Colors) ---
+const THEME_DEFINITIONS = {
+    forest: {
+        main: '#16a34a',     // green-600
+        hover: '#15803d',    // green-700
+        secondary: '#4ade80', // green-400
+        light_bg: '#f0fdf4', // green-50
+        dark_bg: 'rgba(20, 83, 45, 0.5)', // green-900 (dark)
+        ring: '#86efac',     // green-300
+        dark_text: '#4ade80'
+    },
+    sunset: {
+        main: '#ea580c',     // orange-600
+        hover: '#c2410c',    // orange-700
+        secondary: '#fb923c', // orange-400
+        light_bg: '#fff7ed', // orange-50
+        dark_bg: 'rgba(124, 45, 18, 0.5)', // orange-900 (dark)
+        ring: '#fdba74',     // orange-300
+        dark_text: '#fb923c'
+    },
+    ocean: {
+        main: '#0284c7',     // sky-600
+        hover: '#0369a1',    // sky-700
+        secondary: '#38bdf8', // sky-400
+        light_bg: '#f0f9ff', // sky-50
+        dark_bg: 'rgba(12, 74, 110, 0.5)', // sky-900 (dark)
+        ring: '#7dd3fc',     // sky-300
+        dark_text: '#38bdf8'
+    },
+    berry: {
+        main: '#c026d3',     // fuchsia-600
+        hover: '#a21caf',    // fuchsia-700
+        secondary: '#e879f9', // fuchsia-400
+        light_bg: '#fdf4ff', // fuchsia-50
+        dark_bg: 'rgba(74, 4, 78, 0.5)', // fuchsia-900 (dark)
+        ring: '#f5d0fe',     // fuchsia-300
+        dark_text: '#e879f9'
+    },
+    midnight: {
+        main: '#4f46e5',     // indigo-600
+        hover: '#4338ca',    // indigo-700
+        secondary: '#818cf8', // indigo-400
+        light_bg: '#eef2ff', // indigo-50
+        dark_bg: 'rgba(30, 27, 75, 0.5)', // indigo-900 (dark)
+        ring: '#a5b4fc',     // indigo-300
+        dark_text: '#818cf8'
+    },
+    sakura: {
+        main: '#db2777',     // pink-600
+        hover: '#be185d',    // pink-700
+        secondary: '#f472b6', // pink-400
+        light_bg: '#fdf2f8', // pink-50
+        dark_bg: 'rgba(80, 7, 36, 0.5)', // pink-900 (dark)
+        ring: '#f9a8d4',     // pink-300
+        dark_text: '#f472b6'
+    }
 };
 
-export const PET_LEVELS = [
-    { level: 1, xp: 0, stage: 0 },      // Egg
-    { level: 2, xp: 500, stage: 1 },   // Baby
-    { level: 3, xp: 1500, stage: 1 },
-    { level: 4, xp: 3000, stage: 2 },  // Adult
-    { level: 5, xp: 5000, stage: 2 },
-    { level: 6, xp: 7500, stage: 2 },
-    { level: 7, xp: 10000, stage: 2 },
-    { level: 8, xp: 15000, stage: 2 },
-    { level: 9, xp: 22000, stage: 2 },
-    { level: 10, xp: 30000, stage: 2 },
-];
 
 export function getAvatarFrameClass(avatar, size = 'default') { // 'default' or 'small'
     const shopItem = SHOP_ITEMS.find(i => i.value === avatar && i.type === 'avatar');
@@ -342,24 +279,35 @@ export function getLevelBorderClass(level) {
     return 'bg-gray-300 dark:bg-gray-600'; // Bronze/Gray
 }
 
+let instance = null;
+
 export class Gamification {
     constructor() {
+        if (instance) return instance;
+        instance = this;
+
         this.storageKey = 'app_gamification_data';
         this.authManager = authManager;
 
+        // NEW: ตัวแปรสำหรับป้องกันการส่งคะแนนซ้ำ (ไม่บันทึกลง Storage)
+        this.lastProcessedQuiz = {
+            id: null,
+            timestamp: 0
+        };
+
         const isNewToGamification = !localStorage.getItem(this.storageKey);
-        
+
         this.state = this.loadState();
-        
+
         // NEW: ตรวจสอบความถูกต้องของข้อมูลทันทีที่โหลดจาก LocalStorage
         // ฟังก์ชันนี้จะช่วยแก้ปัญหา Data Inconsistency เช่น XP รวมน้อยกว่า XP ย่อย
         // ซึ่งอาจเกิดจากการซิงค์ข้อมูลผิดพลาดในเวอร์ชันก่อนหน้า
         if (this.ensureConsistency()) {
             this.saveState();
         }
-        
+
         const today = new Date().toDateString();
-        if (this.state.lastQuestDate !== today) {
+        if (this.state.lastQuestDate !== today || !this.state.activeQuests || this.state.activeQuests.length === 0) {
             this.state.activeQuests = this.generateDailyQuests();
             this.state.rerolls = 3;
             this.state.lastQuestDate = today;
@@ -371,11 +319,8 @@ export class Gamification {
         this.updateLevel();
         this.saveState();
 
-        // NEW: Pet System Initialization
-        this.levelUpPet(true); // Initial check without saving
-        
         if (isNewToGamification) {
-            this.syncProgress();
+            this.recalculateFromHistory();
         }
 
         this.updateStreak();
@@ -384,21 +329,25 @@ export class Gamification {
 
         // IMPROVEMENT: Cross-tab synchronization
         // เมื่อมีการเปลี่ยนแปลงข้อมูลใน Tab อื่น ให้โหลดข้อมูลใหม่และอัปเดตหน้าจอนี้ทันที
-        window.addEventListener('storage', (e) => {
+        this.storageListener = (e) => {
             if (e.key === this.storageKey) {
                 this.state = this.loadState();
                 this.onStateUpdated();
             }
-        });
+        };
+        window.addEventListener('storage', this.storageListener);
 
         // เชื่อมต่อกับ AuthManager เพื่อโหลดข้อมูลเมื่อสถานะ Login เปลี่ยนแปลง
-        this.authManager.onUserChange(async (user) => {
+        this.unsubscribeAuth = this.authManager.onUserChange(async (user) => {
             // โหลดข้อมูลล่าสุด (จะจัดการให้เองว่ามาจาก Cloud หรือ Local)
             try {
                 const data = await this.authManager.loadUserData();
                 if (data) {
                     // Merge data from Cloud with Default State for completeness
                     this.state = { ...this.getDefaultState(), ...data };
+
+                    // NEW: คำนวณคะแนนใหม่ทุกครั้งที่โหลดข้อมูลเพื่อความถูกต้อง (Recalculate on login)
+                    this.recalculateFromHistory();
 
                     // --- Data Consistency Check & Correction ---
                     // เรียกใช้ฟังก์ชันตรวจสอบความถูกต้องที่สร้างขึ้นใหม่
@@ -432,79 +381,100 @@ export class Gamification {
         });
     }
 
+    // NEW: ฟังก์ชันสำหรับทำลาย Instance และล้าง Listeners เพื่อป้องกัน Memory Leak
+    destroy() {
+        if (this.storageListener) {
+            window.removeEventListener('storage', this.storageListener);
+        }
+        if (this.unsubscribeAuth) {
+            this.unsubscribeAuth();
+        }
+        if (this.headerObserver) {
+            this.headerObserver.disconnect();
+            this.headerObserver = null;
+        }
+        instance = null;
+    }
+
     // เพิ่มฟังก์ชันใหม่สำหรับตรวจสอบความถูกต้องของข้อมูล XP
     // Logic: วนลูปหาผลรวม XP ของแต่ละหมวดย่อย (Proficiency) แล้วเทียบกับ XP หลัก (Physics/Earth)
     // หาก XP หลักน้อยกว่าผลรวม (ซึ่งเป็นไปไม่ได้ในทางทฤษฎี) ระบบจะปรับค่า XP หลักให้เท่ากับผลรวมทันที
     ensureConsistency() {
         let needsSave = false;
-        let calculatedPhysicsXP = 0;
-        let calculatedEarthXP = 0;
 
-        // 1. ตรวจสอบว่าค่า XP หลักเป็นตัวเลข
+        // 1. ตรวจสอบค่าพื้นฐาน
         if (typeof this.state.xp !== 'number') { this.state.xp = Number(this.state.xp) || 0; needsSave = true; }
-        if (typeof this.state.physicsXP !== 'number') { this.state.physicsXP = Number(this.state.physicsXP) || 0; needsSave = true; }
-        if (typeof this.state.earthXP !== 'number') { this.state.earthXP = Number(this.state.earthXP) || 0; needsSave = true; }
+        if (typeof this.state.level !== 'number') { this.state.level = Number(this.state.level) || 1; needsSave = true; }
 
-        // 2. คำนวณผลรวม XP จากหมวดย่อย (Proficiency Groups)
+        // 2. เตรียมตัวแปรสำหรับคำนวณผลรวมของแต่ละ Track
+        const calculatedTrackXPs = {};
+        SiteConfig.categories.forEach(cat => {
+            if (typeof this.state[cat.id] !== 'number') {
+                this.state[cat.id] = Number(this.state[cat.id]) || 0;
+                needsSave = true;
+            }
+            calculatedTrackXPs[cat.track] = 0;
+        });
+
+        // 3. คำนวณผลรวม XP จากหมวดย่อย (Proficiency Groups)
         for (const group of Object.values(PROFICIENCY_GROUPS)) {
             const groupXP = Number(this.state[group.field]) || 0;
-            
-            // แก้ไขค่าใน state ให้เป็นตัวเลขถ้าจำเป็น
+
             if (this.state[group.field] !== groupXP && this.state[group.field] !== undefined) {
                 this.state[group.field] = groupXP;
                 needsSave = true;
             }
 
-            if (group.track === 'physics') {
-                calculatedPhysicsXP += groupXP;
-            } else if (group.track === 'earth') {
-                calculatedEarthXP += groupXP;
+            if (calculatedTrackXPs[group.track] !== undefined) {
+                calculatedTrackXPs[group.track] += groupXP;
             }
         }
 
-        // 3. แก้ไข XP ของสายวิชาหลักหากน้อยกว่าผลรวมของหมวดย่อย
+        // 4. แก้ไข XP ของสายวิชาหลักหากน้อยกว่าผลรวมของหมวดย่อย
         // (XP หลักอาจจะมากกว่าได้ หากได้จากโจทย์ทั่วไป แต่ห้ามน้อยกว่า)
-        if (this.state.physicsXP < calculatedPhysicsXP) {
-            console.log(`Correcting physicsXP from ${this.state.physicsXP} to ${calculatedPhysicsXP}`);
-            this.state.physicsXP = calculatedPhysicsXP;
-            needsSave = true;
-        }
-        if (this.state.earthXP < calculatedEarthXP) {
-            console.log(`Correcting earthXP from ${this.state.earthXP} to ${calculatedEarthXP}`);
-            this.state.earthXP = calculatedEarthXP;
-            needsSave = true;
-        }
+        SiteConfig.categories.forEach(cat => {
+            const calculated = calculatedTrackXPs[cat.track];
+            if (this.state[cat.id] < calculated) {
+                console.log(`Correcting ${cat.id} from ${this.state[cat.id]} to ${calculated}`);
+                this.state[cat.id] = calculated;
+                needsSave = true;
+            }
+        });
 
-        // 4. Reconcile Total XP with the sum of its parts (Physics, Earth, General)
+        // 5. Reconcile Total XP with the sum of its parts
         // This ensures that data from older versions (without generalXP) is corrected.
-        const sumOfParts = (this.state.physicsXP || 0) + (this.state.earthXP || 0) + (this.state.generalXP || 0);
+        let sumOfParts = (this.state.generalXP || 0);
+        SiteConfig.categories.forEach(cat => {
+            sumOfParts += (this.state[cat.id] || 0);
+        });
 
-        if (this.state.xp < sumOfParts) {
-            // This case is unlikely but indicates a major inconsistency.
-            // The total XP should never be less than the sum of its components.
-            // We correct the total XP to match the sum.
-            console.log(`Correcting total XP upwards from ${this.state.xp} to ${sumOfParts}`);
-            this.state.xp = sumOfParts;
-            needsSave = true;
-        } else if (this.state.xp > sumOfParts) {
+        // FIX: ยกเลิกการดันคะแนนขึ้น (xp < sumOfParts) เพราะ XP ปัจจุบันอาจน้อยกว่าผลรวมได้ (จากการซื้อของ)
+        // แต่ยังคงตรวจสอบกรณีคะแนนเฟ้อ (xp > sumOfParts)
+        if (this.state.xp > sumOfParts) {
             // This is the more likely case for older data:
             // Total XP was incremented, but the parts (especially generalXP) were not.
             // We attribute the difference to generalXP.
             const difference = this.state.xp - sumOfParts;
-            console.log(`Attributing unaccounted ${difference} XP to generalXP.`);
-            this.state.generalXP = (this.state.generalXP || 0) + difference;
-            needsSave = true;
+            // FIX: ปรับปรุงเงื่อนไข ไม่เติม General XP พร่ำเพรื่อ
+            // จะเติมก็ต่อเมื่อ General XP เป็น 0 (กรณี Migration ข้อมูลเก่า) หรือผลต่างไม่มากผิดปกติ
+            if (this.state.generalXP === 0 || difference < 5000) {
+                console.log(`Attributing unaccounted ${difference} XP to generalXP.`);
+                this.state.generalXP = (this.state.generalXP || 0) + difference;
+                needsSave = true;
+            } else {
+                console.warn(`Detected large XP discrepancy (${difference}). Correcting total XP downwards to match sum of parts.`);
+                this.state.xp = sumOfParts;
+                needsSave = true;
+            }
         }
 
         return needsSave;
     }
 
     getDefaultState() {
-        return {
+        const state = {
             level: 1,
             xp: 0,
-            physicsXP: 0,
-            earthXP: 0,
             badges: [],
             quizzesCompleted: 0,
             lastLogin: null,
@@ -525,34 +495,53 @@ export class Gamification {
             perfectScores: 0,
             highScores80: 0,
             weekendQuizzesCompleted: 0,
-            // Proficiency XPs
-            mechanicsXP: 0,
-            electricityXP: 0,
-            wavesLightXP: 0,
-            pet: {
-                type: 'dog',
-                name: 'เพื่อนซี้สี่ขา',
-                mood: 'normal',
-                moodExpires: 0,
-                xp: 0,
-                level: 1,
-                stageIndex: 0
-            },
-            modernHeatXP: 0,
-            astronomyXP: 0,
-            geologyXP: 0,
-            meteorologyXP: 0,
-            freeNameChangeAvailable: true,
-            generalXP: 0, // NEW: For XP from quests or non-track sources
+            freeNameChangeAvailable: true, generalXP: 0, accumulatedQuestionsForBonus: 0,
+            totalSpentXP: 0, // NEW: ติดตามยอด XP ที่ใช้ไปทั้งหมด (ป้องกันการคืน XP จากไอเทมที่ใช้แล้ว)
         };
+
+        // Dynamic Categories
+        SiteConfig.categories.forEach(cat => {
+            state[cat.id] = 0;
+        });
+
+        // Dynamic Proficiency Fields
+        Object.values(PROFICIENCY_GROUPS).forEach(group => {
+            state[group.field] = 0;
+        });
+
+        return state;
+    }
+
+    // ฟังก์ชันสำหรับลบ XP ที่เฟ้อเกินจริง (เรียกใช้เมื่อต้องการล้างค่าที่ผิดปกติ)
+    fixInflatedXP() {
+        let sumOfParts = (this.state.generalXP || 0);
+        SiteConfig.categories.forEach(cat => {
+            sumOfParts += (this.state[cat.id] || 0);
+        });
+
+        if (this.state.xp > sumOfParts) {
+            const difference = this.state.xp - sumOfParts;
+            console.log(`Removing inflated XP: ${difference}. Resetting total XP from ${this.state.xp} to ${sumOfParts}.`);
+            this.state.xp = sumOfParts;
+            this.saveState();
+            return true;
+        }
+        return false;
     }
 
     updateLevel() {
         let leveledUp = false;
+        let safetyCounter = 0; // NEW: Safety counter to prevent infinite loops
         // Loop to handle multiple level-ups in one go, but sequentially.
         while (true) {
-            const currentLevel = this.state.level || 1;
-            const nextLevelThreshold = XP_THRESHOLDS.find(t => t.level === currentLevel + 1);
+            if (safetyCounter++ > 50) {
+                console.warn("Possible infinite loop detected in updateLevel. Breaking.");
+                break;
+            }
+            const currentLevel = parseInt(this.state.level) || 1;
+            // OPTIMIZATION: Direct array access is faster than find() since thresholds are sorted
+            // XP_THRESHOLDS[0] is Level 1. XP_THRESHOLDS[currentLevel] is the threshold for Level (currentLevel + 1)
+            const nextLevelThreshold = XP_THRESHOLDS[currentLevel];
 
             if (!nextLevelThreshold) {
                 break; // Max level reached
@@ -583,17 +572,18 @@ export class Gamification {
         // IMPROVEMENT: Define Default State clearly
         // Merge loaded state with defaults to ensure all keys exist (Robustness)
         state = { ...this.getDefaultState(), ...(state || {}) };
-        
+
         return state;
     }
 
     // ฟังก์ชันสำหรับดึงข้อมูลการทำโจทย์เก่าๆ มาคำนวณเป็น XP เริ่มต้น
     // Logic: สแกน LocalStorage หา key ที่ขึ้นต้นด้วย 'quizState-'
     // แล้วคำนวณ XP ย้อนหลังให้ผู้ใช้ที่เคยเล่นก่อนมีระบบ Gamification
-    syncProgress() {
+    recalculateFromHistory() { // Renamed from syncProgress to be a general purpose recalculation tool
         let totalXP = 0;
-        let physicsXP = 0;
-        let earthXP = 0;
+        const accumulatedTrackXPs = {};
+        SiteConfig.categories.forEach(c => accumulatedTrackXPs[c.id] = 0);
+
         let completed = 0;
         let totalCorrect = 0;
         let perfectScores = 0;
@@ -601,6 +591,11 @@ export class Gamification {
         const topicXPs = {};
         let weekendQuizzes = 0;
         let generalQuizXP = 0;
+        let totalQuestionsAnswered = 0; // NEW: นับจำนวนข้อที่ตอบทั้งหมดเพื่อคำนวณ Bonus
+
+        // OPTIMIZATION: Cache subcategory string matching to avoid repeated loops and string includes
+        const subCategoryCache = new Map();
+        const proficiencyEntries = Object.entries(PROFICIENCY_GROUPS);
 
         // วนลูปดูข้อมูลทั้งหมดใน LocalStorage
         for (let i = 0; i < localStorage.length; i++) {
@@ -612,8 +607,8 @@ export class Gamification {
                     // NEW: Check for shuffledQuestions to ensure we can calculate XP accurately
                     if (data && data.userAnswers && data.shuffledQuestions) {
                         let calculatedXp = 0;
-                        let quizPhysicsXP = 0;
-                        let quizEarthXP = 0;
+                        const quizTrackXPs = {};
+                        SiteConfig.categories.forEach(c => quizTrackXPs[c.track] = 0);
 
                         data.userAnswers.forEach((ans, index) => {
                             if (ans && ans.isCorrect) {
@@ -626,7 +621,7 @@ export class Gamification {
                                 }
                             }
                         });
-                        
+
                         const xp = calculatedXp;
                         const correctCount = data.score || 0;
 
@@ -635,6 +630,8 @@ export class Gamification {
                         // นับจำนวนชุดที่ทำเสร็จ (ดูจากจำนวนข้อที่ตอบเทียบกับจำนวนข้อทั้งหมด)
                         const totalQ = data.shuffledQuestions ? data.shuffledQuestions.length : 0;
                         const answered = data.userAnswers.filter(a => a).length;
+                        totalQuestionsAnswered += answered; // สะสมจำนวนข้อที่ตอบ
+
                         if (totalQ > 0 && answered >= totalQ) {
                             completed++;
 
@@ -661,28 +658,44 @@ export class Gamification {
                             if (ans && ans.isCorrect) {
                                 const question = data.shuffledQuestions[index];
                                 const points = (question && (question.type === 'multiple-select' || question.type === 'fill-in-number')) ? 5 : 4;
-                                
+
                                 let subCatStr = '';
                                 if (ans.subCategory) {
                                     if (typeof ans.subCategory === 'string') subCatStr = ans.subCategory;
                                     else if (ans.subCategory.main) subCatStr = ans.subCategory.main;
                                 }
-                                for (const [groupKey, groupDef] of Object.entries(PROFICIENCY_GROUPS)) {
-                                    if (groupDef.keywords.some(k => subCatStr.includes(k))) {
-                                        topicXPs[groupDef.field] = (topicXPs[groupDef.field] || 0) + points;
-                                        
-                                        // NEW: Accumulate track XP based on proficiency group
-                                        if (groupDef.track === 'physics') quizPhysicsXP += points;
-                                        if (groupDef.track === 'earth') quizEarthXP += points;
-                                        
-                                        break;
+
+                                // OPTIMIZATION: Use cache for proficiency matching
+                                let matchedGroup = subCategoryCache.get(subCatStr);
+
+                                if (matchedGroup === undefined) {
+                                    matchedGroup = null; // Default if not found
+                                    for (const [groupKey, groupDef] of proficiencyEntries) {
+                                        if (groupDef.keywords.some(k => subCatStr.includes(k))) {
+                                            matchedGroup = groupDef;
+                                            break;
+                                        }
+                                    }
+                                    subCategoryCache.set(subCatStr, matchedGroup);
+                                }
+
+                                if (matchedGroup) {
+                                    topicXPs[matchedGroup.field] = (topicXPs[matchedGroup.field] || 0) + points;
+                                    if (quizTrackXPs[matchedGroup.track] !== undefined) {
+                                        quizTrackXPs[matchedGroup.track] += points;
                                     }
                                 }
                             }
                         });
 
-                        // ถ้ายังระบุสายวิชาไม่ได้จาก Proficiency Group ให้ลองดูจากหมวดหมู่หรือชื่อไฟล์
-                        if (quizPhysicsXP === 0 && quizEarthXP === 0) {
+                        // Check if any track XP was added
+                        let allTracksZero = true;
+                        for (const t in quizTrackXPs) {
+                            if (quizTrackXPs[t] > 0) allTracksZero = false;
+                        }
+
+                        // ถ้ายังระบุสายวิชาไม่ได้จาก Proficiency Group ให้ลองดูจากหมวดหมู่หรือชื่อไฟล์ (Fallback)
+                        if (allTracksZero) {
                             let category = 'General';
                             const firstAns = data.userAnswers.find(a => a);
                             if (firstAns) {
@@ -691,20 +704,22 @@ export class Gamification {
                                     category = typeof firstAns.subCategory === 'object' ? firstAns.subCategory.main : firstAns.subCategory;
                                 }
                             }
-                            
-                            const lowerCat = String(category).toLowerCase();
-                            if (lowerCat.includes('physics') || lowerCat.includes('ฟิสิกส์') || key.includes('phy_')) {
-                                quizPhysicsXP = calculatedXp;
-                            } else if (lowerCat.includes('earth') || lowerCat.includes('astronomy') || lowerCat.includes('space') || lowerCat.includes('โลก') || lowerCat.includes('ดาราศาสตร์') || lowerCat.includes('วิทย์โลก') || key.includes('ess_')) {
-                                quizEarthXP = calculatedXp;
+
+                            const track = this.identifyTrack(category, key);
+                            if (track !== 'general' && quizTrackXPs[track] !== undefined) {
+                                quizTrackXPs[track] = calculatedXp;
                             }
                         }
 
-                        // The difference is general XP
-                        generalQuizXP += (calculatedXp - quizPhysicsXP - quizEarthXP);
+                        // Sum up and calculate General XP
+                        let sumQuizTracks = 0;
+                        for (const [track, xp] of Object.entries(quizTrackXPs)) {
+                            sumQuizTracks += xp;
+                            const catConfig = SiteConfig.categories.find(c => c.track === track);
+                            if (catConfig) accumulatedTrackXPs[catConfig.id] += xp;
+                        }
 
-                        physicsXP += quizPhysicsXP;
-                        earthXP += quizEarthXP;
+                        generalQuizXP += (calculatedXp - sumQuizTracks);
                     }
                 } catch (e) {
                     console.warn("Skipping invalid quiz state during sync:", key);
@@ -712,28 +727,66 @@ export class Gamification {
             }
         }
 
-        // ถ้าพบข้อมูลเก่า ให้อัปเดตสถานะเริ่มต้นทันที
-        if (totalXP > 0) {
-            this.state.xp = totalXP;
-            this.state.physicsXP = physicsXP;
-            this.state.earthXP = earthXP;
-            this.state.quizzesCompleted = completed;
-            this.state.totalCorrectAnswers = totalCorrect;
-            this.state.perfectScores = perfectScores;
-            this.state.highScores80 = highScores80;
-            this.state.weekendQuizzesCompleted = weekendQuizzes;
-            this.state.generalXP = generalQuizXP;
-            
-            // Apply calculated topic XPs
-            for (const [field, xp] of Object.entries(topicXPs)) {
-                this.state[field] = xp;
-            }
+        // NEW: คำนวณ Bonus XP ย้อนหลัง (ทุก 20 ข้อ ได้ 20 XP)
+        const bonusXP = Math.floor(totalQuestionsAnswered / 20) * 20;
+        totalXP += bonusXP;
+        this.state.accumulatedQuestionsForBonus = totalQuestionsAnswered % 20;
 
-            // ตรวจสอบและปลดล็อกเหรียญรางวัลจากข้อมูลเก่าทันที
-            this.checkBadges(0); 
-            this.saveState();
-            console.log(`Synced old progress: ${totalXP} XP, ${completed} Quizzes`);
+        // NEW: รวม XP จากประวัติภารกิจ (Quest History) เพื่อไม่ให้คะแนนหาย
+        if (this.state.questHistory) {
+            this.state.questHistory.forEach(item => {
+                if (item.xp) totalXP += item.xp;
+            });
         }
+
+        // NEW: ใช้ค่า totalSpentXP ที่บันทึกไว้เป็นหลัก (เพื่อความถูกต้องของไอเทมที่ใช้ไปแล้ว)
+        // หากไม่มี (ข้อมูลเก่า) ให้คำนวณจากของที่มีอยู่เป็นค่าเริ่มต้น (Fallback)
+        let spentXP = this.state.totalSpentXP || 0;
+
+        if (spentXP === 0) {
+            if (this.state.inventory) {
+                this.state.inventory.forEach(itemId => {
+                    const item = SHOP_ITEMS.find(i => i.id === itemId);
+                    if (item) spentXP += item.cost;
+                });
+            }
+            if (this.state.consumables) {
+                Object.entries(this.state.consumables).forEach(([itemId, count]) => {
+                    const item = SHOP_ITEMS.find(i => i.id === itemId);
+                    if (item) spentXP += (item.cost * count);
+                });
+            }
+            // บันทึกค่าเริ่มต้นกลับไปเพื่อใช้ในอนาคต
+            this.state.totalSpentXP = spentXP;
+        }
+
+        // ถ้าพบข้อมูลเก่า ให้อัปเดตสถานะเริ่มต้นทันที
+        // FIX: Always update if called manually, even if totalXP is 0 (to reset inflated stats)
+        this.state.xp = Math.max(0, totalXP - spentXP); // XP สุทธิ = ที่หาได้ - ที่ใช้ไป
+
+        // Apply accumulated track XPs
+        for (const [id, xp] of Object.entries(accumulatedTrackXPs)) {
+            this.state[id] = xp;
+        }
+
+        this.state.quizzesCompleted = completed;
+        this.state.totalCorrectAnswers = totalCorrect;
+        this.state.perfectScores = perfectScores;
+        this.state.highScores80 = highScores80;
+        this.state.weekendQuizzesCompleted = weekendQuizzes;
+        this.state.generalXP = generalQuizXP;
+
+        // Apply calculated topic XPs
+        for (const [field, xp] of Object.entries(topicXPs)) {
+            this.state[field] = xp;
+        }
+
+        // ตรวจสอบและปลดล็อกเหรียญรางวัลจากข้อมูลเก่าทันที
+        this.checkBadges(0);
+        this.saveState();
+        console.log(`Recalculated progress: ${totalXP} XP, ${completed} Quizzes`);
+
+        return { totalXP, completed };
     }
 
     saveState() {
@@ -788,10 +841,15 @@ export class Gamification {
         this.saveState();
     }
 
-    setPetMood(mood, durationInMs) {
-        this.state.pet.mood = mood;
-        this.state.pet.moodExpires = Date.now() + durationInMs;
-        this.saveState();
+    // NEW: ฟังก์ชันกลางสำหรับหัก XP (ใช้แทนการลบตรงๆ เพื่อบันทึกยอดใช้จ่าย)
+    spendXP(amount) {
+        if (this.state.xp >= amount) {
+            this.state.xp -= amount;
+            this.state.totalSpentXP = (this.state.totalSpentXP || 0) + amount;
+            this.saveState();
+            return true;
+        }
+        return false;
     }
 
     buyItem(itemId) {
@@ -801,19 +859,21 @@ export class Gamification {
 
         if (item.type === 'consumable') {
             this.state.xp -= item.cost;
+            this.state.totalSpentXP = (this.state.totalSpentXP || 0) + item.cost; // Track spending
             this.state.consumables[itemId] = (this.state.consumables[itemId] || 0) + 1;
             this.saveState();
             return { success: true, message: `ซื้อ ${item.name} สำเร็จ! (มี: ${this.state.consumables[itemId]})`, item };
         } else {
             if (this.state.inventory.includes(itemId)) return { success: false, message: "คุณมีสินค้านี้แล้ว" };
             this.state.xp -= item.cost;
+            this.state.totalSpentXP = (this.state.totalSpentXP || 0) + item.cost; // Track spending
             this.state.inventory.push(itemId);
-            
+
             // Check Shop Badges
             if (this.state.inventory.length >= 5 && !this.state.badges.includes('shop_spender')) {
                 this.state.badges.push('shop_spender');
             }
-            
+
             this.checkAchievements();
             this.saveState();
             return { success: true, message: `ซื้อ ${item.name} สำเร็จ!`, item };
@@ -839,11 +899,11 @@ export class Gamification {
 
     updateHeaderAvatar() {
         const profileLink = document.getElementById('main-header-profile-link');
-        
+        const user = this.authManager.currentUser;
+
         // Update Header Email
         const headerEmailEl = document.getElementById('user-hub-email');
         if (headerEmailEl) {
-            const user = this.authManager.currentUser;
             if (user && user.email) {
                 headerEmailEl.textContent = user.email;
                 headerEmailEl.classList.remove('hidden');
@@ -853,6 +913,17 @@ export class Gamification {
         }
 
         if (profileLink) {
+            // ถ้าไม่ได้ล็อกอิน ให้แสดงไอคอน Guest (SVG) แทนอวตาร
+            if (!user) {
+                profileLink.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                `;
+                profileLink.className = "flex items-center justify-center h-full w-full";
+                return;
+            }
+
             const avatar = this.state.avatar || '🧑‍🎓';
             const level = this.getCurrentLevel().level;
 
@@ -868,11 +939,11 @@ export class Gamification {
             // ตรวจสอบว่าเป็น URL รูปภาพหรือไม่ (มีจุดหรือเครื่องหมาย /)
             const isImage = avatar.includes('/') || avatar.includes('.');
             let contentHtml = '';
-            
+
             if (isImage) {
-                contentHtml = `<img src="${avatar}" alt="Avatar" class="w-full h-full rounded-full object-cover">`;
+                contentHtml = `<img src="${escapeHtml(avatar)}" alt="Avatar" class="w-full h-full rounded-full object-cover">`;
             } else {
-                contentHtml = `<span class="text-xl leading-none flex items-center justify-center h-full w-full select-none">${avatar}</span>`;
+                contentHtml = `<span class="text-xl leading-none flex items-center justify-center h-full w-full select-none">${escapeHtml(avatar)}</span>`;
             }
 
             const levelBorderClass = getLevelBorderClass(level);
@@ -913,14 +984,14 @@ export class Gamification {
     applyTheme(theme) {
         // Remove existing theme classes
         document.documentElement.classList.remove('theme-forest', 'theme-sunset', 'theme-ocean', 'theme-berry', 'theme-midnight');
-        
+
         if (theme) {
             document.documentElement.classList.add(theme);
-            
+
             // OPTIMIZATION: Set CSS Variables instead of generating full CSS rules
             const themeName = theme.replace('theme-', '');
             const colors = THEME_DEFINITIONS[themeName];
-            
+
             if (colors) {
                 const root = document.documentElement;
                 root.style.setProperty('--theme-main', colors.main);
@@ -951,7 +1022,7 @@ export class Gamification {
 
         const style = document.createElement('style');
         style.id = 'gamification-theme-styles';
-        
+
         // OPTIMIZATION: Use CSS Variables in a single set of rules
         const allStyles = `
             @keyframes avatarPop {
@@ -1184,7 +1255,7 @@ export class Gamification {
         defaultState.displayName = this.state.displayName;
         defaultState.avatar = this.state.avatar;
         defaultState.selectedTheme = this.state.selectedTheme;
-        
+
         this.state = defaultState;
         this.saveState();
     }
@@ -1204,7 +1275,7 @@ export class Gamification {
         // หากเป็น Custom Quiz ต้องมีอย่างน้อย 20 ข้อจึงจะนับสถิติ (ป้องกันการปั๊มสถิติด้วยโจทย์ 1 ข้อ)
         // Check eligibility: Custom quizzes need at least 20 questions
         const isEligible = !isCustomQuiz || (isCustomQuiz && questionCount >= 20);
-        
+
         if (isEligible) {
             if (percentage === 100) {
                 this.state.perfectScores = (this.state.perfectScores || 0) + 1;
@@ -1228,8 +1299,8 @@ export class Gamification {
                 return (this.state.perfectScores || 0) >= quest.target;
             case 'high_scores_80':
                 return (this.state.highScores80 || 0) >= quest.target;
-            case 'physics_level':
-                return this.getPhysicsLevel().level >= quest.target;
+            case 'astronomy_level':
+                return this.getAstronomyTrackLevel().level >= quest.target;
             case 'earth_level':
                 return this.getEarthLevel().level >= quest.target;
             default:
@@ -1266,7 +1337,7 @@ export class Gamification {
         // --- REVISED LOGIC FOR OVERALL LEVEL ---
         // The level is now stored in the state. We just calculate progress towards the next one.
         const currentLevel = this.state.level || 1;
-        
+
         const currentLevelData = XP_THRESHOLDS.find(t => t.level === currentLevel);
         const nextLevelData = XP_THRESHOLDS.find(t => t.level === currentLevel + 1);
 
@@ -1286,7 +1357,7 @@ export class Gamification {
 
             // Calculate Quest progress
             if (nextLevelData.quest) questProgressPercent = this.getQuestProgressPercent(nextLevelData.quest);
-            
+
             // Overall progress is the minimum of the two
             overallProgressPercent = Math.min(xpProgressPercent, questProgressPercent);
         }
@@ -1299,11 +1370,15 @@ export class Gamification {
     }
 
     getPhysicsLevel() {
-        return this.getLevelInfo(this.state.physicsXP, 'physics');
+        return this.getLevelInfo(this.state.physicsTrackXP || 0, 'physics');
+    }
+
+    getAstronomyTrackLevel() {
+        return this.getEarthLevel();
     }
 
     getEarthLevel() {
-        return this.getLevelInfo(this.state.earthXP, 'earth');
+        return this.getLevelInfo(this.state.earthTrackXP || 0, 'earth');
     }
 
     // Legacy support (เพื่อให้โค้ดเก่าไม่พัง)
@@ -1324,8 +1399,8 @@ export class Gamification {
                 return this.state.perfectScores || 0;
             case 'high_scores_80':
                 return this.state.highScores80 || 0;
-            case 'physics_level':
-                return this.getPhysicsLevel().level;
+            case 'astronomy_level':
+                return this.getAstronomyTrackLevel().level;
             case 'earth_level':
                 return this.getEarthLevel().level;
             default:
@@ -1371,7 +1446,7 @@ export class Gamification {
         // หาภารกิจใหม่ที่ไม่ซ้ำกับที่มีอยู่
         const currentIds = this.state.activeQuests.map(q => q.id);
         const available = DAILY_QUESTS.filter(q => !currentIds.includes(q.id));
-        
+
         if (available.length === 0) return { success: false, message: "ไม่มีภารกิจอื่นให้เปลี่ยนแล้ว" };
 
         const newQuest = available[Math.floor(Math.random() * available.length)];
@@ -1414,7 +1489,7 @@ export class Gamification {
         } else if (diffDays > 1) {
             // ขาดช่วงไป (Missed days) -> ตรวจสอบ Streak Freeze
             const freezeCount = this.state.consumables['item_streak_freeze'] || 0;
-            
+
             if (freezeCount > 0) {
                 // ใช้ไอเทมเพื่อรักษาสถิติ
                 this.state.consumables['item_streak_freeze']--;
@@ -1429,7 +1504,7 @@ export class Gamification {
             // กรณีอื่นๆ (เช่น diffDays <= 0 ซึ่งไม่ควรเกิด หรือครั้งแรกจริงๆ)
             this.state.streak = 1;
         }
-        
+
         this.state.lastLogin = todayStr;
         this.updateLevel(); // Check if streak quest completion triggers level up
         this.saveState();
@@ -1441,18 +1516,11 @@ export class Gamification {
     addXP(amount, category = '', options = { shouldSave: true }) {
         this.state.xp += amount;
 
-        // ตรวจสอบสายวิชาจาก category
-        let isPhysics = false;
-        let isEarth = false;
-        const catString = (typeof category === 'string') ? category : (category?.main || String(category || ''));
-        const lowerCat = catString.toLowerCase();
+        const track = this.identifyTrack(category);
+        const catConfig = SiteConfig.categories.find(c => c.track === track);
 
-        if (lowerCat.includes('physics') || lowerCat.includes('ฟิสิกส์')) {
-            this.state.physicsXP += amount;
-            isPhysics = true;
-        } else if (lowerCat.includes('earth') || lowerCat.includes('astronomy') || lowerCat.includes('space') || lowerCat.includes('โลก') || lowerCat.includes('ดาราศาสตร์') || lowerCat.includes('วิทย์โลก')) {
-            this.state.earthXP += amount;
-            isEarth = true;
+        if (catConfig) {
+            this.state[catConfig.id] = (this.state[catConfig.id] || 0) + amount;
         } else {
             // XP ที่ไม่มีหมวดหมู่ชัดเจน (เช่น จากเควส) จะถูกนับเป็น General XP
             this.state.generalXP = (this.state.generalXP || 0) + amount;
@@ -1462,7 +1530,7 @@ export class Gamification {
 
         // ตรวจสอบ Badge ที่เกี่ยวกับ XP สะสม (ส่ง 0 ไปเพราะไม่ได้มาจากการทำข้อสอบ)
         this.checkBadges(0, 0, false);
-        
+
         // Save state only if explicitly told to.
         if (options.shouldSave) {
             this.saveState();
@@ -1472,26 +1540,88 @@ export class Gamification {
     // ฟังก์ชันใหม่: บันทึกผลการทำข้อสอบโดยรับค่า XP แยกตามสายวิชา
     // นี่คือฟังก์ชันหลักที่ quiz-logic.js เรียกใช้เมื่อส่งคำตอบ
     // จัดการทั้ง XP, สถิติรายข้อ, และการปลดล็อก Badge/Achievement ในที่เดียว
-    submitQuizResult(totalXP, physicsXP, earthXP, percentage, questionCount, isCustomQuiz, topicXPs = {}, questStats = {}) {
-        const oldLevelInfo = this.getCurrentLevel();
-        const oldPhysics = this.getPhysicsLevel();
-        const oldEarth = this.getEarthLevel();
+    submitQuizResult(totalXP, percentage, questionCount, isCustomQuiz, topicXPs = {}, questStats = {}) {
+        // FIX: ป้องกันการส่งคะแนนซ้ำ (Debounce / Idempotency Check)
+        // ตรวจสอบว่า Quiz ID นี้เพิ่งถูกประมวลผลไปเมื่อไม่นานมานี้หรือไม่ (< 5 วินาที)
+        const now = Date.now();
+        if (this.lastProcessedQuiz.id === questStats.quizId && (now - this.lastProcessedQuiz.timestamp < 5000)) {
+            console.warn("Duplicate quiz submission detected. Skipping XP update.");
+            return {
+                overall: { leveledUp: false, info: this.getCurrentLevel() },
+                physics: { leveledUp: false, info: this.getPhysicsLevel() },
+                earth: { leveledUp: false, info: this.getEarthLevel() },
+                astronomy: { leveledUp: false, info: this.getEarthLevel() },
+                newBadges: [],
+                newAchievements: []
+            };
+        }
+        this.lastProcessedQuiz = { id: questStats.quizId, timestamp: now };
 
-        // NEW: Add Pet XP
-        if (this.state.pet && totalXP > 0) {
-            const petXpGained = Math.floor(totalXP * 0.25); // Pet gets 25% of user's XP
-            this.state.pet.xp += petXpGained;
-            this.levelUpPet();
+        const oldLevelInfo = this.getCurrentLevel();
+
+        // Dynamic: Capture old levels for all configured tracks
+        const oldTrackLevels = {};
+        SiteConfig.categories.forEach(cat => {
+            oldTrackLevels[cat.track] = this.getLevelInfo(this.state[cat.id] || 0, cat.track);
+        });
+
+        const newTrackXPs = {};
+        SiteConfig.categories.forEach(cat => newTrackXPs[cat.track] = 0);
+
+        // Calculate track XP from the detailed topicXPs
+        for (const [groupKey, groupDef] of Object.entries(PROFICIENCY_GROUPS)) {
+            const xpForTopic = topicXPs[groupDef.field] || 0;
+            if (newTrackXPs[groupDef.track] !== undefined) {
+                newTrackXPs[groupDef.track] += xpForTopic;
+            }
         }
 
-        // คำนวณ XP ที่ไม่เข้าพวก (ไม่ใช่ทั้งฟิสิกส์และวิทย์โลก)
-        const nonTrackXP = totalXP - physicsXP - earthXP;
+        // FIX: Fallback logic if topicXPs didn't capture the category (e.g. keywords mismatch)
+        // This ensures XP is assigned to the correct track based on Quiz Category/ID
+        let remainingXP = totalXP;
+        Object.values(newTrackXPs).forEach(val => remainingXP -= val);
+
+        if (remainingXP > 0) {
+            const track = this.identifyTrack(questStats.category, questStats.quizId);
+
+            if (newTrackXPs[track] !== undefined) {
+                newTrackXPs[track] += remainingXP;
+                remainingXP = 0;
+            }
+        }
 
         this.state.xp += totalXP;
-        this.state.physicsXP += physicsXP;
-        this.state.earthXP += earthXP;
-        this.state.generalXP = (this.state.generalXP || 0) + nonTrackXP;
+
+        // Dynamic: Update state for each category
+        SiteConfig.categories.forEach(cat => {
+            if (newTrackXPs[cat.track] > 0) {
+                this.state[cat.id] = (this.state[cat.id] || 0) + newTrackXPs[cat.track];
+            }
+        });
+
+        this.state.generalXP = (this.state.generalXP || 0) + remainingXP;
         this.state.quizzesCompleted += 1;
+
+        // --- NEW: Bonus XP for every 20 questions answered ---
+        const qCount = questionCount || 0;
+        this.state.accumulatedQuestionsForBonus = (this.state.accumulatedQuestionsForBonus || 0) + qCount;
+        const bonusStep = 20;
+        const bonusXPPerStep = 20; // แจก 20 XP ทุกๆ 20 ข้อ
+
+        const stepsCompleted = Math.floor(this.state.accumulatedQuestionsForBonus / bonusStep);
+
+        if (stepsCompleted > 0) {
+            const bonusXP = stepsCompleted * bonusXPPerStep;
+            this.state.accumulatedQuestionsForBonus %= bonusStep; // เก็บเศษไว้รอบหน้า
+
+            this.state.xp += bonusXP;
+            this.state.generalXP = (this.state.generalXP || 0) + bonusXP;
+
+            setTimeout(() => {
+                showToast('โบนัสความขยัน! 🔥', `สะสมครบ ${stepsCompleted * bonusStep} ข้อ รับเพิ่ม ${bonusXP} XP`, '🎁');
+            }, 1500);
+        }
+        // -----------------------------------------------------
 
         // Update Topic XPs
         for (const [field, xp] of Object.entries(topicXPs)) {
@@ -1504,7 +1634,7 @@ export class Gamification {
         if (day === 0 || day === 6) {
             this.state.weekendQuizzesCompleted = (this.state.weekendQuizzesCompleted || 0) + 1;
         }
-        
+
         // NEW: Call the stats update function here
         this.updateEndQuizStats(percentage, questionCount, isCustomQuiz);
 
@@ -1515,18 +1645,28 @@ export class Gamification {
         const newBadges = this.checkBadges(percentage, questionCount, isCustomQuiz);
         const newAchievements = this.checkAchievements();
         const questResult = this.updateQuest(questStats);
-        
+
         // NEW: Save state ONCE at the end of all calculations
         this.saveState();
-        
+
+        // FIX: Update timestamp for charts in profile.js to detect changes
+        localStorage.setItem('last_quiz_completed_timestamp', Date.now().toString());
+
         const newLevelInfo = this.getCurrentLevel();
-        const newPhysics = this.getPhysicsLevel();
-        const newEarth = this.getEarthLevel();
+
+        const resultTracks = {};
+        SiteConfig.categories.forEach(cat => {
+            const newInfo = this.getLevelInfo(this.state[cat.id] || 0, cat.track);
+            const oldInfo = oldTrackLevels[cat.track];
+            resultTracks[cat.track] = { leveledUp: newInfo.level > oldInfo.level, info: newInfo };
+        });
 
         return {
             overall: { leveledUp: newLevelInfo.level > oldLevelInfo.level, info: newLevelInfo },
-            physics: { leveledUp: newPhysics.level > oldPhysics.level, info: newPhysics },
-            earth: { leveledUp: newEarth.level > oldEarth.level, info: newEarth },
+            tracks: resultTracks,
+            physics: resultTracks.physics,
+            earth: resultTracks.earth,
+            astronomy: resultTracks.earth,
             newBadges: newBadges,
             newAchievements: newAchievements
         };
@@ -1544,7 +1684,7 @@ export class Gamification {
 
         // ตรวจสอบความสำเร็จ (Achievements) ทันทีที่มีการอัปเดตสถิติ
         const newAchievements = this.checkAchievements();
-        
+
         const completedQuests = [];
 
         // NEW: Check eligibility for quests that depend on score
@@ -1556,11 +1696,11 @@ export class Gamification {
             let progressMade = 0;
 
             if (q.type === 'quiz_complete') {
-                progressMade = 1;
+                if (stats.questionCount >= 20) progressMade = 1;
             } else if (q.type === 'correct_answers') {
                 progressMade = stats.correctAnswers || 0;
             } else if (q.type === 'questions_category') {
-                if (this.checkCategoryMatch(stats.category, q.category)) {
+                if (this.checkCategoryMatch(stats.category, q.category, stats.quizId)) {
                     progressMade = stats.totalQuestions || 0;
                 }
             } else if (q.type === 'high_score') {
@@ -1575,7 +1715,7 @@ export class Gamification {
                     progressMade = stats.correctCalculation || 0;
                 }
             } else if (q.type === 'quiz_category') {
-                if (this.checkCategoryMatch(stats.category, q.category)) {
+                if (stats.questionCount >= 20 && this.checkCategoryMatch(stats.category, q.category, stats.quizId)) {
                     progressMade = 1;
                 }
             }
@@ -1603,12 +1743,12 @@ export class Gamification {
                 }
             }
         });
-        
+
         const leveledUp = this.updateLevel();
 
         // ส่งคืนทั้งภารกิจที่เสร็จและความสำเร็จใหม่
         // No saveState() here, it will be called by the parent function (submitQuizResult)
-        
+
         // ส่งคืนทั้งภารกิจที่เสร็จและความสำเร็จใหม่
         return { completed: completedQuests, newAchievements };
     }
@@ -1661,83 +1801,53 @@ export class Gamification {
         return newUnlocks;
     }
 
-    // NEW: Pet level up logic
-    levelUpPet(isInitialCheck = false) {
-        if (!this.state.pet) return false;
+    // Helper function to identify track from category/quizId
+    identifyTrack(category, quizId = '') {
+        const catString = (typeof category === 'string') ? category : (category?.main || String(category || ''));
+        const lowerCat = catString.toLowerCase();
+        const lowerId = String(quizId).toLowerCase();
 
-        let newLevelData = null;
-        for (const levelData of PET_LEVELS) {
-            if (this.state.pet.xp >= levelData.xp) {
-                newLevelData = levelData;
-            } else {
-                break;
+        const textToSearch = lowerCat + ' ' + lowerId;
+
+        for (const cat of SiteConfig.categories) {
+            if (cat.keywords && cat.keywords.some(k => textToSearch.includes(k.toLowerCase()))) {
+                return cat.track;
             }
         }
 
-        let leveledUp = false;
-        if (newLevelData && newLevelData.level > this.state.pet.level) {
-            console.log(`Pet leveled up! ${this.state.pet.level} -> ${newLevelData.level}`);
-            this.state.pet.level = newLevelData.level;
-            this.state.pet.stageIndex = newLevelData.stage;
-            leveledUp = true;
-
-            // --- Branching Evolution Logic (At Level 4) ---
-            if (this.state.pet.level === 4) {
-                const baseType = this.state.pet.type.split('_')[0]; // dog, cat, dragon
-                if (['dog', 'cat', 'dragon'].includes(baseType)) {
-                    const phys = this.state.physicsXP || 0;
-                    const earth = this.state.earthXP || 0;
-                    
-                    let newType = baseType;
-                    if (phys > earth) newType = `${baseType}_physics`;
-                    else if (earth > phys) newType = `${baseType}_earth`;
-                    
-                    if (newType !== baseType && PET_TYPES[newType]) {
-                        console.log(`Pet Evolving! ${baseType} -> ${newType}`);
-                        this.state.pet.type = newType;
-                    }
-                }
-            }
-            
-            // Don't save during initial constructor check
-            if (!isInitialCheck) {
-                this.saveState();
-            }
-        }
-        return leveledUp;
+        return 'general';
     }
 
-    // NEW: Get current pet info for rendering
-    getPetInfo() {
-        if (!this.state.pet) {
-            this.state.pet = this.getDefaultState().pet;
+    checkCategoryMatch(quizCat, questCat, quizId = '') {
+        if (!quizCat && !quizId) return false;
+
+        const lowerQuestCat = questCat.toLowerCase();
+        const quizTrack = this.identifyTrack(quizCat, quizId);
+        const lowerQuizId = String(quizId).toLowerCase();
+
+        if (lowerQuestCat === 'physics') {
+            return quizTrack === 'physics';
         }
-        const petData = PET_TYPES[this.state.pet.type];
-        if (!petData) return null;
+        if (lowerQuestCat === 'astronomy') {
+            // Astronomy is part of the Earth track, but we distinguish it by keywords or ID
+            if (lowerQuizId.startsWith('es')) return false; // Exclude pure Earth Science
+            if (lowerQuizId.startsWith('astro')) return true;
 
-        const currentLevelData = PET_LEVELS.find(l => l.level === this.state.pet.level) || PET_LEVELS[0];
-        const nextLevelData = PET_LEVELS.find(l => l.level === this.state.pet.level + 1);
-
-        const xpForThisLevel = this.state.pet.xp - currentLevelData.xp;
-        const xpNeededForNextLevel = nextLevelData ? (nextLevelData.xp - currentLevelData.xp) : 0;
-        const progressPercent = xpNeededForNextLevel > 0 ? (xpForThisLevel / xpNeededForNextLevel) * 100 : 100;
-
-        return {
-            ...this.state.pet,
-            spriteName: petData.stages[this.state.pet.stageIndex],
-            icon: petData.icon,
-            progressPercent: Math.min(100, progressPercent),
-            nextLevelXP: nextLevelData ? nextLevelData.xp : this.state.pet.xp
-        };
-    }
-
-    checkCategoryMatch(quizCat, questCat) {
-        if (!quizCat) return false;
-        const catString = (typeof quizCat === 'string') ? quizCat : (quizCat?.main || String(quizCat || ''));
-        const lowerQuiz = catString.toLowerCase();
-        const lowerQuest = questCat.toLowerCase();
-        if (lowerQuest === 'physics') return lowerQuiz.includes('physics') || lowerQuiz.includes('ฟิสิกส์');
-        if (lowerQuest === 'earth') return lowerQuiz.includes('earth') || lowerQuiz.includes('astronomy') || lowerQuiz.includes('space') || lowerQuiz.includes('โลก') || lowerQuiz.includes('ดาราศาสตร์') || lowerQuiz.includes('วิทย์โลก');
+            const catString = (typeof quizCat === 'string') ? quizCat : (quizCat?.main || String(quizCat || ''));
+            const lowerQuizCat = catString.toLowerCase();
+            return lowerQuizCat.includes('astro') || lowerQuizCat.includes('ดาราศาสตร์') || quizTrack === 'astronomy';
+        }
+        if (lowerQuestCat === 'earth') {
+            // Match Earth track but exclude pure Astronomy if needed? 
+            // Usually "Earth Science" quests in this app include both unless specified.
+            // But let's stay consistent with identifyTrack.
+            return quizTrack === 'earth';
+        }
+        if (lowerQuestCat === 'review') {
+            const catString = (typeof quizCat === 'string') ? quizCat : (quizCat?.main || String(quizCat || ''));
+            const lowerQuizCat = catString.toLowerCase();
+            return lowerQuizCat.includes('review') || lowerQuizCat.includes('ทบทวน') || lowerQuizId.startsWith('esr') || (lowerQuizId.startsWith('astro') && !lowerQuizId.includes('posn'));
+        }
         return false;
     }
 
@@ -1745,8 +1855,7 @@ export class Gamification {
     // Logic: ตรวจสอบเงื่อนไขต่างๆ และมอบเหรียญรางวัลหากยังไม่เคยได้รับ
     checkBadges(lastQuizScorePercent, questionCount = 0, isCustomQuiz = false) {
         const newBadges = [];
-        
-        // Helper เพื่อปลดล็อก
+
         const unlock = (badgeId) => {
             if (!this.state.badges.includes(badgeId)) {
                 this.state.badges.push(badgeId);
@@ -1756,64 +1865,61 @@ export class Gamification {
 
         const isEligibleForStats = !isCustomQuiz || (isCustomQuiz && questionCount >= 20);
 
-        // 1. First Quiz
+        // OPTIMIZATION: Calculate levels once and reuse
+        const physicsLevel = this.getPhysicsLevel().level;
+
+        const earthLevel = this.getEarthLevel().level;
+
         if (this.state.quizzesCompleted >= 1) unlock('first_quiz');
 
-        // 2. Score based badges
         if (isEligibleForStats) {
             if (lastQuizScorePercent === 100) unlock('perfect_score');
         }
-        
+
         if ((this.state.highScores80 || 0) >= 3) unlock('high_scorer_3');
         if ((this.state.highScores80 || 0) >= 5) unlock('high_scorer_5');
         if ((this.state.highScores80 || 0) >= 10) unlock('high_scorer_10');
-        
+
         if ((this.state.perfectScores || 0) >= 3) unlock('perfect_scorer_3');
         if ((this.state.perfectScores || 0) >= 5) unlock('perfect_scorer_5');
 
-        // 3. Marathon runner
         if (questionCount >= 50) unlock('marathon_runner');
 
-        // 4. Quiz Master (5 Quizzes)
         if (this.state.quizzesCompleted >= 5) unlock('quiz_master_5');
         if (this.state.quizzesCompleted >= 10) unlock('quiz_master_10');
         if (this.state.quizzesCompleted >= 25) unlock('quiz_master_25');
         if (this.state.quizzesCompleted >= 50) unlock('quiz_master_50');
         if (this.state.quizzesCompleted >= 100) unlock('quiz_master_100');
 
-        // 5. Streak 3 Days (ไฟแรง)
         if (this.state.streak >= 3) unlock('streak_3');
         if (this.state.streak >= 7) unlock('streak_7');
         if (this.state.streak >= 14) unlock('streak_14');
         if (this.state.streak >= 30) unlock('streak_30');
         if (this.state.streak >= 60) unlock('streak_60');
 
-        // 6. Level based badges
-        if (this.getPhysicsLevel().level >= 3) unlock('physics_lover');
-        if (this.getPhysicsLevel().level >= 5) unlock('physics_expert');
-        if (this.getPhysicsLevel().level >= 10) unlock('physics_master');
-        if (this.getEarthLevel().level >= 3) unlock('earth_lover');
-        if (this.getEarthLevel().level >= 5) unlock('earth_expert');
-        if (this.getEarthLevel().level >= 10) unlock('earth_master');
 
-        // 7. XP based badges
+        if (earthLevel >= 3) unlock('earth_lover');
+        if (earthLevel >= 5) unlock('earth_expert');
+        if (earthLevel >= 10) unlock('earth_master');
+        if (physicsLevel >= 3) unlock('physics_lover');
+        if (physicsLevel >= 5) unlock('physics_expert');
+        if (physicsLevel >= 10) unlock('physics_master');
+
         if (this.state.xp >= 5000) unlock('xp_5k');
         if (this.state.xp >= 10000) unlock('xp_10k');
-        
-        // 8. Dual Expert
-        if (this.getPhysicsLevel().level >= 5 && this.getEarthLevel().level >= 5) unlock('dual_expert');
 
-        // 9. Weekend Learner
+        if (physicsLevel >= 5 && earthLevel >= 5) unlock('dual_expert');
+
         if ((this.state.weekendQuizzesCompleted || 0) >= 3) unlock('weekend_learner_3');
         if ((this.state.weekendQuizzesCompleted || 0) >= 5) unlock('weekend_learner_5');
         if ((this.state.weekendQuizzesCompleted || 0) >= 10) unlock('weekend_learner_10');
         if ((this.state.weekendQuizzesCompleted || 0) >= 15) unlock('weekend_learner_15');
 
-        // 10. Proficiency Badges (New)
-        if ((this.state.mechanicsXP || 0) >= 1000) unlock('mechanics_expert');
         if ((this.state.astronomyXP || 0) >= 1000) unlock('astronomy_expert');
+        if ((this.state.geologyXP || 0) >= 1000) unlock('geology_expert');
+        if ((this.state.meteorologyXP || 0) >= 1000) unlock('meteorology_expert');
+        if ((this.state.oceanographyXP || 0) >= 1000) unlock('oceanography_expert');
 
-        // REMOVED: this.saveState();
         return newBadges;
     }
 
@@ -1829,4 +1935,8 @@ export class Gamification {
     getLevelProgressPercent() {
         return this.getCurrentLevel().progressPercent;
     }
+}
+
+export function initializeGamification() {
+    return new Gamification();
 }

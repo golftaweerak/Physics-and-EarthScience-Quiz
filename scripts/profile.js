@@ -5,10 +5,11 @@ import { ModalHandler } from './modal-handler.js';
 import { showToast } from './toast.js';
 import { collection, query, orderBy, limit, getDocs, where, getCountFromServer } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { db } from './firebase-config.js';
-import { PixelPetRenderer } from './pixel-pet-renderer.js';
+import { escapeHtml } from './utils.js';
+import { SiteConfig } from './site-config.js';
 
 const AVATARS = [
-    '🧑‍🎓', '👩‍🎓', '👨‍🔬', '👩‍🔬', '👨‍🚀', '👩‍🚀', '👽', '🤖','👻','💩'
+    '🧑‍🎓', '👩‍🎓', '👨‍🔬', '👩‍🔬', '👨‍🚀', '👩‍🚀', '👽', '🤖', '👻', '💩'
 ];
 
 // Theme colors for Radar Chart
@@ -17,7 +18,7 @@ const THEME_COLORS = {
     'theme-sunset': { border: '#ea580c', background: 'rgba(234, 88, 12, 0.2)', point: '#ea580c' },
     'theme-ocean': { border: '#0891b2', background: 'rgba(8, 145, 178, 0.2)', point: '#0891b2' },
     'theme-berry': { border: '#db2777', background: 'rgba(219, 39, 119, 0.2)', point: '#db2777' },
-    'theme-sakura': { border: '#f43f5e', background: 'rgba(244, 63, 94, 0.2)', point: '#f43f5e' },
+    'theme-sakura': { border: '#e11d48', background: 'rgba(225, 29, 72, 0.2)', point: '#e11d48' },
     'theme-midnight': { border: '#475569', background: 'rgba(71, 85, 105, 0.2)', point: '#475569' },
     'default': { border: 'rgba(59, 130, 246, 1)', background: 'rgba(59, 130, 246, 0.2)', point: 'rgba(59, 130, 246, 1)' }
 };
@@ -41,13 +42,13 @@ function getChartJsTheme(game) {
 let lastSyncTime = null;
 let previousXP = null;
 let previousAvatar = null;
-let petRenderer = null;
 let previousTitle = null;
+let gamificationUpdateHandler = null; // NEW: Store handler reference for cleanup
+let activeShopTab = 'consumable'; // NEW: Track active shop tab
 
 export async function initializeProfile(gameInstance) {
     const game = gameInstance || new Gamification();
-    
-    petRenderer = new PixelPetRenderer('profile-pet-canvas');
+
     // 1. เรนเดอร์ UI ทั่วไปทันที (รวดเร็ว)
     renderUserInfo(game);
     renderTrackProgress(game);
@@ -55,9 +56,8 @@ export async function initializeProfile(gameInstance) {
     renderAchievements(game);
     renderQuestHistory(game);
     renderShop(game);
-    renderDailyQuests('profile-daily-quests-container');
+    renderDailyQuests(game, 'profile-daily-quests-container');
     renderSyncStatus(game);
-    updatePet(game, petRenderer);
 
     // 2. ติดตั้งระบบต่างๆ
     setupShopSystem(game);
@@ -66,31 +66,37 @@ export async function initializeProfile(gameInstance) {
     setupTitleSystem(game);
     setupThemeSystem(game);
     setupResetSystem(game);
+    setupRecalculateSystem(game); // NEW: Add recalculate button setup
     setupCollapsibleSections();
     setupManualSync(game);
     setupLeaderboardSystem(game);
-    setupShopAccordion(game);
     setupShopShortcut();
-    setupPetInteraction(petRenderer);
     setupBadgeInteractions(game);
 
     // 3. เรนเดอร์กราฟ (Asynchronous/ช้ากว่า)
     document.getElementById('radar-chart-loader')?.classList.remove('hidden');
     document.getElementById('history-chart-loader')?.classList.remove('hidden');
     document.getElementById('strengths-weaknesses-loader')?.classList.remove('hidden');
-    
+
     setupRefreshChartsSystem(game); // Setup once
+
+    const allProgress = await getDetailedProgressForAllQuizzes();
     const chartsRendered = await Promise.all([
-        renderRadarChart(game),
-        renderProficiencyHistoryChart(game),
-        renderStrengthsWeaknesses()
+        renderRadarChart(game, allProgress),
+        renderProficiencyHistoryChart(game, allProgress),
+        renderStrengthsWeaknesses(allProgress)
     ]);
     if (chartsRendered.every(Boolean)) {
         document.getElementById('refresh-charts-btn')?.classList.add('hidden');
     }
 
     // 4. NEW: Auto-refresh when data changes (e.g., after login/sync)
-    window.addEventListener('gamification-updated', async () => {
+    // FIX: Remove existing listener to prevent duplicates/memory leaks
+    if (gamificationUpdateHandler) {
+        window.removeEventListener('gamification-updated', gamificationUpdateHandler);
+    }
+
+    gamificationUpdateHandler = async () => {
         // Update UI elements
         renderUserInfo(game);
         renderTrackProgress(game);
@@ -98,33 +104,19 @@ export async function initializeProfile(gameInstance) {
         renderAchievements(game);
         renderQuestHistory(game);
         renderShop(game);
-        updatePet(game, petRenderer);
+        renderDailyQuests(game, 'profile-daily-quests-container');
         renderSyncStatus(game);
 
         // Re-render charts to reflect merged data
+        const updatedProgress = await getDetailedProgressForAllQuizzes();
         await Promise.all([
-            renderRadarChart(game),
-            renderProficiencyHistoryChart(game),
-            renderStrengthsWeaknesses()
+            renderRadarChart(game, updatedProgress),
+            renderProficiencyHistoryChart(game, updatedProgress),
+            renderStrengthsWeaknesses(updatedProgress)
         ]);
-        setupRefreshChartsSystem(game); // Re-setup in case elements were re-rendered
-    });
-}
+    };
 
-function updatePet(game, renderer) {
-    if (!renderer) return;
-    const petInfo = game.getPetInfo();
-    if (!petInfo) return;
-
-    renderer.setPet(petInfo.type, petInfo.stageIndex);
-
-    // Check for temporary mood from quiz results
-    if (game.state.pet.moodExpires > Date.now()) {
-        renderer.setBaseMood(game.state.pet.mood);
-    } else {
-        // Revert to normal mood if expired
-        renderer.setBaseMood('normal');
-    }
+    window.addEventListener('gamification-updated', gamificationUpdateHandler);
 }
 
 /**
@@ -172,17 +164,23 @@ function renderUserInfo(game) {
     const questContainerEl = document.getElementById('next-level-quest-container');
     const questDescEl = document.getElementById('next-level-quest-desc');
     const questProgressEl = document.getElementById('next-level-quest-progress');
-    
+
     // Calculate XP Progress relative to current level
     const currentThreshold = XP_THRESHOLDS[overall.level - 1];
     const nextThreshold = XP_THRESHOLDS[overall.level]; // level is 1-based, array is 0-based
-    
+
     if (nextThreshold) {
         const xpRange = nextThreshold.xp - currentThreshold.xp;
         const xpGained = game.state.xp - currentThreshold.xp;
         const xpPercent = Math.min(100, Math.max(0, (xpGained / xpRange) * 100));
-        
-        if (progressBarEl) progressBarEl.style.width = `${xpPercent}%`;
+
+        if (progressBarEl) {
+            // Animate from 0 to target
+            progressBarEl.style.width = '0%';
+            setTimeout(() => {
+                progressBarEl.style.width = `${xpPercent}%`;
+            }, 100);
+        }
         if (nextLevelTargetXpEl) nextLevelTargetXpEl.textContent = xpRange.toLocaleString();
     } else {
         if (progressBarEl) progressBarEl.style.width = '100%';
@@ -193,7 +191,7 @@ function renderUserInfo(game) {
         if (overall.nextLevelQuest) {
             questContainerEl.classList.remove('hidden');
             if (questDescEl) questDescEl.textContent = overall.nextLevelQuest.desc;
-            
+
             const questProgress = game.getQuestProgressValue(overall.nextLevelQuest);
             const questTarget = overall.nextLevelQuest.target;
             if (questProgressEl) questProgressEl.textContent = `(${questProgress}/${questTarget})`;
@@ -215,14 +213,14 @@ function renderUserInfo(game) {
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 inline-block mr-1.5 -mt-0.5 opacity-70" viewBox="0 0 20 20" fill="currentColor">
                     <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                     <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-                </svg>${user.email}
+                </svg>${escapeHtml(user.email)}
             `;
             emailEl.classList.remove('hidden');
         } else {
             emailEl.classList.add('hidden');
         }
     }
-    
+
     // Update avatar display
     const avatarEl = document.getElementById('profile-avatar-display');
     const levelFrameEl = document.getElementById('level-frame-container');
@@ -232,9 +230,9 @@ function renderUserInfo(game) {
         if (previousAvatar !== avatar) {
             const isImage = avatar.includes('/') || avatar.includes('.');
             if (isImage) {
-                avatarEl.innerHTML = `<img src="${avatar}" alt="Profile Avatar" class="w-full h-full rounded-full object-cover">`;
+                avatarEl.innerHTML = `<img src="${escapeHtml(avatar)}" alt="Profile Avatar" class="w-full h-full rounded-full object-cover">`;
             } else {
-                avatarEl.innerHTML = avatar;
+                avatarEl.innerHTML = escapeHtml(avatar);
             }
             avatarEl.classList.remove('anim-avatar-pop');
             void avatarEl.offsetWidth; // Force reflow
@@ -244,7 +242,7 @@ function renderUserInfo(game) {
 
         // Update border class based on price/rarity
         const frameClass = getAvatarFrameClass(avatar);
-        avatarEl.className = `w-full h-full rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-4xl cursor-pointer transition-transform transform group-hover:scale-105 ${frameClass}`;
+        avatarEl.className = `w-full h-full rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-4xl cursor-pointer transition-transform transform ${frameClass}`;
 
         // NEW: Update level border (outer ring)
         const levelBorderClass = getLevelBorderClass(overall.level);
@@ -256,7 +254,7 @@ function renderUserInfo(game) {
     const titleBtn = document.getElementById('edit-title-btn');
     if (titleBtn) {
         if (game.state.selectedTitle) {
-            titleBtn.innerHTML = `<span class="text-purple-600 dark:text-purple-400 font-bold">《 ${game.state.selectedTitle} 》</span>`;
+            titleBtn.innerHTML = `<span class="text-purple-600 dark:text-purple-400 font-bold">《 ${escapeHtml(game.state.selectedTitle)} 》</span>`;
         } else {
             titleBtn.innerHTML = `🏷️ เปลี่ยนฉายา`;
         }
@@ -274,33 +272,27 @@ function renderUserInfo(game) {
     renderRecentBadges(game);
     previousTitle = currentTitle;
     previousXP = currentXP;
-}
 
-function setupPetInteraction(renderer) {
-    const container = document.getElementById('profile-pet-container');
-    if (container && renderer) {
-        container.addEventListener('click', () => {
-            renderer.playAnimation('interact', 500);
-        });
-    }
+    // FIX: Force update header avatar to ensure it matches profile
+    game.updateHeaderAvatar();
 }
 
 function renderSyncStatus(game) {
     const wrapper = document.getElementById('sync-status-wrapper');
     const statusEl = document.getElementById('connection-status');
     const lastSyncEl = document.getElementById('last-sync-display');
-    
+
     if (!wrapper || !statusEl) return;
 
     wrapper.classList.remove('hidden');
 
     // Access authManager from game instance if available
-    const user = game.authManager?.currentUser; 
+    const user = game.authManager?.currentUser;
     const isOnline = navigator.onLine;
 
     if (!user) {
         // Guest Mode
-         statusEl.innerHTML = `
+        statusEl.innerHTML = `
             <span class="w-2 h-2 rounded-full bg-gray-400"></span>
             <span class="text-gray-600 dark:text-gray-400 text-[10px] sm:text-xs">Guest (Local)</span>
         `;
@@ -308,13 +300,13 @@ function renderSyncStatus(game) {
         if (lastSyncEl) lastSyncEl.textContent = "";
     } else {
         if (isOnline) {
-             statusEl.innerHTML = `
+            statusEl.innerHTML = `
                 <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
                 <span class="text-green-700 dark:text-green-300 text-[10px] sm:text-xs">Cloud Synced</span>
             `;
             statusEl.className = "flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800";
         } else {
-             statusEl.innerHTML = `
+            statusEl.innerHTML = `
                 <span class="w-2 h-2 rounded-full bg-yellow-500"></span>
                 <span class="text-yellow-700 dark:text-yellow-300 text-[10px] sm:text-xs">Offline</span>
             `;
@@ -331,14 +323,14 @@ function renderSyncStatus(game) {
 function renderRecentBadges(game) {
     const container = document.getElementById('recent-badges');
     if (!container) return;
-    
+
     const recentBadges = game.getEarnedBadges().slice(-3).reverse();
-    
+
     if (recentBadges.length === 0) {
-            container.innerHTML = '<span class="text-sm text-gray-400">ยังไม่มีเหรียญรางวัล</span>';
+        container.innerHTML = '<span class="text-sm text-gray-400">ยังไม่มีเหรียญรางวัล</span>';
     } else {
         container.innerHTML = recentBadges.map(b => `
-            <div class="w-10 h-10 rounded-full bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center text-xl shadow-sm border border-yellow-200 dark:border-yellow-700/50 transition-transform hover:scale-110 cursor-help" title="${b.name}: ${b.desc}">
+            <div class="recent-badge-item w-10 h-10 rounded-full bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center text-xl shadow-sm border border-yellow-200 dark:border-yellow-700/50 transition-transform hover:scale-110 cursor-pointer" title="${b.name}: ${b.desc}" data-id="${b.id}">
                 ${b.icon}
             </div>
         `).join('');
@@ -401,22 +393,29 @@ function setupNameEditSystem(game) {
                 if (isFree) {
                     game.state.freeNameChangeAvailable = false;
                     toastMsg = `เปลี่ยนชื่อเรียบร้อยแล้ว (ฟรี)`;
+                    game.setDisplayName(newName);
+                    renderUserInfo(game);
+                    nameModal.close();
+                    showToast('บันทึกสำเร็จ', toastMsg, '✏️');
                 } else {
-                    game.state.xp -= NAME_CHANGE_COST;
-                    toastMsg = `เปลี่ยนชื่อเรียบร้อยแล้ว (-${NAME_CHANGE_COST} XP)`;
+                    // FIX: ใช้ spendXP เพื่อบันทึกประวัติการใช้จ่าย (ป้องกัน XP เด้งคืนตอนคำนวณใหม่)
+                    if (game.spendXP(NAME_CHANGE_COST)) {
+                        toastMsg = `เปลี่ยนชื่อเรียบร้อยแล้ว (-${NAME_CHANGE_COST} XP)`;
+                        game.setDisplayName(newName);
+                        renderUserInfo(game);
+                        nameModal.close();
+                        showToast('บันทึกสำเร็จ', toastMsg, '✏️');
+                    } else {
+                        showToast('ข้อผิดพลาด', 'XP ไม่เพียงพอ', '❌', 'error');
+                    }
                 }
-
-                game.setDisplayName(newName);
-                renderUserInfo(game);
-                nameModal.close();
-                showToast('บันทึกสำเร็จ', toastMsg, '✏️');
             } else {
                 showToast('ข้อผิดพลาด', 'กรุณาระบุชื่อ', '⚠️', 'error');
             }
         };
 
         saveBtn.addEventListener('click', saveName);
-        
+
         // Allow Enter key to save
         nameInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') saveName();
@@ -437,18 +436,55 @@ function setupResetSystem(game) {
     resetBtn.addEventListener('click', () => {
         if (titleEl) titleEl.textContent = 'รีเซ็ตข้อมูลความคืบหน้า?';
         if (descEl) descEl.innerHTML = 'คุณแน่ใจหรือไม่ที่จะลบข้อมูลเลเวล, XP, และเหรียญรางวัลทั้งหมด? <br><strong class="text-red-600 dark:text-red-500">การกระทำนี้ไม่สามารถย้อนกลับได้</strong>';
-        
+
         // Clone button to remove old listeners
         const newConfirmBtn = confirmBtn.cloneNode(true);
         confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
-        
+
         newConfirmBtn.addEventListener('click', () => {
             game.resetProgress();
+
+            // NEW: Clear all quiz history from localStorage for a complete reset
+            Object.keys(localStorage).forEach(key => {
+                if (key.startsWith('quizState-')) {
+                    localStorage.removeItem(key);
+                }
+            });
+
             confirmModal.close();
             window.location.reload(); // Reload to reflect changes
         });
-        
+
         confirmModal.open();
+    });
+}
+
+function setupRecalculateSystem(game) {
+    const recalcBtn = document.getElementById('recalculate-xp-btn');
+    if (!recalcBtn) return;
+
+    recalcBtn.addEventListener('click', () => {
+        // Add loading animation
+        const icon = recalcBtn.querySelector('svg');
+        if (icon) icon.classList.add('animate-spin');
+        recalcBtn.disabled = true;
+        recalcBtn.classList.add('opacity-75', 'cursor-not-allowed');
+
+        setTimeout(() => {
+            try {
+                const result = game.recalculateFromHistory();
+                renderUserInfo(game);
+                renderTrackProgress(game);
+                showToast('คำนวณใหม่สำเร็จ', `คะแนนของคุณคือ ${result.totalXP.toLocaleString()} XP จาก ${result.completed} แบบทดสอบ`, '✅');
+            } catch (e) {
+                console.error(e);
+                showToast('เกิดข้อผิดพลาด', 'ไม่สามารถคำนวณคะแนนใหม่ได้', '❌', 'error');
+            } finally {
+                if (icon) icon.classList.remove('animate-spin');
+                recalcBtn.disabled = false;
+                recalcBtn.classList.remove('opacity-75', 'cursor-not-allowed');
+            }
+        }, 500); // Fake delay for UX
     });
 }
 
@@ -466,10 +502,11 @@ function setupRefreshChartsSystem(game) {
         document.getElementById('history-chart-loader')?.classList.remove('hidden');
         document.getElementById('strengths-weaknesses-loader')?.classList.remove('hidden');
 
+        const allProgress = await getDetailedProgressForAllQuizzes();
         const [r1, r2, r3] = await Promise.all([
-            renderRadarChart(game),
-            renderProficiencyHistoryChart(game),
-            renderStrengthsWeaknesses()
+            renderRadarChart(game, allProgress),
+            renderProficiencyHistoryChart(game, allProgress),
+            renderStrengthsWeaknesses(allProgress)
         ]);
 
         if (r1 && r2 && r3) {
@@ -478,7 +515,7 @@ function setupRefreshChartsSystem(game) {
 
         // Remove animation
         if (icon) icon.classList.remove('animate-spin');
-        
+
         showToast('อัปเดตข้อมูล', 'โหลดข้อมูลกราฟล่าสุดเรียบร้อยแล้ว', '🔄');
     });
 }
@@ -490,7 +527,7 @@ function setupManualSync(game) {
     btn.addEventListener('click', async () => {
         const icon = btn.querySelector('svg');
         if (icon) icon.classList.add('animate-spin');
-        
+
         // Disable button
         btn.disabled = true;
         btn.classList.add('opacity-50', 'cursor-not-allowed');
@@ -503,9 +540,9 @@ function setupManualSync(game) {
                 showToast('ซิงค์ข้อมูลสำเร็จ', 'ข้อมูลล่าสุดถูกโหลดเรียบร้อยแล้ว', '☁️');
             } else {
                 if (!game.authManager.currentUser) {
-                     showToast('ไม่ได้เข้าสู่ระบบ', 'ระบบบันทึกข้อมูลในเครื่อง (Local) เท่านั้น', '💻');
+                    showToast('ไม่ได้เข้าสู่ระบบ', 'ระบบบันทึกข้อมูลในเครื่อง (Local) เท่านั้น', '💻');
                 } else {
-                     showToast('ซิงค์ไม่สำเร็จ', 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้', '⚠️', 'error');
+                    showToast('ซิงค์ไม่สำเร็จ', 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้', '⚠️', 'error');
                 }
             }
         } catch (e) {
@@ -519,10 +556,46 @@ function setupManualSync(game) {
     });
 }
 
+/**
+ * Calculates the level and rank title for a given XP score and leaderboard type.
+ * This is a helper for leaderboard rendering.
+ * @param {number} xp The XP score.
+ * @param {string} type The type of leaderboard (e.g., 'xp', 'astronomyTrackXP').
+ * @returns {{level: number, title: string}}
+ */
+function getLevelInfoForLeaderboard(xp, type) {
+    let track = 'overall';
+
+    const configCat = SiteConfig.categories.find(c => c.id === type);
+    if (configCat && configCat.track) track = configCat.track;
+
+    // Map specific proficiency fields to their main tracks
+    for (const group of Object.values(PROFICIENCY_GROUPS)) {
+        if (group.field === type) {
+            track = group.track;
+            break;
+        }
+    }
+
+    let level = 1;
+    for (const threshold of XP_THRESHOLDS) {
+        if (xp >= threshold.xp) {
+            level = threshold.level;
+        } else {
+            break;
+        }
+    }
+
+    const titles = TRACK_TITLES[track] || TRACK_TITLES.overall;
+    const titleIndex = Math.min(level - 1, titles.length - 1);
+    const title = titles[titleIndex];
+    return { level, title };
+}
+
 function setupLeaderboardSystem(game) {
     const listContainer = document.getElementById('leaderboard-list');
     const tabs = document.querySelectorAll('.leaderboard-tab');
-    
+
     if (!listContainer || tabs.length === 0) return;
 
     const renderList = async (type) => {
@@ -535,10 +608,13 @@ function setupLeaderboardSystem(game) {
         `;
 
         try {
+            // OPTIMIZATION: Don't wait for Auth to fetch Top 10. 
+            // Rules are public (read: if true). If user logs in later, 
+            // the 'gamification-updated' event will trigger a re-render to highlight 'Me'.
             const usersRef = collection(db, 'users');
             const q = query(usersRef, orderBy(type, 'desc'), limit(10));
             const querySnapshot = await game.authManager.retryOperation(() => getDocs(q));
-            
+
             const leaderboard = [];
             querySnapshot.forEach((doc) => {
                 leaderboard.push({ id: doc.id, ...doc.data() });
@@ -581,7 +657,7 @@ function setupLeaderboardSystem(game) {
             }
 
             const renderRow = (user, rank, isMe) => {
-                
+
                 let rankDisplay = `<span class="font-bold text-gray-500 w-6 text-center text-sm sm:text-base">${rank}</span>`;
                 if (rank === 1) rankDisplay = `<span class="text-xl sm:text-2xl">🥇</span>`;
                 if (rank === 2) rankDisplay = `<span class="text-xl sm:text-2xl">🥈</span>`;
@@ -589,11 +665,12 @@ function setupLeaderboardSystem(game) {
 
                 const score = isMe && user.score !== undefined ? user.score : (user[type] || 0);
                 const scoreFormatted = score.toLocaleString();
-                
+
                 let track = 'overall';
-                if (type === 'physicsXP') track = 'physics';
-                if (type === 'earthXP') track = 'earth';
-                
+
+                const configCat = SiteConfig.categories.find(c => c.id === type);
+                if (configCat && configCat.track) track = configCat.track;
+
                 let level = 1;
                 let rankTitle = 'ผู้เริ่มต้น';
 
@@ -612,10 +689,10 @@ function setupLeaderboardSystem(game) {
 
                 const avatar = user.avatar || '🧑‍🎓';
                 const isImage = avatar.includes('/') || avatar.includes('.');
-                const avatarContent = isImage 
+                const avatarContent = isImage
                     ? `<img src="${avatar}" class="w-full h-full rounded-full object-cover">`
                     : `<span class="text-2xl sm:text-3xl">${avatar}</span>`;
-                
+
                 const levelBorderClass = getLevelBorderClass(level);
                 const avatarFrameClass = getAvatarFrameClass(avatar, 'small');
                 const avatarHtml = `
@@ -748,7 +825,7 @@ function setupCollapsibleSections() {
         const targetId = header.dataset.target;
         const content = document.getElementById(targetId); // This is the outer container
         const icon = header.querySelector('.chevron-icon');
-        
+
         if (!content || !icon) return;
 
         // Check current state (if max-height is 0, it's collapsed)
@@ -778,8 +855,8 @@ function setupCollapsibleSections() {
                 content.style.maxHeight = content.scrollHeight + "px";
                 content.style.overflow = "hidden";
             }
-            
-            content.offsetHeight; 
+
+            content.offsetHeight;
             content.style.maxHeight = "0px";
             content.style.opacity = "0";
             icon.classList.add('-rotate-90'); // Point right
@@ -831,18 +908,18 @@ function setupAvatarSystem(game) {
             const btn = e.target.closest('.avatar-option');
             if (btn) {
                 const newAvatar = btn.dataset.avatar;
-                
+
                 game.setAvatar(newAvatar);
                 renderUserInfo(game); // Update UI immediately
 
                 // Play success sound
                 const audio = new Audio('./assets/audio/correct.mp3');
                 audio.volume = 0.5;
-                audio.play().catch(() => {}); // Ignore potential auto-play errors
+                audio.play().catch(() => { }); // Ignore potential auto-play errors
 
                 avatarModal.close();
                 showToast('บันทึกสำเร็จ', 'เปลี่ยนรูปโปรไฟล์เรียบร้อยแล้ว', '😎');
-                
+
                 // Update selection highlight visually
                 grid.querySelectorAll('.avatar-option').forEach(b => {
                     b.classList.remove('bg-blue-100', 'dark:bg-blue-900/50', 'ring-2', 'ring-blue-500');
@@ -862,9 +939,9 @@ function renderAvatarGrid(game, grid) {
 
     grid.innerHTML = uniqueAvatars.map(avatar => {
         const isImage = avatar.includes('/') || avatar.includes('.');
-        const content = isImage 
-            ? `<img src="${avatar}" alt="Avatar" class="w-8 h-8 rounded-full object-cover mx-auto">` 
-            : avatar;
+        const content = isImage
+            ? `<img src="${escapeHtml(avatar)}" alt="Avatar" class="w-8 h-8 rounded-full object-cover mx-auto">`
+            : escapeHtml(avatar);
 
         // Determine frame class based on price
         const shopItem = SHOP_ITEMS.find(i => i.value === avatar && i.type === 'avatar');
@@ -905,7 +982,7 @@ function renderTitleGrid(game, grid, modal) {
     // Add purchased titles
     const inventory = game.getInventory();
     const purchasedTitles = SHOP_ITEMS.filter(i => i.type === 'title' && inventory.includes(i.id)).map(i => i.value);
-    
+
     const allTitles = [...new Set([...unlockedTitles, ...purchasedTitles])];
 
     // Add "No Title" option
@@ -957,7 +1034,7 @@ function renderThemeGrid(game, grid, modal) {
     if (!grid) return;
     const inventory = game.getInventory();
     const purchasedThemes = SHOP_ITEMS.filter(i => i.type === 'theme' && inventory.includes(i.id));
-    
+
     let html = `
         <button class="theme-option w-full text-left p-3 rounded-lg border transition-colors ${!game.state.selectedTheme ? 'bg-blue-100 border-blue-500 dark:bg-blue-900/50' : 'border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'}" data-theme="">
             <span class="font-bold text-gray-800 dark:text-gray-200">🎨 ค่าเริ่มต้น (Default)</span>
@@ -991,7 +1068,7 @@ function setupShopSystem(game) {
     const shopModal = new ModalHandler('shop-details-modal');
     const container = document.getElementById('shop-items-grid');
     const buyBtn = document.getElementById('shop-modal-buy-btn');
-    
+
     // Elements in modal to update
     const iconEl = document.getElementById('shop-modal-icon');
     const titleEl = document.getElementById('shop-modal-title');
@@ -1009,12 +1086,12 @@ function setupShopSystem(game) {
                 const item = SHOP_ITEMS.find(i => i.id === itemId);
                 if (item) {
                     currentItemId = itemId;
-                    
+
                     // Populate Modal
                     if (iconEl) iconEl.textContent = item.icon;
                     if (titleEl) titleEl.textContent = item.name;
                     if (typeEl) typeEl.textContent = item.type === 'avatar' ? 'Avatar' : (item.type === 'theme' ? 'Theme' : 'Title');
-                    
+
                     if (descEl) {
                         if (item.type === 'theme') {
                             descEl.innerHTML = `<span>${item.desc}</span>
@@ -1031,7 +1108,7 @@ function setupShopSystem(game) {
                             descEl.textContent = item.desc;
                         }
                     }
-                    
+
                     const inventory = game.getInventory();
                     const isOwned = inventory.includes(item.id);
                     const canBuy = game.state.xp >= item.cost;
@@ -1056,7 +1133,7 @@ function setupShopSystem(game) {
                         buyBtn.disabled = false;
                         buyBtn.className = 'w-full py-3 rounded-xl text-white font-bold text-lg shadow-md transition-transform transform hover:scale-105 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700';
                         buyBtn.innerHTML = `<span>ยืนยันการแลก</span> <span class="bg-white/20 px-2 py-0.5 rounded text-sm">${item.cost} XP</span>`;
-                        
+
                         if (isConsumable) {
                             statusEl.textContent = `คุณมีอยู่แล้ว: ${quantity} ชิ้น`;
                             statusEl.className = 'mt-2 text-sm font-medium text-blue-600 dark:text-blue-400';
@@ -1075,19 +1152,23 @@ function setupShopSystem(game) {
     if (buyBtn) {
         buyBtn.addEventListener('click', () => {
             if (!currentItemId) return;
-            
+
             const result = game.buyItem(currentItemId);
             if (result.success) {
                 showToast('ซื้อสำเร็จ', result.message, '🛒');
 
                 const audio = new Audio('./assets/audio/badge-unlock.mp3');
                 audio.volume = 0.7;
-                audio.play().catch(() => {});
+                audio.play().catch(() => { });
 
                 // NEW: Play item flying animation
                 const item = SHOP_ITEMS.find(i => i.id === currentItemId);
                 const startEl = document.getElementById('shop-modal-icon');
                 if (item && startEl) {
+                    const rect = startEl.getBoundingClientRect();
+                    const centerX = rect.left + rect.width / 2;
+                    const centerY = rect.top + rect.height / 2;
+                    createPurchaseParticles(centerX, centerY);
                     animateItemToBag(item.icon, startEl);
                 }
 
@@ -1104,118 +1185,124 @@ function setupShopSystem(game) {
 function renderShop(game) {
     const container = document.getElementById('shop-items-grid');
     if (!container) return;
-    
-    // Change layout to vertical stack for categories
-    container.className = 'space-y-6';
+
+    // Reset container classes
+    container.className = 'flex flex-col gap-4';
 
     const inventory = game.getInventory();
 
     const categories = [
-        { type: 'consumable', label: 'ไอเทมตัวช่วย (Consumables)', icon: '⚡' },
-        { type: 'avatar', label: 'อวตาร (Avatars)', icon: '👤' },
-        { type: 'theme', label: 'ธีม (Themes)', icon: '🎨' },
-        { type: 'title', label: 'ฉายา (Titles)', icon: '🏷️' }
+        { type: 'consumable', label: 'ไอเทม', icon: '⚡', desc: 'ตัวช่วยในการทำข้อสอบ' },
+        { type: 'avatar', label: 'อวตาร', icon: '👤', desc: 'รูปโปรไฟล์แสดงตัวตน' },
+        { type: 'theme', label: 'ธีม', icon: '🎨', desc: 'เปลี่ยนสีสันของแอป' },
+        { type: 'title', label: 'ฉายา', icon: '🏷️', desc: 'ยศต่อท้ายชื่อ' }
     ];
 
-    container.innerHTML = categories.map(cat => {
-        const items = SHOP_ITEMS.filter(item => item.type === cat.type);
-        if (items.length === 0) return '';
+    // 1. Render Tabs
+    const tabsHtml = `
+        <div class="flex space-x-2 overflow-x-auto pb-2 modern-scrollbar select-none" role="tablist">
+            ${categories.map(cat => {
+        const isActive = cat.type === activeShopTab;
+        const activeClass = isActive
+            ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-md ring-2 ring-blue-200 dark:ring-blue-900 transform scale-105'
+            : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-700';
 
-        const itemsHtml = items.map(item => {
+        return `
+                    <button 
+                        class="shop-tab-btn flex-shrink-0 flex items-center gap-2 px-5 py-3 rounded-xl transition-all duration-200 ${activeClass}"
+                        data-type="${cat.type}"
+                        role="tab"
+                        aria-selected="${isActive}"
+                    >
+                        <span class="text-xl">${cat.icon}</span>
+                        <span class="font-bold text-sm whitespace-nowrap">${cat.label}</span>
+                    </button>
+                `;
+    }).join('')}
+        </div>
+    `;
+
+    // 2. Render Active Category Content
+    const activeCat = categories.find(c => c.type === activeShopTab) || categories[0];
+    const items = SHOP_ITEMS.filter(item => item.type === activeCat.type);
+
+    let contentHtml = '';
+
+    if (items.length === 0) {
+        contentHtml = `
+            <div class="flex flex-col items-center justify-center py-12 text-gray-400 dark:text-gray-500 bg-gray-50 dark:bg-gray-800/30 rounded-2xl border border-dashed border-gray-200 dark:border-gray-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-3 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
+                </svg>
+                <p>ไม่มีสินค้าในหมวดหมู่นี้</p>
+            </div>`;
+    } else {
+        const itemsGridHtml = items.map(item => {
             const isOwned = inventory.includes(item.id);
             const canBuy = game.state.xp >= item.cost;
             const isConsumable = item.type === 'consumable';
             const quantity = isConsumable ? game.getItemCount(item.id) : 0;
 
-            let statusClass = '';
-            let statusText = `${item.cost} XP`;
-
-            const quantityBadge = isConsumable
-                ? `<div class="absolute top-2 right-2 bg-blue-600 text-white text-xs font-bold w-6 h-6 flex items-center justify-center rounded-full border-2 border-white dark:border-gray-800 shadow-md z-10">${quantity}</div>`
-                : '';
+            let statusBadge = '';
+            let cardOpacity = '';
 
             if (isOwned && !isConsumable) {
-                statusClass = 'text-green-600 dark:text-green-400';
-                statusText = '✓ เป็นเจ้าของแล้ว';
+                statusBadge = `<span class="absolute top-2 right-2 bg-green-100 text-green-700 text-[10px] font-bold px-2 py-0.5 rounded-full border border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800 shadow-sm">ครอบครอง</span>`;
             } else if (isConsumable && quantity > 0) {
-                statusClass = 'text-blue-600 dark:text-blue-400';
-                // The quantity is now shown in a badge, so we just show the cost here.
-                statusText = `${item.cost} XP`;
-            } else if (!canBuy) {
-                statusClass = 'text-red-500';
-            } else {
-                statusClass = 'text-blue-600 dark:text-blue-400';
+                statusBadge = `<span class="absolute top-2 right-2 bg-blue-100 text-blue-700 text-[10px] font-bold px-2 py-0.5 rounded-full border border-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:border-blue-800 shadow-sm">มี ${quantity}</span>`;
             }
 
-        return `
-            <div class="shop-item-card relative bg-gray-50 dark:bg-gray-700/30 p-3 rounded-xl border border-transparent hover:border-blue-300 dark:hover:border-blue-500 flex flex-col items-center text-center transition-all duration-300 hover:shadow-lg hover:-translate-y-1 cursor-pointer group" data-id="${item.id}">
-                ${quantityBadge}
-                <div class="w-12 h-12 mb-2 rounded-full bg-white dark:bg-gray-800 flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform duration-300">
-                    <div class="text-2xl transform group-hover:rotate-12 transition-transform duration-300">${item.icon}</div>
+            const priceDisplay = (isOwned && !isConsumable)
+                ? `<span class="text-xs text-green-600 dark:text-green-400 font-bold flex items-center gap-1"><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg> ซื้อแล้ว</span>`
+                : `<div class="flex items-center gap-1 ${canBuy ? 'text-yellow-600 dark:text-yellow-400' : 'text-red-500'} font-bold text-sm bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-lg">
+                     <span>${item.cost}</span> <span class="text-[10px] opacity-80">XP</span>
+                   </div>`;
+
+            return `
+                <div class="shop-item-card relative bg-white dark:bg-gray-800 p-4 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-lg hover:-translate-y-1 hover:border-blue-300 dark:hover:border-blue-500 transition-all duration-300 cursor-pointer group flex flex-col items-center text-center h-full ${cardOpacity}" data-id="${item.id}">
+                    ${statusBadge}
+                    <div class="w-16 h-16 mb-3 rounded-2xl bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-600 flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform duration-300 relative overflow-hidden">
+                        <div class="text-4xl transform group-hover:rotate-12 transition-transform duration-300 filter drop-shadow-sm relative z-10">${item.icon}</div>
+                        <div class="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </div>
+                    <h4 class="font-bold text-gray-800 dark:text-gray-100 text-sm w-full truncate px-1 mb-1 font-kanit">${item.name}</h4>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 line-clamp-2 mb-3 h-8 leading-tight w-full">${item.desc}</p>
+                    <div class="mt-auto w-full flex justify-center">
+                        ${priceDisplay}
+                    </div>
                 </div>
-                <h4 class="font-bold text-gray-800 dark:text-gray-100 mb-1 text-xs w-full truncate px-1">${item.name}</h4>
-                <p class="text-[10px] font-bold ${statusClass} bg-white/50 dark:bg-black/20 px-2 py-0.5 rounded-full mt-0.5">${statusText}</p>
-            </div>
-        `;
+            `;
         }).join('');
 
-        // Accordion Structure
-        return `
-            <div class="shop-category bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
-                <button class="w-full flex justify-between items-center p-4 bg-gradient-to-r from-gray-50 to-white dark:from-gray-800 dark:to-gray-700/50 hover:from-blue-50 hover:to-white dark:hover:from-gray-700 dark:hover:to-gray-700 transition-all shop-category-header group" data-target="shop-cat-${cat.type}">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-full bg-white dark:bg-gray-700 flex items-center justify-center shadow-sm text-xl group-hover:scale-110 transition-transform">${cat.icon}</div>
-                        <span class="font-bold text-gray-700 dark:text-gray-200 text-lg">${cat.label}</span>
-                    </div>
-                    <div class="w-8 h-8 rounded-full bg-white dark:bg-gray-700 flex items-center justify-center shadow-sm text-gray-400 group-hover:text-blue-500 transition-colors">
-                        <svg class="w-5 h-5 transform transition-transform duration-300 chevron-icon -rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                        </svg>
-                    </div>
-                </button>
-                <div id="shop-cat-${cat.type}" class="collapsible-content" style="max-height: 0px; opacity: 0;">
-                    <div class="p-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 bg-white dark:bg-gray-800">
-                        ${itemsHtml}
-                    </div>
+        contentHtml = `
+            <div class="anim-fade-in">
+                <div class="mb-4 px-1 flex items-center justify-between">
+                    <h3 class="text-lg font-bold text-gray-800 dark:text-white flex items-center gap-2 font-kanit">
+                        ${activeCat.label}
+                    </h3>
+                    <span class="text-xs text-gray-500 dark:text-gray-400">${activeCat.desc}</span>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 pb-2">
+                    ${itemsGridHtml}
                 </div>
             </div>
         `;
-    }).join('');
-}
+    }
 
-function setupShopAccordion(game) {
-    const container = document.getElementById('shop-items-grid');
-    if (!container) return;
+    container.innerHTML = tabsHtml + contentHtml;
 
-    container.addEventListener('click', (e) => {
-        const header = e.target.closest('.shop-category-header');
-        if (!header) return;
-
-        const targetId = header.dataset.target;
-        const content = document.getElementById(targetId);
-        const icon = header.querySelector('.chevron-icon');
-
-        if (content && icon) {
-            // Check if currently collapsed (maxHeight is 0 or close to it)
-            const isCollapsed = content.style.maxHeight === '0px';
-            
-            if (isCollapsed) {
-                content.style.maxHeight = content.scrollHeight + "px";
-                content.style.opacity = "1";
-                icon.classList.remove('-rotate-90');
-            } else {
-                content.style.maxHeight = "0px";
-                content.style.opacity = "0";
-                icon.classList.add('-rotate-90');
-            }
-        }
+    // Add Event Listeners for Tabs
+    container.querySelectorAll('.shop-tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            activeShopTab = btn.dataset.type;
+            renderShop(game); // Re-render with new tab
+        });
     });
 }
 
 function renderTrackProgress(game) {
     const container = document.getElementById('track-progress-container');
-    const physics = game.getPhysicsLevel();
-    const earth = game.getEarthLevel();
+    if (!container) return;
 
     const createTrackHTML = (name, data, colorClass, icon) => `
         <div class="bg-gray-50 dark:bg-gray-700/30 p-4 rounded-xl border border-gray-200 dark:border-gray-700/50">
@@ -1231,61 +1318,121 @@ function renderTrackProgress(game) {
             </div>
             <div class="flex justify-between text-xs mt-1.5 text-gray-500 dark:text-gray-400">
                 <span class="font-medium">${data.title}</span>
-                <span>${data.currentXP.toLocaleString()} XP</span>
+                <span>${data.currentXP.toLocaleString()} / ${data.nextLevelXP ? data.nextLevelXP.toLocaleString() : 'MAX'} XP</span>
             </div>
         </div>
     `;
 
-    container.innerHTML = 
-        createTrackHTML('Physics Track', physics, 'bg-purple-500', '⚛️') +
-        createTrackHTML('Earth Science Track', earth, 'bg-teal-500', '🌍');
+    // Dynamic rendering based on SiteConfig
+    const colors = ['bg-purple-500', 'bg-teal-500', 'bg-blue-500', 'bg-orange-500', 'bg-pink-500'];
+    const icons = ['🔭', '🌍', '⚛️', '🧪', '🧬'];
+
+    container.innerHTML = SiteConfig.categories.map((cat, index) => {
+        const xp = game.state[cat.id] || 0;
+        const data = game.getLevelInfo(xp, cat.track);
+        const color = colors[index % colors.length];
+        const icon = icons[index % icons.length];
+        return createTrackHTML(cat.label, data, color, icon);
+    }).join('');
 }
 
 function renderBadges(game) {
     const container = document.getElementById('profile-badges-grid');
+    if (!container) return;
+
     const earnedBadgeIds = game.state.badges;
 
     container.innerHTML = BADGES.map(badge => {
         const isEarned = earnedBadgeIds.includes(badge.id);
-        const opacityClass = isEarned ? 'opacity-100' : 'opacity-70 grayscale';
-        const borderClass = isEarned 
-            ? (badge.tier === 'gold' ? 'border-yellow-400 bg-yellow-50 dark:bg-yellow-900/20' 
-                : badge.tier === 'silver' ? 'border-gray-400 bg-gray-50 dark:bg-gray-800' 
-                : 'border-orange-400 bg-orange-50 dark:bg-orange-900/20')
-            : 'border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800';
-
-        let overlayHtml = '';
         const progress = !isEarned ? getBadgeProgress(game, badge.id) : null;
 
+        // Base classes
+        let cardClasses = "badge-card relative flex flex-col items-center justify-center p-3 rounded-2xl transition-all duration-300 group cursor-pointer overflow-hidden aspect-square";
+        let iconClasses = "text-4xl sm:text-5xl mb-2 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3";
+        let nameClasses = "text-[10px] sm:text-xs font-bold text-center truncate w-full px-1 z-10 transition-colors leading-tight";
+
+        // Tier-specific styles
+        let bgStyle = "";
+        let borderStyle = "";
+        let shadowStyle = "";
+        let textStyle = "text-gray-700 dark:text-gray-300";
+
+        if (isEarned) {
+            if (badge.tier === 'gold') {
+                bgStyle = "bg-gradient-to-br from-yellow-50 to-amber-100 dark:from-yellow-900/20 dark:to-amber-900/10";
+                borderStyle = "border-2 border-yellow-400 dark:border-yellow-600";
+                shadowStyle = "shadow-lg shadow-yellow-500/20 hover:shadow-yellow-500/40";
+                textStyle = "text-yellow-800 dark:text-yellow-200";
+            } else if (badge.tier === 'silver') {
+                bgStyle = "bg-gradient-to-br from-gray-50 to-slate-100 dark:from-gray-800 dark:to-slate-800";
+                borderStyle = "border-2 border-slate-300 dark:border-slate-500";
+                shadowStyle = "shadow-lg shadow-slate-500/20 hover:shadow-slate-500/40";
+                textStyle = "text-slate-700 dark:text-slate-300";
+            } else { // bronze
+                bgStyle = "bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-900/10";
+                borderStyle = "border-2 border-orange-300 dark:border-orange-600";
+                shadowStyle = "shadow-lg shadow-orange-500/20 hover:shadow-orange-500/40";
+                textStyle = "text-orange-800 dark:text-orange-200";
+            }
+            cardClasses += ` ${bgStyle} ${borderStyle} ${shadowStyle} hover:-translate-y-1`;
+        } else {
+            // Locked state
+            cardClasses += " bg-gray-50 dark:bg-gray-800/50 border-2 border-dashed border-gray-200 dark:border-gray-700 opacity-70 hover:opacity-100";
+            iconClasses += " grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-70";
+            textStyle = "text-gray-400 dark:text-gray-500";
+        }
+
+        // Progress Overlay / Shine Effect
+        let overlayHtml = '';
         if (!isEarned) {
             if (progress) {
                 const percent = Math.min(100, Math.max(0, (progress.current / progress.target) * 100));
                 overlayHtml = `
-                    <div class="absolute inset-x-0 bottom-2 px-2 flex flex-col items-center z-10">
-                        <div class="w-full bg-gray-300 dark:bg-gray-600 rounded-full h-1.5 overflow-hidden shadow-sm">
-                            <div class="bg-blue-500 h-1.5 rounded-full transition-all duration-500" style="width: ${percent}%"></div>
-                        </div>
-                        <div class="text-[10px] font-bold text-gray-800 dark:text-white mt-1 bg-white/95 dark:bg-gray-900/90 px-2 py-0.5 rounded-full backdrop-blur-sm shadow-sm border border-gray-100 dark:border-gray-600">
-                            ${progress.current}/${progress.target} ${progress.label}
-                        </div>
+                    <div class="absolute inset-x-0 bottom-0 h-1 bg-gray-200 dark:bg-gray-700">
+                        <div class="h-full bg-blue-500 transition-all duration-500" style="width: ${percent}%"></div>
                     </div>
                 `;
             } else {
-                overlayHtml = '<div class="absolute inset-0 flex items-center justify-center"><span class="text-xs font-bold text-gray-500 bg-white/80 dark:bg-black/80 px-2 py-1 rounded">Locked</span></div>';
+                // Lock icon for untracked badges
+                overlayHtml = `
+                    <div class="absolute top-2 right-2 text-gray-300 dark:text-gray-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                    </div>
+                `;
             }
+        } else {
+            // Earned badge shine effect
+            overlayHtml = `
+                <div class="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/40 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none transform -translate-x-full group-hover:translate-x-full transition-transform ease-in-out" style="transition-duration: 0.7s;"></div>
+            `;
         }
 
         return `
-            <div class="badge-card flex flex-col items-center p-3 rounded-xl border-2 ${borderClass} ${opacityClass} transition-all duration-300 hover:shadow-md hover:-translate-y-1 hover:scale-102 hover:z-10 relative group cursor-pointer" data-id="${badge.id}">
-                <div class="text-3xl mb-2">${badge.icon}</div>
-                <div class="text-xs font-bold text-center truncate w-full hidden lg:block mb-3">${badge.name}</div>
+            <div class="${cardClasses}" data-id="${badge.id}">
+                <div class="${iconClasses}">${badge.icon}</div>
+                <div class="${nameClasses} ${textStyle}">${badge.name}</div>
                 ${overlayHtml}
                 
                 <!-- Tooltip -->
-                <div class="absolute bottom-full mb-2 hidden group-hover:block w-40 p-2 bg-gray-900 text-white text-xs rounded shadow-lg z-20 text-center pointer-events-none">
-                    <div class="font-bold text-yellow-400 mb-1">${badge.name}</div>
-                    <div>${badge.desc}</div>
-                    ${progress ? `<div class="mt-1 text-blue-300 pt-1 border-t border-gray-700">ความคืบหน้า: ${progress.current}/${progress.target} ${progress.label}</div>` : ''}
+                <div class="absolute bottom-full mb-3 hidden group-hover:block w-48 p-3 bg-gray-900/95 dark:bg-gray-800/95 text-white text-xs rounded-xl shadow-xl z-50 text-center pointer-events-none backdrop-blur-sm border border-gray-700 transform translate-y-2 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200">
+                    <div class="font-bold text-${badge.tier === 'gold' ? 'yellow-400' : (badge.tier === 'silver' ? 'slate-300' : 'orange-300')} mb-1 text-sm">${badge.name}</div>
+                    <div class="text-gray-300 leading-relaxed mb-2">${badge.desc}</div>
+                    ${progress && !isEarned ? `
+                        <div class="pt-2 border-t border-gray-700/50">
+                            <div class="flex justify-between text-[10px] text-gray-400 mb-1">
+                                <span>ความคืบหน้า</span>
+                                <span class="font-mono">${progress.current}/${progress.target} ${progress.label}</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-1.5 overflow-hidden">
+                                <div class="bg-blue-500 h-1.5 rounded-full" style="width: ${(progress.current / progress.target) * 100}%"></div>
+                            </div>
+                        </div>
+                    ` : ''}
+                    ${isEarned ? `<div class="mt-1 text-[10px] text-green-400 font-bold">✓ ได้รับแล้ว</div>` : ''}
+                    <!-- Arrow -->
+                    <div class="absolute -bottom-1.5 left-1/2 transform -translate-x-1/2 w-3 h-3 bg-gray-900/95 dark:bg-gray-800/95 rotate-45 border-r border-b border-gray-700"></div>
                 </div>
             </div>
         `;
@@ -1312,16 +1459,17 @@ function getBadgeProgress(game, badgeId) {
         case 'high_scorer_10': return { current: state.highScores80 || 0, target: 10, label: 'ครั้ง' };
         case 'perfect_scorer_3': return { current: state.perfectScores || 0, target: 3, label: 'ครั้ง' };
         case 'perfect_scorer_5': return { current: state.perfectScores || 0, target: 5, label: 'ครั้ง' };
-        case 'physics_lover': return { current: game.getPhysicsLevel().level, target: 3, label: 'Lv' };
-        case 'physics_expert': return { current: game.getPhysicsLevel().level, target: 5, label: 'Lv' };
-        case 'physics_master': return { current: game.getPhysicsLevel().level, target: 10, label: 'Lv' };
+
         case 'earth_lover': return { current: game.getEarthLevel().level, target: 3, label: 'Lv' };
         case 'earth_expert': return { current: game.getEarthLevel().level, target: 5, label: 'Lv' };
         case 'earth_master': return { current: game.getEarthLevel().level, target: 10, label: 'Lv' };
+        case 'physics_lover': return { current: game.getPhysicsLevel().level, target: 3, label: 'Lv' };
+        case 'physics_expert': return { current: game.getPhysicsLevel().level, target: 5, label: 'Lv' };
+        case 'physics_master': return { current: game.getPhysicsLevel().level, target: 10, label: 'Lv' };
         case 'xp_5k': return { current: state.xp, target: 5000, label: 'XP' };
         case 'xp_10k': return { current: state.xp, target: 10000, label: 'XP' };
         case 'shop_spender': return { current: game.getInventory().length, target: 5, label: 'ชิ้น' };
-        case 'dual_expert': 
+        case 'dual_expert':
             const p = game.getPhysicsLevel().level;
             const e = game.getEarthLevel().level;
             return { current: Math.min(p, e), target: 5, label: 'Lv (Min)' };
@@ -1337,18 +1485,17 @@ function getBadgeProgress(game, badgeId) {
 
 function setupBadgeInteractions(game) {
     const container = document.getElementById('profile-badges-grid');
+    const recentContainer = document.getElementById('recent-badges');
     const modal = new ModalHandler('badge-details-modal');
-    
-    if (!container) return;
 
-    container.addEventListener('click', (e) => {
-        const card = e.target.closest('.badge-card');
-        if (card) {
+    const handleBadgeClick = (e) => {
+        const card = e.target.closest('.badge-card, .recent-badge-item');
+        if (card && card.dataset.id) {
             const badgeId = card.dataset.id;
             const badge = BADGES.find(b => b.id === badgeId);
             if (badge) {
                 const isEarned = game.state.badges.includes(badgeId);
-                
+
                 const iconEl = document.getElementById('badge-modal-icon');
                 const nameEl = document.getElementById('badge-modal-name');
                 const descEl = document.getElementById('badge-modal-desc');
@@ -1362,10 +1509,15 @@ function setupBadgeInteractions(game) {
                     } else {
                         iconEl.classList.add('grayscale', 'opacity-50');
                     }
+
+                    // Add pop animation for smoother feel
+                    iconEl.classList.remove('anim-item-pop');
+                    void iconEl.offsetWidth; // Force reflow
+                    iconEl.classList.add('anim-item-pop');
                 }
                 if (nameEl) nameEl.textContent = badge.name;
                 if (descEl) descEl.textContent = badge.desc;
-                
+
                 if (statusEl) {
                     if (isEarned) {
                         statusEl.innerHTML = '<span class="px-3 py-1 rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 text-sm font-bold">ได้รับแล้ว</span>';
@@ -1373,11 +1525,14 @@ function setupBadgeInteractions(game) {
                         statusEl.innerHTML = '<span class="px-3 py-1 rounded-full bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-400 text-sm font-bold">ยังไม่ได้รับ</span>';
                     }
                 }
-                
+
                 modal.open();
             }
         }
-    });
+    };
+
+    if (container) container.addEventListener('click', handleBadgeClick);
+    if (recentContainer) recentContainer.addEventListener('click', handleBadgeClick);
 }
 
 function renderAchievements(game) {
@@ -1388,13 +1543,6 @@ function renderAchievements(game) {
 
     container.innerHTML = ACHIEVEMENTS.map(ach => {
         const isUnlocked = unlockedIds.includes(ach.id);
-        const containerClass = isUnlocked 
-            ? 'bg-white dark:bg-gray-800 border-yellow-200 dark:border-yellow-900/50 shadow-sm' 
-            : 'bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700 opacity-80';
-        
-        const titleClass = isUnlocked ? 'text-gray-800 dark:text-gray-200' : 'text-gray-500 dark:text-gray-500';
-        const descClass = isUnlocked ? 'text-gray-500 dark:text-gray-400' : 'text-gray-400 dark:text-gray-600';
-        const iconBgClass = isUnlocked ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400' : 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 grayscale';
 
         // Calculate Progress
         let currentProgress = 0;
@@ -1419,34 +1567,68 @@ function renderAchievements(game) {
         }
 
         const percent = Math.min(100, Math.max(0, (currentProgress / ach.target) * 100));
-        const displayProgress = Math.min(currentProgress, ach.target);
-        const barColor = isUnlocked ? 'bg-yellow-500' : 'bg-blue-500';
+
+        // Base classes
+        let cardClasses = "relative flex flex-col items-center justify-center p-3 rounded-2xl transition-all duration-300 group cursor-pointer overflow-hidden aspect-square";
+        let iconClasses = "text-4xl sm:text-5xl mb-2 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3";
+        let nameClasses = "text-[10px] sm:text-xs font-bold text-center truncate w-full px-1 z-10 transition-colors leading-tight";
+
+        // Styles
+        let bgStyle = "";
+        let borderStyle = "";
+        let shadowStyle = "";
+        let textStyle = "text-gray-700 dark:text-gray-300";
+
+        if (isUnlocked) {
+            bgStyle = "bg-gradient-to-br from-purple-50 to-indigo-100 dark:from-purple-900/20 dark:to-indigo-900/10";
+            borderStyle = "border-2 border-purple-300 dark:border-purple-600";
+            shadowStyle = "shadow-lg shadow-purple-500/20 hover:shadow-purple-500/40";
+            textStyle = "text-purple-800 dark:text-purple-200";
+            cardClasses += ` ${bgStyle} ${borderStyle} ${shadowStyle} hover:-translate-y-1`;
+        } else {
+            cardClasses += " bg-gray-50 dark:bg-gray-800/50 border-2 border-dashed border-gray-200 dark:border-gray-700 opacity-70 hover:opacity-100";
+            iconClasses += " grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-70";
+            textStyle = "text-gray-400 dark:text-gray-500";
+        }
+
+        // Progress Overlay / Shine Effect
+        let overlayHtml = '';
+        if (!isUnlocked) {
+            overlayHtml = `
+                <div class="absolute inset-x-0 bottom-0 h-1 bg-gray-200 dark:bg-gray-700">
+                    <div class="h-full bg-blue-500 transition-all duration-500" style="width: ${percent}%"></div>
+                </div>
+            `;
+        } else {
+            overlayHtml = `
+                <div class="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/40 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none transform -translate-x-full group-hover:translate-x-full transition-transform ease-in-out" style="transition-duration: 0.7s;"></div>
+            `;
+        }
 
         return `
-            <div class="relative p-3 rounded-xl border ${containerClass} transition-all duration-300 hover:shadow-md hover:-translate-y-1 group">
-                <div class="flex items-start gap-3">
-                    <div class="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-xl ${iconBgClass} shadow-sm">
-                        ${ach.icon}
-                    </div>
-                    <div class="flex-grow min-w-0">
-                        <div class="flex justify-between items-start">
-                            <h4 class="text-sm font-bold ${titleClass} truncate pr-2">${ach.title}</h4>
-                            ${isUnlocked 
-                                ? '<span class="text-green-600 bg-green-100 dark:bg-green-900/30 px-1.5 py-0.5 rounded-full text-[10px] font-bold border border-green-200 dark:border-green-800">สำเร็จ</span>' 
-                                : '<span class="text-gray-500 bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded-full text-[10px] font-bold border border-gray-200 dark:border-gray-600">ล็อค</span>'}
-                        </div>
-                        <p class="text-xs ${descClass} mt-0.5 mb-2 line-clamp-1">${ach.desc}</p>
-                        
-                        <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 overflow-hidden">
-                            <div class="${barColor} h-1.5 rounded-full transition-all duration-500 relative" style="width: ${percent}%">
-                                ${isUnlocked ? '<div class="absolute inset-0 bg-white/20 animate-pulse"></div>' : ''}
+            <div class="${cardClasses}" title="${ach.title}">
+                <div class="${iconClasses}">${ach.icon}</div>
+                <div class="${nameClasses} ${textStyle}">${ach.title}</div>
+                ${overlayHtml}
+                
+                <!-- Tooltip -->
+                <div class="absolute bottom-full mb-3 hidden group-hover:block w-48 p-3 bg-gray-900/95 dark:bg-gray-800/95 text-white text-xs rounded-xl shadow-xl z-50 text-center pointer-events-none backdrop-blur-sm border border-gray-700 transform translate-y-2 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200">
+                    <div class="font-bold text-purple-300 mb-1 text-sm">${ach.title}</div>
+                    <div class="text-gray-300 leading-relaxed mb-2">${ach.desc}</div>
+                    ${!isUnlocked ? `
+                        <div class="pt-2 border-t border-gray-700/50">
+                            <div class="flex justify-between text-[10px] text-gray-400 mb-1">
+                                <span>ความคืบหน้า</span>
+                                <span class="font-mono">${currentProgress}/${ach.target}</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-1.5 overflow-hidden">
+                                <div class="bg-blue-500 h-1.5 rounded-full" style="width: ${percent}%"></div>
                             </div>
                         </div>
-                        <div class="flex justify-between items-center mt-1">
-                            <span class="text-[10px] ${descClass} font-mono">${displayProgress} / ${ach.target}</span>
-                            ${ach.rewardTitle ? `<span class="text-[10px] text-purple-600 dark:text-purple-400 font-medium flex items-center gap-1">🎁 ${ach.rewardTitle}</span>` : ''}
-                        </div>
-                    </div>
+                    ` : `<div class="mt-1 text-[10px] text-green-400 font-bold">✓ ปลดล็อกแล้ว</div>`}
+                    ${ach.rewardTitle ? `<div class="mt-2 pt-2 border-t border-gray-700/50 text-[10px] text-yellow-400">🎁 รางวัล: ${ach.rewardTitle}</div>` : ''}
+                    <!-- Arrow -->
+                    <div class="absolute -bottom-1.5 left-1/2 transform -translate-x-1/2 w-3 h-3 bg-gray-900/95 dark:bg-gray-800/95 rotate-45 border-r border-b border-gray-700"></div>
                 </div>
             </div>
         `;
@@ -1475,7 +1657,7 @@ function renderQuestHistory(game) {
     `).join('');
 }
 
-async function renderRadarChart(game) {
+async function renderRadarChart(game, allProgress = null) {
     const ctx = document.getElementById('skills-radar-chart')?.getContext('2d');
     const loader = document.getElementById('radar-chart-loader');
     if (!ctx) {
@@ -1483,7 +1665,7 @@ async function renderRadarChart(game) {
         return false;
     }
     const chartContainer = ctx.canvas.parentElement;
-    
+
     // Check if Chart.js is loaded
     if (typeof Chart === 'undefined') {
         console.warn("Chart.js is not loaded. Skipping radar chart rendering.");
@@ -1493,9 +1675,9 @@ async function renderRadarChart(game) {
 
     try {
         // --- Caching Logic ---
-        const CACHE_KEY = 'radar_chart_data_cache';
+        const CACHE_KEY = 'radar_chart_data_cache_v2'; // Bump version to force refresh
         const LAST_COMPLETED_KEY = 'last_quiz_completed_timestamp'; // This key should be updated when a quiz is finished
-        
+
         const lastCompletionTime = localStorage.getItem(LAST_COMPLETED_KEY) || '0';
         let cachedData = null;
         const cachedItem = localStorage.getItem(CACHE_KEY);
@@ -1509,6 +1691,9 @@ async function renderRadarChart(game) {
             }
         }
 
+        // Cleanup old cache
+        localStorage.removeItem('radar_chart_data_cache');
+
         let stats;
 
         if (cachedData && cachedData.timestamp >= lastCompletionTime) {
@@ -1518,27 +1703,37 @@ async function renderRadarChart(game) {
         } else {
             // Recalculate data
             console.log("Recalculating radar chart data for caching.");
-            const allProgress = await getDetailedProgressForAllQuizzes();
-    
+            if (!allProgress) allProgress = await getDetailedProgressForAllQuizzes();
+
             const newStats = {};
             Object.keys(PROFICIENCY_GROUPS).forEach(key => {
                 newStats[key] = { correct: 0, total: 0 };
             });
             newStats['General'] = { correct: 0, total: 0 };
-    
+
             allProgress.forEach(quiz => {
                 if (!quiz.userAnswers) return;
 
-                quiz.userAnswers.forEach(ans => { 
+                quiz.userAnswers.forEach(ans => {
                     if (ans) {
                         let subCatStr = '';
                         if (ans.subCategory) {
                             if (typeof ans.subCategory === 'string') subCatStr = ans.subCategory;
-                            else if (ans.subCategory.main) subCatStr = ans.subCategory.main;
+                            else if (ans.subCategory.main) {
+                                subCatStr = ans.subCategory.main;
+                                // FIX: Include specific sub-category for better matching
+                                if (ans.subCategory.specific) {
+                                    const specific = Array.isArray(ans.subCategory.specific) ? ans.subCategory.specific.join(' ') : ans.subCategory.specific;
+                                    subCatStr += ' ' + specific;
+                                }
+                            }
                         }
-                        
+
+                        // FIX: Include source category for better matching (consistent with stats.js)
+                        subCatStr += ' ' + (ans.sourceQuizCategory || quiz.category || '');
+
                         let matchedGroup = 'General';
-                        const matches = (text, keywords) => keywords.some(k => text.includes(k));
+                        const matches = (text, keywords) => keywords.some(k => text.toLowerCase().includes(k.toLowerCase()));
 
                         for (const [groupKey, groupDef] of Object.entries(PROFICIENCY_GROUPS)) {
                             if (matches(subCatStr, groupDef.keywords)) {
@@ -1558,17 +1753,17 @@ async function renderRadarChart(game) {
             // Save to cache
             localStorage.setItem(CACHE_KEY, JSON.stringify({
                 timestamp: new Date().getTime(),
-                stats: stats 
+                stats: stats
             }));
         }
 
         // 2. Calculate Percentages 
         const labels = Object.values(PROFICIENCY_GROUPS).map(g => g.label);
         const dataPoints = Object.keys(PROFICIENCY_GROUPS).map(key => {
-            const s = stats[key];
+            const s = (stats && stats[key]) ? stats[key] : { correct: 0, total: 0 };
             return s.total > 0 ? (s.correct / s.total) * 100 : 0;
         });
-        
+
         // 3. Render Chart 
         const isDark = document.documentElement.classList.contains('dark');
         const gridColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
@@ -1580,7 +1775,7 @@ async function renderRadarChart(game) {
         const existingChart = Chart.getChart(ctx);
         if (existingChart) existingChart.destroy();
 
-        new Chart(ctx, { 
+        new Chart(ctx, {
             type: 'radar',
             data: {
                 labels: labels,
@@ -1619,7 +1814,7 @@ async function renderRadarChart(game) {
                     legend: { display: false },
                     tooltip: {
                         callbacks: {
-                            label: function(context) {
+                            label: function (context) {
                                 const key = Object.keys(PROFICIENCY_GROUPS)[context.dataIndex];
                                 const s = stats[key];
                                 return `${context.label}: ${context.raw.toFixed(1)}% (${s.correct}/${s.total} ข้อ)`;
@@ -1629,7 +1824,7 @@ async function renderRadarChart(game) {
                 }
             }
         });
-        return true;    
+        return true;
     } catch (error) {
         console.error("Failed to render radar chart:", error);
         if (chartContainer) {
@@ -1644,7 +1839,7 @@ async function renderRadarChart(game) {
 function animateValue(obj, start, end, duration) {
     if (!obj) return;
     if (obj.animationId) cancelAnimationFrame(obj.animationId);
-    
+
     let startTimestamp = null;
     const step = (timestamp) => {
         if (!startTimestamp) startTimestamp = timestamp;
@@ -1690,13 +1885,13 @@ function animateItemToBag(icon, startElement) {
     // 1. Determine Target (Shop button or User Hub)
     const shopBtn = document.getElementById('goto-shop-btn');
     const userHubBtn = document.getElementById('user-hub-btn');
-    
+
     // Prefer the shop button if it's visible in the viewport
     let target = userHubBtn;
     if (shopBtn) {
         const rect = shopBtn.getBoundingClientRect();
-        if (rect.top >= 0 && rect.left >= 0 && 
-            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && 
+        if (rect.top >= 0 && rect.left >= 0 &&
+            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
             rect.right <= (window.innerWidth || document.documentElement.clientWidth)) {
             target = shopBtn;
         }
@@ -1712,16 +1907,17 @@ function animateItemToBag(icon, startElement) {
     flyer.style.zIndex = '10000';
     flyer.style.pointerEvents = 'none';
     flyer.style.transition = 'all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1)';
-    
+    flyer.style.textShadow = '0 0 20px rgba(255, 255, 255, 0.8), 0 0 40px rgba(255, 215, 0, 0.6)';
+
     const startRect = startElement.getBoundingClientRect();
-    
+
     // Center of start element
     const startX = startRect.left + startRect.width / 2;
     const startY = startRect.top + startRect.height / 2;
 
     flyer.style.left = `${startX}px`;
     flyer.style.top = `${startY}px`;
-    flyer.style.transform = 'translate(-50%, -50%) scale(1)';
+    flyer.style.transform = 'translate(-50%, -50%) scale(1) rotate(0deg)';
     flyer.style.opacity = '1';
 
     document.body.appendChild(flyer);
@@ -1737,14 +1933,14 @@ function animateItemToBag(icon, startElement) {
 
         flyer.style.left = `${targetX}px`;
         flyer.style.top = `${targetY}px`;
-        flyer.style.transform = 'translate(-50%, -50%) scale(0.2)'; // Shrink
+        flyer.style.transform = 'translate(-50%, -50%) scale(0.2) rotate(720deg)'; // Shrink and spin
         flyer.style.opacity = '0'; // Fade out
     });
 
     // 4. Cleanup & Target Feedback
     flyer.addEventListener('transitionend', () => {
         flyer.remove();
-        
+
         // Bounce effect on target
         if (target.animate) {
             target.animate([
@@ -1758,6 +1954,39 @@ function animateItemToBag(icon, startElement) {
         }
     });
 }
+
+function createPurchaseParticles(x, y) {
+    const colors = ['#FBBF24', '#F59E0B', '#3B82F6', '#60A5FA', '#FFFFFF'];
+    for (let i = 0; i < 30; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'fixed z-[10001] rounded-full pointer-events-none';
+        const size = Math.random() * 8 + 4;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        particle.style.left = `${x}px`;
+        particle.style.top = `${y}px`;
+        particle.style.boxShadow = `0 0 10px ${particle.style.backgroundColor}`;
+
+        document.body.appendChild(particle);
+
+        const angle = Math.random() * Math.PI * 2;
+        const velocity = Math.random() * 200 + 50;
+        const tx = Math.cos(angle) * velocity;
+        const ty = Math.sin(angle) * velocity;
+
+        const animation = particle.animate([
+            { transform: 'translate(-50%, -50%) scale(1)', opacity: 1 },
+            { transform: `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(0)`, opacity: 0 }
+        ], {
+            duration: 600 + Math.random() * 400,
+            easing: 'cubic-bezier(0, .9, .57, 1)'
+        });
+
+        animation.onfinish = () => particle.remove();
+    }
+}
+
 function externalTooltipHandler(context) {
     // Tooltip Element
     const { chart, tooltip } = context;
@@ -1784,7 +2013,7 @@ function externalTooltipHandler(context) {
         const closeCell = document.createElement('th');
         closeCell.colSpan = 2;
         closeCell.className = "text-right pb-1 border-b border-gray-600/50 mb-2";
-        
+
         const closeBtn = document.createElement('button');
         closeBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400 hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>`;
         closeBtn.className = "p-0.5 rounded hover:bg-white/10 transition-colors cursor-pointer";
@@ -1796,7 +2025,7 @@ function externalTooltipHandler(context) {
             chart.setActiveElements([], { x: 0, y: 0 });
             chart.update();
         };
-        
+
         closeCell.appendChild(closeBtn);
         closeRow.appendChild(closeCell);
         tableHead.appendChild(closeRow);
@@ -1864,7 +2093,7 @@ function externalTooltipHandler(context) {
     tooltipEl.style.left = positionX + tooltip.caretX + 'px';
     tooltipEl.style.top = positionY + tooltip.caretY + 'px';
     tooltipEl.style.padding = '12px';
-    
+
     // Smart positioning
     let transformX = '-50%';
     let transformY = '-100%';
@@ -1882,7 +2111,7 @@ function externalTooltipHandler(context) {
     tooltipEl.style.marginTop = marginTop;
 }
 
-async function renderProficiencyHistoryChart(game) {
+async function renderProficiencyHistoryChart(game, allProgress = null) {
     const ctx = document.getElementById('proficiency-history-chart')?.getContext('2d');
     const loader = document.getElementById('history-chart-loader');
     if (!ctx) {
@@ -1898,8 +2127,8 @@ async function renderProficiencyHistoryChart(game) {
     }
 
     try {
-        const allProgress = await getDetailedProgressForAllQuizzes();
-        
+        if (!allProgress) allProgress = await getDetailedProgressForAllQuizzes();
+
         // Prepare data structure: { 'Mechanics': [{date, score}, ...], ... }
         const historyData = {};
         Object.keys(PROFICIENCY_GROUPS).forEach(key => {
@@ -1914,7 +2143,7 @@ async function renderProficiencyHistoryChart(game) {
             // We use the first answer's subcategory or quiz category to match keywords
             let matchedGroup = null;
             const firstAnswer = quiz.userAnswers.find(a => a);
-            
+
             let searchString = quiz.category || '';
             if (firstAnswer && firstAnswer.subCategory) {
                 if (typeof firstAnswer.subCategory === 'string') searchString += ' ' + firstAnswer.subCategory;
@@ -1934,7 +2163,7 @@ async function renderProficiencyHistoryChart(game) {
                 const score = quiz.score || 0;
                 const total = quiz.shuffledQuestions ? quiz.shuffledQuestions.length : (quiz.amount || 0);
                 const percentage = total > 0 ? (score / total) * 100 : 0;
-                
+
                 historyData[matchedGroup].push({
                     x: new Date(quiz.lastAttemptTimestamp),
                     y: percentage,
@@ -1952,7 +2181,7 @@ async function renderProficiencyHistoryChart(game) {
         const datasets = Object.keys(PROFICIENCY_GROUPS).map((key, index) => {
             const group = PROFICIENCY_GROUPS[key];
             const data = historyData[key];
-            
+
             // Generate a color for this line (using HSL for distinct colors)
             const hue = (index * 360 / Object.keys(PROFICIENCY_GROUPS).length) % 360;
             const color = `hsla(${hue}, 70%, 50%, 1)`;
@@ -2031,7 +2260,7 @@ async function renderProficiencyHistoryChart(game) {
     }
 }
 
-async function renderStrengthsWeaknesses() {
+async function renderStrengthsWeaknesses(allProgress = null) {
     const strengthsList = document.getElementById('strengths-list');
     const weaknessesList = document.getElementById('weaknesses-list');
     const loader = document.getElementById('strengths-weaknesses-loader');
@@ -2042,7 +2271,7 @@ async function renderStrengthsWeaknesses() {
     }
 
     try {
-        const CACHE_KEY = 'strengths_weaknesses_cache';
+        const CACHE_KEY = 'strengths_weaknesses_cache_v3'; // Bump version to force refresh
         const LAST_COMPLETED_KEY = 'last_quiz_completed_timestamp';
 
         const lastCompletionTime = localStorage.getItem(LAST_COMPLETED_KEY) || '0';
@@ -2057,11 +2286,15 @@ async function renderStrengthsWeaknesses() {
             }
         }
 
+        // Cleanup old cache keys
+        localStorage.removeItem('strengths_weaknesses_cache');
+        localStorage.removeItem('strengths_weaknesses_cache_v2');
+
         let analysis;
         if (cachedData && cachedData.timestamp >= lastCompletionTime) {
             analysis = cachedData.analysis;
         } else {
-            analysis = await calculateStrengthsAndWeaknesses();
+            analysis = await calculateStrengthsAndWeaknesses(allProgress);
             localStorage.setItem(CACHE_KEY, JSON.stringify({ timestamp: new Date().getTime(), analysis: analysis }));
         }
 
@@ -2078,7 +2311,7 @@ async function renderStrengthsWeaknesses() {
             strengthsList.innerHTML = `<li class="text-sm text-gray-500 dark:text-gray-400 italic">ยังไม่มีข้อมูลเพียงพอ</li>`;
         }
 
-        if (weaknesses.length > 0) { 
+        if (weaknesses.length > 0) {
             weaknessesList.innerHTML = weaknesses.map(w => `
                 <li class="bg-yellow-50 dark:bg-yellow-900/20 p-2 rounded border border-yellow-100 dark:border-yellow-800/30 flex justify-between items-center">
                     <span class="text-sm font-medium text-gray-700 dark:text-gray-300 truncate mr-2" title="${w.name}">${w.name}</span>

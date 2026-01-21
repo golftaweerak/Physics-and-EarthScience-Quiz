@@ -1,0 +1,23 @@
+{
+  "firestore": {
+    "database": "(default)",
+    "location": "asia-southeast1",
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "hosting": {
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**",
+      "EarthScienceQuiz/**",
+      "tools/**",
+      "xlsx/**",
+      "csv/**",
+      "dataconnect/**"
+    ],
+    "cleanUrls": true,
+    "trailingSlash": false
+  }
+}

@@ -5,11 +5,24 @@ import { showToast } from './toast.js';
  * Renders the daily quests into a specified container.
  * @param {string} containerId - The ID of the element to render the quests into.
  */
-export function renderDailyQuests(containerId) {
-    const container = document.getElementById(containerId);
-    if (!container) return;
+export function renderDailyQuests(gameOrId, optionalId) {
+    let game;
+    let containerId;
 
-    const game = new Gamification();
+    if (typeof gameOrId === 'string') {
+        containerId = gameOrId;
+        game = new Gamification();
+    } else {
+        game = gameOrId;
+        containerId = optionalId;
+    }
+
+    const container = document.getElementById(containerId);
+    if (!container) {
+        console.warn(`Container for daily quests not found: ${containerId}`);
+        return;
+    }
+
     const quests = game.state.activeQuests || [];
     const rerollsLeft = game.state.rerolls || 0;
 
@@ -27,11 +40,17 @@ export function renderDailyQuests(containerId) {
             statusClass = 'bg-green-500';
         }
 
+        const is20Required = ['quiz_complete', 'quiz_category', 'high_score'].includes(quest.type);
+        const questHint = is20Required ? '<span class="text-[10px] text-orange-500 dark:text-orange-400 font-normal">(ต้องทำ 20 ข้อขึ้นไป)</span>' : '';
+
         return `
             <div class="daily-quest-item p-3 rounded-lg flex items-center gap-4 ${isCompleted ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700' : 'bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700'}">
                 <div class="text-3xl flex-shrink-0">${isCompleted ? '✅' : '📜'}</div>
                 <div class="flex-grow min-w-0">
-                    <p class="font-bold text-sm text-gray-800 dark:text-gray-100 truncate" title="${quest.desc}">${quest.desc}</p>
+                    <div class="flex flex-col sm:flex-row sm:items-baseline sm:gap-1">
+                        <p class="font-bold text-sm text-gray-800 dark:text-gray-100 truncate" title="${quest.desc}">${quest.desc}</p>
+                        ${questHint}
+                    </div>
                     <div class="flex items-center gap-2 mt-1.5">
                         <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
                             <div class="${statusClass} h-2.5 rounded-full transition-all duration-500" style="width: ${progressPercent}%"></div>
@@ -61,7 +80,7 @@ export function renderDailyQuests(containerId) {
             const result = game.rerollQuest(index);
             if (result.success) {
                 showToast('เปลี่ยนภารกิจสำเร็จ', `คุณมีสิทธิ์เปลี่ยนภารกิจอีก ${result.rerollsLeft} ครั้ง`, '🔄');
-                renderDailyQuests(containerId); // Re-render the quests
+                renderDailyQuests(game, containerId); // Re-render the quests
             } else {
                 showToast('ไม่สำเร็จ', result.message, '❌', 'error');
             }

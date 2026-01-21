@@ -10,6 +10,22 @@ const dataDir = path.join(__dirname, '../data');
 const quizListPath = path.join(dataDir, 'quizzes-list.js');
 
 /**
+ * Recursively finds all files in a directory.
+ */
+function getAllFiles(dirPath, arrayOfFiles = []) {
+    const files = fs.readdirSync(dirPath);
+    files.forEach((file) => {
+        const fullPath = path.join(dirPath, file);
+        if (fs.statSync(fullPath).isDirectory()) {
+            getAllFiles(fullPath, arrayOfFiles);
+        } else {
+            arrayOfFiles.push(fullPath);
+        }
+    });
+    return arrayOfFiles;
+}
+
+/**
  * Counts the number of questions in a given file content.
  * @param {string} content - The content of the data file.
  * @returns {number} The number of questions found.
@@ -98,23 +114,26 @@ async function updateQuizList() {
         const quizMap = new Map(quizList.map(q => [q.id.toLowerCase(), q]));
         const existingIds = new Set(quizMap.keys()); // This set now contains lowercase IDs
 
-        const dataFiles = fs.readdirSync(dataDir).filter(file =>
-            file.endsWith('-data.js') &&
-            !file.startsWith('template-') &&
-            !file.startsWith('sub-category-') &&
-            !file.startsWith('tempCodeRunnerFile')
-        );
+        const allFiles = getAllFiles(dataDir);
+        const dataFiles = allFiles.filter(filePath => {
+            const fileName = path.basename(filePath);
+            return fileName.endsWith('-data.js') &&
+                !fileName.startsWith('template-') &&
+                !fileName.startsWith('sub-category-') &&
+                !fileName.startsWith('scores-data') &&
+                !fileName.startsWith('tempCodeRunnerFile');
+        });
 
         let quizzesAdded = 0;
         const addedQuizSummaries = [];
         let quizzesUpdated = 0;
         const updatedQuizSummaries = [];
 
-        for (const file of dataFiles) {
+        for (const filePath of dataFiles) {
+            const file = path.basename(filePath);
             const id = file.replace('-data.js', '');
             const lowerId = id.toLowerCase();
             try {
-                const filePath = path.join(dataDir, file);
                 const content = fs.readFileSync(filePath, 'utf8');
                 const actualCount = countQuestionsInContent(content);
 

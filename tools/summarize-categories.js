@@ -61,7 +61,9 @@ async function main() {
   const quizFiles = allFilePaths.filter(
     (filePath) => {
       const fileName = path.basename(filePath);
-      return fileName.endsWith("-data.js") && !["sub-category-data.js", "template-data.js"].includes(fileName);
+      return fileName.endsWith("-data.js") &&
+        !["sub-category-data.js", "template-data.js"].includes(fileName) &&
+        !fileName.startsWith("scores-data");
     }
   );
 
@@ -133,13 +135,13 @@ async function main() {
   let markdownOutput = "## 📊 สรุปหมวดหมู่คำถาม\n\n";
   markdownOutput += "| หมวดหมู่หลัก (Main) | หมวดหมู่ย่อย (Specific) | จำนวนข้อ |\n";
   markdownOutput += "|:-------------------|:-------------------------|:---------|\n";
-  
+
   const sortedMainCategories = [...categoryData.keys()].sort((a, b) => a.localeCompare(b, 'th'));
 
   for (const mainCat of sortedMainCategories) {
     const specificData = categoryData.get(mainCat);
     const sortedSpecifics = [...specificData.keys()].sort((a, b) => a.localeCompare(b, 'th'));
-    
+
     // To get the unique total for the main category, flatten all question arrays and use a Set.
     const allQuestionsInMain = [...specificData.values()].flat();
     const uniqueQuestions = new Set(allQuestionsInMain);
