@@ -4,9 +4,9 @@ module.exports = {
     "./*.html",
     "./components/**/*.html",
     // FIX: เจาะจงไฟล์ Script ที่มี UI Logic เพื่อป้องกันการสร้าง Class ขยะจากไฟล์ Data หรือ Logic อื่นๆ
-    "./scripts/main.js",
-    "./scripts/modal-handler.js",
-    "./quiz/**/*.html"
+    "./quiz/**/*.html",
+    "./scripts/**/*.js",
+    "./scripts/**/*.html"
   ],
   // Safelist: ป้องกันไม่ให้ Tailwind ลบคลาสที่ถูกเรียกใช้ผ่านตัวแปร JS (Dynamic Classes)
   safelist: [

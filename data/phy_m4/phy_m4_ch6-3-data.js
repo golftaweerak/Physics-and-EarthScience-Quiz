@@ -236,7 +236,7 @@ export const quizItems = [
   {
     number: 15,
     type: "fill-in-number",
-    question: "กราฟระหว่างแรง (F) กับเวลา (t) เป็นรูปสามเหลี่ยมที่มีฐานกว้าง 0.2 วินาที และสูง 500 N การดลที่เกิดขึ้นมีค่าเท่าใด (ตอบเป็นจำนวนเต็มในหน่วย N·s)",
+    question: "กราฟระหว่างแรง (F) กับเวลา (t) เป็นรูปสามเหลี่ยมที่มีฐานกว้าง 0.2 วินาที และสูง 500 N <br><div class='flex justify-center'><img src='../assets/images/phy_m4_ch6-3_q15.png' alt='Force vs Time Graph' class='max-w-sm'></div><br>การดลที่เกิดขึ้นมีค่าเท่าใด (ตอบเป็นจำนวนเต็มในหน่วย N·s)",
     answer: 50,
     unit: "N·s",
     hint: "พื้นที่ใต้กราฟ F-t คือการดล",

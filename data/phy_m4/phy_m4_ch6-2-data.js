@@ -280,7 +280,7 @@ export const quizItems = [
   {
     type: "scenario",
     title: "สถานการณ์: กราฟแรงกับการเวลา",
-    description: "แรงลัพธ์ที่กระทำต่อวัตถุมวล \\(2 \\text{ kg}\\) ที่อยู่นิ่ง เปลี่ยนแปลงตามเวลาดังแสดงในกราฟ (กราฟเป็นรูปสามเหลี่ยม ฐานอยู่ที่แกนเวลาตั้งแต่ \\(t=0\\) ถึง \\(t=4 \\text{ s}\\) และจุดยอดอยู่ที่ \\(F=20 \\text{ N}\\) ที่เวลา \\(t=2 \\text{ s}\\))",
+    description: "แรงลัพธ์ที่กระทำต่อวัตถุมวล \\(2 \\text{ kg}\\) ที่อยู่นิ่ง เปลี่ยนแปลงตามเวลาดังแสดงในกราฟ (กราฟเป็นรูปสามเหลี่ยม ฐานอยู่ที่แกนเวลาตั้งแต่ \\(t=0\\) ถึง \\(t=4 \\text{ s}\\) และจุดยอดอยู่ที่ \\(F=20 \\text{ N}\\) ที่เวลา \\(t=2 \\text{ s}\\)) <br><br><div class='flex justify-center'><img src='../assets/images/phy_m4_ch6-2_q18.png' alt='กราฟแรงกับเวลา' class='max-w-sm'></div>",
     questions: [{
       number: 18,
       type: "fill-in-number",
@@ -528,7 +528,7 @@ export const quizItems = [
   {
     number: 35,
     type: "fill-in-number",
-    question: "กราฟแรงดลรูปสี่เหลี่ยมคางหมู มีด้านคู่ขนานยาว \\(2 \\text{ s}\\) และ \\(4 \\text{ s}\\) สูง \\(10 \\text{ N}\\) การดลมีค่าเท่าใด (ตอบเป็นจำนวนเต็มในหน่วย \\(N \\cdot s\\))",
+    question: "กราฟแรงดลรูปสี่เหลี่ยมคางหมู มีด้านคู่ขนานยาว \\(2 \\text{ s}\\) และ \\(4 \\text{ s}\\) สูง \\(10 \\text{ N}\\) <br><div class='flex justify-center'><img src='../assets/images/phy_m4_ch6-2_q35.png' alt='Force vs Time Graph' class='max-w-sm'></div><br>การดลมีค่าเท่าใด (ตอบเป็นจำนวนเต็มในหน่วย \\(N \\cdot s\\))",
     answer: 30,
     unit: "N·s",
     hint: "พื้นที่สี่เหลี่ยมคางหมู = \\(1/2 \\times (\\text{ผลบวกด้านคู่ขนาน}) \\times \\text{สูง}\\)",

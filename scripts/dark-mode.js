@@ -9,8 +9,20 @@ function updateAllToggles() {
     const icon = isDark ? sunIcon : moonIcon;
     const text = isDark ? 'โหมดสว่าง' : 'โหมดมืด';
 
-    document.querySelectorAll('#dark-mode-toggle').forEach(btn => {
-        btn.innerHTML = `${icon} <span>${text}</span>`;
+    const buttons = document.querySelectorAll('.dark-mode-toggle, #dark-mode-toggle');
+    console.log(`[DarkMode] updateAllToggles called. Found ${buttons.length} buttons.`);
+
+    buttons.forEach(btn => {
+        const displayStyle = btn.getAttribute('data-display') || 'full'; // 'full' (icon+text) or 'icon' (icon only)
+        console.log(`[DarkMode] Updating button: style=${displayStyle}, isDark=${isDark}`);
+
+        if (displayStyle === 'icon') {
+            btn.innerHTML = icon;
+            btn.setAttribute('aria-label', text);
+            btn.title = text;
+        } else {
+            btn.innerHTML = `${icon} <span>${text}</span>`;
+        }
     });
 }
 
@@ -21,9 +33,11 @@ export function applyTheme(isDark) {
     try {
         if (isDark) {
             document.documentElement.classList.add('dark');
+            if (document.body) document.body.classList.add('dark');
             localStorage.setItem('theme', 'dark');
         } else {
             document.documentElement.classList.remove('dark');
+            if (document.body) document.body.classList.remove('dark');
             localStorage.setItem('theme', 'light');
         }
     } catch (e) {
@@ -37,7 +51,7 @@ export function applyTheme(isDark) {
  * This handles buttons even if they are replaced by dynamic loaders.
  */
 document.addEventListener('click', (event) => {
-    const toggleBtn = event.target.closest('#dark-mode-toggle');
+    const toggleBtn = event.target.closest('.dark-mode-toggle, #dark-mode-toggle');
     if (toggleBtn) {
         const isCurrentlyDark = document.documentElement.classList.contains('dark');
         applyTheme(!isCurrentlyDark);
@@ -49,7 +63,15 @@ try {
     const storedTheme = localStorage.getItem('theme');
     const isInitialDark = storedTheme === 'dark' ||
         (!storedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches);
-    document.documentElement.classList.add(isInitialDark ? 'dark' : 'light');
+    const themeClass = isInitialDark ? 'dark' : 'light'; // This variable is not used but logic is same
+
+    if (isInitialDark) {
+        document.documentElement.classList.add('dark');
+        if (document.body) document.body.classList.add('dark');
+    } else {
+        document.documentElement.classList.remove('dark');
+        if (document.body) document.body.classList.remove('dark');
+    }
 } catch (e) {
     console.warn('Dark Mode: Early theme init failed:', e);
 }
@@ -64,7 +86,7 @@ function startObserver() {
             if (mutation.type === 'childList') {
                 for (const node of mutation.addedNodes) {
                     if (node.nodeType === 1) { // Element
-                        if (node.id === 'dark-mode-toggle' || node.querySelector?.('#dark-mode-toggle')) {
+                        if (node.matches?.('.dark-mode-toggle, #dark-mode-toggle') || node.querySelector?.('.dark-mode-toggle, #dark-mode-toggle')) {
                             shouldUpdate = true;
                             break;
                         }
