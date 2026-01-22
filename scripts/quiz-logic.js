@@ -1874,20 +1874,8 @@ function renderResultCategoryChart(categoryStats) {
 
     const chartData = [];
     Object.entries(categoryStats).forEach(([mainName, mainData]) => {
-      const subEntries = Object.entries(mainData.subcategories);
-      if (subEntries.length > 0) {
-        subEntries.forEach(([subName, subData]) => {
-          // If subName is the fallback '—', maybe use the main category name instead for the chart?
-          // But usually we want the outcome.
-          chartData.push({
-            label: subName === '—' ? mainName : subName,
-            correct: subData.correct,
-            total: subData.total
-          });
-        });
-      } else {
-        chartData.push({ label: mainName, correct: mainData.correct, total: mainData.total });
-      }
+      // Use Main Category (Chapter) stats directly
+      chartData.push({ label: mainName, correct: mainData.correct, total: mainData.total });
     });
 
     const sortedData = chartData.sort((a, b) => a.label.localeCompare(b.label, 'th'));
@@ -2047,7 +2035,7 @@ function buildResultsLayout(resultInfo, stats) {
     const chartContainer = document.createElement('div');
     chartContainer.className = 'w-full p-6 bg-white dark:bg-gray-800/50 rounded-xl shadow-md border border-gray-200 dark:border-gray-700';
     chartContainer.innerHTML = `
-            <h3 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4 font-kanit text-center">คะแนนตามจุดประสงค์การเรียนรู้</h3>
+            <h3 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4 font-kanit text-center">คะแนนตามบท</h3>
             <div class="relative h-96">
                 <canvas id="result-category-chart"></canvas>
             </div>
