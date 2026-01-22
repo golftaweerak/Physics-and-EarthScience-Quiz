@@ -180,7 +180,21 @@ export async function initializeQuiz() {
     }
 
     try {
-        const scriptPath = `../data/${quizId}-data.js?v=${Date.now()}`;
+        // Fix for missing path prefixes (matching logic in data-manager.js):
+        let scriptPath;
+        if (quizId.includes('/')) {
+            scriptPath = `../data/${quizId}-data.js?v=${Date.now()}`;
+        } else {
+            // Auto-detect folder based on ID prefix
+            let folder = '';
+            if (quizId.startsWith('phy_m4')) folder = 'phy_m4/';
+            else if (quizId.startsWith('phy_m5')) folder = 'phy_m5/';
+            else if (quizId.startsWith('phy_m6')) folder = 'phy_m6/';
+            else if (quizId.startsWith('ess_basic')) folder = 'ess_basic/';
+            else if (quizId.startsWith('ess_adv')) folder = 'ess_adv/';
+
+            scriptPath = `../data/${folder}${quizId}-data.js?v=${Date.now()}`;
+        }
         const module = await import(scriptPath);
         const data = module.quizItems || module.quizData || [];
 
