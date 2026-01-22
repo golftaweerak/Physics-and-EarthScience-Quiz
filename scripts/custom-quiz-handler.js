@@ -1450,7 +1450,15 @@ export function initializeCustomQuizHandler() {
                 categoryDisplay: allCategoryDetails[singleSubject]?.displayName || 'แบบทดสอบที่สร้างเอง'
             });
 
-            window.location.href = `./quiz/index.html?id=${customQuiz.customId}`;
+            // NEW: Check if we are in a lobby context (e.g., started from Challenge Mode)
+            if (window.challengeContext && typeof window.challengeContext.onQuizCreated === 'function') {
+                window.challengeContext.onQuizCreated(customQuiz);
+                customQuizModal.close();
+                showToast('สร้างสำเร็จ', 'เลือกแบบทดสอบเรียบร้อยแล้ว', '✅');
+            } else {
+                // Default behavior: Redirect to the quiz
+                window.location.href = `./quiz/index.html?id=${customQuiz.customId}`;
+            }
         } catch (error) {
             console.error("Error starting custom quiz:", error);
             showToast("เกิดข้อผิดพลาด", "ไม่สามารถเริ่มทำแบบทดสอบได้: " + error.message, "❌", "error");

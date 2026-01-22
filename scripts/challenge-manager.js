@@ -114,8 +114,8 @@ export class ChallengeManager {
     if (!btn && this.dom.startBtn && this.dom.startBtn.parentNode) {
       btn = document.createElement('button');
       btn.id = 'lobby-ready-btn';
-      // Default styling
-      btn.className = 'px-4 py-2 rounded-lg font-bold shadow-md transition-all transform hover:scale-105 hidden mr-2';
+      // Default styling matches other buttons (flex-1 py-3)
+      btn.className = 'flex-1 py-3 rounded-lg font-bold shadow-md transition-all transform hover:scale-102 hidden bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200';
       // Insert before start button
       this.dom.startBtn.parentNode.insertBefore(btn, this.dom.startBtn);
     }

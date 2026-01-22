@@ -2790,8 +2790,8 @@ function checkForSavedQuiz(action) {
   }
 
   // Case 3: Default case - no valid saved state or not resuming.
-  // If it's a custom quiz, we auto-start to skip redundant checks.
-  if (state.isCustomQuiz) {
+  // If it's a custom quiz OR a challenge (multiplayer), we auto-start to skip redundant checks.
+  if (state.isCustomQuiz || state.isChallenge) {
     // Explicitly hide start screen to prevent overlap since switchScreen won't hide it
     // if activeScreen is null (initial load).
     if (elements.startScreen) {
