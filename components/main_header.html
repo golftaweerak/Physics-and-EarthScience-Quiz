@@ -1,6 +1,6 @@
 <!-- This is the shared header component for all pages. -->
 <header id="main-header"
-    class="fixed top-0 left-0 right-0 z-40 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm shadow-md transition-colors duration-300">
+    class="fixed top-0 left-0 right-0 z-40 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm shadow-md">
     <div class="container mx-auto flex items-center justify-between h-16 px-4">
         <!-- Left Side: Menu -->
         <div class="flex-1 flex justify-start">
@@ -113,13 +113,6 @@
 
         <!-- Right Side: Profile & Dark Mode Toggle -->
         <div class="flex-1 flex justify-end gap-2 items-center">
-            <!-- Dark Mode Toggle (Navbar) -->
-            <button type="button"
-                class="dark-mode-toggle p-2 rounded-full text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-200"
-                data-display="icon" aria-label="สลับโหมดมืด/สว่าง">
-                <!-- Icon injected by JS -->
-            </button>
-
             <!-- Network Status -->
             <div id="header-network-status" class="hidden transition-all duration-300"></div>
             <!-- User Hub Dropdown -->

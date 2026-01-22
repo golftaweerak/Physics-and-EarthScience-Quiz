@@ -1056,6 +1056,8 @@ export class ChallengeManager {
         }
       });
       this.renderTypingIndicator(typingUsers);
+    }, (error) => {
+      console.warn("Typing listener error:", error);
     });
   }
 
@@ -1136,6 +1138,8 @@ export class ChallengeManager {
       if (this.lastLobbyData) {
         this.updateLobbyUI(this.lastLobbyData);
       }
+    }, (error) => {
+      console.warn("Presence listener error:", error);
     });
   }
 
@@ -1204,7 +1208,9 @@ export class ChallengeManager {
       console.error("Lobby listener error:", error);
       if (error.code === 'permission-denied') {
         showToast('ไม่สามารถเข้าถึงห้องได้', 'คุณอาจไม่มีสิทธิ์หรือห้องถูกจำกัดการเข้าถึง', '⚠️', 'error');
-        // Optional: this.leaveLobby(); // อาจจะเด้งออกถ้าจำเป็น
+        this.leaveLobby(false);
+      } else if (error.code === 'unavailable') {
+        console.warn("Lobby listener unavailable, retrying...");
       }
     });
 
