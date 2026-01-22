@@ -341,8 +341,16 @@ export class ChallengeManager {
       return;
     }
 
-    // Fetch custom quizzes
-    const customQuizzes = await getSavedCustomQuizzes();
+    // Fetch custom quizzes with a timeout to prevent UI freeze
+    let customQuizzes = [];
+    try {
+      const fetchPromise = getSavedCustomQuizzes();
+      const timeoutPromise = new Promise(resolve => setTimeout(() => resolve([]), 3000)); // 3s fallback
+      customQuizzes = await Promise.race([fetchPromise, timeoutPromise]);
+    } catch (e) {
+      console.warn("Failed to load custom quizzes, proceeding with built-in only:", e);
+    }
+
     // Merge lists
     const allQuizzes = [...quizList, ...customQuizzes];
 

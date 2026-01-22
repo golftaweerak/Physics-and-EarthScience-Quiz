@@ -10,11 +10,9 @@ function updateAllToggles() {
     const text = isDark ? 'โหมดสว่าง' : 'โหมดมืด';
 
     const buttons = document.querySelectorAll('.dark-mode-toggle, #dark-mode-toggle');
-    console.log(`[DarkMode] updateAllToggles called. Found ${buttons.length} buttons.`);
 
     buttons.forEach(btn => {
         const displayStyle = btn.getAttribute('data-display') || 'full'; // 'full' (icon+text) or 'icon' (icon only)
-        console.log(`[DarkMode] Updating button: style=${displayStyle}, isDark=${isDark}`);
 
         if (displayStyle === 'icon') {
             btn.innerHTML = icon;

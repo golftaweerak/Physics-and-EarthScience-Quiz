@@ -3,7 +3,6 @@ module.exports = {
   content: [
     "./*.html",
     "./components/**/*.html",
-    // FIX: เจาะจงไฟล์ Script ที่มี UI Logic เพื่อป้องกันการสร้าง Class ขยะจากไฟล์ Data หรือ Logic อื่นๆ
     "./quiz/**/*.html",
     "./scripts/**/*.js",
     "./scripts/**/*.html"

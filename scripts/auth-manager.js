@@ -245,14 +245,21 @@ class AuthManagerInternal {
         let lastError;
         for (let i = 0; i < maxRetries; i++) {
             try {
-                return await operation();
+                // Add a timeout to the operation itself to prevent indefinite hanging
+                const operationPromise = operation();
+                const timeoutPromise = new Promise((_, reject) =>
+                    setTimeout(() => reject(new Error('Operation timed out')), 10000)
+                );
+
+                return await Promise.race([operationPromise, timeoutPromise]);
             } catch (error) {
                 lastError = error;
                 // Retry on network errors or unavailable service
                 const isRetryable = error.code === 'unavailable' ||
                     error.message?.includes('offline') ||
                     error.message?.includes('transport') ||
-                    error.message?.includes('network');
+                    error.message?.includes('network') ||
+                    error.message?.includes('timed out'); // Also retry timeouts
 
                 if (!isRetryable) throw error;
 

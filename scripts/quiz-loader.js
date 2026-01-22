@@ -140,7 +140,25 @@ export async function initializeQuiz() {
             const seed = parseInt(urlParams.get('seed')) || Date.now();
             populatePage("แบบทดสอบสุ่ม (Challenge)", "แบบทดสอบที่สุ่มจากคลังข้อสอบทั้งหมด");
 
-            const promises = quizList.map(q => import(`../data/${q.id}-data.js?v=${Date.now()}`).then(m => ({ module: m, info: q })).catch(e => null));
+            const promises = quizList.map(q => {
+                // Fix for missing path prefixes (matching logic in data-manager.js):
+                let folder = '';
+                if (q.id.includes('/')) {
+                    // Already has path? assume valid relative path if it starts with .., otherwise custom
+                    // But here q.id is usually just the basename code like 'phy_m4_...'
+                } else {
+                    if (q.id.startsWith('phy_m4')) folder = 'phy_m4/';
+                    else if (q.id.startsWith('phy_m5')) folder = 'phy_m5/';
+                    else if (q.id.startsWith('phy_m6')) folder = 'phy_m6/';
+                    else if (q.id.startsWith('ess_basic')) folder = 'ess_basic/';
+                    else if (q.id.startsWith('ess_adv')) folder = 'ess_adv/';
+                }
+                const path = `../data/${folder}${q.id}-data.js?v=${Date.now()}`;
+                return import(path).then(m => ({ module: m, info: q })).catch(e => {
+                    console.warn(`Failed to load quiz data for random generation: ${q.id}`, e);
+                    return null;
+                });
+            });
             const results = await Promise.all(promises);
 
             let allQuestions = [];

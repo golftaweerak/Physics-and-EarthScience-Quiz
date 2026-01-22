@@ -24,13 +24,17 @@ async function main() {
         const urlParams = new URLSearchParams(window.location.search);
         const isDevMode = urlParams.get('dev') === 'true';
 
-        // 4. ถ้าไม่ใช่เมลโรงเรียน และไม่ได้อยู่ในโหมด dev ให้หยุดการทำงาน
+        // 4. (Disabled) Email restriction check
+        /*
         if (!isDevMode && (!user || !user.email || !user.email.endsWith('@promma.ac.th'))) {
-            // ซ่อน Spinner ที่กำลังโหลด เพราะเราจะไม่โหลดข้อมูลต่อ
+            // ...
             const loadingSpinner = document.getElementById('loading-spinner');
             if (loadingSpinner) loadingSpinner.style.display = 'none';
-            return;
+            // Show access denied modal or redirect (optional implementation)
+            // For now, just return to stop loading
+             return;
         }
+        */
 
         // 5. ถ้ามีสิทธิ์ ให้โหลดข้อมูลสรุปผลต่อ
         const { initializeSummaryPage } = await import('./summary-handler.js');

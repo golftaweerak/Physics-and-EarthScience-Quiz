@@ -5,19 +5,15 @@ service cloud.firestore {
     
     // กฎสำหรับ Collection 'users'
     match /users/{userId} {
-      // อนุญาตให้ทุกคนอ่านข้อมูลพื้นฐาน (สำหรับ Leaderboard)
-      allow read: if true;
-      
-      // อนุญาตให้เจ้าของบัญชีแก้ไขข้อมูลของตนเองได้
+      allow read: if true; // สำหรับ Leaderboard
       allow write: if request.auth != null && request.auth.uid == userId;
 
-      // กฎสำหรับ Subcollections ทั้งหมดภายใต้ users (เช่น custom_quizzes, quiz_history)
       match /{document=**} {
         allow read, write: if request.auth != null && request.auth.uid == userId;
       }
     }
 
-    // Leaderboard (Legacy/Standalone if needed)
+    // Leaderboard
     match /leaderboard/{userId} {
       allow read: if true;
       allow write: if request.auth != null && request.auth.uid == userId;
@@ -25,13 +21,32 @@ service cloud.firestore {
 
     // --- Challenge / Lobby System ---
     match /lobbies/{lobbyId} {
+      // อนุญาตให้ใครก็ได้ที่ล็อกอินอ่านห้องได้
       allow read: if request.auth != null;
-      allow create, update: if request.auth != null;
-      allow delete: if request.auth != null && request.auth.uid == resource.data.hostId;
+      
+      // อนุญาตให้สร้างห้อง หรืออัปเดตห้อง (เช่น เริ่มเกม, อัปเดตคะแนน)
+      allow create: if request.auth != null;
+      allow update: if request.auth != null;
+      
+      // ลบห้อง: เฉพาะ Host (เช็คจาก field hostId) หรือใครก็ได้ (เพื่อความง่ายในการ Cleanup ถ้าจำเป็น)
+      // แต่เพื่อความปลอดภัย ให้เฉพาะ Host ดีกว่า
+      allow delete: if request.auth != null && (resource.data.hostId == request.auth.uid || resource.data.hostId == null);
 
+      // Subcollection: messages (Chat)
       match /messages/{messageId} {
+        allow read, create: if request.auth != null;
+      }
+
+      // Subcollection: presence (Heartbeat) - MISSING IN PREVIOUS RULES
+      match /presence/{uid} {
         allow read: if request.auth != null;
-        allow create: if request.auth != null;
+        allow write: if request.auth != null && request.auth.uid == uid;
+      }
+
+      // Subcollection: typing (Typing Indicator) - MISSING IN PREVIOUS RULES
+      match /typing/{uid} {
+        allow read: if request.auth != null;
+        allow write: if request.auth != null && request.auth.uid == uid;
       }
     }
   }

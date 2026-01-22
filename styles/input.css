@@ -29,7 +29,7 @@
     word-break: thai;
     background-color: white;
     color: #1f2937;
-    animation: fade-in 0.5s ease-in-out;
+    animation: fade-in 0.2s ease-in-out;
   }
 
   .font-kanit {
@@ -49,6 +49,13 @@
   body.dark {
     background-color: #020617;
     color: #f3f4f6;
+  }
+
+  /* Faster theme switching */
+  body {
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease;
   }
 
   /* Custom dark mode background with subtle pattern */

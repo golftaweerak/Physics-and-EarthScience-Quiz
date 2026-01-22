@@ -6650,7 +6650,7 @@
     word-break: thai;
     background-color: white;
     color: #1f2937;
-    animation: fade-in 0.5s ease-in-out;
+    animation: fade-in 0.2s ease-in-out;
   }
   .font-kanit {
     font-family: "Kanit", sans-serif;
@@ -6667,6 +6667,9 @@
   body.dark {
     background-color: #020617;
     color: #f3f4f6;
+  }
+  body {
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
   body.dark {
     background-color: #020617;
