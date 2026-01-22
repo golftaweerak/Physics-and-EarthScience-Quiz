@@ -547,7 +547,7 @@
     role="dialog" aria-modal="true" aria-labelledby="lobby-title">
     <div
         class="modal-container bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-3xl w-full p-4 sm:p-6 border border-gray-200 dark:border-gray-700 transform transition-all flex flex-col max-h-[95vh] sm:max-h-[90vh]">
-        <div class="text-center mb-4 sm:mb-6 shrink-0">
+        <div class="text-center mb-4 sm:mb-6 shrink-0 relative group">
             <div class="inline-block p-3 rounded-full bg-orange-100 dark:bg-orange-900/30 text-3xl sm:text-4xl mb-2">⛺
             </div>
             <h3 id="lobby-title" class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white font-kanit">
@@ -558,8 +558,32 @@
                     class="font-mono text-lg sm:text-xl font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 px-2 py-0.5 rounded cursor-pointer select-all"
                     title="คลิกเพื่อคัดลอก">...</span>
             </div>
-            <div id="lobby-quiz-name" class="mt-2 text-sm font-medium text-purple-600 dark:text-purple-400"></div>
-            <div id="lobby-mode-display" class="text-xs font-bold text-gray-500 dark:text-gray-400 mt-1"></div>
+
+            <div class="flex items-center justify-center gap-2 mt-2">
+                <div id="lobby-quiz-name" class="text-sm font-medium text-purple-600 dark:text-purple-400"></div>
+                <!-- Host Edit Button for Quiz -->
+                <button id="lobby-edit-quiz-btn"
+                    class="hidden text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="flex items-center justify-center gap-2 mt-1">
+                <div id="lobby-mode-display" class="text-xs font-bold text-gray-500 dark:text-gray-400"></div>
+                <!-- Host Edit Button for Mode -->
+                <button id="lobby-edit-mode-btn"
+                    class="hidden text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                    </svg>
+                </button>
+            </div>
         </div>
 
         <div

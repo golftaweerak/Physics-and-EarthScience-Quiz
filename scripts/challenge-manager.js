@@ -96,7 +96,12 @@ export class ChallengeManager {
     this.dom.challengeTimerInputContainer = document.getElementById('challenge-timer-input-container');
     this.dom.challengeTimerInput = document.getElementById('challenge-timer-input');
     this.dom.challengeTimerUnit = document.getElementById('challenge-timer-unit');
+    this.dom.challengeTimerUnit = document.getElementById('challenge-timer-unit');
     this.dom.createCustomQuizBtn = document.getElementById('quiz-select-create-custom');
+
+    // NEW: Edit Buttons
+    this.dom.editQuizBtn = document.getElementById('lobby-edit-quiz-btn');
+    this.dom.editModeBtn = document.getElementById('lobby-edit-mode-btn');
 
     // Modals
     this.kickModal = new ModalHandler('kick-notification-modal');
@@ -248,6 +253,15 @@ export class ChallengeManager {
       if (openBtn) openBtn.click();
     });
 
+    // NEW: Edit Button Listeners
+    this.dom.editQuizBtn?.addEventListener('click', () => {
+      this.openQuizSelection(this.currentMode || 'classic', this.selectedLives);
+    });
+
+    this.dom.editModeBtn?.addEventListener('click', () => {
+      this.openModeSelection();
+    });
+
     // Event delegation for the players list to handle kick buttons
     this.dom.playersListContainer?.addEventListener('click', (e) => {
       const kickBtn = e.target.closest('.kick-player-btn');
@@ -297,7 +311,8 @@ export class ChallengeManager {
           if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
             const isHidden = this.lobbyModal.modal.classList.contains('hidden');
             // Only leave if hidden, we have a lobby, we are NOT transitioning to quiz, and NOT starting (countdown)
-            if (isHidden && this.currentLobbyId && !this.isTransitioning && !this.isStarting) {
+            // AND we are not manually keeping it open (e.g. reopenLobby)
+            if (isHidden && this.currentLobbyId && !this.isTransitioning && !this.isStarting && !this.isReopening) {
               this.leaveLobby();
             }
           }
@@ -1588,6 +1603,144 @@ export class ChallengeManager {
     }
 
     window.location.href = `./quiz/index.html?${params.toString()}`;
+  }
+
+  updateLobbyUI(data) {
+    if (!this.dom.playersListContainer) return;
+
+    // Title & Info
+    if (this.dom.roomIdDisplay) this.dom.roomIdDisplay.textContent = this.currentLobbyId;
+    if (this.dom.quizName) this.dom.quizName.textContent = data.quizConfig?.title || 'แบบทดสอบ';
+
+    const modeNames = {
+      'classic': 'Classic Mode',
+      'time-attack': 'Speed Run',
+      'survival': 'Survival Mode',
+      'coop': 'Co-op Mode'
+    };
+    if (this.dom.modeDisplay) this.dom.modeDisplay.textContent = modeNames[data.mode] || data.mode;
+
+    // NEW: Show/Hide Edit Buttons for Host
+    if (this.isHost) {
+      this.dom.editQuizBtn?.classList.remove('hidden');
+      this.dom.editModeBtn?.classList.remove('hidden');
+    } else {
+      this.dom.editQuizBtn?.classList.add('hidden');
+      this.dom.editModeBtn?.classList.add('hidden');
+    }
+
+    // Players List
+    const players = data.players || [];
+    if (this.dom.playerCount) this.dom.playerCount.textContent = players.length;
+
+    this.dom.playersListContainer.innerHTML = players.map(p => {
+      const isMe = p.uid === authManager.currentUser?.uid;
+      const readyStatus = p.ready ? '<span class="text-green-500 font-bold">พร้อม!</span>' : '<span class="text-gray-400">รอ...</span>';
+      const isHost = p.uid === data.hostId;
+
+      let kickBtn = '';
+      if (this.isHost && !isMe) {
+        kickBtn = `
+                    <button class="kick-player-btn p-1 text-red-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors ml-2" title="เชิญออก" data-uid="${p.uid}" data-name="${escapeHtml(p.name)}">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7a4 4 0 11-8 0 4 4 0 018 0zM9 14a6 6 0 00-6 6v1h12v-1a6 6 0 00-6-6zM21 12h-6" />
+                        </svg>
+                    </button>
+                `;
+      }
+
+      return `
+                <div class="flex items-center justify-between p-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm">
+                    <div class="flex items-center gap-3 overflow-hidden">
+                        <div class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-lg border border-gray-200 dark:border-gray-600 flex-shrink-0 overflow-hidden">
+                             ${p.avatar && (p.avatar.includes('/') || p.avatar.includes('.')) ? `<img src="${p.avatar}" class="w-full h-full object-cover">` : (p.avatar || '🧑‍🎓')}
+                        </div>
+                        <div class="min-w-0">
+                            <div class="text-sm font-bold text-gray-800 dark:text-gray-200 truncate flex items-center gap-1">
+                                ${escapeHtml(p.name)}
+                                ${isMe ? '<span class="text-xs text-blue-500">(ฉัน)</span>' : ''}
+                                ${isHost ? '<span class="text-xs text-yellow-500">👑</span>' : ''}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 flex-shrink-0">
+                        <div class="text-xs">${readyStatus}</div>
+                        ${kickBtn}
+                    </div>
+                </div>
+            `;
+    }).join('');
+
+    // Start Button Logic (Host only)
+    if (this.isHost) {
+      this.dom.readyBtn?.classList.add('hidden'); // Host doesn't need ready button
+      this.dom.startBtn?.classList.remove('hidden');
+
+      const allReady = players.length > 0 && players.every(p => p.ready || p.uid === data.hostId); // Host is implicitly ready
+      // const allReady = players.length > 1; // Dev Testing
+
+      if (allReady) {
+        this.dom.startBtn.disabled = false;
+        this.dom.startBtn.classList.remove('opacity-50', 'cursor-not-allowed', 'grayscale');
+        this.dom.startBtn.classList.add('animate-pulse');
+        this.dom.waitingMsg?.classList.add('hidden');
+      } else {
+        this.dom.startBtn.disabled = true;
+        this.dom.startBtn.classList.add('opacity-50', 'cursor-not-allowed', 'grayscale');
+        this.dom.startBtn.classList.remove('animate-pulse');
+        if (this.dom.waitingMsg) {
+          this.dom.waitingMsg.classList.remove('hidden');
+          this.dom.waitingMsg.classList.add('flex');
+        }
+      }
+    } else {
+      // Client View
+      this.dom.startBtn?.classList.add('hidden');
+      this.dom.readyBtn?.classList.remove('hidden');
+
+      const me = players.find(p => p.uid === authManager.currentUser?.uid);
+      if (me && me.ready) {
+        this.dom.readyBtn.textContent = 'ยกเลิกพร้อม';
+        this.dom.readyBtn.classList.remove('bg-gray-200', 'dark:bg-gray-700', 'text-gray-800', 'dark:text-gray-200');
+        this.dom.readyBtn.classList.add('bg-green-500', 'text-white', 'ring-2', 'ring-green-300');
+      } else {
+        this.dom.readyBtn.textContent = 'พร้อม!';
+        this.dom.readyBtn.classList.add('bg-gray-200', 'dark:bg-gray-700', 'text-gray-800', 'dark:text-gray-200');
+        this.dom.readyBtn.classList.remove('bg-green-500', 'text-white', 'ring-2', 'ring-green-300');
+      }
+
+      if (this.dom.waitingMsg) {
+        this.dom.waitingMsg.classList.remove('hidden');
+        this.dom.waitingMsg.classList.add('flex');
+        this.dom.waitingMsg.querySelector('span:last-child').textContent = 'รอหัวหน้าห้องเริ่มเกม...';
+      }
+    }
+  }
+
+  // NEW: Method to specifically reopen the lobby from result screen
+  async reopenLobby() {
+    this.isReopening = true; // Flag to prevent auto-close logic
+    this.isTransitioning = false;
+    this.isStarting = false;
+
+    // Use cached ID or fetch from storage
+    const lobbyId = this.currentLobbyId || sessionStorage.getItem('reconnect_lobby_id');
+
+    if (lobbyId) {
+      // If we still have the listener, just show the modal
+      this.lobbyModal.open();
+
+      // If we lost the listener (e.g. page reload), re-join
+      if (!this.unsubscribe) {
+        await this.joinLobby(lobbyId);
+      }
+    } else {
+      showToast('ไม่พบข้อมูลห้อง', 'กรุณาสร้างห้องใหม่หรือเข้าร่วมใหม่', '⚠️');
+      this.openMainMenu();
+    }
+
+    // Reset flag after a short delay
+    setTimeout(() => { this.isReopening = false; }, 1000);
   }
 
   async leaveLobby(removeFromDb = true) {

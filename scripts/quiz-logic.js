@@ -211,7 +211,12 @@ export function init(quizData, storageKey, quizTitle, customTime, action, isChal
     powerupModalDesc: document.getElementById("powerup-modal-desc"),
     powerupUserXp: document.getElementById("powerup-user-xp"),
     powerupItemCost: document.getElementById("powerup-item-cost"),
+    powerupModalDesc: document.getElementById("powerup-modal-desc"),
+    powerupUserXp: document.getElementById("powerup-user-xp"),
+    powerupItemCost: document.getElementById("powerup-item-cost"),
     powerupConfirmBtn: document.getElementById("powerup-confirm-buy-btn"),
+    // New: Back to Lobby Button
+    backToLobbyBtn: document.getElementById("back-to-lobby-btn"),
   };
   // --- 2. State Initialization ---
   state = {
@@ -1734,6 +1739,28 @@ function showResults() {
   // Clean up old results and build the new layout
   cleanupResultsScreen();
   buildResultsLayout(resultInfo, stats);
+
+  // Toggle Action Buttons based on Mode
+  if (state.isChallenge) {
+    elements.restartBtn?.classList.add('hidden');
+    elements.backToLobbyBtn?.classList.remove('hidden');
+    // Bind click handler dynamically
+    if (elements.backToLobbyBtn) {
+      elements.backToLobbyBtn.onclick = async () => {
+        try {
+          const { challengeManager } = await import('./challenge-manager.js');
+          challengeManager.reopenLobby();
+          elements.resultScreen.classList.add('hidden');
+        } catch (e) {
+          console.error("Failed to re-open lobby:", e);
+          if (state.lobbyId) window.location.href = `../index.html?lobby=${state.lobbyId}`;
+        }
+      };
+    }
+  } else {
+    elements.restartBtn?.classList.remove('hidden');
+    elements.backToLobbyBtn?.classList.add('hidden');
+  }
 
   // Switch to the result screen
   switchScreen(elements.resultScreen);
