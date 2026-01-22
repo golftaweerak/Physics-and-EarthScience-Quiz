@@ -6,21 +6,42 @@
  * @returns {Promise<void>} A promise that resolves when the component is loaded or fails.
  */
 export async function loadComponent(selector, filePath) {
+    console.log(`⏳ ComponentLoader: Requesting ${filePath} into ${selector}...`);
     const element = document.querySelector(selector);
     if (!element) {
-        console.warn(`Component loader: Target element with selector '${selector}' not found.`);
+        console.warn(`⚠️ ComponentLoader: Target element '${selector}' not found.`);
         return;
     }
 
     try {
-        const response = await fetch(filePath);
+        const controller = new AbortController();
+        const timeoutDuration = 1500; // Reduced to 1.5 seconds for debugging
+        const timeoutPromise = new Promise((_, reject) =>
+            setTimeout(() => {
+                controller.abort();
+                reject(new Error(`Timeout after ${timeoutDuration}ms`));
+            }, timeoutDuration)
+        );
+
+        const fetchPromise = fetch(filePath, { signal: controller.signal });
+
+        // RACE: Whichever finishes first wins.
+        // This guarantees we don't wait forever even if fetch hangs ignoring the signal.
+        const response = await Promise.race([fetchPromise, timeoutPromise]);
+
         if (!response.ok) {
-            throw new Error(`Failed to fetch ${filePath}: ${response.statusText}`);
+            throw new Error(`Status ${response.status}: ${response.statusText}`);
         }
-        element.innerHTML = await response.text();
+
+        const html = await response.text();
+        element.innerHTML = html;
+        console.log(`✅ ComponentLoader: Successfully loaded ${filePath}`);
     } catch (error) {
-        console.error(`Error loading component into '${selector}':`, error);
+        console.error(`❌ ComponentLoader: Error loading ${filePath}:`, error);
         // Provide user-facing feedback directly in the placeholder
-        element.innerHTML = `<p class="text-center text-red-500 dark:text-red-400 p-4">เกิดข้อผิดพลาดในการโหลดส่วนนี้</p>`;
+        element.innerHTML = `<div class="p-4 text-center border border-red-300 bg-red-50 dark:bg-red-900/20 rounded-lg">
+            <p class="text-red-600 dark:text-red-400 font-bold">Failed to load component</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">${error.message}</p>
+        </div>`;
     }
 }

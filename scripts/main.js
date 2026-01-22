@@ -176,6 +176,7 @@ export const getSectionToggles = () =>
   document.querySelectorAll(".section-toggle");
 
 export function initializePage() {
+  console.log("🚀 main.js: initializePage STARTED");
   // Constants for animation timings to avoid "magic numbers"
   const ACCORDION_ANIMATION_DURATION = 500; // Corresponds to `duration-500` in Tailwind
   const SCROLL_DELAY = ACCORDION_ANIMATION_DURATION + 50; // Buffer for smooth scrolling after animation
@@ -732,6 +733,7 @@ export function initializePage() {
 
       const fragment = document.createDocumentFragment();
       sortedCategories.forEach((categoryKey) => {
+        console.log(`🚀 main.js: Creating section for category: ${categoryKey}`);
         const quizzes = groupedQuizzes[categoryKey];
         const section = createCategorySection(categoryKey, quizzes);
         if (section) {

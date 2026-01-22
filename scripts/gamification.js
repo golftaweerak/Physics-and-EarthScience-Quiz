@@ -320,7 +320,8 @@ export class Gamification {
         this.saveState();
 
         if (isNewToGamification) {
-            this.recalculateFromHistory();
+            // Defer heavy recalculation to keep startup smooth
+            setTimeout(() => this.recalculateFromHistory(), 500);
         }
 
         this.updateStreak();
@@ -346,8 +347,8 @@ export class Gamification {
                     // Merge data from Cloud with Default State for completeness
                     this.state = { ...this.getDefaultState(), ...data };
 
-                    // NEW: คำนวณคะแนนใหม่ทุกครั้งที่โหลดข้อมูลเพื่อความถูกต้อง (Recalculate on login)
-                    this.recalculateFromHistory();
+                    // NEW: Defer recalculation on login
+                    setTimeout(() => this.recalculateFromHistory(), 200);
 
                     // --- Data Consistency Check & Correction ---
                     // เรียกใช้ฟังก์ชันตรวจสอบความถูกต้องที่สร้างขึ้นใหม่
@@ -559,14 +560,14 @@ export class Gamification {
     }
 
     loadState() {
-        const stored = localStorage.getItem(this.storageKey);
         let state = null;
         try {
+            const stored = localStorage.getItem(this.storageKey);
             if (stored) {
                 state = JSON.parse(stored);
             }
         } catch (e) {
-            console.error("Error loading gamification state:", e);
+            console.error("Error loading gamification state from storage:", e);
         }
 
         // IMPROVEMENT: Define Default State clearly

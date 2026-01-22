@@ -295,7 +295,11 @@ class AuthManagerInternal {
     // ฟังก์ชันหลักสำหรับบันทึกข้อมูล (ใช้แทนการ setItem)
     async saveUserData(data) {
         // 1. บันทึกลง LocalStorage เสมอ (เพื่อความเร็วและ Offline เบื้องต้น)
-        localStorage.setItem(this.LOCAL_STORAGE_KEY, JSON.stringify(data));
+        try {
+            localStorage.setItem(this.LOCAL_STORAGE_KEY, JSON.stringify(data));
+        } catch (e) {
+            console.warn("AuthManager: Failed to save to localStorage:", e);
+        }
 
         // 2. ถ้าล็อกอิน ให้บันทึกลง Firestore ด้วย
         if (this.currentUser) {
@@ -354,14 +358,22 @@ class AuthManagerInternal {
             // หรือถ้าคุณต้องการ Logic ที่ซับซ้อนกว่านี้ (เช่น เอา XP ที่มากกว่า) ก็แก้ตรงนี้ได้
             console.log("Found cloud data, syncing to local...");
             const cloudData = docSnap.data();
-            localStorage.setItem(this.LOCAL_STORAGE_KEY, JSON.stringify(cloudData));
+            try {
+                localStorage.setItem(this.LOCAL_STORAGE_KEY, JSON.stringify(cloudData));
+            } catch (e) {
+                console.warn("AuthManager: Failed to sync cloud data to local storage:", e);
+            }
         }
     }
 
     // บันทึกเวลาซิงค์ล่าสุดและแจ้งเตือน UI
     updateLastSyncTime() {
         const now = new Date().toISOString();
-        localStorage.setItem('last_cloud_sync', now);
+        try {
+            localStorage.setItem('last_cloud_sync', now);
+        } catch (e) {
+            // Ignore
+        }
         // ส่ง Event ให้หน้าจออื่นรับรู้
         window.dispatchEvent(new CustomEvent('auth-synced', { detail: { time: now } }));
     }

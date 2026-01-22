@@ -94,7 +94,7 @@ export async function initializeQuiz() {
     // --- NEW: Handle Custom Quiz ---
     if (quizId && quizId.startsWith('custom_')) {
         let customQuizData = null;
-        const allCustomQuizzes = getSavedCustomQuizzes();
+        const allCustomQuizzes = await getSavedCustomQuizzes();
         customQuizData = allCustomQuizzes.find(q => q.customId === quizId);
 
         if (!customQuizData && lobbyConfig && lobbyConfig.customQuestions) {

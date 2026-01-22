@@ -1,32 +1,105 @@
-// --- Dark Mode Toggle Script ---
+const sunIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z" clip-rule="evenodd" /></svg>`;
+const moonIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" /></svg>`;
 
-export function initializeDarkMode() { 
-    const toggleButton = document.getElementById('dark-mode-toggle');
-    if (!toggleButton) {
-        // console.error('Dark mode toggle button not found!');
-        return;
-    }
+/**
+ * Updates any dark mode toggle buttons found in the document.
+ */
+function updateAllToggles() {
+    const isDark = document.documentElement.classList.contains('dark');
+    const icon = isDark ? sunIcon : moonIcon;
+    const text = isDark ? 'โหมดสว่าง' : 'โหมดมืด';
 
-    const sunIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>`;
-    const moonIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>`;
+    document.querySelectorAll('#dark-mode-toggle').forEach(btn => {
+        btn.innerHTML = `${icon} <span>${text}</span>`;
+    });
+}
 
-    function applyTheme(isDark) {
+/**
+ * Applies the theme and dispatches an event.
+ */
+export function applyTheme(isDark) {
+    try {
         if (isDark) {
             document.documentElement.classList.add('dark');
-            toggleButton.innerHTML = sunIcon;
-            localStorage.theme = 'dark';
+            localStorage.setItem('theme', 'dark');
         } else {
             document.documentElement.classList.remove('dark');
-            toggleButton.innerHTML = moonIcon;
-            localStorage.theme = 'light';
+            localStorage.setItem('theme', 'light');
         }
+    } catch (e) {
+        console.warn('Dark Mode: Storage access denied:', e);
+    }
+    updateAllToggles();
+}
+
+/**
+ * Global click handler for dark mode toggle using delegation.
+ * This handles buttons even if they are replaced by dynamic loaders.
+ */
+document.addEventListener('click', (event) => {
+    const toggleBtn = event.target.closest('#dark-mode-toggle');
+    if (toggleBtn) {
+        const isCurrentlyDark = document.documentElement.classList.contains('dark');
+        applyTheme(!isCurrentlyDark);
+    }
+});
+
+// 1. Initial application (Safe FOUC fix)
+try {
+    const storedTheme = localStorage.getItem('theme');
+    const isInitialDark = storedTheme === 'dark' ||
+        (!storedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    document.documentElement.classList.add(isInitialDark ? 'dark' : 'light');
+} catch (e) {
+    console.warn('Dark Mode: Early theme init failed:', e);
+}
+
+// 2. Global singleton observer setup
+let observer = null;
+function startObserver() {
+    if (observer || !document.body) return;
+    observer = new MutationObserver((mutations) => {
+        let shouldUpdate = false;
+        for (const mutation of mutations) {
+            if (mutation.type === 'childList') {
+                for (const node of mutation.addedNodes) {
+                    if (node.nodeType === 1) { // Element
+                        if (node.id === 'dark-mode-toggle' || node.querySelector?.('#dark-mode-toggle')) {
+                            shouldUpdate = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (shouldUpdate) break;
+        }
+
+        if (shouldUpdate) {
+            updateAllToggles();
+        }
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+    updateAllToggles();
+}
+
+// Try to start observer immediately (if body exists) or wait for it
+if (document.body) {
+    startObserver();
+} else {
+    document.addEventListener('DOMContentLoaded', startObserver);
+}
+
+export function initializeDarkMode() {
+    // Determine current state safely
+    let isDark = false;
+    try {
+        const storedTheme = localStorage.getItem('theme');
+        isDark = storedTheme === 'dark' ||
+            (!storedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    } catch (e) {
+        isDark = document.documentElement.classList.contains('dark');
     }
 
-    toggleButton.addEventListener('click', () => {
-        applyTheme(!document.documentElement.classList.contains('dark'));
-    });
-
-    // Apply theme on initial load
-    const isInitialDark = localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
-    applyTheme(isInitialDark);
+    applyTheme(isDark);
+    startObserver();
 }

@@ -326,7 +326,22 @@ export async function fetchAllQuizData() {
   // Filter out any potential empty/falsy entries from the list to prevent errors.
   const validQuizList = Array.isArray(quizList) ? quizList.filter((quiz) => quiz) : [];
   const promises = validQuizList.map(async (quiz) => {
-    const scriptPath = `../data/${quiz.id}-data.js`;
+    // Fix for missing path prefixes:
+    let scriptPath;
+    if (quiz.id.includes('/')) {
+      scriptPath = `../data/${quiz.id}-data.js`;
+    } else {
+      // Auto-detect folder based on ID prefix
+      let folder = '';
+      if (quiz.id.startsWith('phy_m4')) folder = 'phy_m4/';
+      else if (quiz.id.startsWith('phy_m5')) folder = 'phy_m5/';
+      else if (quiz.id.startsWith('phy_m6')) folder = 'phy_m6/';
+      else if (quiz.id.startsWith('ess_basic')) folder = 'ess_basic/';
+      else if (quiz.id.startsWith('ess_adv')) folder = 'ess_adv/';
+
+      scriptPath = `../data/${folder}${quiz.id}-data.js`;
+    }
+
     try {
       const module = await import(scriptPath);
       const data = module.quizItems || module.quizScenarios || module.quizData || [];

@@ -28,10 +28,6 @@
 
         <!-- Content wrapper with top padding to avoid overlapping with the new fixed header -->
         <div style="padding-top: 7rem;">
-            <!-- Category selection buttons are injected here by app-loader.js from components/header.html.
-                 This approach improves semantics by defining the header structure in the main layout. -->
-
-
 
             <!-- Header for the quiz list section, populated by main.js -->
             <div id="quiz-list-header" class="max-w-4xl mx-auto mt-8 mb-4 hidden flex justify-between items-center">
@@ -117,55 +113,6 @@
 
         <!-- app-loader is a module and will handle importing its own dependencies. -->
         <script src="./scripts/app-loader.js" type="module"></script>
-
-        <!-- Load Site Configuration -->
-        <script type="module">
-            import { SiteConfig } from './scripts/site-config.js';
-
-            // Update Meta Tags & Title dynamically
-            document.title = SiteConfig.appTitle;
-            document.querySelector('meta[name="description"]').setAttribute("content", SiteConfig.appDescription);
-            document.querySelector('meta[name="keywords"]').setAttribute("content", SiteConfig.appKeywords);
-            document.querySelector('meta[name="author"]').setAttribute("content", SiteConfig.author);
-        </script>
-        <script type="module">
-            import { Gamification } from './scripts/gamification.js';
-            new Gamification();
-            import { ChallengeManager } from './scripts/challenge-manager.js';
-
-            // Initialize ChallengeManager only after modals are loaded to prevent errors
-            const initChallengeManager = () => {
-                if (document.getElementById('challenge-menu-modal')) {
-                    const cm = new ChallengeManager();
-                    cm.init();
-                } else {
-                    const observer = new MutationObserver((mutations, obs) => {
-                        if (document.getElementById('challenge-menu-modal')) {
-                            const cm = new ChallengeManager();
-                            cm.init();
-                            obs.disconnect();
-                        }
-                    });
-                    const placeholder = document.getElementById('modals-placeholder');
-                    if (placeholder) observer.observe(placeholder, { childList: true, subtree: true });
-                }
-            };
-            initChallengeManager();
-
-            // แสดงการแจ้งเตือนเมื่อมีการซิงค์ข้อมูลสำเร็จ (รับ Event จาก AuthManager)
-            const toast = document.getElementById('sync-toast');
-            window.addEventListener('auth-synced', () => {
-                if (toast) {
-                    // แสดง Toast
-                    toast.classList.remove('translate-y-24', 'opacity-0');
-
-                    // ซ่อน Toast หลังจาก 3 วินาที
-                    setTimeout(() => {
-                        toast.classList.add('translate-y-24', 'opacity-0');
-                    }, 3000);
-                }
-            });
-        </script>
 </body>
 
 </html>
