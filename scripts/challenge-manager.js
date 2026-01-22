@@ -342,7 +342,7 @@ export class ChallengeManager {
     }
 
     // Fetch custom quizzes
-    const customQuizzes = getSavedCustomQuizzes();
+    const customQuizzes = await getSavedCustomQuizzes();
     // Merge lists
     const allQuizzes = [...quizList, ...customQuizzes];
 
@@ -566,7 +566,7 @@ export class ChallengeManager {
     if (quizId === 'random') {
       questionAmount = 20; // Random: 20 questions
     } else if (quizId.startsWith('custom_')) {
-      const customQuiz = getSavedCustomQuizzes().find(q => q.customId === quizId);
+      const customQuiz = (await getSavedCustomQuizzes()).find(q => q.customId === quizId);
       if (customQuiz) {
         customQuestions = customQuiz.questions;
         questionAmount = customQuiz.questions.length;
@@ -624,7 +624,7 @@ export class ChallengeManager {
     if (quizId === 'random') {
       questionAmount = 20;
     } else if (quizId.startsWith('custom_')) {
-      const customQuiz = getSavedCustomQuizzes().find(q => q.customId === quizId);
+      const customQuiz = (await getSavedCustomQuizzes()).find(q => q.customId === quizId);
       if (customQuiz) {
         customQuestions = customQuiz.questions;
         questionAmount = customQuiz.questions.length;
