@@ -117,13 +117,19 @@ export async function initializeQuiz() {
         populatePage(customQuizData.title, customQuizData.description);
 
         let finalCustomTime = customQuizData.customTime;
+        // Default timer mode from custom data, fallback to 'none'
+        let finalTimerMode = customQuizData.timerMode || 'none';
         let lives = 1;
+
         if (lobbyConfig) {
             finalCustomTime = lobbyConfig.customTime;
+            // Lobby might override timer settings
+            if (lobbyConfig.timerMode) finalTimerMode = lobbyConfig.timerMode;
             lives = lobbyConfig.lives || 1;
         }
 
-        initQuizApp(customQuizData.questions, customQuizData.storageKey, customQuizData.title, finalCustomTime, action, false, lives);
+        // Pass finalTimerMode to init
+        initQuizApp(customQuizData.questions, customQuizData.storageKey, customQuizData.title, finalCustomTime, action, false, lives, finalTimerMode);
         return;
     }
 
@@ -153,13 +159,16 @@ export async function initializeQuiz() {
             const selectedQuestions = allQuestions.slice(0, amount);
 
             let customTime = null;
+            let timerMode = 'none';
             let lives = 1;
+
             if (lobbyConfig) {
                 customTime = lobbyConfig.customTime;
+                timerMode = lobbyConfig.timerMode || 'none';
                 lives = lobbyConfig.lives || 1;
             }
 
-            initQuizApp(selectedQuestions, `quizState-challenge-${seed}`, "Challenge Mode", customTime, action, true, lives);
+            initQuizApp(selectedQuestions, `quizState-challenge-${seed}`, "Challenge Mode", customTime, action, true, lives, timerMode);
             return;
         } catch (error) {
             console.error("Error generating random quiz:", error);

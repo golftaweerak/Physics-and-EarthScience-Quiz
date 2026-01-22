@@ -156,8 +156,9 @@ function ensurePowerUpModalExists() {
  * @param {string} action - Action from URL (e.g. 'view_results')
  * @param {boolean} isChallenge - Whether this is a challenge/multiplayer session
  * @param {number} lives - Initial lives for Survival mode
+ * @param {string} timerMode - Timer mode from custom quiz settings (optional)
  */
-export function init(quizData, storageKey, quizTitle, customTime, action, isChallenge = false, lives = 1) {
+export function init(quizData, storageKey, quizTitle, customTime, action, isChallenge = false, lives = 1, timerMode = null) {
   // Ensure the power-up modal exists in the DOM
   ensurePowerUpModalExists();
 
@@ -227,7 +228,7 @@ export function init(quizData, storageKey, quizTitle, customTime, action, isChal
     incorrectSound: new Audio("../assets/audio/incorrect.mp3"),
     levelUpSound: new Audio("../assets/audio/level-up.mp3"), // Added missing sound
     badgeSound: new Audio("../assets/audio/badge-unlock.mp3"), // Added missing sound
-    timerMode: "none",
+    timerMode: timerMode || "none", // Initialize with passed mode or default
     timeLeft: 0,
     timerId: null,
     initialTime: 0,
@@ -2246,9 +2247,10 @@ function startQuiz() {
   const timerModeSelector = document.querySelector(
     'input[name="timer-mode"]:checked'
   );
-  if (timerModeSelector) {
+  if (timerModeSelector && state.activeScreen === elements.startScreen) {
     state.timerMode = timerModeSelector.value;
   }
+  // Else: keep the existing state.timerMode (which might have been passed in init)
 
   // Filter out any potential null or undefined questions from the source data
   // to prevent errors during the quiz, especially in the results analysis.
@@ -2799,8 +2801,19 @@ function checkForSavedQuiz(action) {
     }
   }
 
-  // Case 3: Default case - no valid saved state or not resuming. Show the start screen.
-  switchScreen(elements.startScreen);
+  // Case 3: Default case - no valid saved state or not resuming.
+  // If it's a custom quiz, we auto-start to skip redundant checks.
+  if (state.isCustomQuiz) {
+    // Explicitly hide start screen to prevent overlap since switchScreen won't hide it
+    // if activeScreen is null (initial load).
+    if (elements.startScreen) {
+      elements.startScreen.classList.add('hidden');
+    }
+    startQuiz();
+  } else {
+    // Standard quiz flow -> show start screen
+    switchScreen(elements.startScreen);
+  }
 }
 
 // --- Timer Functions ---
