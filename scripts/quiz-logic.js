@@ -892,10 +892,11 @@ function showQuestion() {
     // Ensure button is visible and reset state
     if (elements.hintBtn) {
       elements.hintBtn.classList.remove('hidden');
-      elements.hintBtn.innerHTML = '💡 แสดงคำใบ้ <span class="text-xs ml-1 bg-red-500 text-white px-1 rounded">-2 คะแนน</span>';
+      elements.hintBtn.innerHTML = '💡 แสดงคำใบ้ <span class="text-xs ml-1 bg-red-500 text-white px-1 rounded">-2 xp</span>';
       elements.hintBtn.disabled = false;
-      elements.hintBtn.classList.remove('bg-gray-400', 'cursor-not-allowed');
-      elements.hintBtn.classList.add('bg-yellow-400', 'hover:bg-yellow-500');
+      elements.hintBtn.classList.remove('cursor-not-allowed', 'opacity-50');
+      // No specific color class add/remove needed if we rely on base glass style from HTML
+      // OR re-apply base glass style if needed (if disabled state messes it up)
     }
     // Hide hint text initially
     if (elements.hintText) {
@@ -3265,7 +3266,7 @@ function toggleHint() {
       state.hintUsed = true;
       // Only toast if it's the first time and answer isn't submitted yet
       if (!state.userAnswers[state.currentQuestionIndex]) {
-        showToast('คำใบ้ถูกเปิดแล้ว', 'คะแนนข้อนี้จะถูกหัก 2 คะแนน หากตอบถูก', '💡', 'warning');
+        showToast('คำใบ้ถูกเปิดแล้ว', 'คะแนนข้อนี้จะถูกหัก 2 xp หากตอบถูก', '💡', 'warning');
       }
     }
 
@@ -3280,7 +3281,7 @@ function toggleHint() {
       if (state.hintUsed) {
         elements.hintBtn.innerHTML = '💡 แสดงคำใบ้ <span class="text-xs ml-1 bg-gray-500 text-white px-1 rounded">เปิดแล้ว</span>';
       } else {
-        elements.hintBtn.innerHTML = '💡 แสดงคำใบ้ <span class="text-xs ml-1 bg-red-500 text-white px-1 rounded">-2 คะแนน</span>';
+        elements.hintBtn.innerHTML = '💡 แสดงคำใบ้ <span class="text-xs ml-1 bg-red-500 text-white px-1 rounded">-2 xp</span>';
       }
     }
   }
