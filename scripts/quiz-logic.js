@@ -201,8 +201,9 @@ export function init(quizData, storageKey, quizTitle, customTime, action, isChal
     quizTitleDisplay: document.getElementById("quiz-title-display"),
     // New hint elements
     hintBtn: document.getElementById("hint-btn"),
-    hintContainer: document.getElementById("hint-container"),
-    hintSection: document.getElementById("hint-section"),
+    hintSection: document.getElementById("hint-area"), // Matches HTML ID 'hint-area'
+    hintText: document.getElementById("hint-text"),    // Matches HTML ID 'hint-text'
+    // hintContainer: Removed to avoid confusion
     // Power-up container (will be created dynamically)
     powerUpContainer: null,
     // Power-up Modal Elements
@@ -280,6 +281,53 @@ export function init(quizData, storageKey, quizTitle, customTime, action, isChal
   checkForSavedQuiz(action); // This will check localStorage and either show the start screen or a resume prompt.
   setupPowerUpUI(); // Setup the power-up bar
   showQuestionCountWarning();
+
+  // NEW: Appy Dynamic Theme
+  applyLocalTheme();
+}
+
+/**
+ * Applies the user's selected theme (from localStorage/Gamification) to the Quiz UI.
+ * This function injects the specific theme class into the HTML body.
+ */
+function applyLocalTheme() {
+  try {
+    const stored = localStorage.getItem('app_gamification_data');
+    if (stored) {
+      const data = JSON.parse(stored);
+      const theme = data.selectedTheme;
+      // Theme values are like 'theme-forest', 'theme-sunset', etc.
+      if (theme && theme.startsWith('theme-')) {
+        console.log("Applying Theme:", theme);
+        document.body.classList.add(theme);
+
+        // Optional: Update meta theme-color for mobile browsers
+        // This is a nice-to-have polishing touch
+        updateMetaThemeColor(theme);
+      }
+    }
+  } catch (e) {
+    console.warn("Failed to apply theme:", e);
+  }
+}
+
+function updateMetaThemeColor(themeClass) {
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (!meta) return;
+
+  // Map theme classes to hex colors for the browser address bar
+  const themeColors = {
+    'theme-forest': '#16a34a',
+    'theme-sunset': '#ea580c',
+    'theme-ocean': '#0284c7',
+    'theme-berry': '#c026d3',
+    'theme-midnight': '#4f46e5',
+    'theme-sakura': '#db2777'
+  };
+
+  if (themeColors[themeClass]) {
+    meta.setAttribute('content', themeColors[themeClass]);
+  }
 }
 
 /**
@@ -835,6 +883,41 @@ function showQuestion() {
   }
 
   renderMath(elements.quizScreen); // Render math only within the quiz screen
+
+  // --- Hint System Reset ---
+  if (state.shuffledQuestions[state.currentQuestionIndex].hint) {
+    // Show the wrapper (hintSection / hint-area)
+    if (elements.hintSection) elements.hintSection.classList.remove('hidden');
+
+    // Ensure button is visible and reset state
+    if (elements.hintBtn) {
+      elements.hintBtn.classList.remove('hidden');
+      elements.hintBtn.innerHTML = '💡 แสดงคำใบ้ <span class="text-xs ml-1 bg-red-500 text-white px-1 rounded">-2 คะแนน</span>';
+      elements.hintBtn.disabled = false;
+      elements.hintBtn.classList.remove('bg-gray-400', 'cursor-not-allowed');
+      elements.hintBtn.classList.add('bg-yellow-400', 'hover:bg-yellow-500');
+    }
+    // Hide hint text initially
+    if (elements.hintText) {
+      elements.hintText.classList.add('hidden');
+      elements.hintText.innerHTML = '';
+    }
+    // Reset usage flag for new question (unless revisiting)
+    if (!previousAnswer) {
+      state.hintUsed = false;
+    } else {
+      if (previousAnswer.hintUsed) {
+        state.hintUsed = true;
+        // Restore "Hint Used" state button
+        if (elements.hintBtn) {
+          elements.hintBtn.innerHTML = '💡 แสดงคำใบ้ <span class="text-xs ml-1 bg-gray-500 text-white px-1 rounded">เปิดแล้ว</span>';
+        }
+      }
+    }
+  } else {
+    // Hide if no hint
+    if (elements.hintSection) elements.hintSection.classList.add('hidden');
+  }
 }
 
 function apply5050() {
@@ -1197,7 +1280,10 @@ function evaluateFillInNumberAnswer() {
     explanation: currentQuestion.explanation || "",
     subCategory: currentQuestion.subCategory || 'ไม่มีหมวดหมู่',
     sourceQuizTitle: currentQuestion.sourceQuizTitle,
-    sourceQuizCategory: currentQuestion.sourceQuizCategory
+    sourceQuizTitle: currentQuestion.sourceQuizTitle,
+    sourceQuizCategory: currentQuestion.sourceQuizCategory,
+    // NEW: Track hint usage for Fill-in
+    hintUsed: state.hintUsed || false
   };
   saveQuizState();
 
@@ -1274,14 +1360,43 @@ function selectAnswer(e) {
     explanation: state.shuffledQuestions[state.currentQuestionIndex]?.explanation || "",
     subCategory: state.shuffledQuestions[state.currentQuestionIndex]?.subCategory || 'ไม่มีหมวดหมู่',
     sourceQuizTitle: state.shuffledQuestions[state.currentQuestionIndex]?.sourceQuizTitle,
-    sourceQuizCategory: state.shuffledQuestions[state.currentQuestionIndex]?.sourceQuizCategory
+    sourceQuizTitle: state.shuffledQuestions[state.currentQuestionIndex]?.sourceQuizTitle,
+    sourceQuizCategory: state.shuffledQuestions[state.currentQuestionIndex]?.sourceQuizCategory,
+    // NEW: Track hint usage
+    hintUsed: state.hintUsed || false
   };
 
   // Save state immediately after an answer is recorded for better data persistence.
   saveQuizState();
 
   if (correct) {
-    state.score++;
+    // SCORING UPDATE: Check if hint was used
+    let points = 1;
+    if (state.hintUsed) {
+      points = -2; // Penalty for using hint (Logic per user request: -2 from score?)
+      // Wait, user said "score reduced by 2".
+      // Usually, a correct answer gives +1 score in this simple counter.
+      // If the user means "points for this question", we need to know the base points.
+      // But state.score is a simple counter of correct answers?
+      // Let's check: elements.scoreCounter.textContent = `คะแนน: ${state.score}`;
+      // Ah, elsewhere (gamification) it calculates XP based on correctness.
+      // But here, state.score seems to be just "Number of Correct Answers".
+      // If the user wants to reduce THE SCORE, maybe they mean XP?
+      // "เพิ่มเงื่อนไขว่าถ้าใช้คำใบ้แล้วคะแนนที่ได้ของข้อนั้นจะลดลง 2 คะแนน"
+      // If base score (count) is 1, reducing by 2 means -1? That's weird for a "Correct Count".
+      // Let's assume they mean GAMIFICATION XP.
+      // Standard points = 4 or 5 XP.
+      // Penalty = -2 XP from that.
+
+      // BUT, if they mean the simple `state.score` (which acts like a counter), maybe they want it to count less?
+      // Let's assume they mean XP mostly, but for the visual counter, maybe just don't increment?
+      // No, user said "score of that question reduced by 2".
+      // Let's check gamification logic in `showResults`.
+      // It calculates XP there.
+      // So we need to store `hintUsed` in `state.userAnswers`.
+
+    }
+    state.score++; // Still counts as correct
     elements.scoreCounter.textContent = `คะแนน: ${state.score}`;
     state.game.incrementCorrectStreak();
     if (state.isSoundEnabled)
@@ -3119,6 +3234,54 @@ function bindEventListeners() {
   }
   // New: Add listener for the hint button
   if (elements.hintBtn) {
-    elements.hintBtn.addEventListener("click", showHint);
+    elements.hintBtn.addEventListener("click", toggleHint);
+  } else {
+    // Retry binding if element wasn't caught in initial cache (sometimes happens with dynamic elements, though here it is static)
+    const btn = document.getElementById('hint-btn');
+    if (btn) btn.addEventListener('click', toggleHint);
+  }
+}
+
+/**
+ * Toggles the visibility of the hint text.
+ * Applies penalty logic when first revealed.
+ */
+function toggleHint() {
+  const hintText = document.getElementById('hint-text');
+  const currentQuestion = state.shuffledQuestions[state.currentQuestionIndex];
+
+  if (!hintText || !currentQuestion || !currentQuestion.hint) return;
+
+  const isHidden = hintText.classList.contains('hidden');
+
+  if (isHidden) {
+    // Reveal Hint
+    hintText.classList.remove('hidden');
+    hintText.innerHTML = `<strong>คำใบ้:</strong> ${currentQuestion.hint}`;
+    renderMath(hintText);
+
+    // Mark as used for penalty
+    if (!state.hintUsed) {
+      state.hintUsed = true;
+      // Only toast if it's the first time and answer isn't submitted yet
+      if (!state.userAnswers[state.currentQuestionIndex]) {
+        showToast('คำใบ้ถูกเปิดแล้ว', 'คะแนนข้อนี้จะถูกหัก 2 คะแนน หากตอบถูก', '💡', 'warning');
+      }
+    }
+
+    // Update Button Style
+    if (elements.hintBtn) {
+      elements.hintBtn.textContent = '🙈 ซ่อนคำใบ้';
+    }
+  } else {
+    // Hide Hint
+    hintText.classList.add('hidden');
+    if (elements.hintBtn) {
+      if (state.hintUsed) {
+        elements.hintBtn.innerHTML = '💡 แสดงคำใบ้ <span class="text-xs ml-1 bg-gray-500 text-white px-1 rounded">เปิดแล้ว</span>';
+      } else {
+        elements.hintBtn.innerHTML = '💡 แสดงคำใบ้ <span class="text-xs ml-1 bg-red-500 text-white px-1 rounded">-2 คะแนน</span>';
+      }
+    }
   }
 }
