@@ -1,8 +1,8 @@
 
-import { quizList } from './data/quizzes-list.js';
-import { quizList } from './data/quizzes-list.js';
-import { subCategoryData } from './data/sub-category-data.js';
-import { getSyllabusForCategory } from './scripts/syllabus-manager.js';
+import { quizList } from '../data/quizzes-list.js';
+
+import { subCategoryData } from '../data/sub-category-data.js';
+import { getSyllabusForCategory } from '../scripts/syllabus-manager.js';
 
 console.log("🚀 Starting Offline Data Verification...");
 

@@ -19,7 +19,7 @@ global.localStorage = {
 global.fetch = () => Promise.resolve({ ok: true, text: () => Promise.resolve("") });
 global.HTMLElement = class { };
 
-import('./scripts/main.js')
+import('../scripts/main.js')
   .then((m) => {
     console.log("Import success!");
     if (m.initializePage) {

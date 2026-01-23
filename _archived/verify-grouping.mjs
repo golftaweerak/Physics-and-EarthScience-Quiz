@@ -1,7 +1,7 @@
 
-import { quizList } from './data/quizzes-list.js';
-import { getSyllabusForCategory } from './scripts/syllabus-manager.js';
-import { categoryDetails } from './scripts/data-manager.js';
+import { quizList } from '../data/quizzes-list.js';
+import { getSyllabusForCategory } from '../scripts/syllabus-manager.js';
+import { categoryDetails } from '../scripts/data-manager.js';
 
 console.log("🚀 Starting Grouping Logic Verification...");
 

@@ -27,8 +27,8 @@ global.history = { replaceState: () => { } };
   console.log("Starting loader shim...");
   try {
     console.log("Importing gamification...");
-    const gamificationPromise = import('./scripts/gamification.js');
-    const mainPromise = import('./scripts/main.js');
+    const gamificationPromise = import('../scripts/gamification.js');
+    const mainPromise = import('../scripts/main.js');
 
     const gamification = await gamificationPromise;
     console.log("Gamification imported.");

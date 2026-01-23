@@ -134,30 +134,8 @@ export const quizList = [
     "category": "PhysicsM4",
     "subCategory": "บทที่ 5: งานและพลังงาน"
   },
-  {
-    "id": "phy_m4_final-exam-1",
-    "title": "ทบทวนเนื้อหาบทที่ 3 (แรงและกฎการเคลื่อนที่) และบทที่ 4 (สมดุลต่อการเลื่อนที่)",
-    "amount": 30,
-    "description": "ทบทวนเนื้อหาบทที่ 3 (แรงและกฎการเคลื่อนที่) และบทที่ 4 (สมดุลต่อการเลื่อนที่)",
-    "url": "./quiz/index.html?id=phy_m4_final-exam-1",
-    "storageKey": "quizState-phy_m4_final-exam-1",
-    "icon": "./assets/icons/physicsm4.png",
-    "altText": "ไอคอนสำหรับ phy_m4_final-exam-1",
-    "category": "PhysicsM4",
-    "subCategory": "บทที่ 3: แรงและกฎการเคลื่อนที่"
-  },
-  {
-    "id": "phy_m4_final-exam-2",
-    "title": "ทบทวนเนื้อหาบทที่ 3 (แรงและกฎการเคลื่อนที่) และบทที่ 4 (สมดุลต่อการเลื่อนที่) โดยเน้นเรื่องแรงโน้มถ่วงและการเปรียบเทียบน้ำหนัก",
-    "amount": 30,
-    "description": "ทบทวนเนื้อหาบทที่ 3 (แรงและกฎการเคลื่อนที่) และบทที่ 4 (สมดุลต่อการเลื่อนที่) โดยเน้นเรื่องแรงโน้มถ่วงและการเปรียบเทียบน้ำหนัก",
-    "url": "./quiz/index.html?id=phy_m4_final-exam-2",
-    "storageKey": "quizState-phy_m4_final-exam-2",
-    "icon": "./assets/icons/physicsm4.png",
-    "altText": "ไอคอนสำหรับ phy_m4_final-exam-2",
-    "category": "PhysicsM4",
-    "subCategory": "บทที่ 3: แรงและกฎการเคลื่อนที่"
-  },
+
+
   {
     "id": "phy_m4_mid2-exam-4",
     "title": "ทบทวนเนื้อหาบทที่ 4 (สมดุลกล) และบทที่ 5 (งานและพลังงาน)",
@@ -578,18 +556,7 @@ export const quizList = [
     "category": "PhysicsM4",
     "subCategory": "บทที่ 6: โมเมนตัมและการชน"
   },
-  {
-    "id": "phy_m4/phy_m4_ch6-6",
-    "title": "บทที่ 6: โมเมนตัมและการชน (ชุดที่ 6 - เน้นโมเมนตัม, การเปลี่ยนแปลงโมเมนตัม และแรงดล) จำนวน 30 ข้อ",
-    "amount": 30,
-    "description": "บทที่ 6: โมเมนตัมและการชน (ชุดที่ 6 - เน้นโมเมนตัม, การเปลี่ยนแปลงโมเมนตัม และแรงดล) จำนวน 30 ข้อ",
-    "url": "./quiz/index.html?id=phy_m4_ch6-6",
-    "storageKey": "quizState-phy_m4_ch6-6",
-    "icon": "./assets/icons/physicsm4.png",
-    "altText": "ไอคอนสำหรับ phy_m4_ch6-6",
-    "category": "PhysicsM4",
-    "subCategory": "บทที่ 6: โมเมนตัมและการชน"
-  },
+
   {
     "id": "phy_m4_ch7-1",
     "title": "บทที่ 7: การเคลื่อนที่แนวโค้ง (ชุดที่ 1 - การเคลื่อนที่แบบโพรเจกไทล์)",
