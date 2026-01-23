@@ -1743,6 +1743,49 @@ export class ChallengeManager {
     setTimeout(() => { this.isReopening = false; }, 1000);
   }
 
+  async resetLobby() {
+    if (!this.currentLobbyId || !this.isHost) return;
+
+    try {
+      // 1. Reset status to waiting
+      // 2. Clear winnerName
+      // 3. Reset players ready status and progress? (Optional, but good for clean slate)
+      //    For now, let's keep players but reset their game state.
+
+      const lobbyRef = doc(db, 'lobbies', this.currentLobbyId);
+
+      await runTransaction(db, async (transaction) => {
+        const docSnap = await transaction.get(lobbyRef);
+        if (!docSnap.exists()) return;
+
+        const data = docSnap.data();
+        const players = data.players || [];
+
+        // Reset player stats
+        const resetPlayers = players.map(p => ({
+          ...p,
+          score: 0,
+          progress: 0,
+          ready: p.uid === data.hostId, // Host is ready, others not
+          eliminated: false
+        }));
+
+        transaction.update(lobbyRef, {
+          status: 'waiting',
+          winnerName: null,
+          players: resetPlayers
+        });
+      });
+
+      showToast('เริ่มใหม่', 'รีเซ็ตห้องเรียบร้อยแล้ว', '🔄');
+      this.reopenLobby(); // Host goes back immediately
+
+    } catch (e) {
+      console.error("Failed to reset lobby:", e);
+      showToast('ผิดพลาด', 'ไม่สามารถรีเซ็ตห้องได้', '❌', 'error');
+    }
+  }
+
   async leaveLobby(removeFromDb = true) {
     if (this.isTransitioning) return;
 

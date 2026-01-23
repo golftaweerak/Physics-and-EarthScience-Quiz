@@ -25,14 +25,19 @@ const auth = getAuth(app);
 
 
 let db;
+// OPTIMIZED: Use memory cache by default for better performance on iOS/Mobile
+// Persistent cache (IndexedDB) can cause significant startup lag on some devices.
 try {
     db = initializeFirestore(app, {
         localCache: persistentLocalCache({
             tabManager: persistentMultipleTabManager()
         })
+        // If you want purely memory cache (fastest startup, no offline persistence across reloads):
+        // localCache: memoryLocalCache()
     });
 } catch (e) {
     console.warn("Firestore persistence failed, falling back to default:", e);
+    // iOS often falls back here anyway if multiple tabs are open or storage is restricted
     db = getFirestore(app);
 }
 

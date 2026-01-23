@@ -229,6 +229,11 @@ class AuthManagerInternal {
 
     // ฟังก์ชันสำหรับรอให้ Auth พร้อมใช้งาน
     async waitForAuthReady() {
+        // OPTIMIZED: Return immediately if already initialized
+        if (this.isInitialized) {
+            return this.currentUser;
+        }
+
         // Fallback: If authReadyPromise takes too long (e.g. 2s), assume not logged in to unblock the UI
         const timeout = new Promise(resolve => setTimeout(() => resolve(null), 2000));
         await Promise.race([this.authReadyPromise, timeout]);

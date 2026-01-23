@@ -1438,9 +1438,18 @@ function showResults() {
   stopTimer(); // Stop any running timers.
 
   // --- NEW: Cleanup Lobby Listener ---
-  if (state.lobbyUnsubscribe) {
+  // FIX: Don't remove listener yet if we are in Challenge Mode!
+  // We need to keep listening for 'waiting' status to auto-restart.
+  if (state.lobbyUnsubscribe && !state.isChallenge) {
     state.lobbyUnsubscribe();
     state.lobbyUnsubscribe = null;
+  }
+
+  // Release Wake Lock
+  if (state.wakeLock) {
+    state.wakeLock.release().then(() => {
+      state.wakeLock = null;
+    }).catch(e => console.warn('Wake Lock Release Error:', e));
   }
 
   setFloatingNav(false); // Deactivate the floating navigation bar
@@ -1742,7 +1751,6 @@ function showResults() {
 
   // Toggle Action Buttons based on Mode
   if (state.isChallenge) {
-    elements.restartBtn?.classList.add('hidden');
     elements.backToLobbyBtn?.classList.remove('hidden');
     // Bind click handler dynamically
     if (elements.backToLobbyBtn) {
@@ -1757,8 +1765,42 @@ function showResults() {
         }
       };
     }
+
+    // NEW: Host "Play Again" Button
+    if (state.isHost) {
+      const restartBtn = elements.restartBtn;
+      if (restartBtn) {
+        restartBtn.classList.remove('hidden');
+        restartBtn.textContent = '🔄 เริ่มใหม่ทั้งห้อง (Host Reset)';
+        // Change color to differentiate
+        restartBtn.className = "w-full sm:w-auto flex-1 bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-3 px-6 rounded-lg text-lg transition duration-300 shadow-md hover:shadow-lg";
+
+        restartBtn.onclick = async () => {
+          if (confirm('คุณต้องการรีเซ็ตห้องเพื่อเริ่มเล่นใหม่หรือไม่? ผู้เล่นทุกคนจะถูกดึงกลับไปที่ห้อง Lobby')) {
+            try {
+              const { challengeManager } = await import('./challenge-manager.js');
+              await challengeManager.resetLobby();
+              elements.resultScreen.classList.add('hidden');
+            } catch (e) {
+              console.error(e);
+              showToast('Error', 'Failed to reset lobby', '❌');
+            }
+          }
+        };
+      }
+    } else {
+      // Client: Hide restart button strictly
+      elements.restartBtn?.classList.add('hidden');
+    }
+
   } else {
     elements.restartBtn?.classList.remove('hidden');
+    // Restore default text and style just in case
+    if (elements.restartBtn) {
+      elements.restartBtn.textContent = 'ทำแบบทดสอบอีกครั้ง';
+      elements.restartBtn.className = "w-full sm:w-auto flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg text-lg transition duration-300 shadow-md hover:shadow-lg";
+      elements.restartBtn.onclick = null; // Remove dynamic handler to fallback to default or re-bind default in bindEventListeners
+    }
     elements.backToLobbyBtn?.classList.add('hidden');
   }
 
@@ -2293,6 +2335,16 @@ function startQuiz() {
 
   showQuestion();
   saveQuizState();
+
+  // NEW: Request Wake Lock
+  if ('wakeLock' in navigator) {
+    navigator.wakeLock.request('screen')
+      .then(lock => {
+        state.wakeLock = lock;
+        console.log('Wake Lock active');
+      })
+      .catch(err => console.warn('Wake Lock error:', err));
+  }
 }
 
 // --- New Review Functions ---
@@ -2591,36 +2643,52 @@ function setupMultiplayerUI() {
           showToast('จบเกม!', data.mode === 'time-attack' ? `${winnerName} เข้าเส้นชัยแล้ว!` : 'การแข่งขันสิ้นสุดลงแล้ว', '🏁');
           setTimeout(() => showResults(), 1000);
         }
-        return;
       }
-
-      const players = data.players || [];
-      const totalScore = players.reduce((sum, p) => sum + (p.score || 0), 0);
-      state.currentTeamScore = totalScore;
-
-      if (state.mode === 'coop' && elements.teamScoreDisplay) {
-        animateValue(elements.teamScoreDisplay, parseInt(elements.teamScoreDisplay.dataset.score || 0), totalScore, 1000, '🤝 ทีม: ');
-        elements.teamScoreDisplay.dataset.score = totalScore;
-      }
-
-      if (elements.teamProgressBar) {
-        let progressPercent = 0;
-        const totalQ = state.questionCount || 1;
-        if (state.mode === 'coop') {
-          const totalProgress = players.reduce((sum, p) => sum + (p.progress || 0), 0);
-          progressPercent = (totalProgress / (totalQ * players.length)) * 100;
-        } else if (state.mode === 'time-attack') {
-          const maxScore = Math.max(...players.map(p => p.score || 0));
-          progressPercent = (maxScore / 10) * 100;
-        } else {
-          const maxProgress = Math.max(...players.map(p => p.progress || 0));
-          progressPercent = (maxProgress / totalQ) * 100;
-        }
-        elements.teamProgressBar.style.width = `${Math.min(100, progressPercent)}%`;
-      }
-
-      updatePlayersListUI(players);
+      return;
     }
+
+    // NEW: Auto-Redirect to Lobby if status becomes 'waiting' (Host Reset)
+    if (data.status === 'waiting' && state.activeScreen === elements.resultScreen) {
+      showToast('เริ่มเกมใหม่', 'หัวหน้าห้องได้รีเซ็ตห้องแล้ว', '🔄');
+
+      if (state.lobbyUnsubscribe) {
+        state.lobbyUnsubscribe(); // Clean up this listener as reopenLobby will attach a new one via CM
+        state.lobbyUnsubscribe = null;
+      }
+
+      import('./challenge-manager.js').then(({ challengeManager }) => {
+        challengeManager.reopenLobby();
+        elements.resultScreen.classList.add('hidden');
+      });
+      return;
+    }
+
+    const players = data.players || [];
+    const totalScore = players.reduce((sum, p) => sum + (p.score || 0), 0);
+    state.currentTeamScore = totalScore;
+
+    if (state.mode === 'coop' && elements.teamScoreDisplay) {
+      animateValue(elements.teamScoreDisplay, parseInt(elements.teamScoreDisplay.dataset.score || 0), totalScore, 1000, '🤝 ทีม: ');
+      elements.teamScoreDisplay.dataset.score = totalScore;
+    }
+
+    if (elements.teamProgressBar) {
+      let progressPercent = 0;
+      const totalQ = state.questionCount || 1;
+      if (state.mode === 'coop') {
+        const totalProgress = players.reduce((sum, p) => sum + (p.progress || 0), 0);
+        progressPercent = (totalProgress / (totalQ * players.length)) * 100;
+      } else if (state.mode === 'time-attack') {
+        const maxScore = Math.max(...players.map(p => p.score || 0));
+        progressPercent = (maxScore / 10) * 100;
+      } else {
+        const maxProgress = Math.max(...players.map(p => p.progress || 0));
+        progressPercent = (maxProgress / totalQ) * 100;
+      }
+      elements.teamProgressBar.style.width = `${Math.min(100, progressPercent)}%`;
+    }
+
+    updatePlayersListUI(players);
   });
 }
 
