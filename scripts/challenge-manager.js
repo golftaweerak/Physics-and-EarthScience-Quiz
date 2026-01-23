@@ -38,7 +38,7 @@ export class ChallengeManager {
     this.onOnline = null;
 
     const basePath = window.location.pathname.includes('/quiz/') ? '../' : './';
-    this.notificationSound = new Audio('./assets/audio/badge.mp3');
+    this.notificationSound = new Audio('./assets/audio/notification.mp3');
   }
 
   init() {
