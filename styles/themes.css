@@ -1,0 +1,45 @@
+:root {
+  /* Default Theme (Classic Blue) */
+  --quiz-primary: #2563eb;       /* blue-600 */
+  --quiz-primary-hover: #1d4ed8; /* blue-700 */
+  --quiz-secondary: #60a5fa;     /* blue-400 */
+  --quiz-bg-light: #eff6ff;      /* blue-50 */
+  --quiz-bg-dark: rgba(30, 58, 138, 0.5); /* blue-900/50 */
+  --quiz-ring: #93c5fd;          /* blue-300 */
+  --quiz-text-dark: #60a5fa;     /* blue-400 */
+  
+  --quiz-gradient-start: #3b82f6; /* blue-500 */
+  --quiz-gradient-end: #2563eb;   /* blue-600 */
+}
+
+/* Base style overrides using variables */
+.theme-btn-primary {
+    background-color: var(--quiz-primary) !important;
+}
+.theme-btn-primary:hover {
+    background-color: var(--quiz-primary-hover) !important;
+}
+
+.theme-text-primary {
+    color: var(--quiz-primary) !important;
+}
+
+.theme-bg-light {
+    background-color: var(--quiz-bg-light) !important;
+}
+
+.theme-border-primary {
+    border-color: var(--quiz-primary) !important;
+}
+
+.theme-ring-focus:focus {
+    --tw-ring-color: var(--quiz-ring) !important;
+}
+
+/* Gradient Background for Quiz Screen */
+.quiz-bg-gradient {
+    background: linear-gradient(135deg, var(--quiz-bg-light) 0%, #ffffff 100%);
+}
+.dark .quiz-bg-gradient {
+    background: linear-gradient(135deg, #111827 0%, #1f2937 100%); /* Default dark is slate-900 */
+}
