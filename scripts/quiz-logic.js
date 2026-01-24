@@ -380,8 +380,8 @@ function updateNextButtonAppearance(action) {
   let buttonIcon = config.icons.next;
   let buttonTitle = 'ข้อต่อไป';
 
-  // Base classes that are always present
-  const baseClasses = ['hidden', 'w-full', 'sm:w-auto', 'px-10', 'py-4', 'text-white', 'font-black', 'rounded-2xl', 'shadow-xl', 'transition-all', 'transform', 'hover:-translate-y-1', 'active:scale-95', 'btn-quiz-next'];
+  // Base classes that are always present (wait, don't include hidden here)
+  const baseClasses = ['w-full', 'sm:w-auto', 'px-10', 'py-4', 'text-white', 'font-black', 'rounded-2xl', 'shadow-xl', 'transition-all', 'transform', 'hover:-translate-y-1', 'active:scale-95', 'btn-quiz-next'];
 
   // Theme classes
   const nextClasses = ['theme-bg-primary', 'hover:shadow-indigo-500/20'];
@@ -389,6 +389,13 @@ function updateNextButtonAppearance(action) {
 
   // Reset theme-specific classes first
   elements.nextBtn.classList.remove(...nextClasses, ...submitClasses);
+
+  // Ensure base classes (like text-white) are always present
+  if (state.isFloatingNav) {
+    elements.nextBtn.classList.add('text-white', 'btn-floating');
+  } else {
+    elements.nextBtn.classList.add(...baseClasses);
+  }
 
   if (action === 'submit') {
     buttonText = 'ส่งคำตอบ';
@@ -425,7 +432,7 @@ function setFloatingNav(active) {
   state.isFloatingNav = active;
 
   const containerFloatingClasses = ['fixed', 'bottom-4', 'right-4', 'z-50', 'flex', 'flex-col', 'sm:flex-row', 'gap-3'];
-  const buttonFloatingClasses = ['w-14', 'h-14', 'sm:w-16', 'sm:h-16', 'rounded-full', 'flex', 'items-center', 'justify-center', 'shadow-2xl', 'hover:shadow-xl', 'transition-all', 'p-0', 'border-0', 'active:scale-90'];
+  const buttonFloatingClasses = ['w-14', 'h-14', 'sm:w-16', 'sm:h-16', 'rounded-full', 'flex', 'items-center', 'justify-center', 'shadow-2xl', 'hover:shadow-xl', 'transition-all', 'p-0', 'border-0', 'active:scale-90', 'text-white', 'btn-floating'];
 
   if (active) {
     // --- 1. Configure Container ---
@@ -442,10 +449,14 @@ function setFloatingNav(active) {
     }
 
     // --- 2. Configure Buttons ---
+    const prevBaseClasses = ['w-full', 'sm:w-auto', 'px-8', 'py-3', 'bg-white', 'dark:bg-gray-800', 'text-gray-600', 'dark:text-gray-300', 'font-bold', 'rounded-2xl', 'hover:bg-gray-200', 'dark:hover:bg-gray-700', 'transition-all', 'active:scale-95', 'border', 'border-transparent', 'dark:border-gray-700'];
+    elements.prevBtn.classList.remove(...prevBaseClasses);
     elements.prevBtn.classList.add(...buttonFloatingClasses);
     elements.prevBtn.innerHTML = config.icons.prev;
     elements.prevBtn.title = "ข้อก่อนหน้า";
 
+    const nextBaseClasses = ['w-full', 'sm:w-auto', 'px-10', 'py-4', 'text-white', 'font-black', 'rounded-2xl', 'shadow-xl', 'transition-all', 'transform', 'hover:-translate-y-1', 'active:scale-95', 'btn-quiz-next'];
+    elements.nextBtn.classList.remove(...nextBaseClasses);
     elements.nextBtn.classList.add(...buttonFloatingClasses);
     updateNextButtonAppearance('next'); // Set default icon
 
@@ -469,6 +480,9 @@ function setFloatingNav(active) {
 
     // --- 2. Revert Buttons ---
     elements.prevBtn.classList.remove(...buttonFloatingClasses);
+    // Add back original classes
+    const prevBaseClasses = ['w-full', 'sm:w-auto', 'px-8', 'py-3', 'bg-white', 'dark:bg-gray-800', 'text-gray-600', 'dark:text-gray-300', 'font-bold', 'rounded-2xl', 'hover:bg-gray-200', 'dark:hover:bg-gray-700', 'transition-all', 'active:scale-95', 'border', 'border-transparent', 'dark:border-gray-700'];
+    elements.prevBtn.classList.add(...prevBaseClasses);
     elements.prevBtn.innerHTML = "ข้อก่อนหน้า";
     elements.prevBtn.title = "";
 
