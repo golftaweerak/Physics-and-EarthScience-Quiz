@@ -1527,7 +1527,7 @@ function renderBadges(game) {
         // Base classes
         let cardClasses = "badge-card relative flex flex-col items-center justify-center p-3 rounded-2xl transition-all duration-300 group cursor-pointer overflow-hidden aspect-square";
         let iconClasses = "text-4xl sm:text-5xl mb-2 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3";
-        let nameClasses = "text-[10px] sm:text-xs font-bold text-center truncate w-full px-1 z-10 transition-colors leading-tight";
+        let nameClasses = "text-[9px] sm:text-xs font-bold text-center w-full px-1 z-10 transition-colors leading-tight break-words";
 
         // Tier-specific styles
         let bgStyle = "";
@@ -1749,7 +1749,7 @@ function renderAchievements(game) {
         // Base classes
         let cardClasses = "achievement-card relative flex flex-col items-center justify-center p-3 rounded-2xl transition-all duration-300 group cursor-pointer overflow-hidden aspect-square";
         let iconClasses = "text-4xl sm:text-5xl mb-2 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3";
-        let nameClasses = "text-[10px] sm:text-xs font-bold text-center truncate w-full px-1 z-10 transition-colors leading-tight";
+        let nameClasses = "text-[9px] sm:text-xs font-bold text-center w-full px-1 z-10 transition-colors leading-tight break-words";
 
         // Styles
         let bgStyle = "";

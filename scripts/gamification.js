@@ -69,7 +69,13 @@ export const BADGES = [
     { id: 'mechanics_expert', icon: '⚙️', name: 'ผู้เชี่ยวชาญกลศาสตร์', desc: 'มี XP สายกลศาสตร์ครบ 1,000', tier: 'silver' },
     { id: 'electromagnetism_expert', icon: '⚡', name: 'ผู้เชี่ยวชาญไฟฟ้าแม่เหล็ก', desc: 'มี XP สายไฟฟ้าและแม่เหล็กครบ 1,000', tier: 'silver' },
     { id: 'waves_expert', icon: '🔊', name: 'ผู้เชี่ยวชาญคลื่น', desc: 'มี XP สายคลื่นและแสงครบ 1,000', tier: 'silver' },
-    { id: 'modern_physics_expert', icon: '☢️', name: 'ผู้เชี่ยวชาญฟิสิกส์ใหม่', desc: 'มี XP สายฟิสิกส์อะตอม/นิวเคลียร์ครบ 1,000', tier: 'silver' }
+    { id: 'modern_physics_expert', icon: '☢️', name: 'ผู้เชี่ยวชาญฟิสิกส์ใหม่', desc: 'มี XP สายฟิสิกส์อะตอม/นิวเคลียร์ครบ 1,000', tier: 'silver' },
+    // NEW Badges
+    { id: 'theory_master', icon: '📜', name: 'นักทฤษฎี', desc: 'มี XP สายทฤษฎีสะสมครบ 1,000', tier: 'gold' },
+    { id: 'calculation_expert', icon: '🧮', name: 'นักคำนวณ', desc: 'มี XP สายคำนวณสะสมครบ 1,000', tier: 'gold' },
+    { id: 'night_owl', icon: '🦉', name: 'นกฮูกราตรี', desc: 'ทำแบบทดสอบในช่วงเวลา 00:00 - 05:00', tier: 'silver' },
+    { id: 'early_bird', icon: '🌅', name: 'นกเช้าตรู่', desc: 'ทำแบบทดสอบในช่วงเวลา 05:00 - 08:00', tier: 'silver' },
+    { id: 'item_user_10', icon: '🧪', name: 'นักทดลองไอเทม', desc: 'ใช้ไอเทมช่วยเหลือครบ 10 ครั้ง', tier: 'silver' }
 ];
 
 // กำหนดภารกิจประจำวัน (Daily Quests)
@@ -90,7 +96,12 @@ export const DAILY_QUESTS = [
     // More quests for variety
     { id: 'quiz_5', desc: 'ทำแบบทดสอบให้จบ 5 ครั้ง', target: 5, type: 'quiz_complete', xp: 250 },
     { id: 'correct_50', desc: 'ตอบถูกให้ได้ 50 ข้อ', target: 50, type: 'correct_answers', xp: 400 },
-    { id: 'earth_10', desc: 'ทำโจทย์วิทย์โลก 10 ข้อ', target: 10, type: 'questions_category', category: 'Earth', xp: 150 }
+    { id: 'earth_10', desc: 'ทำโจทย์วิทย์โลก 10 ข้อ', target: 10, type: 'questions_category', category: 'Earth', xp: 150 },
+    // NEW Daily Quests
+    { id: 'item_use_1', desc: 'ใช้ไอเทมช่วยเหลือในแบบทดสอบ 1 ครั้ง', target: 1, type: 'use_item', xp: 100 },
+    { id: 'theory_20', desc: 'ตอบคำถามทฤษฎีให้ถูก 20 ข้อ', target: 20, type: 'correct_answers_type', questionType: 'theory', xp: 200 },
+    { id: 'calc_10', desc: 'ตอบข้อเขียนตัวเลขให้ถูก 10 ข้อ', target: 10, type: 'correct_answers_type', questionType: 'calculation', xp: 250 },
+    { id: 'custom_quiz_size_30', desc: 'ทำแบบทดสอบที่สร้างเอง (30 ข้อขึ้นไป) ให้จบ', target: 1, type: 'custom_quiz_size', minQuestions: 30, xp: 300 }
 ];
 
 // กำหนดความสำเร็จ (Achievements)
@@ -110,7 +121,18 @@ export const ACHIEVEMENTS = [
     { id: 'perfectionist_3', title: 'ผู้รักความสมบูรณ์แบบ', desc: 'ทำคะแนนเต็ม 100% ได้ 3 ครั้ง', icon: '🏅', target: 3, type: 'perfect_scores', rewardTitle: 'ผู้รักความสมบูรณ์แบบ' },
     { id: 'collector_5', title: 'นักสะสมมือใหม่', desc: 'มีไอเทมในครอบครอง 5 ชิ้น', icon: '🎒', target: 5, type: 'total_items', rewardTitle: 'นักสะสม' },
     { id: 'collector_10', title: 'นักสะสมตัวยง', desc: 'มีไอเทมในครอบครอง 10 ชิ้น', icon: '📦', target: 10, type: 'total_items', rewardTitle: 'คลังสมบัติ' },
-    { id: 'avatar_5', title: 'แฟชั่นนิสต้า', desc: 'มีอวตารครอบครอง 5 แบบ', icon: '🎭', target: 5, type: 'total_avatars', rewardTitle: 'แฟชั่นนิสต้า' }
+    { id: 'avatar_5', title: 'แฟชั่นนิสต้า', desc: 'มีอวตารครอบครอง 5 แบบ', icon: '🎭', target: 5, type: 'total_avatars', rewardTitle: 'แฟชั่นนิสต้า' },
+    // NEW Achievements (Titles)
+    { id: 'theory_master_ach', title: 'ปราชญ์ทฤษฎี', desc: 'สะสม XP สายทฤษฎีครบ 1,000', icon: '📜', target: 1000, type: 'theory_xp', rewardTitle: 'นักทฤษฎี' },
+    { id: 'calc_expert_ach', title: 'จอมโจทย์คำนวณ', desc: 'สะสม XP สายคำนวณครบ 1,000', icon: '🧮', target: 1000, type: 'calculation_xp', rewardTitle: 'นักคำนวณ' },
+    { id: 'night_owl_ach', title: 'ผู้พิทักษ์ราตรี', desc: 'ได้รับเหรียญนกฮูกราตรี', icon: '🦉', target: 1, type: 'has_badge', badgeId: 'night_owl', rewardTitle: 'นกฮูกราตรี' },
+    { id: 'early_bird_ach', title: 'ผู้เบิกอรุณ', desc: 'ได้รับเหรียญนกเช้าตรู่', icon: '🌅', target: 1, type: 'has_badge', badgeId: 'early_bird', rewardTitle: 'นกเช้าตรู่' },
+    { id: 'item_user_ach', title: 'ปรมาจารย์อุปกรณ์ช่วย', desc: 'ใช้ไอเทมช่วยเหลือครบ 10 ครั้ง', icon: '🧪', target: 10, type: 'item_usage', rewardTitle: 'นักใช้ไอเทม' },
+    // Long-term Achievements
+    { id: 'level_30', title: 'ปราชญ์อาวุโส', desc: 'เลเวลถึง 30', icon: '🔱', target: 30, type: 'level', rewardTitle: 'ปราชญ์อาวุโส' },
+    { id: 'level_50', title: 'อมตะแห่งปัญญา', desc: 'เลเวลถึง 50', icon: '♾️', target: 50, type: 'level', rewardTitle: 'อมตะแห่งปัญญา' },
+    { id: 'item_usage_50', title: 'ผู้เชี่ยวชาญอุปกรณ์', desc: 'ใช้ไอเทมช่วยเหลือครบ 50 ครั้ง', icon: '🛠️', target: 50, type: 'item_usage', rewardTitle: 'นักประดิษฐ์' },
+    { id: 'xp_50k_ach', title: 'เศรษฐีผู้ร่ำรวย', desc: 'มี XP รวมสะสมครบ 50,000', icon: '💎', target: 50000, type: 'total_xp', rewardTitle: 'มหาเศรษฐี' }
 ];
 
 // กำหนดสินค้าในร้านค้า (Shop Items)
@@ -440,7 +462,12 @@ export class Gamification {
             }
         });
 
-        // 5. Reconcile Total XP with the sum of its parts
+        // 5. Ensure theory and calculation XP exist
+        if (typeof this.state.theoryXP !== 'number') { this.state.theoryXP = 0; needsSave = true; }
+        if (typeof this.state.calculationXP !== 'number') { this.state.calculationXP = 0; needsSave = true; }
+        if (typeof this.state.itemUsageCount !== 'number') { this.state.itemUsageCount = 0; needsSave = true; }
+
+        // 6. Reconcile Total XP with the sum of its parts
         // This ensures that data from older versions (without generalXP) is corrected.
         let sumOfParts = (this.state.generalXP || 0);
         SiteConfig.categories.forEach(cat => {
@@ -496,6 +523,10 @@ export class Gamification {
             weekendQuizzesCompleted: 0,
             freeNameChangeAvailable: true, generalXP: 0, accumulatedQuestionsForBonus: 0,
             totalSpentXP: 0, // NEW: ติดตามยอด XP ที่ใช้ไปทั้งหมด (ป้องกันการคืน XP จากไอเทมที่ใช้แล้ว)
+            theoryXP: 0, // NEW: สะสม XP จากข้อทฤษฎี
+            calculationXP: 0, // NEW: สะสม XP จากข้อคำนวณ
+            itemUsageCount: 0, // NEW: จำนวนครั้งที่ใช้ไอเทม
+            lastQuizTime: null // NEW: เก็บเวลาที่ทำชุดโจทย์ล่าสุด
         };
 
         // Dynamic Categories
@@ -591,6 +622,8 @@ export class Gamification {
         let weekendQuizzes = 0;
         let generalQuizXP = 0;
         let totalQuestionsAnswered = 0; // NEW: นับจำนวนข้อที่ตอบทั้งหมดเพื่อคำนวณ Bonus
+        let totalTheoryXP = 0;
+        let totalCalculationXP = 0;
 
         // OPTIMIZATION: Cache subcategory string matching to avoid repeated loops and string includes
         const subCategoryCache = new Map();
@@ -612,11 +645,18 @@ export class Gamification {
                         data.userAnswers.forEach((ans, index) => {
                             if (ans && ans.isCorrect) {
                                 const question = data.shuffledQuestions[index];
-                                // Award 5 XP for complex questions, 4 for others
+                                // Award 6 XP for complex questions, 4 for others
                                 if (question && (question.type === 'multiple-select' || question.type === 'fill-in-number')) {
-                                    calculatedXp += 5;
-                                } else {
-                                    calculatedXp += 4;
+                                    calculatedXp += 6;
+                                }
+
+                                // Badge-specific XP (8/12 Rule)
+                                if (question) {
+                                    if (question.type === 'fill-in-number') {
+                                        totalCalculationXP += 12;
+                                    } else {
+                                        totalTheoryXP += 8;
+                                    }
                                 }
                             }
                         });
@@ -656,7 +696,7 @@ export class Gamification {
                         data.userAnswers.forEach((ans, index) => {
                             if (ans && ans.isCorrect) {
                                 const question = data.shuffledQuestions[index];
-                                const points = (question && (question.type === 'multiple-select' || question.type === 'fill-in-number')) ? 5 : 4;
+                                const points = (question && (question.type === 'multiple-select' || question.type === 'fill-in-number')) ? 6 : 4;
 
                                 let subCatStr = '';
                                 if (ans.subCategory) {
@@ -777,6 +817,8 @@ export class Gamification {
         }
 
         this.state.quizzesCompleted = Math.max(this.state.quizzesCompleted || 0, completed);
+        this.state.theoryXP = Math.max(this.state.theoryXP || 0, totalTheoryXP);
+        this.state.calculationXP = Math.max(this.state.calculationXP || 0, totalCalculationXP);
         this.state.totalCorrectAnswers = Math.max(this.state.totalCorrectAnswers || 0, totalCorrect);
         this.state.perfectScores = Math.max(this.state.perfectScores || 0, perfectScores);
         this.state.highScores80 = Math.max(this.state.highScores80 || 0, highScores80);
@@ -1648,6 +1690,18 @@ export class Gamification {
         // NEW: Call the stats update function here
         this.updateEndQuizStats(percentage, questionCount, isCustomQuiz);
 
+        // NEW: Track Theory and Calculation XP specifically
+        if (questStats.theoryXP) this.state.theoryXP = (this.state.theoryXP || 0) + questStats.theoryXP;
+        if (questStats.calculationXP) this.state.calculationXP = (this.state.calculationXP || 0) + questStats.calculationXP;
+
+        // Track item usage in this quiz
+        if (questStats.itemsUsedCount) {
+            this.state.itemUsageCount = (this.state.itemUsageCount || 0) + questStats.itemsUsedCount;
+        }
+
+        // Store last quiz timestamp for time-based badges
+        this.state.lastQuizTime = now;
+
         this.updateLevel();
 
         // Check for new badges and achievements.
@@ -1728,6 +1782,13 @@ export class Gamification {
                 if (stats.questionCount >= 20 && this.checkCategoryMatch(stats.category, q.category, stats.quizId)) {
                     progressMade = 1;
                 }
+            } else if (q.type === 'use_item') {
+                // Tracking total items used in the session
+                progressMade = stats.itemsUsedCount || 0;
+            } else if (q.type === 'custom_quiz_size') {
+                if (stats.isCustomQuiz && stats.questionCount >= (q.minQuestions || 20)) {
+                    progressMade = 1;
+                }
             }
 
             if (progressMade > 0) {
@@ -1784,14 +1845,22 @@ export class Gamification {
             else if (ach.type === 'perfect_scores') {
                 if ((this.state.perfectScores || 0) >= ach.target) achieved = true;
             }
-            else if (ach.type === 'total_items') {
-                if (this.state.inventory.length >= ach.target) achieved = true;
-            } else if (ach.type === 'total_avatars') {
+            else if (ach.type === 'total_avatars') {
                 const avatarCount = this.state.inventory.filter(id => {
                     const item = SHOP_ITEMS.find(i => i.id === id);
                     return item && item.type === 'avatar';
                 }).length;
                 if (avatarCount >= ach.target) achieved = true;
+            } else if (ach.type === 'item_usage') {
+                if ((this.state.itemUsageCount || 0) >= ach.target) achieved = true;
+            } else if (ach.type === 'total_xp') {
+                if (this.state.xp >= ach.target) achieved = true;
+            } else if (ach.type === 'theory_xp') {
+                if ((this.state.theoryXP || 0) >= ach.target) achieved = true;
+            } else if (ach.type === 'calculation_xp') {
+                if ((this.state.calculationXP || 0) >= ach.target) achieved = true;
+            } else if (ach.type === 'has_badge') {
+                if (this.state.badges.includes(ach.badgeId)) achieved = true;
             }
 
             if (achieved) {
@@ -1929,6 +1998,19 @@ export class Gamification {
         if ((this.state.geologyXP || 0) >= 1000) unlock('geology_expert');
         if ((this.state.meteorologyXP || 0) >= 1000) unlock('meteorology_expert');
         if ((this.state.oceanographyXP || 0) >= 1000) unlock('oceanography_expert');
+
+        // NEW Badges
+        if ((this.state.theoryXP || 0) >= 1000) unlock('theory_master');
+        if ((this.state.calculationXP || 0) >= 1000) unlock('calculation_expert');
+        if ((this.state.itemUsageCount || 0) >= 10) unlock('item_user_10');
+
+        // Time-based badges
+        if (this.state.lastQuizTime) {
+            const date = new Date(this.state.lastQuizTime);
+            const hour = date.getHours();
+            if (hour >= 0 && hour < 5) unlock('night_owl');
+            if (hour >= 5 && hour < 8) unlock('early_bird');
+        }
 
         return newBadges;
     }

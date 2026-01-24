@@ -1777,10 +1777,10 @@ function showResults(isViewOnly = false) {
       state.userAnswers.forEach((ans, index) => {
         if (ans && ans.isCorrect) {
           const question = state.shuffledQuestions[index];
-          let points = 4; // Default for standard questions
+          let points = 4; // Theory/Standard questions
 
           if (question && (question.type === 'multiple-select' || question.type === 'fill-in-number')) {
-            points = 5;
+            points = 6; // Calculation/Complex questions
           }
           xpEarned += points;
 
@@ -1865,6 +1865,10 @@ function showResults(isViewOnly = false) {
         percentage: percentage,
         correctTheory: correctTheory,
         correctCalculation: correctCalculation,
+        theoryXP: (correctTheory * 8) * state.xpMultiplier, // Base 8 XP for badge tracking
+        calculationXP: (correctCalculation * 12) * state.xpMultiplier, // Base 12 XP for badge tracking
+        itemsUsedCount: state.itemsUsedInQuiz || 0, // NEW: Track item usage
+        quizId: state.quizId,
         questionCount: state.questionCount,
         isCustomQuiz: state.isCustomQuiz
       };
@@ -2488,6 +2492,7 @@ function startQuiz() {
   clearSavedState();
   state.sessionStartTime = Date.now(); // Record start time for the session
   state.totalTimeSpent = 0; // Reset total time spent for a new quiz
+  state.itemsUsedInQuiz = 0; // NEW: Track items used
 
   // Only read timer mode if the controls are visible (i.e., on the start screen).
   // On restart, it will reuse the previously selected mode.
