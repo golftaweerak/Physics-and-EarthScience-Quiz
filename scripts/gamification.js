@@ -85,10 +85,8 @@ export const DAILY_QUESTS = [
     { id: 'score_100', desc: 'ทำคะแนนเต็ม (100%) 1 ครั้ง', target: 1, type: 'high_score', threshold: 100, xp: 300 },
     // NEW QUEST TYPES
     { id: 'theory_10', desc: 'ตอบคำถามทฤษฎีให้ถูก 10 ข้อ', target: 10, type: 'correct_answers_type', questionType: 'theory', xp: 120 },
-    { id: 'astro_quiz_1', desc: 'ทำแบบทดสอบหมวดดาราศาสตร์ 1 ครั้ง', target: 1, type: 'quiz_category', category: 'Astronomy', xp: 80 },
     { id: 'earth_quiz_1', desc: 'ทำแบบทดสอบหมวดวิทย์โลก 1 ครั้ง', target: 1, type: 'quiz_category', category: 'Earth', xp: 80 },
     { id: 'physics_quiz_1', desc: 'ทำแบบทดสอบหมวดฟิสิกส์ 1 ครั้ง', target: 1, type: 'quiz_category', category: 'Physics', xp: 80 },
-    { id: 'review_quiz_1', desc: 'ทำแบบทดสอบหมวดทบทวน 1 ครั้ง', target: 1, type: 'quiz_category', category: 'Review', xp: 80 },
     // More quests for variety
     { id: 'quiz_5', desc: 'ทำแบบทดสอบให้จบ 5 ครั้ง', target: 5, type: 'quiz_complete', xp: 250 },
     { id: 'correct_50', desc: 'ตอบถูกให้ได้ 50 ข้อ', target: 50, type: 'correct_answers', xp: 400 },
@@ -662,30 +660,34 @@ export class Gamification {
 
                                 let subCatStr = '';
                                 if (ans.subCategory) {
-                                    if (typeof ans.subCategory === 'string') subCatStr = ans.subCategory;
-                                    else if (ans.subCategory.main) subCatStr = ans.subCategory.main;
-                                }
-
-                                // OPTIMIZATION: Use cache for proficiency matching
-                                let matchedGroup = subCategoryCache.get(subCatStr);
-
-                                if (matchedGroup === undefined) {
-                                    matchedGroup = null; // Default if not found
-                                    for (const [groupKey, groupDef] of proficiencyEntries) {
-                                        if (groupDef.keywords.some(k => subCatStr.includes(k))) {
-                                            matchedGroup = groupDef;
-                                            break;
-                                        }
-                                    }
-                                    subCategoryCache.set(subCatStr, matchedGroup);
-                                }
-
-                                if (matchedGroup) {
-                                    topicXPs[matchedGroup.field] = (topicXPs[matchedGroup.field] || 0) + points;
-                                    if (quizTrackXPs[matchedGroup.track] !== undefined) {
-                                        quizTrackXPs[matchedGroup.track] += points;
+                                    if (typeof ans.subCategory === 'string') {
+                                        subCatStr = ans.subCategory;
+                                    } else {
+                                        // Include BOTH main and specific contexts for better matching
+                                        subCatStr = (ans.subCategory.main || '') + ' ' + (ans.subCategory.specific || '');
                                     }
                                 }
+                                subCatStr = subCatStr.toLowerCase();
+
+                                // Multi-group matching: A question can contribute to multiple fields (e.g. Meteorology AND Oceanography)
+                                const tracksForThisQuestion = new Set();
+
+                                for (const [groupKey, groupDef] of proficiencyEntries) {
+                                    // Keywords matching
+                                    const matches = groupDef.keywords.some(k => subCatStr.includes(k.toLowerCase()));
+
+                                    if (matches) {
+                                        topicXPs[groupDef.field] = (topicXPs[groupDef.field] || 0) + points;
+                                        tracksForThisQuestion.add(groupDef.track);
+                                    }
+                                }
+
+                                // Update track XPs based on all matched groups (preventing double counting)
+                                tracksForThisQuestion.forEach(track => {
+                                    if (quizTrackXPs[track] !== undefined) {
+                                        quizTrackXPs[track] += points;
+                                    }
+                                });
                             }
                         });
 
@@ -762,24 +764,31 @@ export class Gamification {
         }
 
         // ถ้าพบข้อมูลเก่า ให้อัปเดตสถานะเริ่มต้นทันที
-        // FIX: Always update if called manually, even if totalXP is 0 (to reset inflated stats)
-        this.state.xp = Math.max(0, totalXP - spentXP); // XP สุทธิ = ที่หาได้ - ที่ใช้ไป
+        // FIX: Use Math.max to prevent overwriting Cloud Data with empty Local History
+        // If local history is empty (new device), we should preserve the loaded state.
 
-        // Apply accumulated track XPs
+        const currentXP = Number(this.state.xp) || 0;
+        const calculatedXP = Math.max(0, totalXP - spentXP);
+        this.state.xp = Math.max(currentXP, calculatedXP);
+
+        // Apply accumulated track XPs (Math.max)
         for (const [id, xp] of Object.entries(accumulatedTrackXPs)) {
-            this.state[id] = xp;
+            this.state[id] = Math.max(this.state[id] || 0, xp);
         }
 
-        this.state.quizzesCompleted = completed;
-        this.state.totalCorrectAnswers = totalCorrect;
-        this.state.perfectScores = perfectScores;
-        this.state.highScores80 = highScores80;
-        this.state.weekendQuizzesCompleted = weekendQuizzes;
-        this.state.generalXP = generalQuizXP;
+        this.state.quizzesCompleted = Math.max(this.state.quizzesCompleted || 0, completed);
+        this.state.totalCorrectAnswers = Math.max(this.state.totalCorrectAnswers || 0, totalCorrect);
+        this.state.perfectScores = Math.max(this.state.perfectScores || 0, perfectScores);
+        this.state.highScores80 = Math.max(this.state.highScores80 || 0, highScores80);
+        this.state.weekendQuizzesCompleted = Math.max(this.state.weekendQuizzesCompleted || 0, weekendQuizzes);
 
-        // Apply calculated topic XPs
+        // General XP: If we have valid local calculation, and it's greater, take it.
+        // Otherwise keep existing.
+        this.state.generalXP = Math.max(this.state.generalXP || 0, generalQuizXP);
+
+        // Apply calculated topic XPs (Math.max)
         for (const [field, xp] of Object.entries(topicXPs)) {
-            this.state[field] = xp;
+            this.state[field] = Math.max(this.state[field] || 0, xp);
         }
 
         // ตรวจสอบและปลดล็อกเหรียญรางวัลจากข้อมูลเก่าทันที

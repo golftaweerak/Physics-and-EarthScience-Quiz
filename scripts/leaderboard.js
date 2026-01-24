@@ -1,6 +1,6 @@
 import { authManager } from './auth-manager.js';
 import { db } from './firebase-config.js';
-import { collection, query, orderBy, limit, getDocs, where, getCountFromServer } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { collection, query, orderBy, limit, getDocs, where, getCountFromServer } from "firebase/firestore";
 import { XP_THRESHOLDS, TRACK_TITLES, PROFICIENCY_GROUPS, getLevelBorderClass, getAvatarFrameClass } from './gamification.js';
 
 function getLevelInfoForLeaderboard(xp, type) {

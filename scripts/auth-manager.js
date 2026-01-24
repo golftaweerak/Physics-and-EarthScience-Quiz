@@ -1,7 +1,7 @@
 // scripts/auth-manager.js
 import { auth, db, googleProvider } from './firebase-config.js';
-import { signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { doc, getDoc, setDoc, updateDoc, collection, getDocs, writeBatch, deleteDoc, terminate } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { signInWithPopup, signOut, onAuthStateChanged } from "firebase/auth";
+import { doc, getDoc, setDoc, updateDoc, collection, getDocs, writeBatch, deleteDoc, terminate } from "firebase/firestore";
 import { showToast } from './toast.js';
 
 class AuthManagerInternal {
@@ -22,6 +22,25 @@ class AuthManagerInternal {
     }
 
     init() {
+        // TEST MODE: Bypass Authentication for E2E Testing (Uncomment to enable)
+        /*
+        if (localStorage.getItem('TEST_MODE') === 'true') {
+            console.log("⚠️ TEST_MODE ENABLED: Simulating Auth");
+            this.isInitialized = true;
+            this.currentUser = {
+                uid: 'test-user-id',
+                displayName: 'Test User',
+                photoURL: './assets/icons/study.png',
+                email: 'test@example.com'
+            };
+            if (this.resolveAuthReady) {
+                this.resolveAuthReady(this.currentUser);
+                this.resolveAuthReady = null;
+            }
+            return; // Skip real auth
+        }
+        */
+
         onAuthStateChanged(auth, async (user) => {
             const previousUser = this.currentUser; // เก็บสถานะผู้ใช้ก่อนหน้า
             this.isInitialized = true;

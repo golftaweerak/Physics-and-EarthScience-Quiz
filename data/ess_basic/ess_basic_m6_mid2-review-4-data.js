@@ -169,7 +169,7 @@ export const quizItems = [
       "คลื่นเลิฟ และ คลื่นเรย์ลี",
       "คลื่นบก (Land wave) และ คลื่นน้ำ (Water wave)"
     ],
-    answer: "คลื่นในตัวกลาง และ คลื่นพื้นผิว",
+    answer: "คลื่นในตัวกลาง (Body Waves) และ คลื่นพื้นผิว (Surface Waves)",
     explanation: "การแบ่งประเภทหลักแบ่งเป็น 1. คลื่นในตัวกลาง (Body Wave) ซึ่งได้แก่ P และ S และ 2. คลื่นพื้นผิว (Surface Wave) ซึ่งได้แก่ Love และ Rayleigh",
     subCategory: {
       main: "ธรณีพิบัติภัย",

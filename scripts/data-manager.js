@@ -325,6 +325,9 @@ export async function fetchAllQuizData() {
 
   // Filter out any potential empty/falsy entries from the list to prevent errors.
   const validQuizList = Array.isArray(quizList) ? quizList.filter((quiz) => quiz) : [];
+  // Use import.meta.glob to allow Vite to bundle these files
+  const dataModules = import.meta.glob('../data/**/*.js');
+
   const promises = validQuizList.map(async (quiz) => {
     // Fix for missing path prefixes:
     let scriptPath;
@@ -342,8 +345,13 @@ export async function fetchAllQuizData() {
       scriptPath = `../data/${folder}${quiz.id}-data.js`;
     }
 
+    if (!dataModules[scriptPath]) {
+      console.warn(`Data module not found for ${scriptPath}`);
+      return [];
+    }
+
     try {
-      const module = await import(scriptPath);
+      const module = await dataModules[scriptPath]();
       const data = module.quizItems || module.quizScenarios || module.quizData || [];
 
       if (!Array.isArray(data)) {

@@ -1,6 +1,6 @@
 import { subCategoryData } from '../data/sub-category-data.js';
 import { categoryDetails } from './data-manager.js';
-import { quizzesList } from '../data/quizzes-list.js';
+import { quizList as quizzesList } from '../data/quizzes-list.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     let questions = []; // State for added questions
@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const STORAGE_KEY = 'quizGeneratorState'; // Key for localStorage
     let history = [];
     let historyIndex = -1;
- 
+
     // --- UI Elements ---
     const quizIdInput = document.getElementById('quiz-id');
     const quizTitleInput = document.getElementById('quiz-title');
@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function populateMainCategories() {
         const mainCategories = ['AstronomyPOSN', 'EarthScience', 'AstronomyReview', 'GeneralKnowledge', 'ChallengePOSN'];
         let optionsHtml = '<option value="">-- เลือกหมวดหมู่หลัก --</option>';
-        
+
         mainCategories.forEach(key => {
             if (categoryDetails[key]) {
                 optionsHtml += `<option value="${key}">${categoryDetails[key].title}</option>`;
@@ -171,25 +171,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let optionsHtml = '<option value="">-- เลือกหมวดหมู่ย่อย --</option>';
 
-    // Add robust checks to prevent script-halting errors if subCategoryData is malformed.
-    if (mainCategory === 'EarthScience' && subCategoryData.EarthAndSpace) {
+        // Add robust checks to prevent script-halting errors if subCategoryData is malformed.
+        if (mainCategory === 'EarthScience' && subCategoryData.EarthAndSpace) {
             for (const [groupName, topics] of Object.entries(subCategoryData.EarthAndSpace)) {
-            if (Array.isArray(topics)) {
-                optionsHtml += `<optgroup label="${groupName}">`;
-                topics.forEach(topic => {
-                    const value = `${groupName}::${topic}`;
-                    optionsHtml += `<option value="${value}">${topic}</option>`;
-                });
-                optionsHtml += `</optgroup>`;
+                if (Array.isArray(topics)) {
+                    optionsHtml += `<optgroup label="${groupName}">`;
+                    topics.forEach(topic => {
+                        const value = `${groupName}::${topic}`;
+                        optionsHtml += `<option value="${value}">${topic}</option>`;
+                    });
+                    optionsHtml += `</optgroup>`;
+                }
             }
-            }
-    } else if ((mainCategory === 'Astronomy' || mainCategory === 'AstronomyReview') && Array.isArray(subCategoryData.Astronomy)) {
-        subCategoryData.Astronomy.forEach(item => {
-            // Ensure the item has the expected structure before using it.
-            if (item && typeof item.topic === 'string' && typeof item.level === 'string') {
-                optionsHtml += `<option value="${item.topic}">${item.topic} (${item.level})</option>`;
-            }
-        });
+        } else if ((mainCategory === 'Astronomy' || mainCategory === 'AstronomyReview') && Array.isArray(subCategoryData.Astronomy)) {
+            subCategoryData.Astronomy.forEach(item => {
+                // Ensure the item has the expected structure before using it.
+                if (item && typeof item.topic === 'string' && typeof item.level === 'string') {
+                    optionsHtml += `<option value="${item.topic}">${item.topic} (${item.level})</option>`;
+                }
+            });
         }
         return optionsHtml;
     }
@@ -415,7 +415,7 @@ document.addEventListener('DOMContentLoaded', () => {
     /**
      * Handles adding a new question or updating an existing one.
      */
-    function handleAddOrUpdateQuestionClick() {        
+    function handleAddOrUpdateQuestionClick() {
         if (!validateQuestionForm()) {
             return;
         }
@@ -428,7 +428,7 @@ document.addEventListener('DOMContentLoaded', () => {
             D: optionDInput.value.trim(),
         };
         const answer = correctAnswerSelect.value;
-        const subCategory = null;
+        let subCategory = null;
 
         if (subCategoryValue && subCategoryValue.includes('::')) {
             const [main, specific] = subCategoryValue.split('::');
@@ -436,7 +436,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const explanation = explanationInput.value.trim();
-        
+
         const questionData = {
             question: questionText,
             options: {},
@@ -587,7 +587,7 @@ document.addEventListener('DOMContentLoaded', () => {
         quizTitleInput.value = quizTitle || '';
         categorySelect.value = quizCategory || '';
         // Deep copy to prevent state mutations from affecting history directly
-        questions = JSON.parse(JSON.stringify(stateQuestions || [])); 
+        questions = JSON.parse(JSON.stringify(stateQuestions || []));
 
         // Update UI based on the new state
         validateQuizId();
@@ -618,7 +618,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         return initialState;
     }
-    
+
     /**
      * Toggles the visibility of the question form.
      */
@@ -635,7 +635,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function setFormCollapsedUI(shouldBeCollapsed) {
         if (!questionFormContent || !questionFormChevron) return;
         const isCurrentlyCollapsed = questionFormContent.classList.contains('grid-rows-[0fr]');
-        
+
         if (shouldBeCollapsed === isCurrentlyCollapsed) {
             return; // No change needed
         }
@@ -722,7 +722,7 @@ document.addEventListener('DOMContentLoaded', () => {
      * @param {string} [options.confirmButtonClass='bg-red-600 hover:bg-red-700'] - Tailwind classes for the confirm button.
      * @param {number} [options.autoClose=0] - Time in ms to auto-close an alert modal. 0 means no auto-close.
      */
-    function showNotificationModal({ title, message, type = 'alert', onConfirm = () => {}, confirmButtonClass = 'bg-red-600 hover:bg-red-700', autoClose = 0 }) {
+    function showNotificationModal({ title, message, type = 'alert', onConfirm = () => { }, confirmButtonClass = 'bg-red-600 hover:bg-red-700', autoClose = 0 }) {
         notificationModalTitle.textContent = title;
         notificationModalBody.innerHTML = message;
 
@@ -820,7 +820,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 2. Render LaTeX using KaTeX auto-render extension
         renderMathInElement(element, {
-            delimiters: [ { left: '$$', right: '$$', display: true }, { left: '$', right: '$', display: false }, { left: '\\(', right: '\\)', display: false }, { left: '\\[', right: '\\]', display: true } ],
+            delimiters: [{ left: '$$', right: '$$', display: true }, { left: '$', right: '$', display: false }, { left: '\\(', right: '\\)', display: false }, { left: '\\[', right: '\\]', display: true }],
             throwOnError: false
         });
     }
@@ -1010,7 +1010,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!Array.isArray(generatedQuestions)) throw new Error("AI did not return a valid JSON array.");
 
-            const validatedQuestions = generatedQuestions.filter(q => 
+            const validatedQuestions = generatedQuestions.filter(q =>
                 q && typeof q.question === 'string' && typeof q.options === 'object' && q.options !== null && typeof q.answer === 'string'
             );
 

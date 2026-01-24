@@ -3,10 +3,21 @@ import { getDetailedProgressForAllQuizzes, calculateStrengthsAndWeaknesses } fro
 import { renderDailyQuests } from './daily-quests-renderer.js';
 import { ModalHandler } from './modal-handler.js';
 import { showToast } from './toast.js';
-import { collection, query, orderBy, limit, getDocs, where, getCountFromServer } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { collection, query, orderBy, limit, getDocs, where, getCountFromServer } from "firebase/firestore";
 import { db } from './firebase-config.js';
 import { escapeHtml } from './utils.js';
 import { SiteConfig } from './site-config.js';
+import { subCategoryData } from '../data/sub-category-data.js';
+import {
+    getAllStats, calculateSummary, renderSummaryCards,
+    calculateScoreTrend, renderScoreTrendChart,
+    calculateSubjectPerformance, renderSubjectPerformanceChart,
+    calculateGroupedPerformance, renderPerformanceAccordions,
+    renderDetailedList, setupActionListeners, renderInDepthStats,
+    calculateScoreDistribution, renderScoreDistributionChart
+} from './stats.js';
+import { quizList } from '../data/quizzes-list.js';
+import { getSavedCustomQuizzes } from './custom-quiz-handler.js';
 
 const AVATARS = [
     '🧑‍🎓', '👩‍🎓', '👨‍🔬', '👩‍🔬', '👨‍🚀', '👩‍🚀', '👽', '🤖', '👻', '💩'
@@ -43,8 +54,14 @@ let lastSyncTime = null;
 let previousXP = null;
 let previousAvatar = null;
 let previousTitle = null;
-let gamificationUpdateHandler = null; // NEW: Store handler reference for cleanup
-let activeShopTab = 'consumable'; // NEW: Track active shop tab
+let gamificationUpdateHandler = null;
+let activeShopTab = 'consumable';
+let activeHistoryRange = 'all';
+let activeProficiencyMode = 'overall';
+let historySearchQuery = ''; // Track search in History panel
+let activeAnalysisSyllabus = 'overall';
+let activeReportTrendRange = '7'; // Default for Analysis tab
+let chartsInitialized = { dashboard: false, analysis: false };
 
 export async function initializeProfile(gameInstance) {
     const game = gameInstance || new Gamification();
@@ -72,6 +89,8 @@ export async function initializeProfile(gameInstance) {
     setupLeaderboardSystem(game);
     setupShopShortcut();
     setupBadgeInteractions(game);
+    setupAchievementInteractions(game); // NEW: Achievement modal
+    setupHubTabs(game); // NEW: Hub navigation logic
 
     // 3. เรนเดอร์กราฟ (Asynchronous/ช้ากว่า)
     document.getElementById('radar-chart-loader')?.classList.remove('hidden');
@@ -81,6 +100,9 @@ export async function initializeProfile(gameInstance) {
     setupRefreshChartsSystem(game); // Setup once
 
     const allProgress = await getDetailedProgressForAllQuizzes();
+    setupHistoryRangeSystem(game, allProgress); // NEW: Add history range selector setup
+    setupProficiencyModeSystem(game, allProgress); // NEW: Add proficiency mode selector setup
+
     const chartsRendered = await Promise.all([
         renderRadarChart(game, allProgress),
         renderProficiencyHistoryChart(game, allProgress),
@@ -117,6 +139,162 @@ export async function initializeProfile(gameInstance) {
     };
 
     window.addEventListener('gamification-updated', gamificationUpdateHandler);
+}
+
+/**
+ * Handles Tab Switching for the Main Hub
+ */
+function setupHubTabs(game) {
+    const tabs = document.querySelectorAll('.primary-tab-btn');
+    const panels = document.querySelectorAll('.hub-panel');
+    const indicator = document.getElementById('tab-sliding-indicator');
+
+    const updateIndicator = (activeTab) => {
+        if (!indicator || !activeTab) return;
+
+        const rect = activeTab.getBoundingClientRect();
+        const parentRect = activeTab.parentElement.getBoundingClientRect();
+
+        indicator.style.display = 'block';
+        indicator.style.width = `${rect.width}px`;
+        indicator.style.left = `${rect.left - parentRect.left}px`;
+
+        // Ensure opacity is set after first position
+        setTimeout(() => {
+            indicator.style.opacity = '1';
+        }, 50);
+    };
+
+    // Initial update
+    const initialActive = document.querySelector('.primary-tab-btn.active');
+    if (initialActive) {
+        setTimeout(() => updateIndicator(initialActive), 100);
+    }
+
+    window.addEventListener('resize', () => {
+        const active = document.querySelector('.primary-tab-btn.active');
+        if (active) updateIndicator(active);
+    });
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', async () => {
+            const target = tab.dataset.tabTarget;
+
+            // UI Update: Buttons
+            tabs.forEach(t => {
+                t.classList.remove('active', 'text-blue-600', 'dark:text-blue-400');
+                t.classList.add('text-gray-500', 'dark:text-gray-400', 'hover:text-gray-900', 'dark:hover:text-gray-100');
+            });
+            tab.classList.add('active', 'text-blue-600', 'dark:text-blue-400');
+            tab.classList.remove('text-gray-500', 'dark:text-gray-400', 'hover:text-gray-900', 'dark:hover:text-gray-100');
+
+            updateIndicator(tab);
+
+            // UI Update: Panels
+            panels.forEach(p => p.classList.add('hidden'));
+            const activePanel = document.getElementById(`panel-${target}`);
+            if (activePanel) {
+                activePanel.classList.remove('hidden');
+                activePanel.classList.add('animate-fade-in');
+            }
+
+            // Lazy Load / Trigger Specific Logic
+            if (target === 'analysis' && !chartsInitialized.analysis) {
+                await renderAnalysisTab(game);
+            } else if (target === 'history') {
+                await renderHistoryTab(game);
+            }
+        });
+    });
+}
+
+async function renderAnalysisTab(game) {
+    const container = document.getElementById('panel-analysis');
+    if (!container) return;
+
+    const customQuizzes = await getSavedCustomQuizzes();
+    const allStats = getAllStats(customQuizzes);
+
+    if (allStats.length === 0) {
+        container.innerHTML = `<div class="text-center py-20 text-gray-500">ไม่มีสถิติสำหรับวิเคราะห์</div>`;
+        return;
+    }
+
+    const summary = calculateSummary(allStats, quizList.length + customQuizzes.length);
+    renderSummaryCards(summary);
+
+    const trendData = calculateScoreTrend(allStats, activeReportTrendRange);
+    renderScoreTrendChart(trendData);
+
+    const subjectData = calculateSubjectPerformance(allStats);
+    renderSubjectPerformanceChart(subjectData);
+
+    const groupedData = calculateGroupedPerformance(allStats, activeAnalysisSyllabus);
+    renderPerformanceAccordions(groupedData);
+
+    renderInDepthStats(allStats);
+
+    // Setup local filters for analysis tab
+    setupAnalysisFilters(game, allStats);
+
+    chartsInitialized.analysis = true;
+}
+
+async function renderHistoryTab(game) {
+    const customQuizzes = await getSavedCustomQuizzes();
+    const allStats = getAllStats(customQuizzes);
+
+    // Filter history based on search
+    const filteredHistory = allStats.filter(s =>
+        s.title.toLowerCase().includes(historySearchQuery.toLowerCase()) ||
+        getCategoryDisplayName(s.category).toLowerCase().includes(historySearchQuery.toLowerCase())
+    );
+
+    renderDetailedList(filteredHistory);
+    setupActionListeners();
+
+    // Setup history search listener
+    const searchInput = document.getElementById('history-search-input');
+    if (searchInput && !searchInput.dataset.initialized) {
+        searchInput.addEventListener('input', (e) => {
+            historySearchQuery = e.target.value;
+            renderHistoryTab(game);
+        });
+        searchInput.dataset.initialized = "true";
+    }
+}
+
+function setupAnalysisFilters(game, allStats) {
+    // Trend filter
+    const trendBtns = document.querySelectorAll('.trend-range-btn');
+    trendBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            activeReportTrendRange = btn.dataset.range;
+            trendBtns.forEach(b => b.classList.remove('active', 'bg-blue-100', 'text-blue-700'));
+            btn.classList.add('active', 'bg-blue-100', 'text-blue-700');
+            const trendData = calculateScoreTrend(allStats, activeReportTrendRange);
+            renderScoreTrendChart(trendData);
+        });
+    });
+
+    // Syllabus filter
+    const topicSelect = document.getElementById('topic-syllabus-select');
+    if (topicSelect) {
+        topicSelect.addEventListener('change', (e) => {
+            activeAnalysisSyllabus = e.target.value;
+            const groupedData = calculateGroupedPerformance(allStats, activeAnalysisSyllabus);
+            renderPerformanceAccordions(groupedData);
+        });
+    }
+}
+
+function getCategoryDisplayName(catId) {
+    const details = {
+        'physics': 'ฟิสิกส์',
+        'earth_science': 'วิทย์โลกและดาราศาสตร์',
+        'general_science': 'วิทยาศาสตร์ทั่วไป'
+    };
+    return details[catId] || catId;
 }
 
 /**
@@ -596,7 +774,7 @@ function setupLeaderboardSystem(game) {
     const listContainer = document.getElementById('leaderboard-list');
     const tabs = document.querySelectorAll('.leaderboard-tab');
 
-    if (!listContainer || tabs.length === 0) return;
+    if (!listContainer) return;
 
     const renderList = async (type) => {
         // Show loading
@@ -1569,7 +1747,7 @@ function renderAchievements(game) {
         const percent = Math.min(100, Math.max(0, (currentProgress / ach.target) * 100));
 
         // Base classes
-        let cardClasses = "relative flex flex-col items-center justify-center p-3 rounded-2xl transition-all duration-300 group cursor-pointer overflow-hidden aspect-square";
+        let cardClasses = "achievement-card relative flex flex-col items-center justify-center p-3 rounded-2xl transition-all duration-300 group cursor-pointer overflow-hidden aspect-square";
         let iconClasses = "text-4xl sm:text-5xl mb-2 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3";
         let nameClasses = "text-[10px] sm:text-xs font-bold text-center truncate w-full px-1 z-10 transition-colors leading-tight";
 
@@ -1606,7 +1784,7 @@ function renderAchievements(game) {
         }
 
         return `
-            <div class="${cardClasses}" title="${ach.title}">
+            <div class="${cardClasses}" data-id="${ach.id}" title="${ach.title}">
                 <div class="${iconClasses}">${ach.icon}</div>
                 <div class="${nameClasses} ${textStyle}">${ach.title}</div>
                 ${overlayHtml}
@@ -1635,6 +1813,88 @@ function renderAchievements(game) {
     }).join('');
 }
 
+function setupAchievementInteractions(game) {
+    const container = document.getElementById('profile-achievements-list');
+    const modal = new ModalHandler('achievement-details-modal');
+
+    if (!container) return;
+
+    container.addEventListener('click', (e) => {
+        const card = e.target.closest('.achievement-card');
+        if (card && card.dataset.id) {
+            const achId = card.dataset.id;
+            const ach = ACHIEVEMENTS.find(a => a.id === achId);
+            if (ach) {
+                const unlockedIds = game.state.unlockedAchievements || [];
+                const isUnlocked = unlockedIds.includes(achId);
+
+                const iconEl = document.getElementById('achievement-modal-icon');
+                const nameEl = document.getElementById('achievement-modal-name');
+                const descEl = document.getElementById('achievement-modal-desc');
+                const statusEl = document.getElementById('achievement-modal-status');
+
+                // Calculate Progress (Dry-run logic from renderAchievements)
+                let currentProgress = 0;
+                if (ach.type === 'level') currentProgress = game.getCurrentLevel().level;
+                else if (ach.type === 'total_correct') currentProgress = game.state.totalCorrectAnswers || 0;
+                else if (ach.type === 'total_quizzes') currentProgress = game.state.quizzesCompleted || 0;
+                else if (ach.type === 'total_items') currentProgress = game.getInventory().length;
+                else if (ach.type === 'total_avatars') {
+                    currentProgress = game.getInventory().filter(id => {
+                        const item = SHOP_ITEMS.find(i => i.id === id);
+                        return item && item.type === 'avatar';
+                    }).length;
+                } else if (ach.type === 'high_scores_80') currentProgress = game.state.highScores80 || 0;
+                else if (ach.type === 'perfect_scores') currentProgress = game.state.perfectScores || 0;
+
+                const percent = Math.min(100, Math.max(0, (currentProgress / ach.target) * 100));
+
+                if (iconEl) {
+                    iconEl.textContent = ach.icon;
+                    if (isUnlocked) iconEl.classList.remove('grayscale', 'opacity-50');
+                    else iconEl.classList.add('grayscale', 'opacity-50');
+                }
+
+                if (nameEl) nameEl.textContent = ach.title;
+
+                if (descEl) {
+                    let descHtml = `<div class="mb-4">${ach.desc}</div>`;
+                    if (!isUnlocked) {
+                        descHtml += `
+                            <div class="bg-gray-100 dark:bg-gray-700/50 p-3 rounded-xl border border-gray-200 dark:border-gray-600">
+                                <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mb-1.5 font-bold">
+                                    <span>ความคืบหน้า</span>
+                                    <span>${currentProgress.toLocaleString()} / ${ach.target.toLocaleString()}</span>
+                                </div>
+                                <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2 overflow-hidden">
+                                    <div class="bg-blue-500 h-full transition-all duration-700" style="width: ${percent}%"></div>
+                                </div>
+                            </div>
+                        `;
+                    }
+                    descEl.innerHTML = descHtml;
+                }
+
+                if (statusEl) {
+                    if (isUnlocked) {
+                        let statusHtml = '<div class="space-y-2">';
+                        statusHtml += '<span class="px-3 py-1 rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 text-sm font-bold block w-fit mx-auto">✓ ปลดล็อกแล้ว</span>';
+                        if (ach.rewardTitle) {
+                            statusHtml += `<div class="text-xs text-yellow-600 dark:text-yellow-400 font-bold">🎁 รางวัล: ฉายา "《 ${ach.rewardTitle} 》"</div>`;
+                        }
+                        statusHtml += '</div>';
+                        statusEl.innerHTML = statusHtml;
+                    } else {
+                        statusEl.innerHTML = '<span class="px-3 py-1 rounded-full bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-400 text-sm font-bold">ยังไม่ปลดล็อก</span>';
+                    }
+                }
+
+                modal.open();
+            }
+        }
+    });
+}
+
 function renderQuestHistory(game) {
     const container = document.getElementById('profile-quest-history');
     if (!container) return;
@@ -1657,7 +1917,7 @@ function renderQuestHistory(game) {
     `).join('');
 }
 
-async function renderRadarChart(game, allProgress = null) {
+async function renderRadarChart(game, allProgress = null, mode = 'overall') {
     const ctx = document.getElementById('skills-radar-chart')?.getContext('2d');
     const loader = document.getElementById('radar-chart-loader');
     if (!ctx) {
@@ -1675,7 +1935,7 @@ async function renderRadarChart(game, allProgress = null) {
 
     try {
         // --- Caching Logic ---
-        const CACHE_KEY = 'radar_chart_data_cache_v2'; // Bump version to force refresh
+        const CACHE_KEY = `radar_chart_data_v2_${mode}`; // Use mode-specific cache
         const LAST_COMPLETED_KEY = 'last_quiz_completed_timestamp'; // This key should be updated when a quiz is finished
 
         const lastCompletionTime = localStorage.getItem(LAST_COMPLETED_KEY) || '0';
@@ -1698,18 +1958,56 @@ async function renderRadarChart(game, allProgress = null) {
 
         if (cachedData && cachedData.timestamp >= lastCompletionTime) {
             // Use cached data
-            console.log("Using cached radar chart data.");
+            console.log(`Using cached radar chart data for ${mode}.`);
             stats = cachedData.stats;
         } else {
             // Recalculate data
-            console.log("Recalculating radar chart data for caching.");
+            console.log(`Recalculating radar chart data for mode: ${mode}`);
             if (!allProgress) allProgress = await getDetailedProgressForAllQuizzes();
 
             const newStats = {};
-            Object.keys(PROFICIENCY_GROUPS).forEach(key => {
-                newStats[key] = { correct: 0, total: 0 };
+
+            // Define Groups based on Mode
+            let groupsToUse = {};
+            if (mode === 'overall') {
+                groupsToUse = PROFICIENCY_GROUPS;
+            } else if (mode.startsWith('physics_')) {
+                const grade = mode.split('_')[1]; // m4, m5, m6
+                const syllabus = subCategoryData.Physics[grade];
+                if (syllabus && syllabus.chapters) {
+                    syllabus.chapters.forEach((ch, idx) => {
+                        const title = ch.shortTitle || ch.title.split(':')[0];
+                        groupsToUse[title] = { label: title, keywords: [ch.title] };
+                    });
+                }
+            } else if (mode === 'earth_basic') {
+                const syllabus = subCategoryData.EarthSpaceScienceBasic;
+                if (syllabus && syllabus.units) {
+                    syllabus.units.forEach(unit => {
+                        unit.chapters.forEach(ch => {
+                            const title = ch.shortTitle || ch.title;
+                            groupsToUse[title] = { label: title, keywords: [ch.title] };
+                        });
+                    });
+                }
+            } else if (mode === 'earth_adv') {
+                const syllabus = subCategoryData.EarthSpaceScienceAdvance;
+                if (syllabus && syllabus.chapters) {
+                    syllabus.chapters.forEach(ch => {
+                        const title = ch.shortTitle || ch.title;
+                        groupsToUse[title] = { label: title, keywords: [ch.title] };
+                    });
+                }
+            } else if (mode === 'physics') {
+                // Legacy fallback if needed
+                groupsToUse = PROFICIENCY_GROUPS;
+            } else if (mode === 'earth') {
+                groupsToUse = PROFICIENCY_GROUPS;
+            }
+
+            Object.keys(groupsToUse).forEach(key => {
+                newStats[key] = { correct: 0, total: 0, label: groupsToUse[key].label };
             });
-            newStats['General'] = { correct: 0, total: 0 };
 
             allProgress.forEach(quiz => {
                 if (!quiz.userAnswers) return;
@@ -1721,34 +2019,28 @@ async function renderRadarChart(game, allProgress = null) {
                             if (typeof ans.subCategory === 'string') subCatStr = ans.subCategory;
                             else if (ans.subCategory.main) {
                                 subCatStr = ans.subCategory.main;
-                                // FIX: Include specific sub-category for better matching
                                 if (ans.subCategory.specific) {
                                     const specific = Array.isArray(ans.subCategory.specific) ? ans.subCategory.specific.join(' ') : ans.subCategory.specific;
                                     subCatStr += ' ' + specific;
                                 }
                             }
                         }
-
-                        // FIX: Include source category for better matching (consistent with stats.js)
                         subCatStr += ' ' + (ans.sourceQuizCategory || quiz.category || '');
+                        subCatStr = subCatStr.toLowerCase();
 
-                        let matchedGroup = 'General';
-                        const matches = (text, keywords) => keywords.some(k => text.toLowerCase().includes(k.toLowerCase()));
+                        const matches = (text, keywords) => keywords.some(k => text.includes(k.toLowerCase()));
 
-                        for (const [groupKey, groupDef] of Object.entries(PROFICIENCY_GROUPS)) {
+                        for (const [groupKey, groupDef] of Object.entries(groupsToUse)) {
                             if (matches(subCatStr, groupDef.keywords)) {
-                                matchedGroup = groupKey;
-                                break;
+                                newStats[groupKey].total++;
+                                if (ans.isCorrect) newStats[groupKey].correct++;
                             }
                         }
-
-                        newStats[matchedGroup].total++;
-                        if (ans.isCorrect) newStats[matchedGroup].correct++;
                     }
                 });
             });
 
-            stats = newStats; // Assign for rendering
+            stats = newStats;
 
             // Save to cache
             localStorage.setItem(CACHE_KEY, JSON.stringify({
@@ -1758,9 +2050,8 @@ async function renderRadarChart(game, allProgress = null) {
         }
 
         // 2. Calculate Percentages 
-        const labels = Object.values(PROFICIENCY_GROUPS).map(g => g.label);
-        const dataPoints = Object.keys(PROFICIENCY_GROUPS).map(key => {
-            const s = (stats && stats[key]) ? stats[key] : { correct: 0, total: 0 };
+        const labels = Object.values(stats).map(s => s.label);
+        const dataPoints = Object.values(stats).map(s => {
             return s.total > 0 ? (s.correct / s.total) * 100 : 0;
         });
 
@@ -1815,8 +2106,8 @@ async function renderRadarChart(game, allProgress = null) {
                     tooltip: {
                         callbacks: {
                             label: function (context) {
-                                const key = Object.keys(PROFICIENCY_GROUPS)[context.dataIndex];
-                                const s = stats[key];
+                                const key = Object.keys(stats)[context.dataIndex];
+                                const s = stats[key] || { correct: 0, total: 0 };
                                 return `${context.label}: ${context.raw.toFixed(1)}% (${s.correct}/${s.total} ข้อ)`;
                             }
                         }
@@ -1855,6 +2146,50 @@ function animateValue(obj, start, end, duration) {
         }
     };
     obj.animationId = window.requestAnimationFrame(step);
+}
+
+function setupHistoryRangeSystem(game, allProgress) {
+    const buttons = document.querySelectorAll('.history-range-btn');
+    if (buttons.length === 0) return;
+
+    buttons.forEach(btn => {
+        btn.addEventListener('click', async () => {
+            const range = btn.dataset.range;
+            if (range === activeHistoryRange) return;
+
+            // UI Update
+            buttons.forEach(b => {
+                b.classList.remove('bg-white', 'dark:bg-gray-600', 'shadow', 'text-blue-600', 'dark:text-blue-300');
+                b.classList.add('text-gray-500', 'dark:text-gray-400', 'hover:text-gray-700', 'dark:hover:text-gray-200');
+            });
+            btn.classList.add('bg-white', 'dark:bg-gray-600', 'shadow', 'text-blue-600', 'dark:text-blue-300');
+            btn.classList.remove('text-gray-500', 'dark:text-gray-400', 'hover:text-gray-700', 'dark:hover:text-gray-200');
+
+            activeHistoryRange = range;
+            const loader = document.getElementById('history-chart-loader');
+            if (loader) loader.classList.remove('hidden');
+
+            await renderProficiencyHistoryChart(game, allProgress, activeHistoryRange);
+            if (loader) loader.classList.add('hidden');
+        });
+    });
+}
+
+function setupProficiencyModeSystem(game, allProgress) {
+    const select = document.getElementById('proficiency-mode-select');
+    if (!select) return;
+
+    select.addEventListener('change', async (e) => {
+        const mode = e.target.value;
+        if (mode === activeProficiencyMode) return;
+
+        activeProficiencyMode = mode;
+        const loader = document.getElementById('radar-chart-loader');
+        if (loader) loader.classList.remove('hidden');
+
+        await renderRadarChart(game, allProgress, activeProficiencyMode);
+        if (loader) loader.classList.add('hidden');
+    });
 }
 
 function getOrCreateTooltip(chart) {
@@ -2111,7 +2446,7 @@ function externalTooltipHandler(context) {
     tooltipEl.style.marginTop = marginTop;
 }
 
-async function renderProficiencyHistoryChart(game, allProgress = null) {
+async function renderProficiencyHistoryChart(game, allProgress = null, range = 'all') {
     const ctx = document.getElementById('proficiency-history-chart')?.getContext('2d');
     const loader = document.getElementById('history-chart-loader');
     if (!ctx) {
@@ -2135,41 +2470,62 @@ async function renderProficiencyHistoryChart(game, allProgress = null) {
             historyData[key] = [];
         });
 
+        // Calculate cutoff date if range is not 'all'
+        let cutoffDate = null;
+        if (range !== 'all') {
+            const days = parseInt(range);
+            cutoffDate = new Date();
+            cutoffDate.setDate(cutoffDate.getDate() - days);
+        }
+
         // Process all quizzes
         allProgress.forEach(quiz => {
             if (!quiz.userAnswers || !quiz.lastAttemptTimestamp) return;
+
+            const quizDate = new Date(quiz.lastAttemptTimestamp);
+            if (cutoffDate && quizDate < cutoffDate) return; // Skip if out of range
 
             // Determine which group this quiz belongs to
             // We use the first answer's subcategory or quiz category to match keywords
             let matchedGroup = null;
             const firstAnswer = quiz.userAnswers.find(a => a);
 
-            let searchString = quiz.category || '';
+            let searchString = (quiz.category || '').toLowerCase();
             if (firstAnswer && firstAnswer.subCategory) {
-                if (typeof firstAnswer.subCategory === 'string') searchString += ' ' + firstAnswer.subCategory;
-                else if (firstAnswer.subCategory.main) searchString += ' ' + firstAnswer.subCategory.main;
-            }
-
-            const matches = (text, keywords) => keywords.some(k => text.includes(k));
-
-            for (const [groupKey, groupDef] of Object.entries(PROFICIENCY_GROUPS)) {
-                if (matches(searchString, groupDef.keywords)) {
-                    matchedGroup = groupKey;
-                    break;
+                if (typeof firstAnswer.subCategory === 'string') {
+                    searchString += ' ' + firstAnswer.subCategory.toLowerCase();
+                } else {
+                    searchString += ' ' + (firstAnswer.subCategory.main || '').toLowerCase() + ' ' + (firstAnswer.subCategory.specific || '').toLowerCase();
                 }
             }
 
-            if (matchedGroup) {
-                const score = quiz.score || 0;
-                const total = quiz.shuffledQuestions ? quiz.shuffledQuestions.length : (quiz.amount || 0);
-                const percentage = total > 0 ? (score / total) * 100 : 0;
+            const matches = (text, keywords) => {
+                if (!text) return false;
+                const lowerText = text.toLowerCase();
+                return keywords.some(k => lowerText.includes(k.toLowerCase()));
+            };
+            const matchedGroups = [];
 
-                historyData[matchedGroup].push({
-                    x: new Date(quiz.lastAttemptTimestamp),
-                    y: percentage,
-                    title: quiz.title
-                });
+            for (const [groupKey, groupDef] of Object.entries(PROFICIENCY_GROUPS)) {
+                if (matches(searchString, groupDef.keywords)) {
+                    matchedGroups.push(groupKey);
+                    // No break here. A quiz can appear in multiple history lines if it spans topics.
+                }
             }
+
+            matchedGroups.forEach(matchedGroup => {
+                if (matchedGroup) {
+                    const score = quiz.score || 0;
+                    const total = quiz.shuffledQuestions ? quiz.shuffledQuestions.length : (quiz.amount || 0);
+                    const percentage = total > 0 ? (score / total) * 100 : 0;
+
+                    historyData[matchedGroup].push({
+                        x: new Date(quiz.lastAttemptTimestamp),
+                        y: percentage,
+                        title: quiz.title
+                    });
+                }
+            });
         });
 
         // Sort data by date
@@ -2218,8 +2574,12 @@ async function renderProficiencyHistoryChart(game, allProgress = null) {
                     x: {
                         type: 'time',
                         time: {
-                            unit: 'day',
-                            displayFormats: { day: 'd MMM' },
+                            unit: range === '7' ? 'day' : (range === '14' ? 'day' : (range === '30' ? 'week' : 'month')),
+                            displayFormats: {
+                                day: 'd MMM',
+                                week: 'd MMM',
+                                month: 'MMM yyyy'
+                            },
                             tooltipFormat: 'd MMM yyyy HH:mm'
                         },
                         grid: { color: gridColor },

@@ -329,7 +329,7 @@ export const quizItems = [
     type: "question",
     question: "ลูกเห็บ (Hail) เกิดขึ้นในเมฆชนิดใด",
     options: ["เซอร์รัส (Cirrus)", "สเตรตัส (Stratus)", "คิวมูโลนิมบัส (Cumulonimbus)", "อัลโตคิวมูลัส (Altocumulus)"],
-    answer: "คิวมูโลนิมบัส",
+    answer: "คิวมูโลนิมบัส (Cumulonimbus)",
     explanation: "ลูกเห็บเกิดในเมฆฝนฟ้าคะนองขนาดใหญ่ (คิวมูโลนิมบัส) ที่มีกระแสลมพัดขึ้น (Updraft) รุนแรง พัดพาหยดน้ำขึ้นไปแข็งตัวในระดับสูงซ้ำไปซ้ำมาจนเป็นก้อนน้ำแข็งขนาดใหญ่",
     subCategory: {
       main: "ลมฟ้าอากาศและภูมิอากาศ",
@@ -365,7 +365,7 @@ export const quizItems = [
     type: "question",
     question: "ชั้นบรรยากาศใดที่มีอุณหภูมิเพิ่มขึ้นตามความสูงเนื่องจากมีแก๊สโอโซนดูดกลืนรังสีอัลตราไวโอเลต",
     options: ["โทรโพสเฟียร์ (Troposphere)", "สตราโตสเฟียร์ (Stratosphere)", "มีโซสเฟียร์ (Mesosphere)", "เทอร์โมสเฟียร์ (Thermosphere)"],
-    answer: "สตราโตสเฟียร์",
+    answer: "สตราโตสเฟียร์ (Stratosphere)",
     explanation: "ในชั้นสตราโตสเฟียร์ มีชั้นโอโซนที่ดูดกลืนรังสี UV จากดวงอาทิตย์ ทำให้ยิ่งสูงขึ้นไป อุณหภูมิยิ่งสูงขึ้น (Temperature Inversion)",
     subCategory: {
       main: "ลมฟ้าอากาศและภูมิอากาศ",

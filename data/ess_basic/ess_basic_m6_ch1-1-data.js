@@ -369,7 +369,7 @@ export const quizItems = [
     type: "question",
     question: "กาแล็กซีเพื่อนบ้านขนาดใหญ่ที่อยู่ใกล้ทางช้างเผือกมากที่สุดคือข้อใด",
     options: ["กาแล็กซีแอนโดรเมดา (Andromeda Galaxy)", "กาแล็กซีแมเจลแลนใหญ่ (Large Magellanic Cloud)", "กาแล็กซีแมเจลแลนเล็ก (Small Magellanic Cloud)", "กาแล็กซีสามเหลี่ยม (Triangulum Galaxy)"],
-    answer: "กาแล็กซีแอนโดรเมดา (Andromeda)",
+    answer: "กาแล็กซีแอนโดรเมดา (Andromeda Galaxy)",
     explanation: "กาแล็กซีแอนโดรเมดา (M31) เป็นกาแล็กซีกังหันขนาดใหญ่ที่อยู่ห่างออกไปประมาณ 2.5 ล้านปีแสง และกำลังเคลื่อนที่เข้าหาทางช้างเผือก",
     subCategory: {
       main: "เอกภพและกาแล็กซี",

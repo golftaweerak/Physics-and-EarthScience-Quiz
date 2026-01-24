@@ -1,8 +1,8 @@
-
 import { init as initQuizApp } from './quiz-logic.js';
 import { getSavedCustomQuizzes } from './custom-quiz-handler.js';
 import { db } from './firebase-config.js';
-import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { doc, getDoc } from "firebase/firestore";
+import { getDataModules } from './quiz-data-loader.js';
 
 /**
  * Populates the common elements of the quiz page (titles, descriptions).
@@ -64,7 +64,10 @@ function mulberry32(a) {
 }
 
 export async function initializeQuiz() {
-    const { quizList } = await import(`../data/quizzes-list.js?v=${Date.now()}`);
+    const { quizList } = await import('../data/quizzes-list.js');
+
+    // Use import.meta.glob to allow Vite to bundle these files
+    const dataModules = getDataModules();
 
     const urlParams = new URLSearchParams(window.location.search);
     const seedParam = urlParams.get('seed');
@@ -140,12 +143,11 @@ export async function initializeQuiz() {
             const seed = parseInt(urlParams.get('seed')) || Date.now();
             populatePage("แบบทดสอบสุ่ม (Challenge)", "แบบทดสอบที่สุ่มจากคลังข้อสอบทั้งหมด");
 
-            const promises = quizList.map(q => {
+            const promises = quizList.map(async (q) => {
                 // Fix for missing path prefixes (matching logic in data-manager.js):
                 let folder = '';
                 if (q.id.includes('/')) {
                     // Already has path? assume valid relative path if it starts with .., otherwise custom
-                    // But here q.id is usually just the basename code like 'phy_m4_...'
                 } else {
                     if (q.id.startsWith('phy_m4')) folder = 'phy_m4/';
                     else if (q.id.startsWith('phy_m5')) folder = 'phy_m5/';
@@ -153,11 +155,20 @@ export async function initializeQuiz() {
                     else if (q.id.startsWith('ess_basic')) folder = 'ess_basic/';
                     else if (q.id.startsWith('ess_adv')) folder = 'ess_adv/';
                 }
-                const path = `../data/${folder}${q.id}-data.js?v=${Date.now()}`;
-                return import(path).then(m => ({ module: m, info: q })).catch(e => {
+                const path = `../data/${folder}${q.id}-data.js`;
+
+                if (!dataModules[path]) {
+                    console.warn(`Random generation: Module not found for ${path}`);
+                    return null;
+                }
+
+                try {
+                    const m = await dataModules[path]();
+                    return { module: m, info: q };
+                } catch (e) {
                     console.warn(`Failed to load quiz data for random generation: ${q.id}`, e);
                     return null;
-                });
+                }
             });
             const results = await Promise.all(promises);
 
@@ -195,22 +206,22 @@ export async function initializeQuiz() {
         }
     }
 
-    if (!quizId) {
-        handleQuizError("ไม่พบ ID ของแบบทดสอบ", "กรุณาตรวจสอบ URL หรือกลับไปที่หน้าหลักเพื่อเลือกแบบทดสอบ");
-        return;
-    }
-
-    const quizInfo = quizList.filter(q => q).find(q => q.id === quizId);
-    if (!quizInfo) {
-        handleQuizError("ไม่พบข้อมูลแบบทดสอบ", `ไม่พบแบบทดสอบสำหรับ ID: ${quizId}`);
-        return;
-    }
-
     try {
+        if (!quizId) {
+            handleQuizError("ไม่พบ ID ของแบบทดสอบ", "กรุณาตรวจสอบ URL หรือกลับไปที่หน้าหลักเพื่อเลือกแบบทดสอบ");
+            return;
+        }
+
+        const quizInfo = quizList.filter(q => q).find(q => q.id === quizId);
+        if (!quizInfo) {
+            handleQuizError("ไม่พบข้อมูลแบบทดสอบ", `ไม่พบแบบทดสอบสำหรับ ID: ${quizId}`);
+            return;
+        }
+
         // Fix for missing path prefixes (matching logic in data-manager.js):
         let scriptPath;
         if (quizId.includes('/')) {
-            scriptPath = `../data/${quizId}-data.js?v=${Date.now()}`;
+            scriptPath = `../data/${quizId}-data.js`;
         } else {
             // Auto-detect folder based on ID prefix
             let folder = '';
@@ -220,9 +231,14 @@ export async function initializeQuiz() {
             else if (quizId.startsWith('ess_basic')) folder = 'ess_basic/';
             else if (quizId.startsWith('ess_adv')) folder = 'ess_adv/';
 
-            scriptPath = `../data/${folder}${quizId}-data.js?v=${Date.now()}`;
+            scriptPath = `../data/${folder}${quizId}-data.js`;
         }
-        const module = await import(scriptPath);
+
+        if (!dataModules[scriptPath]) {
+            throw new Error(`Data module not found: ${scriptPath}`);
+        }
+
+        const module = await dataModules[scriptPath]();
         const data = module.quizItems || module.quizData || [];
 
         if (!data || !Array.isArray(data)) {
@@ -243,14 +259,21 @@ export async function initializeQuiz() {
 
         populatePage(quizInfo.title, quizInfo.description);
 
+
         let customTime = null;
         let lives = 1;
+        let timerMode = 'none'; // Default to none
+
         if (lobbyConfig) {
             customTime = lobbyConfig.customTime;
             lives = lobbyConfig.lives || 1;
+            timerMode = lobbyConfig.timerMode || 'none';
         }
 
-        initQuizApp(processedQuizData, quizInfo.storageKey, quizInfo.title, customTime, action, !!seedParam, lives);
+        // Determine isChallenge based on seedParam OR lobbyId
+        const isChallenge = !!seedParam || !!lobbyId;
+
+        initQuizApp(processedQuizData, quizInfo.storageKey, quizInfo.title, customTime, action, isChallenge, lives, timerMode);
 
     } catch (error) {
         console.error(`Error loading quiz data for ID ${quizId}:`, error);

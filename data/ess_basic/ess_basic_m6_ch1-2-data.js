@@ -72,7 +72,7 @@ export const quizItems = [
     type: "question",
     question: "อนุภาคใดจัดเป็น 'ปฏิสสาร' (Antimatter) ของอิเล็กตรอน",
     options: ["โปรตอน (Proton)", "นิวตรอน (Neutron)", "โพซิตรอน (Positron)", "นิวตริโน (Neutrino)"],
-    answer: "โพซิตรอน",
+    answer: "โพซิตรอน (Positron)",
     explanation: "โพซิตรอน (Positron) มีมวลเท่ากับอิเล็กตรอนแต่มีประจุไฟฟ้าเป็นบวก ซึ่งเป็นคู่ปฏิสสารของอิเล็กตรอน",
     subCategory: {
       main: "เอกภพและกาแล็กซี",

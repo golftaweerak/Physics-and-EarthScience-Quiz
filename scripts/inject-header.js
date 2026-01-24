@@ -13,7 +13,7 @@ const headerContent = fs.readFileSync(headerPath, 'utf8');
 // 2. รายชื่อไฟล์ HTML ที่ต้องการอัปเดต
 const filesToUpdate = [
     'index.html',
-    'stats.html',
+
     'profile.html',
     'summary.html',
     'preview.html',
@@ -24,14 +24,14 @@ const filesToUpdate = [
 // 3. วนลูปอัปเดตทีละไฟล์
 filesToUpdate.forEach(file => {
     const filePath = path.join(__dirname, '../', file);
-    
+
     if (fs.existsSync(filePath)) {
         let content = fs.readFileSync(filePath, 'utf8');
-        
+
         // ใช้ Regex ค้นหาจุดที่จะวาง Header
         // จะแทนที่เนื้อหาระหว่าง <!-- HEADER_START --> และ <!-- HEADER_END -->
         const regex = /<!-- HEADER_START -->[\s\S]*?<!-- HEADER_END -->/g;
-        
+
         if (content.match(regex)) {
             const newContent = content.replace(regex, `<!-- HEADER_START -->\n${headerContent}\n    <!-- HEADER_END -->`);
             fs.writeFileSync(filePath, newContent, 'utf8');

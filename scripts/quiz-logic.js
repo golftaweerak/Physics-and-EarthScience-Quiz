@@ -3,7 +3,7 @@ import { shuffleArray } from './utils.js';
 import { Gamification, SHOP_ITEMS, PROFICIENCY_GROUPS } from './gamification.js';
 import { showToast } from './toast.js';
 import { db } from './firebase-config.js';
-import { doc, updateDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { doc, updateDoc, onSnapshot, serverTimestamp } from "firebase/firestore";
 import { authManager } from './auth-manager.js';
 
 // state: Stores all dynamic data of the quiz
@@ -218,6 +218,9 @@ export function init(quizData, storageKey, quizTitle, customTime, action, isChal
     powerupConfirmBtn: document.getElementById("powerup-confirm-buy-btn"),
     // New: Back to Lobby Button
     backToLobbyBtn: document.getElementById("back-to-lobby-btn"),
+    // New: Multiplayer UI
+    multiplayerHearts: document.getElementById("multiplayer-hearts"),
+    quizStatusBar: document.getElementById("quiz-status-bar"),
   };
   // --- 2. State Initialization ---
   state = {
@@ -284,6 +287,9 @@ export function init(quizData, storageKey, quizTitle, customTime, action, isChal
 
   // NEW: Appy Dynamic Theme
   applyLocalTheme();
+
+  // NEW: Initial hearts rendering (for Survival)
+  updateHearts();
 }
 
 /**
@@ -422,7 +428,7 @@ function setFloatingNav(active) {
 
     // Add padding to the bottom of the quiz screen to prevent content overlap
     if (elements.quizScreen) {
-      elements.quizScreen.style.paddingBottom = '6rem'; // 96px
+      elements.quizScreen.style.paddingBottom = '10rem';
     }
   } else {
     // --- 1. Revert Container ---
@@ -488,12 +494,36 @@ function renderMath(element) {
 }
 
 function updateProgressBar() {
-  if (!elements.progressBar) return; // ป้องกัน error หากไม่มี element นี้ในหน้า
-  // คำนวณ % ความคืบหน้าจากข้อปัจจุบัน
+  if (!elements.progressBar) return;
   const progressPercentage =
     ((state.currentQuestionIndex + 1) / state.shuffledQuestions.length) * 100;
   elements.progressBar.style.width = `${progressPercentage}%`;
-  if (elements.quizNav) elements.quizNav.classList.remove("hidden");
+
+  if (elements.questionCounter) {
+    elements.questionCounter.textContent = `${state.currentQuestionIndex + 1} / ${state.shuffledQuestions.length}`;
+  }
+}
+
+/**
+ * Updates the display of lives (hearts) for Survival mode.
+ */
+function updateHearts() {
+  if (!elements.multiplayerHearts) return;
+
+  if (state.mode === 'survival') {
+    elements.multiplayerHearts.classList.remove('hidden');
+    let heartsHtml = '';
+    for (let i = 0; i < state.initialLives; i++) {
+      if (i < state.lives) {
+        heartsHtml += '<span class="text-red-500 transform hover:scale-110 transition-transform cursor-default" title="ชีวิต">❤️</span>';
+      } else {
+        heartsHtml += '<span class="text-gray-300 dark:text-gray-600 grayscale opacity-40 transform scale-90" title="เสียชีวิตแล้ว">❤️</span>';
+      }
+    }
+    elements.multiplayerHearts.innerHTML = heartsHtml;
+  } else {
+    elements.multiplayerHearts.classList.add('hidden');
+  }
 }
 
 /**
@@ -506,7 +536,7 @@ function createOptionButton(optionText, previousAnswer) {
   const button = document.createElement("button");
   button.innerHTML = optionText.replace(/\n/g, "<br>");
   button.dataset.optionValue = optionText; // Store raw value
-  button.className = "option-btn w-full p-4 border-2 border-gray-300 dark:border-gray-600 rounded-lg text-left hover:bg-gray-100 dark:hover:bg-gray-700 hover:border-blue-500 dark:hover:border-blue-500";
+  button.className = "option-btn w-full p-5 border-2 border-gray-100 dark:border-gray-700/50 rounded-2xl text-left bg-white/50 dark:bg-gray-800/40 hover:bg-white dark:hover:bg-gray-700/60 hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-lg transition-all duration-300 font-medium shadow-sm";
 
   if (previousAnswer) {
     // This is a revisited question, so we disable the button and show its state.
@@ -541,7 +571,7 @@ function createCheckboxOption(optionText, previousAnswer) {
   const wrapperLabel = document.createElement('label');
   // The entire element is now a label, making it fully clickable.
   // Added cursor-pointer to the wrapper itself and a smooth transition.
-  wrapperLabel.className = 'option-checkbox-wrapper flex items-center w-full p-4 border-2 border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 hover:border-blue-500 dark:hover:border-blue-500 cursor-pointer transition-colors duration-150';
+  wrapperLabel.className = 'option-checkbox-wrapper flex items-center w-full p-5 border-2 border-gray-100 dark:border-gray-700/50 rounded-2xl bg-white/50 dark:bg-gray-800/40 hover:bg-white dark:hover:bg-gray-800/60 hover:border-blue-500 dark:hover:border-blue-400 cursor-pointer transition-all duration-300 shadow-sm';
 
   const checkbox = document.createElement('input');
   checkbox.type = 'checkbox';
@@ -584,19 +614,8 @@ function createCheckboxOption(optionText, previousAnswer) {
  * Sets up the Power-up UI elements.
  */
 function setupPowerUpUI() {
-  // Create container if it doesn't exist
-  if (!document.getElementById('power-up-bar')) {
-    const container = document.createElement('div');
-    container.id = 'power-up-bar';
-    container.className = 'flex flex-wrap justify-center gap-3 mb-6 px-2';
-
-    // Insert before the question container
-    const questionContainer = document.getElementById('question');
-    if (questionContainer && questionContainer.parentNode) {
-      questionContainer.parentNode.insertBefore(container, questionContainer);
-    }
-    elements.powerUpContainer = container;
-  }
+  // Container already exists in modern HTML, but we cache it here
+  elements.powerUpContainer = document.getElementById('power-up-bar');
 }
 
 /**
@@ -642,21 +661,21 @@ function renderPowerUps(animateItemId = null) {
     const isTimerDisabled = state.timerMode === 'none';
     const isDisabled = isUsed || (isTimeFreeze && isTimerDisabled);
 
-    let btnClass = "relative group flex items-center justify-center lg:justify-start gap-0 lg:gap-2 p-2 lg:px-3 lg:py-1.5 rounded-xl lg:rounded-full transition-all shadow-sm border-2 ";
+    let btnClass = "relative group flex items-center justify-center lg:justify-start gap-0 lg:gap-2 p-2.5 lg:px-4 lg:py-2 rounded-xl lg:rounded-full transition-all shadow-sm border-2 backdrop-blur-sm ";
 
     if (item.id === animateItemId) {
       btnClass += "anim-item-pop ";
     }
 
     if (isUsed) {
-      btnClass += "bg-green-100 text-green-700 border-green-500 cursor-default opacity-80";
+      btnClass += "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 border-green-500/50 cursor-default opacity-90";
     } else if (isTimeFreeze && isTimerDisabled) {
       // Style for unavailable item
-      btnClass += "bg-gray-100 dark:bg-gray-800 text-gray-400 border-gray-200 dark:border-gray-700 cursor-not-allowed opacity-60 grayscale";
+      btnClass += "bg-gray-100/50 dark:bg-gray-800/20 text-gray-400 dark:text-gray-600 border-transparent cursor-not-allowed opacity-50 grayscale";
     } else if (count > 0) {
-      btnClass += "bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-600 hover:bg-blue-50 dark:hover:bg-gray-600 hover:border-blue-400 cursor-pointer transform hover:scale-105";
+      btnClass += "bg-white/60 dark:bg-gray-800/60 text-blue-600 dark:text-blue-400 border-blue-200/50 dark:border-blue-700/50 hover:bg-white dark:hover:bg-gray-800 hover:border-blue-400 cursor-pointer transform hover:scale-105";
     } else {
-      btnClass += "bg-gray-100 dark:bg-gray-800 text-gray-400 border-gray-200 dark:border-gray-700 cursor-pointer hover:bg-gray-200";
+      btnClass += "bg-gray-100/30 dark:bg-gray-800/20 text-gray-400 dark:text-gray-500 border-transparent cursor-pointer hover:bg-gray-200/40";
     }
 
     return `
@@ -800,6 +819,11 @@ function showQuestion() {
     showResults(); // Or handle error appropriately
     return;
   }
+
+  // Update Status Bar
+  updateHearts();
+  updateProgressBar();
+
   // Safely replace newlines, guarding against undefined/null questions
   const questionHtml = (currentQuestion?.question || "").replace(/\n/g, "<br>");
 
@@ -1129,6 +1153,7 @@ function evaluateMultipleAnswer() {
     // --- NEW: Survival Mode Lives ---
     if (state.mode === 'survival' && !state.isEliminated) {
       state.lives--;
+      updateHearts();
       showToast('ระวัง!', `เหลืออีก ${state.lives} ❤️`, '⚠️', 'error');
       if (state.lives <= 0) {
         state.isEliminated = true;
@@ -1213,6 +1238,7 @@ function evaluateFillInAnswer() {
     // --- NEW: Survival Mode Lives ---
     if (state.mode === 'survival' && !state.isEliminated) {
       state.lives--;
+      updateHearts();
       showToast('ระวัง!', `เหลืออีก ${state.lives} ❤️`, '⚠️', 'error');
       if (state.lives <= 0) {
         state.isEliminated = true;
@@ -1304,6 +1330,7 @@ function evaluateFillInNumberAnswer() {
     // --- NEW: Survival Mode Lives ---
     if (state.mode === 'survival' && !state.isEliminated) {
       state.lives--;
+      updateHearts();
       showToast('ระวัง!', `เหลืออีก ${state.lives} ❤️`, '⚠️', 'error');
       if (state.lives <= 0) {
         state.isEliminated = true;
@@ -1326,15 +1353,21 @@ function resetState() {
   elements.skipBtn.classList.add("hidden");
   elements.feedback.classList.add("hidden");
   elements.feedbackContent.innerHTML = "";
-  elements.feedback.className = "hidden mt-6 p-4 rounded-lg";
+  elements.feedback.className = "hidden mt-8 p-6 rounded-[2rem] anim-feedback-in shadow-lg border-2";
   elements.prevBtn.classList.add("hidden");
   while (elements.options.firstChild) {
     elements.options.removeChild(elements.options.firstChild);
   }
   // New: Hide hint section on reset
   if (elements.hintSection) elements.hintSection.classList.add("hidden");
-  if (elements.hintContainer) elements.hintContainer.classList.add("hidden");
-  if (elements.hintBtn) elements.hintBtn.classList.remove("hidden");
+  if (elements.hintText) {
+    elements.hintText.classList.add("hidden");
+    elements.hintText.innerHTML = "";
+  }
+  if (elements.hintBtn) {
+    elements.hintBtn.classList.remove("hidden");
+    elements.hintBtn.innerHTML = "💡 แสดงคำใบ้";
+  }
 }
 
 function selectAnswer(e) {
@@ -1467,26 +1500,14 @@ function showFeedback(isCorrect, explanation, correctAnswer) {
   const correctAnswerDisplay = Array.isArray(correctAnswer) ? correctAnswer.join(', ') : correctAnswer;
 
   if (isCorrect) {
-    elements.feedbackContent.innerHTML = `<h3 class="font-bold text-lg text-green-800 dark:text-green-300">ถูกต้อง!</h3><p class="text-green-700 dark:text-green-400 mt-2">${explanationHtml}</p>`;
-    elements.feedback.classList.add(
-      "bg-green-100",
-      "dark:bg-green-900/50",
-      "border",
-      "border-green-300",
-      "dark:border-green-700"
-    );
+    elements.feedbackContent.innerHTML = `<div class="flex items-center gap-3 mb-2"><span class="text-2xl">✨</span> <h3 class="font-black text-xl text-green-800 dark:text-green-300">ถูกต้องที่สุด!</h3></div><div class="text-green-700 dark:text-green-400 font-medium leading-relaxed">${explanationHtml}</div>`;
+    elements.feedback.className = "mt-8 p-6 rounded-[2rem] anim-feedback-in shadow-xl border-2 bg-green-500/10 dark:bg-green-500/10 border-green-500/30 block";
   } else {
-    elements.feedbackContent.innerHTML = `<h3 class="font-bold text-lg text-red-800 dark:text-red-300">ผิดครับ!</h3><p class="text-red-700 dark:text-red-400 mt-1">คำตอบที่ถูกต้องคือ: <strong>${correctAnswerDisplay}</strong></p><p class="text-red-700 dark:text-red-400 mt-2">${explanationHtml}</p>`;
-    elements.feedback.classList.add(
-      "bg-red-100",
-      "dark:bg-red-900/50",
-      "border",
-      "border-red-300",
-      "dark:border-red-700"
-    );
+    elements.feedbackContent.innerHTML = `<div class="flex items-center gap-3 mb-2"><span class="text-2xl">💡</span> <h3 class="font-black text-xl text-red-800 dark:text-red-300">เกือบถูกแล้ว!</h3></div><div class="text-red-700 dark:text-red-400 mt-1 mb-4 bg-red-500/5 p-4 rounded-2xl border border-red-500/10 font-bold">คำตอบที่ถูกต้องคือ: <span class="text-red-600 dark:text-red-300 underline decoration-2 underline-offset-4 decoration-red-500/30">${correctAnswerDisplay}</span></div><div class="text-red-700 dark:text-red-400 font-medium leading-relaxed opacity-90">${explanationHtml}</div>`;
+    elements.feedback.className = "mt-8 p-6 rounded-[2rem] anim-feedback-in shadow-xl border-2 bg-red-500/10 dark:bg-red-500/10 border-red-500/30 block";
   }
   elements.feedback.classList.remove("hidden");
-  elements.feedback.classList.add("anim-feedback-in");
+  renderMath(elements.feedbackContent);
 }
 
 function showNextQuestion() {
@@ -1550,7 +1571,7 @@ function showPreviousQuestion() {
 }
 
 // --- NEW: Function to display the final results screen ---
-function showResults() {
+function showResults(isViewOnly = false) {
   stopTimer(); // Stop any running timers.
 
   // --- NEW: Cleanup Lobby Listener ---
@@ -1570,10 +1591,15 @@ function showResults() {
 
   setFloatingNav(false); // Deactivate the floating navigation bar
 
+  // ROBUST SCORING: Calculate correct answers directly from the answers array
+  // to ensure consistency with the chapter performance breakdown.
   const totalQuestions = state.shuffledQuestions.length;
-  const correctAnswers = state.score;
+  const correctAnswers = state.userAnswers.filter(ans => ans && ans.isCorrect).length;
   const incorrectAnswersCount = totalQuestions - correctAnswers;
   const percentage = totalQuestions > 0 ? Math.round((correctAnswers / totalQuestions) * 100) : 0;
+
+  // Sync state.score just in case it's used elsewhere
+  state.score = correctAnswers;
 
   // --- REVISED Time Calculation ---
   // This new logic accurately tracks time spent, even across browser sessions.
@@ -1678,147 +1704,149 @@ function showResults() {
   let xpEarned = 0;
   let levelResult = null;
 
-
-
   let newBadges = [];
   let completedQuests = [];
   let newAchievements = [];
   let physicsXP = 0;
   let earthXP = 0;
-  const topicXPs = {};
 
-  // NEW: Calculate correct answer types for quests
-  let correctTheory = 0;
-  let correctCalculation = 0;
-  state.userAnswers.forEach((ans, index) => {
-    if (ans && ans.isCorrect) {
-      const question = state.shuffledQuestions[index];
-      if (question) {
-        if (question.type === 'fill-in-number') correctCalculation++;
-        else correctTheory++;
-      }
-    }
-  });
-
-  try {
-    const game = state.game; // Use the instance from state
-
+  // Only process Gamification if NOT in view-only mode
+  if (!isViewOnly) {
+    // NEW: Calculate correct answer types for quests
+    let correctTheory = 0;
+    let correctCalculation = 0;
     state.userAnswers.forEach((ans, index) => {
       if (ans && ans.isCorrect) {
         const question = state.shuffledQuestions[index];
-        let points = 4; // Default for standard questions
-
-        if (question && (question.type === 'multiple-select' || question.type === 'fill-in-number')) {
-          points = 5;
-        }
-        xpEarned += points;
-
-        // Calculate Topic XP
-        let subCatStr = '';
-        if (ans.subCategory) {
-          if (typeof ans.subCategory === 'string') subCatStr = ans.subCategory;
-          else if (ans.subCategory.main) {
-            // Combine main and specific for keyword matching
-            subCatStr = ans.subCategory.main + ' ' + (ans.subCategory.specific || '');
-          }
-        }
-
-        // Normalize for case-insensitive matching
-        subCatStr = subCatStr.toLowerCase();
-
-        let isPhysics = false;
-        let isEarth = false;
-
-        for (const [groupKey, groupDef] of Object.entries(PROFICIENCY_GROUPS)) {
-          // Check against normalized keywords
-          const keywords = groupDef.keywords || [];
-          if (keywords.some(k => subCatStr.includes(k.toLowerCase()))) {
-            topicXPs[groupDef.field] = (topicXPs[groupDef.field] || 0) + points;
-
-            // Check track from proficiency group
-            if (groupDef.track === 'physics') isPhysics = true;
-            if (groupDef.track === 'earth') isEarth = true;
-
-            break;
-          }
-        }
-
-        // ตรวจสอบหมวดวิชาของข้อนี้
-        let qCategory = 'General';
-        if (ans.sourceQuizCategory) {
-          qCategory = ans.sourceQuizCategory;
-        } else if (ans.subCategory) {
-          qCategory = typeof ans.subCategory === 'object' ? ans.subCategory.main : ans.subCategory;
-        }
-
-        const lowerCat = String(qCategory).toLowerCase();
-
-        // Fallback check using category name or ID prefix
-        if (!isPhysics && (lowerCat.includes('physics') || lowerCat.includes('ฟิสิกส์') || lowerCat.includes('phy_') || lowerCat.includes('กลศาสตร์') || lowerCat.includes('ไฟฟ้า'))) {
-          isPhysics = true;
-        }
-
-        if (!isEarth && (lowerCat.includes('earth') || lowerCat.includes('astronomy') || lowerCat.includes('space') || lowerCat.includes('โลก') || lowerCat.includes('ดาราศาสตร์') || lowerCat.includes('วิทย์โลก') || lowerCat.includes('ess_') || lowerCat.includes('ดารา'))) {
-          isEarth = true;
-        }
-
-        if (isPhysics) {
-          physicsXP += points;
-        } else if (isEarth) {
-          earthXP += points;
+        if (question) {
+          if (question.type === 'fill-in-number') correctCalculation++;
+          else correctTheory++;
         }
       }
     });
 
-    // Apply XP Multiplier
-    xpEarned *= state.xpMultiplier;
-    physicsXP *= state.xpMultiplier;
-    earthXP *= state.xpMultiplier;
+    try {
+      const game = state.game; // Use the instance from state
 
-    // --- NEW: Prepare quest stats object ---
-    const firstAnswer = state.userAnswers.find(a => a);
-    let questCategory = 'General';
-    if (firstAnswer) {
-      if (firstAnswer.sourceQuizCategory) {
-        questCategory = firstAnswer.sourceQuizCategory;
-      } else if (firstAnswer.subCategory) {
-        questCategory = typeof firstAnswer.subCategory === 'object' ? firstAnswer.subCategory.main : firstAnswer.subCategory;
-      }
-    }
-    const questStats = {
-      correctAnswers: correctAnswers,
-      totalQuestions: totalQuestions,
-      category: questCategory,
-      percentage: percentage,
-      correctTheory: correctTheory,
-      correctCalculation: correctCalculation,
-      questionCount: state.questionCount,
-      isCustomQuiz: state.isCustomQuiz
-    };
+      state.userAnswers.forEach((ans, index) => {
+        if (ans && ans.isCorrect) {
+          const question = state.shuffledQuestions[index];
+          let points = 4; // Default for standard questions
 
-    const result = game.submitQuizResult(xpEarned, percentage, state.questionCount, state.isCustomQuiz, topicXPs, questStats);
-    levelResult = { overall: result.overall, physics: result.physics, earth: result.earth };
-    newBadges = result.newBadges || [];
-    newAchievements = result.newAchievements || [];
-    completedQuests = result.completedQuests || [];
+          if (question && (question.type === 'multiple-select' || question.type === 'fill-in-number')) {
+            points = 5;
+          }
+          xpEarned += points;
 
-    // Play Sounds for Gamification
-    if (state.isSoundEnabled && levelResult) {
-      if (levelResult.overall?.leveledUp || levelResult.physics?.leveledUp || levelResult.earth?.leveledUp) {
-        if (state.levelUpSound) {
-          state.levelUpSound.currentTime = 0;
-          state.levelUpSound.play().catch(e => console.warn("Could not play level up sound", e));
+          // Calculate Topic XP
+          let subCatStr = '';
+          if (ans.subCategory) {
+            if (typeof ans.subCategory === 'string') subCatStr = ans.subCategory;
+            else if (ans.subCategory.main) {
+              // Combine main and specific for keyword matching
+              subCatStr = ans.subCategory.main + ' ' + (ans.subCategory.specific || '');
+            }
+          }
+
+          // Normalize for case-insensitive matching
+          subCatStr = subCatStr.toLowerCase();
+
+          let isPhysics = false;
+          let isEarth = false;
+
+          for (const [groupKey, groupDef] of Object.entries(PROFICIENCY_GROUPS)) {
+            // Check against normalized keywords
+            const keywords = groupDef.keywords || [];
+            if (keywords.some(k => subCatStr.includes(k.toLowerCase()))) {
+              topicXPs[groupDef.field] = (topicXPs[groupDef.field] || 0) + points;
+
+              // Check track from proficiency group
+              if (groupDef.track === 'physics') isPhysics = true;
+              if (groupDef.track === 'earth') isEarth = true;
+
+              // NOTE: No break here! A question can belong to multiple proficiency fields
+              // (e.g. Meteorolgy & Oceanography for an El Nino question)
+            }
+          }
+
+          // ตรวจสอบหมวดวิชาของข้อนี้
+          let qCategory = 'General';
+          if (ans.sourceQuizCategory) {
+            qCategory = ans.sourceQuizCategory;
+          } else if (ans.subCategory) {
+            qCategory = typeof ans.subCategory === 'object' ? ans.subCategory.main : ans.subCategory;
+          }
+
+          const lowerCat = String(qCategory).toLowerCase();
+
+          // Fallback check using category name or ID prefix
+          if (!isPhysics && (lowerCat.includes('physics') || lowerCat.includes('ฟิสิกส์') || lowerCat.includes('phy_') || lowerCat.includes('กลศาสตร์') || lowerCat.includes('ไฟฟ้า'))) {
+            isPhysics = true;
+          }
+
+          if (!isEarth && (lowerCat.includes('earth') || lowerCat.includes('astronomy') || lowerCat.includes('space') || lowerCat.includes('โลก') || lowerCat.includes('ดาราศาสตร์') || lowerCat.includes('วิทย์โลก') || lowerCat.includes('ess_') || lowerCat.includes('ดารา'))) {
+            isEarth = true;
+          }
+
+          if (isPhysics) {
+            physicsXP += points;
+          }
+          if (isEarth) {
+            earthXP += points;
+          }
         }
-      } else if (newBadges.length > 0) {
-        if (state.badgeSound) {
-          state.badgeSound.currentTime = 0;
-          state.badgeSound.play().catch(e => console.warn("Could not play badge sound", e));
+      });
+
+      // Apply XP Multiplier
+      xpEarned *= state.xpMultiplier;
+      physicsXP *= state.xpMultiplier;
+      earthXP *= state.xpMultiplier;
+
+      // --- NEW: Prepare quest stats object ---
+      const firstAnswer = state.userAnswers.find(a => a);
+      let questCategory = 'General';
+      if (firstAnswer) {
+        if (firstAnswer.sourceQuizCategory) {
+          questCategory = firstAnswer.sourceQuizCategory;
+        } else if (firstAnswer.subCategory) {
+          questCategory = typeof firstAnswer.subCategory === 'object' ? firstAnswer.subCategory.main : firstAnswer.subCategory;
         }
       }
+      const questStats = {
+        correctAnswers: correctAnswers,
+        totalQuestions: totalQuestions,
+        category: questCategory,
+        percentage: percentage,
+        correctTheory: correctTheory,
+        correctCalculation: correctCalculation,
+        questionCount: state.questionCount,
+        isCustomQuiz: state.isCustomQuiz
+      };
+
+      const result = game.submitQuizResult(xpEarned, percentage, state.questionCount, state.isCustomQuiz, topicXPs, questStats);
+      levelResult = { overall: result.overall, physics: result.physics, earth: result.earth };
+      newBadges = result.newBadges || [];
+      newAchievements = result.newAchievements || [];
+      completedQuests = result.completedQuests || [];
+
+      // Play Sounds for Gamification
+      if (state.isSoundEnabled && levelResult) {
+        if (levelResult.overall?.leveledUp || levelResult.physics?.leveledUp || levelResult.earth?.leveledUp) {
+          if (state.levelUpSound) {
+            state.levelUpSound.currentTime = 0;
+            state.levelUpSound.play().catch(e => console.warn("Could not play level up sound", e));
+          }
+        } else if (newBadges.length > 0) {
+          if (state.badgeSound) {
+            state.badgeSound.currentTime = 0;
+            state.badgeSound.play().catch(e => console.warn("Could not play badge sound", e));
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Gamification error:", error);
     }
-  } catch (error) {
-    console.error("Gamification error:", error);
-  }
+  } // Close if (!isViewOnly)
 
   // --- Show Toast Notifications ---
   if (levelResult?.overall?.leveledUp) {
@@ -2859,7 +2887,7 @@ async function updateLobbyScore() {
 
     // BUT updateDoc is simpler for a single field update if Firestore provided array-level targeting. 
     // Since it doesn't, we'll fetch and update.
-    const { runTransaction } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js");
+    const { runTransaction } = await import("firebase/firestore");
 
     await runTransaction(db, async (transaction) => {
       const lobbySnap = await transaction.get(lobbyRef);
@@ -2948,7 +2976,7 @@ function checkForSavedQuiz(action) {
       // Validate state before using it
       if (typeof savedState.currentQuestionIndex === 'number' && Array.isArray(savedState.shuffledQuestions)) {
         loadStateFromSave(savedState);
-        showResults(); // This will also call switchScreen to the result screen
+        showResults(true); // Call with isViewOnly = true
         return; // Done.
       }
     } catch (e) {

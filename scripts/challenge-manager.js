@@ -1,5 +1,5 @@
 import { db } from './firebase-config.js';
-import { doc, setDoc, getDoc, updateDoc, onSnapshot, arrayUnion, serverTimestamp, collection, addDoc, query, orderBy, limit, deleteDoc, runTransaction } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { doc, setDoc, getDoc, updateDoc, onSnapshot, arrayUnion, serverTimestamp, collection, addDoc, query, orderBy, limit, deleteDoc, runTransaction } from "firebase/firestore";
 import { authManager } from './auth-manager.js';
 import { showToast } from './toast.js';
 import { ModalHandler } from './modal-handler.js';
@@ -42,27 +42,38 @@ export class ChallengeManager {
   }
 
   init() {
-    // FIX: Prevent multiple initializations
-    if (this.isInitialized) return;
-    this.isInitialized = true;
-    delete window.challengeContext; // Cleanup any stale context on init
+    // 1. Global Initialization (Run Once)
+    if (!this.isInitialized) {
+      this.isInitialized = true;
+      delete window.challengeContext;
+      this.lobbyModal = new ModalHandler('lobby-modal');
+      this.checkPendingLobby();
+    }
 
-    // Initialize handlers for existing modals
-    this.lobbyModal = new ModalHandler('lobby-modal');
+    // 2. UI Initialization (Can be run multiple times to refresh bindings)
+    this._refreshUIBindings();
+  }
 
+  _refreshUIBindings() {
     this._cacheDomElements();
     this._ensureReadyButton();
     this._attachEventListeners();
-    this.checkPendingLobby(); // Renamed to cover both URL and Storage
   }
 
   /**
-   * Caches frequently accessed DOM elements to improve performance.
+   * Caches frequently accessed DOM elements.
    * @private
    */
   _cacheDomElements() {
     this.dom.menuBtn = document.getElementById('open-challenge-menu-btn');
     this.dom.headerMenuBtn = document.getElementById('header-challenge-menu-btn');
+
+    if (!this.dom.headerMenuBtn) {
+      console.warn('ChallengeManager: Header menu button not found in DOM.');
+    } else {
+      // console.log('ChallengeManager: Header menu button found.');
+    }
+
     this.dom.createBtn = document.getElementById('challenge-create-btn');
     this.dom.joinBtn = document.getElementById('challenge-join-btn');
     this.dom.startBtn = document.getElementById('lobby-start-btn');
@@ -103,13 +114,13 @@ export class ChallengeManager {
     this.dom.editQuizBtn = document.getElementById('lobby-edit-quiz-btn');
     this.dom.editModeBtn = document.getElementById('lobby-edit-mode-btn');
 
-    // Modals
-    this.kickModal = new ModalHandler('kick-notification-modal');
-    this.confirmModal = new ModalHandler('confirm-action-modal');
-    this.mainMenuModal = new ModalHandler('challenge-menu-modal');
-    this.joinModal = new ModalHandler('join-lobby-modal');
-    this.modeModal = new ModalHandler('mode-select-modal');
-    this.quizModal = new ModalHandler('quiz-select-modal');
+    // Modals (Re-initializing these is cheap and ensures they bind to current DOM)
+    if (!this.kickModal) this.kickModal = new ModalHandler('kick-notification-modal');
+    if (!this.confirmModal) this.confirmModal = new ModalHandler('confirm-action-modal');
+    if (!this.mainMenuModal) this.mainMenuModal = new ModalHandler('challenge-menu-modal');
+    if (!this.joinModal) this.joinModal = new ModalHandler('join-lobby-modal');
+    if (!this.modeModal) this.modeModal = new ModalHandler('mode-select-modal');
+    if (!this.quizModal) this.quizModal = new ModalHandler('quiz-select-modal');
   }
 
   _ensureReadyButton() {
@@ -127,12 +138,21 @@ export class ChallengeManager {
 
     if (btn) {
       this.dom.readyBtn = btn;
-      // Prevent duplicate listeners using dataset flag
-      if (!btn.dataset.hasListener) {
-        btn.addEventListener('click', () => this.toggleReady());
-        btn.dataset.hasListener = 'true';
-      }
+      this._safeBind(btn, 'click', () => this.toggleReady());
     }
+  }
+
+  /**
+   * Helper to safely bind events once using dataset flags.
+   */
+  _safeBind(element, event, handler) {
+    if (!element) return;
+    // Use a unique property based on event type to allow multiple different events
+    const flag = `has${event}Listener`;
+    if (element.dataset[flag]) return;
+
+    element.addEventListener(event, handler);
+    element.dataset[flag] = 'true';
   }
 
   /**
@@ -141,20 +161,23 @@ export class ChallengeManager {
    * @private
    */
   _attachEventListeners() {
-    this.dom.menuBtn?.addEventListener('click', () => this.openMainMenu());
-    this.dom.headerMenuBtn?.addEventListener('click', () => this.openMainMenu());
-    this.dom.createBtn?.addEventListener('click', () => {
+    this._safeBind(this.dom.menuBtn, 'click', () => this.openMainMenu());
+    this._safeBind(this.dom.headerMenuBtn, 'click', () => this.openMainMenu());
+
+    this._safeBind(this.dom.createBtn, 'click', () => {
       this.mainMenuModal.close();
       this.openModeSelection();
     });
-    this.dom.joinBtn?.addEventListener('click', () => {
+
+    this._safeBind(this.dom.joinBtn, 'click', () => {
       this.mainMenuModal.close();
       this.openJoinModal();
     });
 
-    this.dom.startBtn?.addEventListener('click', () => this.startGame());
-    this.dom.leaveBtn?.addEventListener('click', () => this.leaveLobby());
-    this.dom.copyBtn?.addEventListener('click', () => {
+    this._safeBind(this.dom.startBtn, 'click', () => this.startGame());
+    this._safeBind(this.dom.leaveBtn, 'click', () => this.leaveLobby());
+
+    this._safeBind(this.dom.copyBtn, 'click', () => {
       if (this.currentLobbyId) {
         navigator.clipboard.writeText(this.currentLobbyId).then(() => {
           showToast('คัดลอกรหัสแล้ว', `รหัสห้อง: ${this.currentLobbyId}`, '📋');
@@ -163,33 +186,33 @@ export class ChallengeManager {
     });
 
     if (this.dom.chatInput && this.dom.chatSendBtn) {
-      this.dom.chatSendBtn.addEventListener('click', () => {
+      this._safeBind(this.dom.chatSendBtn, 'click', () => {
         this.sendChatMessage();
         this.updateTypingStatus(false);
       });
-      this.dom.chatInput.addEventListener('keydown', (e) => {
+      this._safeBind(this.dom.chatInput, 'keydown', (e) => {
         if (e.key === 'Enter') {
           e.preventDefault();
           this.sendChatMessage();
           this.updateTypingStatus(false);
         }
       });
-      this.dom.chatInput.addEventListener('input', () => this.handleTyping());
+      this._safeBind(this.dom.chatInput, 'input', () => this.handleTyping());
     }
 
-    this.dom.kickAckBtn?.addEventListener('click', () => this.kickModal.close());
+    this._safeBind(this.dom.kickAckBtn, 'click', () => this.kickModal.close());
 
     if (this.dom.confirmJoinBtn && this.dom.joinInput) {
-      this.dom.confirmJoinBtn.addEventListener('click', () => this.handleJoinSubmit());
-      this.dom.joinInput.addEventListener('keydown', (e) => {
+      this._safeBind(this.dom.confirmJoinBtn, 'click', () => this.handleJoinSubmit());
+      this._safeBind(this.dom.joinInput, 'keydown', (e) => {
         if (e.key === 'Enter') this.handleJoinSubmit();
       });
-      this.dom.joinInput.addEventListener('input', (e) => { e.target.value = e.target.value.replace(/[^0-9]/g, ''); });
+      this._safeBind(this.dom.joinInput, 'input', (e) => { e.target.value = e.target.value.replace(/[^0-9]/g, ''); });
     }
 
     // Timer mode toggle logic
     this.dom.challengeTimerModes.forEach(radio => {
-      radio.addEventListener('change', (e) => {
+      this._safeBind(radio, 'change', (e) => {
         const mode = e.target.value;
         if (mode === 'none') {
           this.dom.challengeTimerInputContainer.classList.add('hidden');
@@ -207,7 +230,7 @@ export class ChallengeManager {
     });
 
     this.dom.modeSelectButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
+      this._safeBind(btn, 'click', () => {
         const mode = btn.dataset.mode;
         const lives = parseInt(btn.dataset.lives || '1');
         this.modeModal.close();
@@ -220,7 +243,7 @@ export class ChallengeManager {
       });
     });
 
-    this.dom.randomQuizBtn?.addEventListener('click', () => {
+    this._safeBind(this.dom.randomQuizBtn, 'click', () => {
       this.quizModal.close();
       const { timerMode, customTime } = this.getTimerSettings();
       if (this.currentLobbyId && this.isHost) {

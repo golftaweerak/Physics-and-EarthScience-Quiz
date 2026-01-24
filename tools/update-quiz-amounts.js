@@ -33,8 +33,20 @@ async function loadQuizList(quizListPath) {
 }
 
 async function getActualAmount(quiz, dataDir) {
-  // Split the quiz.id to handle subdirectories correctly and robustly.
-  const pathSegments = `${quiz.id}-data.js`.split('/');
+  let relativePath = `${quiz.id}-data.js`;
+
+  // If the ID doesn't contain a slash, try to determine the subfolder based on the ID prefix.
+  if (!quiz.id.includes('/')) {
+    let folder = "";
+    if (quiz.id.startsWith("phy_m4")) folder = "phy_m4/";
+    else if (quiz.id.startsWith("phy_m5")) folder = "phy_m5/";
+    else if (quiz.id.startsWith("phy_m6")) folder = "phy_m6/";
+    else if (quiz.id.startsWith("ess_basic")) folder = "ess_basic/";
+    else if (quiz.id.startsWith("ess_adv")) folder = "ess_adv/";
+    relativePath = `${folder}${quiz.id}-data.js`;
+  }
+
+  const pathSegments = relativePath.split('/');
   const dataFilePath = path.join(dataDir, ...pathSegments);
   try {
     const dataFileUrl = `${pathToFileURL(dataFilePath).href}?v=${Date.now()}`;

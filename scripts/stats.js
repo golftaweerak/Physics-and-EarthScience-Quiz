@@ -2,6 +2,18 @@ import { quizList } from "../data/quizzes-list.js";
 import { getSavedCustomQuizzes } from "./custom-quiz-handler.js";
 import { categoryDetails, getCategoryDisplayName } from "./data-manager.js";
 import { ModalHandler } from "./modal-handler.js";
+import { subCategoryData } from "../data/sub-category-data.js";
+
+/**
+ * Centralized function to get theme colors for Chart.js.
+ * @returns {{gridColor: string, textColor: string}}
+ */
+function getChartJsTheme() {
+    const isDark = document.documentElement.classList.contains('dark');
+    const gridColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+    const textColor = isDark ? '#e5e7eb' : '#374151';
+    return { gridColor, textColor };
+}
 
 /**
  * Converts a Tailwind CSS border color class to an RGBA string.
@@ -18,8 +30,8 @@ function tailwindBorderToRgba(tailwindClass, opacity = 0.7) {
         'border-rose-400': '251, 113, 133',
         'border-red-500': '239, 68, 68',
         'border-amber-500': '245, 158, 11',
-        'border-green-400': '74, 222, 128',        
-        'border-purple-500': '168, 85, 247',        
+        'border-green-400': '74, 222, 128',
+        'border-purple-500': '168, 85, 247',
         'border-indigo-600': '79, 70, 229', // Dark Indigo
     };
     const rgb = colorMap[tailwindClass] || '107, 114, 128'; // Default to gray
@@ -43,51 +55,62 @@ function tailwindBorderToHex(tailwindClass) {
     return colorMap[tailwindClass] || '#6b7280'; // Default to gray
 }
 
+// Store global stats for filtering
+let globalStats = [];
+let activeTrendRange = 'all';
+let activeTopicSyllabus = 'overall';
+let historySearchQuery = '';
+
 /**
  * Retrieves all finished quiz stats from localStorage.
  * @returns {Array<object>} An array of quiz objects merged with their progress.
  */
-function getAllStats(customQuizzes) {
-  const allQuizzes = [...quizList, ...customQuizzes];
-  const allStats = [];
+export function getAllStats(customQuizzes = []) {
+    const allQuizzes = [...quizList, ...customQuizzes];
+    const allStats = [];
 
-  for (const quiz of allQuizzes) {
-    const storageKey = quiz.storageKey || `quizState-${quiz.id || quiz.customId}`;
-    const data = localStorage.getItem(storageKey);
-    if (data) {
-      try { // Wrap the entire processing of a single item in a try-catch
-        const progress = JSON.parse(data);
+    for (const quiz of allQuizzes) {
+        const storageKey = quiz.storageKey || `quizState-${quiz.id || quiz.customId}`;
+        const data = localStorage.getItem(storageKey);
+        if (data) {
+            try { // Wrap the entire processing of a single item in a try-catch
+                const progress = JSON.parse(data);
 
-        // Add a more robust check for a valid progress object.
-        // Old data might be malformed or incomplete.
-        if (!progress || typeof progress !== 'object' || !Array.isArray(progress.userAnswers)) {
-            console.warn(`Skipping invalid or incomplete stats for ${quiz.storageKey}`);
-            continue; // Skip this item and move to the next one
+                // Add a more robust check for a valid progress object.
+                // Old data might be malformed or incomplete.
+                if (!progress || typeof progress !== 'object' || !Array.isArray(progress.userAnswers)) {
+                    console.warn(`Skipping invalid or incomplete stats for ${quiz.storageKey}`);
+                    continue; // Skip this item and move to the next one
+                }
+
+                const totalQuestions = progress.shuffledQuestions?.length || 0;
+                const userAnswers = progress.userAnswers || [];
+                const answeredCount = userAnswers.filter((a) => a !== null).length;
+                const isFinished = totalQuestions > 0 && answeredCount >= totalQuestions;
+
+                // ROBUST SCORING: Calculate correct answers directly from the answers array
+                const robustScore = userAnswers.filter(ans => ans && ans.isCorrect).length;
+
+                let finalUrl = quiz.url;
+                if (!finalUrl && quiz.customId) {
+                    finalUrl = `./quiz/index.html?id=${quiz.customId}`;
+                }
+
+                allStats.push({
+                    ...quiz, // title, category, url, icon etc.
+                    ...progress, // score, userAnswers, etc.
+                    score: robustScore, // Use calculated score
+                    storageKey: storageKey, // Ensure the correct storageKey is carried forward
+                    url: finalUrl,
+                    isFinished: isFinished,
+                });
+            } catch (e) {
+                console.error(`Failed to process stats for ${quiz.storageKey}. Data might be corrupted.`, e);
+            }
         }
-
-        const totalQuestions = progress.shuffledQuestions?.length || 0;
-        const answeredCount = progress.userAnswers.filter((a) => a !== null).length;
-        const isFinished = totalQuestions > 0 && answeredCount >= totalQuestions;
-
-        let finalUrl = quiz.url;
-        if (!finalUrl && quiz.customId) {
-          finalUrl = `./quiz/index.html?id=${quiz.customId}`;
-        }
-
-        allStats.push({
-          ...quiz, // title, category, url, icon etc.
-          ...progress, // score, userAnswers, etc.
-          storageKey: storageKey, // Ensure the correct storageKey is carried forward
-          url: finalUrl,
-          isFinished: isFinished,
-        });
-      } catch (e) {
-        console.error(`Failed to process stats for ${quiz.storageKey}. Data might be corrupted.`, e);
-      }
     }
-  }
 
-  return allStats;
+    return allStats;
 }
 
 /**
@@ -95,7 +118,14 @@ function getAllStats(customQuizzes) {
  * @param {Array<object>} stats - The array of stats from getAllStats.
  * @returns {{labels: Array<string>, data: Array<number>}} An object for Chart.js.
  */
-function calculateScoreTrend(stats) {
+export function calculateScoreTrend(stats, range = 'all') {
+    let cutoffDate = null;
+    if (range !== 'all') {
+        const days = parseInt(range);
+        cutoffDate = new Date();
+        cutoffDate.setDate(cutoffDate.getDate() - days);
+    }
+
     const finishedQuizzes = stats
         .filter(stat => stat.isFinished && stat.lastAttemptTimestamp)
         .map(stat => {
@@ -107,6 +137,7 @@ function calculateScoreTrend(stats) {
                 score: percentage
             };
         })
+        .filter(item => !cutoffDate || item.date >= cutoffDate)
         .sort((a, b) => a.date - b.date); // Sort by date ascending
 
     const labels = finishedQuizzes.map(item => item.date.toLocaleDateString('th-TH', { day: 'numeric', month: 'short' }));
@@ -120,7 +151,7 @@ function calculateScoreTrend(stats) {
  * @param {Array<object>} stats - The array of all quiz progress data.
  * @returns {{best: object|null, worst: object|null}}
  */
-function calculateTopicPerformance(stats) {
+export function calculateTopicPerformance(stats) {
     const performanceByTopic = {};
 
     stats.forEach(stat => {
@@ -226,19 +257,58 @@ function createStatCard(value, label, icon, theme) {
 }
 
 /**
+ * NEW: Creates a larger, horizontal card for complex insights (like Best/Worst topic).
+ * @param {string} title - The title/category of the insight.
+ * @param {string} value - The main text/value.
+ * @param {string} score - The percentage score.
+ * @param {string} icon - SVG HTML icon.
+ * @param {string} theme - 'green' or 'red'.
+ * @returns {HTMLElement}
+ */
+function createInsightCard(title, value, score, icon, theme) {
+    const themeClasses = {
+        green: { bg: "bg-green-100 dark:bg-green-900/40", text: "text-green-700 dark:text-green-300", border: "border-green-200 dark:border-green-800/50", light: "bg-green-500" },
+        red: { bg: "bg-red-100 dark:bg-red-900/40", text: "text-red-700 dark:text-red-300", border: "border-red-200 dark:border-red-800/50", light: "bg-red-500" }
+    };
+    const classes = themeClasses[theme];
+
+    const card = document.createElement("div");
+    card.className = `p-5 bg-white dark:bg-gray-800/50 rounded-2xl shadow-sm border ${classes.border} flex items-start gap-4 transition-all duration-300 hover:shadow-lg hover:-translate-y-1`;
+    card.innerHTML = `
+        <div class="flex-shrink-0 h-14 w-14 rounded-2xl flex items-center justify-center ${classes.bg} ${classes.text}">
+            ${icon.replace('h-6 w-6', 'h-8 w-8')}
+        </div>
+        <div class="flex-grow min-w-0">
+            <div class="flex justify-between items-start gap-2 mb-1">
+                <p class="text-xs font-black uppercase tracking-widest text-gray-500 dark:text-gray-400">${title}</p>
+                <span class="text-lg font-black font-kanit ${classes.text}">${score}%</span>
+            </div>
+            <h4 class="text-lg font-bold text-gray-800 dark:text-gray-100 font-kanit leading-tight pb-2">${value}</h4>
+            <div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-1.5 overflow-hidden">
+                <div class="${classes.light} h-full" style="width: ${score}%"></div>
+            </div>
+        </div>
+    `;
+    return card;
+}
+
+/**
  * NEW: Renders in-depth statistics like average time per question.
  * @param {Array<object>} allStats - The array of all quiz progress data.
  */
-function renderInDepthStats(allStats) {
-    const container = document.getElementById('summary-cards-grid');
-    if (!container) return;
+export function renderInDepthStats(allStats) {
+    const summaryGrid = document.getElementById('summary-cards-grid');
+    const insightContainer = document.getElementById('insight-cards-container');
+    if (!summaryGrid || !insightContainer) return;
+
+    // Clear insight container first
+    insightContainer.innerHTML = '';
 
     // --- 1. Calculate Average Time Per Question ---
     let totalTimeSpentSeconds = 0;
     let totalQuestionsAnswered = 0;
 
     allStats.forEach(quiz => {
-        // Ensure the quiz has a recorded time and was actually attempted.
         if (quiz.totalTimeSpent && quiz.shuffledQuestions && quiz.userAnswers && quiz.userAnswers.some(a => a !== null)) {
             totalTimeSpentSeconds += quiz.totalTimeSpent;
             totalQuestionsAnswered += quiz.shuffledQuestions.length;
@@ -257,34 +327,34 @@ function renderInDepthStats(allStats) {
             timeIcon,
             'purple'
         );
-        container.appendChild(avgTimeCard);
+        summaryGrid.appendChild(avgTimeCard);
     }
 
-    // --- 2. Calculate and Render Best/Worst Topics ---
+    // --- 2. Calculate and Render Best/Worst Topics (New Design) ---
     const topicPerformance = calculateTopicPerformance(allStats);
     if (topicPerformance.best) {
-        const bestTopicIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>`;
-        const bestTopicCard = createStatCard(`${topicPerformance.best.score.toFixed(0)}%`, `หัวข้อที่ถนัด: ${topicPerformance.best.name}`, bestTopicIcon, 'green');
-        container.appendChild(bestTopicCard);
+        const bestTopicIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>`;
+        const bestTopicCard = createInsightCard('หัวข้อที่ถนัดที่สุด', topicPerformance.best.name, topicPerformance.best.score.toFixed(0), bestTopicIcon, 'green');
+        insightContainer.appendChild(bestTopicCard);
     }
     if (topicPerformance.worst) {
-        const worstTopicIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" /></svg>`;
-        const worstTopicCard = createStatCard(`${topicPerformance.worst.score.toFixed(0)}%`, `ควรทบทวน: ${topicPerformance.worst.name}`, worstTopicIcon, 'red');
-        container.appendChild(worstTopicCard);
+        const worstTopicIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" /></svg>`;
+        const worstTopicCard = createInsightCard('หัวข้อที่ควรทบทวน', topicPerformance.worst.name, topicPerformance.worst.score.toFixed(0), worstTopicIcon, 'red');
+        insightContainer.appendChild(worstTopicCard);
     }
 
     // --- 3. Calculate and Render Question Type Performance ---
     const typePerformance = calculateQuestionTypePerformance(allStats);
     const theoryIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" /><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd" /></svg>`;
     const calcIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2H6zm1 2a1 1 0 000 2h6a1 1 0 100-2H7zM6 7a1 1 0 011-1h4a1 1 0 110 2H7a1 1 0 01-1-1zm0 3a1 1 0 100 2h4a1 1 0 100-2H6z" clip-rule="evenodd" /></svg>`;
-    
+
     if (typePerformance.theory.total > 0) {
         const theoryCard = createStatCard(`${typePerformance.theory.score.toFixed(0)}%`, `ความแม่นยำ (ทฤษฎี)`, theoryIcon, 'blue');
-        container.appendChild(theoryCard);
+        summaryGrid.appendChild(theoryCard);
     }
     if (typePerformance.calculation.total > 0) {
         const calcCard = createStatCard(`${typePerformance.calculation.score.toFixed(0)}%`, `ความแม่นยำ (คำนวณ)`, calcIcon, 'blue');
-        container.appendChild(calcCard);
+        summaryGrid.appendChild(calcCard);
     }
 }
 
@@ -293,7 +363,7 @@ function renderInDepthStats(allStats) {
  * @param {Array<object>} stats - The array of stats from getAllStats.
  * @returns {{labels: Array<string>, data: Array<number>}} An object for Chart.js.
  */
-function calculateScoreDistribution(stats) {
+export function calculateScoreDistribution(stats) {
     const scoreBins = {
         '0-9%': 0, '10-19%': 0, '20-29%': 0, '30-39%': 0, '40-49%': 0,
         '50-59%': 0, '60-69%': 0, '70-79%': 0, '80-89%': 0, '90-100%': 0
@@ -327,7 +397,7 @@ function calculateScoreDistribution(stats) {
  * NEW: Renders the score trend line chart.
  * @param {object} trendData - Data from calculateScoreTrend.
  */
-function renderScoreTrendChart(trendData) {
+export function renderScoreTrendChart(trendData) {
     const chartContainer = document.getElementById('score-trend-chart')?.closest('section');
     const ctx = document.getElementById('score-trend-chart')?.getContext('2d');
 
@@ -382,8 +452,29 @@ function renderScoreTrendChart(trendData) {
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            scales: { y: { beginAtZero: true, max: 100, ticks: { color: textColor, callback: value => value + '%' }, grid: { color: gridColor } }, x: { ticks: { color: textColor }, grid: { display: false } } },
-            plugins: { legend: { display: false }, tooltip: { callbacks: { label: context => ` คะแนน: ${context.raw.toFixed(1)}%` } } }
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100,
+                    ticks: {
+                        color: getChartJsTheme().textColor,
+                        callback: value => value + '%'
+                    },
+                    grid: { color: getChartJsTheme().gridColor }
+                },
+                x: {
+                    ticks: { color: getChartJsTheme().textColor },
+                    grid: { display: false }
+                }
+            },
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: 'rgba(0,0,0,0.8)',
+                    padding: 12,
+                    callbacks: { label: context => ` คะแนน: ${context.raw.toFixed(1)}%` }
+                }
+            }
         }
     });
 }
@@ -392,7 +483,7 @@ function renderScoreTrendChart(trendData) {
  * NEW: Renders the score distribution bar chart.
  * @param {object} distributionData - Data from calculateScoreDistribution.
  */
-function renderScoreDistributionChart(distributionData) {
+export function renderScoreDistributionChart(distributionData) {
     const chartContainer = document.getElementById('score-distribution-chart')?.closest('section');
     const ctx = document.getElementById('score-distribution-chart')?.getContext('2d');
 
@@ -432,7 +523,7 @@ function renderScoreDistributionChart(distributionData) {
                 backgroundColor: 'rgba(168, 85, 247, 0.7)',
                 borderColor: 'rgba(168, 85, 247, 1)',
                 borderWidth: 1,
-                borderRadius: 4
+                borderRadius: 8
             }]
         },
         options: {
@@ -441,13 +532,24 @@ function renderScoreDistributionChart(distributionData) {
             scales: {
                 y: {
                     beginAtZero: true,
-                    ticks: { color: textColor, precision: 0 },
-                    title: { display: true, text: 'จำนวนครั้ง', color: textColor },
-                    grid: { color: gridColor }
+                    ticks: { color: getChartJsTheme().textColor, precision: 0 },
+                    title: { display: true, text: 'จำนวนครั้ง', color: getChartJsTheme().textColor, font: { weight: 'bold' } },
+                    grid: { color: getChartJsTheme().gridColor }
                 },
-                x: { ticks: { color: textColor }, title: { display: true, text: 'ช่วงคะแนน', color: textColor }, grid: { display: false } }
+                x: {
+                    ticks: { color: getChartJsTheme().textColor },
+                    title: { display: true, text: 'ช่วงคะแนน', color: getChartJsTheme().textColor, font: { weight: 'bold' } },
+                    grid: { display: false }
+                }
             },
-            plugins: { legend: { display: false }, tooltip: { callbacks: { label: context => ` จำนวน: ${context.raw} ครั้ง` } } }
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: 'rgba(0,0,0,0.8)',
+                    padding: 12,
+                    callbacks: { label: context => ` จำนวน: ${context.raw} ครั้ง` }
+                }
+            }
         }
     });
 }
@@ -458,30 +560,30 @@ function renderScoreDistributionChart(distributionData) {
  * @param {number} totalAvailableQuizzes - The total number of quizzes available (static + custom).
  * @returns {object} An object containing summary data.
  */
-function calculateSummary(stats, totalAvailableQuizzes) {
-  let totalCorrect = 0;
-  let totalAnswered = 0;
+export function calculateSummary(stats, totalAvailableQuizzes) {
+    let totalCorrect = 0;
+    let totalAnswered = 0;
 
-  stats.forEach((stat) => {
-    totalCorrect += stat.score || 0;
-    // If userAnswers exists, count the non-null entries. Otherwise, it's 0.
-    totalAnswered += stat.userAnswers?.filter((a) => a !== null).length || 0;
-  });
+    stats.forEach((stat) => {
+        totalCorrect += stat.score || 0;
+        // If userAnswers exists, count the non-null entries. Otherwise, it's 0.
+        totalAnswered += stat.userAnswers?.filter((a) => a !== null).length || 0;
+    });
 
-  const averageScore =
-    totalAnswered > 0 ? (totalCorrect / totalAnswered) * 100 : 0;
+    const averageScore =
+        totalAnswered > 0 ? (totalCorrect / totalAnswered) * 100 : 0;
 
-  const completedQuizzes = stats.filter((s) => s.isFinished).length;
+    const completedQuizzes = stats.filter((s) => s.isFinished).length;
 
-  return {
-    totalCorrect,
-    totalIncorrect: totalAnswered - totalCorrect,
-    totalQuestions: totalAnswered,
-    completedQuizzes: completedQuizzes,
-    inProgressQuizzes: stats.length - completedQuizzes,
-    averageScore: averageScore.toFixed(1),
-    totalQuizCount: totalAvailableQuizzes,
-  };
+    return {
+        totalCorrect,
+        totalIncorrect: totalAnswered - totalCorrect,
+        totalQuestions: totalAnswered,
+        completedQuizzes: completedQuizzes,
+        inProgressQuizzes: stats.length - completedQuizzes,
+        averageScore: averageScore.toFixed(1),
+        totalQuizCount: totalAvailableQuizzes,
+    };
 }
 
 /**
@@ -489,30 +591,30 @@ function calculateSummary(stats, totalAvailableQuizzes) {
  * @param {Array<object>} stats - The array of stats from getAllStats.
  * @returns {Array<object>} A sorted array of objects, each containing subject name, score, and order.
  */
-function calculateSubjectPerformance(stats) {
+export function calculateSubjectPerformance(stats) {
     const performanceBySubject = {};
 
-  // Iterate through each quiz session
-  stats.forEach((stat) => {
-    // Ensure there are answers to process
-    if (!stat.userAnswers) return;
+    // Iterate through each quiz session
+    stats.forEach((stat) => {
+        // Ensure there are answers to process
+        if (!stat.userAnswers) return;
 
-    // Iterate through each answer within the session
-    stat.userAnswers.forEach((answer) => {
-      if (!answer) return; // Skip if an answer is null (e.g., skipped question)
+        // Iterate through each answer within the session
+        stat.userAnswers.forEach((answer) => {
+            if (!answer) return; // Skip if an answer is null (e.g., skipped question)
 
-      // Use the question's own original category for accurate grouping
-      const subject = answer.sourceQuizCategory || stat.category || "Uncategorized";
+            // Use the question's own original category for accurate grouping
+            const subject = answer.sourceQuizCategory || stat.category || "Uncategorized";
 
-      if (!performanceBySubject[subject]) {
-        performanceBySubject[subject] = { correct: 0, total: 0 };
-      }
-      performanceBySubject[subject].total++;
-      if (answer.isCorrect) {
-        performanceBySubject[subject].correct++;
-      }
+            if (!performanceBySubject[subject]) {
+                performanceBySubject[subject] = { correct: 0, total: 0 };
+            }
+            performanceBySubject[subject].total++;
+            if (answer.isCorrect) {
+                performanceBySubject[subject].correct++;
+            }
+        });
     });
-  });
     return Object.entries(performanceBySubject)
         .map(([subjectKey, data]) => {
             const details = categoryDetails[subjectKey] || { order: 99 };
@@ -532,44 +634,71 @@ function calculateSubjectPerformance(stats) {
  * @param {Array<object>} stats - The array of stats from getAllStats, which includes userAnswers.
  * @returns {object} A nested object representing the grouped performance data.
  */
-function calculateGroupedPerformance(stats) {
+export function calculateGroupedPerformance(stats, mode = 'overall') {
     const performanceBySubject = {};
+
+    // 1. Determine Groups based on Mode
+    let groupsToMap = {};
+    if (mode === 'overall') {
+        // Broad grouping (default behavior)
+    } else if (mode.startsWith('physics_')) {
+        const grade = mode.split('_')[1]; // m4, m5, m6
+        const syllabus = subCategoryData.Physics[grade];
+        if (syllabus && syllabus.chapters) {
+            syllabus.chapters.forEach(ch => {
+                groupsToMap[ch.title] = ch.shortTitle || ch.title.split(':')[0];
+            });
+        }
+    } else if (mode === 'earth_basic') {
+        const syllabus = subCategoryData.EarthSpaceScienceBasic;
+        if (syllabus && syllabus.units) {
+            syllabus.units.forEach(unit => {
+                unit.chapters.forEach(ch => {
+                    groupsToMap[ch.title] = ch.shortTitle || ch.title;
+                });
+            });
+        }
+    } else if (mode === 'earth_adv') {
+        const syllabus = subCategoryData.EarthSpaceScienceAdvance;
+        if (syllabus && syllabus.chapters) {
+            syllabus.chapters.forEach(ch => {
+                groupsToMap[ch.title] = ch.shortTitle || ch.title;
+            });
+        }
+    }
 
     stats.forEach(stat => {
         if (!stat.userAnswers) return;
 
         stat.userAnswers.forEach(answer => {
-            // Defensive check: Ensure 'answer' is not null before accessing its properties.
-            // This handles old data formats and prevents crashes from skipped questions.
-            if (!answer) {
-                return;
-            }
+            if (!answer) return;
 
-            // Use the question's own original category if available, otherwise fall back to the quiz's category.
             const subject = answer.sourceQuizCategory || stat.category || 'Uncategorized';
             if (typeof answer.subCategory !== 'object' || !answer.subCategory.main || !answer.subCategory.specific) {
                 return;
             }
 
-            const chapter = answer.subCategory.main;
+            const rawChapter = answer.subCategory.main;
             const learningOutcome = answer.subCategory.specific;
 
+            // If we are in a syllabus mode, only include relevant data and map chapter titles
+            let chapter = rawChapter;
+            if (mode !== 'overall') {
+                const mappedChapter = groupsToMap[rawChapter];
+                if (!mappedChapter) return; // Skip if not in the current syllabus mode
+                chapter = mappedChapter;
+            }
+
             // Initialize structures
-            if (!performanceBySubject[subject]) {
-                performanceBySubject[subject] = {};
-            }
-            if (!performanceBySubject[subject][chapter]) {
-                performanceBySubject[subject][chapter] = {};
-            }
+            if (!performanceBySubject[subject]) performanceBySubject[subject] = {};
+            if (!performanceBySubject[subject][chapter]) performanceBySubject[subject][chapter] = {};
             if (!performanceBySubject[subject][chapter][learningOutcome]) {
                 performanceBySubject[subject][chapter][learningOutcome] = { correct: 0, total: 0 };
             }
 
             // Increment counts.
             performanceBySubject[subject][chapter][learningOutcome].total++;
-            if (answer.isCorrect) {
-                performanceBySubject[subject][chapter][learningOutcome].correct++;
-            }
+            if (answer.isCorrect) performanceBySubject[subject][chapter][learningOutcome].correct++;
         });
     });
 
@@ -597,8 +726,8 @@ function calculateGroupedPerformance(stats) {
  * Renders the four summary cards at the top of the page.
  * @param {object} summary - The summary object from calculateSummary.
  */
-function renderSummaryCards(summary) {
-    const container = document.getElementById("summary-cards-grid");
+export function renderSummaryCards(summary) {
+    const container = document.getElementById("analysis-summary-grid") || document.getElementById("summary-cards-grid");
     if (!container) return;
 
     const completedPercentage =
@@ -622,6 +751,8 @@ function renderSummaryCards(summary) {
             color: "bg-blue-500",
             icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`,
             iconBgColor: "bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-300",
+            borderColor: "border-blue-200 dark:border-blue-800/50",
+            shadowColor: "hover:shadow-blue-500/10"
         },
         {
             label: "กำลังทำ",
@@ -630,6 +761,8 @@ function renderSummaryCards(summary) {
             color: "bg-indigo-500",
             icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.586a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>`,
             iconBgColor: "bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-300",
+            borderColor: "border-indigo-200 dark:border-indigo-800/50",
+            shadowColor: "hover:shadow-indigo-500/10"
         },
         {
             label: "ตอบถูกทั้งหมด",
@@ -638,6 +771,8 @@ function renderSummaryCards(summary) {
             color: "bg-green-500",
             icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>`,
             iconBgColor: "bg-green-100 dark:bg-green-900/50 text-green-600 dark:text-green-300",
+            borderColor: "border-green-200 dark:border-green-800/50",
+            shadowColor: "hover:shadow-green-500/10"
         },
         {
             label: "คะแนนเฉลี่ย",
@@ -646,29 +781,31 @@ function renderSummaryCards(summary) {
             color: "bg-purple-500",
             icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" /></svg>`,
             iconBgColor: "bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-400",
+            borderColor: "border-purple-200 dark:border-purple-800/50",
+            shadowColor: "hover:shadow-purple-500/10"
         },
     ];
 
     container.innerHTML = cards
         .map((card) => {
             const percentage = card.percentage.toFixed(0);
-      // Redesigned card for a more compact 2-column layout on all screen sizes, with added effects.
             return `
-        <div class="bg-white dark:bg-gray-800/50 p-4 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 flex flex-col gap-3 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+        <div class="bg-white dark:bg-gray-800/50 p-4 rounded-2xl shadow-sm border ${card.borderColor || 'border-gray-200 dark:border-gray-700/60'} flex flex-col gap-3 transition-all duration-300 hover:shadow-lg ${card.shadowColor || ''} hover:-translate-y-1 group">
             <div class="flex items-center justify-between">
-                <span class="font-medium text-gray-700 dark:text-gray-200 text-sm">${card.label}</span>
-                <div class="flex-shrink-0 h-8 w-8 rounded-lg flex items-center justify-center ${card.iconBgColor}">
+                <span class="font-bold text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wider">${card.label}</span>
+                <div class="flex-shrink-0 h-10 w-10 rounded-xl flex items-center justify-center ${card.iconBgColor} transition-transform group-hover:scale-110 duration-300">
                     ${card.icon}
                 </div>
-                    </div>
+            </div>
             <div>
-                <span class="font-bold text-2xl text-gray-800 dark:text-gray-100">${card.value}</span>
-                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mt-1">
-                    <div class="${card.color} h-2 rounded-full progress-bar-animated" style="width: ${percentage}%"></div>
-                        </div>
+                <span class="font-black text-3xl text-gray-800 dark:text-gray-100 font-kanit">${card.value}</span>
+                <div class="w-full bg-gray-100 dark:bg-gray-700/50 rounded-full h-2 mt-2 overflow-hidden shadow-inner">
+                    <div class="${card.color} h-2 rounded-full relative" style="width: ${percentage}%">
                     </div>
                 </div>
-                `;
+            </div>
+        </div>
+        `;
         })
         .join("");
 }
@@ -717,15 +854,19 @@ function renderOverallChart(summary) {
                 legend: {
                     position: "bottom",
                     labels: {
-                        color: document.documentElement.classList.contains("dark")
-                            ? "#d1d5db" // gray-300 for better contrast in dark mode
-                            : "#374151", // gray-700 for better readability
-                        font: { family: "'Kanit', sans-serif", size: 14 },
+                        color: getChartJsTheme().textColor,
+                        font: { family: "'Kanit', sans-serif", size: 14, weight: 'bold' },
+                        padding: 20,
+                        usePointStyle: true,
+                        pointStyle: 'circle'
                     },
                 },
                 tooltip: {
                     titleFont: { family: "'Kanit', sans-serif" },
                     bodyFont: { family: "'Sarabun', sans-serif" },
+                    backgroundColor: 'rgba(0,0,0,0.8)',
+                    padding: 12,
+                    cornerRadius: 8
                 },
             },
         },
@@ -736,7 +877,7 @@ function renderOverallChart(summary) {
  * Renders a horizontal bar chart showing the average score per subject.
  * @param {Array<object>} subjectData - Data from calculateSubjectPerformance.
  */
-function renderSubjectPerformanceChart(subjectData) {
+export function renderSubjectPerformanceChart(subjectData) {
     if (typeof Chart === 'undefined') {
         console.warn("Chart.js is not loaded. Skipping subject performance chart.");
         return;
@@ -784,17 +925,19 @@ function renderSubjectPerformanceChart(subjectData) {
                 x: {
                     beginAtZero: true,
                     max: 100,
+                    grid: { color: getChartJsTheme().gridColor },
                     ticks: {
-                        color: document.documentElement.classList.contains('dark') ? '#d1d5db' : '#374151',
-                        callback: function(value) {
+                        color: getChartJsTheme().textColor,
+                        callback: function (value) {
                             return value + '%'
                         }
                     }
                 },
                 y: {
+                    grid: { display: false },
                     ticks: {
-                        color: document.documentElement.classList.contains('dark') ? '#d1d5db' : '#374151',
-                        font: { family: "'Kanit', sans-serif" }
+                        color: getChartJsTheme().textColor,
+                        font: { family: "'Kanit', sans-serif", weight: 'bold' }
                     }
                 }
             },
@@ -828,7 +971,7 @@ export function initializeTabs() {
             tab.setAttribute('aria-selected', 'false');
             tab.classList.remove(...activeTabClasses);
             tab.classList.add(...inactiveTabClasses);
-            
+
             const panelId = tab.getAttribute('aria-controls');
             const panel = document.getElementById(panelId);
             if (panel) panel.classList.add('hidden');
@@ -846,7 +989,7 @@ export function initializeTabs() {
  * Renders the performance data as a series of nested accordions, grouped by subject and then chapter.
  * @param {object} groupedData - Data from calculateGroupedCategoryPerformance.
  */
-function renderPerformanceAccordions(groupedData) {
+export function renderPerformanceAccordions(groupedData) {
     const container = document.getElementById("subject-performance-container");
     if (!container) return;
 
@@ -962,7 +1105,7 @@ function renderPerformanceAccordions(groupedData) {
  * that allows the user to retake the quiz, now displayed as info-rich cards.
  * @param {Array<object>} stats - The array of stats from getAllStats.
  */
-function renderDetailedList(stats) {
+export function renderDetailedList(stats) {
     const container = document.getElementById("detailed-stats-container");
     if (!container) return;
 
@@ -1037,11 +1180,17 @@ function renderDetailedList(stats) {
 let finishedQuizModalHandler;
 
 function showFinishedQuizModal(title, url, storageKey) {
-    if (!finishedQuizModalHandler) return;
-
-    const modalTitle = document.getElementById('finished-quiz-modal-title');
-    const viewBtn = document.getElementById('view-results-btn');
-    const restartBtn = document.getElementById('restart-quiz-btn');
+    if (!finishedQuizModalHandler) {
+        try {
+            finishedQuizModalHandler = new ModalHandler('completed-quiz-modal');
+        } catch (e) {
+            console.error("Failed to initialize completed-quiz-modal:", e);
+            return;
+        }
+    }
+    const modalTitle = document.getElementById('completed-modal-title');
+    const viewBtn = document.getElementById('completed-view-results-btn');
+    const restartBtn = document.getElementById('completed-start-over-btn');
 
     if (!modalTitle || !viewBtn || !restartBtn) return;
 
@@ -1070,10 +1219,11 @@ function showFinishedQuizModal(title, url, storageKey) {
  * Sets up a single, unified event listener for all quiz items in the detailed list.
  * Clicking any item will navigate to the quiz URL to retake it.
  */
-function setupActionListeners() {
+export function setupActionListeners() {
     const container = document.getElementById("detailed-stats-container");
-    if (!container) return;
+    if (!container || container.dataset.listenersInitialized) return;
 
+    container.dataset.listenersInitialized = "true";
     container.addEventListener('click', (e) => {
         const statItem = e.target.closest('.quiz-stat-item');
         if (!statItem) return;
@@ -1116,6 +1266,7 @@ export async function buildStatsPage() {
     const customQuizzes = await Promise.race([customQuizzesPromise, timeoutPromise]);
 
     const allStats = getAllStats(customQuizzes); // Pass data, don't re-fetch
+    globalStats = allStats; // Store globally for filtering
     const totalAvailableQuizzes = quizList.length + customQuizzes.length;
 
     loadingSpinner.classList.add("hidden");
@@ -1125,25 +1276,10 @@ export async function buildStatsPage() {
         document.getElementById("clear-stats-btn").disabled = true;
     } else {
         try {
-            const groupedData = calculateGroupedPerformance(allStats);
-            const summary = calculateSummary(allStats, totalAvailableQuizzes);
-            const subjectPerformance = calculateSubjectPerformance(allStats);
-            
-            renderSummaryCards(summary);
-            renderOverallChart(summary);
-            renderSubjectPerformanceChart(subjectPerformance);
-            renderPerformanceAccordions(groupedData);
-            renderDetailedList(allStats);
-
-            // NEW calls for trend chart
-            const trendData = calculateScoreTrend(allStats);
-            renderScoreTrendChart(trendData);
-            renderInDepthStats(allStats);
-            const distributionData = calculateScoreDistribution(allStats);
-            renderScoreDistributionChart(distributionData);
-
+            updateStatsUI();
             finishedQuizModalHandler = new ModalHandler('finished-quiz-modal');
             setupActionListeners();
+            setupStatFilters();
         } catch (error) {
             console.error("Error building stats page components:", error);
         } finally {
@@ -1151,5 +1287,75 @@ export async function buildStatsPage() {
             statsContent.classList.add("anim-fade-in");
             statsContent.style.opacity = 1;
         }
+    }
+}
+
+function updateStatsUI() {
+    const totalQuizzes = globalStats.length; // Approximate enough for summary
+    const groupedData = calculateGroupedPerformance(globalStats, activeTopicSyllabus);
+    const summary = calculateSummary(globalStats, globalStats.length); // Fallback count
+    const subjectPerformance = calculateSubjectPerformance(globalStats);
+
+    renderSummaryCards(summary);
+    renderOverallChart(summary);
+    renderSubjectPerformanceChart(subjectPerformance);
+    renderPerformanceAccordions(groupedData);
+
+    // Filter history based on search
+    const filteredHistory = globalStats.filter(s =>
+        s.title.toLowerCase().includes(historySearchQuery.toLowerCase()) ||
+        getCategoryDisplayName(s.category).toLowerCase().includes(historySearchQuery.toLowerCase())
+    );
+    renderDetailedList(filteredHistory);
+
+    const trendData = calculateScoreTrend(globalStats, activeTrendRange);
+    renderScoreTrendChart(trendData);
+    renderInDepthStats(globalStats);
+    const distributionData = calculateScoreDistribution(globalStats);
+    renderScoreDistributionChart(distributionData);
+}
+
+function setupStatFilters() {
+    // 1. Trend Range Buttons
+    const trendButtons = document.querySelectorAll('.trend-range-btn');
+    trendButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const range = btn.dataset.range;
+            if (activeTrendRange === range) return;
+
+            activeTrendRange = range;
+            trendButtons.forEach(b => {
+                b.classList.remove('bg-white', 'dark:bg-gray-600', 'shadow', 'text-blue-600', 'dark:text-blue-300');
+                b.classList.add('text-gray-500', 'dark:text-gray-400', 'hover:text-gray-700', 'dark:hover:text-gray-200');
+            });
+            btn.classList.add('bg-white', 'dark:bg-gray-600', 'shadow', 'text-blue-600', 'dark:text-blue-300');
+            btn.classList.remove('text-gray-500', 'dark:text-gray-400', 'hover:text-gray-700', 'dark:hover:text-gray-200');
+
+            const trendData = calculateScoreTrend(globalStats, activeTrendRange);
+            renderScoreTrendChart(trendData);
+        });
+    });
+
+    // 2. Topic Syllabus Select
+    const topicSelect = document.getElementById('topic-syllabus-select');
+    if (topicSelect) {
+        topicSelect.addEventListener('change', (e) => {
+            activeTopicSyllabus = e.target.value;
+            const groupedData = calculateGroupedPerformance(globalStats, activeTopicSyllabus);
+            renderPerformanceAccordions(groupedData);
+        });
+    }
+
+    // 3. History Search
+    const searchInput = document.getElementById('history-search-input');
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            historySearchQuery = e.target.value;
+            const filteredHistory = globalStats.filter(s =>
+                s.title.toLowerCase().includes(historySearchQuery.toLowerCase()) ||
+                getCategoryDisplayName(s.category).toLowerCase().includes(historySearchQuery.toLowerCase())
+            );
+            renderDetailedList(filteredHistory);
+        });
     }
 }

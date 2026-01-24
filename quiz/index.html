@@ -28,7 +28,79 @@
     referrerpolicy="no-referrer"></script>
   <!-- Chart.js for Result Charts -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <link rel="icon" href="../assets/icons/promma-logo.png" type="image/png">
+  <link rel="icon" href="../assets/icons/exam.png" type="image/png">
+
+  <style>
+    /* Premium Glassmorphic Attributes */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .dark .glass-card {
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .mode-card {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .mode-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .mode-card.active {
+      border-color: #3b82f6;
+      background: rgba(59, 130, 246, 0.05);
+      box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.1);
+    }
+
+    .dark .mode-card.active {
+      background: rgba(59, 130, 246, 0.1);
+      border-color: #60a5fa;
+    }
+
+    .status-bar-item {
+      transition: all 0.3s ease;
+    }
+
+    .shimmer-glow {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .shimmer-glow::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg,
+          rgba(255, 255, 255, 0) 0%,
+          rgba(255, 255, 255, 0.05) 50%,
+          rgba(255, 255, 255, 0) 100%);
+      animation: rotate-shimmer 6s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes rotate-shimmer {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .progress-glow {
+      box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+    }
+  </style>
 </head>
 
 <body
@@ -37,146 +109,182 @@
     <!-- Header with buttons -->
     <div id="main_header-placeholder"></div>
 
-    <main id="quiz-container" class="bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-xl shadow-lg">
-      <div id="start-screen">
-        <h1 id="start-screen-title"
-          class="text-2xl sm:text-3xl font-bold text-center text-gray-700 dark:text-gray-100 mb-4">
-          <!-- Title will be inserted by JS -->
-        </h1>
-        <p id="start-screen-description" class="text-center text-gray-600 dark:text-gray-400 mb-6">
-          <!-- Description will be inserted by JS -->
-        </p>
-        <p class="text-center text-gray-500 dark:text-gray-400 mb-8">
-          คลิก "เริ่มทำแบบทดสอบ" เพื่อเริ่มต้น
-        </p>
-        <!-- Timer Options -->
-        <div id="timer-options" class="mb-8 text-left max-w-md mx-auto">
-          <label
-            class="block text-lg font-bold text-gray-700 dark:text-gray-300 mb-3 text-center">ตัวเลือกการจับเวลา:</label>
-          <div class="space-y-3">
-            <label for="timer-none"
-              class="flex items-center p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg border-2 border-transparent has-[:checked]:border-blue-500 cursor-pointer transition">
-              <input type="radio" id="timer-none" name="timer-mode" value="none"
-                class="h-5 w-5 text-blue-600 focus:ring-blue-500" checked>
-              <span class="ml-3 text-gray-700 dark:text-gray-200">
-                <span class="font-bold">ไม่จับเวลา</span>
-                <span class="block text-sm text-gray-500 dark:text-gray-400">ทำแบบทดสอบไปเรื่อยๆ
-                  ไม่ต้องกังวลเรื่องเวลา</span>
-              </span>
+    <main id="quiz-container" class="glass-card p-6 sm:p-10 rounded-[2rem] shadow-2xl relative overflow-hidden">
+      <!-- Start Screen -->
+      <div id="start-screen" class="max-w-2xl mx-auto py-4">
+        <div class="text-center mb-10">
+          <h1 id="start-screen-title"
+            class="text-3xl sm:text-4xl font-black text-gray-800 dark:text-white mb-4 tracking-tight">
+            <!-- Title inserted by JS -->
+          </h1>
+          <p id="start-screen-description" class="text-lg text-gray-500 dark:text-gray-400 mb-2 font-medium">
+            <!-- Description inserted by JS -->
+          </p>
+          <div class="w-16 h-1.5 bg-blue-500 rounded-full mx-auto mt-6 shadow-sm"></div>
+        </div>
+
+        <!-- Modern Timer Mode Selection -->
+        <div id="timer-options" class="mb-10">
+          <h2 class="text-sm font-black text-gray-400 dark:text-gray-500 uppercase tracking-[0.2em] mb-6 text-center">
+            เลือกรูปแบบการจับเวลา</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <!-- Mode 1: No Timer -->
+            <label class="mode-card cursor-pointer group">
+              <input type="radio" name="timer-mode" value="none" class="sr-only" checked>
+              <div
+                class="h-full flex flex-col items-center p-5 rounded-2xl border-2 border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-gray-800/40 group-[&:has(input:checked)]:border-blue-500 dark:group-[&:has(input:checked)]:border-blue-400 group-[&:has(input:checked)]:bg-blue-50 group-[&:has(input:checked)]:dark:bg-blue-900/10 transition-all duration-300">
+                <span class="text-3xl mb-3 transform group-hover:scale-110 transition-transform">🎯</span>
+                <span class="font-bold text-gray-700 dark:text-gray-200 text-sm">ไม่จับเวลา</span>
+                <span
+                  class="text-[10px] text-gray-400 dark:text-gray-500 text-center mt-1 leading-tight">ทำไปเรื่อยๆ<br>ไม่กดดัน</span>
+              </div>
             </label>
-            <label for="timer-overall"
-              class="flex items-center p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg border-2 border-transparent has-[:checked]:border-blue-500 cursor-pointer transition">
-              <input type="radio" id="timer-overall" name="timer-mode" value="overall"
-                class="h-5 w-5 text-blue-600 focus:ring-blue-500">
-              <span class="ml-3 text-gray-700 dark:text-gray-200">
-                <span class="font-bold">จับเวลาทั้งชุด</span>
-                <span class="block text-sm text-gray-500 dark:text-gray-400">มีเวลาจำกัดสำหรับทำแบบทดสอบทั้งชุด</span>
-              </span>
+
+            <!-- Mode 2: Overall -->
+            <label class="mode-card cursor-pointer group">
+              <input type="radio" name="timer-mode" value="overall" class="sr-only">
+              <div
+                class="h-full flex flex-col items-center p-5 rounded-2xl border-2 border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-gray-800/40 group-[&:has(input:checked)]:border-blue-500 dark:group-[&:has(input:checked)]:border-blue-400 group-[&:has(input:checked)]:bg-blue-50 group-[&:has(input:checked)]:dark:bg-blue-900/10 transition-all duration-300">
+                <span class="text-3xl mb-3 transform group-hover:scale-110 transition-transform">⏱️</span>
+                <span class="font-bold text-gray-700 dark:text-gray-200 text-sm">จับเวลารวม</span>
+                <span
+                  class="text-[10px] text-gray-400 dark:text-gray-500 text-center mt-1 leading-tight">ท้าทาย<br>มีจำกัดเวลา</span>
+              </div>
             </label>
-            <label for="timer-per-question"
-              class="flex items-center p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg border-2 border-transparent has-[:checked]:border-blue-500 cursor-pointer transition">
-              <input type="radio" id="timer-per-question" name="timer-mode" value="perQuestion"
-                class="h-5 w-5 text-blue-600 focus:ring-blue-500">
-              <span class="ml-3 text-gray-700 dark:text-gray-200">
-                <span class="font-bold">จับเวลาเป็นข้อ</span>
-                <span class="block text-sm text-gray-500 dark:text-gray-400">มีเวลาจำกัดสำหรับตอบคำถามแต่ละข้อ</span>
-              </span>
+
+            <!-- Mode 3: Per Question -->
+            <label class="mode-card cursor-pointer group">
+              <input type="radio" name="timer-mode" value="perQuestion" class="sr-only">
+              <div
+                class="h-full flex flex-col items-center p-5 rounded-2xl border-2 border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-gray-800/40 group-[&:has(input:checked)]:border-blue-500 dark:group-[&:has(input:checked)]:border-blue-400 group-[&:has(input:checked)]:bg-blue-50 group-[&:has(input:checked)]:dark:bg-blue-900/10 transition-all duration-300">
+                <span class="text-3xl mb-3 transform group-hover:scale-110 transition-transform">⚡</span>
+                <span class="font-bold text-gray-700 dark:text-gray-200 text-sm">จับเวลาต่อข้อ</span>
+                <span
+                  class="text-[10px] text-gray-400 dark:text-gray-500 text-center mt-1 leading-tight">รวดเร็ว<br>วัดไหวพริบ</span>
+              </div>
             </label>
           </div>
         </div>
+
         <button id="start-btn"
-          class="w-full bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 dark:focus:ring-offset-slate-950">
-          เริ่มทำแบบทดสอบ
+          class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-black py-4 px-6 rounded-2xl text-xl shadow-xl shadow-blue-500/20 transition-all duration-300 transform hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-3">
+          <span>เริ่มทำแบบทดสอบ</span>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+          </svg>
         </button>
       </div>
 
+      <!-- Quiz Screen -->
       <div id="quiz-screen" class="hidden">
-        <h2 id="quiz-title-display" class="text-xl font-bold text-gray-800 dark:text-gray-100 mb-4 text-center"></h2>
-        <div id="quiz-nav" class="hidden">
-          <!-- Progress Bar -->
-          <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 mb-4">
-            <div id="progress-bar" class="bg-blue-600 h-2.5 rounded-full transition-all duration-500 ease-in-out"
-              style="width: 0%">
-            </div>
-          </div>
-          <div class="flex justify-between items-center mb-4 text-lg font-bold">
-            <div id="question-counter" class="text-blue-600 dark:text-blue-400" aria-live="polite"></div>
-            <div id="timer-display" class="hidden flex items-center justify-center text-red-600 dark:text-red-400"
-              aria-live="polite">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor" stroke-width="2" role="img" aria-labelledby="timerIconTitle">
-                <title id="timerIconTitle">นาฬิกาจับเวลา</title>
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z">
-                </path>
-              </svg>
-              <span id="timer-value">00:00</span>
-            </div>
-            <div class="flex items-center gap-4">
-              <div id="score-counter" class="dark:text-gray-300" aria-live="polite">
-                คะแนน: 0
+        <!-- Modern Status Bar -->
+        <header id="quiz-status-bar" class="mb-10">
+          <div class="flex items-center justify-between gap-4 mb-4">
+            <!-- Left: Hearts (Multiplayer) / Score (Single) -->
+            <div class="flex items-center gap-3">
+              <div id="multiplayer-hearts"
+                class="hidden flex items-center gap-1 bg-white/50 dark:bg-gray-800/50 px-3 py-1.5 rounded-full border border-gray-200 dark:border-gray-700 shadow-sm transition-all duration-300">
+                <!-- Real-time hearts injected by JS -->
               </div>
-              <button id="sound-toggle-btn" aria-label="เปิด/ปิดเสียง"
-                class="p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-                <!-- Icon will be inserted by JS -->
+              <div
+                class="bg-blue-500/10 dark:bg-blue-400/10 text-blue-600 dark:text-blue-400 px-4 py-1.5 rounded-full text-xs font-black tracking-wider border border-blue-500/20">
+                <span id="score-counter">คะแนน: 0</span>
+              </div>
+            </div>
+
+            <!-- Center: Timer (if active) -->
+            <div id="timer-display"
+              class="hidden flex items-center gap-2 bg-red-500/10 dark:bg-red-400/10 text-red-600 dark:text-red-400 px-4 py-1.5 rounded-full border border-red-500/20 shadow-sm animate-pulse">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="3">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span id="timer-value" class="font-mono font-bold">00:00</span>
+            </div>
+
+            <!-- Right: Sound & Menu Toggle -->
+            <div class="flex items-center gap-2">
+              <button id="sound-toggle-btn"
+                class="p-2 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 transition-all active:scale-90">
+                <!-- Icon inserted by JS -->
               </button>
             </div>
           </div>
-        </div>
-        <div class="mb-6">
-          <div id="question" class="text-xl font-semibold mb-6 min-h-[80px] dark:text-gray-100"></div>
-          <div id="hint-area" class="mb-4 hidden">
-            <button id="hint-btn"
-              class="px-4 py-2 text-sm backdrop-blur-md bg-white/20 dark:bg-black/20 hover:bg-white/30 dark:hover:bg-white/10 border border-yellow-400/50 text-yellow-700 dark:text-yellow-300 font-bold rounded-full shadow-sm transition-all duration-300 flex items-center gap-2">
-              💡 แสดงคำใบ้
-            </button>
-            <div id="hint-text"
-              class="hidden mt-4 p-4 bg-yellow-100 dark:bg-gray-700 border-l-4 border-yellow-500 text-yellow-800 dark:text-yellow-200 rounded-r-lg">
-              <!-- Hint content will be inserted here -->
+
+          <!-- Progress Bar -->
+          <div class="relative w-full h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden shadow-inner">
+            <div id="progress-bar"
+              class="absolute inset-y-0 left-0 bg-gradient-to-r from-blue-400 to-indigo-500 transition-all duration-700 ease-out progress-glow"
+              style="width: 0%">
+              <div class="absolute inset-0 bg-white/20 animate-pulse"></div>
+            </div>
+            <div id="question-counter"
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-[9px] font-black text-white mix-blend-difference opacity-50 uppercase tracking-widest">
             </div>
           </div>
-          <div id="options" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+        </header>
+
+        <div class="mb-10 text-center sm:text-left transition-all duration-500">
+          <h2 id="quiz-title-display"
+            class="text-sm font-black text-blue-500 dark:text-blue-400 uppercase tracking-widest mb-3 opacity-70"></h2>
+          <div id="question" class="text-xl sm:text-2xl font-bold leading-relaxed dark:text-white px-2"></div>
         </div>
-        <div id="feedback" class="hidden mt-6 p-4 rounded-lg" aria-live="assertive">
-          <div class="feedback-content"></div>
+
+        <!-- Power-up Bar Placeholder -->
+        <div id="power-up-bar" class="flex flex-wrap justify-center gap-3 mb-8 px-2 anim-fade-in">
+          <!-- Items injected by logic -->
         </div>
-        <div id="action-buttons" class="grid grid-cols-3 mt-6 gap-4">
+
+        <div id="hint-area" class="mb-8 hidden anim-fade-in">
+          <button id="hint-btn"
+            class="w-full sm:w-auto px-6 py-2.5 bg-yellow-400/10 hover:bg-yellow-400/20 border-2 border-yellow-400/30 text-yellow-700 dark:text-yellow-400 font-black rounded-2xl shadow-sm transition-all flex items-center justify-center gap-2 active:scale-95">
+            💡 แสดงคำใบ้
+          </button>
+          <div id="hint-text"
+            class="hidden mt-4 p-5 bg-yellow-50 dark:bg-yellow-900/10 border-2 border-yellow-200 dark:border-yellow-800/30 text-yellow-800 dark:text-yellow-200 rounded-2xl text-sm font-medium leading-relaxed">
+          </div>
+        </div>
+
+        <div id="options" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+
+        <div id="feedback" class="hidden mt-8 p-6 rounded-[1.5rem] anim-feedback-in shadow-lg border-2"
+          aria-live="assertive">
+          <div class="feedback-content font-bold"></div>
+        </div>
+        <div id="action-buttons" class="flex flex-col sm:flex-row items-center justify-between mt-12 gap-4">
           <button id="prev-btn"
-            class="hidden bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-4 rounded-lg text-lg transition-all duration-300 transform hover:-translate-y-1">
+            class="hidden w-full sm:w-auto px-8 py-3 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 font-bold rounded-2xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-all active:scale-95 border border-transparent dark:border-gray-700">
             ข้อก่อนหน้า
           </button>
+          <div class="flex-1"></div>
           <button id="skip-btn"
-            class="hidden bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-3 px-4 rounded-lg text-lg transition-all duration-300 transform hover:-translate-y-1">
-            ข้าม
+            class="hidden w-full sm:w-auto px-8 py-3 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 font-bold rounded-2xl hover:bg-indigo-500/20 transition-all border-2 border-indigo-500/20 active:scale-95">
+            ข้ามข้อนี้
           </button>
           <button id="next-btn"
-            class="hidden col-start-3 bg-gray-700 hover:bg-gray-800 dark:bg-gray-600 dark:hover:bg-gray-700 text-white font-bold py-3 px-4 rounded-lg text-lg transition-all duration-300 transform hover:-translate-y-1">
+            class="hidden w-full sm:w-auto px-10 py-4 bg-gray-800 dark:bg-gray-100 text-white dark:text-gray-900 font-black rounded-2xl shadow-xl hover:shadow-gray-500/20 transition-all transform hover:-translate-y-1 active:scale-95">
             ข้อต่อไป
           </button>
-        </div>
-      </div>
+        </div> <!-- End action-buttons -->
+      </div> <!-- End quiz-screen -->
 
       <div id="result-screen" class="hidden text-center">
-        <!--
-          The content of the result screen (score, message, stats) will be populated
-          inside this container by the buildResultsLayout() function.
-        -->
         <div id="result-content-container"></div>
 
-        <!-- The action buttons are now static and will not be moved by JS -->
-        <div class="w-full max-w-2xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-3 mt-8">
+        <div class="w-full max-w-2xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-4 mt-12">
           <button id="review-btn"
-            class="hidden w-full sm:w-auto flex-1 bg-gray-700 hover:bg-gray-800 text-white font-bold py-3 px-6 rounded-lg text-lg transition duration-300 shadow-md hover:shadow-lg">
+            class="hidden w-full sm:w-auto flex-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-black py-4 px-8 rounded-2xl text-lg transition duration-300 shadow-lg hover:shadow-gray-500/10 hover:bg-gray-200 dark:hover:bg-gray-700 active:scale-95">
             ทบทวนข้อที่ผิด
           </button>
           <button id="restart-btn"
-            class="w-full sm:w-auto flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg text-lg transition duration-300 shadow-md hover:shadow-lg">
+            class="w-full sm:w-auto flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-black py-4 px-8 rounded-2xl text-lg transition duration-300 shadow-xl shadow-blue-500/20 active:scale-95">
             ทำแบบทดสอบอีกครั้ง
           </button>
           <button id="back-to-lobby-btn"
-            class="hidden w-full sm:w-auto flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg text-lg transition duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2">
+            class="hidden w-full sm:w-auto flex-1 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 font-black py-4 px-8 rounded-2xl text-lg transition duration-300 shadow-lg border-2 border-indigo-500/20 hover:bg-indigo-500/20 active:scale-95 flex items-center justify-center gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
               stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
                 d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
             </svg>
             กลับห้องรอ
@@ -185,10 +293,11 @@
       </div>
 
       <div id="review-screen" class="hidden">
-        <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-center dark:text-gray-100">ทบทวนข้อที่ตอบผิด</h2>
-        <div id="review-container" class="space-y-4"></div>
+        <h2 class="text-3xl font-black mb-8 text-center dark:text-white uppercase tracking-tight">ทบทวนข้อที่ตอบผิด
+        </h2>
+        <div id="review-container" class="space-y-6"></div>
         <button id="back-to-result-btn"
-          class="w-full mt-8 bg-gray-700 hover:bg-gray-800 dark:bg-gray-600 dark:hover:bg-gray-700 text-white font-bold py-3 px-4 rounded-lg text-lg transition-all duration-300 transform hover:-translate-y-1">
+          class="w-full mt-12 bg-gray-800 dark:bg-gray-100 text-white dark:text-gray-900 font-black py-4 px-8 rounded-2xl text-xl shadow-xl transition-all transform hover:-translate-y-1 active:scale-95">
           กลับไปหน้าสรุปผล
         </button>
       </div>
