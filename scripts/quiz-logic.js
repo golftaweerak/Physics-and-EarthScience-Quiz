@@ -380,21 +380,35 @@ function updateNextButtonAppearance(action) {
   let buttonIcon = config.icons.next;
   let buttonTitle = 'ข้อต่อไป';
 
+  // Base classes that are always present
+  const baseClasses = ['hidden', 'w-full', 'sm:w-auto', 'px-10', 'py-4', 'text-white', 'font-black', 'rounded-2xl', 'shadow-xl', 'transition-all', 'transform', 'hover:-translate-y-1', 'active:scale-95', 'btn-quiz-next'];
+
+  // Theme classes
+  const nextClasses = ['theme-bg-primary', 'hover:shadow-indigo-500/20'];
+  const submitClasses = ['theme-bg-gradient', 'shimmer-effect', 'hover:shadow-emerald-500/30'];
+
+  // Reset theme-specific classes first
+  elements.nextBtn.classList.remove(...nextClasses, ...submitClasses);
+
   if (action === 'submit') {
     buttonText = 'ส่งคำตอบ';
     buttonIcon = config.icons.submit;
     buttonTitle = 'ส่งคำตอบ';
+    elements.nextBtn.classList.add(...submitClasses);
   } else if (isLastQuestion && isAnswered) {
     buttonText = 'ดูผลสรุป';
-    buttonIcon = config.icons.submit; // Using the submit icon for "finish" is fine.
+    buttonIcon = config.icons.submit;
     buttonTitle = 'ดูผลสรุป';
+    elements.nextBtn.classList.add(...submitClasses);
+  } else {
+    elements.nextBtn.classList.add(...nextClasses);
   }
 
   if (state.isFloatingNav) {
     elements.nextBtn.innerHTML = buttonIcon;
     elements.nextBtn.title = buttonTitle;
   } else {
-    elements.nextBtn.innerHTML = ''; // Clear icons
+    elements.nextBtn.innerHTML = '';
     elements.nextBtn.textContent = buttonText;
   }
 }
