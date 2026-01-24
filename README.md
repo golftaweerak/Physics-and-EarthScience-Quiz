@@ -113,22 +113,26 @@ npm run preview
 
 ## 🌐 การอัปเดตเว็บไซต์ (Deployment)
 
-โปรเจกต์นี้ตั้งค่าให้ Deploy ไปยัง **GitHub Pages** ได้ง่ายๆ ผ่านคำสั่ง NPM:
+โปรเจกต์นี้มีคำสั่งพิเศษที่ช่วยให้คุณบันทึกโค้ดและอัปเดตหน้าเว็บได้ในคำสั่งเดียว:
 
 ```bash
-npm run deploy
+npm run ship
 ```
 
-**คำสั่งนี้จะทำหน้าที่:**
+**คำสั่งนี้จะทำหน้าที่ 4 อย่างในครั้งเดียว:**
 
-1. รัน `npm run build` เพื่อสร้างไฟล์เวอร์ชันล่าสุดใน `dist/`
-2. อัปโหลดโฟลเดอร์ `dist/` ไปยัง branch `gh-pages` บน GitHub โดยอัตโนมัติ
+1. **`git add .`**: เตรียมไฟล์ทั้งหมดที่แก้ไข
+2. **`git commit`**: บันทึกการเปลี่ยนแปลง (Auto-message: "Update and deploy")
+3. **`git push`**: ส่งโค้ดขึ้น GitHub
+4. **`npm run deploy`**: Build โปรเจกต์ล่าสุดและอัปโหลดไปยัง GitHub Pages
+
+_(หรือหากต้องการ Deploy อย่างเดียวโดยไม่ยุ่งกับ Git ให้ใช้ `npm run deploy` ตามปกติครับ)_
 
 **หมายเหตุ:** ให้มั่นใจว่าในหน้า Settings > Pages ของ GitHub Repository ได้เลือก Source เป็น **Deploy from a branch** และเลือก branch เป็น `gh-pages`
 
 ---
 
-## � เครื่องมือจัดการข้อมูล (Data Management Tools)
+## 🧰 เครื่องมือจัดการข้อมูล (Data Management Tools)
 
 โปรเจกต์นี้มี Script สำหรับตรวจสอบและจัดการข้อมูลข้อสอบที่อยู่ในโฟลเดอร์ `tools/`
 
