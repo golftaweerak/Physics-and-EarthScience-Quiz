@@ -1,6 +1,10 @@
 /* c:\Users\golf_\OneDrive\Documents\GitHub\Physics-and-EarthScience-Quiz\styles\input.css */
 
 @import "tailwindcss";
+@import "./themes.css";
+@import "./animations.css";
+@import "./quiz.css";
+@import "./quiz-animations.css";
 @variant dark (&:where(.dark, .dark *));
 
 /* === BASE STYLES === */
