@@ -5,31 +5,31 @@
  * - `word-break: keep-all;` prevents words from breaking in the middle.
  * - `overflow-wrap: break-word;` allows long, unbreakable strings to wrap if they would overflow.
 */
-#question,
-.option-btn,
-#feedback,
-#review-container {
-  word-break: keep-all;
-  overflow-wrap: break-word;
-  /* text-align: justify; */
-  line-height: 1.75; /* เพิ่มระยะห่างระหว่างบรรทัดเพื่อให้อ่านง่ายขึ้น */
+#question {
+  @apply text-xl sm:text-2xl leading-relaxed;
 }
 
-/* 
- * Apply the same Thai justification to the preview pages (preview.html, preview-data.html)
- * which use the .question-card and .prose classes for content.
-*/
+.option-btn {
+  @apply text-base sm:text-lg p-4 sm:p-5;
+}
+
 .question-card,
 .prose {
   word-break: keep-all;
   overflow-wrap: break-word;
-  /* text-align: justify; */
-  line-height: 1.75; /* เพิ่มระยะห่างระหว่างบรรทัดเพื่อให้อ่านง่ายขึ้น */
+  line-height: 1.75;
+  transition:
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.question-card:hover {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
 }
 
 .question-card h2,
 .question-card .font-semibold {
-  text-align: left; /* Reset alignment for headers and choice numerals */
+  text-align: left;
 }
 
 /*
@@ -54,10 +54,12 @@
 }
 
 /* 
- * Responsive Floating Navigation
- * Adjusts the size and spacing of navigation buttons on small screens
- * to prevent overlapping content.
-*/
+ * Floating Navigation Helper for Skip Button
+ */
+.floating-skip {
+  @apply sm:static fixed bottom-20 right-4 rounded-full px-4 py-2 text-xs opacity-70 hover:opacity-100 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm z-50;
+  border-style: solid !important;
+}
 @media (max-width: 640px) {
   #action-buttons.fixed {
     bottom: 1.5rem !important;

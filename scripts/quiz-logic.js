@@ -424,13 +424,22 @@ function setFloatingNav(active) {
 
   state.isFloatingNav = active;
 
-  const containerFloatingClasses = ['fixed', 'bottom-4', 'right-4', 'z-20', 'gap-3'];
-  const buttonFloatingClasses = ['w-16', 'h-16', 'rounded-full', 'flex', 'items-center', 'justify-center', 'shadow-lg', 'hover:shadow-xl', 'transition', 'p-0', 'border-0'];
+  const containerFloatingClasses = ['fixed', 'bottom-4', 'right-4', 'z-50', 'flex', 'flex-col', 'sm:flex-row', 'gap-3'];
+  const buttonFloatingClasses = ['w-14', 'h-14', 'sm:w-16', 'sm:h-16', 'rounded-full', 'flex', 'items-center', 'justify-center', 'shadow-2xl', 'hover:shadow-xl', 'transition-all', 'p-0', 'border-0', 'active:scale-90'];
 
   if (active) {
     // --- 1. Configure Container ---
-    elements.actionContainer.classList.remove('justify-between', 'mt-8');
+    elements.actionContainer.classList.remove('justify-between', 'mt-8', 'mt-12');
     elements.actionContainer.classList.add(...containerFloatingClasses);
+
+    // Hide the flex-1 spacer in floating mode
+    const spacer = elements.actionContainer.querySelector('.flex-1');
+    if (spacer) spacer.classList.add('hidden');
+
+    // Style the skip button for floating mode
+    if (elements.skipBtn) {
+      elements.skipBtn.classList.add('floating-skip');
+    }
 
     // --- 2. Configure Buttons ---
     elements.prevBtn.classList.add(...buttonFloatingClasses);
@@ -442,12 +451,21 @@ function setFloatingNav(active) {
 
     // Add padding to the bottom of the quiz screen to prevent content overlap
     if (elements.quizScreen) {
-      elements.quizScreen.style.paddingBottom = '10rem';
+      elements.quizScreen.style.paddingBottom = '12rem';
     }
   } else {
     // --- 1. Revert Container ---
     elements.actionContainer.classList.remove(...containerFloatingClasses);
-    elements.actionContainer.classList.add('justify-between', 'mt-8');
+    elements.actionContainer.classList.add('justify-between', 'mt-12');
+
+    // Show the flex-1 spacer back
+    const spacer = elements.actionContainer.querySelector('.flex-1');
+    if (spacer) spacer.classList.remove('hidden');
+
+    // Revert skip button style
+    if (elements.skipBtn) {
+      elements.skipBtn.classList.remove('floating-skip');
+    }
 
     // --- 2. Revert Buttons ---
     elements.prevBtn.classList.remove(...buttonFloatingClasses);
