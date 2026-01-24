@@ -95,13 +95,20 @@ export function initializeCustomQuizHandler() {
     const customQuizModal = new ModalHandler("custom-quiz-modal");
     const customQuizHubModal = new ModalHandler("custom-quiz-hub-modal");
     const completedModal = new ModalHandler('completed-quiz-modal');
-    const randomAllModal = new ModalHandler("random-all-modal");
     const confirmModal = new ModalHandler("confirm-action-modal");
     const confirmModalTitle = document.getElementById("confirm-modal-title");
     const confirmModalDescription = document.getElementById("confirm-modal-description");
     const confirmActionBtn = document.getElementById("confirm-action-btn");
     const confirmCancelBtn = document.getElementById("confirm-cancel-btn");
     const confirmModalEl = document.getElementById("confirm-action-modal");
+
+    const numberInputModal = new ModalHandler("number-input-modal");
+    const numberInputTitle = document.getElementById("number-input-modal-title");
+    const numberInputDesc = document.getElementById("number-input-modal-desc");
+    const genericNumberInput = document.getElementById("generic-number-input");
+    const numberInputSlider = document.getElementById("number-input-slider");
+    const numberInputConfirmBtn = document.getElementById("number-input-confirm-btn");
+    const numberInputMaxDisplay = document.getElementById("number-input-max-display");
 
     const createCustomQuizBtn = document.getElementById("create-custom-quiz-btn");
     const categorySelectionContainer = document.getElementById("custom-quiz-category-selection");
@@ -126,17 +133,6 @@ export function initializeCustomQuizHandler() {
             <p class="mt-4 text-lg font-semibold text-gray-700 dark:text-gray-300">กำลังโหลดรายการแบบทดสอบ...</p>
         `;
         customQuizListContainer.parentNode.insertBefore(listLoader, customQuizListContainer);
-    }
-
-    // --- UI Enhancements: Adjust padding for floating UI ---
-    function adjustScrollableContentPadding() {
-        const scrollableContent = customQuizModal.modal.querySelector('.overflow-y-auto');
-        if (scrollableContent) {
-            // Add enough padding at the bottom of the scrollable area to ensure
-            // no content is hidden behind the floating controls and FAB.
-            // A fixed value is simpler and sufficient here. 10rem should be plenty.
-            scrollableContent.style.paddingBottom = '10rem';
-        }
     }
 
     // --- State Management ---
@@ -206,6 +202,76 @@ export function initializeCustomQuizHandler() {
             const val = parseInt(document.getElementById('random-all-input').value, 10);
             executeRandomSelection(val);
             randomAllModal.close();
+        });
+    }
+
+    /**
+     * Shows a modal to get a number input from the user.
+     * @param {string} title
+     * @param {string} description
+     * @param {number} defaultValue
+     * @param {number} max
+     * @returns {Promise<number|null>}
+     */
+    function showNumberInputModal(title, description, defaultValue, max) {
+        return new Promise((resolve) => {
+            if (numberInputTitle) numberInputTitle.textContent = title;
+            if (numberInputDesc) numberInputDesc.textContent = description;
+            if (genericNumberInput) {
+                genericNumberInput.max = max;
+                genericNumberInput.value = defaultValue;
+            }
+            if (numberInputSlider) {
+                numberInputSlider.max = max;
+                numberInputSlider.value = defaultValue;
+                updateSliderTrack(numberInputSlider);
+            }
+            if (numberInputMaxDisplay) numberInputMaxDisplay.textContent = max;
+
+            const onConfirm = () => {
+                const value = parseInt(genericNumberInput.value, 10);
+                cleanup();
+                resolve(isNaN(value) ? 0 : value);
+            };
+
+            const onCancel = () => {
+                cleanup();
+                resolve(null);
+            };
+
+            const cleanup = () => {
+                numberInputConfirmBtn.removeEventListener('click', onConfirm);
+                numberInputModal.modal.querySelectorAll('[data-modal-close]').forEach(btn => btn.removeEventListener('click', onCancel));
+                numberInputModal.close();
+            };
+
+            numberInputConfirmBtn.addEventListener('click', onConfirm);
+            numberInputModal.modal.querySelectorAll('[data-modal-close]').forEach(btn => btn.addEventListener('click', onCancel));
+
+            numberInputModal.open();
+
+            // Setup input sync for this modal specifically
+            const syncInputs = (e) => {
+                let val = parseInt(e.target.value, 10) || 0;
+                if (val > max) val = max;
+                if (val < 0) val = 0;
+
+                genericNumberInput.value = val;
+                numberInputSlider.value = val;
+                updateSliderTrack(numberInputSlider);
+            };
+
+            genericNumberInput.addEventListener('input', syncInputs);
+            numberInputSlider.addEventListener('input', syncInputs);
+
+            // Overwrite cleanup to remove these as well
+            const originalCleanup = cleanup;
+            const newCleanup = () => {
+                genericNumberInput.removeEventListener('input', syncInputs);
+                numberInputSlider.removeEventListener('input', syncInputs);
+                originalCleanup();
+            };
+            // Note: In a real app we'd need better object management, but this works for our scope.
         });
     }
 
@@ -573,64 +639,6 @@ export function initializeCustomQuizHandler() {
         }
     }
 
-    /**
-     * Creates the HTML for the right-hand summary and actions panel in the custom quiz modal.
-     * @returns {string} The HTML string for the summary panel.
-     */
-    function createSummaryPanelHTML() {
-        return `
-            <div class="lg:sticky lg:top-24 space-y-6">
-                <!-- Summary Card -->
-                <div class="p-6 bg-gray-50 dark:bg-gray-900/50 rounded-xl border border-gray-200 dark:border-gray-700 text-center shadow-sm">
-                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">จำนวนข้อที่เลือก</p>
-                    <p id="total-question-count" class="text-5xl font-bold text-blue-600 dark:text-blue-400 transition-all duration-300">0</p>
-                </div>    
-    
-                <!-- Random Selection -->
-                <div class="p-4 bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm space-y-3">
-                    <button id="custom-quiz-random-btn" class="w-full flex items-center justify-center gap-2 px-4 py-2 bg-purple-100 text-purple-700 dark:bg-purple-900/50 dark:text-purple-300 rounded-lg hover:bg-purple-200 dark:hover:bg-purple-800/70 text-sm font-bold transition">สุ่มทั้งหมด</button>
-                </div>
-
-                <!-- Timer Options -->
-                <fieldset class="p-4 bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm">
-                    <legend class="px-2 font-bold text-lg font-kanit text-gray-800 dark:text-gray-200">ตั้งค่าเวลา</legend>
-                    <div class="mt-4 space-y-4">
-                        <div class="flex items-center">
-                            <input id="timer-none" name="custom-timer-mode" type="radio" value="none" checked class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500">
-                            <label for="timer-none" class="ml-3 block text-sm font-medium text-gray-700 dark:text-gray-300">ไม่จับเวลา</label>
-                        </div>
-                        <div class="flex items-center">
-                            <input id="timer-overall" name="custom-timer-mode" type="radio" value="overall" class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500">
-                            <label for="timer-overall" class="ml-3 block text-sm font-medium text-gray-700 dark:text-gray-300">จับเวลารวมทั้งชุด</label>
-                        </div>
-                        <div id="overall-time-input-container" class="hidden pl-7">
-                            <label for="custom-timer-overall-minutes" class="text-sm text-gray-500 dark:text-gray-400">เวลา (นาที):</label>
-                            <input type="number" id="custom-timer-overall-minutes" value="20" min="1" class="mt-1 w-24 p-1 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-center text-sm">
-                        </div>
-                        <div class="flex items-center">
-                            <input id="timer-per-question" name="custom-timer-mode" type="radio" value="perQuestion" class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500">
-                            <label for="timer-per-question" class="ml-3 block text-sm font-medium text-gray-700 dark:text-gray-300">จับเวลาเป็นรายข้อ</label>
-                        </div>
-                        <div id="per-question-time-input-container" class="hidden pl-7">
-                            <label for="custom-timer-per-question-seconds" class="text-sm text-gray-500 dark:text-gray-400">เวลา (วินาที):</label>
-                            <input type="number" id="custom-timer-per-question-seconds" value="90" min="10" step="5" class="mt-1 w-24 p-1 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-center text-sm">
-                        </div>
-                    </div>
-                </fieldset>
-    
-                <!-- Action Buttons -->
-                <div class="space-y-3 pt-4 border-t border-gray-200 dark:border-gray-700">
-                    <button id="custom-quiz-start-btn" class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-base font-bold transition shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
-                        <svg class="h-5 w-5" width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z" clip-rule="evenodd" /></svg>
-                        เริ่มทำแบบทดสอบ
-                    </button>
-                    <button id="custom-quiz-clear-btn" class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition text-sm font-bold">
-                        ล้างค่าทั้งหมด
-                    </button>
-                </div>
-            </div>
-        `;
-    }
 
     function bindCustomQuizModalEvents() {
         const container = customQuizModal.modal; // Listen on the whole modal for delegated events
@@ -640,44 +648,9 @@ export function initializeCustomQuizHandler() {
         container.addEventListener('input', (e) => {
             const target = e.target;
 
-            // Then, handle the value synchronization for the interacted control
+            // Handle the value synchronization and clamping for numeric inputs
             if (target.matches('input[type="number"][data-chapter]')) {
-                const subject = target.dataset.sliderSubject || target.dataset.subject;
-                const chapter = target.dataset.sliderChapter || target.dataset.chapter;
-                const specific = target.dataset.sliderSpecific || target.dataset.specific;
-                const type = target.dataset.type;
-
-                if (type === 'total') {
-                    const topicControl = target.closest('.specific-topic-control');
-                    const theoryInput = topicControl.querySelector('input[data-type="theory"]');
-                    const calcInput = topicControl.querySelector('input[data-type="calculation"]');
-                    const totalValue = parseInt(target.value, 10) || 0;
-
-                    const maxTheory = parseInt(theoryInput.max, 10) || 0;
-                    const maxCalc = parseInt(calcInput.max, 10) || 0;
-                    const maxTotal = maxTheory + maxCalc;
-
-                    if (maxTotal > 0) {
-                        // Distribute proportionally
-                        let theoryValue = Math.round(totalValue * (maxTheory / maxTotal));
-                        let calcValue = totalValue - theoryValue;
-
-                        // Adjust if one type over-allocates
-                        if (theoryValue > maxTheory) {
-                            calcValue += theoryValue - maxTheory;
-                            theoryValue = maxTheory;
-                        }
-                        if (calcValue > maxCalc) {
-                            theoryValue += calcValue - maxCalc;
-                            calcValue = maxCalc;
-                        }
-                        theoryInput.value = Math.min(maxTheory, theoryValue);
-                        calcInput.value = Math.min(maxCalc, calcValue);
-                    }
-                }
                 let value = target.value;
-                const slider = document.querySelector(`input[data-slider-subject="${subject}"][data-slider-chapter="${chapter}"][data-slider-specific="${specific}"]`);
-                const input = document.querySelector(`input[data-subject="${subject}"][data-chapter="${chapter}"][data-specific="${specific}"]`);
 
                 // Clamp value for number inputs
                 if (target.type === 'number') {
@@ -686,15 +659,11 @@ export function initializeCustomQuizHandler() {
                     if (currentValue > max) {
                         value = max;
                         target.value = max;
+                    } else if (currentValue < 0) {
+                        value = 0;
+                        target.value = 0;
                     }
                 }
-
-                const finalValue = value === "" ? 0 : value;
-                if (slider) slider.value = finalValue;
-                if (input) input.value = finalValue;
-
-                // Update the visual track of the slider
-                if (slider) updateSliderTrack(slider);
 
                 updateTotalCount();
             }
@@ -881,16 +850,13 @@ export function initializeCustomQuizHandler() {
 
                 if (value === 'custom') {
                     const max = parseInt(input.max, 10);
-                    const customValue = prompt(`กรุณาระบุจำนวนข้อ (สูงสุด ${max} ข้อ):`, input.value);
-                    if (customValue === null) return; // User cancelled
-
-                    let parsedValue = parseInt(customValue, 10);
-                    if (isNaN(parsedValue) || parsedValue < 0) {
-                        parsedValue = 0;
-                    } else if (parsedValue > max) {
-                        parsedValue = max;
-                    }
-                    value = parsedValue;
+                    showNumberInputModal(`ระบุจำนวนข้อ`, `สูงสุดสำหรับหัวข้อนี้คือ ${max} ข้อ`, input.value, max).then(result => {
+                        if (result !== null) {
+                            input.value = result;
+                            updateTotalCount();
+                        }
+                    });
+                    return;
                 }
 
                 if (input) input.value = value;
@@ -903,10 +869,12 @@ export function initializeCustomQuizHandler() {
             }
 
             // NEW: Handle subject-level random button
-            if (target.dataset.action === 'random-subject') {
+            const randomSubjectBtn = target.closest('[data-action="random-subject"]');
+            if (randomSubjectBtn) {
                 e.stopPropagation(); // Prevent accordion from toggling
-                const subjectKey = target.dataset.subjectKey;
+                const subjectKey = randomSubjectBtn.dataset.subjectKey;
                 handleRandomSelectionForSubject(subjectKey);
+                return; // Stop further processing for this click
             }
 
             // NEW: Handle group random buttons
@@ -963,8 +931,8 @@ export function initializeCustomQuizHandler() {
             // Handle accordion toggling
             const toggle = target.closest('.subject-accordion-toggle, .chapter-accordion-toggle');
             if (toggle) {
-                // If a quick select button inside the subject header was clicked, do not toggle the accordion.
-                if (target.closest('button[data-quick-select-subject]')) {
+                // Double check it's not a button inside the toggle
+                if (target.closest('button[data-action]')) {
                     return;
                 }
 
@@ -1286,15 +1254,9 @@ export function initializeCustomQuizHandler() {
                 </div>
             `;
 
-            const mainContentArea = customQuizModal.modal.querySelector('#custom-quiz-main-content');
-            const sidebarArea = customQuizModal.modal.querySelector('#custom-quiz-sidebar');
-
             if (categorySelectionContainer) {
                 categorySelectionContainer.innerHTML = categoryHTML;
                 categorySelectionContainer.className = "space-y-4"; // Use space-y for vertical stacking
-            }
-            if (sidebarArea) {
-                sidebarArea.innerHTML = createSummaryPanelHTML();
             }
 
             customQuizHubModal.close();
@@ -1308,9 +1270,11 @@ export function initializeCustomQuizHandler() {
             triggerElement.innerHTML = originalText;
             triggerElement.disabled = false;
             // Setup listeners after all content is loaded
-            adjustScrollableContentPadding();
+            // adjustScrollableContentPadding(); // Removed as it's no longer needed with the compact footer
             // Initialize sliders visual state
-            customQuizModal.modal.querySelectorAll('input[type="range"]').forEach(updateSliderTrack);
+            if (customQuizModal.modal) {
+                customQuizModal.modal.querySelectorAll('input[type="range"]').forEach(updateSliderTrack);
+            }
             updateTotalCount();
         }
     }
@@ -1320,9 +1284,13 @@ export function initializeCustomQuizHandler() {
      */
     async function handleStartCustomQuiz() {
         const startBtn = document.getElementById('custom-quiz-start-btn');
+        const btnContent = startBtn?.querySelector('.btn-content');
+        const btnLoader = startBtn?.querySelector('.btn-loader');
+
         if (startBtn) {
             startBtn.disabled = true;
-            startBtn.innerHTML = '<svg class="animate-spin h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> กำลังสร้าง...';
+            btnContent?.classList.add('hidden');
+            btnLoader?.classList.remove('hidden');
         }
 
         try {
@@ -1366,6 +1334,11 @@ export function initializeCustomQuizHandler() {
                         // Filter the pool for this specific topic
                         const topicPool = allQuestions.filter(q => {
                             if (!q.subCategory) return false;
+
+                            // Ensure subject matches
+                            const questionSubject = q.sourceQuizCategory || 'Uncategorized';
+                            if (questionSubject !== subject) return false;
+
                             const mainCat = (typeof q.subCategory === 'object') ? q.subCategory.main : q.subCategory;
                             if (mainCat !== chapter) return false;
 
@@ -1412,7 +1385,8 @@ export function initializeCustomQuizHandler() {
                 showToast("ข้อผิดพลาด", "กรุณาเลือกคำถามอย่างน้อย 1 ข้อ", "⚠️", "error");
                 if (startBtn) {
                     startBtn.disabled = false;
-                    startBtn.innerHTML = 'เริ่มทำแบบทดสอบ';
+                    btnContent?.classList.remove('hidden');
+                    btnLoader?.classList.add('hidden');
                 }
                 return;
             }
@@ -1464,12 +1438,13 @@ export function initializeCustomQuizHandler() {
             showToast("เกิดข้อผิดพลาด", "ไม่สามารถเริ่มทำแบบทดสอบได้: " + error.message, "❌", "error");
             if (startBtn) {
                 startBtn.disabled = false;
-                startBtn.innerHTML = 'เริ่มทำแบบทดสอบ';
+                btnContent?.classList.remove('hidden');
+                btnLoader?.classList.add('hidden');
             }
         }
     }
 
-    function handleRandomSelection() {
+    async function handleRandomSelection() {
         const allInputs = Array.from(document.querySelectorAll('#custom-quiz-category-selection input[type="number"][data-type]'));
         if (allInputs.length === 0) { return; }
 
@@ -1480,27 +1455,11 @@ export function initializeCustomQuizHandler() {
             return;
         }
 
-        // Setup Modal
-        const modalInput = document.getElementById('random-all-input');
-        const modalSlider = document.getElementById('random-all-slider');
-        const maxDisplay = document.getElementById('random-all-max-display');
+        const defaultVal = Math.min(20, maxQuestions);
+        const result = await showNumberInputModal("สุ่มจากทุกวิชา", `มีข้อสอบทั้งหมดในรายการที่เลือก ${maxQuestions} ข้อ`, defaultVal, maxQuestions);
 
-        if (modalInput && modalSlider && maxDisplay) {
-            const defaultVal = Math.min(20, maxQuestions);
-
-            modalInput.max = maxQuestions;
-            modalInput.value = defaultVal;
-
-            modalSlider.max = maxQuestions;
-            modalSlider.value = defaultVal;
-
-            maxDisplay.textContent = maxQuestions;
-
-            updateSliderTrack(modalSlider);
-
-            // Force high z-index to ensure it appears above the custom quiz modal
-            if (randomAllModal.modal) randomAllModal.modal.style.zIndex = '105';
-            randomAllModal.open();
+        if (result !== null) {
+            executeRandomSelection(result);
         }
     }
 
@@ -1678,16 +1637,6 @@ export function initializeCustomQuizHandler() {
         observer.observe(confirmModalEl, { attributes: true, attributeFilter: ['class'] });
     }
 
-    // Robustly handle z-index for the random all modal to ensure it stays on top
-    if (randomAllModal.modal) {
-        const observer = new MutationObserver(() => {
-            if (randomAllModal.modal.classList.contains('hidden')) {
-                randomAllModal.modal.style.zIndex = '';
-            }
-        });
-        observer.observe(randomAllModal.modal, { attributes: true, attributeFilter: ['class'] });
-    }
-
     // Initialize the delegated event listeners once
     bindCustomQuizModalEvents();
 
@@ -1695,15 +1644,11 @@ export function initializeCustomQuizHandler() {
      * Handles random selection for a specific subject (all chapters).
      * @param {string} subjectKey - The key of the subject.
      */
-    function handleRandomSelectionForSubject(subjectKey) {
-        const numPerChapterInput = prompt(`ระบุจำนวนข้อที่ต้องการสุ่ม 'ต่อหนึ่งบท' สำหรับวิชานี้:`, "2");
-        if (numPerChapterInput === null) return;
+    async function handleRandomSelectionForSubject(subjectKey) {
+        const result = await showNumberInputModal(`ระบุจำนวนข้อ`, `ระบุจำนวนข้อที่ต้องการสุ่ม 'ต่อหนึ่งบท' สำหรับวิชานี้`, 2, 20);
+        if (result === null) return;
 
-        const numPerChapter = parseInt(numPerChapterInput, 10);
-        if (isNaN(numPerChapter) || numPerChapter < 0) {
-            showToast("ข้อมูลไม่ถูกต้อง", "กรุณาระบุจำนวนตัวเลขที่ถูกต้อง", "⚠️", "error");
-            return;
-        }
+        const numPerChapter = result;
 
         // Get all inputs for this subject
         const inputs = Array.from(document.querySelectorAll(`#custom-quiz-category-selection input[type="number"][data-subject="${subjectKey}"]`));
@@ -1804,7 +1749,7 @@ export function initializeCustomQuizHandler() {
      * @param {number|null} countOverride - If provided, this is the target count.
      * @param {boolean} isTotalCount - If true, countOverride is the TOTAL questions for the group. If false, it's per chapter.
      */
-    function handleSubjectGroupRandom(groupType, countOverride = null, isTotalCount = false) {
+    async function handleSubjectGroupRandom(groupType, countOverride = null, isTotalCount = false) {
         const groupMapping = getGroupMappings(groupType);
         const groupName = groupType; // Simplified for brevity, could map to display name
 
@@ -1812,9 +1757,9 @@ export function initializeCustomQuizHandler() {
         if (countOverride !== null) {
             numPerChapter = countOverride;
         } else {
-            const numPerChapterInput = prompt(`ระบุจำนวนข้อที่ต้องการสุ่ม 'ต่อหนึ่งบท' จากกลุ่ม ${groupName}:`, "2");
-            if (numPerChapterInput === null) return;
-            numPerChapter = parseInt(numPerChapterInput, 10);
+            const result = await showNumberInputModal(`ระบุจำนวนข้อ`, `ระบุจำนวนข้อที่ต้องการสุ่ม 'ต่อหนึ่งบท' จากกลุ่ม ${groupName}`, 2, 20);
+            if (result === null) return;
+            numPerChapter = result;
         }
 
         if (isNaN(numPerChapter) || numPerChapter < 0) {

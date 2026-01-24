@@ -64,7 +64,8 @@
 
 @media (max-width: 640px) {
   #action-buttons.fixed {
-    @apply bottom-6 left-1/2 -translate-x-1/2 flex-row items-center !important;
+    /* Use ! prefix for important utilities in Tailwind 4 */
+    @apply !bottom-6 !left-1/2 !-translate-x-1/2 !flex-row !items-center;
     right: auto !important;
     gap: 0.75rem !important;
     width: auto !important;
@@ -72,12 +73,12 @@
   }
 
   #action-buttons.fixed button {
-    @apply w-12 h-12 !important;
+    @apply !w-12 !h-12;
     padding: 0 !important;
   }
 
   #action-buttons.fixed button svg {
-    @apply w-6 h-6 !important;
+    @apply !w-6 !h-6;
   }
 }
 
