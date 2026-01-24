@@ -431,8 +431,8 @@ function setFloatingNav(active) {
 
   state.isFloatingNav = active;
 
-  const containerFloatingClasses = ['fixed', 'bottom-4', 'right-4', 'z-50', 'flex', 'flex-col', 'sm:flex-row', 'gap-3'];
-  const buttonFloatingClasses = ['w-14', 'h-14', 'sm:w-16', 'sm:h-16', 'rounded-full', 'flex', 'items-center', 'justify-center', 'shadow-2xl', 'hover:shadow-xl', 'transition-all', 'p-0', 'border-0', 'active:scale-90', 'text-white', 'btn-floating'];
+  const containerFloatingClasses = ['fixed', 'bottom-6', 'left-1/2', '-translate-x-1/2', 'z-50', 'flex', 'flex-row', 'items-center', 'gap-3', 'p-2', 'rounded-full', 'bg-white/80', 'dark:bg-gray-900/80', 'backdrop-blur-xl', 'border', 'border-white/20', 'shadow-2xl'];
+  const buttonFloatingClasses = ['w-12', 'h-12', 'sm:w-14', 'sm:h-14', 'rounded-full', 'flex', 'items-center', 'justify-center', 'shadow-lg', 'hover:shadow-xl', 'transition-all', 'p-0', 'border-0', 'active:scale-90', 'text-white', 'btn-floating'];
 
   if (active) {
     // --- 1. Configure Container ---
@@ -462,7 +462,7 @@ function setFloatingNav(active) {
 
     // Add padding to the bottom of the quiz screen to prevent content overlap
     if (elements.quizScreen) {
-      elements.quizScreen.style.paddingBottom = '12rem';
+      elements.quizScreen.style.paddingBottom = '8rem';
     }
   } else {
     // --- 1. Revert Container ---

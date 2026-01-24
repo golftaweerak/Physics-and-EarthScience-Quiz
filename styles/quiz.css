@@ -57,24 +57,27 @@
  * Floating Navigation Helper for Skip Button
  */
 .floating-skip {
-  @apply sm:static fixed bottom-20 right-4 rounded-full px-4 py-2 text-xs opacity-70 hover:opacity-100 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm z-50;
+  @apply sm:static rounded-full px-5 py-2 text-xs font-bold opacity-80 hover:opacity-100 bg-gray-100 dark:bg-gray-800 transition-all;
   border-style: solid !important;
+  height: fit-content;
 }
+
 @media (max-width: 640px) {
   #action-buttons.fixed {
-    bottom: 1.5rem !important;
-    right: 1rem !important;
+    @apply bottom-6 left-1/2 -translate-x-1/2 flex-row items-center !important;
+    right: auto !important;
     gap: 0.75rem !important;
+    width: auto !important;
+    padding: 0.5rem !important;
   }
 
   #action-buttons.fixed button {
-    width: 3.5rem !important; /* 56px instead of 64px */
-    height: 3.5rem !important;
+    @apply w-12 h-12 !important;
+    padding: 0 !important;
   }
 
   #action-buttons.fixed button svg {
-    width: 1.5rem !important;
-    height: 1.5rem !important;
+    @apply w-6 h-6 !important;
   }
 }
 
