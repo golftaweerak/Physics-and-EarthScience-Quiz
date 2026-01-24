@@ -23,7 +23,7 @@ export const quizList = [
   },
   {
     "id": "phy_m4/phy_m4_ch5-1",
-    "title": "บทที่ 5: งานและพลังงาน (ชุดที่ 1)",
+    "title": "งานและพลังงาน (ชุดที่ 1)",
     "amount": 40,
     "description": "บทที่ 5: งานและพลังงาน (ชุดที่ 1)",
     "url": "./quiz/index.html?id=phy_m4/phy_m4_ch5-1",
@@ -35,7 +35,7 @@ export const quizList = [
   },
   {
     "id": "phy_m4/phy_m4_ch5-2",
-    "title": "บทที่ 5: งานและพลังงาน (ชุดที่ 2)",
+    "title": "งานและพลังงาน (ชุดที่ 2)",
     "amount": 40,
     "description": "บทที่ 5: งานและพลังงาน (ชุดที่ 2)",
     "url": "./quiz/index.html?id=phy_m4/phy_m4_ch5-2",
@@ -47,7 +47,7 @@ export const quizList = [
   },
   {
     "id": "phy_m4/phy_m4_ch5-3",
-    "title": "บทที่ 5: งานและพลังงาน (ชุดที่ 3 - เน้นทฤษฎีบทงาน-พลังงาน)",
+    "title": "งานและพลังงาน (ชุดที่ 3)",
     "amount": 40,
     "description": "บทที่ 5: งานและพลังงาน (ชุดที่ 3 - เน้นทฤษฎีบทงาน-พลังงาน)",
     "url": "./quiz/index.html?id=phy_m4/phy_m4_ch5-3",
@@ -59,7 +59,7 @@ export const quizList = [
   },
   {
     "id": "phy_m4/phy_m4_ch5-4",
-    "title": "บทที่ 5: งานและพลังงาน (ชุดที่ 4 - เน้นพลังงานกลและทฤษฎีบทงาน-พลังงาน)",
+    "title": "งานและพลังงาน (ชุดที่ 4)",
     "amount": 40,
     "description": "บทที่ 5: งานและพลังงาน (ชุดที่ 4 - เน้นพลังงานกลและทฤษฎีบทงาน-พลังงาน)",
     "url": "./quiz/index.html?id=phy_m4/phy_m4_ch5-4",
@@ -71,7 +71,7 @@ export const quizList = [
   },
   {
     "id": "phy_m4/phy_m4_ch5-5",
-    "title": "บทที่ 5: งานและพลังงาน (ชุดที่ 5 - เน้นนิยามและการคำนวณพลังงานจลน์และพลังงานศักย์)",
+    "title": "งานและพลังงาน (ชุดที่ 5)",
     "amount": 30,
     "description": "บทที่ 5: งานและพลังงาน (ชุดที่ 5 - เน้นนิยามและการคำนวณพลังงานจลน์และพลังงานศักย์)",
     "url": "./quiz/index.html?id=phy_m4/phy_m4_ch5-5",
@@ -83,7 +83,7 @@ export const quizList = [
   },
   {
     "id": "phy_m4/phy_m4_ch5-6",
-    "title": "บทที่ 5: งานและพลังงาน (ชุดที่ 6 - เน้นกฎการอนุรักษ์พลังงานกล)",
+    "title": "งานและพลังงาน (ชุดที่ 6)",
     "amount": 40,
     "description": "บทที่ 5: งานและพลังงาน (ชุดที่ 6 - เน้นกฎการอนุรักษ์พลังงานกล)",
     "url": "./quiz/index.html?id=phy_m4/phy_m4_ch5-6",
@@ -95,7 +95,7 @@ export const quizList = [
   },
   {
     "id": "phy_m4/phy_m4_ch5-7",
-    "title": "บทที่ 5: งานและพลังงาน (ชุดที่ 7 - กฎการอนุรักษ์พลังงานประยุกต์)",
+    "title": "งานและพลังงาน (ชุดที่ 7)",
     "amount": 40,
     "description": "บทที่ 5: งานและพลังงาน (ชุดที่ 7 - กฎการอนุรักษ์พลังงานประยุกต์)",
     "url": "./quiz/index.html?id=phy_m4/phy_m4_ch5-7",
@@ -107,7 +107,7 @@ export const quizList = [
   },
   {
     "id": "phy_m4/phy_m4_ch5-8",
-    "title": "บทที่ 5: งานและพลังงาน (ชุดที่ 8 - กฎการอนุรักษ์พลังงานและการประยุกต์)",
+    "title": "งานและพลังงาน (ชุดที่ 8)",
     "amount": 40,
     "description": "บทที่ 5: งานและพลังงาน (ชุดที่ 8 - กฎการอนุรักษ์พลังงานและการประยุกต์)",
     "url": "./quiz/index.html?id=phy_m4/phy_m4_ch5-8",
@@ -119,7 +119,7 @@ export const quizList = [
   },
   {
     "id": "phy_m4/phy_m4_ch5-9",
-    "title": "บทที่ 5: งานและพลังงาน (ชุดที่ 9 - เครื่องกลอย่างง่าย)",
+    "title": "งานและพลังงาน (ชุดที่ 9)",
     "amount": 40,
     "description": "บทที่ 5: งานและพลังงาน (ชุดที่ 9 - เครื่องกลอย่างง่าย)",
     "url": "./quiz/index.html?id=phy_m4/phy_m4_ch5-9",
@@ -203,7 +203,7 @@ export const quizList = [
   },
   {
     "id": "phy_m4/phy_m4_ch2-1",
-    "title": "บทที่ 2: การเคลื่อนที่แนวตรง (ชุดที่ 1 - ทฤษฎี)",
+    "title": "การเคลื่อนที่แนวตรง (ชุดที่ 1)",
     "amount": 20,
     "description": "บทที่ 2: การเคลื่อนที่แนวตรง (ชุดที่ 1 - ทฤษฎี)",
     "url": "./quiz/index.html?id=phy_m4/phy_m4_ch2-1",
@@ -614,7 +614,7 @@ export const quizList = [
   },
   {
     "id": "ess_basic/ess_basic_m6_ch10-1",
-    "title": "บทที่ 10: ข้อมูลและสารสนเทศทางอุตุนิยมวิทยา",
+    "title": "ข้อมูลและสารสนเทศทางอุตุนิยมวิทยา (ชุึดที่ 1)",
     "amount": 30,
     "description": "บทที่ 10: ข้อมูลและสารสนเทศทางอุตุนิยมวิทยา",
     "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_ch10-1",
@@ -626,7 +626,7 @@ export const quizList = [
   },
   {
     "id": "ess_basic/ess_basic_m6_ch10-2",
-    "title": "บทที่ 10: ข้อมูลและสารสนเทศทางอุตุนิยมวิทยา (ชุดที่ 2 - การพยากรณ์และการแปลความหมาย)",
+    "title": "ข้อมูลและสารสนเทศทางอุตุนิยมวิทยา (ชุดที่ 2)",
     "amount": 30,
     "description": "บทที่ 10: ข้อมูลและสารสนเทศทางอุตุนิยมวิทยา (ชุดที่ 2 - การพยากรณ์และการแปลความหมาย)",
     "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_ch10-2",
@@ -638,7 +638,7 @@ export const quizList = [
   },
   {
     "id": "ess_basic/ess_basic_m6_ch10-3",
-    "title": "บทที่ 10: ข้อมูลและสารสนเทศทางอุตุนิยมวิทยา (ชุดที่ 3 - การพยากรณ์อากาศขั้นสูงและเทคโนโลยีอวกาศ)",
+    "title": "ข้อมูลและสารสนเทศทางอุตุนิยมวิทยา (ชุดที่ 3)",
     "amount": 30,
     "description": "บทที่ 10: ข้อมูลและสารสนเทศทางอุตุนิยมวิทยา (ชุดที่ 3 - การพยากรณ์อากาศขั้นสูงและเทคโนโลยีอวกาศ)",
     "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_ch10-3",
@@ -650,7 +650,7 @@ export const quizList = [
   },
   {
     "id": "ess_basic/ess_basic_m6_ch1-1",
-    "title": "บทที่ 1: เอกภพและกาแล็กซี",
+    "title": "เอกภพและกาแล็กซี",
     "amount": 30,
     "description": "บทที่ 1: เอกภพและกาแล็กซี (กำเนิดเอกภพ, หลักฐานบิกแบง, กาแล็กซีทางช้างเผือก)",
     "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_ch1-1",
@@ -662,7 +662,7 @@ export const quizList = [
   },
   {
     "id": "ess_basic/ess_basic_m6_ch1-2",
-    "title": "บทที่ 1: เอกภพและกาแล็กซี (ชุดที่ 2)",
+    "title": "เอกภพและกาแล็กซี (ชุดที่ 2)",
     "amount": 30,
     "description": "บทที่ 1: เอกภพและกาแล็กซี (ชุดที่ 2 - เน้นรายละเอียดทฤษฎี, กฎของฮับเบิล, และโครงสร้างกาแล็กซี)",
     "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_ch1-2",
@@ -674,7 +674,7 @@ export const quizList = [
   },
   {
     "id": "ess_basic/ess_basic_m6_ch1-3",
-    "title": "บทที่ 1: เอกภพและกาแล็กซี (ชุดที่ 3 - เน้นการวิเคราะห์และรูปแบบข้อสอบที่หลากหลาย)",
+    "title": "เอกภพและกาแล็กซี (ชุดที่ 3)",
     "amount": 30,
     "description": "บทที่ 1: เอกภพและกาแล็กซี (ชุดที่ 3 - เน้นการวิเคราะห์และรูปแบบข้อสอบที่หลากหลาย)",
     "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_ch1-3",
@@ -686,7 +686,7 @@ export const quizList = [
   },
   {
     "id": "ess_basic/ess_basic_m6_ch2-1",
-    "title": "บทที่ 2: ดาวฤกษ์",
+    "title": "ดาวฤกษ์ (ชุดที่ 1)",
     "amount": 30,
     "description": "บทที่ 2: ดาวฤกษ์ (กำเนิด, สมบัติ, และวิวัฒนาการ)",
     "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_ch2-1",
@@ -698,7 +698,7 @@ export const quizList = [
   },
   {
     "id": "ess_basic/ess_basic_m6_ch2-2",
-    "title": "บทที่ 2: ดาวฤกษ์ (ชุดที่ 2)",
+    "title": "ดาวฤกษ์ (ชุดที่ 2)",
     "amount": 30,
     "description": "บทที่ 2: ดาวฤกษ์ (ชุดที่ 2 - สมบัติ, วิวัฒนาการ, และแผนภาพ H-R)",
     "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_ch2-2",
@@ -710,7 +710,7 @@ export const quizList = [
   },
   {
     "id": "ess_basic/ess_basic_m6_ch2-3",
-    "title": "บทที่ 2: ดาวฤกษ์ (ชุดที่ 3 - เน้นการวิเคราะห์และรูปแบบข้อสอบที่หลากหลาย)",
+    "title": "ดาวฤกษ์ (ชุดที่ 3)",
     "amount": 30,
     "description": "บทที่ 2: ดาวฤกษ์ (ชุดที่ 3 - เน้นการวิเคราะห์และรูปแบบข้อสอบที่หลากหลาย)",
     "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_ch2-3",
@@ -722,7 +722,7 @@ export const quizList = [
   },
   {
     "id": "ess_basic/ess_basic_m6_ch3-1",
-    "title": "บทที่ 3: ระบบสุริยะ (ชุดที่ 1)",
+    "title": "ระบบสุริยะ (ชุดที่ 1)",
     "amount": 30,
     "description": "บทที่ 3: ระบบสุริยะ (ชุดที่ 1 - กำเนิด, เขตเอื้อชีวิต, และปรากฏการณ์บนดวงอาทิตย์)",
     "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_ch3-1",
@@ -734,7 +734,7 @@ export const quizList = [
   },
   {
     "id": "ess_basic/ess_basic_m6_ch4-1",
-    "title": "บทที่ 4: เทคโนโลยีอวกาศ",
+    "title": "เทคโนโลยีอวกาศ",
     "amount": 30,
     "description": "บทที่ 4: เทคโนโลยีอวกาศ",
     "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_ch4-1",
@@ -746,7 +746,7 @@ export const quizList = [
   },
   {
     "id": "ess_basic/ess_basic_m6_ch4-2",
-    "title": "บทที่ 4: เทคโนโลยีอวกาศ (เน้นประวัติศาสตร์และไทม์ไลน์การสำรวจอวกาศ)",
+    "title": "เทคโนโลยีอวกาศ",
     "amount": 40,
     "description": "บทที่ 4: เทคโนโลยีอวกาศ (เน้นประวัติศาสตร์และไทม์ไลน์การสำรวจอวกาศ)",
     "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_ch4-2",
@@ -758,7 +758,7 @@ export const quizList = [
   },
   {
     "id": "ess_basic/ess_basic_m6_ch5-1",
-    "title": "บทที่ 5: โครงสร้างโลก",
+    "title": "โครงสร้างโลก (ชุดที่ 1)",
     "amount": 30,
     "description": "บทที่ 5: โครงสร้างโลก",
     "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_ch5-1",
@@ -770,7 +770,7 @@ export const quizList = [
   },
   {
     "id": "ess_basic/ess_basic_m6_ch5-2",
-    "title": "บทที่ 5: โครงสร้างโลก (เน้นการวิเคราะห์เปรียบเทียบกับดาวเคราะห์อื่น)",
+    "title": "โครงสร้างโลก (ชุดที่ 2)",
     "amount": 30,
     "description": "บทที่ 5: โครงสร้างโลก (เน้นการวิเคราะห์เปรียบเทียบกับดาวเคราะห์อื่น)",
     "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_ch5-2",
@@ -782,7 +782,7 @@ export const quizList = [
   },
   {
     "id": "ess_basic/ess_basic_m6_ch7-1",
-    "title": "บทที่ 7: ธรณีพิบัติภัย (ชุดที่ 1, เน้นสาเหตุ กระบวนการ และผลกระทบ)",
+    "title": "ธรณีพิบัติภัย (ชุดที่ 1)",
     "amount": 30,
     "description": "บทที่ 7: ธรณีพิบัติภัย (ชุดที่ 1, เน้นสาเหตุ กระบวนการ และผลกระทบ)",
     "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_ch7-1",
@@ -794,7 +794,7 @@ export const quizList = [
   },
   {
     "id": "ess_basic/ess_basic_m6_ch7-2",
-    "title": "บทที่ 7: ธรณีพิบัติภัย (ชุดที่ 2, เน้นการปฏิบัติตนและการประยุกต์)",
+    "title": "ธรณีพิบัติภัย (ชุดที่ 2)",
     "amount": 30,
     "description": "บทที่ 7: ธรณีพิบัติภัย (ชุดที่ 2, เน้นการปฏิบัติตนและการประยุกต์)",
     "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_ch7-2",
@@ -806,7 +806,7 @@ export const quizList = [
   },
   {
     "id": "ess_basic/ess_basic_m6_ch7-3",
-    "title": "บทที่ 7: ธรณีพิบัติภัย (ชุดที่ 3, เน้นการจำแนกประเภทและผลกระทบ)",
+    "title": "ธรณีพิบัติภัย (ชุดที่ 3)",
     "amount": 30,
     "description": "บทที่ 7: ธรณีพิบัติภัย (ชุดที่ 3, เน้นการจำแนกประเภทและผลกระทบ)",
     "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_ch7-3",
@@ -818,7 +818,7 @@ export const quizList = [
   },
   {
     "id": "ess_basic/ess_basic_m6_ch7-4",
-    "title": "บทที่ 7: ธรณีพิบัติภัย (ชุดที่ 4, เน้นการเปรียบเทียบและผลกระทบต่อสิ่งแวดล้อม)",
+    "title": "ธรณีพิบัติภัย (ชุดที่ 4)",
     "amount": 30,
     "description": "บทที่ 7: ธรณีพิบัติภัย (ชุดที่ 4, เน้นการเปรียบเทียบและผลกระทบต่อสิ่งแวดล้อม)",
     "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_ch7-4",
@@ -830,7 +830,7 @@ export const quizList = [
   },
   {
     "id": "ess_basic/ess_basic_m6_ch8-1",
-    "title": "บทที่ 8: ลมฟ้าอากาศและภูมิอากาศ (ชุดที่ 1)",
+    "title": "ลมฟ้าอากาศและภูมิอากาศ (ชุดที่ 1)",
     "amount": 40,
     "description": "บทที่ 8: ลมฟ้าอากาศและภูมิอากาศ (ชุดที่ 1 - สมดุลพลังงาน, การหมุนเวียนอากาศและน้ำ)",
     "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_ch8-1",
@@ -842,7 +842,7 @@ export const quizList = [
   },
   {
     "id": "ess_basic/ess_basic_m6_ch8-2",
-    "title": "บทที่ 8: ลมฟ้าอากาศและภูมิอากาศ (ชุดที่ 2)",
+    "title": "ลมฟ้าอากาศและภูมิอากาศ (ชุดที่ 2)",
     "amount": 30,
     "description": "บทที่ 8: ลมฟ้าอากาศและภูมิอากาศ (ชุดที่ 2 - องค์ประกอบบรรยากาศ, เมฆ, พายุ, การเปลี่ยนแปลงภูมิอากาศ)",
     "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_ch8-2",
@@ -854,7 +854,7 @@ export const quizList = [
   },
   {
     "id": "ess_basic/ess_basic_m6_ch8-3",
-    "title": "บทที่ 8: ลมฟ้าอากาศและภูมิอากาศ (ชุดที่ 3)",
+    "title": "ลมฟ้าอากาศและภูมิอากาศ (ชุดที่ 3)",
     "amount": 30,
     "description": "บทที่ 8: ลมฟ้าอากาศและภูมิอากาศ (ชุดที่ 3 - ชั้นบรรยากาศ, แผนที่อากาศ, การพยากรณ์)",
     "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_ch8-3",
@@ -866,7 +866,7 @@ export const quizList = [
   },
   {
     "id": "ess_basic/ess_basic_m6_ch8-4",
-    "title": "บทที่ 8: ลมฟ้าอากาศและภูมิอากาศ (ชุดที่ 4)",
+    "title": "ลมฟ้าอากาศและภูมิอากาศ (ชุดที่ 4)",
     "amount": 30,
     "description": "บทที่ 8: ลมฟ้าอากาศและภูมิอากาศ (ชุดที่ 4 - เน้นการจำแนกภูมิอากาศ, การเปลี่ยนแปลง, และแผนที่อากาศ)",
     "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_ch8-4",
@@ -878,9 +878,9 @@ export const quizList = [
   },
   {
     "id": "ess_basic/ess_basic_m6_mid2-review-1",
-    "title": "แนวข้อสอบทบทวนกลางภาค (Midterm Review) ชุดที่ 1",
+    "title": "แนวข้อสอบทบทวนกลางภาค 2 ชุดที่ 1",
     "amount": 40,
-    "description": "แนวข้อสอบทบทวนกลางภาค (Midterm Review) ชุดที่ 1 ครอบคลุมเนื้อหาบทที่ 6 (การแปรสัณฐาน) และบทที่ 7 (ธรณีพิบัติภัย)",
+    "description": "แนวข้อสอบทบทวนกลางภาค 2 ชุดที่ 1 ครอบคลุมเนื้อหาบทที่ 6 (การแปรสัณฐาน) และบทที่ 7 (ธรณีพิบัติภัย)",
     "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_mid2-review-1",
     "storageKey": "quizState-ess_basic_m6_mid2-review-1",
     "icon": "./assets/icons/earth.png",
@@ -890,9 +890,9 @@ export const quizList = [
   },
   {
     "id": "ess_basic/ess_basic_m6_mid2-review-2",
-    "title": "แนวข้อสอบทบทวนกลางภาคชุดที่ 2",
+    "title": "แนวข้อสอบทบทวนกลางภาค 2 ชุดที่ 2",
     "amount": 40,
-    "description": "แนวข้อสอบทบทวนกลางภาคชุดที่ 2 (เน้นไม่ซ้ำกับชุดแรก) ครอบคลุมเนื้อหาบทที่ 6 (การแปรสัณฐาน) และบทที่ 7 (ธรณีพิบัติภัย)",
+    "description": "แนวข้อสอบทบทวนกลางภาค 2 ชุดที่ 2 (เน้นไม่ซ้ำกับชุดแรก) ครอบคลุมเนื้อหาบทที่ 6 (การแปรสัณฐาน) และบทที่ 7 (ธรณีพิบัติภัย)",
     "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_mid2-review-2",
     "storageKey": "quizState-ess_basic_m6_mid2-review-2",
     "icon": "./assets/icons/earth.png",
@@ -902,9 +902,9 @@ export const quizList = [
   },
   {
     "id": "ess_basic/ess_basic_m6_mid2-review-3",
-    "title": "แนวข้อสอบทบทวนกลางภาคชุดที่ 3",
+    "title": "แนวข้อสอบทบทวนกลางภาค 2 ชุดที่ 3",
     "amount": 30,
-    "description": "แนวข้อสอบทบทวนกลางภาคชุดที่ 3 (เน้นการวิเคราะห์ การคำนวณเบื้องต้น และหัวข้อเจาะลึก) ครอบคลุมเนื้อหาบทที่ 6 (การแปรสัณฐาน) และบทที่ 7 (ธรณีพิบัติภัย)",
+    "description": "แนวข้อสอบทบทวนกลางภาค 2 ชุดที่ 3 (เน้นการวิเคราะห์ การคำนวณเบื้องต้น และหัวข้อเจาะลึก) ครอบคลุมเนื้อหาบทที่ 6 (การแปรสัณฐาน) และบทที่ 7 (ธรณีพิบัติภัย)",
     "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_mid2-review-3",
     "storageKey": "quizState-ess_basic_m6_mid2-review-3",
     "icon": "./assets/icons/earth.png",
@@ -914,9 +914,9 @@ export const quizList = [
   },
   {
     "id": "ess_basic/ess_basic_m6_mid2-review-4",
-    "title": "แนวข้อสอบทบทวนกลางภาคชุดที่ 4",
+    "title": "แนวข้อสอบทบทวนกลางภาค 2 ชุดที่ 4",
     "amount": 40,
-    "description": "แนวข้อสอบทบทวนกลางภาคชุดที่ 4 ครอบคลุมเนื้อหาบทที่ 6 (การแปรสัณฐาน) และบทที่ 7 (ธรณีพิบัติภัย)",
+    "description": "แนวข้อสอบทบทวนกลางภาค 2 ชุดที่ 4 ครอบคลุมเนื้อหาบทที่ 6 (การแปรสัณฐาน) และบทที่ 7 (ธรณีพิบัติภัย)",
     "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_mid2-review-4",
     "storageKey": "quizState-ess_basic_m6_mid2-review-4",
     "icon": "./assets/icons/earth.png",
@@ -950,7 +950,7 @@ export const quizList = [
   },
   {
     "id": "ess_adv/ess_adv_m6_ch17-1",
-    "title": "บทที่ 17: การเคลื่อนที่ปรากฏของดาวเคราะห์ (ชุดที่ 1)",
+    "title": "การเคลื่อนที่ปรากฏของดาวเคราะห์ (ชุดที่ 1)",
     "amount": 30,
     "description": "บทที่ 17: การเคลื่อนที่ปรากฏของดาวเคราะห์",
     "url": "./quiz/index.html?id=ess_adv/ess_adv_m6_ch17-1",
@@ -962,7 +962,7 @@ export const quizList = [
   },
   {
     "id": "ess_adv/ess_adv_m4_ch1-1",
-    "title": "บทที่ 1: โครงสร้างโลก (ชุดที่ 1)",
+    "title": "โครงสร้างโลก (ชุดที่ 1)",
     "amount": 30,
     "description": "บทที่ 1: โครงสร้างโลก (ชุดที่ 1)",
     "url": "./quiz/index.html?id=ess_adv/ess_adv_m4_ch1-1",
@@ -974,7 +974,7 @@ export const quizList = [
   },
   {
     "id": "ess_adv/ess_adv_m4_ch1-2",
-    "title": "บทที่ 1: โครงสร้างโลก (ชุดที่ 2)",
+    "title": "โครงสร้างโลก (ชุดที่ 2)",
     "amount": 30,
     "description": "บทที่ 1: โครงสร้างโลก (ชุดที่ 2)",
     "url": "./quiz/index.html?id=ess_adv/ess_adv_m4_ch1-2",
@@ -986,7 +986,7 @@ export const quizList = [
   },
   {
     "id": "ess_adv/ess_adv_m4_ch1-3",
-    "title": "บทที่ 1: โครงสร้างโลก (ชุดที่ 3)",
+    "title": "โครงสร้างโลก (ชุดที่ 3)",
     "amount": 30,
     "description": "บทที่ 1: โครงสร้างโลก (ชุดที่ 3, เน้นการวิเคราะห์เชิงลึกและประยุกต์)",
     "url": "./quiz/index.html?id=ess_adv/ess_adv_m4_ch1-3",
@@ -998,7 +998,7 @@ export const quizList = [
   },
   {
     "id": "ess_adv/ess_adv_m6_ch14-1",
-    "title": "บทที่ 14: ดาวฤกษ์ (ชุดที่ 1)",
+    "title": "ดาวฤกษ์ (ชุดที่ 1)",
     "amount": 30,
     "description": "บทที่ 14: ดาวฤกษ์",
     "url": "./quiz/index.html?id=ess_adv/ess_adv_m6_ch14-1",
@@ -1010,7 +1010,7 @@ export const quizList = [
   },
   {
     "id": "ess_adv/ess_adv_m6_ch16-1",
-    "title": "บทที่ 16: ทรงกลมฟ้า (ชุดที่ 1)",
+    "title": "ทรงกลมฟ้า (ชุดที่ 1)",
     "amount": 30,
     "description": "บทที่ 16: ทรงกลมฟ้า",
     "url": "./quiz/index.html?id=ess_adv/ess_adv_m6_ch16-1",
@@ -1022,7 +1022,7 @@ export const quizList = [
   },
   {
     "id": "ess_adv/ess_adv_m6_ch18-1",
-    "title": "บทที่ 18: เทคโนโลยีอวกาศและการประยุกต์ใช้ (ชุดที่ 1)",
+    "title": "เทคโนโลยีอวกาศและการประยุกต์ใช้ (ชุดที่ 1)",
     "amount": 30,
     "description": "บทที่ 18: เทคโนโลยีอวกาศและการประยุกต์ใช้ (ชุดที่ 1)",
     "url": "./quiz/index.html?id=ess_adv/ess_adv_m6_ch18-1",
@@ -1034,7 +1034,7 @@ export const quizList = [
   },
   {
     "id": "ess_adv/ess_adv_m6_ch18-2",
-    "title": "บทที่ 18: เทคโนโลยีอวกาศและการประยุกต์ใช้ (ชุดที่ 2)",
+    "title": "เทคโนโลยีอวกาศและการประยุกต์ใช้ (ชุดที่ 2)",
     "amount": 30,
     "description": "บทที่ 18: เทคโนโลยีอวกาศและการประยุกต์ใช้ (ชุดที่ 2)",
     "url": "./quiz/index.html?id=ess_adv/ess_adv_m6_ch18-2",
@@ -1046,7 +1046,7 @@ export const quizList = [
   },
   {
     "id": "ess_adv/ess_adv_m4_ch3-1",
-    "title": "บทที่ 3: ธรณีพิบัติภัย (ชุดที่ 1)",
+    "title": "ธรณีพิบัติภัย (ชุดที่ 1)",
     "amount": 30,
     "description": "บทที่ 3: ธรณีพิบัติภัย (ชุดที่ 1, เน้นการวิเคราะห์และการคำนวณ)",
     "url": "./quiz/index.html?id=ess_adv/ess_adv_m4_ch3-1",
@@ -1058,7 +1058,7 @@ export const quizList = [
   },
   {
     "id": "ess_adv/ess_adv_m6_ch15-1",
-    "title": "บทที่ 15: ระบบสุริยะ (ชุดที่ 1)",
+    "title": "ระบบสุริยะ (ชุดที่ 1)",
     "amount": 30,
     "description": "บทที่ 15: ระบบสุริยะ",
     "url": "./quiz/index.html?id=ess_adv/ess_adv_m6_ch15-1",
@@ -1070,7 +1070,7 @@ export const quizList = [
   },
   {
     "id": "ess_adv/ess_adv_m6_ch13-1",
-    "title": "บทที่ 13: เอกภพและกาแล็กซี (ชุดที่ 1)",
+    "title": "เอกภพและกาแล็กซี (ชุดที่ 1)",
     "amount": 30,
     "description": "บทที่ 13: เอกภพและกาแล็กซี",
     "url": "./quiz/index.html?id=ess_adv/ess_adv_m6_ch13-1",
