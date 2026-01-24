@@ -26,4 +26,5 @@ export default defineConfig({
   server: {
     open: true,
   },
+  base: '/Physics-and-EarthScience-Quiz/', // Essential for GitHub Pages sub-path deployment
 });
