@@ -35,6 +35,8 @@ export const BADGES = [
     { id: 'high_scorer_3', icon: '⭐', name: 'ยอดเยี่ยม', desc: 'ได้คะแนนเกิน 80% จำนวน 3 ครั้งในแบบทดสอบที่เข้าเกณฑ์', tier: 'bronze' },
     { id: 'high_scorer_5', icon: '🌟', name: 'ดาวเด่น', desc: 'ได้คะแนนเกิน 80% จำนวน 5 ครั้งในแบบทดสอบที่เข้าเกณฑ์', tier: 'silver' },
     { id: 'high_scorer_10', icon: '🌠', name: 'ดาวจรัสฟ้า', desc: 'ได้คะแนนเกิน 80% จำนวน 10 ครั้งในแบบทดสอบที่เข้าเกณฑ์', tier: 'gold' },
+    { id: 'perfect_scorer_3', icon: '🏅', name: 'แชมป์ไร้พ่าย', desc: 'ทำคะแนนเต็ม 100% ครบ 3 ครั้ง', tier: 'gold' },
+    { id: 'perfect_scorer_5', icon: '👑', name: 'ราชาสนามสอบ', desc: 'ทำคะแนนเต็ม 100% ครบ 5 ครั้ง', tier: 'gold' },
     { id: 'marathon_runner', icon: '🏃‍♂️', name: 'นักวิ่งมาราธอน', desc: 'ทำแบบทดสอบที่มี 50 ข้อขึ้นไปจนสำเร็จ', tier: 'silver' },
     { id: 'streak_3', icon: '🔥', name: 'ไฟแรง', desc: 'เข้าใช้งานต่อเนื่อง 3 วัน', tier: 'silver' },
     { id: 'streak_7', icon: '❤️‍🔥', name: 'ไฟลุกโชน', desc: 'เข้าใช้งานต่อเนื่อง 7 วัน', tier: 'gold' },
@@ -119,6 +121,7 @@ export const ACHIEVEMENTS = [
     { id: 'quiz_200', title: 'ตำนานเดินดิน', desc: 'ทำแบบทดสอบครบ 200 ครั้ง', icon: '🏛️', target: 200, type: 'total_quizzes', rewardTitle: 'ตำนานเดินดิน' },
     { id: 'high_achiever_5', title: 'ผลงานโดดเด่น', desc: 'ทำคะแนนได้ 80% ขึ้นไป 5 ครั้ง', icon: '🌟', target: 5, type: 'high_scores_80', rewardTitle: 'ผู้มีผลงานโดดเด่น' },
     { id: 'perfectionist_3', title: 'ผู้รักความสมบูรณ์แบบ', desc: 'ทำคะแนนเต็ม 100% ได้ 3 ครั้ง', icon: '🏅', target: 3, type: 'perfect_scores', rewardTitle: 'ผู้รักความสมบูรณ์แบบ' },
+    { id: 'perfectionist_5', title: 'ไร้ที่ติ', desc: 'ทำคะแนนเต็ม 100% ได้ 5 ครั้ง', icon: '👑', target: 5, type: 'perfect_scores', rewardTitle: 'ผู้ไร้ที่ติ' },
     { id: 'collector_5', title: 'นักสะสมมือใหม่', desc: 'มีไอเทมในครอบครอง 5 ชิ้น', icon: '🎒', target: 5, type: 'total_items', rewardTitle: 'นักสะสม' },
     { id: 'collector_10', title: 'นักสะสมตัวยง', desc: 'มีไอเทมในครอบครอง 10 ชิ้น', icon: '📦', target: 10, type: 'total_items', rewardTitle: 'คลังสมบัติ' },
     { id: 'avatar_5', title: 'แฟชั่นนิสต้า', desc: 'มีอวตารครอบครอง 5 แบบ', icon: '🎭', target: 5, type: 'total_avatars', rewardTitle: 'แฟชั่นนิสต้า' },
@@ -648,15 +651,10 @@ export class Gamification {
                                 // Award 6 XP for complex questions, 4 for others
                                 if (question && (question.type === 'multiple-select' || question.type === 'fill-in-number')) {
                                     calculatedXp += 6;
-                                }
-
-                                // Badge-specific XP (8/12 Rule)
-                                if (question) {
-                                    if (question.type === 'fill-in-number') {
-                                        totalCalculationXP += 12;
-                                    } else {
-                                        totalTheoryXP += 8;
-                                    }
+                                    totalCalculationXP += 6;
+                                } else {
+                                    calculatedXp += 4;
+                                    totalTheoryXP += 4;
                                 }
                             }
                         });
@@ -1998,6 +1996,11 @@ export class Gamification {
         if ((this.state.geologyXP || 0) >= 1000) unlock('geology_expert');
         if ((this.state.meteorologyXP || 0) >= 1000) unlock('meteorology_expert');
         if ((this.state.oceanographyXP || 0) >= 1000) unlock('oceanography_expert');
+
+        if ((this.state.mechanicsXP || 0) >= 1000) unlock('mechanics_expert');
+        if ((this.state.electromagnetismXP || 0) >= 1000) unlock('electromagnetism_expert');
+        if ((this.state.wavesXP || 0) >= 1000) unlock('waves_expert');
+        if ((this.state.modern_physicsXP || 0) >= 1000) unlock('modern_physics_expert');
 
         // NEW Badges
         if ((this.state.theoryXP || 0) >= 1000) unlock('theory_master');

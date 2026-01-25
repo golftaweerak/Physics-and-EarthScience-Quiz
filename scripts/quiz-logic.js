@@ -1759,17 +1759,9 @@ function showResults(isViewOnly = false) {
   // Only process Gamification if NOT in view-only mode
   if (!isViewOnly) {
     // NEW: Calculate correct answer types for quests
+    // NEW: Calculate correct answer types and XP
     let correctTheory = 0;
     let correctCalculation = 0;
-    state.userAnswers.forEach((ans, index) => {
-      if (ans && ans.isCorrect) {
-        const question = state.shuffledQuestions[index];
-        if (question) {
-          if (question.type === 'fill-in-number') correctCalculation++;
-          else correctTheory++;
-        }
-      }
-    });
 
     try {
       const game = state.game; // Use the instance from state
@@ -1777,11 +1769,12 @@ function showResults(isViewOnly = false) {
       state.userAnswers.forEach((ans, index) => {
         if (ans && ans.isCorrect) {
           const question = state.shuffledQuestions[index];
-          let points = 4; // Theory/Standard questions
+          let isComplex = question && (question.type === 'multiple-select' || question.type === 'fill-in-number');
+          let points = isComplex ? 6 : 4;
 
-          if (question && (question.type === 'multiple-select' || question.type === 'fill-in-number')) {
-            points = 6; // Calculation/Complex questions
-          }
+          if (isComplex) correctCalculation++;
+          else correctTheory++;
+
           xpEarned += points;
 
           // Calculate Topic XP
@@ -1865,8 +1858,8 @@ function showResults(isViewOnly = false) {
         percentage: percentage,
         correctTheory: correctTheory,
         correctCalculation: correctCalculation,
-        theoryXP: (correctTheory * 8) * state.xpMultiplier, // Base 8 XP for badge tracking
-        calculationXP: (correctCalculation * 12) * state.xpMultiplier, // Base 12 XP for badge tracking
+        theoryXP: (correctTheory * 4) * state.xpMultiplier, // Base 4 XP for badge tracking
+        calculationXP: (correctCalculation * 6) * state.xpMultiplier, // Base 6 XP for badge tracking
         itemsUsedCount: state.itemsUsedInQuiz || 0, // NEW: Track item usage
         quizId: state.quizId,
         questionCount: state.questionCount,
