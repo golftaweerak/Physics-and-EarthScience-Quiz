@@ -1755,6 +1755,7 @@ function showResults(isViewOnly = false) {
   let newAchievements = [];
   let physicsXP = 0;
   let earthXP = 0;
+  const topicXPs = {}; // NEW: Initialize topicXPs explicitly
 
   // Only process Gamification if NOT in view-only mode
   if (!isViewOnly) {

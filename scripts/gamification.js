@@ -1700,12 +1700,20 @@ export class Gamification {
         // Store last quiz timestamp for time-based badges
         this.state.lastQuizTime = now;
 
+        // FIX: Update last processed quiz to prevent duplicates (was missing before)
+        this.lastProcessedQuiz = { id: questStats.quizId, timestamp: now };
+
         this.updateLevel();
 
         // Check for new badges and achievements.
         // OPTIMIZATION: checkBadges no longer saves state internally.
         const newBadges = this.checkBadges(percentage, questionCount, isCustomQuiz);
         const newAchievements = this.checkAchievements();
+
+        // DEBUG: Debug Quest Update
+        console.log("Updating Quests with stats:", questStats);
+        // showToast('Debug', `QC: ${questionCount}, S.QC: ${questStats.questionCount}`, '🔧', 'blue'); 
+
         const questResult = this.updateQuest(questStats);
 
         // NEW: Save state ONCE at the end of all calculations
@@ -1790,6 +1798,9 @@ export class Gamification {
             }
 
             if (progressMade > 0) {
+                console.log(`Quest ${q.id} progress: ${q.progress} + ${progressMade} / ${q.target}`);
+                // showToast('Quest Update', `${q.desc}: +${progressMade}`, '📈', 'blue'); 
+
                 q.progress += progressMade;
                 // ตรวจสอบว่าทำสำเร็จหรือไม่
                 if (q.progress >= q.target) {
@@ -1810,6 +1821,8 @@ export class Gamification {
                     // เก็บประวัติล่าสุด 50 รายการ
                     if (this.state.questHistory.length > 50) this.state.questHistory.pop();
                 }
+            } else {
+                // console.log(`Quest ${q.id} NO progress. QC=${stats.questionCount}, Type=${q.type}`);
             }
         });
 
