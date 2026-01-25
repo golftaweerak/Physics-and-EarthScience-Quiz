@@ -2020,6 +2020,15 @@ async function renderRadarChart(game, allProgress = null, mode = 'overall') {
             console.log(`Recalculating radar chart data for mode: ${mode}`);
             if (!allProgress) allProgress = await getDetailedProgressForAllQuizzes();
 
+            // --- DATA ISOLATION LOGIC ---
+            // Prevent mixing of Basic and Advanced Earth Science data
+            if (mode === 'earth_basic') {
+                allProgress = allProgress.filter(p => p.id && p.id.startsWith('ess_basic'));
+            } else if (mode === 'earth_adv') {
+                allProgress = allProgress.filter(p => p.id && p.id.startsWith('ess_adv'));
+            }
+            // -----------------------------
+
             const newStats = {};
 
             // Define Groups based on Mode
@@ -2104,8 +2113,21 @@ async function renderRadarChart(game, allProgress = null, mode = 'overall') {
             }));
         }
 
-        // 2. Calculate Percentages 
-        const labels = Object.values(stats).map(s => s.label);
+        // 2. Calculate Percentages
+        // Calculate Stats for each Group
+        // ... (existing stat calculation logic) ...
+
+        // --- TOPIC LABEL MAPPING ---
+        const TOPIC_LABEL_MAPPING = {
+            "เทคโนโลยีอวกาศและการประยุกต์ใช้": "เทคโนโลยีอวกาศ",
+            "การหมุนเวียนของระบบลมโลก": "การหมุนเวียนลม",
+            "เอกภพและกาแล็กซี": "เอกภพ",
+            "การแปรสัณฐานของแผ่นธรณี": "ธรณีแปรสัณฐาน",
+            "ปรากฏการณ์ของดาวเคราะห์": "ปรากฏการณ์ดาวเคราะห์",
+            "การหมุนเวียนของน้ำในมหาสมุทร": "การหมุนเวียนน้ำ"
+        };
+
+        const labels = Object.keys(stats).map(key => TOPIC_LABEL_MAPPING[key] || key);
         const dataPoints = Object.values(stats).map(s => {
             return s.total > 0 ? (s.correct / s.total) * 100 : 0;
         });
@@ -2508,6 +2530,36 @@ async function renderProficiencyHistoryChart(game, allProgress = null, range = '
         if (loader) loader.classList.add('hidden');
         return false;
     }
+    // Event listener for tab switching
+    setupTabs(game);
+
+    // NEW: Listen for data sync events to update charts automatically
+    window.addEventListener('auth-synced', () => {
+        console.log("Data synced event received. Refreshing charts...");
+
+        // Clear caches to force re-calculation
+        if (game.authManager) {
+            // Re-fetch detailed stats if needed (usually handled internally by stats.js)
+        }
+
+        // Re-render Radar Chart
+        if (typeof renderRadarChart === 'function') {
+            renderRadarChart(game);
+        }
+
+        // Re-render active tab content if necessary
+        const activeTab = document.querySelector('.primary-tab-btn.active');
+        if (activeTab) {
+            const target = activeTab.dataset.tabTarget;
+            if (target === 'analysis' && typeof renderAnalysisTab === 'function') {
+                // Force re-render of analysis
+                chartsInitialized.analysis = false;
+                renderAnalysisTab(game);
+            } else if (target === 'history' && typeof renderHistoryTab === 'function') {
+                renderHistoryTab(game);
+            }
+        }
+    });
 
     // Check if Chart.js is loaded
     if (typeof Chart === 'undefined') {
