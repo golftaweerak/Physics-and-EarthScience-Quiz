@@ -1800,6 +1800,11 @@ function showResults(isViewOnly = false) {
             if (keywords.some(k => subCatStr.includes(k.toLowerCase()))) {
               topicXPs[groupDef.field] = (topicXPs[groupDef.field] || 0) + points;
 
+              // NEW: Count questions per group for granular quest tracking
+              // Only count if this question actually contributes to this group
+              if (!topicXPs.groupCounts) topicXPs.groupCounts = {};
+              topicXPs.groupCounts[groupKey] = (topicXPs.groupCounts[groupKey] || 0) + 1;
+
               // Check track from proficiency group
               if (groupDef.track === 'physics') isPhysics = true;
               if (groupDef.track === 'earth') isEarth = true;
@@ -1864,6 +1869,7 @@ function showResults(isViewOnly = false) {
         itemsUsedCount: state.itemsUsedInQuiz || 0, // NEW: Track item usage
         quizId: state.quizId,
         questionCount: totalQuestions,
+        groupCounts: topicXPs.groupCounts || {}, // NEW: Pass detailed group counts
         isCustomQuiz: state.isCustomQuiz
       };
 

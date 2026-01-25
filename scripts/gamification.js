@@ -1772,6 +1772,10 @@ export class Gamification {
             } else if (q.type === 'questions_category') {
                 if (this.checkCategoryMatch(stats.category, q.category, stats.quizId)) {
                     progressMade = stats.totalQuestions || 0;
+                } else if (stats.groupCounts && stats.groupCounts[q.category]) {
+                    // NEW: Fallback to granular counts if the main category doesn't match
+                    // This supports mixed quizzes (e.g. Earth Science quiz with Astronomy questions)
+                    progressMade = stats.groupCounts[q.category];
                 }
             } else if (q.type === 'high_score') {
                 if (isEligibleForStats) {

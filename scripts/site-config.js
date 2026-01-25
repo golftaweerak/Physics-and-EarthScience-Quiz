@@ -20,7 +20,7 @@ export const SiteConfig = {
       name: "EarthScience",
       label: "วิทย์โลก & ดาราศาสตร์",
       track: "earth",
-      keywords: ['earth', 'โลก', 'วิทย์โลก', 'geology', 'ธรณี', 'meteorology', 'อุตุนิยมวิทยา', 'oceanography', 'สมุทรศาสตร์', 'ess_', 'astro', 'astronomy', 'space', 'universe']
+      keywords: ['earth', 'โลก', 'วิทย์โลก', 'geology', 'ธรณี', 'meteorology', 'อุตุนิยมวิทยา', 'oceanography', 'สมุทรศาสตร์', 'ess_', 'astro', 'astronomy', 'space', 'universe', 'ess_adv']
     }
   ],
 

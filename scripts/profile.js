@@ -834,6 +834,48 @@ function setupLeaderboardSystem(game) {
                 }
             }
 
+            // --- RANK CHANGE LOGIC ---
+            const getDailyRankAnchor = (leaderboardType, currentRank) => {
+                try {
+                    const today = new Date().toDateString();
+                    const key = `leaderboard_anchor_${leaderboardType}_${currentUserId}`;
+                    const stored = localStorage.getItem(key);
+
+                    if (stored) {
+                        const data = JSON.parse(stored);
+                        if (data.date === today) {
+                            return data.rank;
+                        }
+                    }
+
+                    // New day or no anchor, set current rank as anchor
+                    localStorage.setItem(key, JSON.stringify({ date: today, rank: currentRank }));
+                    return currentRank;
+                } catch (e) {
+                    console.warn("Rank anchor error:", e);
+                    return currentRank;
+                }
+            };
+
+            // Calculate anchor for the current user
+            let rankChangeHtml = '';
+            if (userInTop10 || userRankData) {
+                const myCurrentRank = userInTop10
+                    ? (leaderboard.findIndex(u => u.id === currentUserId) + 1)
+                    : userRankData.rank;
+
+                const anchorRank = getDailyRankAnchor(type, myCurrentRank);
+                const delta = anchorRank - myCurrentRank; // Positive = Improved (e.g. 10 -> 5, delta = 5)
+
+                if (delta > 0) {
+                    rankChangeHtml = `<span class="text-[10px] sm:text-xs font-bold text-green-500 flex items-center gap-0.5" title="อันดับขึ้น ${delta} อันดับจากเมื่อเช้า">▲ ${delta}</span>`;
+                } else if (delta < 0) {
+                    rankChangeHtml = `<span class="text-[10px] sm:text-xs font-bold text-red-500 flex items-center gap-0.5" title="อันดับลง ${Math.abs(delta)} อันดับจากเมื่อเช้า">▼ ${Math.abs(delta)}</span>`;
+                } else {
+                    rankChangeHtml = `<span class="text-[10px] sm:text-xs font-bold text-gray-300 dark:text-gray-600" title="อันดับคงที่">-</span>`;
+                }
+            }
+
             const renderRow = (user, rank, isMe) => {
 
                 let rankDisplay = `<span class="font-bold text-gray-500 w-6 text-center text-sm sm:text-base">${rank}</span>`;
@@ -890,8 +932,9 @@ function setupLeaderboardSystem(game) {
                             ${avatarHtml}
                         </div>
                         <div class="flex-grow min-w-0 flex flex-col justify-center">
-                            <div class="font-bold text-sm sm:text-base text-gray-800 dark:text-gray-200 truncate">
-                                ${user.displayName || 'ผู้เรียน'} ${isMe ? '<span class="text-xs text-blue-600 dark:text-blue-400 ml-1">(คุณ)</span>' : ''}
+                            <div class="font-bold text-sm sm:text-base text-gray-800 dark:text-gray-200 truncate flex items-center gap-2">
+                                ${user.displayName || 'ผู้เรียน'} 
+                                ${isMe ? `<span class="text-xs text-blue-600 dark:text-blue-400 font-bold bg-blue-100 dark:bg-blue-900/40 px-1.5 py-0.5 rounded-md">(คุณ)</span> ${rankChangeHtml}` : ''}
                             </div>
                             <div class="text-xs text-gray-500 dark:text-gray-400 flex flex-wrap items-center gap-x-1.5 gap-y-0.5 leading-tight">
                                 <span class="text-blue-600 dark:text-blue-400 font-medium whitespace-nowrap">${rankTitle}</span>
