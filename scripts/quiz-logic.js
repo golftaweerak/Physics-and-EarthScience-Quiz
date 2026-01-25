@@ -1862,11 +1862,11 @@ function showResults(isViewOnly = false) {
         calculationXP: (correctCalculation * 6) * state.xpMultiplier, // Base 6 XP for badge tracking
         itemsUsedCount: state.itemsUsedInQuiz || 0, // NEW: Track item usage
         quizId: state.quizId,
-        questionCount: state.questionCount,
+        questionCount: totalQuestions,
         isCustomQuiz: state.isCustomQuiz
       };
 
-      const result = game.submitQuizResult(xpEarned, percentage, state.questionCount, state.isCustomQuiz, topicXPs, questStats);
+      const result = game.submitQuizResult(xpEarned, percentage, totalQuestions, state.isCustomQuiz, topicXPs, questStats);
       levelResult = { overall: result.overall, physics: result.physics, earth: result.earth };
       newBadges = result.newBadges || [];
       newAchievements = result.newAchievements || [];
