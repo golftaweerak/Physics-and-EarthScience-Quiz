@@ -19,9 +19,11 @@ export default defineConfig({
         profile: resolve(__dirname, 'profile.html'),
         quiz_generator: resolve(__dirname, 'quiz-generator.html'),
         scores: resolve(__dirname, 'scores.html'),
-
         summary: resolve(__dirname, 'summary.html'),
         quiz: resolve(__dirname, 'quiz/index.html'),
+        landing: resolve(__dirname, 'landing.html'),
+        simulations: resolve(__dirname, 'simulations.html'),
+        simulation_viewer: resolve(__dirname, 'simulation-viewer.html'),
       },
     },
     outDir: 'dist',

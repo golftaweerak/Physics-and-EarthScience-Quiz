@@ -181,8 +181,9 @@ class AuthManagerInternal {
             const path = window.location.pathname;
             const isHomePage = (path.endsWith('/') || path.endsWith('index.html')) && !path.includes('/quiz/');
 
+            // NEW: If on landing page, just reload to update the UI without redirecting to profile
             if (isHomePage) {
-                window.location.href = './profile.html';
+                window.location.reload();
             } else {
                 window.location.reload();
             }

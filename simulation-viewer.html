@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulation Viewer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;700&family=Sarabun:wght@400;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="./styles/input.css">
+  <link rel="icon" href="./assets/icons/exam.png" type="image/png">
+
+  <!-- KaTeX for Math Rendering -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+</head>
+
+<body class="bg-slate-50 dark:bg-slate-950 flex flex-col min-h-screen font-sarabun text-slate-900 dark:text-slate-100">
+
+  <!-- Sticky Header Placeholder -->
+  <div id="main_header-placeholder" class="fixed top-0 left-0 right-0 z-50"></div>
+
+  <div class="container mx-auto px-4 pt-24 pb-12 flex-grow flex flex-col">
+    <!-- Main Simulation Container -->
+    <main id="sim-container"
+      class="flex-grow bg-white dark:bg-slate-900/50 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden p-4 md:p-8">
+      <!-- Loading State -->
+      <div id="sim-loading" class="flex flex-col items-center justify-center h-full min-h-[50vh] gap-4">
+        <div class="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+        <p class="font-kanit font-bold text-slate-500">กำลังโหลด Simulation...</p>
+      </div>
+    </main>
+  </div>
+
+  <!-- Footer Placeholder -->
+  <div id="footer-placeholder"></div>
+  <div id="modals-placeholder"></div>
+
+  <!-- app-loader will handle initial setup -->
+  <script src="./scripts/app-loader.js" type="module"></script>
+
+  <!-- Simulation Dispatcher Logic -->
+  <script type="module">
+    import { SimulationLoader } from './scripts/simulation-loader.js';
+
+    async function loadSimulation() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const simId = urlParams.get('id');
+      const container = document.getElementById('sim-container');
+
+      if (!simId) {
+        container.innerHTML = `<div class="p-8 text-center"><p class="text-red-500 font-bold">ไม่พบรหัส Simulation</p><a href="./index.html" class="mt-4 inline-block text-blue-600">กลับหน้าหลัก</a></div>`;
+        return;
+      }
+
+      try {
+        const SimulationModule = await SimulationLoader.load(simId);
+        const sim = new SimulationModule({ containerId: 'sim-container' });
+        await sim.init();
+
+      } catch (err) {
+        console.error(err);
+        container.innerHTML = `<div class="p-8 text-center text-red-500 font-bold">เกิดข้อผิดพลาดในการโหลด Simulation: ${err.message}</div>`;
+      }
+    }
+
+    // Wait for app-loader or common-init if needed, but here we just wait for DOM
+    window.addEventListener('load', loadSimulation);
+  </script>
+</body>
+
+</html>

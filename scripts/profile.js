@@ -1742,6 +1742,14 @@ function renderAchievements(game) {
             currentProgress = game.state.highScores80 || 0;
         } else if (ach.type === 'perfect_scores') {
             currentProgress = game.state.perfectScores || 0;
+        } else if (ach.type === 'theory_xp') {
+            currentProgress = game.state.theoryXP || 0;
+        } else if (ach.type === 'calculation_xp') {
+            currentProgress = game.state.calculationXP || 0;
+        } else if (ach.type === 'item_usage') {
+            currentProgress = game.state.itemUsageCount || 0;
+        } else if (ach.type === 'total_xp') {
+            currentProgress = game.state.xp || 0;
         }
 
         const percent = Math.min(100, Math.max(0, (currentProgress / ach.target) * 100));
@@ -1846,6 +1854,10 @@ function setupAchievementInteractions(game) {
                     }).length;
                 } else if (ach.type === 'high_scores_80') currentProgress = game.state.highScores80 || 0;
                 else if (ach.type === 'perfect_scores') currentProgress = game.state.perfectScores || 0;
+                else if (ach.type === 'theory_xp') currentProgress = game.state.theoryXP || 0;
+                else if (ach.type === 'calculation_xp') currentProgress = game.state.calculationXP || 0;
+                else if (ach.type === 'item_usage') currentProgress = game.state.itemUsageCount || 0;
+                else if (ach.type === 'total_xp') currentProgress = game.state.xp || 0;
 
                 const percent = Math.min(100, Math.max(0, (currentProgress / ach.target) * 100));
 

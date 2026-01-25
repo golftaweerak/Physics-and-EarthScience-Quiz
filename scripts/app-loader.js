@@ -130,6 +130,18 @@ async function main() {
         // 5. Page-Specific Logic
         console.log("🚀 App Loader: Loading page scripts...");
 
+        if (document.getElementById('landing-page-container')) {
+            try {
+                console.log("🚀 App Loader: Importing landing-page.js...");
+                const landingMod = await import('./landing-page.js');
+                if (landingMod && typeof landingMod.initializeLandingPage === 'function') {
+                    await landingMod.initializeLandingPage();
+                }
+            } catch (err) {
+                console.error("❌ App Loader: Failed to initialize landing page logic:", err);
+            }
+        }
+
         if (document.getElementById('quiz-categories-container')) {
             try {
                 // Dynamic import for main page logic
