@@ -74,8 +74,14 @@ function groupQuizzesForCategory(quizzes, categoryKey) {
     const regularQuizzes = quizzes.filter(quiz => quiz.subCategory !== specialCategoryName);
 
     // 2. Group the regular quizzes based on the syllabus structure.
+    const matchedQuizIds = new Set();
     const chapterGroups = chapters.map(chapter => {
-      const chapterQuizzes = regularQuizzes.filter(quiz => quiz.subCategory === chapter.title);
+      const chapterQuizzes = regularQuizzes.filter(quiz => {
+        const isMatch = quiz.subCategory === chapter.title;
+        if (isMatch) matchedQuizIds.add(quiz.id);
+        return isMatch;
+      });
+
       if (chapterQuizzes.length === 0) return null;
 
       let displayTitle = chapter.title;
@@ -99,10 +105,26 @@ function groupQuizzesForCategory(quizzes, categoryKey) {
       };
     }).filter(Boolean);
 
+    // 2.5 Group unmatched quizzes
+    const unmatchedQuizzes = regularQuizzes.filter(quiz => !matchedQuizIds.has(quiz.id));
+    if (unmatchedQuizzes.length > 0) {
+      // Sort unmatched quizzes by title/id if possible
+      unmatchedQuizzes.sort((a, b) => {
+        return a.title.localeCompare(b.title, 'th', { numeric: true });
+      });
+
+      chapterGroups.push({
+        title: "ชุดข้อสอบทั่วไป",
+        quizzes: unmatchedQuizzes,
+        level: 1,
+        shortTitle: "ทั่วไป"
+      });
+    }
+
     // 3. Create a separate group for the final review quizzes if they exist.
     let specialGroup = null;
     if (specialQuizzes.length > 0) {
-      // Custom sorting logic for review quizzes to order them by term and type
+      // ... (rest of sorting logic)
       const getSortKey = (quiz) => {
         const title = quiz.title;
         let term = 99;
@@ -453,33 +475,43 @@ export function initializePage() {
       const hasSubCategories = ['AstronomyPOSN', 'ChallengePOSN', 'AstronomyReview', 'PhysicsM4', 'PhysicsM5', 'PhysicsM6', 'EarthSpaceScienceBasic', 'EarthSpaceScienceAdvance'].includes(categoryKey);
 
       if (hasSubCategories) {
-        const subCategoryContainer = document.createElement('div');
-        subCategoryContainer.className = 'p-2 md:p-4 space-y-2';
-
         const groupedData = groupQuizzesForCategory(quizzes, categoryKey);
 
-        groupedData.forEach(group => {
-          if (group.isNested) {
-            // Create a container accordion for nested groups
-            const containerAccordion = createSubCategoryAccordion({ title: group.title, quizzes: [], level: group.level, shortTitle: group.shortTitle }, colorName);
-            const contentWrapper = containerAccordion.querySelector('.inner-content-wrapper');
-            contentWrapper.innerHTML = ''; // Clear default grid
-            contentWrapper.classList.remove('quiz-grid-container');
-            contentWrapper.classList.add('space-y-2', 'p-2');
+        // If there's only one sub-group and it's not nested, show quizzes directly to avoid redundant accordions
+        if (groupedData.length === 1 && !groupedData[0].isNested) {
+          const quizGrid = document.createElement("div");
+          quizGrid.className = "quiz-grid-container p-4 md:p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2";
+          groupedData[0].quizzes.forEach((quiz, index) => {
+            const card = createQuizCard(quiz, index);
+            quizGrid.appendChild(card);
+          });
+          innerContentWrapper.appendChild(quizGrid);
+        } else {
+          const subCategoryContainer = document.createElement('div');
+          subCategoryContainer.className = 'p-2 md:p-4 space-y-2';
 
-            group.subGroups.forEach(subGroup => {
-              const nestedAccordion = createSubCategoryAccordion(subGroup, colorName, categoryKey);
-              contentWrapper.appendChild(nestedAccordion);
-            });
-            subCategoryContainer.appendChild(containerAccordion);
-          } else {
-            // Create a standard sub-category accordion
-            const accordion = createSubCategoryAccordion(group, colorName, categoryKey);
-            subCategoryContainer.appendChild(accordion);
-          }
-        });
+          groupedData.forEach(group => {
+            if (group.isNested) {
+              // Create a container accordion for nested groups
+              const containerAccordion = createSubCategoryAccordion({ title: group.title, quizzes: [], level: group.level, shortTitle: group.shortTitle }, colorName);
+              const contentWrapper = containerAccordion.querySelector('.inner-content-wrapper');
+              contentWrapper.innerHTML = ''; // Clear default grid
+              contentWrapper.classList.remove('quiz-grid-container');
+              contentWrapper.classList.add('space-y-2', 'p-2');
 
-        innerContentWrapper.appendChild(subCategoryContainer);
+              group.subGroups.forEach(subGroup => {
+                const nestedAccordion = createSubCategoryAccordion(subGroup, colorName, categoryKey);
+                contentWrapper.appendChild(nestedAccordion);
+              });
+              subCategoryContainer.appendChild(containerAccordion);
+            } else {
+              // Create a standard sub-category accordion
+              const accordion = createSubCategoryAccordion(group, colorName, categoryKey);
+              subCategoryContainer.appendChild(accordion);
+            }
+          });
+          innerContentWrapper.appendChild(subCategoryContainer);
+        }
       } else {
         const quizGrid = document.createElement("div");
         quizGrid.className = "quiz-grid-container p-4 md:p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2";
@@ -695,56 +727,176 @@ export function initializePage() {
         quizListHeader.classList.remove('hidden');
       }
     }
-    // 1. Group quizzes by category
-    const groupedQuizzes = quizList.reduce((acc, quiz) => {
-      const category = quiz.category || "Uncategorized";
-      if (!acc[category]) {
-        acc[category] = [];
-      }
-      acc[category].push(quiz);
-      return acc;
-    }, {});
+    // --- TRACK SWITCHER & CATEGORY RENDERING ---
 
-    // Sort quizzes within each category using natural sort for consistent ordering.
-    // This ensures that "Quiz 2" comes before "Quiz 10".
-    Object.keys(groupedQuizzes).forEach(categoryKey => {
-      groupedQuizzes[categoryKey].sort((a, b) => a.title.localeCompare(b.title, 'th', { numeric: true, sensitivity: 'base' }));
-    });
-
-    // 2. Sort categories based on the 'order' property for consistent display
-    const sortedCategories = Object.keys(groupedQuizzes).sort((a, b) => {
-      // --- Custom Sort Logic: Force 'AstronomyReview' to be first ---
-      if (a === 'AstronomyReview' && b !== 'AstronomyReview') return -1;
-      if (a !== 'AstronomyReview' && b === 'AstronomyReview') return 1;
-
-      // --- Default Sort Logic: Use the 'order' property from data-manager ---
-      const orderA = (categoryDetails[a] && categoryDetails[a].order) || 99;
-      const orderB = (categoryDetails[b] && categoryDetails[b].order) || 99;
-      return orderA - orderB;
-    });
-
-    // 3. Create and append category sections using a DocumentFragment for performance
     const container = document.getElementById("quiz-categories-container");
-    if (container) {
-      // Proactively adjust the spacing between sections for a more compact view.
-      // This assumes the container uses Tailwind's space-y utility.
-      container.classList.remove('space-y-6', 'space-y-8'); // Remove potentially larger spacing
-      container.classList.add('space-y-4'); // Apply a smaller, consistent gap
+    let currentlyOpenSectionToggle = null;
+    let currentTrack = localStorage.getItem('selectedTrack') || 'high_school';
 
-      const fragment = document.createDocumentFragment();
-      sortedCategories.forEach((categoryKey) => {
-        console.log(`🚀 main.js: Creating section for category: ${categoryKey}`);
-        const quizzes = groupedQuizzes[categoryKey];
-        const section = createCategorySection(categoryKey, quizzes);
-        if (section) {
-          fragment.appendChild(section);
-        }
-      });
-      container.innerHTML = ""; // Clear existing content
-      container.appendChild(fragment);
-    } else {
-      console.error("Category container not found!");
+    const TRACK_MAPPING = {
+      'high_school': [
+        'PhysicsM4', 'PhysicsM5', 'PhysicsM6',
+        'EarthSpaceScienceBasic', 'EarthSpaceScienceAdvance'
+      ],
+      'posn': [
+        'PosnEarthScience',
+        'PosnAstroJunior',
+        'PosnAstroSenior',
+        'AstronomyReview',
+        'ChallengePOSN'
+      ]
+    };
+
+    function updateTrackButtonStyles() {
+      const btnHighSchool = document.getElementById('track-btn-high-school');
+      const btnPosn = document.getElementById('track-btn-posn');
+
+      if (!btnHighSchool || !btnPosn) return;
+
+      const activeClassesHS = ['bg-white', 'text-blue-700', 'shadow-sm', 'border-blue-200', 'dark:bg-gray-700', 'dark:text-blue-300', 'dark:border-blue-800'];
+      const inactiveClasses = ['text-gray-500', 'hover:bg-gray-100', 'border-transparent', 'dark:text-gray-400', 'dark:hover:bg-gray-800'];
+
+      const activeClassesPOSN = ['bg-white', 'text-purple-700', 'shadow-sm', 'border-purple-200', 'dark:bg-gray-700', 'dark:text-purple-300', 'dark:border-purple-800'];
+
+      // Reset
+      btnHighSchool.className = "flex-1 flex items-center justify-center gap-2 py-2 px-4 text-sm font-bold rounded-lg border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1 dark:focus:ring-offset-gray-900";
+      btnPosn.className = "flex-1 flex items-center justify-center gap-2 py-2 px-4 text-sm font-bold rounded-lg border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1 dark:focus:ring-offset-gray-900";
+
+      if (currentTrack === 'high_school') {
+        btnHighSchool.classList.add(...activeClassesHS, 'focus:ring-blue-500');
+        btnPosn.classList.add(...inactiveClasses, 'focus:ring-gray-500');
+      } else {
+        btnPosn.classList.add(...activeClassesPOSN, 'focus:ring-purple-500');
+        btnHighSchool.classList.add(...inactiveClasses, 'focus:ring-gray-500');
+      }
     }
+
+    function renderTrackSwitcher() {
+      const switcherContainer = document.getElementById('track-switcher-container');
+      if (!switcherContainer) return;
+
+      switcherContainer.innerHTML = `
+        <div class="flex p-1 bg-gray-100 dark:bg-gray-800/60 rounded-xl border border-gray-200 dark:border-gray-700 max-w-md mx-auto">
+           <button 
+              id="track-btn-high-school"
+              onclick="window.switchTrack('high_school')"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z" />
+              </svg>
+              ม.ปลาย
+           </button>
+           <button 
+              id="track-btn-posn"
+              onclick="window.switchTrack('posn')"
+           >
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clip-rule="evenodd" />
+              </svg>
+              สอวน.
+           </button>
+        </div>
+      `;
+      updateTrackButtonStyles();
+    }
+
+    // Expose to window
+    window.switchTrack = (track) => {
+      if (currentTrack === track) return;
+      currentTrack = track;
+      localStorage.setItem('selectedTrack', track);
+      updateTrackButtonStyles();
+      renderCategories();
+    };
+
+    function renderCategories() {
+      const container = document.getElementById("quiz-categories-container");
+      if (!container) return;
+
+      // Filter and Sort Logic
+      const groupedQuizzes = quizList.reduce((acc, quiz) => {
+        const category = quiz.category || "Uncategorized";
+        if (!acc[category]) acc[category] = [];
+        acc[category].push(quiz);
+        return acc;
+      }, {});
+
+      Object.keys(groupedQuizzes).forEach(cat => {
+        groupedQuizzes[cat].sort((a, b) => a.title.localeCompare(b.title, 'th', { numeric: true, sensitivity: 'base' }));
+      });
+
+      const targetCategories = TRACK_MAPPING[currentTrack];
+
+      // Safety: ensure undefined categories don't break logic
+      const availableCategories = Object.keys(groupedQuizzes);
+      const filteredCategories = availableCategories.filter(cat =>
+        targetCategories && targetCategories.includes(cat)
+      );
+
+      const sortedCategories = filteredCategories.sort((a, b) => {
+        if (a === 'AstronomyReview' && b !== 'AstronomyReview') return -1;
+        if (a !== 'AstronomyReview' && b === 'AstronomyReview') return 1;
+        const orderA = (categoryDetails[a] && categoryDetails[a].order) || 99;
+        const orderB = (categoryDetails[b] && categoryDetails[b].order) || 99;
+        return orderA - orderB;
+      });
+
+      // Render
+      const fragment = document.createDocumentFragment();
+
+      // Add Track Switcher Button Row (if it was inside container, but we moved it out. Placeholder logic remains)
+
+      if (sortedCategories.length === 0) {
+        // Only show empty state if we really have no content for this track
+        // (Maybe allow showing "All" fallback?)
+
+        container.innerHTML = `
+            <div class="text-center py-16 text-gray-400 dark:text-gray-500">
+                <svg class="w-16 h-16 mx-auto mb-4 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <p>ไม่พบรายการแบบฝึกหัดในหมวดนี้</p>
+                <p class="text-sm mt-2">โปรดลองเลือกหมวดอื่น</p>
+            </div>
+        `;
+      } else {
+        sortedCategories.forEach((categoryKey) => {
+          const quizzes = groupedQuizzes[categoryKey];
+          const section = createCategorySection(categoryKey, quizzes);
+          if (section) fragment.appendChild(section);
+        });
+        container.innerHTML = "";
+        container.appendChild(fragment);
+      }
+
+      // Updates Listeners
+      setTimeout(() => {
+        const sectionToggles = getSectionToggles();
+
+        // Remove old listeners? No easy way to remove anonymous listeners.
+        // But recreating elements (innerHTML = "") clears old listeners on those elements.
+        // So we just attach new ones.
+
+        sectionToggles.forEach((toggle) => {
+          toggle.addEventListener("click", () => {
+            const isThisTheCurrentlyOpen = currentlyOpenSectionToggle === toggle;
+            if (isThisTheCurrentlyOpen) {
+              toggleAccordion(toggle, "close");
+              currentlyOpenSectionToggle = null;
+            } else {
+              if (currentlyOpenSectionToggle) toggleAccordion(currentlyOpenSectionToggle, "close");
+              toggleAccordion(toggle, "open");
+              currentlyOpenSectionToggle = toggle;
+            }
+            updateFloatingNav(currentlyOpenSectionToggle, sectionToggles);
+          });
+        });
+
+        updateFloatingNav(null, sectionToggles); // Initial nav update
+      }, 50);
+    }
+
+    // --- INITIALIZE UI ---
+    renderTrackSwitcher();
+    renderCategories();
 
     // Create and append the floating navigation container
     const floatingNavContainer = document.createElement('div');
@@ -752,36 +904,6 @@ export function initializePage() {
     floatingNavContainer.className = 'fixed bottom-4 left-1/2 p-2 bg-white/60 dark:bg-gray-900/60 backdrop-blur-sm shadow-xl rounded-t-xl transform -translate-x-1/2 opacity-0 pointer-events-none translate-y-full transition-all duration-300 z-40 border border-gray-200 dark:border-gray-700 max-w-[95vw] overflow-x-auto overflow-y-hidden modern-scrollbar';
     floatingNavContainer.innerHTML = `<div id="floating-nav-buttons" class="flex flex-row flex-nowrap items-center gap-2"></div>`;
     document.body.appendChild(floatingNavContainer);
-
-    // 4. Attach listeners and set initial state for accordions
-    const sectionToggles = getSectionToggles();
-    let currentlyOpenSectionToggle = null;
-
-    // Refactored accordion logic for clarity and robustness.
-    // This ensures that state is managed correctly regardless of how the toggle is triggered.
-    sectionToggles.forEach((toggle) => {
-      toggle.addEventListener("click", () => {
-        const isThisTheCurrentlyOpen = currentlyOpenSectionToggle === toggle;
-
-        // Case 1: The clicked toggle is the one that's already open, so we close it.
-        if (isThisTheCurrentlyOpen) {
-          toggleAccordion(toggle, "close");
-          currentlyOpenSectionToggle = null;
-        } else {
-          // Case 2: A new section is being opened.
-          // First, close the old one if it exists.
-          if (currentlyOpenSectionToggle) {
-            toggleAccordion(currentlyOpenSectionToggle, "close");
-          }
-          // Then, open the new one and update the state.
-          toggleAccordion(toggle, "open");
-          currentlyOpenSectionToggle = toggle;
-        }
-
-        // After all state changes, update the floating nav based on the new state.
-        updateFloatingNav(currentlyOpenSectionToggle, sectionToggles);
-      });
-    });
 
     /**
      * Handles clicks on navigation links (e.g., in the header) that point to category sections.
@@ -816,18 +938,6 @@ export function initializePage() {
       }
     }
     document.addEventListener('click', handleCategoryNavigation);
-
-    // Display a message if no quizzes were found after processing
-    // This check should happen AFTER attempting to append content to the container.
-    // Check if the container actually has children, not the fragment (which might be empty or out of scope).
-    if (container && container.children.length === 0) {
-      container.innerHTML = `
-        <div class="text-center py-16 text-gray-500 dark:text-gray-400">
-          <p class="text-lg font-bold mb-2">ไม่พบแบบทดสอบ</p>
-          <p>ดูเหมือนจะยังไม่มีแบบทดสอบให้แสดงในขณะนี้ โปรดลองตรวจสอบภายหลัง</p>
-        </div>
-      `;
-    }
 
     /**
      * Handles the logic when a reset progress button is clicked.

@@ -9,6 +9,20 @@ export const SiteConfig = {
   // keywords: คำค้นหาที่ใช้ระบุว่าข้อสอบชุดนี้ควรถูกนับคะแนนเข้าสายวิชาใด (ใช้ใน gamification.js)
   categories: [
     {
+      id: "posnEarthTrackXP",
+      name: "POSNEarthScience",
+      label: "สอวน. วิทย์โลก",
+      track: "posn_earth",
+      keywords: ['PosnEarthScience', 'ChallengeEarth', 'POSN_Earth', 'POSN_Geology', 'POSN_Meteorology', 'POSN_Oceanography', 'posn_earth']
+    },
+    {
+      id: "posnAstroTrackXP",
+      name: "POSNAstronomy",
+      label: "สอวน. ดาราศาสตร์",
+      track: "posn_astro",
+      keywords: ['PosnAstroJunior', 'PosnAstroSenior', 'AstronomyReview', 'ChallengeAstro', 'POSN_Astronomy', 'junior', 'senior', 'posn_astro']
+    },
+    {
       id: "physicsTrackXP",
       name: "Physics",
       label: "ฟิสิกส์",
@@ -20,7 +34,7 @@ export const SiteConfig = {
       name: "EarthScience",
       label: "วิทย์โลก & ดาราศาสตร์",
       track: "earth",
-      keywords: ['earth', 'โลก', 'วิทย์โลก', 'geology', 'ธรณี', 'meteorology', 'อุตุนิยมวิทยา', 'oceanography', 'สมุทรศาสตร์', 'ess_', 'astro', 'astronomy', 'space', 'universe', 'ess_adv']
+      keywords: ['earth', 'โลก', 'วิทย์โลก', 'geology', 'ธรณี', 'meteorology', 'อุตุนิยมวิทยา', 'oceanography', 'สมุทรศาสตร์', 'ess_', 'astro', 'astronomy', 'space', 'universe', 'ess_adv', 'ES']
     }
   ],
 
@@ -73,6 +87,22 @@ export const SiteConfig = {
       "ผู้ควบคุมแผ่นเปลือกโลก", "ผู้บัญชาการพายุ", "ผู้พิทักษ์ทรัพยากร",
       "ผู้สร้างภูเขา", "จ้าวแห่งวัฏจักร", "ผู้ไขปริศนาบรรพกาล",
       "ผู้ติดตามดวงดาว", "เทพเจ้าแห่งผืนดิน", "ผู้สร้างโลก", "จิตวิญญาณแห่งไกอา"
+    ],
+    posn_earth: [
+      "ผู้สังเกตการณ์ธรณี", "นักสำรวจธรณีภาค", "ผู้ฝึกฝนอุตุนิยมวิทยา",
+      "นักวิเคราะห์แผนที่อากาศ", "ผู้เชี่ยวชาญหินและแร่", "นักสมุทรศาสตร์รุ่นเยาว์",
+      "ผู้พิชิตธรณีพิบัติภัย", "จ้าวแห่งวัฏจักรน้ำ", "ผู้หยั่งรู้บรรยากาศ", "ปรมาจารย์ธรณีฟิสิกส์",
+      "ผู้เชี่ยวชาญธรณีโครงสร้าง", "ผู้พยากรณ์ลมฟ้าอากาศ", "ผู้ไขความลับมหาสมุทร",
+      "ผู้พิทักษ์โลก", "จ้าวแห่งธรณีวิทยา", "ผู้รอบรู้อุตุนิยมวิทยา",
+      "ผู้หยั่งรู้สมุทรศาสตร์", "เทพเจ้าแห่งธรณี", "ผู้สร้างสรรค์โลกใหม่", "ตำนานแห่งวิทย์โลก"
+    ],
+    posn_astro: [
+      "นักดูดาวฝึกหัด", "ผู้หลงใหลท้องฟ้า", "นักสำรวจกลุ่มดาว",
+      "ผู้ใช้แผนที่ดาว", "นักดาราศาสตร์รุ่นเยาว์", "ผู้คำนวณวงโคจร",
+      "ผู้เชี่ยวชาญระบบสุริยะ", "นักฟิสิกส์ดาราศาสตร์", "จ้าวแห่งเลนส์และกระจก", "ปรมาจารย์ทรงกลมฟ้า",
+      "ผู้ท่องอวกาศ", "ผู้ไขความลับแสง", "ผู้พิชิตดาวเคราะห์",
+      "นักล่าดาวหาง", "จ้าวแห่งกาแล็กซี", "ผู้หยั่งรู้เอกภพ",
+      "ผู้เดินทางข้ามเวลา", "เทพเจ้าแห่งดวงดาว", "ผู้สร้างจักรวาล", "ตำนานแห่งดวงดาว"
     ]
   },
 
@@ -134,6 +164,46 @@ export const SiteConfig = {
       field: 'oceanographyXP',
       track: 'earth',
       keywords: ['oceanography', 'สมุทร', 'น้ำทะเล', 'มหาสมุทร', 'ความเค็ม', 'กระแสน้ำ', 'น้ำขึ้นน้ำลง', 'คลื่น', 'ชายฝั่ง', 'นิเวศทางทะเล', 'กระแสลมผิวหน้า', 'หมุนเวียนของน้ำ', 'เอลนีโญ', 'ลานีญา', 'น้ำผุด', 'กระแสน้ำลึก']
+    },
+
+    // --- POSN Earth Groups ---
+    'PosnGeology': {
+      label: 'ธรณีวิทยา (สอวน.)',
+      field: 'posnGeologyXP',
+      track: 'posn_earth',
+      keywords: ['POSN_Geology', 'ChallengeEarth', 'PosnEarthScience'] // Defaulting generic to Geology for now or use generic group
+    },
+    'PosnMeteorology': {
+      label: 'อุตุนิยมวิทยา (สอวน.)',
+      field: 'posnMeteorologyXP',
+      track: 'posn_earth',
+      keywords: ['POSN_Meteorology']
+    },
+    'PosnOceanography': {
+      label: 'สมุทรศาสตร์ (สอวน.)',
+      field: 'posnOceanographyXP',
+      track: 'posn_earth',
+      keywords: ['POSN_Oceanography']
+    },
+
+    // --- POSN Astronomy Groups ---
+    'PosnAstroJunior': {
+      label: 'ดาราศาสตร์ ม.ต้น',
+      field: 'posnAstroJuniorXP',
+      track: 'posn_astro',
+      keywords: ['PosnAstroJunior', 'junior']
+    },
+    'PosnAstroSenior': {
+      label: 'ดาราศาสตร์ ม.ปลาย',
+      field: 'posnAstroSeniorXP',
+      track: 'posn_astro',
+      keywords: ['PosnAstroSenior', 'senior']
+    },
+    'PosnAstroReview': {
+      label: 'ทบทวนดาราศาสตร์',
+      field: 'posnAstroReviewXP',
+      track: 'posn_astro',
+      keywords: ['AstronomyReview', 'ChallengeAstro', 'Astro']
     }
   },
 

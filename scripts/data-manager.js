@@ -57,6 +57,74 @@ export const categoryDetails = {
     cardGlow: "hover:shadow-indigo-600/30",
     logoGlow: "group-hover:shadow-indigo-600/40",
   },
+
+  // --- POSN Earth Science ---
+  POSNEarthScience: {
+    title: "สอวน. วิทยาศาสตร์โลก",
+    displayName: "สอวน. วิทย์โลก",
+    icon: "./assets/icons/earth.png",
+    order: 20,
+    color: "border-teal-500",
+    cardGlow: "hover:shadow-teal-500/30",
+    logoGlow: "group-hover:shadow-teal-500/40",
+  },
+  PosnEarthScience: { // Mapping mismatch coverage
+    title: "สอวน. วิทยาศาสตร์โลก (เนื้อหา)",
+    displayName: "สอวน. วิทย์โลก (เนื้อหา)",
+    icon: "./assets/icons/earth.png",
+    order: 21,
+    color: "border-teal-600",
+    cardGlow: "hover:shadow-teal-600/30",
+    logoGlow: "group-hover:shadow-teal-600/40",
+  },
+
+  // --- POSN Astronomy ---
+  AstronomyPOSN: {
+    title: "สอวน. ดาราศาสตร์",
+    displayName: "สอวน. ดาราศาสตร์",
+    icon: "./assets/icons/space.png",
+    order: 30,
+    color: "border-purple-600",
+    cardGlow: "hover:shadow-purple-600/30",
+    logoGlow: "group-hover:shadow-purple-600/40",
+  },
+  PosnAstroJunior: {
+    title: "สอวน. ดาราศาสตร์ (ม.ต้น)",
+    displayName: "สอวน. ดาราศาสตร์ (ม.ต้น)",
+    icon: "./assets/icons/space.png",
+    order: 31,
+    color: "border-purple-400",
+    cardGlow: "hover:shadow-purple-400/30",
+    logoGlow: "group-hover:shadow-purple-400/40",
+  },
+  PosnAstroSenior: {
+    title: "สอวน. ดาราศาสตร์ (ม.ปลาย)",
+    displayName: "สอวน. ดาราศาสตร์ (ม.ปลาย)",
+    icon: "./assets/icons/space.png",
+    order: 32,
+    color: "border-purple-700",
+    cardGlow: "hover:shadow-purple-700/30",
+    logoGlow: "group-hover:shadow-purple-700/40",
+  },
+  AstronomyReview: {
+    title: "ทบทวน",
+    displayName: "ทบทวน",
+    icon: "./assets/icons/study.png",
+    order: 33,
+    color: "border-pink-500",
+    cardGlow: "hover:shadow-pink-500/30",
+    logoGlow: "group-hover:shadow-pink-500/40",
+  },
+  ChallengePOSN: {
+    title: "แบบทดสอบท้าทาย (POSN)",
+    displayName: "POSN Challenge",
+    icon: "./assets/icons/trophy-star.png",
+    order: 34,
+    color: "border-yellow-500",
+    cardGlow: "hover:shadow-yellow-500/30",
+    logoGlow: "group-hover:shadow-yellow-500/40",
+  },
+
   // This is a special category for the custom quiz creator.
   General: {
     title: "ทุกหมวดหมู่",
@@ -341,6 +409,11 @@ export async function fetchAllQuizData() {
       else if (quiz.id.startsWith('phy_m6')) folder = 'phy_m6/';
       else if (quiz.id.startsWith('ess_basic')) folder = 'ess_basic/';
       else if (quiz.id.startsWith('ess_adv')) folder = 'ess_adv/';
+      // POSN / Advanced Folders
+      else if (quiz.id.startsWith('adv_astro')) folder = 'posn_astro/';
+      else if (quiz.id.startsWith('adv_geology')) folder = 'posn_earth/';
+      else if (quiz.id.startsWith('adv_meteorology')) folder = 'posn_earth/';
+      else if (quiz.id.startsWith('adv_oceanography')) folder = 'posn_earth/';
 
       scriptPath = `../data/${folder}${quiz.id}-data.js`;
     }

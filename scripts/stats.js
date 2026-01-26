@@ -33,6 +33,12 @@ function tailwindBorderToRgba(tailwindClass, opacity = 0.7) {
         'border-green-400': '74, 222, 128',
         'border-purple-500': '168, 85, 247',
         'border-indigo-600': '79, 70, 229', // Dark Indigo
+        'border-teal-600': '13, 148, 136',
+        'border-purple-600': '147, 51, 234',
+        'border-purple-400': '192, 132, 252',
+        'border-purple-700': '126, 34, 206',
+        'border-pink-500': '236, 72, 153',
+        'border-yellow-500': '234, 179, 8'
     };
     const rgb = colorMap[tailwindClass] || '107, 114, 128'; // Default to gray
     return `rgba(${rgb}, ${opacity})`;
@@ -51,6 +57,12 @@ function tailwindBorderToHex(tailwindClass) {
         'border-red-500': '#ef4444',
         'border-amber-500': '#f59e0b',
         'border-indigo-600': '#4f46e5', // Dark Indigo
+        'border-teal-600': '#0d9488',
+        'border-purple-600': '#9333ea',
+        'border-purple-400': '#c084fc',
+        'border-purple-700': '#7e22ce',
+        'border-pink-500': '#ec4899',
+        'border-yellow-500': '#eab308'
     };
     return colorMap[tailwindClass] || '#6b7280'; // Default to gray
 }
@@ -663,6 +675,24 @@ export function calculateGroupedPerformance(stats, mode = 'overall') {
         if (syllabus && syllabus.chapters) {
             syllabus.chapters.forEach(ch => {
                 groupsToMap[ch.title] = ch.shortTitle || ch.title;
+            });
+        }
+    } else if (mode === 'posn_earth') {
+        const syllabus = subCategoryData.EarthAndSpace;
+        if (syllabus) {
+            Object.keys(syllabus).forEach(groupName => {
+                syllabus[groupName].forEach(topic => {
+                    groupsToMap[topic] = groupName;
+                });
+                // Also allow the group name itself to be a key (fallback)
+                groupsToMap[groupName] = groupName;
+            });
+        }
+    } else if (mode === 'posn_astro') {
+        const syllabus = subCategoryData.ASTRONOMY_POSN;
+        if (syllabus) {
+            syllabus.forEach(item => {
+                groupsToMap[item.topic] = item.topic;
             });
         }
     }

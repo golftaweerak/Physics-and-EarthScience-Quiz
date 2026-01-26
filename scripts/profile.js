@@ -288,14 +288,6 @@ function setupAnalysisFilters(game, allStats) {
     }
 }
 
-function getCategoryDisplayName(catId) {
-    const details = {
-        'physics': 'ฟิสิกส์',
-        'earth_science': 'วิทย์โลกและดาราศาสตร์',
-        'general_science': 'วิทยาศาสตร์ทั่วไป'
-    };
-    return details[catId] || catId;
-}
 
 /**
  * Animates a numeric value in a specified element and applies a temporary color flash.
@@ -2026,6 +2018,10 @@ async function renderRadarChart(game, allProgress = null, mode = 'overall') {
                 allProgress = allProgress.filter(p => p.id && p.id.startsWith('ess_basic'));
             } else if (mode === 'earth_adv') {
                 allProgress = allProgress.filter(p => p.id && p.id.startsWith('ess_adv'));
+            } else if (mode === 'posn_earth') {
+                allProgress = allProgress.filter(p => p.id && (p.id.startsWith('es') || p.id.startsWith('adv_geology') || p.id.startsWith('adv_meteorology') || p.id.startsWith('adv_oceanography')));
+            } else if (mode === 'posn_astro') {
+                allProgress = allProgress.filter(p => p.id && (p.id.startsWith('junior') || p.id.startsWith('senior') || p.id.startsWith('adv_astro') || p.id.startsWith('astro')));
             }
             // -----------------------------
 
@@ -2060,6 +2056,20 @@ async function renderRadarChart(game, allProgress = null, mode = 'overall') {
                     syllabus.chapters.forEach(ch => {
                         const title = ch.shortTitle || ch.title;
                         groupsToUse[title] = { label: title, keywords: [ch.title, ch.shortTitle, ...(ch.keywords || [])].filter(k => k) };
+                    });
+                }
+            } else if (mode === 'posn_earth') {
+                const syllabus = subCategoryData.EarthAndSpace;
+                if (syllabus) {
+                    Object.keys(syllabus).forEach(group => {
+                        groupsToUse[group] = { label: group, keywords: [group] };
+                    });
+                }
+            } else if (mode === 'posn_astro') {
+                const syllabus = subCategoryData.ASTRONOMY_POSN;
+                if (syllabus) {
+                    syllabus.forEach(item => {
+                        groupsToUse[item.topic] = { label: item.topic, keywords: [item.topic] };
                     });
                 }
             } else if (mode === 'physics') {

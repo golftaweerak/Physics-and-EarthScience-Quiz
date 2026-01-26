@@ -12,10 +12,60 @@
 /**
  * Constants for main category keys.
  */
+export const LEVELS = {
+  JUNIOR_AND_SENIOR: "ม.ต้น และ ม.ปลาย",
+  JUNIOR_ONLY: "ม.ต้น เท่านั้น",
+  SENIOR_ONLY: "ม.ปลาย เท่านั้น",
+};
+
 export const MAIN_CATEGORIES = {
   EARTH_SPACE_SCIENCE_BASIC: 'EarthSpaceScienceBasic',
   EARTH_SPACE_SCIENCE_ADVANCE: 'EarthSpaceScienceAdvance',
+  EARTH_SCIENCE: 'PosnEarthScience',
+  ASTRONOMY_GENERAL: 'AstronomyReview',
+  ASTRONOMY_OLYMPIAD: 'AstronomyPOSN',
+  GENERAL_KNOWLEDGE: 'GeneralKnowledge',
+  CHALLENGE: 'ChallengePOSN',
 };
+
+export const CORE_ASTRONOMY_TOPICS = Object.freeze({
+  SPHERICAL_ASTRONOMY: "ทรงกลมท้องฟ้าและระบบพิกัด",
+  CELESTIAL_MECHANICS: "กลศาสตร์ท้องฟ้าและกฎของเคปเลอร์",
+  SOLAR_SYSTEM: "ระบบสุริยะและองค์ประกอบ",
+  STARS: "สมบัติและวิวัฒนาการของดาวฤกษ์",
+  GALAXIES: "กาแล็กซีและเอกภพวิทยา",
+  TELESCOPES: "กล้องโทรทรรศน์และเทคโนโลยีอวกาศ",
+});
+
+export const GEOLOGY_TOPICS = Object.freeze({
+  STRUCTURE_AND_TECTONICS: "โครงสร้างโลกและธรณีแปรสัณฐาน",
+  MINERALS_ROCKS_CYCLE: "แร่ หิน และวัฏจักรหิน",
+  GEOHISTORY_STRATIGRAPHY: "ธรณีประวัติและลำดับชั้นหิน",
+  GEOMORPHOLOGY_SURFACE_PROCESSES: "ธรณีสัณฐานและกระบวนการบนพื้นผิวโลก",
+  GEOHAZARDS: "ธรณีพิบัติภัย",
+  GEORESOURCES_ENVIRONMENT: "ทรัพยากรธรณีและธรณีวิทยาสิ่งแวดล้อม",
+  MAPS_SURVEYING: "แผนที่และการสำรวจทางธรณีวิทยา",
+});
+
+export const METEOROLOGY_TOPICS = Object.freeze({
+  COMPOSITION_LAYERS: "องค์ประกอบและชั้นบรรยากาศ",
+  ENERGY_BALANCE_RADIATION: "สมดุลพลังงานของโลกและรังสี",
+  TEMP_PRESSURE_WIND: "อุณหภูมิ ความกดอากาศ และลม",
+  HUMIDITY_CLOUDS_PRECIPITATION: "ความชื้น เมฆ และหยาดน้ำฟ้า",
+  AIR_MASSES_FRONTS: "มวลอากาศและแนวปะทะอากาศ",
+  STORMS_SEVERE_WEATHER: "พายุและสภาพอากาศรุนแรง",
+  WEATHER_MAPS_FORECASTING: "แผนที่อากาศและการพยากรณ์อากาศ",
+  CLIMATE_CHANGE: "ภูมิอากาศและการเปลี่ยนแปลง",
+});
+
+export const OCEANOGRAPHY_TOPICS = Object.freeze({
+  PHYSICAL_CHEMICAL_PROPERTIES: "คุณสมบัติทางกายภาพและเคมีของน้ำทะเล",
+  WAVES_TIDES_CURRENTS: "คลื่น น้ำขึ้นน้ำลง และการหมุนเวียนของกระแสน้ำ",
+  OCEAN_ATMOSPHERE_INTERACTION: "ปฏิสัมพันธ์ระหว่างมหาสมุทรและบรรยากาศ",
+  MARINE_LIFE_ECOSYSTEMS: "สิ่งมีชีวิตและระบบนิเวศทางทะเล",
+  SEAFLOOR_GEOLOGY_MORPHOLOGY: "ธรณีวิทยาและสัณฐานพื้นสมุทร",
+  MARINE_RESOURCES_POLLUTION: "ทรัพยากรและมลพิษทางทะเล",
+});
 
 /**
  * Defines the physics syllabus structure by grade level and chapters.
@@ -348,6 +398,27 @@ export const EARTH_SCIENCE_ADVANCE_SYLLABUS = Object.freeze({
 });
 
 
+export const POSN_EARTH_SYLLABUS = Object.freeze({
+  displayName: "สอวน. วิทยาศาสตร์โลก",
+  chapters: [
+    { title: "ธรณีวิทยา (Geology)", shortTitle: "ธรณี" },
+    { title: "อุตุนิยมวิทยา (Meteorology)", shortTitle: "อุตุฯ" },
+    { title: "สมุทรศาสตร์ (Oceanography)", shortTitle: "สมุทรฯ" },
+    { title: "ดาราศาสตร์ (Astronomy)", shortTitle: "ดารา" },
+    { title: "ทบทวน", shortTitle: "ทบทวน" }
+  ]
+});
+
+export const POSN_ASTRO_SYLLABUS = Object.freeze({
+  displayName: "สอวน. ดาราศาสตร์",
+  chapters: [
+    { title: "ดาราศาสตร์ ม.ต้น", shortTitle: "ม.ต้น" },
+    { title: "ดาราศาสตร์ ม.ปลาย", shortTitle: "ม.ปลาย" },
+    { title: "ทบทวนดาราศาสตร์", shortTitle: "ทบทวน" },
+    { title: "ทบทวน", shortTitle: "ทบทวน" }
+  ]
+});
+
 export const subCategoryData = {
   // Sub-categories for Physics
   Physics: PHYSICS_SYLLABUS,
@@ -357,6 +428,35 @@ export const subCategoryData = {
 
   // Sub-categories for Earth and Space Science (Advanced)
   EarthSpaceScienceAdvance: EARTH_SCIENCE_ADVANCE_SYLLABUS,
+
+  // --- Imported from EarthScienceQuiz (POSN/Challenge) ---
+  EarthAndSpace: {
+    Geology: [...Object.values(GEOLOGY_TOPICS)],
+    Meteorology: [...Object.values(METEOROLOGY_TOPICS)],
+    Astronomy: [...Object.values(CORE_ASTRONOMY_TOPICS)],
+    Oceanography: [...Object.values(OCEANOGRAPHY_TOPICS)],
+  },
+
+  ASTRONOMY_POSN: [
+    { topic: "คณิตศาสตร์สำหรับดาราศาสตร์ (พีชคณิต, เรขาคณิต, ตรีโกณมิติ)", level: LEVELS.JUNIOR_AND_SENIOR, camps: { junior: 1, senior: 1 } },
+    { topic: "กลศาสตร์พื้นฐาน (กฎของนิวตัน, งานและพลังงาน)", level: LEVELS.JUNIOR_AND_SENIOR, camps: { junior: 1, senior: 1 } },
+    { topic: "การแปลงหน่วยและสัญลักษณ์ทางวิทยาศาสตร์", level: LEVELS.JUNIOR_AND_SENIOR, camps: { junior: 1, senior: 1 } },
+    { topic: "คุณสมบัติของคลื่นแม่เหล็กไฟฟ้าและสเปกตรัม", level: LEVELS.JUNIOR_AND_SENIOR, camps: { junior: 1, senior: 1 } },
+    { topic: "แคลคูลัสเบื้องต้นสำหรับดาราศาสตร์", level: LEVELS.SENIOR_ONLY, camps: { senior: 1 } },
+    { topic: "ฟิสิกส์นิวเคลียร์และทฤษฎีสัมพัทธภาพเบื้องต้น", level: LEVELS.SENIOR_ONLY, camps: { senior: 2 } },
+    { topic: CORE_ASTRONOMY_TOPICS.SPHERICAL_ASTRONOMY, level: LEVELS.JUNIOR_AND_SENIOR, camps: { junior: 1, senior: 1 } },
+    { topic: CORE_ASTRONOMY_TOPICS.CELESTIAL_MECHANICS, level: LEVELS.JUNIOR_AND_SENIOR, camps: { junior: 1, senior: 1 } },
+    { topic: CORE_ASTRONOMY_TOPICS.SOLAR_SYSTEM, level: LEVELS.JUNIOR_AND_SENIOR, camps: { junior: 1, senior: 1 } },
+    { topic: CORE_ASTRONOMY_TOPICS.STARS, level: LEVELS.JUNIOR_AND_SENIOR, camps: { junior: 1, senior: 1 } },
+    { topic: CORE_ASTRONOMY_TOPICS.GALAXIES, level: LEVELS.JUNIOR_AND_SENIOR, camps: { junior: 1, senior: 1 } },
+    { topic: CORE_ASTRONOMY_TOPICS.TELESCOPES, level: LEVELS.JUNIOR_AND_SENIOR, camps: { junior: 1, senior: 1 } },
+    { topic: "เวลา ปฏิทิน และการใช้แผนที่ดาว", level: LEVELS.JUNIOR_AND_SENIOR, camps: { junior: 1, senior: 1 } },
+    { topic: "ปรากฏการณ์ในระบบสุริยะ (อุปราคา, น้ำขึ้นน้ำลง)", level: LEVELS.JUNIOR_AND_SENIOR, camps: { junior: 1, senior: 1 } },
+    { topic: "ระบบดาวคู่และกระจุกดาว", level: LEVELS.JUNIOR_AND_SENIOR, camps: { junior: 2, senior: 1 } },
+    { topic: "การวิเคราะห์ข้อมูลและการคำนวณทางดาราศาสตร์", level: LEVELS.JUNIOR_AND_SENIOR, camps: { junior: 1, senior: 1 } },
+    { topic: "ข่าวสารและความก้าวหน้าทางดาราศาสตร์", level: LEVELS.JUNIOR_AND_SENIOR, camps: { junior: 1, senior: 1 } },
+    { topic: "กลุ่มดาวฤกษ์และการใช้ประโยชน์", level: LEVELS.JUNIOR_AND_SENIOR, camps: { junior: 1, senior: 1 } },
+  ],
 };
 
 /**
@@ -397,5 +497,54 @@ export const quizPrefixInfo = {
   ess_adv_m6: {
     mainCategory: MAIN_CATEGORIES.EARTH_SPACE_SCIENCE_ADVANCE,
     icon: './assets/icons/earth.png', // Reusing earth icon
+  },
+  // --- Imported POSN/Challenge Prefixes ---
+  es: {
+    mainCategory: MAIN_CATEGORIES.EARTH_SCIENCE,
+    icon: './assets/icons/geology.png',
+    subCategoryKey: 'EarthAndSpace',
+  },
+  esr: {
+    mainCategory: MAIN_CATEGORIES.ASTRONOMY_GENERAL,
+    icon: './assets/icons/earth1.png',
+    subCategoryKey: 'EarthAndSpace',
+  },
+  junior: {
+    mainCategory: 'PosnAstroJunior',
+    icon: './assets/icons/astronomy1.png',
+    subCategoryKey: 'ASTRONOMY_POSN',
+  },
+  senior: {
+    mainCategory: 'PosnAstroSenior',
+    icon: './assets/icons/black-hole.png',
+    subCategoryKey: 'ASTRONOMY_POSN',
+  },
+  adv_astro: {
+    mainCategory: 'ChallengePOSN',
+    icon: './assets/icons/galaxy.png',
+    subCategoryKey: 'ASTRONOMY_POSN',
+  },
+  adv_geology: {
+    mainCategory: MAIN_CATEGORIES.CHALLENGE,
+    icon: './assets/icons/rock.png',
+    subCategoryKey: 'EarthAndSpace',
+    inferredMainCategory: 'Geology',
+  },
+  adv_meteorology: {
+    mainCategory: MAIN_CATEGORIES.CHALLENGE,
+    icon: './assets/icons/cloud.png',
+    subCategoryKey: 'EarthAndSpace',
+    inferredMainCategory: 'Meteorology',
+  },
+  adv_oceanography: {
+    mainCategory: MAIN_CATEGORIES.CHALLENGE,
+    icon: './assets/icons/wave.png',
+    subCategoryKey: 'EarthAndSpace',
+    inferredMainCategory: 'Oceanography',
+  },
+  astro: {
+    mainCategory: MAIN_CATEGORIES.ASTRONOMY_GENERAL,
+    icon: './assets/icons/space.png',
+    subCategoryKey: 'ASTRONOMY_POSN',
   },
 };

@@ -1,4 +1,10 @@
-import { PHYSICS_SYLLABUS, EARTH_SCIENCE_BASIC_SYLLABUS, EARTH_SCIENCE_ADVANCE_SYLLABUS } from '../data/sub-category-data.js';
+import {
+    PHYSICS_SYLLABUS,
+    EARTH_SCIENCE_BASIC_SYLLABUS,
+    EARTH_SCIENCE_ADVANCE_SYLLABUS,
+    POSN_EARTH_SYLLABUS,
+    POSN_ASTRO_SYLLABUS
+} from '../data/sub-category-data.js';
 
 /**
  * Gets the appropriate syllabus object for a given category key.
@@ -16,6 +22,18 @@ export function getSyllabusForCategory(categoryKey) {
     }
     if (categoryKey === 'EarthSpaceScienceAdvance') {
         return EARTH_SCIENCE_ADVANCE_SYLLABUS;
+    }
+    if (categoryKey === 'PosnEarthScience' || categoryKey === 'POSNEarthScience') {
+        return POSN_EARTH_SYLLABUS;
+    }
+    if (categoryKey === 'PosnAstroJunior' || categoryKey === 'PosnAstroSenior' || categoryKey === 'AstronomyPOSN' || categoryKey === 'POSNAstronomy') {
+        return POSN_ASTRO_SYLLABUS;
+    }
+    if (categoryKey === 'ChallengePOSN') {
+        return POSN_EARTH_SYLLABUS; // Assuming generic challenge maps to Earth POSN structure
+    }
+    if (categoryKey === 'AstronomyReview') {
+        return POSN_ASTRO_SYLLABUS;
     }
     return null;
 }

@@ -1015,83 +1015,193 @@ export function initializeCustomQuizHandler() {
             let categoryHTML = '';
             const sortedSubjects = Object.keys(allCategoryDetails).sort((a, b) => (allCategoryDetails[a].order || 99) - (allCategoryDetails[b].order || 99));
 
-            sortedSubjects.forEach(subjectKey => {
-                const syllabus = getSyllabusForCategory(subjectKey);
-                const subjectDetails = allCategoryDetails[subjectKey];
-                if (!syllabus || !subjectDetails || !groupedQuestions[subjectKey]) {
-                    return;
-                }
+            const highSchoolKeys = ['PhysicsM4', 'PhysicsM5', 'PhysicsM6', 'EarthSpaceScienceBasic', 'EarthSpaceScienceAdvance'];
+            const highSchoolSubjects = sortedSubjects.filter(k => highSchoolKeys.includes(k));
+            const posnSubjects = sortedSubjects.filter(k => !highSchoolKeys.includes(k) && k !== 'General' && k !== 'Custom');
 
-                // Determine if this subject uses learning outcomes or specific topics
-                const isBasicSubject = subjectKey.includes('Basic') || subjectKey.startsWith('Physics');
-                const topicKey = isBasicSubject ? 'learningOutcomes' : 'specificTopics';
+            // Helper function to generate HTML for a group of subjects
+            const generateSubjectGroupHTML = (subjectKeys, groupTitle, isOpen = false) => {
+                if (subjectKeys.length === 0) return '';
 
-                const chapters = syllabus.units ? syllabus.units.flatMap(u => u.chapters) : (syllabus.chapters || []);
+                let innerHTML = '';
+                let groupTotalCount = 0;
 
-                let chapterAccordionsHTML = '';
-                chapters.forEach(chapter => {
-                    // Clone topics from syllabus to avoid mutation and allow adding extras
-                    let topics = [...(chapter[topicKey] || [])].sort((a, b) => a.localeCompare(b, 'th'));
+                subjectKeys.forEach(subjectKey => {
+                    const syllabus = getSyllabusForCategory(subjectKey);
+                    const subjectDetails = allCategoryDetails[subjectKey];
 
-                    // Check for topics in data that are NOT in syllabus (e.g. "Uncategorized")
-                    const chapterData = groupedQuestions[subjectKey]?.[chapter.title];
-                    if (chapterData) {
-                        const knownTopics = new Set(topics);
-                        Object.keys(chapterData).forEach(dataTopic => {
-                            if (!knownTopics.has(dataTopic)) {
-                                topics.push(dataTopic);
-                            }
-                        });
+                    // Check: Must have subject details AND (syllabus OR data)
+                    if (!subjectDetails || (!syllabus && !groupedQuestions[subjectKey])) {
+                        return;
                     }
 
-                    const topicControlsHTML = topics.map(topic => {
-                        const counts = groupedQuestions[subjectKey]?.[chapter.title]?.[topic] || { theory: [], calculation: [] };
-                        return createSpecificTopicControlHTML(subjectKey, chapter.title, topic, {
-                            theory: counts.theory.length,
-                            calculation: counts.calculation.length,
-                            total: counts.theory.length + counts.calculation.length
-                        }, isBasicSubject);
-                    }).join('');
+                    // Determine if this subject uses learning outcomes or specific topics
+                    const isBasicSubject = subjectKey.includes('Basic') || subjectKey.startsWith('Physics');
+                    const topicKey = isBasicSubject ? 'learningOutcomes' : 'specificTopics';
 
-                    if (topicControlsHTML) {
-                        chapterAccordionsHTML += `
-                            <div class="bg-gray-50 dark:bg-gray-800/30 rounded-lg mx-2 mb-2 border border-gray-200 dark:border-gray-700/50 overflow-hidden">
-                                <div class="chapter-accordion-toggle flex justify-between items-center cursor-pointer p-3 hover:bg-gray-100 dark:hover:bg-gray-700/40 transition-colors">
-                                    <h4 class="text-base font-bold text-gray-800 dark:text-gray-200 font-kanit truncate pr-2">${chapter.title || 'บทเรียน'}</h4>
-                                    <svg class="chevron-icon h-5 w-5 text-gray-500 dark:text-gray-400 transition-transform duration-300 flex-shrink-0 ml-2" width="20" height="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                    let chapters = [];
+                    if (syllabus) {
+                        chapters = syllabus.units ? syllabus.units.flatMap(u => u.chapters) : (syllabus.chapters || []);
+                    } else if (groupedQuestions[subjectKey]) {
+                        // Fallback: Generate chapters from data if no syllabus exists
+                        chapters = Object.keys(groupedQuestions[subjectKey])
+                            .sort((a, b) => a.localeCompare(b, 'th'))
+                            .map(title => ({ title }));
+                    }
+
+                    let chapterAccordionsHTML = '';
+                    let subjectTotalCount = 0;
+                    const handledChapters = new Set();
+
+                    // 1. Process chapters from syllabus
+                    chapters.forEach(chapter => {
+                        handledChapters.add(chapter.title);
+                        // Clone topics from syllabus to avoid mutation and allow adding extras
+                        let topics = [...(chapter[topicKey] || [])].sort((a, b) => a.localeCompare(b, 'th'));
+
+                        // Check for topics in data that are NOT in syllabus (e.g. "Uncategorized")
+                        const chapterData = groupedQuestions[subjectKey]?.[chapter.title];
+                        if (chapterData) {
+                            const knownTopics = new Set(topics);
+                            Object.keys(chapterData).forEach(dataTopic => {
+                                if (!knownTopics.has(dataTopic)) {
+                                    topics.push(dataTopic);
+                                }
+                            });
+                        }
+
+                        let chapterTotalCount = 0;
+                        const topicControlsHTML = topics.map(topic => {
+                            const counts = groupedQuestions[subjectKey]?.[chapter.title]?.[topic] || { theory: [], calculation: [] };
+                            const topicTotal = counts.theory.length + counts.calculation.length;
+                            chapterTotalCount += topicTotal;
+
+                            return createSpecificTopicControlHTML(subjectKey, chapter.title, topic, {
+                                theory: counts.theory.length,
+                                calculation: counts.calculation.length,
+                                total: topicTotal
+                            }, isBasicSubject);
+                        }).join('');
+
+                        subjectTotalCount += chapterTotalCount;
+
+                        if (topicControlsHTML) {
+                            chapterAccordionsHTML += `
+                                <div class="bg-gray-50 dark:bg-gray-800/30 rounded-lg mx-2 mb-2 border border-gray-200 dark:border-gray-700/50 overflow-hidden">
+                                    <div class="chapter-accordion-toggle flex justify-between items-center cursor-pointer p-3 hover:bg-gray-100 dark:hover:bg-gray-700/40 transition-colors">
+                                        <h4 class="text-base font-bold text-gray-800 dark:text-gray-200 font-kanit truncate pr-2">
+                                            ${chapter.title || 'บทเรียน'} 
+                                            <span class="text-sm font-normal text-gray-500 dark:text-gray-400">(${chapterTotalCount} ข้อ)</span>
+                                        </h4>
+                                        <svg class="chevron-icon h-5 w-5 text-gray-500 dark:text-gray-400 transition-transform duration-300 flex-shrink-0 ml-2" width="20" height="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                                    </div>
+                                    <div class="specific-topics-container grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-in-out">
+                                        <div class="overflow-hidden">${topicControlsHTML}</div>
+                                    </div>
+                                </div>`;
+                        }
+                    });
+
+                    // 2. Process any EXTRA chapters found in data but not in syllabus
+                    const extraChapters = groupedQuestions[subjectKey] ? Object.keys(groupedQuestions[subjectKey]).filter(t => !handledChapters.has(t)) : [];
+                    extraChapters.forEach(chapterTitle => {
+                        const chapterData = groupedQuestions[subjectKey][chapterTitle];
+                        const topics = Object.keys(chapterData).sort((a, b) => a.localeCompare(b, 'th'));
+
+                        let chapterTotalCount = 0;
+                        const topicControlsHTML = topics.map(topic => {
+                            const counts = chapterData[topic];
+                            const topicTotal = counts.theory.length + counts.calculation.length;
+                            chapterTotalCount += topicTotal;
+
+                            return createSpecificTopicControlHTML(subjectKey, chapterTitle, topic, {
+                                theory: counts.theory.length,
+                                calculation: counts.calculation.length,
+                                total: topicTotal
+                            }, isBasicSubject);
+                        }).join('');
+
+                        subjectTotalCount += chapterTotalCount;
+
+                        if (topicControlsHTML) {
+                            chapterAccordionsHTML += `
+                                <div class="bg-gray-50 dark:bg-gray-800/30 rounded-lg mx-2 mb-2 border border-gray-200 dark:border-gray-700/50 overflow-hidden">
+                                    <div class="chapter-accordion-toggle flex justify-between items-center cursor-pointer p-3 hover:bg-gray-100 dark:hover:bg-gray-700/40 transition-colors">
+                                        <h4 class="text-base font-bold text-gray-800 dark:text-gray-200 font-kanit truncate pr-2">
+                                            ${chapterTitle} 
+                                            <span class="text-sm font-normal text-gray-500 dark:text-gray-400">(${chapterTotalCount} ข้อ)</span>
+                                        </h4>
+                                        <svg class="chevron-icon h-5 w-5 text-gray-500 dark:text-gray-400 transition-transform duration-300 flex-shrink-0 ml-2" width="20" height="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                                    </div>
+                                    <div class="specific-topics-container grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-in-out">
+                                        <div class="overflow-hidden">${topicControlsHTML}</div>
+                                    </div>
+                                </div>`;
+                        }
+                    });
+
+                    if (chapterAccordionsHTML) {
+                        groupTotalCount += subjectTotalCount;
+                        innerHTML += `
+                            <div class="subject-container bg-white dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+                                <div class="subject-accordion-toggle p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors" role="button" aria-expanded="false">
+                                    <div class="flex justify-between items-center">
+                                        <div class="flex items-center gap-3 min-w-0">
+                                            <img src="${subjectDetails.icon}" class="h-8 w-8 flex-shrink-0" alt="${subjectDetails.displayName} icon">
+                                            <div class="flex flex-col">
+                                                <span class="font-bold text-lg text-gray-800 dark:text-gray-100 truncate">${subjectDetails.displayName}</span>
+                                                <span class="text-xs text-gray-500 dark:text-gray-400 font-medium">รวม ${subjectTotalCount} ข้อ</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center gap-3">
+                                            <button type="button" data-action="random-subject" data-subject-key="${subjectKey}" class="p-1.5 text-gray-400 hover:text-purple-500 hover:bg-purple-100 dark:hover:bg-purple-900/50 rounded-full transition-all" title="สุ่มข้อสอบในวิชานี้ (แบบกระจายทุกบท)">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                                                </svg>
+                                            </button>
+                                            <svg class="chevron-icon h-6 w-6 text-gray-500 dark:text-gray-400 transition-transform duration-300 flex-shrink-0" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="specific-topics-container grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-in-out">
-                                    <div class="overflow-hidden">${topicControlsHTML}</div>
+                                <div class="chapters-container grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-in-out">
+                                    <div class="overflow-hidden pt-2">${chapterAccordionsHTML}</div>
                                 </div>
                             </div>`;
                     }
                 });
 
-                if (chapterAccordionsHTML) {
-                    categoryHTML += `
-                        <div class="subject-container bg-white dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
-                            <div class="subject-accordion-toggle p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors" role="button" aria-expanded="false">
-                                <div class="flex justify-between items-center">
-                                    <div class="flex items-center gap-3 min-w-0">
-                                        <img src="${subjectDetails.icon}" class="h-8 w-8 flex-shrink-0" alt="${subjectDetails.displayName} icon">
-                                        <span class="font-bold text-lg text-gray-800 dark:text-gray-100 truncate">${subjectDetails.displayName}</span>
-                                    </div>
-                                    <div class="flex items-center gap-3">
-                                        <button type="button" data-action="random-subject" data-subject-key="${subjectKey}" class="p-1.5 text-gray-400 hover:text-purple-500 hover:bg-purple-100 dark:hover:bg-purple-900/50 rounded-full transition-all" title="สุ่มข้อสอบในวิชานี้ (แบบกระจายทุกบท)">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
-                                            </svg>
-                                        </button>
-                                        <svg class="chevron-icon h-6 w-6 text-gray-500 dark:text-gray-400 transition-transform duration-300 flex-shrink-0" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
-                                    </div>
+                if (!innerHTML) return '';
+
+                // Wrap in master accordion with improved visual design
+                return `
+                    <div class="mb-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden group-accordion">
+                        <div class="subject-accordion-toggle p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors flex justify-between items-center" data-group-toggle="${groupTitle}">
+                            <div class="flex items-center gap-3">
+                                <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100">
+                                    ${groupTitle}
+                                </h3>
+                                <span class="px-2.5 py-0.5 text-xs rounded-full bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 font-medium border border-indigo-200 dark:border-indigo-800">
+                                    รวม ${groupTotalCount} ข้อ
+                                </span>
+                            </div>
+                            <svg class="chevron-icon h-6 w-6 text-gray-400 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </div>
+                        <div class="grid ${isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'} transition-[grid-template-rows] duration-300 ease-in-out">
+                            <div class="overflow-hidden">
+                                <div class="p-4 pt-0 space-y-4 border-t border-gray-100 dark:border-gray-700/50 pt-4">
+                                    ${innerHTML}
                                 </div>
                             </div>
-                            <div class="chapters-container grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-in-out">
-                                <div class="overflow-hidden pt-2">${chapterAccordionsHTML}</div>
-                            </div>
-                        </div>`;
-                }
-            });
+                        </div>
+                    </div>
+                `;
+            };
+
+            // High School defaults to OPEN, POSN defaults to CLOSED
+            categoryHTML += generateSubjectGroupHTML(highSchoolSubjects, "มัธยมศึกษาตอนปลาย (High School)", true);
+            categoryHTML += generateSubjectGroupHTML(posnSubjects, "สอวน. (POSN)", false);
 
             // Helper to calculate available questions for a group
             const getAvailableCount = (groupType) => {
@@ -1229,6 +1339,32 @@ export function initializeCustomQuizHandler() {
                                 <div class="specific-topics-container grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-in-out">
                                     <div class="overflow-hidden bg-white dark:bg-gray-800/50">
                                         ${createRandomRow('วิทย์โลก (เพิ่มเติม) ทั้งหมด', 'earth-advanced', 'indigo')}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- POSN Earth Science (Accordion) -->
+                            <div class="bg-gray-50 dark:bg-gray-800/30 rounded-lg mx-2 mb-2 border border-gray-200 dark:border-gray-700/50 overflow-hidden">
+                                <div class="chapter-accordion-toggle flex justify-between items-center cursor-pointer p-3 hover:bg-gray-100 dark:hover:bg-gray-700/40 transition-colors">
+                                    <h4 class="text-base font-bold text-gray-800 dark:text-gray-200 font-kanit">สอวน. วิทย์โลก</h4>
+                                    <svg class="chevron-icon h-5 w-5 text-gray-500 dark:text-gray-400 transition-transform duration-300 flex-shrink-0" width="20" height="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                                </div>
+                                <div class="specific-topics-container grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-in-out">
+                                    <div class="overflow-hidden bg-white dark:bg-gray-800/50">
+                                        ${createRandomRow('สอวน. วิทย์โลก ทั้งหมด', 'posn-earth', 'teal')}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- POSN Astronomy (Accordion) -->
+                            <div class="bg-gray-50 dark:bg-gray-800/30 rounded-lg mx-2 mb-2 border border-gray-200 dark:border-gray-700/50 overflow-hidden">
+                                <div class="chapter-accordion-toggle flex justify-between items-center cursor-pointer p-3 hover:bg-gray-100 dark:hover:bg-gray-700/40 transition-colors">
+                                    <h4 class="text-base font-bold text-gray-800 dark:text-gray-200 font-kanit">สอวน. ดาราศาสตร์</h4>
+                                    <svg class="chevron-icon h-5 w-5 text-gray-500 dark:text-gray-400 transition-transform duration-300 flex-shrink-0" width="20" height="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                                </div>
+                                <div class="specific-topics-container grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-in-out">
+                                    <div class="overflow-hidden bg-white dark:bg-gray-800/50">
+                                        ${createRandomRow('สอวน. ดาราศาสตร์ ทั้งหมด', 'posn-astro', 'purple')}
                                     </div>
                                 </div>
                             </div>
@@ -1738,7 +1874,9 @@ export function initializeCustomQuizHandler() {
                     { subject: 'EarthSpaceScienceBasic', chapters: ['ลมฟ้าอากาศและภูมิอากาศ'] }, // Includes ocean circulation
                     { subject: 'EarthSpaceScienceAdvance', chapters: ['การหมุนเวียนของน้ำในมหาสมุทร'] }
                 ]
-            }
+            },
+            'posn-earth': { subjects: ['POSNEarthScience', 'PosnEarthScience'] },
+            'posn-astro': { subjects: ['POSNAstronomy', 'PosnAstroJunior', 'PosnAstroSenior', 'AstronomyReview'] }
         };
         return mappings[groupType] || {};
     }

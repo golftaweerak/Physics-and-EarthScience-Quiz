@@ -1,14 +1,16 @@
 import { ModalHandler } from './modal-handler.js';
 import { shuffleArray } from './utils.js';
-import { Gamification, SHOP_ITEMS, PROFICIENCY_GROUPS } from './gamification.js';
+import { Gamification } from './gamification.js';
+import { BADGES, DAILY_QUESTS, ACHIEVEMENTS, SHOP_ITEMS } from '../data/gamification-registry.js';
 import { showToast } from './toast.js';
 import { db } from './firebase-config.js';
 import { doc, updateDoc, onSnapshot, serverTimestamp } from "firebase/firestore";
 import { authManager } from './auth-manager.js';
+import * as UIRenderer from './quiz-ui-renderer.js';
+import { QuizSessionManager } from './quiz-session-manager.js';
 
-// state: Stores all dynamic data of the quiz
-let state = {};
-// elements: Caches all DOM elements for quick access
+// Global state and session variables
+let session;
 let elements = {};
 // handler: A dedicated handler for the resume modal
 let resumeModalHandler;
@@ -1755,6 +1757,8 @@ function showResults(isViewOnly = false) {
   let newAchievements = [];
   let physicsXP = 0;
   let earthXP = 0;
+  let posnEarthXP = 0;
+  let posnAstroXP = 0;
   const topicXPs = {}; // NEW: Initialize topicXPs explicitly
 
   // Only process Gamification if NOT in view-only mode
@@ -1793,6 +1797,8 @@ function showResults(isViewOnly = false) {
 
           let isPhysics = false;
           let isEarth = false;
+          let isPosnEarth = false;
+          let isPosnAstro = false;
 
           for (const [groupKey, groupDef] of Object.entries(PROFICIENCY_GROUPS)) {
             // Check against normalized keywords
@@ -1808,6 +1814,8 @@ function showResults(isViewOnly = false) {
               // Check track from proficiency group
               if (groupDef.track === 'physics') isPhysics = true;
               if (groupDef.track === 'earth') isEarth = true;
+              if (groupDef.track === 'posn_earth') isPosnEarth = true;
+              if (groupDef.track === 'posn_astro') isPosnAstro = true;
 
               // NOTE: No break here! A question can belong to multiple proficiency fields
               // (e.g. Meteorolgy & Oceanography for an El Nino question)
@@ -1834,6 +1842,16 @@ function showResults(isViewOnly = false) {
             isEarth = true;
           }
 
+          if (lowerCat.includes('posnearth') || lowerCat.includes('challengeearth') || lowerCat.includes('posn_earth')) {
+            isPosnEarth = true;
+            isEarth = true; // Also count for earth track
+          }
+
+          if (lowerCat.includes('posnastro') || lowerCat.includes('challengeastro') || lowerCat.includes('posn_astro')) {
+            isPosnAstro = true;
+            isEarth = true; // Also count for earth track
+          }
+
           // Disambiguate: ถ้าเข้าข่ายทั้งคู่ ให้ยึดตามหมวดหลักของข้อสอบ (ป้องกันการได้ XP ซ้ำซ้อนในเรื่องที่คาบเกี่ยว)
           if (isPhysics && isEarth) {
             // ถ้าหมวดหลักเป็นวิทย์โลก ให้ตัดฟิสิกส์ออก
@@ -1852,6 +1870,12 @@ function showResults(isViewOnly = false) {
           if (isEarth) {
             earthXP += points;
           }
+          if (isPosnEarth) {
+            posnEarthXP += points;
+          }
+          if (isPosnAstro) {
+            posnAstroXP += points;
+          }
         }
       });
 
@@ -1859,6 +1883,8 @@ function showResults(isViewOnly = false) {
       xpEarned *= state.xpMultiplier;
       physicsXP *= state.xpMultiplier;
       earthXP *= state.xpMultiplier;
+      posnEarthXP *= state.xpMultiplier;
+      posnAstroXP *= state.xpMultiplier;
 
       // --- NEW: Prepare quest stats object ---
       const firstAnswer = state.userAnswers.find(a => a);
@@ -1887,14 +1913,20 @@ function showResults(isViewOnly = false) {
       };
 
       const result = game.submitQuizResult(xpEarned, percentage, totalQuestions, state.isCustomQuiz, topicXPs, questStats);
-      levelResult = { overall: result.overall, physics: result.physics, earth: result.earth };
+      levelResult = {
+        overall: result.overall,
+        physics: result.physics,
+        earth: result.earth,
+        posn_earth: result.tracks.posn_earth,
+        posn_astro: result.tracks.posn_astro
+      };
       newBadges = result.newBadges || [];
       newAchievements = result.newAchievements || [];
       completedQuests = result.completedQuests || [];
 
       // Play Sounds for Gamification
       if (state.isSoundEnabled && levelResult) {
-        if (levelResult.overall?.leveledUp || levelResult.physics?.leveledUp || levelResult.earth?.leveledUp) {
+        if (levelResult.overall?.leveledUp || levelResult.physics?.leveledUp || levelResult.earth?.leveledUp || levelResult.posn_earth?.leveledUp || levelResult.posn_astro?.leveledUp) {
           if (state.levelUpSound) {
             state.levelUpSound.currentTime = 0;
             state.levelUpSound.play().catch(e => console.warn("Could not play level up sound", e));
@@ -1914,6 +1946,14 @@ function showResults(isViewOnly = false) {
   // --- Show Toast Notifications ---
   if (levelResult?.overall?.leveledUp) {
     showToast('Level Up!', `ยินดีด้วย! เลเวลรวมของคุณคือ ${levelResult.overall.info.level}: ${levelResult.overall.info.title}`, '🎉', 'gold');
+  }
+
+  if (levelResult?.posn_earth?.leveledUp) {
+    showToast('Level Up! (สอวน. วิทย์โลก)', `เลเวลของคุณคือ ${levelResult.posn_earth.info.level}: ${levelResult.posn_earth.info.title}`, '🌋', 'gold');
+  }
+
+  if (levelResult?.posn_astro?.leveledUp) {
+    showToast('Level Up! (สอวน. ดาราศาสตร์)', `เลเวลของคุณคือ ${levelResult.posn_astro.info.level}: ${levelResult.posn_astro.info.title}`, '🔭', 'gold');
   }
 
   if (completedQuests.length > 0) {
@@ -1949,7 +1989,9 @@ function showResults(isViewOnly = false) {
     levelResult,
     newBadges,
     physicsXP,
-    earthXP
+    earthXP,
+    posnEarthXP,
+    posnAstroXP
   };
 
   // Clean up old results and build the new layout
@@ -2354,6 +2396,24 @@ function buildResultsLayout(resultInfo, stats) {
       progress: stats.levelResult?.earth?.info || stats.levelResult?.earth,
       progressColor: 'bg-teal-500',
       delay: 300
+    });
+
+    if (stats.posnEarthXP > 0) items.push({
+      label: 'สอวน. วิทย์โลก',
+      value: stats.posnEarthXP,
+      color: 'text-emerald-600 dark:text-emerald-400',
+      progress: stats.levelResult?.posn_earth?.info || stats.levelResult?.posn_earth,
+      progressColor: 'bg-emerald-500',
+      delay: 450
+    });
+
+    if (stats.posnAstroXP > 0) items.push({
+      label: 'สอวน. ดาราศาสตร์',
+      value: stats.posnAstroXP,
+      color: 'text-violet-600 dark:text-violet-400',
+      progress: stats.levelResult?.posn_astro?.info || stats.levelResult?.posn_astro,
+      progressColor: 'bg-violet-500',
+      delay: 600
     });
 
     items.forEach(item => {

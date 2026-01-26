@@ -2,7 +2,13 @@ import { initializeMenu } from './menu-handler.js';
 import { ModalHandler } from './modal-handler.js';
 import { quizList } from '../data/quizzes-list.js'; // Import quizList
 import { fetchAllQuizData, categoryDetails as allCategoryDetails } from './data-manager.js';
-import { EARTH_SCIENCE_BASIC_SYLLABUS, EARTH_SCIENCE_ADVANCE_SYLLABUS, PHYSICS_SYLLABUS } from '../data/sub-category-data.js';
+import {
+    EARTH_SCIENCE_BASIC_SYLLABUS,
+    EARTH_SCIENCE_ADVANCE_SYLLABUS,
+    PHYSICS_SYLLABUS,
+    POSN_EARTH_SYLLABUS,
+    POSN_ASTRO_SYLLABUS
+} from '../data/sub-category-data.js';
 import { initializeGenerator } from './generator.js';
 
 import { exportQuizToTxt } from './txt-exporter.js';
@@ -77,6 +83,25 @@ async function populateCategoryFilter() {
             }
         });
 
+        // Process POSN Earth Syllabus
+        POSN_EARTH_SYLLABUS.chapters.forEach(chapter => {
+            const optgroup = document.createElement('optgroup');
+            optgroup.label = `สอวน. วิทย์โลก - ${chapter.title}`;
+            // POSN Earth doesn't have LOs in the syllabus object yet, just topics
+            fragment.appendChild(optgroup);
+        });
+
+        // Process POSN Astro Syllabus
+        const astroPortions = ["ม.ต้น", "ม.ปลาย", "ทบทวน"];
+        astroPortions.forEach(portion => {
+            const optgroup = document.createElement('optgroup');
+            optgroup.label = `สอวน. ดาราศาสตร์ - ${portion}`;
+            POSN_ASTRO_SYLLABUS.chapters.filter(ch => ch.title.includes(portion)).forEach(ch => {
+                optgroup.appendChild(new Option(ch.title, ch.title));
+            });
+            fragment.appendChild(optgroup);
+        });
+
         categorySelector.innerHTML = ''; // Clear loading message
         categorySelector.appendChild(fragment);
         categorySelector.disabled = false;
@@ -92,7 +117,7 @@ function highlightText(text, keyword) {
     const textAsString = String(text || '');
     if (!keyword || !textAsString) {
         return textAsString;
-    }    
+    }
     // Escape special characters in the keyword for use in a regular expression
     const escapedKeyword = keyword.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
     const regex = new RegExp(escapedKeyword, 'gi');
@@ -159,7 +184,7 @@ function createQuestionElement(item, displayIndex, keyword) {
     // NEW: Add syllabus info for Basic Earth Science and Physics quizzes
     const quizInfo = quizList.find(q => q.title === item.sourceQuizTitle);
     const categoryKey = quizInfo ? quizInfo.category : null;
-    
+
     let standardInfo = '';
     let learningOutcomeInfo = '';
 
@@ -205,25 +230,40 @@ function createQuestionElement(item, displayIndex, keyword) {
                 learningOutcomeInfo = specificCat;
             }
         }
+        // NEW: Handle POSN Categories
+        else if (categoryKey === 'PosnEarthScience' || categoryKey === 'POSNEarthScience' || categoryKey === 'ChallengePOSN') {
+            const chapter = POSN_EARTH_SYLLABUS.chapters.find(ch => ch.title === mainCat);
+            if (chapter) {
+                standardInfo = "สอวน. วิทยาศาสตร์โลกและอวกาศ";
+                learningOutcomeInfo = specificCat;
+            }
+        }
+        else if (categoryKey === 'PosnAstroJunior' || categoryKey === 'PosnAstroSenior' || categoryKey === 'AstronomyPOSN' || categoryKey === 'POSNAstronomy' || categoryKey === 'AstronomyReview') {
+            const chapter = POSN_ASTRO_SYLLABUS.chapters.find(ch => ch.title === mainCat);
+            if (chapter) {
+                standardInfo = "สอวน. ดาราศาสตร์";
+                learningOutcomeInfo = specificCat;
+            }
+        }
     }
-    
-        if (standardInfo || learningOutcomeInfo) {
-            const syllabusDiv = document.createElement('div');
-            syllabusDiv.className = 'mt-3 mb-4 p-3 bg-gray-50 dark:bg-gray-700/50 border-l-4 border-gray-300 dark:border-gray-600 rounded-r-lg text-xs';
-            let html = '<dl class="space-y-1">';
-            if (standardInfo) {
-                html += `<div class="flex items-start gap-2"><dt class="font-bold w-20 flex-shrink-0">มาตรฐาน:</dt><dd class="text-gray-600 dark:text-gray-400">${standardInfo}</dd></div>`;
-            }
-            if (learningOutcomeInfo) {
-                // Determine the correct label based on the category
-                const label = (categoryKey === 'EarthSpaceScienceBasic') ? 'ตัวชี้วัด:' : 'ผลการเรียนรู้:';
-                // Clean up prefixes for better readability
-                const cleanedOutcome = learningOutcomeInfo.replace(/^ว\s[\d\.]+\sม\.[\d\/]+\s/, '').replace(/^\d+\.\s/, '').trim();
-                html += `<div class="flex items-start gap-2"><dt class="font-bold w-20 flex-shrink-0">${label}</dt><dd class="text-gray-600 dark:text-gray-400">${cleanedOutcome}</dd></div>`;
-            }
-            html += '</dl>';
-            syllabusDiv.innerHTML = html;
-            questionDiv.appendChild(syllabusDiv);
+
+    if (standardInfo || learningOutcomeInfo) {
+        const syllabusDiv = document.createElement('div');
+        syllabusDiv.className = 'mt-3 mb-4 p-3 bg-gray-50 dark:bg-gray-700/50 border-l-4 border-gray-300 dark:border-gray-600 rounded-r-lg text-xs';
+        let html = '<dl class="space-y-1">';
+        if (standardInfo) {
+            html += `<div class="flex items-start gap-2"><dt class="font-bold w-20 flex-shrink-0">มาตรฐาน:</dt><dd class="text-gray-600 dark:text-gray-400">${standardInfo}</dd></div>`;
+        }
+        if (learningOutcomeInfo) {
+            // Determine the correct label based on the category
+            const label = (categoryKey === 'EarthSpaceScienceBasic') ? 'ตัวชี้วัด:' : 'ผลการเรียนรู้:';
+            // Clean up prefixes for better readability
+            const cleanedOutcome = learningOutcomeInfo.replace(/^ว\s[\d\.]+\sม\.[\d\/]+\s/, '').replace(/^\d+\.\s/, '').trim();
+            html += `<div class="flex items-start gap-2"><dt class="font-bold w-20 flex-shrink-0">${label}</dt><dd class="text-gray-600 dark:text-gray-400">${cleanedOutcome}</dd></div>`;
+        }
+        html += '</dl>';
+        syllabusDiv.innerHTML = html;
+        questionDiv.appendChild(syllabusDiv);
     }
 
     if (questionHtml) {
