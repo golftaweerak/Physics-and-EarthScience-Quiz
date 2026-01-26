@@ -1829,8 +1829,21 @@ function showResults(isViewOnly = false) {
             isPhysics = true;
           }
 
+
           if (!isEarth && (lowerCat.includes('earth') || lowerCat.includes('astronomy') || lowerCat.includes('space') || lowerCat.includes('โลก') || lowerCat.includes('ดาราศาสตร์') || lowerCat.includes('วิทย์โลก') || lowerCat.includes('ess_') || lowerCat.includes('ดารา'))) {
             isEarth = true;
+          }
+
+          // Disambiguate: ถ้าเข้าข่ายทั้งคู่ ให้ยึดตามหมวดหลักของข้อสอบ (ป้องกันการได้ XP ซ้ำซ้อนในเรื่องที่คาบเกี่ยว)
+          if (isPhysics && isEarth) {
+            // ถ้าหมวดหลักเป็นวิทย์โลก ให้ตัดฟิสิกส์ออก
+            if (lowerCat.includes('earth') || lowerCat.includes('โลก') || lowerCat.includes('dara') || lowerCat.includes('astro') || lowerCat.includes('ess_') || lowerCat.includes('geo') || lowerCat.includes('meteo') || lowerCat.includes('ocean')) {
+              isPhysics = false;
+            }
+            // ถ้าหมวดหลักเป็นฟิสิกส์ ให้ตัดวิทย์โลกออก
+            else if (lowerCat.includes('physics') || lowerCat.includes('ฟิสิกส์') || lowerCat.includes('phy_') || lowerCat.includes('mechanic') || lowerCat.includes('electric')) {
+              isEarth = false;
+            }
           }
 
           if (isPhysics) {

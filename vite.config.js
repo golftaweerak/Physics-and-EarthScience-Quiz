@@ -30,6 +30,10 @@ export default defineConfig({
   },
   server: {
     open: true,
+    headers: {
+      'Cross-Origin-Opener-Policy': 'same-origin-allow-popups',
+      'Cross-Origin-Embedder-Policy': 'unsafe-none',
+    },
   },
   base: '/Physics-and-EarthScience-Quiz/', // Essential for GitHub Pages sub-path deployment
 });

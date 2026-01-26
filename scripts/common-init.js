@@ -58,7 +58,10 @@ function initializeAuthUI() {
         const logoutBtn = document.getElementById('user-hub-logout-btn');
 
         if (loginBtn && !loginBtn.dataset.authInitialized) {
-            loginBtn.addEventListener('click', () => authManager.login().catch(err => alert("Login failed: " + err.message)));
+            loginBtn.addEventListener('click', () => authManager.login().catch(e => {
+                console.warn("Login handled error:", e);
+                // Errors are already handled/toasted in auth-manager.js
+            }));
             loginBtn.dataset.authInitialized = 'true';
         }
         if (logoutBtn && !logoutBtn.dataset.authInitialized) {
