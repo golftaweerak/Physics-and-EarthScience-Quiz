@@ -10,6 +10,7 @@ class AuthManagerInternal {
         this.onUserChangeCallbacks = [];
         this.isInitialized = false;
         this.LOCAL_STORAGE_KEY = 'app_gamification_data'; // คีย์หลักที่คุณใช้เก็บข้อมูลใน LocalStorage
+        this.isLoggingIn = false;
 
         // Promise เพื่อรอให้ตรวจสอบ Auth เสร็จสิ้นครั้งแรก
         this.authReadyPromise = new Promise((resolve) => {
@@ -173,6 +174,12 @@ class AuthManagerInternal {
 
     // ฟังก์ชัน Login
     async login() {
+        if (this.isLoggingIn) {
+            console.log("Login already in progress. Ignoring.");
+            return;
+        }
+
+        this.isLoggingIn = true;
         try {
             const result = await signInWithPopup(auth, googleProvider);
             sessionStorage.setItem('login_toast', 'true');
@@ -191,7 +198,16 @@ class AuthManagerInternal {
             return result.user;
         } catch (error) {
             console.error("Login failed:", error);
-            throw error;
+            // Ignore popup closed by user error
+            if (error.code === 'auth/popup-closed-by-user' || error.code === 'auth/cancelled-popup-request') {
+                console.warn("Login popup was closed or cancelled.");
+            } else if (error.code === 'auth/network-request-failed') {
+                showToast('เข้าสู่ระบบไม่สำเร็จ', 'ไม่สามารถเชื่อมต่อเครือข่ายได้ กรุณาตรวจสอบอินเทอร์เน็ต', '⚠️', 'error');
+            } else {
+                throw error;
+            }
+        } finally {
+            this.isLoggingIn = false;
         }
     }
 

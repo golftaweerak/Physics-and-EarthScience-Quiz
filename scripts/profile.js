@@ -2041,7 +2041,7 @@ async function renderRadarChart(game, allProgress = null, mode = 'overall') {
                 if (syllabus && syllabus.chapters) {
                     syllabus.chapters.forEach((ch, idx) => {
                         const title = ch.shortTitle || ch.title.split(':')[0];
-                        groupsToUse[title] = { label: title, keywords: [ch.title] };
+                        groupsToUse[title] = { label: title, keywords: [ch.title, ch.shortTitle, ...(ch.keywords || [])].filter(k => k) };
                     });
                 }
             } else if (mode === 'earth_basic') {
@@ -2050,7 +2050,7 @@ async function renderRadarChart(game, allProgress = null, mode = 'overall') {
                     syllabus.units.forEach(unit => {
                         unit.chapters.forEach(ch => {
                             const title = ch.shortTitle || ch.title;
-                            groupsToUse[title] = { label: title, keywords: [ch.title] };
+                            groupsToUse[title] = { label: title, keywords: [ch.title, ch.shortTitle, ...(ch.keywords || [])].filter(k => k) };
                         });
                     });
                 }
@@ -2059,7 +2059,7 @@ async function renderRadarChart(game, allProgress = null, mode = 'overall') {
                 if (syllabus && syllabus.chapters) {
                     syllabus.chapters.forEach(ch => {
                         const title = ch.shortTitle || ch.title;
-                        groupsToUse[title] = { label: title, keywords: [ch.title] };
+                        groupsToUse[title] = { label: title, keywords: [ch.title, ch.shortTitle, ...(ch.keywords || [])].filter(k => k) };
                     });
                 }
             } else if (mode === 'physics') {
@@ -2531,7 +2531,7 @@ async function renderProficiencyHistoryChart(game, allProgress = null, range = '
         return false;
     }
     // Event listener for tab switching
-    setupTabs(game);
+
 
     // NEW: Listen for data sync events to update charts automatically
     window.addEventListener('auth-synced', () => {
