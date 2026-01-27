@@ -1080,97 +1080,8 @@ export const quizList = [
     "category": "EarthSpaceScienceAdvance",
     "subCategory": "เอกภพและกาแล็กซี"
   },
-  {
-    "id": "posn_astro/Astro1",
-    "title": "ทบทวน ดาราศาสตร์ ชุด 1",
-    "amount": 50,
-    "description": "แบบฝึกหัด ทบทวนความเข้าใจทางดาราศาสตร์",
-    "url": "./quiz/index.html?id=posn_astro/Astro1",
-    "storageKey": "quizState-Astro1",
-    "icon": "./assets/icons/space.png",
-    "borderColor": "border-red-500",
-    "altText": "ไอคอนดาราศาสตร์",
-    "category": "AstronomyReview",
-    "subCategory": "ทบทวน"
-  },
-  {
-    "id": "posn_astro/Astro2",
-    "title": "ทบทวน ดาราศาสตร์ ชุด 2",
-    "amount": 50,
-    "description": "แบบฝึกหัด ทบทวนความเข้าใจทางดาราศาสตร์",
-    "url": "./quiz/index.html?id=posn_astro/Astro2",
-    "storageKey": "quizState-Astro2",
-    "icon": "./assets/icons/space.png",
-    "borderColor": "border-red-500",
-    "altText": "ไอคอนดาราศาสตร์",
-    "category": "AstronomyReview",
-    "subCategory": "ทบทวน"
-  },
-  {
-    "id": "posn_astro/Astro3",
-    "title": "ทบทวน ดาราศาสตร์ ชุด 3",
-    "amount": 50,
-    "description": "แบบฝึกหัด ทบทวนความเข้าใจทางดาราศาสตร์",
-    "url": "./quiz/index.html?id=posn_astro/Astro3",
-    "storageKey": "quizState-Astro3",
-    "icon": "./assets/icons/space.png",
-    "borderColor": "border-gray-500",
-    "altText": "ไอคอนดาราศาสตร์",
-    "category": "AstronomyReview",
-    "subCategory": "ทบทวน"
-  },
-  {
-    "id": "posn_astro/Astro4",
-    "title": "ทบทวน ดาราศาสตร์ ชุด 4",
-    "amount": 50,
-    "description": "แบบฝึกหัด ทบทวนความเข้าใจทางดาราศาสตร์",
-    "url": "./quiz/index.html?id=posn_astro/Astro4",
-    "storageKey": "quizState-Astro4",
-    "icon": "./assets/icons/space.png",
-    "borderColor": "border-gray-500",
-    "altText": "ไอคอนดาราศาสตร์",
-    "category": "AstronomyReview",
-    "subCategory": "ทบทวน"
-  },
-  {
-    "id": "posn_astro/Astro5",
-    "title": "ทบทวน ดาราศาสตร์ ชุด 5",
-    "amount": 50,
-    "description": "ครอบคลุมเนื้อหา: พื้นฐานดาราศาสตร์, ปฏิสัมพันธ์โลก-ดวงจันทร์-ดวงอาทิตย์, กลุ่มดาว, คลื่น, ข่าวสาร",
-    "url": "./quiz/index.html?id=posn_astro/Astro5",
-    "storageKey": "quizState-Astro5",
-    "icon": "./assets/icons/space.png",
-    "borderColor": "border-gray-500",
-    "altText": "ไอคอนสำหรับ Astro5",
-    "category": "AstronomyReview",
-    "subCategory": "ทบทวน"
-  },
-  {
-    "id": "posn_astro/Astro6",
-    "title": "ทบทวน ดาราศาสตร์ ชุด 6",
-    "amount": 50,
-    "description": "ครอบคลุมเนื้อหา: การประยุกต์ใช้, กลศาสตร์ท้องฟ้า, เทคโนโลยีอวกาศ, ข่าวสาร",
-    "url": "./quiz/index.html?id=posn_astro/Astro6",
-    "storageKey": "quizState-Astro6",
-    "icon": "./assets/icons/space.png",
-    "borderColor": "border-gray-500",
-    "altText": "ไอคอนสำหรับ Astro6",
-    "category": "AstronomyReview",
-    "subCategory": "ทบทวน"
-  },
-  {
-    "id": "posn_earth/ESr1",
-    "title": "ทบทวน วิทยาศาสตร์โลกและอวกาศ ชุด 1",
-    "amount": 60,
-    "description": "แบบฝึกหัด ทบทวนความเข้าใจทางวิทยาศาสตร์โลกและอวกาศ",
-    "url": "./quiz/index.html?id=posn_earth/ESr1",
-    "storageKey": "quizState-ESr1",
-    "icon": "./assets/icons/earth1.png",
-    "borderColor": "border-red-500",
-    "altText": "ไอคอนวิทยาศาสตร์โลกและอวกาศ",
-    "category": "AstronomyReview",
-    "subCategory": "ทบทวน"
-  },
+
+
   {
     "id": "posn_astro/junior1",
     "title": "ดาราศาสตร์ ม.ต้น ชุด 1",
@@ -1375,18 +1286,7 @@ export const quizList = [
     "altText": "ไอคอนวิทยาศาสตร์โลกและอวกาศ",
     "category": "PosnEarthScience"
   },
-  {
-    "id": "posn_earth/ESr2",
-    "title": "ทบทวน วิทยาศาสตร์โลกและอวกาศ ชุด 2",
-    "amount": 60,
-    "description": "แบบฝึกหัด ทบทวนความเข้าใจทางวิทยาศาสตร์โลกและอวกาศ",
-    "url": "./quiz/index.html?id=posn_earth/ESr2",
-    "storageKey": "quizState-ESr2",
-    "icon": "./assets/icons/earth1.png",
-    "borderColor": "border-red-500",
-    "altText": "ไอคอนวิทยาศาสตร์โลกและอวกาศ",
-    "category": "PosnEarthScience"
-  },
+
   {
     "id": "posn_earth/ES4",
     "title": "วิทยาศาสตร์โลกและอวกาศ ชุด 4",
@@ -1424,6 +1324,32 @@ export const quizList = [
     "category": "PosnEarthScience"
   },
   {
+    "id": "posn_earth/ESr1",
+    "title": "ทบทวน วิทยาศาสตร์โลกและอวกาศ ชุด 1",
+    "amount": 60,
+    "description": "แบบฝึกหัด ทบทวนความเข้าใจทางวิทยาศาสตร์โลกและอวกาศ",
+    "url": "./quiz/index.html?id=posn_earth/ESr1",
+    "storageKey": "quizState-ESr1",
+    "icon": "./assets/icons/earth1.png",
+    "borderColor": "border-gray-500",
+    "altText": "ไอคอนวิทยาศาสตร์โลกและอวกาศ",
+    "category": "AstronomyReview",
+    "subCategory": "ทบทวนวิทยาศาสตร์โลกและอวกาศ"
+  },
+  {
+    "id": "posn_earth/ESr2",
+    "title": "ทบทวน วิทยาศาสตร์โลกและอวกาศ ชุด 2",
+    "amount": 60,
+    "description": "แบบฝึกหัด ทบทวนความเข้าใจทางวิทยาศาสตร์โลกและอวกาศ",
+    "url": "./quiz/index.html?id=posn_earth/ESr2",
+    "storageKey": "quizState-ESr2",
+    "icon": "./assets/icons/earth1.png",
+    "borderColor": "border-gray-500",
+    "altText": "ไอคอนวิทยาศาสตร์โลกและอวกาศ",
+    "category": "AstronomyReview",
+    "subCategory": "ทบทวนวิทยาศาสตร์โลกและอวกาศ"
+  },
+  {
     "id": "posn_earth/ESr3",
     "title": "ทบทวน วิทยาศาสตร์โลกและอวกาศ ชุด 3",
     "amount": 60,
@@ -1433,7 +1359,8 @@ export const quizList = [
     "icon": "./assets/icons/earth1.png",
     "borderColor": "border-gray-500",
     "altText": "ไอคอนวิทยาศาสตร์โลกและอวกาศ",
-    "category": "AstronomyReview"
+    "category": "AstronomyReview",
+    "subCategory": "ทบทวนวิทยาศาสตร์โลกและอวกาศ"
   },
   {
     "id": "posn_earth/ESr4",
@@ -1445,7 +1372,8 @@ export const quizList = [
     "icon": "./assets/icons/earth1.png",
     "borderColor": "border-gray-500",
     "altText": "ไอคอนวิทยาศาสตร์โลกและอวกาศ",
-    "category": "AstronomyReview"
+    "category": "AstronomyReview",
+    "subCategory": "ทบทวนวิทยาศาสตร์โลกและอวกาศ"
   },
   {
     "id": "posn_earth/ES7",
@@ -1530,7 +1458,7 @@ export const quizList = [
     "icon": "./assets/icons/astronomy1.png",
     "borderColor": "border-gray-500",
     "altText": "ไอคอนสำหรับ juniorC1",
-    "category": "AstronomyReview"
+    "category": "PosnAstroJunior"
   },
   {
     "id": "posn_astro/juniorC2",
@@ -1542,7 +1470,7 @@ export const quizList = [
     "icon": "./assets/icons/astronomy1.png",
     "borderColor": "border-gray-500",
     "altText": "ไอคอนสำหรับ juniorC2",
-    "category": "AstronomyReview"
+    "category": "PosnAstroJunior"
   },
   {
     "id": "posn_astro/seniorC1",
@@ -1554,7 +1482,7 @@ export const quizList = [
     "icon": "./assets/icons/black-hole.png",
     "borderColor": "border-gray-500",
     "altText": "ไอคอนสำหรับ seniorC1",
-    "category": "AstronomyReview"
+    "category": "PosnAstroSenior"
   },
   {
     "id": "posn_astro/seniorC2",
@@ -1566,7 +1494,7 @@ export const quizList = [
     "icon": "./assets/icons/black-hole.png",
     "borderColor": "border-gray-500",
     "altText": "ไอคอนสำหรับ seniorC2",
-    "category": "AstronomyReview"
+    "category": "PosnAstroSenior"
   },
   {
     "id": "posn_astro/seniorC3",
@@ -1578,7 +1506,7 @@ export const quizList = [
     "icon": "./assets/icons/black-hole.png",
     "borderColor": "border-gray-500",
     "altText": "ไอคอนสำหรับ seniorC3",
-    "category": "AstronomyReview"
+    "category": "PosnAstroSenior"
   },
   {
     "id": "posn_astro/seniorC4",
@@ -1590,7 +1518,7 @@ export const quizList = [
     "icon": "./assets/icons/black-hole.png",
     "borderColor": "border-gray-500",
     "altText": "ไอคอนสำหรับ seniorC4",
-    "category": "AstronomyReview"
+    "category": "PosnAstroSenior"
   },
   {
     "id": "posn_earth/ESr5",
@@ -1602,7 +1530,8 @@ export const quizList = [
     "icon": "./assets/icons/earth1.png",
     "borderColor": "border-gray-500",
     "altText": "ไอคอนสำหรับ ESr5",
-    "category": "AstronomyReview"
+    "category": "AstronomyReview",
+    "subCategory": "ทบทวนวิทยาศาสตร์โลกและอวกาศ"
   },
   {
     "id": "posn_earth/ESr6",
@@ -1614,7 +1543,8 @@ export const quizList = [
     "icon": "./assets/icons/earth1.png",
     "borderColor": "border-gray-500",
     "altText": "ไอคอนสำหรับ ESr6",
-    "category": "AstronomyReview"
+    "category": "AstronomyReview",
+    "subCategory": "ทบทวนวิทยาศาสตร์โลกและอวกาศ"
   },
   {
     "id": "posn_astro/junior2568",
@@ -1979,3 +1909,87 @@ export const quizList = [
     "subCategory": "ดาราศาสตร์ (Astronomy)"
   },
 ];
+
+// Explicitly added Astro Review Quizzes
+const astroReviewQuizzes = [
+  {
+    "id": "posn_astro/Astro1",
+    "title": "ทบทวน ดาราศาสตร์ ชุด 1",
+    "amount": 50,
+    "description": "แบบฝึกหัด ทบทวนความเข้าใจทางดาราศาสตร์",
+    "url": "./quiz/index.html?id=posn_astro/Astro1",
+    "storageKey": "quizState-Astro1",
+    "icon": "./assets/icons/space.png",
+    "borderColor": "border-gray-500",
+    "altText": "ทบทวนดาราศาสตร์ ชุด 1",
+    "category": "AstronomyReview",
+    "subCategory": "ทบทวนดาราศาสตร์"
+  },
+  {
+    "id": "posn_astro/Astro2",
+    "title": "ทบทวน ดาราศาสตร์ ชุด 2",
+    "amount": 50,
+    "description": "แบบฝึกหัด ทบทวนความเข้าใจทางดาราศาสตร์",
+    "url": "./quiz/index.html?id=posn_astro/Astro2",
+    "storageKey": "quizState-Astro2",
+    "icon": "./assets/icons/space.png",
+    "borderColor": "border-gray-500",
+    "altText": "ทบทวนดาราศาสตร์ ชุด 2",
+    "category": "AstronomyReview",
+    "subCategory": "ทบทวนดาราศาสตร์"
+  },
+  {
+    "id": "posn_astro/Astro3",
+    "title": "ทบทวน ดาราศาสตร์ ชุด 3",
+    "amount": 50,
+    "description": "แบบฝึกหัด ทบทวนความเข้าใจทางดาราศาสตร์",
+    "url": "./quiz/index.html?id=posn_astro/Astro3",
+    "storageKey": "quizState-Astro3",
+    "icon": "./assets/icons/space.png",
+    "borderColor": "border-gray-500",
+    "altText": "ทบทวนดาราศาสตร์ ชุด 3",
+    "category": "AstronomyReview",
+    "subCategory": "ทบทวนดาราศาสตร์"
+  },
+  {
+    "id": "posn_astro/Astro4",
+    "title": "ทบทวน ดาราศาสตร์ ชุด 4",
+    "amount": 50,
+    "description": "แบบฝึกหัด ทบทวนความเข้าใจทางดาราศาสตร์",
+    "url": "./quiz/index.html?id=posn_astro/Astro4",
+    "storageKey": "quizState-Astro4",
+    "icon": "./assets/icons/space.png",
+    "borderColor": "border-gray-500",
+    "altText": "ทบทวนดาราศาสตร์ ชุด 4",
+    "category": "AstronomyReview",
+    "subCategory": "ทบทวนดาราศาสตร์"
+  },
+  {
+    "id": "posn_astro/Astro5",
+    "title": "ทบทวน ดาราศาสตร์ ชุด 5",
+    "amount": 50,
+    "description": "ครอบคลุมเนื้อหา: พื้นฐานดาราศาสตร์, ปฏิสัมพันธ์โลก-ดวงจันทร์-ดวงอาทิตย์, กลุ่มดาว, คลื่น, ข่าวสาร",
+    "url": "./quiz/index.html?id=posn_astro/Astro5",
+    "storageKey": "quizState-Astro5",
+    "icon": "./assets/icons/space.png",
+    "borderColor": "border-gray-500",
+    "altText": "ทบทวนดาราศาสตร์ ชุด 5",
+    "category": "AstronomyReview",
+    "subCategory": "ทบทวนดาราศาสตร์"
+  },
+  {
+    "id": "posn_astro/Astro6",
+    "title": "ทบทวน ดาราศาสตร์ ชุด 6",
+    "amount": 50,
+    "description": "ครอบคลุมเนื้อหา: การประยุกต์ใช้, กลศาสตร์ท้องฟ้า, เทคโนโลยีอวกาศ, ข่าวสาร",
+    "url": "./quiz/index.html?id=posn_astro/Astro6",
+    "storageKey": "quizState-Astro6",
+    "icon": "./assets/icons/space.png",
+    "borderColor": "border-gray-500",
+    "altText": "ทบทวนดาราศาสตร์ ชุด 6",
+    "category": "AstronomyReview",
+    "subCategory": "ทบทวนดาราศาสตร์"
+  }
+];
+
+quizList.push(...astroReviewQuizzes);

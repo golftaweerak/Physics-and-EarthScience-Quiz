@@ -3,7 +3,8 @@ import {
     EARTH_SCIENCE_BASIC_SYLLABUS,
     EARTH_SCIENCE_ADVANCE_SYLLABUS,
     POSN_EARTH_SYLLABUS,
-    POSN_ASTRO_SYLLABUS
+    POSN_ASTRO_SYLLABUS,
+    REVIEW_SYLLABUS
 } from '../data/sub-category-data.js';
 
 /**
@@ -33,7 +34,7 @@ export function getSyllabusForCategory(categoryKey) {
         return POSN_EARTH_SYLLABUS; // Assuming generic challenge maps to Earth POSN structure
     }
     if (categoryKey === 'AstronomyReview') {
-        return POSN_ASTRO_SYLLABUS;
+        return REVIEW_SYLLABUS;
     }
     return null;
 }

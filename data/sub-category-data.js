@@ -419,6 +419,14 @@ export const POSN_ASTRO_SYLLABUS = Object.freeze({
   ]
 });
 
+export const REVIEW_SYLLABUS = Object.freeze({
+  displayName: "ทบทวน",
+  chapters: [
+    { title: "ทบทวนดาราศาสตร์", shortTitle: "ดาราศาสตร์" },
+    { title: "ทบทวนวิทยาศาสตร์โลกและอวกาศ", shortTitle: "วิทย์โลก" }
+  ]
+});
+
 export const subCategoryData = {
   // Sub-categories for Physics
   Physics: PHYSICS_SYLLABUS,

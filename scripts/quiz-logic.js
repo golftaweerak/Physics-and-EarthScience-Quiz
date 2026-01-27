@@ -11,6 +11,7 @@ import { QuizSessionManager } from './quiz-session-manager.js';
 
 // Global state and session variables
 let session;
+let state;
 let elements = {};
 // handler: A dedicated handler for the resume modal
 let resumeModalHandler;

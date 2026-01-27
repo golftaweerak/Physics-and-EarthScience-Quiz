@@ -7,7 +7,9 @@ import {
     EARTH_SCIENCE_ADVANCE_SYLLABUS,
     PHYSICS_SYLLABUS,
     POSN_EARTH_SYLLABUS,
-    POSN_ASTRO_SYLLABUS
+    POSN_EARTH_SYLLABUS,
+    POSN_ASTRO_SYLLABUS,
+    REVIEW_SYLLABUS
 } from '../data/sub-category-data.js';
 import { initializeGenerator } from './generator.js';
 
@@ -238,10 +240,17 @@ function createQuestionElement(item, displayIndex, keyword) {
                 learningOutcomeInfo = specificCat;
             }
         }
-        else if (categoryKey === 'PosnAstroJunior' || categoryKey === 'PosnAstroSenior' || categoryKey === 'AstronomyPOSN' || categoryKey === 'POSNAstronomy' || categoryKey === 'AstronomyReview') {
+        else if (categoryKey === 'PosnAstroJunior' || categoryKey === 'PosnAstroSenior' || categoryKey === 'AstronomyPOSN' || categoryKey === 'POSNAstronomy') {
             const chapter = POSN_ASTRO_SYLLABUS.chapters.find(ch => ch.title === mainCat);
             if (chapter) {
                 standardInfo = "สอวน. ดาราศาสตร์";
+                learningOutcomeInfo = specificCat;
+            }
+        }
+        else if (categoryKey === 'AstronomyReview') {
+            const chapter = REVIEW_SYLLABUS.chapters.find(ch => ch.title === mainCat);
+            if (chapter) {
+                standardInfo = "ทบทวน";
                 learningOutcomeInfo = specificCat;
             }
         }
