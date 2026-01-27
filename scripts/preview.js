@@ -7,7 +7,7 @@ import {
     EARTH_SCIENCE_ADVANCE_SYLLABUS,
     PHYSICS_SYLLABUS,
     POSN_EARTH_SYLLABUS,
-    POSN_EARTH_SYLLABUS,
+
     POSN_ASTRO_SYLLABUS,
     REVIEW_SYLLABUS
 } from '../data/sub-category-data.js';
