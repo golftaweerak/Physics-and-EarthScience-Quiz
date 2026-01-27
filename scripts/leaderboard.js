@@ -162,6 +162,22 @@ export async function initializeLeaderboard() {
                             }
                         }
                         score = Math.max(score, calculatedEarthXP);
+                    } else if (type === 'posnEarthTrackXP') {
+                        let calculatedPosnEarthXP = 0;
+                        for (const group of Object.values(PROFICIENCY_GROUPS)) {
+                            if (group.track === 'posn_earth') {
+                                calculatedPosnEarthXP += (user[group.field] || 0);
+                            }
+                        }
+                        score = Math.max(score, calculatedPosnEarthXP);
+                    } else if (type === 'posnAstroTrackXP') {
+                        let calculatedPosnAstroXP = 0;
+                        for (const group of Object.values(PROFICIENCY_GROUPS)) {
+                            if (group.track === 'posn_astro') {
+                                calculatedPosnAstroXP += (user[group.field] || 0);
+                            }
+                        }
+                        score = Math.max(score, calculatedPosnAstroXP);
                     }
                 }
 

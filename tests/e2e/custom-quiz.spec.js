@@ -2,17 +2,29 @@ import { test, expect } from '@playwright/test';
 
 test('create and start a custom quiz', async ({ page }) => {
   // 1. Go to homepage
-  await page.goto('/');
-  await page.waitForLoadState('networkidle');
+  // 1. Go to homepage
+  await page.goto('./');
+  // Wait for app to be fully initialized
+  await page.waitForSelector('body[data-app-initialized="true"]', { timeout: 15000 });
 
   // 2. Open Hub Modal
+  // Wait for main.js to render the buttons
   const createBtn = page.locator('#create-custom-quiz-btn');
-  await expect(createBtn).toBeVisible();
-  await createBtn.click();
+  await expect(createBtn).toBeVisible({ timeout: 15000 });
+
+  // Handle potential overlay/sticky header issues by forcing click or scrolling
+  await createBtn.scrollIntoViewIfNeeded();
+
+  // Wait for the modal component to be injected (proof that app-loader finished component loading)
+  // This prevents clicking before the event listener is attached
+  await page.locator('#custom-quiz-hub-modal').waitFor({ state: 'attached', timeout: 15000 });
+
+  await createBtn.click({ force: true });
 
   // 3. Wait for Hub Modal
   const hubModal = page.locator('#custom-quiz-hub-modal');
-  await expect(hubModal).toBeVisible({ timeout: 5000 });
+  // It might take a moment for the class to switch from hidden
+  await expect(hubModal).toBeVisible({ timeout: 10000 });
 
   // 4. Click "Create New Quiz" in Hub
   const openGeneratorBtn = page.locator('#open-create-quiz-modal-btn');

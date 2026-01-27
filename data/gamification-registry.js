@@ -55,11 +55,13 @@ export const BADGES = [
   { id: 'electromagnetism_expert', icon: '⚡', name: 'ผู้เชี่ยวชาญไฟฟ้าแม่เหล็ก', desc: 'มี XP สายไฟฟ้าและแม่เหล็กครบ 1,000', tier: 'silver' },
   { id: 'waves_expert', icon: '🔊', name: 'ผู้เชี่ยวชาญคลื่น', desc: 'มี XP สายคลื่นและแสงครบ 1,000', tier: 'silver' },
   { id: 'modern_physics_expert', icon: '☢️', name: 'ผู้เชี่ยวชาญฟิสิกส์ใหม่', desc: 'มี XP สายฟิสิกส์อะตอม/นิวเคลียร์ครบ 1,000', tier: 'silver' },
+
   // NEW Badges
   { id: 'theory_master', icon: '📜', name: 'นักทฤษฎี', desc: 'มี XP สายทฤษฎีสะสมครบ 1,000', tier: 'gold' },
   { id: 'calculation_expert', icon: '🧮', name: 'นักคำนวณ', desc: 'มี XP สายคำนวณสะสมครบ 1,000', tier: 'gold' },
   { id: 'night_owl', icon: '🦉', name: 'นกฮูกราตรี', desc: 'ทำแบบทดสอบในช่วงเวลา 00:00 - 05:00', tier: 'silver' },
   { id: 'early_bird', icon: '🌅', name: 'นกเช้าตรู่', desc: 'ทำแบบทดสอบในช่วงเวลา 05:00 - 08:00', tier: 'silver' },
+  { id: 'speed_runner', icon: '⚡', name: 'เสือปืนไว', desc: 'ตอบถูก 5 ข้อติดต่อกันโดยใช้เวลาน้อยกว่า 30 วินาที', tier: 'gold' },
   { id: 'item_user_10', icon: '🧪', name: 'นักทดลองไอเทม', desc: 'ใช้ไอเทมช่วยเหลือครบ 10 ครั้ง', tier: 'silver' }
 ];
 
@@ -85,7 +87,10 @@ export const DAILY_QUESTS = [
   { id: 'item_use_1', desc: 'ใช้ไอเทมช่วยเหลือในแบบทดสอบ 1 ครั้ง', target: 1, type: 'use_item', xp: 100 },
   { id: 'theory_20', desc: 'ตอบคำถามทฤษฎีให้ถูก 20 ข้อ', target: 20, type: 'correct_answers_type', questionType: 'theory', xp: 200 },
   { id: 'calc_10', desc: 'ตอบข้อเขียนตัวเลขให้ถูก 10 ข้อ', target: 10, type: 'correct_answers_type', questionType: 'calculation', xp: 250 },
-  { id: 'custom_quiz_size_30', desc: 'ทำแบบทดสอบที่สร้างเอง (30 ข้อขึ้นไป) ให้จบ', target: 1, type: 'custom_quiz_size', minQuestions: 30, xp: 300 }
+  { id: 'custom_quiz_size_30', desc: 'ทำแบบทดสอบที่สร้างเอง (30 ข้อขึ้นไป) ให้จบ', target: 1, type: 'custom_quiz_size', minQuestions: 30, xp: 300 },
+  { id: 'posn_quiz_1', desc: 'ทำแบบทดสอบ สอวน. 1 ครั้ง', target: 1, type: 'quiz_starts_with', prefix: 'posn', xp: 200 },
+  { id: 'login_morning', desc: 'เข้าใช้งานช่วงเช้า (6:00 - 9:00)', target: 1, type: 'login_time', startHour: 6, endHour: 9, xp: 50 },
+  { id: 'login_night', desc: 'เข้าใช้งานช่วงค่ำ (20:00 - 23:00)', target: 1, type: 'login_time', startHour: 20, endHour: 23, xp: 50 }
 ];
 
 export const ACHIEVEMENTS = [
@@ -116,7 +121,10 @@ export const ACHIEVEMENTS = [
   { id: 'level_30', title: 'ปราชญ์อาวุโส', desc: 'เลเวลถึง 30', icon: '🔱', target: 30, type: 'level', rewardTitle: 'ปราชญ์อาวุโส' },
   { id: 'level_50', title: 'อมตะแห่งปัญญา', desc: 'เลเวลถึง 50', icon: '♾️', target: 50, type: 'level', rewardTitle: 'อมตะแห่งปัญญา' },
   { id: 'item_usage_50', title: 'ผู้เชี่ยวชาญอุปกรณ์', desc: 'ใช้ไอเทมช่วยเหลือครบ 50 ครั้ง', icon: '🛠️', target: 50, type: 'item_usage', rewardTitle: 'นักประดิษฐ์' },
-  { id: 'xp_50k_ach', title: 'เศรษฐีผู้ร่ำรวย', desc: 'มี XP รวมสะสมครบ 50,000', icon: '💎', target: 50000, type: 'total_xp', rewardTitle: 'มหาเศรษฐี' }
+  { id: 'xp_50k_ach', title: 'เศรษฐีผู้ร่ำรวย', desc: 'มี XP รวมสะสมครบ 50,000', icon: '💎', target: 50000, type: 'total_xp', rewardTitle: 'มหาเศรษฐี' },
+  { id: 'posn_mastery', title: 'เทพเจ้า สอวน.', desc: 'เลเวลถึง 10 ทั้งสาย สอวน. วิทย์โลกและดาราศาสตร์', icon: '🪐', target: 10, type: 'dual_level', track1: 'posn_earth', track2: 'posn_astro', rewardTitle: 'เทพเจ้า สอวน.' },
+  { id: 'quest_champion', title: 'ผู้พิชิตภารกิจ', desc: 'ทำภารกิจรายวันสำเร็จครบ 50 ภารกิจ', icon: '📜', target: 50, type: 'total_quests', rewardTitle: 'ผู้พิชิตภารกิจ' },
+  { id: 'badge_collector', title: 'นักสะสมเหรียญ', desc: 'ได้รับเหรียญรางวัลครบ 20 เหรียญ', icon: '🎖️', target: 20, type: 'total_badges', rewardTitle: 'นักสะสมเหรียญ' }
 ];
 
 export const SHOP_ITEMS = [
@@ -260,3 +268,26 @@ export const THEME_DEFINITIONS = {
     dark_text: '#f472b6'
   }
 };
+
+export const XP_THRESHOLDS = [
+  { level: 1, xp: 0, quest: null }, // No quest to reach level 1
+  { level: 2, xp: 100, quest: { type: 'correct_streak', target: 5, desc: 'ตอบคำถามถูกติดต่อกัน 5 ข้อ' } },
+  { level: 3, xp: 300, quest: { type: 'quizzes_completed', target: 3, desc: 'ทำแบบทดสอบให้ครบ 3 ครั้ง' } },
+  { level: 4, xp: 600, quest: { type: 'perfect_scores', target: 1, desc: 'ทำคะแนนเต็ม 100% ให้ได้ 1 ครั้ง' } },
+  { level: 5, xp: 1000, quest: { type: 'high_scores_80', target: 3, desc: 'ทำคะแนนได้ 80% ขึ้นไป 3 ครั้ง' } },
+  { level: 6, xp: 1500, quest: { type: 'quizzes_completed', target: 10, desc: 'ทำแบบทดสอบให้ครบ 10 ครั้ง' } },
+  { level: 7, xp: 2200, quest: { type: 'correct_streak', target: 15, desc: 'ตอบคำถามถูกติดต่อกัน 15 ข้อ' } },
+  { level: 8, xp: 3000, quest: { type: 'physics_level', target: 5, desc: 'ไปให้ถึงเลเวล 5 ในสายฟิสิกส์' } },
+  { level: 9, xp: 4000, quest: { type: 'earth_level', target: 5, desc: 'ไปให้ถึงเลเวล 5 ในสายวิทย์โลก' } },
+  { level: 10, xp: 5500, quest: { type: 'quizzes_completed', target: 20, desc: 'ทำแบบทดสอบให้ครบ 20 ครั้ง' } },
+  { level: 11, xp: 7500, quest: { type: 'high_scores_80', target: 10, desc: 'ทำคะแนนได้ 80% ขึ้นไป 10 ครั้ง' } },
+  { level: 12, xp: 10000, quest: { type: 'correct_streak', target: 25, desc: 'ตอบคำถามถูกติดต่อกัน 25 ข้อ' } },
+  { level: 13, xp: 13000, quest: { type: 'quizzes_completed', target: 40, desc: 'ทำแบบทดสอบให้ครบ 40 ครั้ง' } },
+  { level: 14, xp: 16500, quest: { type: 'perfect_scores', target: 5, desc: 'ทำคะแนนเต็ม 100% ให้ได้ 5 ครั้ง' } },
+  { level: 15, xp: 20500, quest: { type: 'physics_level', target: 10, desc: 'ไปให้ถึงเลเวล 10 ในสายฟิสิกส์' } },
+  { level: 16, xp: 25000, quest: { type: 'earth_level', target: 10, desc: 'ไปให้ถึงเลเวล 10 ในสายวิทย์โลก' } },
+  { level: 17, xp: 30000, quest: { type: 'high_scores_80', target: 20, desc: 'ทำคะแนนได้ 80% ขึ้นไป 20 ครั้ง' } },
+  { level: 18, xp: 36000, quest: { type: 'quizzes_completed', target: 80, desc: 'ทำแบบทดสอบให้ครบ 80 ครั้ง' } },
+  { level: 19, xp: 43000, quest: { type: 'correct_streak', target: 40, desc: 'ตอบคำถามถูกติดต่อกัน 40 ข้อ' } },
+  { level: 20, xp: 50000, quest: { type: 'perfect_scores', target: 10, desc: 'ทำคะแนนเต็ม 100% ให้ได้ 10 ครั้ง' } }
+];

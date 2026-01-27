@@ -875,7 +875,25 @@ function setupLeaderboardSystem(game) {
                 if (rank === 2) rankDisplay = `<span class="text-xl sm:text-2xl">🥈</span>`;
                 if (rank === 3) rankDisplay = `<span class="text-xl sm:text-2xl">🥉</span>`;
 
-                const score = isMe && user.score !== undefined ? user.score : (user[type] || 0);
+                let score = isMe && user.score !== undefined ? user.score : (user[type] || 0);
+
+                // Fallback: Calculate score from sub-proficiencies if missing or zero
+                if (score === 0 && (type.includes('TrackXP'))) {
+                    let calculatedScore = 0;
+                    let targetTrack = 'overall';
+
+                    const configCat = SiteConfig.categories.find(c => c.id === type);
+                    if (configCat && configCat.track) targetTrack = configCat.track;
+
+                    if (targetTrack !== 'overall') {
+                        for (const group of Object.values(PROFICIENCY_GROUPS)) {
+                            if (group.track === targetTrack) {
+                                calculatedScore += (user[group.field] || 0);
+                            }
+                        }
+                        if (calculatedScore > score) score = calculatedScore;
+                    }
+                }
                 const scoreFormatted = score.toLocaleString();
 
                 let track = 'overall';

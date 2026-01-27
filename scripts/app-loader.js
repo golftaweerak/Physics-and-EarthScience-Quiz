@@ -193,9 +193,10 @@ async function main() {
         });
 
         console.log("✅ App Loader: Initialization complete!");
-
+        document.body.dataset.appInitialized = 'true';
     } catch (error) {
         console.error("❌ App Loader: CRITICAL ERROR:", error);
+        document.body.dataset.appInitialized = 'error';
         // Fallback UI
         const container = document.querySelector('main') || document.body;
         if (container) {

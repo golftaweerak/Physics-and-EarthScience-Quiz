@@ -1,127 +1,131 @@
-/**
- * scripts/quiz-session-manager.js
- * 
- * Manages the state, progression, and data processing of a quiz session.
- * This is the "Model/Controller" part of the quiz logic.
- */
-
-import { shuffleArray } from './utils.js';
 
 export class QuizSessionManager {
-  constructor(quizData, storageKey, options = {}) {
-    this.quizData = quizData;
-    this.storageKey = storageKey;
-    this.options = {
-      isChallenge: false,
-      initialLives: 1,
-      mode: 'classic',
-      ...options
-    };
+  constructor() {
+    this.reset();
+  }
 
+  reset() {
     this.state = {
       currentQuestionIndex: 0,
-      score: 0,
       shuffledQuestions: [],
       userAnswers: [],
-      lives: this.options.initialLives,
-      isEliminated: false,
-      hasWon: false,
-      xpMultiplier: 1,
-      hintUsed: false,
-      startTime: Date.now(),
-      endTime: null
+      score: 0,
+      timer: 0,
+      timerInterval: null,
+      lives: 1, // Default only, overwritten in init
+      isSurvivalMode: false,
+      isChallengeMode: false,
+      startTime: null,
+      correctStreak: 0,
+
+      // Stats tracking
+      theoryXP: 0,
+      calculationXP: 0,
+      itemsUsedCount: 0
     };
+
+    // Bind context if needed
+    // Bind context if needed
+    // this.handleTick = this.handleTick.bind(this); // REMOVED: handleTick does not exist
   }
 
-  /**
-   * Initializes or resumes a session.
-   */
-  start(savedState = null) {
-    if (savedState) {
-      this.state = { ...this.state, ...savedState };
+  init(questions, options = {}) {
+    this.reset();
+    this.state.shuffledQuestions = [...questions]; // Already shuffled by loader usually, or we can shuffle here
+    this.state.isSurvivalMode = options.lives > 1 || options.mode === 'survival';
+    this.state.lives = options.lives || 1;
+    this.state.isChallengeMode = !!options.isChallenge;
+    this.state.userAnswers = new Array(questions.length).fill(null);
+    this.state.startTime = Date.now();
+
+    // Set up timer
+    if (options.timerMode === 'per_question') {
+      this.state.timePerQuestion = options.timeLimit || 90;
+      this.state.timer = this.state.timePerQuestion;
     } else {
-      this.state.shuffledQuestions = shuffleArray([...this.quizData]);
-      this.state.userAnswers = new Array(this.state.shuffledQuestions.length).fill(null);
+      // Overall timer
+      this.state.timeLimit = options.timeLimit || (questions.length * 75);
+      this.state.timer = this.state.timeLimit;
+    }
+
+    this.state.timerMode = options.timerMode || 'overall';
+  }
+
+  startTimer(callback) {
+    if (this.state.timerInterval) clearInterval(this.state.timerInterval);
+
+    this.state.timerInterval = setInterval(() => {
+      if (this.state.timer > 0) {
+        this.state.timer--;
+        if (callback) callback(this.state.timer);
+      } else {
+        this.stopTimer();
+        if (callback) callback(0, true); // timeUp = true
+      }
+    }, 1000);
+  }
+
+  stopTimer() {
+    if (this.state.timerInterval) {
+      clearInterval(this.state.timerInterval);
+      this.state.timerInterval = null;
     }
   }
 
-  /**
-   * Records an answer for the current question.
-   */
-  submitAnswer(answerData) {
-    const { currentQuestionIndex, shuffledQuestions } = this.state;
-    const currentQuestion = shuffledQuestions[currentQuestionIndex];
-
-    const record = {
-      question: currentQuestion.question,
-      selectedAnswer: answerData.selected,
-      correctAnswer: currentQuestion.answer,
-      isCorrect: answerData.isCorrect,
-      explanation: currentQuestion.explanation || "",
-      subCategory: currentQuestion.subCategory || 'ไม่มีหมวดหมู่',
-      sourceQuizTitle: currentQuestion.sourceQuizTitle,
-      sourceQuizCategory: currentQuestion.sourceQuizCategory,
-      timestamp: Date.now()
+  recordAnswer(questionIndex, answerText, isCorrect, questionData) {
+    this.state.userAnswers[questionIndex] = {
+      questionId: questionData.id,
+      answer: answerText,
+      isCorrect: isCorrect,
+      timestamp: Date.now(),
+      // Store data needed for XP calculation later
+      subCategory: questionData.subCategory,
+      sourceQuizCategory: questionData.sourceQuizCategory || questionData.category,
+      type: questionData.type // theory vs calculation
     };
 
-    this.state.userAnswers[currentQuestionIndex] = record;
-    if (answerData.isCorrect) {
+    if (isCorrect) {
       this.state.score++;
+      this.state.correctStreak++;
     } else {
-      if (this.options.mode === 'survival') {
+      this.state.correctStreak = 0;
+      if (this.state.isSurvivalMode) {
         this.state.lives--;
-        if (this.state.lives <= 0) {
-          this.state.isEliminated = true;
-        }
       }
     }
-
-    return record;
-  }
-
-  /**
-   * Moves to the next available question.
-   */
-  nextQuestion() {
-    if (this.state.currentQuestionIndex < this.state.shuffledQuestions.length - 1) {
-      this.state.currentQuestionIndex++;
-      return true;
-    }
-    return false;
-  }
-
-  /**
-   * Calculates final results and XP.
-   */
-  calculateResults() {
-    const total = this.state.shuffledQuestions.length;
-    const percentage = (this.state.score / total) * 100;
-
-    // XP Calculation Logic
-    let baseXP = 0;
-    this.state.userAnswers.forEach(ans => {
-      if (ans && ans.isCorrect) {
-        // Points based on question complexity (placeholder logic)
-        baseXP += 4;
-      }
-    });
-
-    const bonusXP = percentage === 100 ? 50 : (percentage >= 80 ? 20 : 0);
-    const finalXP = Math.round((baseXP + bonusXP) * this.state.xpMultiplier);
 
     return {
-      score: this.state.score,
-      total,
-      percentage,
-      xpEarned: finalXP,
-      isPerfect: percentage === 100
+      isCorrect,
+      remainingLives: this.state.lives,
+      isGameOver: this.state.isSurvivalMode && this.state.lives <= 0
     };
   }
 
-  /**
-   * Persists current state to localStorage.
-   */
-  save() {
-    localStorage.setItem(this.storageKey, JSON.stringify(this.state));
+  getResults() {
+    const total = this.state.shuffledQuestions.length;
+    const correct = this.state.score;
+    const percentage = total > 0 ? Math.round((correct / total) * 100) : 0;
+
+    return {
+      total,
+      correct,
+      percentage,
+      userAnswers: this.state.userAnswers,
+      timeElapsed: Math.floor((Date.now() - this.state.startTime) / 1000),
+      isSurvival: this.state.isSurvivalMode,
+      livesLeft: this.state.lives
+    };
+  }
+
+  // Resume function to restore state from localStorage object
+  restoreState(savedState) {
+    if (!savedState) return false;
+
+    // Deep merge or copy properties
+    this.state = { ...this.state, ...savedState };
+
+    // Important: Checking if timer needs handling? 
+    // Usually resume logic in main app handles the UI timer restart
+    return true;
   }
 }

@@ -4,22 +4,21 @@ import { authManager } from './auth-manager.js';
 import { showToast } from './toast.js';
 import { escapeHtml } from './utils.js';
 import { SiteConfig } from './site-config.js';
-import { BADGES, DAILY_QUESTS, ACHIEVEMENTS, SHOP_ITEMS, THEME_DEFINITIONS } from '../data/gamification-registry.js';
-export { BADGES, DAILY_QUESTS, ACHIEVEMENTS, SHOP_ITEMS, THEME_DEFINITIONS };
-
-// กำหนดเกณฑ์ XP สำหรับทุกสาย (ใช้เกณฑ์เดียวกันเพื่อความง่าย)
-// แต่ละเลเวลจะมีเงื่อนไข (Quest) ที่ต้องทำให้สำเร็จก่อนจึงจะเลื่อนระดับได้
-export const XP_THRESHOLDS = SiteConfig.xpThresholds;
+import {
+    BADGES,
+    DAILY_QUESTS,
+    ACHIEVEMENTS,
+    SHOP_ITEMS,
+    XP_THRESHOLDS,
+    THEME_DEFINITIONS
+} from '../data/gamification-registry.js';
+export { BADGES, DAILY_QUESTS, ACHIEVEMENTS, SHOP_ITEMS, XP_THRESHOLDS, THEME_DEFINITIONS };
 
 // ชื่อยศสำหรับแต่ละสาย (Titles)
 // ผู้เล่นจะได้รับฉายาตามเลเวลที่ทำได้ในแต่ละสาย (Overall, Physics, Earth Science)
 // โดยระบบจะเลือกฉายาจาก Array นี้ตามลำดับเลเวล (Level 1 = Index 0)
 // หากเลเวลเกินจำนวนฉายาที่มี จะใช้ฉายาสูงสุดที่มีอยู่
 export const TRACK_TITLES = SiteConfig.trackTitles;
-
-// DEPRECATED: Pet System Constants (Kept for backward compatibility)
-export const PET_TYPES = {};
-export const PET_LEVELS = [];
 
 // คงไว้เพื่อความเข้ากันได้ (Backward Compatibility) และใช้อ้างอิง
 export const LEVELS = XP_THRESHOLDS.map((t, i) => ({
@@ -1560,6 +1559,16 @@ export class Gamification {
                 if (stats.isCustomQuiz && stats.questionCount >= (q.minQuestions || 20)) {
                     progressMade = 1;
                 }
+            } else if (q.type === 'quiz_starts_with') {
+                if (stats.quizId && stats.quizId.toLowerCase().startsWith(q.prefix.toLowerCase())) {
+                    progressMade = 1;
+                }
+            } else if (q.type === 'login_time') {
+                const now = new Date();
+                const hour = now.getHours();
+                if (hour >= q.startHour && hour < q.endHour) {
+                    progressMade = 1;
+                }
             }
 
             if (progressMade > 0) {
@@ -1571,6 +1580,7 @@ export class Gamification {
                 if (q.progress >= q.target) {
                     q.progress = q.target;
                     q.completed = true;
+                    this.state.totalQuestsCompleted = (this.state.totalQuestsCompleted || 0) + 1; // NEW: Track total completed
                     // Use the quest's category for XP, fallback to 'General'
                     // OPTIMIZATION: Tell addXP not to save state, as submitQuizResult will handle it.
                     this.addXP(q.xp, q.category || 'General', { shouldSave: false });
@@ -1637,6 +1647,21 @@ export class Gamification {
                 if ((this.state.calculationXP || 0) >= ach.target) achieved = true;
             } else if (ach.type === 'has_badge') {
                 if (this.state.badges.includes(ach.badgeId)) achieved = true;
+            } else if (ach.type === 'dual_level') {
+                const level1 = this.getLevelInfo(this.state[ach.track1 + 'TrackXP'] || 0, ach.track1).level;
+                const level2 = this.getLevelInfo(this.state[ach.track2 + 'TrackXP'] || 0, ach.track2).level;
+                if (level1 >= ach.target && level2 >= ach.target) achieved = true;
+            } else if (ach.type === 'total_quests') {
+                // Approximate total quests by checking history length (since we don't store a counter yet, or we could add one)
+                // For now, let's use questHistory.length as a proxy or just rely on manual increment elsewhere?
+                // Better: Use `this.state.questHistory` length if it persisted all history, but it's capped at 50.
+                // Alternative: Add a `totalQuestsCompleted` counter to state. For now, let's assume valid state has this if we add it.
+                // Fallback: Check if we can count differently.
+                // Let's implement a simple counter for future. For now, maybe just check history length (limited).
+                // Actually, let's add `totalQuestsCompleted` to state in `submitQuizResult` or `updateQuest`
+                if ((this.state.totalQuestsCompleted || 0) >= ach.target) achieved = true;
+            } else if (ach.type === 'total_badges') {
+                if (this.state.badges.length >= ach.target) achieved = true;
             }
 
             if (achieved) {
@@ -1765,8 +1790,11 @@ export class Gamification {
 
         if (posnEarthLevel >= 3) unlock('posn_earth_lover');
         if (posnEarthLevel >= 5) unlock('posn_earth_expert');
+        if (posnEarthLevel >= 10) unlock('posn_earth_master'); // Added
+
         if (posnAstroLevel >= 3) unlock('posn_astro_lover');
         if (posnAstroLevel >= 5) unlock('posn_astro_expert');
+        if (posnAstroLevel >= 10) unlock('posn_astro_master'); // Added
 
         if (this.state.xp >= 5000) unlock('xp_5k');
         if (this.state.xp >= 10000) unlock('xp_10k');
@@ -1801,6 +1829,12 @@ export class Gamification {
             if (hour >= 5 && hour < 8) unlock('early_bird');
         }
 
+        // Speed Badge (Simplified check: if perfect score on non-custom quiz with sufficient questions, assume speed if we had data,
+        // but since we lack duration data here, we might need to rely on the user to IMPLEMENT specific speed tracking later.
+        // For now, let's leave speed_runner logic for a future update or if we can pass duration.)
+
+
+
         return newBadges;
     }
 
@@ -1818,6 +1852,8 @@ export class Gamification {
     }
 }
 
+
 export function initializeGamification() {
     return new Gamification();
 }
+

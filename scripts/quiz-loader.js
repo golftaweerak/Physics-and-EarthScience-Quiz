@@ -66,12 +66,14 @@ function mulberry32(a) {
 export async function initializeQuiz() {
     const { quizList } = await import('../data/quizzes-list.js');
 
-    // Use import.meta.glob to allow Vite to bundle these files
+    // Use import.meta.glob to allow water importing
     const dataModules = getDataModules();
+    console.log('[DEBUG] quiz-loader: Available modules keys:', Object.keys(dataModules));
 
     const urlParams = new URLSearchParams(window.location.search);
     const seedParam = urlParams.get('seed');
     const quizId = urlParams.get('id');
+    console.log('[DEBUG] quiz-loader: quizId=', quizId);
     const lobbyId = urlParams.get('lobbyId');
     const action = urlParams.get('action');
 
@@ -233,9 +235,23 @@ export async function initializeQuiz() {
 
             scriptPath = `../data/${folder}${quizId}-data.js`;
         }
+        console.log('[DEBUG] quiz-loader: Resolved scriptPath=', scriptPath);
 
         if (!dataModules[scriptPath]) {
-            throw new Error(`Data module not found: ${scriptPath}`);
+            console.error('[DEBUG] quiz-loader: Exact match failed for', scriptPath);
+            // Try fallback: find key that ends with the expected filename
+            // path normalization might be needed
+            const expectedSuffix = `${quizId}-data.js`;
+            const foundKey = Object.keys(dataModules).find(k => k.endsWith(expectedSuffix) || k.includes(quizId));
+
+            if (foundKey) {
+                console.log('[DEBUG] quiz-loader: Used fallback key:', foundKey);
+                scriptPath = foundKey;
+            } else {
+                console.error('[DEBUG] quiz-loader: scriptPath not found in dataModules. Keys:', Object.keys(dataModules));
+                // Pass debug info to error screen
+                throw new Error(`Data module not found: ${scriptPath} (Keys: ${Object.keys(dataModules).length})`);
+            }
         }
 
         const module = await dataModules[scriptPath]();
@@ -277,7 +293,7 @@ export async function initializeQuiz() {
 
     } catch (error) {
         console.error(`Error loading quiz data for ID ${quizId}:`, error);
-        handleQuizError("เกิดข้อผิดพลาดในการโหลดข้อมูล", `เกิดข้อผิดพลาดที่ไม่คาดคิด`);
+        handleQuizError("เกิดข้อผิดพลาดในการโหลดข้อมูล", error.message);
     }
 }
 

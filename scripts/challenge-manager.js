@@ -1005,7 +1005,12 @@ export class ChallengeManager {
 
     const myUid = authManager.currentUser?.uid;
 
-    container.innerHTML = messages.map((msg) => {
+    // Filter out messages that are already rendered
+    const newMessages = messages.filter(msg => !container.querySelector(`[data-msg-id="${msg.id}"]`));
+
+    if (newMessages.length === 0) return;
+
+    const html = newMessages.map((msg) => {
       const isMe = msg.uid === myUid;
       const timestamp = msg.timestamp?.toDate().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' }) || '';
 
@@ -1038,8 +1043,10 @@ export class ChallengeManager {
                     <p class="text-sm leading-relaxed break-words">${escapeHtml(msg.text)}</p>
                 </div>`;
 
-      return `<div class="flex items-end gap-2 mb-3 ${isMe ? 'justify-end' : 'justify-start'} anim-fade-in">${!isMe ? avatarElement : ''}${messageBubble}${isMe ? avatarElement : ''}</div>`;
+      return `<div class="flex items-end gap-2 mb-3 ${isMe ? 'justify-end' : 'justify-start'} anim-fade-in" data-msg-id="${msg.id}">${!isMe ? avatarElement : ''}${messageBubble}${isMe ? avatarElement : ''}</div>`;
     }).join('');
+
+    container.insertAdjacentHTML('beforeend', html);
 
     // Auto-scroll to bottom only if user was already near bottom
     if (isNearBottom) {
@@ -1175,15 +1182,33 @@ export class ChallengeManager {
     const presenceCol = collection(db, 'lobbies', lobbyId, 'presence');
     this.presenceUnsubscribe = onSnapshot(presenceCol, (snapshot) => {
       const presences = {};
+      const now = Date.now();
+
       snapshot.forEach(doc => {
-        presences[doc.id] = doc.data();
+        const data = doc.data();
+        presences[doc.id] = data;
+
+        // NEW: Direct DOM update for online status
+        const row = this.dom.playersListContainer?.querySelector(`[data-uid="${doc.id}"]`);
+        if (row) {
+          const onlineDot = row.querySelector('.online-dot');
+          if (onlineDot) {
+            let isOnline = false;
+            // Handle Firestore Timestamp
+            const lastSeenTime = data.lastSeen?.toMillis ? data.lastSeen.toMillis() : (data.lastSeen?.toDate ? data.lastSeen.toDate().getTime() : 0);
+            if (now - lastSeenTime < 25000) {
+              isOnline = true;
+            }
+
+            const onlineClass = isOnline ? 'bg-green-500' : 'bg-gray-300 dark:bg-gray-600';
+            onlineDot.className = `online-dot absolute bottom-0 right-0 block h-3 w-3 rounded-full ring-2 ring-white dark:ring-gray-800 shadow-sm ${onlineClass}`;
+          }
+        }
       });
       this.playerPresences = presences;
 
-      // Trigger UI update if we have lobby data to refresh status indicators
-      if (this.lastLobbyData) {
-        this.updateLobbyUI(this.lastLobbyData);
-      }
+      // Removed: updateLobbyUI(this.lastLobbyData) call to prevent full re-render loop
+      // The direct DOM update above handles the visual change efficiently.
     }, (error) => {
       console.warn("Presence listener error:", error);
     });
@@ -1363,7 +1388,15 @@ export class ChallengeManager {
     const currentUser = authManager.currentUser || authManager.getCachedUser();
 
     if (container) {
-      container.innerHTML = players.map((p, index) => {
+      // 1. Mark all current rows for potential removal
+      const rows = container.querySelectorAll('[data-uid]');
+      const existingUids = new Set();
+      rows.forEach(row => existingUids.add(row.dataset.uid));
+
+      // 2. Process players from data
+      players.forEach((p, index) => {
+        existingUids.delete(p.uid); // Keep this player
+
         const isMe = p.uid === currentUser?.uid;
         const score = p.score || 0;
         const progress = p.progress || 0;
@@ -1377,89 +1410,139 @@ export class ChallengeManager {
         if (isMe) {
           isOnline = true;
         } else if (presence && presence.lastSeen) {
-          // Handle Firestore Timestamp
           const lastSeenTime = presence.lastSeen.toMillis ? presence.lastSeen.toMillis() : (presence.lastSeen.toDate ? presence.lastSeen.toDate().getTime() : 0);
-          if (now - lastSeenTime < 25000) { // 25s threshold (allow some missed beats)
+          if (now - lastSeenTime < 25000) {
             isOnline = true;
           }
         }
 
-        const onlineIndicator = isOnline
-          ? `<span class="absolute bottom-0 right-0 block h-3 w-3 rounded-full ring-2 ring-white dark:ring-gray-800 bg-green-500 shadow-sm" title="Online"></span>`
-          : `<span class="absolute bottom-0 right-0 block h-3 w-3 rounded-full ring-2 ring-white dark:ring-gray-800 bg-gray-300 dark:bg-gray-600 shadow-sm" title="Offline"></span>`;
+        const onlineClass = isOnline ? 'bg-green-500' : 'bg-gray-300 dark:bg-gray-600';
 
         let percent = 0;
         if (data.mode === 'time-attack' || data.mode === 'speed' || data.mode === 'speedrun') {
-          // Time Attack: Progress based on Score (Target 10 points)
           percent = Math.min(100, Math.round((score / 10) * 100));
         } else {
-          // Classic/Co-op: Progress based on Questions Answered
           percent = Math.round((progress / total) * 100) || 0;
         }
 
-        let kickButtonHtml = '';
-        if (this.isHost && !isMe && data.status === 'waiting') {
-          kickButtonHtml = /*html*/`
-                        <button class="kick-player-btn ml-2 p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-all" data-uid="${p.uid}" data-name="${escapeHtml(p.name)}" title="เตะออกจากห้อง">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>
-                        </button>
-                    `;
-        }
+        // --- Helper to generate status HTML ---
+        const getStatusHtml = () => {
+          if (data.status === 'started') {
+            let scoreDisplay = '';
+            if (data.mode === 'coop') scoreDisplay = `+${score}`;
+            else if (p.eliminated) scoreDisplay = `<span class="text-red-500 font-bold">💀 OUT</span>`;
+            else scoreDisplay = `${score} <span class="text-xs text-gray-400">pts</span>`;
 
-        let statusHtml = '';
-        if (data.status === 'started') {
-          // โหมดแสดงคะแนน Real-time
-          let scoreDisplay = '';
-          if (data.mode === 'coop') {
-            // ในโหมด Co-op แสดงคะแนนที่ช่วยทีมได้
-            scoreDisplay = `+${score}`;
-          } else if (p.eliminated) {
-            scoreDisplay = `<span class="text-red-500 font-bold">💀 OUT</span>`;
+            return `
+                    <div class="flex flex-col items-end ml-auto min-w-[80px]">
+                        <span class="text-lg font-bold text-blue-600 dark:text-blue-400">${scoreDisplay}</span>
+                        <span class="text-[10px] text-gray-500 dark:text-gray-400">ข้อที่ ${progress}/${total}</span>
+                    </div>`;
           } else {
-            scoreDisplay = `${score} <span class="text-xs text-gray-400">pts</span>`;
+            if (p.uid === data.hostId) return '<span class="text-xs bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200 px-2 py-0.5 rounded-full ml-auto font-bold">Host</span>';
+            return p.ready
+              ? '<span class="text-xs bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 px-2 py-0.5 rounded-full ml-auto font-bold">Ready</span>'
+              : '<span class="text-xs bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200 px-2 py-0.5 rounded-full ml-auto font-bold">Not Ready</span>';
+          }
+        };
+
+        const getKickBtnHtml = () => {
+          if (this.isHost && !isMe && data.status === 'waiting') {
+            return `
+                    <button class="kick-player-btn ml-2 p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-all" data-uid="${p.uid}" data-name="${escapeHtml(p.name)}" title="เตะออกจากห้อง">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>
+                    </button>`;
+          }
+          return '';
+        };
+
+        let row = container.querySelector(`[data-uid="${p.uid}"]`);
+
+        if (row) {
+          // --- UPDATE EXISTING ROW ---
+          // Update Progress Bar
+          const progressBar = row.querySelector('.progress-bar');
+          if (progressBar) progressBar.style.width = `${percent}%`;
+
+          // Update Rank (if started)
+          const rankEl = row.querySelector('.rank-display');
+          if (rankEl) rankEl.textContent = data.status === 'started' && data.mode !== 'coop' ? index + 1 : '';
+
+          // Update Online Indicator
+          const onlineDot = row.querySelector('.online-dot');
+          if (onlineDot) {
+            onlineDot.className = `online-dot absolute bottom-0 right-0 block h-3 w-3 rounded-full ring-2 ring-white dark:ring-gray-800 shadow-sm ${onlineClass}`;
           }
 
-          statusHtml = /*html*/`
-                        <div class="flex flex-col items-end ml-auto min-w-[80px]">
-                            <span class="text-lg font-bold text-blue-600 dark:text-blue-400">${scoreDisplay}</span>
-                            <span class="text-[10px] text-gray-500 dark:text-gray-400">ข้อที่ ${progress}/${total}</span>
-                        </div>
-                    `;
+          // Update Status/Score (check if changed to avoid expensive innerHTML)
+          const statusContainer = row.querySelector('.status-container');
+          const newStatusHtml = getStatusHtml();
+          if (statusContainer && statusContainer.innerHTML !== newStatusHtml) {
+            statusContainer.innerHTML = newStatusHtml;
+          }
+
+          // Update Kick Button (visibility check)
+          const kickContainer = row.querySelector('.kick-container');
+          const newKickHtml = getKickBtnHtml();
+          if (kickContainer && kickContainer.innerHTML.trim() !== newKickHtml.trim()) {
+            kickContainer.innerHTML = newKickHtml;
+          }
+
+          // Move to correct position if order changed
+          const currentIdx = Array.from(container.children).indexOf(row);
+          if (currentIdx !== index) {
+            if (index >= container.children.length) {
+              container.appendChild(row);
+            } else {
+              container.insertBefore(row, container.children[index]);
+            }
+          }
+
         } else {
-          // โหมดรอ
-          if (p.uid === data.hostId) {
-            statusHtml = /*html*/'<span class="text-xs bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200 px-2 py-0.5 rounded-full ml-auto font-bold">Host</span>';
+          // --- CREATE NEW ROW ---
+          row = document.createElement('div');
+          row.dataset.uid = p.uid;
+          row.className = `flex items-center gap-3 p-3 ${isMe ? 'bg-blue-50 border-blue-200 dark:bg-blue-900/20 dark:border-blue-800' : 'bg-gray-50 dark:bg-gray-700/50 border-gray-100 dark:border-gray-600'} rounded-xl border anim-fade-in relative overflow-hidden transition-all duration-300`;
+
+          const avatarSrc = p.avatar && (p.avatar.includes('/') || p.avatar.includes('.'))
+            ? `<img src="${escapeHtml(p.avatar)}" class="w-full h-full rounded-full object-cover">`
+            : escapeHtml(p.avatar || '🧑‍🎓');
+
+          row.innerHTML = `
+                <div class="progress-bar absolute bottom-0 left-0 h-1 bg-green-500 transition-all duration-500" style="width: ${percent}%"></div>
+                
+                <div class="rank-display font-bold text-gray-400 w-6 text-center">${data.status === 'started' && data.mode !== 'coop' ? index + 1 : ''}</div>
+                
+                <div class="relative text-3xl bg-white dark:bg-gray-800 rounded-full w-10 h-10 flex items-center justify-center shadow-sm flex-shrink-0 animate-wiggle" style="animation-delay: ${index * 0.2}s">
+                    ${avatarSrc}
+                    <span class="online-dot absolute bottom-0 right-0 block h-3 w-3 rounded-full ring-2 ring-white dark:ring-gray-800 shadow-sm ${onlineClass}" title="Online"></span>
+                </div>
+                
+                <div class="flex flex-col min-w-0">
+                    <div class="font-bold text-gray-700 dark:text-gray-200 text-sm truncate">${escapeHtml(p.name)} ${isMe ? '(คุณ)' : ''}</div>
+                </div>
+                
+                <div class="status-container flex ml-auto">
+                    ${getStatusHtml()}
+                </div>
+                <div class="kick-container">
+                    ${getKickBtnHtml()}
+                </div>
+            `;
+
+          if (index >= container.children.length) {
+            container.appendChild(row);
           } else {
-            statusHtml = p.ready
-              ? /*html*/'<span class="text-xs bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 px-2 py-0.5 rounded-full ml-auto font-bold">Ready</span>'
-              : /*html*/'<span class="text-xs bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200 px-2 py-0.5 rounded-full ml-auto font-bold">Not Ready</span>';
+            container.insertBefore(row, container.children[index]);
           }
         }
+      });
 
-        return /*html*/`
-                <div class="flex items-center gap-3 p-3 ${isMe ? 'bg-blue-50 border-blue-200 dark:bg-blue-900/20 dark:border-blue-800' : 'bg-gray-50 dark:bg-gray-700/50 border-gray-100 dark:border-gray-600'} rounded-xl border anim-fade-in relative overflow-hidden transition-all duration-300">
-                    ${data.status === 'started' ? `<div class="absolute bottom-0 left-0 h-1 bg-green-500 transition-all duration-500" style="width: ${percent}%"></div>` : ''}
-                    
-                    ${data.status === 'started' && data.mode !== 'coop' ? `<div class="font-bold text-gray-400 w-6 text-center">${index + 1}</div>` : ''}
-                    
-                    <div class="relative text-3xl bg-white dark:bg-gray-800 rounded-full w-10 h-10 flex items-center justify-center shadow-sm flex-shrink-0 animate-wiggle" style="animation-delay: ${index * 0.2}s">
-                        ${(() => {
-            const isImage = p.avatar && (p.avatar.includes('/') || p.avatar.includes('.'));
-            return isImage
-              ? `<img src="${escapeHtml(p.avatar)}" class="w-full h-full rounded-full object-cover">`
-              : escapeHtml(p.avatar || '🧑‍🎓');
-          })()}
-                        ${onlineIndicator}
-                    </div>
-                    
-                    <div class="flex flex-col min-w-0">
-                        <div class="font-bold text-gray-700 dark:text-gray-200 text-sm truncate">${escapeHtml(p.name)} ${isMe ? '(คุณ)' : ''}</div>
-                    </div>
-                    ${statusHtml}
-                    ${kickButtonHtml}
-                </div>
-            `}).join('');
-
+      // 3. Remove players who left
+      existingUids.forEach(uid => {
+        const row = container.querySelector(`[data-uid="${uid}"]`);
+        if (row) row.remove();
+      });
     }
 
     // จัดการปุ่ม Start

@@ -2,8 +2,11 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Homepage', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/');
-    await page.waitForLoadState('networkidle');
+    await page.goto('./');
+    // Wait for app to be fully initialized
+    await page.waitForSelector('body[data-app-initialized="true"]', { timeout: 15000 });
+    // Wait for the main app container to be present
+    await expect(page.locator('#quiz-categories-container')).toBeVisible({ timeout: 15000 });
   });
 
   test('should look correct', async ({ page }) => {

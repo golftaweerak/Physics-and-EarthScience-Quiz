@@ -48,6 +48,21 @@ export async function getSavedCustomQuizzes() {
 }
 
 /**
+ * Debounces a function to control the rate at which it fires.
+ * @param {Function} func The function to debounce.
+ * @param {number} wait The delay in milliseconds.
+ * @returns {Function} The debounced function.
+ */
+function debounce(func, wait) {
+    let timeout;
+    return function (...args) {
+        const context = this;
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(context, args), wait);
+    };
+}
+
+/**
  * Creates a custom quiz object and saves it to localStorage.
  * @param {object} quizData - Object containing quiz properties like title, questions, timerMode, customTime, category.
  * @returns {object} The newly created custom quiz object.
@@ -88,6 +103,7 @@ async function createAndSaveCustomQuiz(quizData) {
  * Initializes all functionality related to creating and managing custom quizzes.
  */
 export function initializeCustomQuizHandler() {
+    console.log('[DEBUG] custom-quiz-handler: initializeCustomQuizHandler called');
     // ... (existing code) ...
     let quizDataCache = null; // Cache for fetched quiz data
 
@@ -275,9 +291,7 @@ export function initializeCustomQuizHandler() {
         });
     }
 
-    if (!createCustomQuizBtn || !customQuizModal.modal || !customQuizHubModal.modal) {
-        return; // Exit if essential elements are missing
-    }
+    // Event delegation is used below in the Initial Setup section to handle these clicks robustly.
 
     // --- 2. Core Logic Functions ---
 
@@ -411,6 +425,7 @@ export function initializeCustomQuizHandler() {
 
         noCustomQuizzesMsg.classList.toggle("hidden", savedQuizzes.length > 0);
         customQuizListContainer.innerHTML = "";
+        const fragment = document.createDocumentFragment();
 
         savedQuizzes.forEach((quiz, index) => {
             const totalQuestions = quiz.questions.length;
@@ -499,8 +514,9 @@ export function initializeCustomQuizHandler() {
                 </div>
                 ${footerHtml}
             `;
-            customQuizListContainer.appendChild(quizItemEl);
+            fragment.appendChild(quizItemEl);
         });
+        customQuizListContainer.appendChild(fragment);
 
         // Hide the loader after the list has been rendered.
         if (listLoader) listLoader.classList.add('hidden');
@@ -556,6 +572,8 @@ export function initializeCustomQuizHandler() {
                 </div>
             </div>`;
     }
+
+    const debouncedUpdateTotalCount = debounce(updateTotalCount, 300);
 
     function updateTotalCount() {
         const totalCountDisplay = document.getElementById("total-question-count");
@@ -665,7 +683,7 @@ export function initializeCustomQuizHandler() {
                     }
                 }
 
-                updateTotalCount();
+                debouncedUpdateTotalCount();
             }
         });
 
@@ -976,6 +994,7 @@ export function initializeCustomQuizHandler() {
         triggerElement.disabled = true;
         isBadgeDismissed = false; // Reset badge state
         hasShownSuccess = false; // Reset success state
+        customQuizHubModal.close();
         customQuizModal.open(triggerElement); // Open modal immediately to show loading inside
 
         try {
@@ -1199,13 +1218,24 @@ export function initializeCustomQuizHandler() {
                 `;
             };
 
+            if (categorySelectionContainer) {
+                categorySelectionContainer.innerHTML = ''; // Clear container
+                categorySelectionContainer.className = "space-y-4";
+            }
+
+            const appendChunk = (html) => {
+                if (categorySelectionContainer && html) {
+                    categorySelectionContainer.insertAdjacentHTML('beforeend', html);
+                }
+            };
+
             // High School defaults to OPEN, POSN defaults to CLOSED
-            categoryHTML += generateSubjectGroupHTML(highSchoolSubjects, "มัธยมศึกษาตอนปลาย (High School)", true);
+            appendChunk(generateSubjectGroupHTML(highSchoolSubjects, "มัธยมศึกษาตอนปลาย (High School)", true));
 
             // Allow UI to breathe before rendering the next heavy block
             await new Promise(r => setTimeout(r, 20));
 
-            categoryHTML += generateSubjectGroupHTML(posnSubjects, "สอวน. (POSN)", false);
+            appendChunk(generateSubjectGroupHTML(posnSubjects, "สอวน. (POSN)", false));
 
             // Helper to calculate available questions for a group
             const getAvailableCount = (groupType) => {
@@ -1278,7 +1308,7 @@ export function initializeCustomQuizHandler() {
             };
 
             // Add the "Subject Group Random" accordion at the end
-            categoryHTML += `
+            const randomControlsHTML = `
                 <div class="subject-container bg-white dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
                     <div class="subject-accordion-toggle p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors" role="button" aria-expanded="false">
                         <div class="flex justify-between items-center">
@@ -1394,14 +1424,8 @@ export function initializeCustomQuizHandler() {
                 </div>
             `;
 
-            if (categorySelectionContainer) {
-                categorySelectionContainer.innerHTML = categoryHTML;
-                categorySelectionContainer.className = "space-y-4"; // Use space-y for vertical stacking
-            }
-
-            customQuizHubModal.close();
-            customQuizModal.open(triggerElement);
-
+            appendChunk(randomControlsHTML);
+            updateTotalCount();
         } catch (error) {
             console.error("Failed to fetch data for custom quiz creation:", error);
             // Optionally, show an error message to the user
@@ -1410,7 +1434,6 @@ export function initializeCustomQuizHandler() {
             triggerElement.innerHTML = originalText;
             triggerElement.disabled = false;
             // Setup listeners after all content is loaded
-            // adjustScrollableContentPadding(); // Removed as it's no longer needed with the compact footer
             // Initialize sliders visual state
             if (customQuizModal.modal) {
                 customQuizModal.modal.querySelectorAll('input[type="range"]').forEach(updateSliderTrack);
@@ -1639,6 +1662,7 @@ export function initializeCustomQuizHandler() {
 
     // Main button on the index page to open the custom quiz hub
     createCustomQuizBtn.addEventListener("click", (e) => {
+        console.log('[DEBUG] custom-quiz-handler: createCustomQuizBtn clicked');
         if (listLoader) listLoader.classList.remove('hidden');
         if (customQuizListContainer) customQuizListContainer.innerHTML = '';
         if (noCustomQuizzesMsg) noCustomQuizzesMsg.classList.add('hidden');
@@ -2014,4 +2038,51 @@ export function initializeCustomQuizHandler() {
         updateTotalCount();
         showToast("สำเร็จ", `สุ่มเลือกคำถามเพิ่มมาทั้งหมด ${totalAdded} ข้อ`, "✅", "success");
     }
+
+    // --- 3. Initial Setup ---
+    bindCustomQuizModalEvents();
+
+    // 1. Create Custom Quiz Button (Main Header) - Restore direct listener for stability
+    if (createCustomQuizBtn) {
+        createCustomQuizBtn.addEventListener('click', () => {
+            console.log('[DEBUG] custom-quiz-handler: create-custom-quiz-btn clicked');
+            customQuizHubModal.open();
+        });
+    }
+
+    // Use a single delegated listener for all internal custom-quiz buttons (dynamic contents)
+    document.addEventListener('click', (e) => {
+        const target = e.target;
+
+        // 2. Open Generator Modal Button (Inside Hub)
+        if (target.closest('#open-create-quiz-modal-btn')) {
+            console.log('[DEBUG] custom-quiz-handler: openCreateQuizModalBtn clicked');
+            buildAndShowCreationModal(target.closest('#open-create-quiz-modal-btn'));
+            return;
+        }
+
+        // 3. Completed Modal: View Results
+        if (target.closest('#completed-view-results-btn')) {
+            completedModal.close();
+            // Handle results view if applicable
+            return;
+        }
+
+        // 4. Completed Modal: Start Over
+        if (target.closest('#completed-start-over-btn')) {
+            completedModal.close();
+            location.reload();
+            return;
+        }
+
+        // 5. Completed Modal: Cancel
+        if (target.closest('#completed-cancel-btn')) {
+            completedModal.close();
+            return;
+        }
+    });
+
+    renderCustomQuizList().catch(err => {
+        console.error("[DEBUG] custom-quiz-handler: Initial custom quiz list render failed:", err);
+    });
 }

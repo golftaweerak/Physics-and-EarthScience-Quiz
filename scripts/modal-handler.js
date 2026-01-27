@@ -13,6 +13,7 @@
 export class ModalHandler {
     /** @param {string} modalId The ID of the modal element. */
     constructor(modalId) {
+        this.modalId = modalId;
         this.modal = document.getElementById(modalId);
         if (!this.modal) {
             console.error(`Modal with id "${modalId}" not found.`);
@@ -52,7 +53,23 @@ export class ModalHandler {
      * @param {HTMLElement} [triggerElement] - The element that triggered the modal opening.
      */
     open(triggerElement = null) {
-        if (this.isOpen || this.isAnimating) return;
+        // Fallback: If the modal wasn't found during construction (race condition), try fetching it now.
+        if (!this.modal) {
+            this.modal = document.getElementById(this.modalId);
+            if (this.modal) {
+                // Re-initialize relevant parts
+                this.modalContainer = this.modal.querySelector('.modal-container') || this.modal;
+                const closeButtons = this.modal.querySelectorAll("[data-modal-close]");
+                closeButtons.forEach((btn) => btn.addEventListener("click", this.close));
+                this.modal.addEventListener("click", (e) => {
+                    if (e.target === this.modal || e.target.hasAttribute('data-modal-overlay')) {
+                        this.close();
+                    }
+                });
+            }
+        }
+
+        if (!this.modal || this.isOpen || this.isAnimating) return;
 
         this.isOpen = true;
         this.isAnimating = true;
@@ -72,10 +89,16 @@ export class ModalHandler {
         document.addEventListener("keydown", this.handleKeyDown);
 
         // Wait for the animation to finish before setting focus
-        this.modal.querySelector('.modal-container')?.addEventListener('transitionend', () => {
+        const onOpenEnd = () => {
+            if (!this.isAnimating) return;
             this.isAnimating = false;
             this.setFocus();
-        }, { once: true });
+            clearTimeout(safetyTimeout);
+        };
+
+        const safetyTimeout = setTimeout(onOpenEnd, 500); // Safety fallback
+
+        this.modal.querySelector('.modal-container')?.addEventListener('transitionend', onOpenEnd, { once: true });
     }
 
     /**
@@ -88,7 +111,8 @@ export class ModalHandler {
         this.modal.classList.remove("is-open");
 
         // Wait for the animation to finish before hiding the modal completely
-        this.modal.querySelector('.modal-container')?.addEventListener('transitionend', () => {
+        const onCloseEnd = () => {
+            if (!this.isAnimating) return;
             this.modal.classList.add("hidden");
             document.body.style.overflow = "";
             document.removeEventListener("keydown", this.handleKeyDown);
@@ -99,7 +123,12 @@ export class ModalHandler {
 
             this.isAnimating = false;
             this.isOpen = false;
-        }, { once: true });
+            clearTimeout(safetyTimeout);
+        };
+
+        const safetyTimeout = setTimeout(onCloseEnd, 500); // Safety fallback
+
+        this.modal.querySelector('.modal-container')?.addEventListener('transitionend', onCloseEnd, { once: true });
     }
 
     /**

@@ -24,7 +24,7 @@ async function main() {
         const componentLoaderPromise = import('./component-loader.js');
         const commonInitPromise = import('./common-init.js');
         const quizLoaderPromise = import('./quiz-loader.js');
-        
+
         // Custom loader to fix paths BEFORE injection to prevent 404s in the quiz subdirectory
         const loadComponentWithFix = async (selector, path) => {
             try {
@@ -34,7 +34,7 @@ async function main() {
                 html = html.replace(/src="\.\/assets\//g, 'src="../assets/');
                 // Replace other ./ links with ../ to fix navigation
                 html = html.replace(/href="\.\//g, 'href="../');
-                
+
                 const element = document.querySelector(selector);
                 if (element) {
                     element.innerHTML = html;
@@ -53,9 +53,9 @@ async function main() {
 
         // Load shared components first
         await Promise.all([
-                loadComponentWithFix('#main_header-placeholder', '../components/main_header.html'),
-                loadComponentWithFix('#footer-placeholder', '../components/footer.html'),
-                loadComponentWithFix('#modals-placeholder', '../components/modals_common.html')
+            loadComponentWithFix('#main_header-placeholder', '../components/main_header.html'),
+            loadComponentWithFix('#footer-placeholder', '../components/footer.html'),
+            loadComponentWithFix('#modals-placeholder', '../components/modals_common.html')
         ]);
 
         const { initializeCommonComponents } = await import('./common-init.js');
@@ -69,13 +69,13 @@ async function main() {
             const fixComponentPathsForSubdirectory = (containerId) => {
                 const container = document.getElementById(containerId);
                 if (!container) return;
-        
+
                 // Fix <a> links: changes './' to '../'
                 container.querySelectorAll('a[href^="./"]').forEach(link => {
                     const currentHref = link.getAttribute('href');
                     link.setAttribute('href', `..${currentHref.substring(1)}`);
                 });
-        
+
                 // Fix <img> sources: changes './' to '../'
                 container.querySelectorAll('img[src^="./"]').forEach(img => {
                     const currentSrc = img.getAttribute('src');
@@ -90,14 +90,17 @@ async function main() {
         // This function will handle loading data and setting up the quiz logic.
         const { initializeQuiz } = await quizLoaderPromise;
         await initializeQuiz();
+        document.body.dataset.appInitialized = 'true';
+        console.log("🚀 Quiz Page fully initialized");
     } catch (error) {
         console.error("A critical error occurred on the quiz page:", error);
+        document.body.dataset.appInitialized = 'error';
         // A simple, dependency-free error message.
         const body = document.body;
         if (body) {
             body.innerHTML = `<div style="text-align: center; padding: 40px; font-family: sans-serif; color: #ef4444;">
                 <h1 style="font-size: 24px; font-weight: bold;">เกิดข้อผิดพลาดในการโหลดหน้าเว็บ</h1>
-                <p style="margin-top: 8px;">ไม่สามารถโหลดแบบทดสอบได้ กรุณาลองใหม่อีกครั้ง หรือกลับไปที่หน้าหลัก</p>
+                <p style="margin-top: 8px;">ไม่สามารถโหลดแบบทดสอบได้ (${error.message})</p>
                 <a href="../index.html" style="display: inline-block; margin-top: 24px; background-color: #3b82f6; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none;">กลับไปหน้าหลัก</a>
             </div>`;
         }

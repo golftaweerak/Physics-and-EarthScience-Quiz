@@ -5,12 +5,14 @@ test('standard quiz flow', async ({ page }) => {
   // Using a known ID from quizzes-list.js, e.g., 'phy_m4_ch2-1' (Nature of Physics 2 - Theory)
   // Ensure we use a valid ID.
   const quizId = 'phy_m4/phy_m4_ch2-1';
-  await page.goto(`/quiz/index.html?id=${quizId}`);
-  await page.waitForLoadState('networkidle');
+  await page.goto(`quiz/index.html?id=${quizId}`);
+  // Wait for app to be fully initialized
+  await page.waitForSelector('body[data-app-initialized="true"]', { timeout: 15000 });
 
-  // 2. Start Screen
+  // App loaded via modules, so 'networkidle' might trigger too early or be flaky.
+  // Instead, wait for the app-loader to inject the start screen.
   const startScreen = page.locator('#start-screen');
-  await expect(startScreen).toBeVisible();
+  await expect(startScreen).toBeVisible({ timeout: 15000 });
 
   // Verify Title (Localized check might be fragile, just check if title element has text)
   await expect(page.locator('#start-screen-title')).not.toBeEmpty();
