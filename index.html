@@ -29,10 +29,15 @@
         <!-- Content wrapper with top padding to avoid overlapping with the new fixed header -->
         <div style="padding-top: 7rem;">
 
+
+            <!-- Track Switcher Container (Moved above header) -->
+            <div id="track-switcher-container" class="max-w-4xl mx-auto mt-2 mb-6"></div>
+
             <!-- Header for the quiz list section, populated by main.js -->
-            <div id="quiz-list-header" class="max-w-4xl mx-auto mt-8 mb-4 hidden flex justify-between items-center">
+            <div id="quiz-list-header" class="max-w-4xl mx-auto mb-4 hidden flex justify-between items-center">
                 <h2 id="quiz-count-display" class="text-2xl font-bold font-kanit text-gray-800 dark:text-gray-100"
                     aria-live="polite"></h2>
+
                 <!-- Action Buttons -->
                 <div class="flex flex-col sm:flex-row items-center gap-2 sm:gap-3">
                     <!-- Primary Action Chip: Custom Quiz (Mobile: Top, Desktop: Last) -->
@@ -74,7 +79,7 @@
                 </div>
             </div>
 
-            <div id="track-switcher-container" class="max-w-4xl mx-auto mb-6"></div>
+
 
             <main id="quiz-categories-container" class="max-w-4xl mx-auto space-y-6 mb-12">
                 <!-- Placeholder for loading, error, or empty states. JS will replace this. -->

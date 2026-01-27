@@ -1143,7 +1143,7 @@ export function initializeCustomQuizHandler() {
                     if (chapterAccordionsHTML) {
                         groupTotalCount += subjectTotalCount;
                         innerHTML += `
-                            <div class="subject-container bg-white dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+                            <div class="subject-container bg-white dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden" style="content-visibility: auto; contain-intrinsic-size: 0 100px;">
                                 <div class="subject-accordion-toggle p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors" role="button" aria-expanded="false">
                                     <div class="flex justify-between items-center">
                                         <div class="flex items-center gap-3 min-w-0">
@@ -1174,7 +1174,7 @@ export function initializeCustomQuizHandler() {
 
                 // Wrap in master accordion with improved visual design
                 return `
-                    <div class="mb-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden group-accordion">
+                    <div class="mb-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden group-accordion" style="content-visibility: auto; contain-intrinsic-size: 0 500px;">
                         <div class="subject-accordion-toggle p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors flex justify-between items-center" data-group-toggle="${groupTitle}">
                             <div class="flex items-center gap-3">
                                 <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100">
@@ -1201,6 +1201,10 @@ export function initializeCustomQuizHandler() {
 
             // High School defaults to OPEN, POSN defaults to CLOSED
             categoryHTML += generateSubjectGroupHTML(highSchoolSubjects, "มัธยมศึกษาตอนปลาย (High School)", true);
+
+            // Allow UI to breathe before rendering the next heavy block
+            await new Promise(r => setTimeout(r, 20));
+
             categoryHTML += generateSubjectGroupHTML(posnSubjects, "สอวน. (POSN)", false);
 
             // Helper to calculate available questions for a group

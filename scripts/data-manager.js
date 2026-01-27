@@ -69,8 +69,8 @@ export const categoryDetails = {
     logoGlow: "group-hover:shadow-teal-500/40",
   },
   PosnEarthScience: { // Mapping mismatch coverage
-    title: "สอวน. วิทยาศาสตร์โลก (เนื้อหา)",
-    displayName: "สอวน. วิทย์โลก (เนื้อหา)",
+    title: "สอวน. วิทยาศาสตร์โลกและอวกาศ",
+    displayName: "สอวน. วิทย์โลก",
     icon: "./assets/icons/earth.png",
     order: 21,
     color: "border-teal-600",

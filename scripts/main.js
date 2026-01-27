@@ -712,9 +712,21 @@ export function initializePage() {
     // Display total quiz count in the new header for the list
     const quizListHeader = document.getElementById("quiz-list-header");
     const quizCountDisplay = document.getElementById("quiz-count-display");
-    if (quizListHeader && quizCountDisplay) {
-      const totalQuizCount = quizList.filter(q => q).length; // Filter for safety
-      const totalQuestionsCount = quizList.reduce((sum, quiz) => sum + (quiz.amount || 0), 0);
+
+    // NEW: Function to update stats based on selected track
+    function updateHeaderStats(track) {
+      if (!quizListHeader || !quizCountDisplay) return;
+
+      const targetCategories = TRACK_MAPPING[track];
+      // Filter quizzes based on the track's categories
+      const filteredQuizzes = quizList.filter(q => {
+        // If no categories defined for the track, assume all? Or none?
+        // For safety, if targetCategories is undefined, show 0.
+        return targetCategories && targetCategories.includes(q.category);
+      });
+
+      const totalQuizCount = filteredQuizzes.length;
+      const totalQuestionsCount = filteredQuizzes.reduce((sum, quiz) => sum + (quiz.amount || 0), 0);
 
       if (totalQuizCount > 0) {
         quizCountDisplay.innerHTML = `
@@ -725,6 +737,9 @@ export function initializePage() {
         <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">จำนวนคำถามทั้งหมด ${totalQuestionsCount.toLocaleString()} ข้อ</div>
       `;
         quizListHeader.classList.remove('hidden');
+      } else {
+        // Optionally hide or show "0 items"
+        quizListHeader.classList.add('hidden');
       }
     }
     // --- TRACK SWITCHER & CATEGORY RENDERING ---
@@ -753,21 +768,27 @@ export function initializePage() {
 
       if (!btnHighSchool || !btnPosn) return;
 
-      const activeClassesHS = ['bg-white', 'text-blue-700', 'shadow-sm', 'border-blue-200', 'dark:bg-gray-700', 'dark:text-blue-300', 'dark:border-blue-800'];
-      const inactiveClasses = ['text-gray-500', 'hover:bg-gray-100', 'border-transparent', 'dark:text-gray-400', 'dark:hover:bg-gray-800'];
+      // Base classes for layout and transition
+      const baseClasses = "relative flex-1 flex items-center justify-center gap-2 py-2.5 px-4 text-sm font-bold rounded-xl transition-all duration-300 transform scale-100 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-900";
 
-      const activeClassesPOSN = ['bg-white', 'text-purple-700', 'shadow-sm', 'border-purple-200', 'dark:bg-gray-700', 'dark:text-purple-300', 'dark:border-purple-800'];
+      // Reset base classes
+      btnHighSchool.className = baseClasses;
+      btnPosn.className = baseClasses;
 
-      // Reset
-      btnHighSchool.className = "flex-1 flex items-center justify-center gap-2 py-2 px-4 text-sm font-bold rounded-lg border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1 dark:focus:ring-offset-gray-900";
-      btnPosn.className = "flex-1 flex items-center justify-center gap-2 py-2 px-4 text-sm font-bold rounded-lg border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1 dark:focus:ring-offset-gray-900";
+      // Active & Inactive Styles
+      // HS: Blue Gradient
+      const activeHS = "bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg shadow-blue-500/30 scale-105 z-10 ring-2 ring-white/20";
+      // POSN: Purple Gradient
+      const activePOSN = "bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg shadow-purple-500/30 scale-105 z-10 ring-2 ring-white/20";
+
+      const inactive = "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700/50 hover:text-gray-900 dark:hover:text-gray-200";
 
       if (currentTrack === 'high_school') {
-        btnHighSchool.classList.add(...activeClassesHS, 'focus:ring-blue-500');
-        btnPosn.classList.add(...inactiveClasses, 'focus:ring-gray-500');
+        btnHighSchool.classList.add(...activeHS.split(" "));
+        btnPosn.classList.add(...inactive.split(" "));
       } else {
-        btnPosn.classList.add(...activeClassesPOSN, 'focus:ring-purple-500');
-        btnHighSchool.classList.add(...inactiveClasses, 'focus:ring-gray-500');
+        btnPosn.classList.add(...activePOSN.split(" "));
+        btnHighSchool.classList.add(...inactive.split(" "));
       }
     }
 
@@ -775,25 +796,29 @@ export function initializePage() {
       const switcherContainer = document.getElementById('track-switcher-container');
       if (!switcherContainer) return;
 
+      // Improved container with glass effect and padding
       switcherContainer.innerHTML = `
-        <div class="flex p-1 bg-gray-100 dark:bg-gray-800/60 rounded-xl border border-gray-200 dark:border-gray-700 max-w-md mx-auto">
+        <div class="relative flex p-1.5 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm max-w-lg mx-auto">
+           <!-- High School Button -->
            <button 
               id="track-btn-high-school"
               onclick="window.switchTrack('high_school')"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                 <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z" />
               </svg>
-              ม.ปลาย
+              <span>ฟิสิกส์ & วิทย์โลก ม.ปลาย</span>
            </button>
+           
+           <!-- POSN Button -->
            <button 
               id="track-btn-posn"
               onclick="window.switchTrack('posn')"
            >
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clip-rule="evenodd" />
               </svg>
-              สอวน.
+              <span>สอวน. วิทย์โลก & ดาราศาสตร์</span>
            </button>
         </div>
       `;
@@ -806,6 +831,7 @@ export function initializePage() {
       currentTrack = track;
       localStorage.setItem('selectedTrack', track);
       updateTrackButtonStyles();
+      updateHeaderStats(track); // Update stats when track changes
       renderCategories();
     };
 
@@ -896,6 +922,7 @@ export function initializePage() {
 
     // --- INITIALIZE UI ---
     renderTrackSwitcher();
+    updateHeaderStats(currentTrack); // Initial stats render
     renderCategories();
 
     // Create and append the floating navigation container
