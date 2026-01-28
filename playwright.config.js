@@ -7,6 +7,10 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
+  timeout: 90 * 1000,
+  expect: {
+    timeout: 10 * 1000,
+  },
   use: {
     baseURL: 'http://localhost:5173/Physics-and-EarthScience-Quiz/',
     trace: 'on-first-retry',

@@ -117,6 +117,7 @@ export function initializeCustomQuizHandler() {
     const confirmActionBtn = document.getElementById("confirm-action-btn");
     const confirmCancelBtn = document.getElementById("confirm-cancel-btn");
     const confirmModalEl = document.getElementById("confirm-action-modal");
+    const randomAllModal = new ModalHandler("random-all-modal");
 
     const numberInputModal = new ModalHandler("number-input-modal");
     const numberInputTitle = document.getElementById("number-input-modal-title");
@@ -658,9 +659,15 @@ export function initializeCustomQuizHandler() {
     }
 
 
+    let areEventsBound = false;
     function bindCustomQuizModalEvents() {
+        if (areEventsBound) return;
+
         const container = customQuizModal.modal; // Listen on the whole modal for delegated events
         if (!container) return;
+
+        console.log('[DEBUG] custom-quiz-handler: Binding modal events');
+        areEventsBound = true;
 
         // Use event delegation for better performance
         container.addEventListener('input', (e) => {
@@ -689,9 +696,11 @@ export function initializeCustomQuizHandler() {
 
         container.addEventListener('click', (e) => {
             const target = e.target;
+            console.log(`[DEBUG] custom-quiz-modal click on:`, target.tagName || 'SVG', target.className?.baseVal || target.className || '');
 
             // Handle close badge button
             if (target.closest('#close-badge-condition-btn')) {
+                console.log('[DEBUG] close-badge-condition-btn clicked');
                 isBadgeDismissed = true;
                 const badgeEl = document.getElementById("custom-quiz-badge-condition");
                 if (badgeEl) badgeEl.classList.add('hidden');
@@ -883,6 +892,7 @@ export function initializeCustomQuizHandler() {
 
             // Handle "Start Quiz" button
             if (target.id === 'custom-quiz-start-btn' || target.closest('#custom-quiz-start-btn')) {
+                console.log('[DEBUG] custom-quiz-start-btn clicked');
                 handleStartCustomQuiz();
             }
 
@@ -914,6 +924,7 @@ export function initializeCustomQuizHandler() {
 
             // NEW: Handle the new "Random All" button inside the generator
             if (target.id === 'generator-random-all-btn' || target.closest('#generator-random-all-btn')) {
+                console.log('[DEBUG] generator-random-all-btn clicked');
                 handleRandomSelection();
             }
 
@@ -949,17 +960,33 @@ export function initializeCustomQuizHandler() {
             // Handle accordion toggling
             const toggle = target.closest('.subject-accordion-toggle, .chapter-accordion-toggle');
             if (toggle) {
+                e.preventDefault();
+                // e.stopImmediatePropagation(); // Try this if still seeing double clicks
+
                 // Double check it's not a button inside the toggle
                 if (target.closest('button[data-action]')) {
+                    console.log('[DEBUG] clicked a button inside toggle, skipping accordion');
                     return;
                 }
 
                 const content = toggle.nextElementSibling;
                 const icon = toggle.querySelector('.chevron-icon');
-                const isOpen = content.classList.contains('grid-rows-[1fr]');
-                content.classList.toggle('grid-rows-[1fr]', !isOpen);
-                content.classList.toggle('grid-rows-[0fr]', isOpen);
-                icon.classList.toggle('rotate-180', !isOpen);
+
+                // Use a more robust check for open state
+                const isCurrentlyOpen = content.classList.contains('grid-rows-[1fr]');
+                console.log(`[DEBUG] accordion state: currently open = ${isCurrentlyOpen}, toggling to ${!isCurrentlyOpen}`);
+
+                if (isCurrentlyOpen) {
+                    content.classList.remove('grid-rows-[1fr]');
+                    content.classList.add('grid-rows-[0fr]');
+                    if (icon) icon.classList.remove('rotate-180');
+                    toggle.setAttribute('aria-expanded', 'false');
+                } else {
+                    content.classList.remove('grid-rows-[0fr]');
+                    content.classList.add('grid-rows-[1fr]');
+                    if (icon) icon.classList.add('rotate-180');
+                    toggle.setAttribute('aria-expanded', 'true');
+                }
             }
         });
 
@@ -1004,32 +1031,46 @@ export function initializeCustomQuizHandler() {
             const { allQuestions } = quizDataCache;
 
             // Group questions by subject, chapter, and specific topic, and count types
-            const groupedQuestions = allQuestions.reduce((acc, q) => {
-                if (q.subCategory && q.subCategory.main && q.subCategory.specific) {
-                    const subjectKey = q.sourceQuizCategory || 'Uncategorized';
-                    const questionType = q.type === 'fill-in-number' ? 'calculation' : 'theory';
+            // NEW: Optimized grouping logic ($O(N)$ instead of $O(N^2)$ for duplicate checks)
+            const groupedQuestions = {};
 
-                    const specifics = Array.isArray(q.subCategory.specific) ? q.subCategory.specific : [q.subCategory.specific];
+            for (const q of allQuestions) {
+                if (!q.subCategory) continue;
 
-                    specifics.forEach(specificTopic => {
-                        if (!acc[subjectKey]) acc[subjectKey] = {};
-                        if (!acc[subjectKey][q.subCategory.main]) acc[subjectKey][q.subCategory.main] = {};
-                        if (!acc[subjectKey][q.subCategory.main][specificTopic]) {
-                            acc[subjectKey][q.subCategory.main][specificTopic] = {
-                                theory: [],
-                                calculation: []
-                            };
-                        }
+                let mainKey = 'Uncategorized';
+                let topics = ['General'];
 
-                        const group = acc[subjectKey][q.subCategory.main][specificTopic];
-                        // Avoid adding duplicate questions to the same topic group
-                        if (!group[questionType].some(existingQ => existingQ.question === q.question)) {
-                            group[questionType].push(q);
-                        }
-                    });
+                if (typeof q.subCategory === 'string') {
+                    mainKey = q.subCategory;
+                } else if (q.subCategory.main) {
+                    mainKey = q.subCategory.main;
+                    if (q.subCategory.specific) {
+                        topics = Array.isArray(q.subCategory.specific) ? q.subCategory.specific : [q.subCategory.specific];
+                    }
                 }
-                return acc;
-            }, {});
+
+                const subjectKey = q.sourceQuizCategory || q.category || 'Uncategorized';
+                const questionType = q.type === 'fill-in-number' || q.choiceType === 'calculation' ? 'calculation' : 'theory';
+
+                if (!groupedQuestions[subjectKey]) groupedQuestions[subjectKey] = {};
+                if (!groupedQuestions[subjectKey][mainKey]) groupedQuestions[subjectKey][mainKey] = {};
+
+                for (const topic of topics) {
+                    if (!groupedQuestions[subjectKey][mainKey][topic]) {
+                        groupedQuestions[subjectKey][mainKey][topic] = { theory: [], calculation: [] };
+                    }
+
+                    const group = groupedQuestions[subjectKey][mainKey][topic][questionType];
+                    // Efficiently avoid EXACT duplicates if they appear in allQuestions
+                    // We use question text as the key for now, as in the original code.
+                    const isDuplicate = group.length > 0 && group.some(existing => existing.question === q.question);
+                    if (!isDuplicate) {
+                        group.push(q);
+                    }
+                }
+            }
+
+            console.log(`[DEBUG] buildAndShowCreationModal: groupedQuestions built for ${Object.keys(groupedQuestions).length} subjects`);
 
             let categoryHTML = '';
             const sortedSubjects = Object.keys(allCategoryDetails).sort((a, b) => (allCategoryDetails[a].order || 99) - (allCategoryDetails[b].order || 99));
@@ -1309,8 +1350,8 @@ export function initializeCustomQuizHandler() {
 
             // Add the "Subject Group Random" accordion at the end
             const randomControlsHTML = `
-                <div class="subject-container bg-white dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
-                    <div class="subject-accordion-toggle p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors" role="button" aria-expanded="false">
+                <div id="test-generator-subject-container" class="subject-container bg-white dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+                    <div id="test-generator-subject-toggle" class="subject-accordion-toggle p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors" role="button" aria-expanded="false">
                         <div class="flex justify-between items-center">
                             <div class="flex items-center gap-3 min-w-0">
                                 <div class="h-8 w-8 flex-shrink-0 flex items-center justify-center bg-purple-100 dark:bg-purple-900/50 rounded-full text-purple-600 dark:text-purple-300">
@@ -1321,7 +1362,7 @@ export function initializeCustomQuizHandler() {
                             <svg class="chevron-icon h-6 w-6 text-gray-500 dark:text-gray-400 transition-transform duration-300 flex-shrink-0" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
                         </div>
                     </div>
-                    <div class="chapters-container grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-in-out">
+                    <div id="test-generator-chapters-container" class="chapters-container grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-in-out">
                         <div class="overflow-hidden pt-2">
 
                             <!-- NEW "Random All" Button -->
@@ -1337,7 +1378,7 @@ export function initializeCustomQuizHandler() {
                             
                             <!-- Physics Group (Accordion) -->
                             <div class="bg-gray-50 dark:bg-gray-800/30 rounded-lg mx-2 mb-2 border border-gray-200 dark:border-gray-700/50 overflow-hidden">
-                                <div class="chapter-accordion-toggle flex justify-between items-center cursor-pointer p-3 hover:bg-gray-100 dark:hover:bg-gray-700/40 transition-colors">
+                                <div id="test-generator-physics-toggle" class="chapter-accordion-toggle flex justify-between items-center cursor-pointer p-3 hover:bg-gray-100 dark:hover:bg-gray-700/40 transition-colors">
                                     <h4 class="text-base font-bold text-gray-800 dark:text-gray-200 font-kanit">ฟิสิกส์ (Physics)</h4>
                                     <svg class="chevron-icon h-5 w-5 text-gray-500 dark:text-gray-400 transition-transform duration-300 flex-shrink-0" width="20" height="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
                                 </div>
@@ -1607,7 +1648,7 @@ export function initializeCustomQuizHandler() {
         }
     }
 
-    async function handleRandomSelection() {
+    function handleRandomSelection() {
         const allInputs = Array.from(document.querySelectorAll('#custom-quiz-category-selection input[type="number"][data-type]'));
         if (allInputs.length === 0) { return; }
 
@@ -1619,11 +1660,23 @@ export function initializeCustomQuizHandler() {
         }
 
         const defaultVal = Math.min(20, maxQuestions);
-        const result = await showNumberInputModal("สุ่มจากทุกวิชา", `มีข้อสอบทั้งหมดในรายการที่เลือก ${maxQuestions} ข้อ`, defaultVal, maxQuestions);
 
-        if (result !== null) {
-            executeRandomSelection(result);
+        // Setup the specific Random All modal instead of generic number input
+        if (randomAllInput && randomAllSlider) {
+            randomAllInput.max = maxQuestions;
+            randomAllSlider.max = maxQuestions;
+            randomAllInput.value = defaultVal;
+            randomAllSlider.value = defaultVal;
+            updateSliderTrack(randomAllSlider);
+
+            // Update range labels if they exist
+            const labels = randomAllSlider.closest('.mb-8')?.querySelectorAll('.flex.justify-between.text-xs span');
+            if (labels && labels.length >= 2) {
+                labels[1].textContent = maxQuestions;
+            }
         }
+
+        randomAllModal.open();
     }
 
     function executeRandomSelection(targetCount) {
@@ -2058,6 +2111,7 @@ export function initializeCustomQuizHandler() {
         // 2. Open Generator Modal Button (Inside Hub)
         if (target.closest('#open-create-quiz-modal-btn')) {
             console.log('[DEBUG] custom-quiz-handler: openCreateQuizModalBtn clicked');
+            if (typeof customQuizHubModal !== 'undefined') customQuizHubModal.close();
             buildAndShowCreationModal(target.closest('#open-create-quiz-modal-btn'));
             return;
         }

@@ -1,0 +1,24 @@
+﻿SyntaxError: C:\Users\golf_\OneDrive\Documents\GitHub\Physics-and-EarthScience-Quiz\tests\e2e\custom-quiz.spec.js: Unexpected token (92:0)
+
+[0m [90m 90 |[39m   [36mawait[39m expect(page[33m.[39mlocator([32m'#quiz-screen:visible, #start-screen:visible'[39m))[33m.[39mtoBeVisible({ timeout[33m:[39m [35m30000[39m })[33m;[39m
+ [90m 91 |[39m })[33m;[39m
+[31m[1m>[22m[39m[90m 92 |[39m })[33m;[39m
+ [90m    |[39m [31m[1m^[22m[39m
+ [90m 93 |[39m[0m
+
+   at custom-quiz.spec.js:92
+
+  90 |   await expect(page.locator('#quiz-screen:visible, #start-screen:visible')).toBeVisible({ timeout: 30000 });
+  91 | });
+> 92 | });
+  93 |
+
+Error: No tests found.
+Make sure that arguments are regular expressions matching test files.
+You may need to escape symbols like "$" or "*" and quote the arguments.
+
+[1A[2K
+To open last HTML report run:
+[36m[39m
+[36m  npx playwright show-report[39m
+[36m[39m

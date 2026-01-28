@@ -1,0 +1,215 @@
+﻿
+Running 4 tests using 4 workers
+
+[1A[2K[1/4] [webkit] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[1A[2K[2/4] [Mobile Chrome] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[1A[2K[3/4] [firefox] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[1A[2K[4/4] [chromium] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[1A[2K[webkit] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[BROWSER] LOG: [DEBUG] custom-quiz-handler: initializeCustomQuizHandler called
+
+[1A[2K[firefox] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[BROWSER] LOG: [DEBUG] custom-quiz-handler: initializeCustomQuizHandler called
+
+[1A[2K[webkit] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[BROWSER] LOG: [DEBUG] custom-quiz-handler: createCustomQuizBtn clicked
+
+[1A[2K[BROWSER] LOG: [DEBUG] custom-quiz-handler: create-custom-quiz-btn clicked
+
+[1A[2K[firefox] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[BROWSER] LOG: [DEBUG] custom-quiz-handler: createCustomQuizBtn clicked
+
+[1A[2K[BROWSER] LOG: [DEBUG] custom-quiz-handler: create-custom-quiz-btn clicked
+
+[1A[2K[BROWSER] LOG: [DEBUG] custom-quiz-handler: openCreateQuizModalBtn clicked
+
+[1A[2K[BROWSER] LOG: [DEBUG] fetchAllQuizData: Loaded quizList with 163 items
+
+[1A[2K[webkit] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[BROWSER] LOG: [DEBUG] custom-quiz-handler: openCreateQuizModalBtn clicked
+
+[1A[2K[BROWSER] LOG: [DEBUG] fetchAllQuizData: Loaded quizList with 163 items
+
+[1A[2K[Mobile Chrome] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[BROWSER] LOG: [DEBUG] custom-quiz-handler: initializeCustomQuizHandler called
+
+[1A[2K[chromium] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[BROWSER] LOG: [DEBUG] custom-quiz-handler: initializeCustomQuizHandler called
+
+[1A[2K[firefox] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[BROWSER] LOG: [DEBUG] fetchAllQuizData: allQuestionsCache total: 7790
+
+[1A[2K[webkit] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[BROWSER] LOG: [DEBUG] fetchAllQuizData: allQuestionsCache total: 7790
+
+[1A[2K[firefox] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[BROWSER] LOG: [DEBUG] buildAndShowCreationModal: groupedQuestions built for 10 subjects
+
+[1A[2K[webkit] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[BROWSER] LOG: [DEBUG] buildAndShowCreationModal: groupedQuestions built for 10 subjects
+
+[1A[2K[chromium] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[BROWSER] LOG: [DEBUG] custom-quiz-handler: createCustomQuizBtn clicked
+
+[1A[2K[Mobile Chrome] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[BROWSER] LOG: [DEBUG] custom-quiz-handler: createCustomQuizBtn clicked
+
+[1A[2K[chromium] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[BROWSER] LOG: [DEBUG] custom-quiz-handler: create-custom-quiz-btn clicked
+
+[1A[2K[Mobile Chrome] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[BROWSER] LOG: [DEBUG] custom-quiz-handler: create-custom-quiz-btn clicked
+
+[1A[2K[BROWSER] LOG: [DEBUG] custom-quiz-handler: openCreateQuizModalBtn clicked
+
+[1A[2K[chromium] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[BROWSER] LOG: [DEBUG] custom-quiz-handler: openCreateQuizModalBtn clicked
+
+[1A[2K[BROWSER] LOG: [DEBUG] fetchAllQuizData: Loaded quizList with 163 items
+
+[1A[2K[Mobile Chrome] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[BROWSER] LOG: [DEBUG] fetchAllQuizData: Loaded quizList with 163 items
+
+[1A[2K[chromium] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[BROWSER] LOG: [DEBUG] fetchAllQuizData: allQuestionsCache total: 7790
+
+[1A[2K[BROWSER] LOG: [DEBUG] buildAndShowCreationModal: groupedQuestions built for 10 subjects
+
+[1A[2K[Mobile Chrome] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[BROWSER] LOG: [DEBUG] fetchAllQuizData: allQuestionsCache total: 7790
+
+[1A[2K[BROWSER] LOG: [DEBUG] buildAndShowCreationModal: groupedQuestions built for 10 subjects
+
+[1A[2K  1) [firefox] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator:  locator('#custom-quiz-modal').locator('.specific-topics-container').first()
+    Expected: visible
+    Received: hidden
+    Timeout:  15000ms
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 15000ms[22m
+    [2m  - waiting for locator('#custom-quiz-modal').locator('.specific-topics-container').first()[22m
+    [2m    17 ├ù locator resolved to <div class="specific-topics-container grid transition-[grid-template-rows] duration-300 ease-in-out grid-rows-[0fr]">ΓÇª</div>[22m
+    [2m       - unexpected value "hidden"[22m
+
+
+      42 |     await accordionToggle.click();
+      43 |     // Wait for content (Playwright considers 0-height hidden)
+    > 44 |     await expect(generatorModal.locator('.specific-topics-container').first()).toBeVisible({ timeout: 15000 });
+         |                                                                                ^
+      45 |   }
+      46 |
+      47 |   // 6. Select questions (Random All)
+        at C:\Users\golf_\OneDrive\Documents\GitHub\Physics-and-EarthScience-Quiz\tests\e2e\custom-quiz.spec.js:44:80
+
+    attachment #1: screenshot (image/png) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+    test-results\custom-quiz-create-and-start-a-custom-quiz-firefox\test-failed-1.png
+    ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+
+
+[1A[2K  2) [chromium] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator:  locator('#custom-quiz-modal').locator('.specific-topics-container').first()
+    Expected: visible
+    Received: hidden
+    Timeout:  15000ms
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 15000ms[22m
+    [2m  - waiting for locator('#custom-quiz-modal').locator('.specific-topics-container').first()[22m
+    [2m    18 ├ù locator resolved to <div class="specific-topics-container grid transition-[grid-template-rows] duration-300 ease-in-out grid-rows-[0fr]">ΓÇª</div>[22m
+    [2m       - unexpected value "hidden"[22m
+
+
+      42 |     await accordionToggle.click();
+      43 |     // Wait for content (Playwright considers 0-height hidden)
+    > 44 |     await expect(generatorModal.locator('.specific-topics-container').first()).toBeVisible({ timeout: 15000 });
+         |                                                                                ^
+      45 |   }
+      46 |
+      47 |   // 6. Select questions (Random All)
+        at C:\Users\golf_\OneDrive\Documents\GitHub\Physics-and-EarthScience-Quiz\tests\e2e\custom-quiz.spec.js:44:80
+
+    attachment #1: screenshot (image/png) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+    test-results\custom-quiz-create-and-start-a-custom-quiz-chromium\test-failed-1.png
+    ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+
+    Error Context: test-results\custom-quiz-create-and-start-a-custom-quiz-chromium\error-context.md
+
+
+[1A[2K  3) [Mobile Chrome] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator:  locator('#custom-quiz-modal').locator('.specific-topics-container').first()
+    Expected: visible
+    Received: hidden
+    Timeout:  15000ms
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 15000ms[22m
+    [2m  - waiting for locator('#custom-quiz-modal').locator('.specific-topics-container').first()[22m
+    [2m    18 ├ù locator resolved to <div class="specific-topics-container grid transition-[grid-template-rows] duration-300 ease-in-out grid-rows-[0fr]">ΓÇª</div>[22m
+    [2m       - unexpected value "hidden"[22m
+
+
+      42 |     await accordionToggle.click();
+      43 |     // Wait for content (Playwright considers 0-height hidden)
+    > 44 |     await expect(generatorModal.locator('.specific-topics-container').first()).toBeVisible({ timeout: 15000 });
+         |                                                                                ^
+      45 |   }
+      46 |
+      47 |   // 6. Select questions (Random All)
+        at C:\Users\golf_\OneDrive\Documents\GitHub\Physics-and-EarthScience-Quiz\tests\e2e\custom-quiz.spec.js:44:80
+
+    attachment #1: screenshot (image/png) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+    test-results\custom-quiz-create-and-start-a-custom-quiz-Mobile-Chrome\test-failed-1.png
+    ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+
+    Error Context: test-results\custom-quiz-create-and-start-a-custom-quiz-Mobile-Chrome\error-context.md
+
+
+[1A[2K  4) [webkit] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator:  locator('#custom-quiz-modal').locator('.specific-topics-container').first()
+    Expected: visible
+    Received: hidden
+    Timeout:  15000ms
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 15000ms[22m
+    [2m  - waiting for locator('#custom-quiz-modal').locator('.specific-topics-container').first()[22m
+    [2m    18 ├ù locator resolved to <div class="specific-topics-container grid transition-[grid-template-rows] duration-300 ease-in-out grid-rows-[0fr]">ΓÇª</div>[22m
+    [2m       - unexpected value "hidden"[22m
+
+
+      42 |     await accordionToggle.click();
+      43 |     // Wait for content (Playwright considers 0-height hidden)
+    > 44 |     await expect(generatorModal.locator('.specific-topics-container').first()).toBeVisible({ timeout: 15000 });
+         |                                                                                ^
+      45 |   }
+      46 |
+      47 |   // 6. Select questions (Random All)
+        at C:\Users\golf_\OneDrive\Documents\GitHub\Physics-and-EarthScience-Quiz\tests\e2e\custom-quiz.spec.js:44:80
+
+    attachment #1: screenshot (image/png) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+    test-results\custom-quiz-create-and-start-a-custom-quiz-webkit\test-failed-1.png
+    ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+
+    Error Context: test-results\custom-quiz-create-and-start-a-custom-quiz-webkit\error-context.md
+
+
+[1A[2K  4 failed
+    [chromium] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+    [firefox] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+    [webkit] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+    [Mobile Chrome] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+
+[36m  Serving HTML report at http://localhost:51106. Press Ctrl+C to quit.[39m

@@ -1,0 +1,195 @@
+﻿{
+  "config": {
+    "configFile": "C:\\Users\\golf_\\OneDrive\\Documents\\GitHub\\Physics-and-EarthScience-Quiz\\playwright.config.js",
+    "rootDir": "C:/Users/golf_/OneDrive/Documents/GitHub/Physics-and-EarthScience-Quiz/tests/e2e",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/golf_/OneDrive/Documents/GitHub/Physics-and-EarthScience-Quiz/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Users/golf_/OneDrive/Documents/GitHub/Physics-and-EarthScience-Quiz/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "C:/Users/golf_/OneDrive/Documents/GitHub/Physics-and-EarthScience-Quiz/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "C:/Users/golf_/OneDrive/Documents/GitHub/Physics-and-EarthScience-Quiz/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "C:/Users/golf_/OneDrive/Documents/GitHub/Physics-and-EarthScience-Quiz/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "C:/Users/golf_/OneDrive/Documents/GitHub/Physics-and-EarthScience-Quiz/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "C:/Users/golf_/OneDrive/Documents/GitHub/Physics-and-EarthScience-Quiz/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "Mobile Chrome",
+        "name": "Mobile Chrome",
+        "testDir": "C:/Users/golf_/OneDrive/Documents/GitHub/Physics-and-EarthScience-Quiz/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "runAgents": "none",
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.58.0",
+    "workers": 6,
+    "webServer": {
+      "command": "npm run dev",
+      "url": "http://localhost:5173",
+      "reuseExistingServer": true,
+      "timeout": 120000
+    }
+  },
+  "suites": [
+    {
+      "title": "custom-quiz.spec.js",
+      "file": "custom-quiz.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "create and start a custom quiz",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 17027,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#random-all-modal')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#random-all-modal')\u001b[22m\n\u001b[2m    - locator resolved to <div role=\"dialog\" aria-modal=\"true\" id=\"random-all-modal\" aria-labelledby=\"random-all-modal-title\" class=\"modal fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black bg-opacity-75\">ΓÇª</div>\u001b[22m\n\u001b[2m    3 ├ù unexpected value \"hidden\"\u001b[22m\n\u001b[2m      - locator resolved to <div role=\"dialog\" aria-modal=\"true\" id=\"random-all-modal\" aria-labelledby=\"random-all-modal-title\" class=\"modal fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black bg-opacity-75 is-open\">ΓÇª</div>\u001b[22m\n\u001b[2m    4 ├ù unexpected value \"hidden\"\u001b[22m\n\u001b[2m      - locator resolved to <div role=\"dialog\" tabindex=\"-1\" aria-modal=\"true\" id=\"random-all-modal\" aria-labelledby=\"random-all-modal-title\" class=\"modal fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black bg-opacity-75 is-open\">ΓÇª</div>\u001b[22m\n\u001b[2m    - unexpected value \"hidden\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#random-all-modal')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#random-all-modal')\u001b[22m\n\u001b[2m    - locator resolved to <div role=\"dialog\" aria-modal=\"true\" id=\"random-all-modal\" aria-labelledby=\"random-all-modal-title\" class=\"modal fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black bg-opacity-75\">ΓÇª</div>\u001b[22m\n\u001b[2m    3 ├ù unexpected value \"hidden\"\u001b[22m\n\u001b[2m      - locator resolved to <div role=\"dialog\" aria-modal=\"true\" id=\"random-all-modal\" aria-labelledby=\"random-all-modal-title\" class=\"modal fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black bg-opacity-75 is-open\">ΓÇª</div>\u001b[22m\n\u001b[2m    4 ├ù unexpected value \"hidden\"\u001b[22m\n\u001b[2m      - locator resolved to <div role=\"dialog\" tabindex=\"-1\" aria-modal=\"true\" id=\"random-all-modal\" aria-labelledby=\"random-all-modal-title\" class=\"modal fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black bg-opacity-75 is-open\">ΓÇª</div>\u001b[22m\n\u001b[2m    - unexpected value \"hidden\"\u001b[22m\n\n    at C:\\Users\\golf_\\OneDrive\\Documents\\GitHub\\Physics-and-EarthScience-Quiz\\tests\\e2e\\custom-quiz.spec.js:61:38",
+                    "location": {
+                      "file": "C:\\Users\\golf_\\OneDrive\\Documents\\GitHub\\Physics-and-EarthScience-Quiz\\tests\\e2e\\custom-quiz.spec.js",
+                      "column": 38,
+                      "line": 61
+                    },
+                    "snippet": "\u001b[0m \u001b[90m 59 |\u001b[39m     \u001b[90m// Confirm random selection in the popup modal\u001b[39m\n \u001b[90m 60 |\u001b[39m     \u001b[36mconst\u001b[39m randomConfirmModal \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'#random-all-modal'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 61 |\u001b[39m     \u001b[36mawait\u001b[39m expect(randomConfirmModal)\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 62 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'#random-all-confirm-btn'\u001b[39m)\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m 63 |\u001b[39m     \u001b[36mawait\u001b[39m expect(randomConfirmModal)\u001b[33m.\u001b[39mtoBeHidden()\u001b[33m;\u001b[39m\n \u001b[90m 64 |\u001b[39m   } \u001b[36melse\u001b[39m {\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\golf_\\OneDrive\\Documents\\GitHub\\Physics-and-EarthScience-Quiz\\tests\\e2e\\custom-quiz.spec.js",
+                        "column": 38,
+                        "line": 61
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#random-all-modal')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#random-all-modal')\u001b[22m\n\u001b[2m    - locator resolved to <div role=\"dialog\" aria-modal=\"true\" id=\"random-all-modal\" aria-labelledby=\"random-all-modal-title\" class=\"modal fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black bg-opacity-75\">ΓÇª</div>\u001b[22m\n\u001b[2m    3 ├ù unexpected value \"hidden\"\u001b[22m\n\u001b[2m      - locator resolved to <div role=\"dialog\" aria-modal=\"true\" id=\"random-all-modal\" aria-labelledby=\"random-all-modal-title\" class=\"modal fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black bg-opacity-75 is-open\">ΓÇª</div>\u001b[22m\n\u001b[2m    4 ├ù unexpected value \"hidden\"\u001b[22m\n\u001b[2m      - locator resolved to <div role=\"dialog\" tabindex=\"-1\" aria-modal=\"true\" id=\"random-all-modal\" aria-labelledby=\"random-all-modal-title\" class=\"modal fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black bg-opacity-75 is-open\">ΓÇª</div>\u001b[22m\n\u001b[2m    - unexpected value \"hidden\"\u001b[22m\n\n\n  59 |     // Confirm random selection in the popup modal\n  60 |     const randomConfirmModal = page.locator('#random-all-modal');\n> 61 |     await expect(randomConfirmModal).toBeVisible();\n     |                                      ^\n  62 |     await page.locator('#random-all-confirm-btn').click();\n  63 |     await expect(randomConfirmModal).toBeHidden();\n  64 |   } else {\n    at C:\\Users\\golf_\\OneDrive\\Documents\\GitHub\\Physics-and-EarthScience-Quiz\\tests\\e2e\\custom-quiz.spec.js:61:38"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-01-28T03:46:17.422Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\golf_\\OneDrive\\Documents\\GitHub\\Physics-and-EarthScience-Quiz\\test-results\\custom-quiz-create-and-start-a-custom-quiz-chromium\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\golf_\\OneDrive\\Documents\\GitHub\\Physics-and-EarthScience-Quiz\\test-results\\custom-quiz-create-and-start-a-custom-quiz-chromium\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\golf_\\OneDrive\\Documents\\GitHub\\Physics-and-EarthScience-Quiz\\tests\\e2e\\custom-quiz.spec.js",
+                    "column": 38,
+                    "line": 61
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "b467d0de07212cbc9816-271e2ceaf740455c6d91",
+          "file": "custom-quiz.spec.js",
+          "line": 3,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-01-28T03:46:05.971Z",
+    "duration": 29595.83,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

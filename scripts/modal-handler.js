@@ -78,27 +78,33 @@ export class ModalHandler {
         document.body.style.overflow = "hidden";
         this.modal.classList.remove("hidden");
 
-        // Use requestAnimationFrame to ensure the browser has applied the display change
-        // before adding the class that triggers the animation.
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                this.modal.classList.add("is-open");
-            });
-        });
+        // Force reflow to ensure the 'hidden' class removal is processed before adding 'is-open'
+        void this.modal.offsetWidth;
+        this.modal.classList.add("is-open");
 
         document.addEventListener("keydown", this.handleKeyDown);
+
+        // Check if transitions are enabled
+        const style = window.getComputedStyle(this.modalContainer || this.modal);
+        const hasTransition = style.transitionDuration !== '0s' && style.transitionProperty !== 'none';
+
+        let safetyTimeout = null;
 
         // Wait for the animation to finish before setting focus
         const onOpenEnd = () => {
             if (!this.isAnimating) return;
             this.isAnimating = false;
             this.setFocus();
-            clearTimeout(safetyTimeout);
+            if (safetyTimeout) clearTimeout(safetyTimeout);
+            this.modal.querySelector('.modal-container')?.removeEventListener('transitionend', onOpenEnd);
         };
 
-        const safetyTimeout = setTimeout(onOpenEnd, 500); // Safety fallback
-
-        this.modal.querySelector('.modal-container')?.addEventListener('transitionend', onOpenEnd, { once: true });
+        if (!hasTransition) {
+            onOpenEnd();
+        } else {
+            safetyTimeout = setTimeout(onOpenEnd, 500); // Safety fallback
+            this.modal.querySelector('.modal-container')?.addEventListener('transitionend', onOpenEnd, { once: true });
+        }
     }
 
     /**
@@ -108,7 +114,15 @@ export class ModalHandler {
         if (!this.isOpen || this.isAnimating) return;
 
         this.isAnimating = true;
+        // Force reflow
+        void this.modal.offsetWidth;
         this.modal.classList.remove("is-open");
+
+        // Check if transitions are enabled
+        const style = window.getComputedStyle(this.modalContainer || this.modal);
+        const hasTransition = style.transitionDuration !== '0s' && style.transitionProperty !== 'none';
+
+        let safetyTimeout = null;
 
         // Wait for the animation to finish before hiding the modal completely
         const onCloseEnd = () => {
@@ -123,11 +137,16 @@ export class ModalHandler {
 
             this.isAnimating = false;
             this.isOpen = false;
-            clearTimeout(safetyTimeout);
+            if (safetyTimeout) clearTimeout(safetyTimeout);
+            this.modal.querySelector('.modal-container')?.removeEventListener('transitionend', onCloseEnd);
         };
 
-        const safetyTimeout = setTimeout(onCloseEnd, 500); // Safety fallback
+        if (!hasTransition) {
+            onCloseEnd();
+            return;
+        }
 
+        safetyTimeout = setTimeout(onCloseEnd, 500); // Safety fallback
         this.modal.querySelector('.modal-container')?.addEventListener('transitionend', onCloseEnd, { once: true });
     }
 

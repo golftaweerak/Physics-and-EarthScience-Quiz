@@ -386,6 +386,7 @@ export async function fetchAllQuizData() {
   try {
     const module = await import(`../data/quizzes-list.js`);
     quizList = module.quizList;
+    console.log(`[DEBUG] fetchAllQuizData: Loaded quizList with ${quizList?.length} items`);
   } catch (error) {
     // Make the error more specific if the main list fails to load.
     throw new Error(`Failed to load or parse quizzes-list.js: ${error.message}`);
@@ -419,7 +420,7 @@ export async function fetchAllQuizData() {
     }
 
     if (!dataModules[scriptPath]) {
-      console.warn(`Data module not found for ${scriptPath}`);
+      console.warn(`[DEBUG] fetchAllQuizData: Data module not found for ${scriptPath}`);
       return [];
     }
 
@@ -467,6 +468,7 @@ export async function fetchAllQuizData() {
   try {
     const results = await Promise.all(promises);
     allQuestionsCache = results.flat();
+    console.log(`[DEBUG] fetchAllQuizData: allQuestionsCache total: ${allQuestionsCache.length}`);
   } catch (error) {
     // The error from a failing import will be caught here.
     // We re-throw it so the UI layer (e.g., preview.js) can display a meaningful message.

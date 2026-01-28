@@ -1,0 +1,979 @@
+﻿
+Running 4 tests using 4 workers
+
+[1A[2K[1/4] [Mobile Chrome] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[1A[2K[2/4] [chromium] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[1A[2K[3/4] [webkit] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[1A[2K[4/4] [firefox] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[1A[2K[chromium] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[BROWSER] LOG: [DEBUG] custom-quiz-handler: initializeCustomQuizHandler called
+
+[1A[2K[BROWSER] LOG: [DEBUG] custom-quiz-handler: Binding modal events
+
+[1A[2K[Mobile Chrome] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[BROWSER] LOG: [DEBUG] custom-quiz-handler: initializeCustomQuizHandler called
+
+[1A[2K[BROWSER] LOG: [DEBUG] custom-quiz-handler: Binding modal events
+
+[1A[2K[BROWSER] LOG: [DEBUG] custom-quiz-handler: createCustomQuizBtn clicked
+
+[1A[2K[BROWSER] LOG: [DEBUG] custom-quiz-handler: create-custom-quiz-btn clicked
+
+[1A[2K[chromium] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[BROWSER] LOG: [DEBUG] custom-quiz-handler: createCustomQuizBtn clicked
+
+[1A[2K[BROWSER] LOG: [DEBUG] custom-quiz-handler: create-custom-quiz-btn clicked
+
+[1A[2K[Mobile Chrome] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[BROWSER] LOG: [DEBUG] custom-quiz-handler: openCreateQuizModalBtn clicked
+
+[1A[2K[BROWSER] LOG: [DEBUG] fetchAllQuizData: Loaded quizList with 163 items
+
+[1A[2K[chromium] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[BROWSER] LOG: [DEBUG] custom-quiz-handler: openCreateQuizModalBtn clicked
+
+[1A[2K[BROWSER] LOG: [DEBUG] fetchAllQuizData: Loaded quizList with 163 items
+
+[1A[2K[firefox] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[BROWSER] LOG: [DEBUG] custom-quiz-handler: initializeCustomQuizHandler called
+
+[1A[2K[BROWSER] LOG: [DEBUG] custom-quiz-handler: Binding modal events
+
+[1A[2K[webkit] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[BROWSER] LOG: [DEBUG] custom-quiz-handler: initializeCustomQuizHandler called
+
+[1A[2K[BROWSER] LOG: [DEBUG] custom-quiz-handler: Binding modal events
+
+[1A[2K[firefox] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[BROWSER] LOG: [DEBUG] custom-quiz-handler: createCustomQuizBtn clicked
+
+[1A[2K[BROWSER] LOG: [DEBUG] custom-quiz-handler: create-custom-quiz-btn clicked
+
+[1A[2K[BROWSER] LOG: [DEBUG] custom-quiz-handler: openCreateQuizModalBtn clicked
+
+[1A[2K[BROWSER] LOG: [DEBUG] fetchAllQuizData: Loaded quizList with 163 items
+
+[1A[2K[webkit] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[BROWSER] LOG: [DEBUG] custom-quiz-handler: createCustomQuizBtn clicked
+
+[1A[2K[BROWSER] LOG: [DEBUG] custom-quiz-handler: create-custom-quiz-btn clicked
+
+[1A[2K[BROWSER] LOG: [DEBUG] custom-quiz-handler: openCreateQuizModalBtn clicked
+
+[1A[2K[BROWSER] LOG: [DEBUG] fetchAllQuizData: Loaded quizList with 163 items
+
+[1A[2K[chromium] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[BROWSER] LOG: [DEBUG] fetchAllQuizData: allQuestionsCache total: 7790
+
+[1A[2K[Mobile Chrome] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[BROWSER] LOG: [DEBUG] fetchAllQuizData: allQuestionsCache total: 7790
+
+[1A[2K[firefox] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[BROWSER] LOG: [DEBUG] fetchAllQuizData: allQuestionsCache total: 7790
+
+[1A[2K[chromium] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[BROWSER] LOG: [DEBUG] buildAndShowCreationModal: groupedQuestions built for 10 subjects
+
+[1A[2K[Mobile Chrome] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[BROWSER] LOG: [DEBUG] buildAndShowCreationModal: groupedQuestions built for 10 subjects
+
+[1A[2K[firefox] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[BROWSER] LOG: [DEBUG] buildAndShowCreationModal: groupedQuestions built for 10 subjects
+
+[1A[2K[chromium] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[BROWSER] LOG: [DEBUG] custom-quiz-modal click on: DIV flex justify-between items-center
+
+[1A[2K[Mobile Chrome] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[BROWSER] LOG: [DEBUG] custom-quiz-modal click on: SPAN font-bold text-lg text-gray-800 dark:text-gray-100 truncate
+
+[1A[2K[chromium] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[BROWSER] LOG: [DEBUG] accordion state: currently open = false, toggling to true
+
+[1A[2K[Mobile Chrome] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[BROWSER] LOG: [DEBUG] accordion state: currently open = false, toggling to true
+
+[1A[2K[webkit] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[BROWSER] LOG: [DEBUG] fetchAllQuizData: allQuestionsCache total: 7790
+
+[1A[2K[chromium] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[BROWSER] LOG: [DEBUG] custom-quiz-modal click on: BUTTON w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-purple-100 text-purple-700 dark:bg-purple-900/50 dark:text-purple-300 rounded-lg hover:bg-purple-200 dark:hover:bg-purple-800/70 text-sm font-bold transition shadow-sm border border-purple-200 dark:border-purple-800
+
+[1A[2K[Mobile Chrome] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[BROWSER] LOG: [DEBUG] custom-quiz-modal click on: BUTTON w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-purple-100 text-purple-700 dark:bg-purple-900/50 dark:text-purple-300 rounded-lg hover:bg-purple-200 dark:hover:bg-purple-800/70 text-sm font-bold transition shadow-sm border border-purple-200 dark:border-purple-800
+
+[1A[2K[chromium] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[BROWSER] LOG: [DEBUG] generator-random-all-btn clicked
+
+[1A[2K[Mobile Chrome] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[BROWSER] LOG: [DEBUG] generator-random-all-btn clicked
+
+[1A[2K[webkit] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[BROWSER] LOG: [DEBUG] buildAndShowCreationModal: groupedQuestions built for 10 subjects
+
+[1A[2K[firefox] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[BROWSER] LOG: [DEBUG] custom-quiz-modal click on: DIV flex justify-between items-center
+
+[1A[2K[BROWSER] LOG: [DEBUG] accordion state: currently open = false, toggling to true
+
+[1A[2K[BROWSER] LOG: [DEBUG] custom-quiz-modal click on: BUTTON w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-purple-100 text-purple-700 dark:bg-purple-900/50 dark:text-purple-300 rounded-lg hover:bg-purple-200 dark:hover:bg-purple-800/70 text-sm font-bold transition shadow-sm border border-purple-200 dark:border-purple-800
+
+[1A[2K[BROWSER] LOG: [DEBUG] generator-random-all-btn clicked
+
+[1A[2K[webkit] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[BROWSER] LOG: [DEBUG] custom-quiz-modal click on: DIV flex justify-between items-center
+
+[1A[2K[BROWSER] LOG: [DEBUG] accordion state: currently open = false, toggling to true
+
+[1A[2K[BROWSER] LOG: [DEBUG] custom-quiz-modal click on: BUTTON w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-purple-100 text-purple-700 dark:bg-purple-900/50 dark:text-purple-300 rounded-lg hover:bg-purple-200 dark:hover:bg-purple-800/70 text-sm font-bold transition shadow-sm border border-purple-200 dark:border-purple-800
+
+[1A[2K[BROWSER] LOG: [DEBUG] generator-random-all-btn clicked
+
+[1A[2K[Mobile Chrome] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[DEBUG] Final Visibility failure details: {
+  "confirmBtn": {
+    "tagName": "BUTTON",
+    "classes": "flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition-transform transform hover:-translate-y-0.5 active:scale-95",
+    "isConnected": true,
+    "display": "block",
+    "opacity": "1",
+    "visibility": "visible",
+    "offsetParent": "null",
+    "rect": {
+      "top": 0,
+      "left": 0,
+      "width": 0,
+      "height": 0
+    }
+  },
+  "confirmBtnAncestors": [
+    {
+      "id": "random-all-confirm-btn",
+      "tagName": "BUTTON",
+      "classes": "flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition-transform transform hover:-translate-y-0.5 active:scale-95",
+      "display": "block",
+      "visibility": "visible",
+      "opacity": "1"
+    },
+    {
+      "id": "",
+      "tagName": "DIV",
+      "classes": "flex gap-3",
+      "display": "flex",
+      "visibility": "visible",
+      "opacity": "1"
+    },
+    {
+      "id": "",
+      "tagName": "DIV",
+      "classes": "modal-container bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-md p-6 relative",
+      "display": "block",
+      "visibility": "visible",
+      "opacity": "1"
+    },
+    {
+      "id": "random-all-modal",
+      "tagName": "DIV",
+      "classes": "modal fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black bg-opacity-75 is-open",
+      "display": "flex",
+      "visibility": "visible",
+      "opacity": "1"
+    },
+    {
+      "id": "number-input-modal",
+      "tagName": "DIV",
+      "classes": "modal hidden fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-[110] p-4 font-sarabun",
+      "display": "none",
+      "visibility": "visible",
+      "opacity": "0"
+    },
+    {
+      "id": "modals-placeholder",
+      "tagName": "DIV",
+      "classes": "",
+      "display": "block",
+      "visibility": "visible",
+      "opacity": "1"
+    },
+    {
+      "id": "",
+      "tagName": "DIV",
+      "classes": "container mx-auto px-4 pb-8 md:pb-12 flex-grow",
+      "display": "block",
+      "visibility": "visible",
+      "opacity": "1"
+    },
+    {
+      "id": "",
+      "tagName": "BODY",
+      "classes": "bg-gray-100 dark:bg-gray-900 flex flex-col min-h-screen font-sarabun",
+      "display": "flex",
+      "visibility": "visible",
+      "opacity": "1"
+    },
+    {
+      "id": "",
+      "tagName": "HTML",
+      "classes": "",
+      "display": "block",
+      "visibility": "visible",
+      "opacity": "1"
+    }
+  ],
+  "confirmBtnCount": 1,
+  "randomModal": {
+    "tagName": "DIV",
+    "classes": "modal fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black bg-opacity-75 is-open",
+    "isConnected": true,
+    "display": "flex",
+    "opacity": "1",
+    "visibility": "visible",
+    "offsetParent": "null",
+    "rect": {
+      "top": 0,
+      "left": 0,
+      "width": 0,
+      "height": 0
+    }
+  },
+  "randomLocalAncestors": [
+    {
+      "id": "random-all-modal",
+      "tagName": "DIV",
+      "classes": "modal fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black bg-opacity-75 is-open",
+      "display": "flex",
+      "visibility": "visible",
+      "opacity": "1"
+    },
+    {
+      "id": "number-input-modal",
+      "tagName": "DIV",
+      "classes": "modal hidden fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-[110] p-4 font-sarabun",
+      "display": "none",
+      "visibility": "visible",
+      "opacity": "0"
+    },
+    {
+      "id": "modals-placeholder",
+      "tagName": "DIV",
+      "classes": "",
+      "display": "block",
+      "visibility": "visible",
+      "opacity": "1"
+    },
+    {
+      "id": "",
+      "tagName": "DIV",
+      "classes": "container mx-auto px-4 pb-8 md:pb-12 flex-grow",
+      "display": "block",
+      "visibility": "visible",
+      "opacity": "1"
+    },
+    {
+      "id": "",
+      "tagName": "BODY",
+      "classes": "bg-gray-100 dark:bg-gray-900 flex flex-col min-h-screen font-sarabun",
+      "display": "flex",
+      "visibility": "visible",
+      "opacity": "1"
+    },
+    {
+      "id": "",
+      "tagName": "HTML",
+      "classes": "",
+      "display": "block",
+      "visibility": "visible",
+      "opacity": "1"
+    }
+  ],
+  "randomModalCount": 1,
+  "modalsPlaceholder": {
+    "tagName": "DIV",
+    "classes": "",
+    "isConnected": true,
+    "display": "block",
+    "opacity": "1",
+    "visibility": "visible",
+    "offsetParent": "BODY",
+    "rect": {
+      "top": 1068,
+      "left": 16,
+      "width": 361,
+      "height": 0
+    }
+  },
+  "viewport": {
+    "width": 393,
+    "height": 727
+  }
+}
+
+[1A[2K[chromium] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[DEBUG] Final Visibility failure details: {
+  "confirmBtn": {
+    "tagName": "BUTTON",
+    "classes": "flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition-transform transform hover:-translate-y-0.5 active:scale-95",
+    "isConnected": true,
+    "display": "block",
+    "opacity": "1",
+    "visibility": "visible",
+    "offsetParent": "null",
+    "rect": {
+      "top": 0,
+      "left": 0,
+      "width": 0,
+      "height": 0
+    }
+  },
+  "confirmBtnAncestors": [
+    {
+      "id": "random-all-confirm-btn",
+      "tagName": "BUTTON",
+      "classes": "flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition-transform transform hover:-translate-y-0.5 active:scale-95",
+      "display": "block",
+      "visibility": "visible",
+      "opacity": "1"
+    },
+    {
+      "id": "",
+      "tagName": "DIV",
+      "classes": "flex gap-3",
+      "display": "flex",
+      "visibility": "visible",
+      "opacity": "1"
+    },
+    {
+      "id": "",
+      "tagName": "DIV",
+      "classes": "modal-container bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-md p-6 relative",
+      "display": "block",
+      "visibility": "visible",
+      "opacity": "1"
+    },
+    {
+      "id": "random-all-modal",
+      "tagName": "DIV",
+      "classes": "modal fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black bg-opacity-75 is-open",
+      "display": "flex",
+      "visibility": "visible",
+      "opacity": "1"
+    },
+    {
+      "id": "number-input-modal",
+      "tagName": "DIV",
+      "classes": "modal hidden fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-[110] p-4 font-sarabun",
+      "display": "none",
+      "visibility": "visible",
+      "opacity": "0"
+    },
+    {
+      "id": "modals-placeholder",
+      "tagName": "DIV",
+      "classes": "",
+      "display": "block",
+      "visibility": "visible",
+      "opacity": "1"
+    },
+    {
+      "id": "",
+      "tagName": "DIV",
+      "classes": "container mx-auto px-4 pb-8 md:pb-12 flex-grow",
+      "display": "block",
+      "visibility": "visible",
+      "opacity": "1"
+    },
+    {
+      "id": "",
+      "tagName": "BODY",
+      "classes": "bg-gray-100 dark:bg-gray-900 flex flex-col min-h-screen font-sarabun",
+      "display": "flex",
+      "visibility": "visible",
+      "opacity": "1"
+    },
+    {
+      "id": "",
+      "tagName": "HTML",
+      "classes": "",
+      "display": "block",
+      "visibility": "visible",
+      "opacity": "1"
+    }
+  ],
+  "confirmBtnCount": 1,
+  "randomModal": {
+    "tagName": "DIV",
+    "classes": "modal fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black bg-opacity-75 is-open",
+    "isConnected": true,
+    "display": "flex",
+    "opacity": "1",
+    "visibility": "visible",
+    "offsetParent": "null",
+    "rect": {
+      "top": 0,
+      "left": 0,
+      "width": 0,
+      "height": 0
+    }
+  },
+  "randomLocalAncestors": [
+    {
+      "id": "random-all-modal",
+      "tagName": "DIV",
+      "classes": "modal fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black bg-opacity-75 is-open",
+      "display": "flex",
+      "visibility": "visible",
+      "opacity": "1"
+    },
+    {
+      "id": "number-input-modal",
+      "tagName": "DIV",
+      "classes": "modal hidden fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-[110] p-4 font-sarabun",
+      "display": "none",
+      "visibility": "visible",
+      "opacity": "0"
+    },
+    {
+      "id": "modals-placeholder",
+      "tagName": "DIV",
+      "classes": "",
+      "display": "block",
+      "visibility": "visible",
+      "opacity": "1"
+    },
+    {
+      "id": "",
+      "tagName": "DIV",
+      "classes": "container mx-auto px-4 pb-8 md:pb-12 flex-grow",
+      "display": "block",
+      "visibility": "visible",
+      "opacity": "1"
+    },
+    {
+      "id": "",
+      "tagName": "BODY",
+      "classes": "bg-gray-100 dark:bg-gray-900 flex flex-col min-h-screen font-sarabun",
+      "display": "flex",
+      "visibility": "visible",
+      "opacity": "1"
+    },
+    {
+      "id": "",
+      "tagName": "HTML",
+      "classes": "",
+      "display": "block",
+      "visibility": "visible",
+      "opacity": "1"
+    }
+  ],
+  "randomModalCount": 1,
+  "modalsPlaceholder": {
+    "tagName": "DIV",
+    "classes": "",
+    "isConnected": true,
+    "display": "block",
+    "opacity": "1",
+    "visibility": "visible",
+    "offsetParent": "BODY",
+    "rect": {
+      "top": 1008,
+      "left": 16,
+      "width": 1248,
+      "height": 0
+    }
+  },
+  "viewport": {
+    "width": 1280,
+    "height": 720
+  }
+}
+
+[1A[2K[firefox] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[DEBUG] Final Visibility failure details: {
+  "confirmBtn": {
+    "tagName": "BUTTON",
+    "classes": "flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition-transform transform hover:-translate-y-0.5 active:scale-95",
+    "isConnected": true,
+    "display": "block",
+    "opacity": "1",
+    "visibility": "visible",
+    "offsetParent": "null",
+    "rect": {
+      "top": 0,
+      "left": 0,
+      "width": 0,
+      "height": 0
+    }
+  },
+  "confirmBtnAncestors": [
+    {
+      "id": "random-all-confirm-btn",
+      "tagName": "BUTTON",
+      "classes": "flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition-transform transform hover:-translate-y-0.5 active:scale-95",
+      "display": "block",
+      "visibility": "visible",
+      "opacity": "1"
+    },
+    {
+      "id": "",
+      "tagName": "DIV",
+      "classes": "flex gap-3",
+      "display": "flex",
+      "visibility": "visible",
+      "opacity": "1"
+    },
+    {
+      "id": "",
+      "tagName": "DIV",
+      "classes": "modal-container bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-md p-6 relative",
+      "display": "block",
+      "visibility": "visible",
+      "opacity": "1"
+    },
+    {
+      "id": "random-all-modal",
+      "tagName": "DIV",
+      "classes": "modal fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black bg-opacity-75 is-open",
+      "display": "flex",
+      "visibility": "visible",
+      "opacity": "1"
+    },
+    {
+      "id": "number-input-modal",
+      "tagName": "DIV",
+      "classes": "modal hidden fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-[110] p-4 font-sarabun",
+      "display": "none",
+      "visibility": "visible",
+      "opacity": "0"
+    },
+    {
+      "id": "modals-placeholder",
+      "tagName": "DIV",
+      "classes": "",
+      "display": "block",
+      "visibility": "visible",
+      "opacity": "1"
+    },
+    {
+      "id": "",
+      "tagName": "DIV",
+      "classes": "container mx-auto px-4 pb-8 md:pb-12 flex-grow",
+      "display": "block",
+      "visibility": "visible",
+      "opacity": "1"
+    },
+    {
+      "id": "",
+      "tagName": "BODY",
+      "classes": "bg-gray-100 dark:bg-gray-900 flex flex-col min-h-screen font-sarabun",
+      "display": "flex",
+      "visibility": "visible",
+      "opacity": "1"
+    },
+    {
+      "id": "",
+      "tagName": "HTML",
+      "classes": "",
+      "display": "block",
+      "visibility": "visible",
+      "opacity": "1"
+    }
+  ],
+  "confirmBtnCount": 1,
+  "randomModal": {
+    "tagName": "DIV",
+    "classes": "modal fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black bg-opacity-75 is-open",
+    "isConnected": true,
+    "display": "flex",
+    "opacity": "1",
+    "visibility": "visible",
+    "offsetParent": "null",
+    "rect": {
+      "top": 0,
+      "left": 0,
+      "width": 0,
+      "height": 0
+    }
+  },
+  "randomLocalAncestors": [
+    {
+      "id": "random-all-modal",
+      "tagName": "DIV",
+      "classes": "modal fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black bg-opacity-75 is-open",
+      "display": "flex",
+      "visibility": "visible",
+      "opacity": "1"
+    },
+    {
+      "id": "number-input-modal",
+      "tagName": "DIV",
+      "classes": "modal hidden fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-[110] p-4 font-sarabun",
+      "display": "none",
+      "visibility": "visible",
+      "opacity": "0"
+    },
+    {
+      "id": "modals-placeholder",
+      "tagName": "DIV",
+      "classes": "",
+      "display": "block",
+      "visibility": "visible",
+      "opacity": "1"
+    },
+    {
+      "id": "",
+      "tagName": "DIV",
+      "classes": "container mx-auto px-4 pb-8 md:pb-12 flex-grow",
+      "display": "block",
+      "visibility": "visible",
+      "opacity": "1"
+    },
+    {
+      "id": "",
+      "tagName": "BODY",
+      "classes": "bg-gray-100 dark:bg-gray-900 flex flex-col min-h-screen font-sarabun",
+      "display": "flex",
+      "visibility": "visible",
+      "opacity": "1"
+    },
+    {
+      "id": "",
+      "tagName": "HTML",
+      "classes": "",
+      "display": "block",
+      "visibility": "visible",
+      "opacity": "1"
+    }
+  ],
+  "randomModalCount": 1,
+  "modalsPlaceholder": {
+    "tagName": "DIV",
+    "classes": "",
+    "isConnected": true,
+    "display": "block",
+    "opacity": "1",
+    "visibility": "visible",
+    "offsetParent": "BODY",
+    "rect": {
+      "top": 1005.2999877929688,
+      "left": 16.166671752929688,
+      "width": 1248,
+      "height": 0
+    }
+  },
+  "viewport": {
+    "width": 1280,
+    "height": 720
+  }
+}
+
+[1A[2K  1) [chromium] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator:  locator('#random-all-confirm-btn')
+    Expected: visible
+    Received: hidden
+    Timeout:  15000ms
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 15000ms[22m
+    [2m  - waiting for locator('#random-all-confirm-btn')[22m
+    [2m    18 ├ù locator resolved to <button id="random-all-confirm-btn" class="flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition-transform transform hover:-translate-y-0.5 active:scale-95">Γå╡                    α╕óα╕╖α╕Öα╕óα╕▒α╕Öα╕üα╕▓α╕úα╕¬α╕╕α╣êα╕íΓå╡              ΓÇª</button>[22m
+    [2m       - unexpected value "hidden"[22m
+
+
+      74 |   // Diagnostic: Log styles if it fails
+      75 |   try {
+    > 76 |     await expect(confirmBtn).toBeVisible({ timeout: 15000 });
+         |                              ^
+      77 |   } catch (error) {
+      78 |     const diagnostic = await page.evaluate(() => {
+      79 |       const btn = document.getElementById('random-all-confirm-btn');
+        at C:\Users\golf_\OneDrive\Documents\GitHub\Physics-and-EarthScience-Quiz\tests\e2e\custom-quiz.spec.js:76:30
+
+    attachment #1: screenshot (image/png) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+    test-results\custom-quiz-create-and-start-a-custom-quiz-chromium\test-failed-1.png
+    ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+
+    Error Context: test-results\custom-quiz-create-and-start-a-custom-quiz-chromium\error-context.md
+
+
+[1A[2K  2) [Mobile Chrome] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator:  locator('#random-all-confirm-btn')
+    Expected: visible
+    Received: hidden
+    Timeout:  15000ms
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 15000ms[22m
+    [2m  - waiting for locator('#random-all-confirm-btn')[22m
+    [2m    18 ├ù locator resolved to <button id="random-all-confirm-btn" class="flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition-transform transform hover:-translate-y-0.5 active:scale-95">Γå╡                    α╕óα╕╖α╕Öα╕óα╕▒α╕Öα╕üα╕▓α╕úα╕¬α╕╕α╣êα╕íΓå╡              ΓÇª</button>[22m
+    [2m       - unexpected value "hidden"[22m
+
+
+      74 |   // Diagnostic: Log styles if it fails
+      75 |   try {
+    > 76 |     await expect(confirmBtn).toBeVisible({ timeout: 15000 });
+         |                              ^
+      77 |   } catch (error) {
+      78 |     const diagnostic = await page.evaluate(() => {
+      79 |       const btn = document.getElementById('random-all-confirm-btn');
+        at C:\Users\golf_\OneDrive\Documents\GitHub\Physics-and-EarthScience-Quiz\tests\e2e\custom-quiz.spec.js:76:30
+
+    attachment #1: screenshot (image/png) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+    test-results\custom-quiz-create-and-start-a-custom-quiz-Mobile-Chrome\test-failed-1.png
+    ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+
+    Error Context: test-results\custom-quiz-create-and-start-a-custom-quiz-Mobile-Chrome\error-context.md
+
+
+[1A[2K[webkit] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz
+[DEBUG] Final Visibility failure details: {
+  "confirmBtn": {
+    "tagName": "BUTTON",
+    "classes": "flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition-transform transform hover:-translate-y-0.5 active:scale-95",
+    "isConnected": true,
+    "display": "block",
+    "opacity": "1",
+    "visibility": "visible",
+    "offsetParent": "null",
+    "rect": {
+      "top": 0,
+      "left": 0,
+      "width": 0,
+      "height": 0
+    }
+  },
+  "confirmBtnAncestors": [
+    {
+      "id": "random-all-confirm-btn",
+      "tagName": "BUTTON",
+      "classes": "flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition-transform transform hover:-translate-y-0.5 active:scale-95",
+      "display": "block",
+      "visibility": "visible",
+      "opacity": "1"
+    },
+    {
+      "id": "",
+      "tagName": "DIV",
+      "classes": "flex gap-3",
+      "display": "flex",
+      "visibility": "visible",
+      "opacity": "1"
+    },
+    {
+      "id": "",
+      "tagName": "DIV",
+      "classes": "modal-container bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-md p-6 relative",
+      "display": "block",
+      "visibility": "visible",
+      "opacity": "1"
+    },
+    {
+      "id": "random-all-modal",
+      "tagName": "DIV",
+      "classes": "modal fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black bg-opacity-75 is-open",
+      "display": "flex",
+      "visibility": "visible",
+      "opacity": "1"
+    },
+    {
+      "id": "number-input-modal",
+      "tagName": "DIV",
+      "classes": "modal hidden fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-[110] p-4 font-sarabun",
+      "display": "none",
+      "visibility": "visible",
+      "opacity": "0"
+    },
+    {
+      "id": "modals-placeholder",
+      "tagName": "DIV",
+      "classes": "",
+      "display": "block",
+      "visibility": "visible",
+      "opacity": "1"
+    },
+    {
+      "id": "",
+      "tagName": "DIV",
+      "classes": "container mx-auto px-4 pb-8 md:pb-12 flex-grow",
+      "display": "block",
+      "visibility": "visible",
+      "opacity": "1"
+    },
+    {
+      "id": "",
+      "tagName": "BODY",
+      "classes": "bg-gray-100 dark:bg-gray-900 flex flex-col min-h-screen font-sarabun",
+      "display": "flex",
+      "visibility": "visible",
+      "opacity": "1"
+    },
+    {
+      "id": "",
+      "tagName": "HTML",
+      "classes": "",
+      "display": "block",
+      "visibility": "visible",
+      "opacity": "1"
+    }
+  ],
+  "confirmBtnCount": 1,
+  "randomModal": {
+    "tagName": "DIV",
+    "classes": "modal fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black bg-opacity-75 is-open",
+    "isConnected": true,
+    "display": "flex",
+    "opacity": "1",
+    "visibility": "visible",
+    "offsetParent": "null",
+    "rect": {
+      "top": 0,
+      "left": 0,
+      "width": 0,
+      "height": 0
+    }
+  },
+  "randomLocalAncestors": [
+    {
+      "id": "random-all-modal",
+      "tagName": "DIV",
+      "classes": "modal fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black bg-opacity-75 is-open",
+      "display": "flex",
+      "visibility": "visible",
+      "opacity": "1"
+    },
+    {
+      "id": "number-input-modal",
+      "tagName": "DIV",
+      "classes": "modal hidden fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-[110] p-4 font-sarabun",
+      "display": "none",
+      "visibility": "visible",
+      "opacity": "0"
+    },
+    {
+      "id": "modals-placeholder",
+      "tagName": "DIV",
+      "classes": "",
+      "display": "block",
+      "visibility": "visible",
+      "opacity": "1"
+    },
+    {
+      "id": "",
+      "tagName": "DIV",
+      "classes": "container mx-auto px-4 pb-8 md:pb-12 flex-grow",
+      "display": "block",
+      "visibility": "visible",
+      "opacity": "1"
+    },
+    {
+      "id": "",
+      "tagName": "BODY",
+      "classes": "bg-gray-100 dark:bg-gray-900 flex flex-col min-h-screen font-sarabun",
+      "display": "flex",
+      "visibility": "visible",
+      "opacity": "1"
+    },
+    {
+      "id": "",
+      "tagName": "HTML",
+      "classes": "",
+      "display": "block",
+      "visibility": "visible",
+      "opacity": "1"
+    }
+  ],
+  "randomModalCount": 1,
+  "modalsPlaceholder": {
+    "tagName": "DIV",
+    "classes": "",
+    "isConnected": true,
+    "display": "block",
+    "opacity": "1",
+    "visibility": "visible",
+    "offsetParent": "BODY",
+    "rect": {
+      "top": 1005,
+      "left": 16,
+      "width": 1248,
+      "height": 0
+    }
+  },
+  "viewport": {
+    "width": 1280,
+    "height": 720
+  }
+}
+
+[1A[2K  3) [firefox] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator:  locator('#random-all-confirm-btn')
+    Expected: visible
+    Received: hidden
+    Timeout:  15000ms
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 15000ms[22m
+    [2m  - waiting for locator('#random-all-confirm-btn')[22m
+    [2m    18 ├ù locator resolved to <button id="random-all-confirm-btn" class="flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition-transform transform hover:-translate-y-0.5 active:scale-95">Γå╡                    α╕óα╕╖α╕Öα╕óα╕▒α╕Öα╕üα╕▓α╕úα╕¬α╕╕α╣êα╕íΓå╡              ΓÇª</button>[22m
+    [2m       - unexpected value "hidden"[22m
+
+
+      74 |   // Diagnostic: Log styles if it fails
+      75 |   try {
+    > 76 |     await expect(confirmBtn).toBeVisible({ timeout: 15000 });
+         |                              ^
+      77 |   } catch (error) {
+      78 |     const diagnostic = await page.evaluate(() => {
+      79 |       const btn = document.getElementById('random-all-confirm-btn');
+        at C:\Users\golf_\OneDrive\Documents\GitHub\Physics-and-EarthScience-Quiz\tests\e2e\custom-quiz.spec.js:76:30
+
+    attachment #1: screenshot (image/png) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+    test-results\custom-quiz-create-and-start-a-custom-quiz-firefox\test-failed-1.png
+    ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+
+
+[1A[2K  4) [webkit] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator:  locator('#random-all-confirm-btn')
+    Expected: visible
+    Received: hidden
+    Timeout:  15000ms
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 15000ms[22m
+    [2m  - waiting for locator('#random-all-confirm-btn')[22m
+    [2m    18 ├ù locator resolved to <button id="random-all-confirm-btn" class="flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition-transform transform hover:-translate-y-0.5 active:scale-95">Γå╡                    α╕óα╕╖α╕Öα╕óα╕▒α╕Öα╕üα╕▓α╕úα╕¬α╕╕α╣êα╕íΓå╡              ΓÇª</button>[22m
+    [2m       - unexpected value "hidden"[22m
+
+
+      74 |   // Diagnostic: Log styles if it fails
+      75 |   try {
+    > 76 |     await expect(confirmBtn).toBeVisible({ timeout: 15000 });
+         |                              ^
+      77 |   } catch (error) {
+      78 |     const diagnostic = await page.evaluate(() => {
+      79 |       const btn = document.getElementById('random-all-confirm-btn');
+        at C:\Users\golf_\OneDrive\Documents\GitHub\Physics-and-EarthScience-Quiz\tests\e2e\custom-quiz.spec.js:76:30
+
+    attachment #1: screenshot (image/png) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+    test-results\custom-quiz-create-and-start-a-custom-quiz-webkit\test-failed-1.png
+    ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+
+    Error Context: test-results\custom-quiz-create-and-start-a-custom-quiz-webkit\error-context.md
+
+
+[1A[2K  4 failed
+    [chromium] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+    [firefox] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+    [webkit] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+    [Mobile Chrome] ΓÇ║ tests\e2e\custom-quiz.spec.js:3:1 ΓÇ║ create and start a custom quiz ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+
+[36m  Serving HTML report at http://localhost:58512. Press Ctrl+C to quit.[39m

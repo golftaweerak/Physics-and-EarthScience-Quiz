@@ -31,7 +31,7 @@ export const quizList = [
     "icon": "./assets/icons/kinetic-energy.png",
     "altText": "ไอคอนสำหรับ phy_m4_ch5-1",
     "category": "PhysicsM4",
-    "subCategory": "บทที่ 5: งานและพลังงาน (ชุดที่ 1)"
+    "subCategory": "บทที่ 5: งานและพลังงาน"
   },
   {
     "id": "phy_m4/phy_m4_ch5-2",
@@ -211,7 +211,7 @@ export const quizList = [
     "icon": "./assets/icons/physicsm4.png",
     "altText": "ไอคอนสำหรับ phy_m4_ch2-1",
     "category": "PhysicsM4",
-    "subCategory": "บทที่ 2: การเคลื่อนที่แนวตรง (ชุดที่ 1 - ทฤษฎี)"
+    "subCategory": "บทที่ 2: การเคลื่อนที่แนวตรง"
   },
   {
     "id": "phy_m4/phy_m4_ch6-1",
