@@ -1988,19 +1988,32 @@ async function renderRadarChart(game, allProgress = null, mode = 'overall') {
                     }
                 });
             } else if (mode.startsWith('physics_')) {
-                const grade = mode.split('_')[1];
-                const syllabus = subCategoryData.Physics[grade];
+                const grade = mode.split('_')[1]; // e.g., 'm4'
+                const syllabus = subCategoryData.Physics?.[grade];
+
                 if (syllabus?.chapters) {
                     syllabus.chapters.forEach(ch => {
-                        const title = ch.shortTitle || ch.title.split(':')[0];
-                        groupsToUse[title] = { label: title, keywords: [ch.title, ch.shortTitle, ...(ch.keywords || [])] };
+                        const title = ch.shortTitle || ch.title.split(':')[0].trim();
+                        // Add broad keywords to ensure matching
+                        const keywords = [
+                            ch.title,
+                            ch.shortTitle,
+                            title,
+                            `บทที่ ${title.replace('บทที่', '').trim()}`,
+                            ...(ch.keywords || [])
+                        ].filter(Boolean);
+
+                        groupsToUse[title] = { label: title, keywords: keywords };
                     });
                 }
             } else if (mode === 'earth_basic') {
                 const syllabus = subCategoryData.EarthSpaceScienceBasic;
-                syllabus?.units.forEach(unit => unit.chapters.forEach(ch => {
+                syllabus?.units?.forEach(unit => unit.chapters.forEach(ch => {
                     const title = ch.shortTitle || ch.title;
-                    groupsToUse[title] = { label: title, keywords: [ch.title, ch.shortTitle, ...(ch.keywords || [])] };
+                    groupsToUse[title] = {
+                        label: title,
+                        keywords: [ch.title, ch.shortTitle, ...(ch.keywords || [])].filter(Boolean)
+                    };
                 }));
             }
         } else {
@@ -2024,17 +2037,25 @@ async function renderRadarChart(game, allProgress = null, mode = 'overall') {
 
         // --- CALCULATION ---
         const stats = {};
+        // Initialize stats for all groups
         Object.keys(groupsToUse).forEach(k => stats[k] = { correct: 0, total: 0, label: groupsToUse[k].label });
 
         currentProgress.forEach(quiz => {
             if (!quiz.userAnswers) return;
             quiz.userAnswers.forEach(ans => {
                 if (!ans) return;
-                let subCat = (typeof ans.subCategory === 'string' ? ans.subCategory : (ans.subCategory?.main || '')).toLowerCase();
-                subCat += ' ' + (ans.sourceQuizCategory || quiz.category || '').toLowerCase();
+
+                // Construct a broad search string from all available categories
+                const searchTerms = [
+                    ans.subCategory,
+                    typeof ans.subCategory === 'object' ? ans.subCategory?.main : '',
+                    ans.sourceQuizCategory,
+                    quiz.category,
+                    quiz.title
+                ].filter(Boolean).join(' ').toLowerCase();
 
                 for (const [key, def] of Object.entries(groupsToUse)) {
-                    if (def.keywords.some(k => subCat.includes(k.toLowerCase()))) {
+                    if (def.keywords.some(k => searchTerms.includes(k.toLowerCase()))) {
                         stats[key].total++;
                         if (ans.isCorrect) stats[key].correct++;
                     }
