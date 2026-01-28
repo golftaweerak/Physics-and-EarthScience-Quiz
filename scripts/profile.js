@@ -23,31 +23,6 @@ const AVATARS = [
     '🧑‍🎓', '👩‍🎓', '👨‍🔬', '👩‍🔬', '👨‍🚀', '👩‍🚀', '👽', '🤖', '👻', '💩'
 ];
 
-// Theme colors for Radar Chart
-const THEME_COLORS = {
-    'theme-forest': { border: '#059669', background: 'rgba(5, 150, 105, 0.2)', point: '#059669' },
-    'theme-sunset': { border: '#ea580c', background: 'rgba(234, 88, 12, 0.2)', point: '#ea580c' },
-    'theme-ocean': { border: '#0891b2', background: 'rgba(8, 145, 178, 0.2)', point: '#0891b2' },
-    'theme-berry': { border: '#db2777', background: 'rgba(219, 39, 119, 0.2)', point: '#db2777' },
-    'theme-sakura': { border: '#e11d48', background: 'rgba(225, 29, 72, 0.2)', point: '#e11d48' },
-    'theme-midnight': { border: '#475569', background: 'rgba(71, 85, 105, 0.2)', point: '#475569' },
-    'default': { border: 'rgba(59, 130, 246, 1)', background: 'rgba(59, 130, 246, 0.2)', point: 'rgba(59, 130, 246, 1)' }
-};
-
-/**
- * Centralized function to get theme colors for Chart.js based on the current theme.
- * @param {Gamification} game - The gamification instance.
- * @returns {{gridColor: string, textColor: string, themeColors: object}}
- */
-function getChartJsTheme(game) {
-    const isDark = document.documentElement.classList.contains('dark');
-    const gridColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
-    const textColor = isDark ? '#e5e7eb' : '#374151';
-    const currentThemeName = game?.state?.selectedTheme;
-    const themeColors = THEME_COLORS[currentThemeName] || THEME_COLORS['default'];
-
-    return { gridColor, textColor, themeColors };
-}
 
 
 let lastSyncTime = null;
