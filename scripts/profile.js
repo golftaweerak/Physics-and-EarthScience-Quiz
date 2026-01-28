@@ -1977,13 +1977,16 @@ async function renderRadarChart(game, allProgress = null, mode = 'overall') {
             // Filter out POSN specific content if not needed, or rely on keywords
             // Define Groups for High School
             if (mode === 'overall') {
-                groupsToUse = {
-                    "กลศาสตร์ 1": { label: "กลศาสตร์ 1", keywords: ["ม.4", "กลศาสตร์", "การเคลื่อนที่", "กฎของนิวตัน", "สมดุล"] },
-                    "คลื่นและแสง": { label: "คลื่นและแสง", keywords: ["คลื่น", "แสง", "เสียง"] },
-                    "ไฟฟ้า": { label: "ไฟฟ้า", keywords: ["ไฟฟ้า", "แม่เหล็ก"] },
-                    "ความร้อนและของไหล": { label: "ความร้อนฯ", keywords: ["ความร้อน", "ของแข็ง", "ของไหล"] },
-                    "โลกและดาราศาสตร์": { label: "พื้นฐานโลกฯ", keywords: ["ess_basic", "ดาราศาสตร์พื้นฐาน"] }
-                };
+                // Use Proficiency Groups from SiteConfig
+                Object.entries(PROFICIENCY_GROUPS).forEach(([key, group]) => {
+                    // Only include physics and earth tracks for High School
+                    if (group.track === 'physics' || group.track === 'earth') {
+                        groupsToUse[key] = {
+                            label: group.label,
+                            keywords: group.keywords
+                        };
+                    }
+                });
             } else if (mode.startsWith('physics_')) {
                 const grade = mode.split('_')[1];
                 const syllabus = subCategoryData.Physics[grade];
