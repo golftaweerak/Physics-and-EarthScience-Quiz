@@ -827,4 +827,56 @@
             </div>
         </div>
     </div>
-</div>
+
+    <!-- Random All Selection Modal -->
+    <div id="random-all-modal"
+        class="modal hidden fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black bg-opacity-75"
+        role="dialog" aria-modal="true" aria-labelledby="random-all-modal-title">
+        <div class="modal-container bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-md p-6 relative">
+            <button data-modal-close aria-label="ปิด"
+                class="absolute top-4 right-4 p-2 rounded-full text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+
+            <h3 id="random-all-modal-title" class="text-xl font-bold text-gray-900 dark:text-gray-100 font-kanit mb-2">
+                สุ่มจำนวนข้อทั้งหมด
+            </h3>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mb-6">
+                เลือกระบุจำนวนข้อรวมที่ต้องการสุ่มจากทุกวิชา
+            </p>
+
+            <div class="mb-8">
+                <div class="flex justify-between items-center mb-4">
+                    <label for="random-all-input"
+                        class="text-sm font-bold text-gray-700 dark:text-gray-300">จำนวนข้อ:</label>
+                    <div class="flex items-center gap-2">
+                        <input type="number" id="random-all-input" min="1" max="100" value="20"
+                            class="w-20 p-2 text-center text-lg border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 font-bold">
+                    </div>
+                </div>
+
+                <div class="relative h-6 flex items-center">
+                    <input type="range" id="random-all-slider" min="1" max="100" value="20"
+                        class="absolute w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-600 accent-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500/50">
+                </div>
+                <div class="flex justify-between text-xs text-gray-400 mt-2 font-mono">
+                    <span>1</span>
+                    <span>100</span>
+                </div>
+            </div>
+
+            <div class="flex gap-3">
+                <button id="random-all-confirm-btn"
+                    class="flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition-transform transform hover:-translate-y-0.5 active:scale-95">
+                    ยืนยันการสุ่ม
+                </button>
+                <button data-modal-close
+                    class="flex-1 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 font-bold py-3 px-4 rounded-xl transition-colors active:scale-95">
+                    ยกเลิก
+                </button>
+            </div>
+        </div>
+    </div>

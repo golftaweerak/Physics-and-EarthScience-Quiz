@@ -1677,7 +1677,8 @@ export function initializeCustomQuizHandler() {
     });
 
     // Button inside the hub to open the creation modal
-    openCreateQuizModalBtn.addEventListener("click", (e) => buildAndShowCreationModal(e.currentTarget));
+    // [FIX] Redundant listener removed: Handled by delegated listener below (approx line 2058)
+    // openCreateQuizModalBtn.addEventListener("click", (e) => buildAndShowCreationModal(e.currentTarget));
 
     // Event delegation for the list of custom quizzes (edit, delete, etc.)
     if (customQuizListContainer) {
