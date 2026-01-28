@@ -1,4 +1,4 @@
-import { Gamification, BADGES, ACHIEVEMENTS, SHOP_ITEMS, XP_THRESHOLDS, TRACK_TITLES, PROFICIENCY_GROUPS, getLevelBorderClass, getAvatarFrameClass } from './gamification.js';
+import { Gamification, BADGES, ACHIEVEMENTS, SHOP_ITEMS, XP_THRESHOLDS, TRACK_TITLES, PROFICIENCY_GROUPS, getLevelBorderClass, getAvatarFrameClass, THEME_DEFINITIONS } from './gamification.js';
 import { getDetailedProgressForAllQuizzes, calculateStrengthsAndWeaknesses } from './data-manager.js';
 import { renderDailyQuests } from './daily-quests-renderer.js';
 import { ModalHandler } from './modal-handler.js';
@@ -58,6 +58,7 @@ let gamificationUpdateHandler = null;
 let activeShopTab = 'consumable';
 let activeHistoryRange = 'all';
 let activeProficiencyMode = 'overall';
+let activeProficiencyTrack = 'highschool'; // 'highschool' or 'posn'
 let historySearchQuery = ''; // Track search in History panel
 let activeAnalysisSyllabus = 'overall';
 let activeReportTrendRange = '7'; // Default for Analysis tab
@@ -1985,189 +1986,89 @@ function renderQuestHistory(game) {
 async function renderRadarChart(game, allProgress = null, mode = 'overall') {
     const ctx = document.getElementById('skills-radar-chart')?.getContext('2d');
     const loader = document.getElementById('radar-chart-loader');
-    if (!ctx) {
-        if (loader) loader.classList.add('hidden');
-        return false;
-    }
-    const chartContainer = ctx.canvas.parentElement;
+    if (!ctx) return false;
 
-    // Check if Chart.js is loaded
-    if (typeof Chart === 'undefined') {
-        console.warn("Chart.js is not loaded. Skipping radar chart rendering.");
-        if (loader) loader.classList.add('hidden');
-        return false;
-    }
+    if (loader) loader.classList.remove('hidden');
 
     try {
-        // --- Caching Logic ---
-        const CACHE_KEY = `radar_chart_data_v2_${mode}`; // Use mode-specific cache
-        const LAST_COMPLETED_KEY = 'last_quiz_completed_timestamp'; // This key should be updated when a quiz is finished
+        if (!allProgress) allProgress = await getDetailedProgressForAllQuizzes();
 
-        const lastCompletionTime = localStorage.getItem(LAST_COMPLETED_KEY) || '0';
-        let cachedData = null;
-        const cachedItem = localStorage.getItem(CACHE_KEY);
-        //const cachedData = cachedItem ? JSON.parse(cachedItem) : null;
-        if (cachedItem) {
-            try {
-                cachedData = JSON.parse(cachedItem);
-            } catch (e) {
-                console.warn('Could not parse radar chart cache. Recalculating...', e);
-                localStorage.removeItem(CACHE_KEY); // Clear corrupted cache
-            }
-        }
+        const track = activeProficiencyTrack; // 'highschool' or 'posn'
+        let currentProgress = allProgress;
+        let groupsToUse = {};
 
-        // Cleanup old cache
-        localStorage.removeItem('radar_chart_data_cache');
-
-        let stats;
-
-        if (cachedData && cachedData.timestamp >= lastCompletionTime) {
-            // Use cached data
-            console.log(`Using cached radar chart data for ${mode}.`);
-            stats = cachedData.stats;
-        } else {
-            // Recalculate data
-            console.log(`Recalculating radar chart data for mode: ${mode}`);
-            if (!allProgress) allProgress = await getDetailedProgressForAllQuizzes();
-
-            // --- DATA ISOLATION LOGIC ---
-            // Prevent mixing of Basic and Advanced Earth Science data
-            if (mode === 'earth_basic') {
-                allProgress = allProgress.filter(p => p.id && p.id.startsWith('ess_basic'));
-            } else if (mode === 'earth_adv') {
-                allProgress = allProgress.filter(p => p.id && p.id.startsWith('ess_adv'));
-            } else if (mode === 'posn_earth') {
-                allProgress = allProgress.filter(p => p.id && (p.id.startsWith('es') || p.id.startsWith('adv_geology') || p.id.startsWith('adv_meteorology') || p.id.startsWith('adv_oceanography')));
-            } else if (mode === 'posn_astro') {
-                allProgress = allProgress.filter(p => p.id && (p.id.startsWith('junior') || p.id.startsWith('senior') || p.id.startsWith('adv_astro') || p.id.startsWith('astro')));
-            }
-            // -----------------------------
-
-            const newStats = {};
-
-            // Define Groups based on Mode
-            let groupsToUse = {};
+        // --- TRACK ISOLATION ---
+        if (track === 'highschool') {
+            // Filter out POSN specific content if not needed, or rely on keywords
+            // Define Groups for High School
             if (mode === 'overall') {
-                groupsToUse = PROFICIENCY_GROUPS;
+                groupsToUse = {
+                    "กลศาสตร์ 1": { label: "กลศาสตร์ 1", keywords: ["ม.4", "กลศาสตร์", "การเคลื่อนที่", "กฎของนิวตัน", "สมดุล"] },
+                    "คลื่นและแสง": { label: "คลื่นและแสง", keywords: ["คลื่น", "แสง", "เสียง"] },
+                    "ไฟฟ้า": { label: "ไฟฟ้า", keywords: ["ไฟฟ้า", "แม่เหล็ก"] },
+                    "ความร้อนและของไหล": { label: "ความร้อนฯ", keywords: ["ความร้อน", "ของแข็ง", "ของไหล"] },
+                    "โลกและดาราศาสตร์": { label: "พื้นฐานโลกฯ", keywords: ["ess_basic", "ดาราศาสตร์พื้นฐาน"] }
+                };
             } else if (mode.startsWith('physics_')) {
-                const grade = mode.split('_')[1]; // m4, m5, m6
+                const grade = mode.split('_')[1];
                 const syllabus = subCategoryData.Physics[grade];
-                if (syllabus && syllabus.chapters) {
-                    syllabus.chapters.forEach((ch, idx) => {
+                if (syllabus?.chapters) {
+                    syllabus.chapters.forEach(ch => {
                         const title = ch.shortTitle || ch.title.split(':')[0];
-                        groupsToUse[title] = { label: title, keywords: [ch.title, ch.shortTitle, ...(ch.keywords || [])].filter(k => k) };
+                        groupsToUse[title] = { label: title, keywords: [ch.title, ch.shortTitle, ...(ch.keywords || [])] };
                     });
                 }
             } else if (mode === 'earth_basic') {
                 const syllabus = subCategoryData.EarthSpaceScienceBasic;
-                if (syllabus && syllabus.units) {
-                    syllabus.units.forEach(unit => {
-                        unit.chapters.forEach(ch => {
-                            const title = ch.shortTitle || ch.title;
-                            groupsToUse[title] = { label: title, keywords: [ch.title, ch.shortTitle, ...(ch.keywords || [])].filter(k => k) };
-                        });
-                    });
-                }
-            } else if (mode === 'earth_adv') {
-                const syllabus = subCategoryData.EarthSpaceScienceAdvance;
-                if (syllabus && syllabus.chapters) {
-                    syllabus.chapters.forEach(ch => {
-                        const title = ch.shortTitle || ch.title;
-                        groupsToUse[title] = { label: title, keywords: [ch.title, ch.shortTitle, ...(ch.keywords || [])].filter(k => k) };
-                    });
-                }
+                syllabus?.units.forEach(unit => unit.chapters.forEach(ch => {
+                    const title = ch.shortTitle || ch.title;
+                    groupsToUse[title] = { label: title, keywords: [ch.title, ch.shortTitle, ...(ch.keywords || [])] };
+                }));
+            }
+        } else {
+            // POSN Track
+            if (mode === 'overall') {
+                groupsToUse = {
+                    "ธรณีวิทยา": { label: "ธรณีวิทยา", keywords: ["geology", "ธรณีวิทยา"] },
+                    "บรรยากาศ": { label: "บรรยากาศ", keywords: ["meteorology", "อุตุนิยมวิทยา"] },
+                    "มหาสมุทร": { label: "มหาสมุทร", keywords: ["oceanography", "สมุทรศาสตร์"] },
+                    "ดาราศาสตร์": { label: "ดาราศาสตร์", keywords: ["astro", "ดาราศาสตร์"] },
+                    "การคำนวณ": { label: "การคำนวณ", keywords: ["calc", "physics"] }
+                };
             } else if (mode === 'posn_earth') {
                 const syllabus = subCategoryData.EarthAndSpace;
-                if (syllabus) {
-                    Object.keys(syllabus).forEach(group => {
-                        groupsToUse[group] = { label: group, keywords: [group] };
-                    });
-                }
+                if (syllabus) Object.keys(syllabus).forEach(g => groupsToUse[g] = { label: g, keywords: [g] });
             } else if (mode === 'posn_astro') {
                 const syllabus = subCategoryData.ASTRONOMY_POSN;
-                if (syllabus) {
-                    syllabus.forEach(item => {
-                        groupsToUse[item.topic] = { label: item.topic, keywords: [item.topic] };
-                    });
-                }
-            } else if (mode === 'physics') {
-                // Legacy fallback if needed
-                groupsToUse = PROFICIENCY_GROUPS;
-            } else if (mode === 'earth') {
-                groupsToUse = PROFICIENCY_GROUPS;
+                syllabus?.forEach(item => groupsToUse[item.topic] = { label: item.topic, keywords: [item.topic] });
             }
-
-            Object.keys(groupsToUse).forEach(key => {
-                newStats[key] = { correct: 0, total: 0, label: groupsToUse[key].label };
-            });
-
-            allProgress.forEach(quiz => {
-                if (!quiz.userAnswers) return;
-
-                quiz.userAnswers.forEach(ans => {
-                    if (ans) {
-                        let subCatStr = '';
-                        if (ans.subCategory) {
-                            if (typeof ans.subCategory === 'string') subCatStr = ans.subCategory;
-                            else if (ans.subCategory.main) {
-                                subCatStr = ans.subCategory.main;
-                                if (ans.subCategory.specific) {
-                                    const specific = Array.isArray(ans.subCategory.specific) ? ans.subCategory.specific.join(' ') : ans.subCategory.specific;
-                                    subCatStr += ' ' + specific;
-                                }
-                            }
-                        }
-                        subCatStr += ' ' + (ans.sourceQuizCategory || quiz.category || '');
-                        subCatStr = subCatStr.toLowerCase();
-
-                        const matches = (text, keywords) => keywords.some(k => text.includes(k.toLowerCase()));
-
-                        for (const [groupKey, groupDef] of Object.entries(groupsToUse)) {
-                            if (matches(subCatStr, groupDef.keywords)) {
-                                newStats[groupKey].total++;
-                                if (ans.isCorrect) newStats[groupKey].correct++;
-                            }
-                        }
-                    }
-                });
-            });
-
-            stats = newStats;
-
-            // Save to cache
-            localStorage.setItem(CACHE_KEY, JSON.stringify({
-                timestamp: new Date().getTime(),
-                stats: stats
-            }));
         }
 
-        // 2. Calculate Percentages
-        // Calculate Stats for each Group
-        // ... (existing stat calculation logic) ...
+        // --- CALCULATION ---
+        const stats = {};
+        Object.keys(groupsToUse).forEach(k => stats[k] = { correct: 0, total: 0, label: groupsToUse[k].label });
 
-        // --- TOPIC LABEL MAPPING ---
-        const TOPIC_LABEL_MAPPING = {
-            "เทคโนโลยีอวกาศและการประยุกต์ใช้": "เทคโนโลยีอวกาศ",
-            "การหมุนเวียนของระบบลมโลก": "การหมุนเวียนลม",
-            "เอกภพและกาแล็กซี": "เอกภพ",
-            "การแปรสัณฐานของแผ่นธรณี": "ธรณีแปรสัณฐาน",
-            "ปรากฏการณ์ของดาวเคราะห์": "ปรากฏการณ์ดาวเคราะห์",
-            "การหมุนเวียนของน้ำในมหาสมุทร": "การหมุนเวียนน้ำ"
-        };
+        currentProgress.forEach(quiz => {
+            if (!quiz.userAnswers) return;
+            quiz.userAnswers.forEach(ans => {
+                if (!ans) return;
+                let subCat = (typeof ans.subCategory === 'string' ? ans.subCategory : (ans.subCategory?.main || '')).toLowerCase();
+                subCat += ' ' + (ans.sourceQuizCategory || quiz.category || '').toLowerCase();
 
-        const labels = Object.keys(stats).map(key => TOPIC_LABEL_MAPPING[key] || key);
-        const dataPoints = Object.values(stats).map(s => {
-            return s.total > 0 ? (s.correct / s.total) * 100 : 0;
+                for (const [key, def] of Object.entries(groupsToUse)) {
+                    if (def.keywords.some(k => subCat.includes(k.toLowerCase()))) {
+                        stats[key].total++;
+                        if (ans.isCorrect) stats[key].correct++;
+                    }
+                }
+            });
         });
 
-        // 3. Render Chart 
-        const isDark = document.documentElement.classList.contains('dark');
-        const gridColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
-        const textColor = isDark ? '#e5e7eb' : '#374151';
+        // --- RENDER CHART ---
+        const labels = Object.values(stats).map(s => s.label);
+        const dataPoints = Object.values(stats).map(s => s.total > 0 ? (s.correct / s.total) * 100 : 0);
 
-        const currentTheme = game?.state?.selectedTheme;
-        const themeColors = THEME_COLORS[currentTheme] || THEME_COLORS['default'];
-
+        const { gridColor, textColor, themeColors } = getChartJsTheme(game);
         const existingChart = Chart.getChart(ctx);
         if (existingChart) existingChart.destroy();
 
@@ -2176,60 +2077,109 @@ async function renderRadarChart(game, allProgress = null, mode = 'overall') {
             data: {
                 labels: labels,
                 datasets: [{
-                    label: 'ความถนัดของคุณ',
+                    label: 'ความถนัด',
                     data: dataPoints,
-                    fill: true,
                     backgroundColor: themeColors.background,
                     borderColor: themeColors.border,
                     pointBackgroundColor: themeColors.point,
-                    pointBorderColor: '#fff',
-                    pointHoverBackgroundColor: '#fff',
-                    pointHoverBorderColor: themeColors.border
+                    pointHoverRadius: 6,
+                    fill: true
                 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
+                responsive: true, maintainAspectRatio: false,
                 scales: {
                     r: {
                         angleLines: { color: gridColor },
                         grid: { color: gridColor },
-                        pointLabels: {
-                            color: textColor,
-                            font: { family: "'Kanit', sans-serif", size: 11 }
-                        },
-                        ticks: {
-                            display: false, // Hide scale numbers for cleaner look
-                            backdropColor: 'transparent'
-                        },
-                        suggestedMin: 0,
-                        suggestedMax: 100
+                        pointLabels: { color: textColor, font: { family: 'Kanit', size: 11 } },
+                        ticks: { display: false }, suggestedMin: 0, suggestedMax: 100
                     }
                 },
                 plugins: {
                     legend: { display: false },
                     tooltip: {
                         callbacks: {
-                            label: function (context) {
-                                const key = Object.keys(stats)[context.dataIndex];
-                                const s = stats[key] || { correct: 0, total: 0 };
-                                return `${context.label}: ${context.raw.toFixed(1)}% (${s.correct}/${s.total} ข้อ)`;
+                            label: (context) => {
+                                const s = Object.values(stats)[context.dataIndex];
+                                return `ความแม่นยำ: ${context.raw.toFixed(1)}% (${s.correct}/${s.total})`;
                             }
                         }
                     }
                 }
             }
         });
+
+        // --- NEW: Mastery Tiers & Smart Focus ---
+        updateMasteryTiers(dataPoints, track);
+        updateSmartFocus(stats, track);
+
         return true;
-    } catch (error) {
-        console.error("Failed to render radar chart:", error);
-        if (chartContainer) {
-            chartContainer.innerHTML = `<p class="text-center text-sm text-red-500">ไม่สามารถโหลดข้อมูลสำหรับแผนภูมิได้</p>`;
-        }
+    } catch (e) {
+        console.error("Radar Chart Error:", e);
         return false;
     } finally {
         if (loader) loader.classList.add('hidden');
     }
+}
+
+/**
+ * Calculates and updates the Mastery Rank UI based on average proficiency.
+ */
+function updateMasteryTiers(dataPoints, track) {
+    const avg = dataPoints.length > 0 ? dataPoints.reduce((a, b) => a + b, 0) / dataPoints.length : 0;
+    const iconEl = document.getElementById('mastery-rank-icon');
+    const nameEl = document.getElementById('mastery-rank-name');
+    const subEl = document.getElementById('mastery-rank-subtitle');
+
+    if (!iconEl || !nameEl) return;
+
+    let tier = { name: "Newbie", icon: "🌱", color: "text-gray-400" };
+
+    if (track === 'highschool') {
+        if (avg >= 85) tier = { name: "Master Physicist", icon: "⚛️", color: "text-purple-500" };
+        else if (avg >= 70) tier = { name: "Expert Learner", icon: "🧠", color: "text-blue-500" };
+        else if (avg >= 50) tier = { name: "Apprentice", icon: "📐", color: "text-green-500" };
+    } else {
+        if (avg >= 85) tier = { name: "Olympian", icon: "🥇", color: "text-yellow-500" };
+        else if (avg >= 70) tier = { name: "Bronze Medalist", icon: "🥉", color: "text-orange-500" };
+        else if (avg >= 50) tier = { name: "Qualifier", icon: "📝", color: "text-blue-500" };
+    }
+
+    iconEl.textContent = tier.icon;
+    nameEl.textContent = tier.name;
+    nameEl.className = `text-lg font-black leading-tight ${tier.color}`;
+    if (subEl) subEl.textContent = `Avg. Accuracy: ${avg.toFixed(1)}%`;
+}
+
+/**
+ * Identifies the weakest area and suggests a direct quiz link.
+ */
+function updateSmartFocus(stats, track) {
+    const weakestEl = document.getElementById('weakest-area-name');
+    const focusBtn = document.getElementById('smart-focus-btn');
+    if (!weakestEl || !focusBtn) return;
+
+    const items = Object.entries(stats).filter(s => s[1].total > 0);
+    if (items.length === 0) {
+        weakestEl.textContent = "ยังไม่มีข้อมูลการฝึกฝนมากพอ";
+        focusBtn.classList.add('opacity-50', 'pointer-events-none');
+        return;
+    }
+
+    items.sort((a, b) => (a[1].correct / a[1].total) - (b[1].correct / b[1].total));
+    const weakest = items[0];
+    weakestEl.textContent = weakest[1].label;
+    focusBtn.classList.remove('opacity-50', 'pointer-events-none');
+
+    focusBtn.onclick = () => {
+        // Logic to redirect to a quiz or search for this topic
+        // For now, let's use a toast as feedback and potentially redirect to custom quiz with pre-filled topic
+        showToast('Smart Focus', `กำลังเตรียมตะลุยโจทย์: ${weakest[1].label}`, '🔥');
+        setTimeout(() => {
+            window.location.href = `quiz.html?mode=custom&topic=${encodeURIComponent(weakest[1].label)}`;
+        }, 1000);
+    };
 }
 
 function animateValue(obj, start, end, duration) {
@@ -2282,19 +2232,79 @@ function setupHistoryRangeSystem(game, allProgress) {
 
 function setupProficiencyModeSystem(game, allProgress) {
     const select = document.getElementById('proficiency-mode-select');
-    if (!select) return;
+    const toggleHS = document.getElementById('track-toggle-highschool');
+    const togglePOSN = document.getElementById('track-toggle-posn');
 
-    select.addEventListener('change', async (e) => {
-        const mode = e.target.value;
-        if (mode === activeProficiencyMode) return;
+    const updateTrackUI = (track) => {
+        activeProficiencyTrack = track;
 
-        activeProficiencyMode = mode;
-        const loader = document.getElementById('radar-chart-loader');
-        if (loader) loader.classList.remove('hidden');
+        // Update selection dropdown options based on track
+        if (select) {
+            select.innerHTML = '';
+            const defaultOpt = document.createElement('option');
+            defaultOpt.value = 'overall';
+            defaultOpt.textContent = track === 'highschool' ? 'ภาพรวม ม.ปลาย' : 'ภาพรวม สอวน.';
+            select.appendChild(defaultOpt);
 
-        await renderRadarChart(game, allProgress, activeProficiencyMode);
-        if (loader) loader.classList.add('hidden');
+            if (track === 'highschool') {
+                [
+                    { v: 'physics_m4', t: 'ฟิสิกส์ ม.4' },
+                    { v: 'physics_m5', t: 'ฟิสิกส์ ม.5' },
+                    { v: 'physics_m6', t: 'ฟิสิกส์ ม.6' },
+                    { v: 'earth_basic', t: 'วท. โลกพื้นฐาน' },
+                    { v: 'earth_adv', t: 'วท. โลกเพิ่มเติม' }
+                ].forEach(opt => {
+                    const el = document.createElement('option');
+                    el.value = opt.v; el.textContent = opt.t;
+                    select.appendChild(el);
+                });
+            } else {
+                [
+                    { v: 'posn_earth', t: 'สอวน. วิทยาศาสตร์โลก' },
+                    { v: 'posn_astro', t: 'สอวน. ดาราศาสตร์' }
+                ].forEach(opt => {
+                    const el = document.createElement('option');
+                    el.value = opt.v; el.textContent = opt.t;
+                    select.appendChild(el);
+                });
+            }
+        }
+
+        // Update Toggle Buttons CSS
+        if (toggleHS && togglePOSN) {
+            if (track === 'highschool') {
+                toggleHS.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 bg-white dark:bg-blue-600 text-blue-600 dark:text-white shadow-sm";
+                togglePOSN.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200";
+            } else {
+                togglePOSN.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 bg-white dark:bg-blue-600 text-blue-600 dark:text-white shadow-sm";
+                toggleHS.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200";
+            }
+        }
+    };
+
+    if (toggleHS) toggleHS.addEventListener('click', () => {
+        updateTrackUI('highschool');
+        activeProficiencyMode = 'overall';
+        renderRadarChart(game, allProgress, 'overall');
     });
+
+    if (togglePOSN) togglePOSN.addEventListener('click', () => {
+        updateTrackUI('posn');
+        activeProficiencyMode = 'overall';
+        renderRadarChart(game, allProgress, 'overall');
+    });
+
+    if (select) {
+        select.addEventListener('change', async (e) => {
+            const mode = e.target.value;
+            if (mode === activeProficiencyMode) return;
+            activeProficiencyMode = mode;
+            renderRadarChart(game, allProgress, activeProficiencyMode);
+        });
+    }
+
+    // Initial Trigger
+    updateTrackUI(activeProficiencyTrack);
 }
 
 function getOrCreateTooltip(chart) {
@@ -2314,6 +2324,41 @@ function getOrCreateTooltip(chart) {
     }
 
     return tooltipEl;
+}
+
+/**
+ * Returns a theme object for Chart.js based on the current mode (dark/light) and game theme.
+ */
+function getChartJsTheme(game) {
+    const isDark = document.documentElement.classList.contains('dark');
+    const gridColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+    const textColor = isDark ? '#e5e7eb' : '#374151';
+
+    // Get theme colors from definitions or fallback to default (blue-ish)
+    const currentTheme = game?.state?.selectedTheme?.replace('theme-', '') || 'default';
+    const def = THEME_DEFINITIONS[currentTheme] || {
+        main: '#3b82f6', // blue-500
+        secondary: '#60a5fa'
+    };
+
+    const themeColors = {
+        background: isDark ? `rgba(${hexToRgb(def.main)}, 0.2)` : `rgba(${hexToRgb(def.main)}, 0.1)`,
+        border: def.main,
+        point: def.secondary || def.main
+    };
+
+    return { gridColor, textColor, themeColors };
+}
+
+/**
+ * Helper to convert hex to RGB for alpha channel support
+ */
+function hexToRgb(hex) {
+    hex = hex.replace('#', '');
+    const r = parseInt(hex.substring(0, 2), 16);
+    const g = parseInt(hex.substring(2, 4), 16);
+    const b = parseInt(hex.substring(4, 6), 16);
+    return `${r}, ${g}, ${b}`;
 }
 
 /**

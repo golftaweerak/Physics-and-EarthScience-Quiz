@@ -229,27 +229,25 @@ export class Gamification {
             sumOfParts += (this.state[cat.id] || 0);
         });
 
-        // FIX: ยกเลิกการดันคะแนนขึ้น (xp < sumOfParts) เพราะ XP ปัจจุบันอาจน้อยกว่าผลรวมได้ (จากการซื้อของ)
-        // แต่ยังคงตรวจสอบกรณีคะแนนเฟ้อ (xp > sumOfParts)
         if (this.state.xp > sumOfParts) {
-            // This is the more likely case for older data:
-            // Total XP was incremented, but the parts (especially generalXP) were not.
-            // We attribute the difference to generalXP.
             const difference = this.state.xp - sumOfParts;
-            // FIX: ปรับปรุงเงื่อนไข ไม่เติม General XP พร่ำเพรื่อ
-            // จะเติมก็ต่อเมื่อ General XP เป็น 0 (กรณี Migration ข้อมูลเก่า) หรือผลต่างไม่มากผิดปกติ
             if (this.state.generalXP === 0 || difference < 5000) {
-                console.log(`Attributing unaccounted ${difference} XP to generalXP.`);
                 this.state.generalXP = (this.state.generalXP || 0) + difference;
                 needsSave = true;
             } else {
-                console.warn(`Detected large XP discrepancy (${difference}). Correcting total XP downwards to match sum of parts.`);
                 this.state.xp = sumOfParts;
                 needsSave = true;
             }
         }
 
-        return needsSave;
+        // --- NEW: Perform global achievement and badge check ---
+        // This catches any missed unlocks from bugs or sync issues
+        const newAchievements = this.checkAchievements();
+        if (newAchievements.length > 0) needsSave = true;
+
+        if (needsSave) {
+            this.saveState();
+        }
     }
 
     getDefaultState() {
@@ -585,6 +583,7 @@ export class Gamification {
 
         // ตรวจสอบและปลดล็อกเหรียญรางวัลจากข้อมูลเก่าทันที
         this.checkBadges(0);
+        this.checkAchievements();
         this.saveState();
         console.log(`Recalculated progress: ${totalXP} XP, ${completed} Quizzes`);
 
@@ -1507,13 +1506,10 @@ export class Gamification {
     updateQuest(stats) {
         if (!this.state.activeQuests) return { completed: [], newAchievements: [] };
 
-        // อัปเดตสถิติรวม (Total Stats)
+        // 1. อัปเดตสถิติรวม (Total Stats)
         if (stats.correctAnswers) {
             this.state.totalCorrectAnswers += stats.correctAnswers;
         }
-
-        // ตรวจสอบความสำเร็จ (Achievements) ทันทีที่มีการอัปเดตสถิติ
-        const newAchievements = this.checkAchievements();
 
         const completedQuests = [];
 
@@ -1573,8 +1569,6 @@ export class Gamification {
 
             if (progressMade > 0) {
                 console.log(`Quest ${q.id} progress: ${q.progress} + ${progressMade} / ${q.target}`);
-                // showToast('Quest Update', `${q.desc}: +${progressMade}`, '📈', 'blue'); 
-
                 q.progress += progressMade;
                 // ตรวจสอบว่าทำสำเร็จหรือไม่
                 if (q.progress >= q.target) {
@@ -1596,15 +1590,11 @@ export class Gamification {
                     // เก็บประวัติล่าสุด 50 รายการ
                     if (this.state.questHistory.length > 50) this.state.questHistory.pop();
                 }
-            } else {
-                // console.log(`Quest ${q.id} NO progress. QC=${stats.questionCount}, Type=${q.type}`);
             }
         });
 
-        const leveledUp = this.updateLevel();
-
-        // ส่งคืนทั้งภารกิจที่เสร็จและความสำเร็จใหม่
-        // No saveState() here, it will be called by the parent function (submitQuizResult)
+        this.updateLevel();
+        const newAchievements = this.checkAchievements();
 
         // ส่งคืนทั้งภารกิจที่เสร็จและความสำเร็จใหม่
         return { completed: completedQuests, newAchievements };
