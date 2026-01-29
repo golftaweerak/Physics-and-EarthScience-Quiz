@@ -203,6 +203,7 @@ export function init(quizData, storageKey, quizTitle, customTime, action, isChal
     hintBtn: document.getElementById("hint-btn"),
     hintSection: document.getElementById("hint-area"), // Matches HTML ID 'hint-area'
     hintText: document.getElementById("hint-text"),    // Matches HTML ID 'hint-text'
+    // hintContainer: Removed to avoid confusion
     // Power-up container (will be created dynamically)
     powerUpContainer: null,
     // Power-up Modal Elements
@@ -899,7 +900,7 @@ function showQuestion() {
     const inputHtml = `
         <div class="mt-4">
             <label for="fill-in-answer" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">กรุณาพิมพ์คำตอบของคุณ:</label>
-            <input type="text" id="fill-in-answer" class="w-full p-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="ใส่คำตอบ...">
+            <input type="text" id="fill-in-answer" class="w-full p-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="พิมพ์คำตอบที่นี่...">
         </div>
       `;
     elements.options.innerHTML = inputHtml;
@@ -964,6 +965,8 @@ function showQuestion() {
       elements.hintBtn.innerHTML = '💡 แสดงคำใบ้ <span class="text-xs ml-1 bg-red-500 text-white px-1 rounded">-2 xp</span>';
       elements.hintBtn.disabled = false;
       elements.hintBtn.classList.remove('cursor-not-allowed', 'opacity-50');
+      // No specific color class add/remove needed if we rely on base glass style from HTML
+      // OR re-apply base glass style if needed (if disabled state messes it up)
     }
     // Hide hint text initially
     if (elements.hintText) {
@@ -1252,10 +1255,7 @@ function evaluateFillInAnswer() {
   answerInput.disabled = true; // Disable input after submission
 
   const currentQuestion = state.shuffledQuestions[state.currentQuestionIndex];
-  // Ensure answer is treated as array even if string provided
-  const rawAnswer = currentQuestion.answer;
-  const answerArray = Array.isArray(rawAnswer) ? rawAnswer : [rawAnswer];
-  const correctAnswers = answerArray.map(ans => (ans || "").toString().trim().toLowerCase());
+  const correctAnswers = currentQuestion.answer.map(ans => ans.trim().toLowerCase());
 
   const isCorrect = correctAnswers.includes(userAnswer);
 
@@ -1298,8 +1298,7 @@ function evaluateFillInAnswer() {
   updateLobbyScore();
 
   // Show feedback
-  // Show feedback
-  showFeedback(isCorrect, currentQuestion.explanation, Array.isArray(currentQuestion.answer) ? currentQuestion.answer.join(' หรือ ') : currentQuestion.answer);
+  showFeedback(isCorrect, currentQuestion.explanation, currentQuestion.answer.join(' หรือ '));
 
   // Visually indicate correctness on the input field
   if (isCorrect) {
@@ -3095,8 +3094,7 @@ function checkForSavedQuiz(action) {
 
   // Case 3: Default case - no valid saved state or not resuming.
   // If it's a custom quiz OR a challenge (multiplayer), we auto-start to skip redundant checks.
-  // MODIFIED: Disable auto-start for custom quizzes to match test requirement
-  if (state.isChallenge) {
+  if (state.isCustomQuiz || state.isChallenge) {
     // Explicitly hide start screen to prevent overlap since switchScreen won't hide it
     // if activeScreen is null (initial load).
     if (elements.startScreen) {
@@ -3108,13 +3106,6 @@ function checkForSavedQuiz(action) {
     switchScreen(elements.startScreen);
   }
 }
-/* Original auto-start logic:
-  if (state.isCustomQuiz || state.isChallenge) {
-    // ...
-    startQuiz();
-  } else { ... }
-*/
-
 
 // --- Timer Functions ---
 
@@ -3321,13 +3312,16 @@ function bindEventListeners() {
   if (elements.nextBtn) elements.nextBtn.addEventListener("click", handleNextButtonClick);
 
   // Keep other listeners as they are.
-  // Keep other listeners as they are.
+  elements.startBtn.addEventListener("click", startQuiz);
+  elements.prevBtn.addEventListener("click", showPreviousQuestion);
+  elements.restartBtn.addEventListener("click", startQuiz);
+  elements.reviewBtn.addEventListener("click", showReview);
+  elements.backToResultBtn.addEventListener("click", backToResult);
   if (elements.startBtn) elements.startBtn.addEventListener("click", startQuiz);
   if (elements.prevBtn) elements.prevBtn.addEventListener("click", showPreviousQuestion);
   if (elements.restartBtn) elements.restartBtn.addEventListener("click", startQuiz);
   if (elements.reviewBtn) elements.reviewBtn.addEventListener("click", showReview);
   if (elements.backToResultBtn) elements.backToResultBtn.addEventListener("click", backToResult);
-  // Removed duplicate unconditional bindings that might crash if elements are missing
   if (elements.soundToggleBtn) {
     elements.soundToggleBtn.addEventListener("click", toggleSound);
   }

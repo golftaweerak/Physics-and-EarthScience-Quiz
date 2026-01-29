@@ -128,4 +128,7 @@ export class QuizSessionManager {
     // Usually resume logic in main app handles the UI timer restart
     return true;
   }
+  freezeTime(seconds) {
+    this.state.timer += seconds;
+  }
 }

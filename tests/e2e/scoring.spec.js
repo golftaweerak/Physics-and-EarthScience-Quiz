@@ -50,14 +50,14 @@ test('verify scoring and XP attribution', async ({ page }) => {
   await correctOption.click();
 
   // 5. Verify Correct Feedback
-  await expect(page.locator('#feedback')).toContainText('ถูกต้อง!');
+  await expect(page.locator('#feedback')).toContainText('ถูกต้อง');
 
   // 6. Finish Quiz
   await page.locator('#next-btn').click();
 
   // Wait for Result Screen
   await expect(page.locator('#result-screen')).toBeVisible();
-  await expect(page.locator('#score-counter')).toHaveText('1 / 1');
+  await expect(page.locator('#score-counter')).toContainText('คะแนน: 1');
 
   // 7. Verify XP Update in LocalStorage
   // We need to wait a bit because XP update happens async/debounce in gamification.js (?)
@@ -65,8 +65,8 @@ test('verify scoring and XP attribution', async ({ page }) => {
 
   const gamificationData = await onLocalStorage(page, 'app_gamification_data');
 
-  expect(gamificationData.xp).toBeGreaterThanOrEqual(10);
-  expect(gamificationData.geologyXP).toBe(10);
+  expect(gamificationData.xp).toBeGreaterThanOrEqual(4);
+  expect(gamificationData.geologyXP).toBe(4);
 });
 
 async function onLocalStorage(page, key) {

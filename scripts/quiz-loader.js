@@ -102,6 +102,11 @@ export async function initializeQuiz() {
         const allCustomQuizzes = await getSavedCustomQuizzes();
         customQuizData = allCustomQuizzes.find(q => q.customId === quizId);
 
+        // Ensure storageKey exists (crucial for init logic)
+        if (customQuizData && !customQuizData.storageKey) {
+            customQuizData.storageKey = `quizState-${customQuizData.customId}`;
+        }
+
         if (!customQuizData && lobbyConfig && lobbyConfig.customQuestions) {
             customQuizData = {
                 customId: quizId,
