@@ -7,10 +7,10 @@ export async function loadHeader() {
     const basePath = isSubdirectory ? '../' : './';
 
     try {
-        const response = await fetch(`${basePath}header.html`);
+        const response = await fetch(`${basePath}components/main_header.html`);
         if (!response.ok) throw new Error('Header not found');
         let headerHTML = await response.text();
-        
+
         // Adjust asset paths within the loaded HTML
         headerHTML = headerHTML.replace(/src="\.\//g, `src="${basePath}`);
         headerHTML = headerHTML.replace(/href="\.\//g, `href="${basePath}`);
