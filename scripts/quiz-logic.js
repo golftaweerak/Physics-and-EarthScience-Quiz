@@ -181,7 +181,15 @@ function loadQuestion(index) {
   // Check if previously answered
   const prevAnswer = sessionManager.state.userAnswers[index] ? sessionManager.state.userAnswers[index].answer : null;
 
-  if (currentQ.options && Array.isArray(currentQ.options)) {
+  if (currentQ.type === 'fill-in' || currentQ.type === 'fill-in-number') {
+    const inputEl = uiRenderer.createInput(
+      'ใส่คำตอบ...',
+      prevAnswer,
+      (text) => selectOption(index, text),
+      currentQ.unit // Support passing unit if available in data
+    );
+    elements.optionsContainer.appendChild(inputEl);
+  } else if (currentQ.options && Array.isArray(currentQ.options)) {
     currentQ.options.forEach(opt => {
       const btn = uiRenderer.createOptionButton(opt, prevAnswer, (selectedText) => {
         selectOption(index, selectedText);

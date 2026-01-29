@@ -117,6 +117,35 @@ export class QuizUIRenderer {
     return button;
   }
 
+  createInput(placeholder, previousAnswer, onInputCallback, unit = '') {
+    const container = document.createElement('div');
+    container.className = 'w-full mb-4';
+
+    const input = document.createElement('input');
+    input.type = 'text'; // Use text to allow flexibility, validation happens elsewhere
+    input.className = 'w-full p-4 rounded-xl border-2 border-gray-200 dark:border-gray-700 focus:border-blue-500 outline-none text-lg font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 transition-all duration-200';
+    input.placeholder = placeholder || 'พิมพ์คำตอบของคุณที่นี่...';
+
+    if (previousAnswer) {
+      input.value = previousAnswer;
+    }
+
+    input.addEventListener('input', (e) => {
+      onInputCallback(e.target.value);
+    });
+
+    container.appendChild(input);
+
+    if (unit) {
+      const unitEl = document.createElement('span');
+      unitEl.className = 'block text-right text-sm text-gray-500 dark:text-gray-400 mt-1 mr-2';
+      unitEl.textContent = `หน่วย: ${unit}`;
+      container.appendChild(unitEl);
+    }
+
+    return container;
+  }
+
   updateNextButtonAppearance(action) {
     const btn = this.elements.nextButton;
     const iconSpan = btn.querySelector('.btn-icon');
