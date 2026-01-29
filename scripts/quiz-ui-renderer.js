@@ -119,26 +119,53 @@ export class QuizUIRenderer {
 
   createInput(placeholder, previousAnswer, onInputCallback, unit = '') {
     const container = document.createElement('div');
-    container.className = 'w-full mb-4';
+    container.className = 'w-full mb-6'; // Increased margin
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'flex flex-col sm:flex-row gap-3 items-stretch';
 
     const input = document.createElement('input');
-    input.type = 'text'; // Use text to allow flexibility, validation happens elsewhere
-    input.className = 'w-full p-4 rounded-xl border-2 border-gray-200 dark:border-gray-700 focus:border-blue-500 outline-none text-lg font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 transition-all duration-200';
+    input.type = 'text';
+    input.className = 'flex-grow p-4 rounded-xl border-2 border-gray-200 dark:border-gray-700 focus:border-blue-500 outline-none text-lg font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 transition-all duration-200';
     input.placeholder = placeholder || 'พิมพ์คำตอบของคุณที่นี่...';
 
     if (previousAnswer) {
       input.value = previousAnswer;
+      input.disabled = true; // Disable if already answered
     }
 
-    input.addEventListener('input', (e) => {
-      onInputCallback(e.target.value);
+    // Capture enter key to submit
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !input.disabled && input.value.trim() !== '') {
+        submitBtn.click();
+      }
     });
 
-    container.appendChild(input);
+    const submitBtn = document.createElement('button');
+    submitBtn.textContent = 'ส่งคำตอบ';
+    submitBtn.className = 'px-6 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-md hover:bg-blue-700 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap';
+
+    if (previousAnswer) {
+      submitBtn.style.display = 'none'; // Hide if already answered
+    }
+
+    submitBtn.onclick = () => {
+      const val = input.value.trim();
+      if (val) {
+        input.disabled = true;
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'ส่งแล้ว';
+        onInputCallback(val);
+      }
+    };
+
+    wrapper.appendChild(input);
+    wrapper.appendChild(submitBtn);
+    container.appendChild(wrapper);
 
     if (unit) {
       const unitEl = document.createElement('span');
-      unitEl.className = 'block text-right text-sm text-gray-500 dark:text-gray-400 mt-1 mr-2';
+      unitEl.className = 'block text-right text-sm text-gray-500 dark:text-gray-400 mt-2 mr-2';
       unitEl.textContent = `หน่วย: ${unit}`;
       container.appendChild(unitEl);
     }

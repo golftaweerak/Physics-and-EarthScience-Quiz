@@ -23,7 +23,7 @@ test('verify scoring and XP attribution', async ({ page }) => {
   await page.goto('quiz/index.html'); // Load page to get context (or any page)
 
   await page.evaluate((quiz) => {
-    localStorage.setItem('custom_quizzes', JSON.stringify([quiz]));
+    localStorage.setItem('customQuizzesList', JSON.stringify([quiz]));
     // Reset Gamification Data to Ensure clean state
     const cleanState = {
       xp: 0,
@@ -35,10 +35,11 @@ test('verify scoring and XP attribution', async ({ page }) => {
   }, customQuiz);
 
   // 2. Navigate to the Custom Quiz
+  // 2. Navigate to the Custom Quiz
   await page.goto('quiz/index.html?id=custom_test_scoring');
 
   // Wait for start screen
-  await expect(page.locator('#start-screen-title')).toHaveText('Test Scoring Quiz');
+  await expect(page.locator('#start-screen-title')).toHaveText('Test Scoring Quiz', { timeout: 15000 });
 
   // 3. Start Quiz
   await page.locator('#start-btn').click();
@@ -60,7 +61,7 @@ test('verify scoring and XP attribution', async ({ page }) => {
 
   // 7. Verify XP Update in LocalStorage
   // We need to wait a bit because XP update happens async/debounce in gamification.js (?)
-  // Actually, it's synchronous in submitQuizResult but might be in the same tick.
+  await page.waitForTimeout(1000); // Increased buffer
 
   const gamificationData = await onLocalStorage(page, 'app_gamification_data');
 

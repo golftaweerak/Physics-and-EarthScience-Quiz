@@ -48,7 +48,10 @@ function cacheElements() {
     quizTitleElement: document.getElementById('quiz-title-display'), // Matches line 229
     quizDescriptionElement: document.getElementById('start-screen-description'), // Matches line 118
     quizIconElement: document.getElementById('quiz-icon'),
-    heartContainer: document.getElementById('multiplayer-hearts'), // Matches line 186
+    heartContainer: document.getElementById('multiplayer-hearts'),
+    hintArea: document.getElementById('hint-area'),
+    hintBtn: document.getElementById('hint-btn'),
+    hintText: document.getElementById('hint-text'),
   };
 }
 
@@ -97,6 +100,13 @@ export function init(quizData, storageKey, quizTitle, customTime, action, isChal
   // Bind global buttons
   if (elements.nextButton) {
     elements.nextButton.onclick = handleNextButton;
+  }
+
+  // Bind hint button
+  if (elements.hintBtn) {
+    elements.hintBtn.onclick = () => {
+      if (elements.hintText) elements.hintText.classList.toggle('hidden');
+    };
   }
 
   // Mobile Layout adjustments
@@ -200,6 +210,16 @@ function loadQuestion(index) {
   } else {
     console.warn("Question options missing or invalid:", currentQ);
     elements.optionsContainer.innerHTML = '<p class="text-red-500">Error: options not found.</p>';
+  }
+
+  // Check for hint
+  if (currentQ.hint) {
+    if (elements.hintArea) elements.hintArea.classList.remove('hidden');
+    if (elements.hintText) elements.hintText.textContent = currentQ.hint;
+    // Reset hint state (hidden text)
+    if (elements.hintText) elements.hintText.classList.add('hidden');
+  } else {
+    if (elements.hintArea) elements.hintArea.classList.add('hidden');
   }
 
   // Update Next Button State
