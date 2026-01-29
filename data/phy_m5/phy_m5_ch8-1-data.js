@@ -22,8 +22,8 @@ export const quizItems = [
       "เคลื่อนที่เป็นวงกลม"
     ],
     answer: "มีแรงกระทำกลับคืนสู่สมดุลแปรผันตรงกับการกระจัด",
-    explanation: "การเคลื่อนที่แบบ SHM มีลักษณะเด่นคือ มีแรงดึงกลับ (Restoring Force) ที่แปรผันตรงกับขนาดของการกระจัดจากจุดสมดุล และมีทิศทางตรงกันข้ามเสมอ (F = -kx)",
-    subCategory: {
+    explanation: "การเคลื่อนที่แบบ SHM มีลักษณะเด่นคือ มีแรงดึงกลับ (Restoring Force) ที่แปรผันตรงกับขนาดของการกระจัดจากจุดสมดุล และมีทิศทางตรงกันข้ามเสมอ (\\(F = -kx\\))",
+    subCategory: { 
       main: MAIN_CATEGORY,
       specific: LO_1
     }
@@ -39,8 +39,8 @@ export const quizItems = [
       "ตำแหน่งกึ่งกลางระหว่างจุดสมดุลและแอมพลิจูด"
     ],
     answer: "ตำแหน่งสมดุล",
-    explanation: "ที่ตำแหน่งสมดุล (x=0) พลังงานศักย์ทั้งหมดจะเปลี่ยนเป็นพลังงานจลน์ ทำให้วัตถุมีความเร็วสูงสุด ในขณะที่ที่ตำแหน่งแอมพลิจูด วัตถุจะหยุดนิ่งชั่วขณะ (v=0)",
-    subCategory: {
+    explanation: "ที่ตำแหน่งสมดุล (\\(x=0\\)) พลังงานศักย์ทั้งหมดจะเปลี่ยนเป็นพลังงานจลน์ ทำให้วัตถุมีความเร็วสูงสุด ในขณะที่ที่ตำแหน่งแอมพลิจูด วัตถุจะหยุดนิ่งชั่วขณะ (\\(v=0\\))",
+    subCategory: { 
       main: MAIN_CATEGORY,
       specific: LO_1
     }
@@ -56,8 +56,8 @@ export const quizItems = [
       "ตำแหน่งที่ความเร็วเป็นศูนย์"
     ],
     answer: "ตำแหน่งแอมพลิจูด (การกระจัดสูงสุด)",
-    explanation: "จาก F = ma และ F = -kx จะได้ a = -(k/m)x. ความเร่ง (a) จะมีขนาดสูงสุดเมื่อการกระจัด (x) มีค่าสูงสุด ซึ่งก็คือที่ตำแหน่งแอมพลิจูด",
-    subCategory: {
+    explanation: "จาก \\(F = ma\\) และ \\(F = -kx\\) จะได้ \\(a = -(k/m)x\\). ความเร่ง (\\(a\\)) จะมีขนาดสูงสุดเมื่อการกระจัด (\\(x\\)) มีค่าสูงสุด ซึ่งก็คือที่ตำแหน่งแอมพลิจูด",
+    subCategory: { 
       main: MAIN_CATEGORY,
       specific: LO_1
     }
@@ -85,9 +85,9 @@ export const quizItems = [
     question: "ถ้าเพิ่มมวลที่ติดปลายสปริงเป็น 4 เท่า คาบการสั่นจะเปลี่ยนแปลงอย่างไร",
     options: ["เพิ่มขึ้น 2 เท่า", "เพิ่มขึ้น 4 เท่า", "ลดลง 2 เท่า", "ลดลง 4 เท่า"],
     answer: "เพิ่มขึ้น 2 เท่า",
-    hint: "จากสูตร \\(T = 2\\pi\\sqrt{m/k}\\), คาบ (T) มีความสัมพันธ์กับมวล (m) อย่างไร",
+    hint: "จากสูตร \\(T = 2\\pi\\sqrt{m/k}\\), คาบ (\\(T\\)) มีความสัมพันธ์กับมวล (\\(m\\)) อย่างไร",
     explanation: "คาบการสั่นของมวลติดสปริงแปรผันตรงกับรากที่สองของมวล (\\(T \\propto \\sqrt{m}\\)). ดังนั้นถ้ามวลเพิ่มเป็น 4 เท่า คาบจะเพิ่มขึ้น \\(\\sqrt{4} = 2\\) เท่า",
-    subCategory: {
+    subCategory: { 
       main: MAIN_CATEGORY,
       specific: LO_1
     }
@@ -98,9 +98,9 @@ export const quizItems = [
     question: "ถ้าเพิ่มความยาวของเชือกที่แขวนลูกตุ้มอย่างง่ายเป็น 9 เท่า คาบการแกว่งจะเปลี่ยนแปลงอย่างไร",
     options: ["เพิ่มขึ้น 3 เท่า", "เพิ่มขึ้น 9 เท่า", "ลดลง 3 เท่า", "ลดลง 9 เท่า"],
     answer: "เพิ่มขึ้น 3 เท่า",
-    hint: "จากสูตร \\(T = 2\\pi\\sqrt{L/g}\\), คาบ (T) มีความสัมพันธ์กับความยาว (L) อย่างไร",
+    hint: "จากสูตร \\(T = 2\\pi\\sqrt{L/g}\\), คาบ (\\(T\\)) มีความสัมพันธ์กับความยาว (\\(L\\)) อย่างไร",
     explanation: "คาบการแกว่งของลูกตุ้มอย่างง่ายแปรผันตรงกับรากที่สองของความยาวเชือก (\\(T \\propto \\sqrt{L}\\)). ดังนั้นถ้าความยาวเพิ่มเป็น 9 เท่า คาบจะเพิ่มขึ้น \\(\\sqrt{9} = 3\\) เท่า",
-    subCategory: {
+    subCategory: { 
       main: MAIN_CATEGORY,
       specific: LO_1
     }
@@ -130,20 +130,20 @@ export const quizItems = [
       answer: 20,
       unit: "rad/s",
       explanation: "\\(\\omega = \\sqrt{k/m} = \\sqrt{200/0.5} = \\sqrt{400} = 20\\) rad/s.",
-      subCategory: {
+      subCategory: { 
         main: MAIN_CATEGORY,
         specific: LO_1
       }
     }, {
       number: 9,
       type: "fill-in-number",
-      question: "คาบ (T) ของการสั่นเป็นเท่าใด (ตอบเป็นทศนิยม 2 ตำแหน่งในหน่วย s)",
+      question: "คาบ (\\(T\\)) ของการสั่นเป็นเท่าใด (ตอบเป็นทศนิยม 2 ตำแหน่งในหน่วย s)",
       answer: 0.31,
       unit: "s",
       decimalPlaces: 2,
       tolerance: 0.01,
       explanation: "\\(T = 2\\pi/\\omega = 2(3.14)/20 = 0.314 \\approx 0.31\\) s.",
-      subCategory: {
+      subCategory: { 
         main: MAIN_CATEGORY,
         specific: LO_1
       }
@@ -153,8 +153,8 @@ export const quizItems = [
       question: "ความเร็วสูงสุด (\\(v_{max}\\)) ของมวลเป็นเท่าใด (ตอบเป็นจำนวนเต็มในหน่วย m/s)",
       answer: 2,
       unit: "m/s",
-      explanation: "แอมพลิจูด A = 10 cm = 0.1 m. \\(v_{max} = \\omega A = 20 \\times 0.1 = 2\\) m/s.",
-      subCategory: {
+      explanation: "แอมพลิจูด \\(A\\) = 10 cm = 0.1 m. \\(v_{max} = \\omega A = 20 \\times 0.1 = 2\\) m/s.",
+      subCategory: { 
         main: MAIN_CATEGORY,
         specific: LO_1
       }
@@ -165,7 +165,7 @@ export const quizItems = [
       answer: 40,
       unit: "m/s²",
       explanation: "\\(a_{max} = \\omega^2 A = (20)^2 \\times 0.1 = 400 \\times 0.1 = 40\\) m/s².",
-      subCategory: {
+      subCategory: { 
         main: MAIN_CATEGORY,
         specific: LO_1
       }
@@ -197,7 +197,7 @@ export const quizItems = [
       decimalPlaces: 2,
       tolerance: 0.01,
       explanation: "\\(T = 2\\pi\\sqrt{L/g} = 2\\pi\\sqrt{2.5/10} = 2\\pi\\sqrt{0.25} = 2\\pi(0.5) = \\pi \\approx 3.14\\) s.",
-      subCategory: {
+      subCategory: { 
         main: MAIN_CATEGORY,
         specific: LO_1
       }
@@ -210,7 +210,7 @@ export const quizItems = [
       decimalPlaces: 2,
       tolerance: 0.01,
       explanation: "\\(f = 1/T = 1/\\pi \\approx 1/3.14 \\approx 0.318\\) Hz.",
-      subCategory: {
+      subCategory: { 
         main: MAIN_CATEGORY,
         specific: LO_1
       }
@@ -220,8 +220,8 @@ export const quizItems = [
       question: "ถ้าต้องการให้คาบการแกว่งเป็น 2 เท่าของเดิม จะต้องใช้เชือกยาวกี่เมตร (ตอบเป็นจำนวนเต็ม)",
       answer: 10,
       unit: "m",
-      explanation: "จาก \\(T \\propto \\sqrt{L}\\), ถ้าต้องการให้ T เพิ่ม 2 เท่า จะต้องเพิ่ม L เป็น \\(2^2 = 4\\) เท่า. ความยาวใหม่ = \\(4 \\times 2.5 = 10\\) เมตร.",
-      subCategory: {
+      explanation: "จาก \\(T \\propto \\sqrt{L}\\), ถ้าต้องการให้ \\(T\\) เพิ่ม 2 เท่า จะต้องเพิ่ม \\(L\\) เป็น \\(2^2 = 4\\) เท่า. ความยาวใหม่ = \\(4 \\times 2.5 = 10\\) เมตร.",
+      subCategory: { 
         main: MAIN_CATEGORY,
         specific: LO_1
       }
@@ -232,11 +232,11 @@ export const quizItems = [
   {
     number: 16,
     type: "fill-in-number",
-    question: "วัตถุหนึ่งเคลื่อนที่แบบ SHM ด้วยสมการ \\(x(t) = 5 \\cos(4\\pi t)\\) โดย x มีหน่วยเป็นเมตร และ t เป็นวินาที จงหาแอมพลิจูดของการเคลื่อนที่ (ตอบเป็นจำนวนเต็มในหน่วย m)",
+    question: "วัตถุหนึ่งเคลื่อนที่แบบ SHM ด้วยสมการ \\(x(t) = 5 \\cos(4\\pi t)\\) โดย \\(x\\) มีหน่วยเป็นเมตร และ \\(t\\) เป็นวินาที จงหาแอมพลิจูดของการเคลื่อนที่ (ตอบเป็นจำนวนเต็มในหน่วย m)",
     answer: 5,
     unit: "m",
-    explanation: "จากสมการรูปแบบทั่วไป \\(x(t) = A \\cos(\\omega t + \\phi)\\), แอมพลิจูด (A) คือค่าสัมประสิทธิ์หน้าฟังก์ชัน cos ซึ่งในที่นี้คือ 5 เมตร",
-    subCategory: {
+    explanation: "จากสมการรูปแบบทั่วไป \\(x(t) = A \\cos(\\omega t + \\phi)\\), แอมพลิจูด (\\(A\\)) คือค่าสัมประสิทธิ์หน้าฟังก์ชัน cos ซึ่งในที่นี้คือ 5 เมตร",
+    subCategory: { 
       main: MAIN_CATEGORY,
       specific: LO_1
     }
@@ -247,8 +247,8 @@ export const quizItems = [
     question: "จากสมการในข้อ 16 จงหาความถี่เชิงมุม (\\(\\omega\\)) (ตอบเป็นจำนวนเต็มในหน่วย rad/s, ไม่ต้องใส่ \\(\\pi\\))",
     answer: 4,
     unit: "π rad/s",
-    explanation: "จากสมการ \\(x(t) = 5 \\cos(4\\pi t)\\), ความถี่เชิงมุม (\\(\\omega\\)) คือค่าสัมประสิทธิ์ของ t ภายในฟังก์ชัน cos ซึ่งคือ \\(4\\pi\\) rad/s.",
-    subCategory: {
+    explanation: "จากสมการ \\(x(t) = 5 \\cos(4\\pi t)\\), ความถี่เชิงมุม (\\(\\omega\\)) คือค่าสัมประสิทธิ์ของ \\(t\\) ภายในฟังก์ชัน cos ซึ่งคือ \\(4\\pi\\) rad/s.",
+    subCategory: { 
       main: MAIN_CATEGORY,
       specific: LO_1
     }
@@ -256,11 +256,11 @@ export const quizItems = [
   {
     number: 18,
     type: "fill-in-number",
-    question: "จากสมการในข้อ 16 จงหาความถี่ (f) ของการสั่น (ตอบเป็นจำนวนเต็มในหน่วย Hz)",
+    question: "จากสมการในข้อ 16 จงหาความถี่ (\\(f\\)) ของการสั่น (ตอบเป็นจำนวนเต็มในหน่วย Hz)",
     answer: 2,
     unit: "Hz",
     explanation: "จาก \\(\\omega = 2\\pi f\\), จะได้ \\(f = \\omega / 2\\pi = 4\\pi / 2\\pi = 2\\) Hz.",
-    subCategory: {
+    subCategory: { 
       main: MAIN_CATEGORY,
       specific: LO_1
     }
@@ -280,12 +280,12 @@ export const quizItems = [
   {
     number: 20,
     type: "fill-in-number",
-    question: "วัตถุเคลื่อนที่แบบ SHM มีแอมพลิจูด 0.2 m และคาบ 4 s ที่เวลา t=0 วัตถุอยู่ที่ตำแหน่งสมดุลและกำลังเคลื่อนที่ไปทางบวก จงหาการกระจัดที่เวลา t=1 s (ตอบเป็นทศนิยม 1 ตำแหน่งในหน่วย m)",
+    question: "วัตถุเคลื่อนที่แบบ SHM มีแอมพลิจูด 0.2 m และคาบ 4 s ที่เวลา \\(t=0\\) วัตถุอยู่ที่ตำแหน่งสมดุลและกำลังเคลื่อนที่ไปทางบวก จงหาการกระจัดที่เวลา \\(t=1\\) s (ตอบเป็นทศนิยม 1 ตำแหน่งในหน่วย m)",
     answer: 0.2,
     unit: "m",
-    hint: "เขียนสมการการเคลื่อนที่ในรูป \\(x(t) = A \\sin(\\omega t)\\) ก่อน แล้วจึงแทนค่า t",
-    explanation: "\\(\\omega = 2\\pi/T = 2\\pi/4 = \\pi/2\\). สมการคือ \\(x(t) = 0.2 \\sin(\\frac{\\pi}{2} t)\\). ที่ t=1, \\(x(1) = 0.2 \\sin(\\pi/2) = 0.2(1) = 0.2\\) m.",
-    subCategory: {
+    hint: "เขียนสมการการเคลื่อนที่ในรูป \\(x(t) = A \\sin(\\omega t)\\) ก่อน แล้วจึงแทนค่า \\(t\\)",
+    explanation: "\\(\\omega = 2\\pi/T = 2\\pi/4 = \\pi/2\\). สมการคือ \\(x(t) = 0.2 \\sin(\\frac{\\pi}{2} t)\\). ที่ \\(t=1\\), \\(x(1) = 0.2 \\sin(\\pi/2) = 0.2(1) = 0.2\\) m.",
+    subCategory: { 
       main: MAIN_CATEGORY,
       specific: LO_1
     }
@@ -324,8 +324,8 @@ export const quizItems = [
       question: "คาบการแกว่งของลูกตุ้มนี้เป็นกี่วินาที",
       answer: 2,
       unit: "s",
-      hint: "คาบคือเวลาที่ใช้ในการเคลื่อนที่ครบ 1 รอบ",
-      explanation: "เวลาทั้งหมด = 60 วินาที, จำนวนรอบ = 30 รอบ. คาบ (T) = เวลา / จำนวนรอบ = 60 / 30 = 2 วินาที",
+      hint: "คาบ (\\(T\\)) คือเวลาที่ใช้ในการเคลื่อนที่ครบ 1 รอบ",
+      explanation: "เวลาทั้งหมด = 60 วินาที, จำนวนรอบ = 30 รอบ. คาบ (\\(T\\)) = เวลา / จำนวนรอบ = 60 / 30 = 2 วินาที",
       subCategory: {
         main: MAIN_CATEGORY,
         specific: LO_1
@@ -336,8 +336,8 @@ export const quizItems = [
       question: "ความถี่ของลูกตุ้มเป็นเท่าใด (ตอบเป็นทศนิยม 1 ตำแหน่งในหน่วย Hz)",
       answer: 0.5,
       unit: "Hz",
-      hint: "ความถี่คือส่วนกลับของคาบ (f = 1/T)",
-      explanation: "ความถี่ (f) = 1 / T = 1 / 2 = 0.5 Hz",
+      hint: "ความถี่คือส่วนกลับของคาบ (\\(f = 1/T\\))",
+      explanation: "ความถี่ (\\(f\\)) = \\(1 / T\\) = 1 / 2 = 0.5 Hz",
       subCategory: {
         main: MAIN_CATEGORY,
         specific: LO_1
@@ -350,8 +350,8 @@ export const quizItems = [
     question: "ถ้าต้องการให้ลูกตุ้มนาฬิกาแกว่งช้าลง (คาบเพิ่มขึ้น) ควรทำอย่างไร",
     options: ["เพิ่มมวลของลูกตุ้ม", "ลดมวลของลูกตุ้ม", "เพิ่มความยาวของสายแขวน", "ลดความยาวของสายแขวน"],
     answer: "เพิ่มความยาวของสายแขวน",
-    explanation: "จาก \\(T = 2\\pi\\sqrt{L/g}\\), คาบการแกว่ง (T) แปรผันตรงกับรากที่สองของความยาว (L) ดังนั้นการเพิ่มความยาวจะทำให้คาบเพิ่มขึ้น (แกว่งช้าลง)",
-    subCategory: {
+    explanation: "จาก \\(T = 2\\pi\\sqrt{L/g}\\), คาบการแกว่ง (\\(T\\)) แปรผันตรงกับรากที่สองของความยาว (\\(L\\)) ดังนั้นการเพิ่มความยาวจะทำให้คาบเพิ่มขึ้น (แกว่งช้าลง)",
+    subCategory: { 
       main: MAIN_CATEGORY,
       specific: LO_1
     }
@@ -365,7 +365,7 @@ export const quizItems = [
     decimalPlaces: 2,
     tolerance: 0.01,
     explanation: "\\(\\omega = 2\\pi f = 2\\pi(5) = 10\\pi\\). \\(v_{max} = \\omega A = (10\\pi)(0.1) = \\pi \\approx 3.14\\) m/s.",
-    subCategory: {
+    subCategory: { 
       main: MAIN_CATEGORY,
       specific: LO_1
     }
@@ -390,7 +390,7 @@ export const quizItems = [
     unit: "s",
     hint: "จาก \\(T \\propto \\sqrt{m}\\), ตั้งอัตราส่วน \\(T_2/T_1 = \\sqrt{m_2/m_1}\\)",
     explanation: "\\(T_2/T_1 = \\sqrt{m_2/m_1} \\implies T_2 / 0.4 = \\sqrt{0.2/0.8} = \\sqrt{1/4} = 1/2\\). ดังนั้น \\(T_2 = 0.4 / 2 = 0.2\\) s.",
-    subCategory: {
+    subCategory: { 
       main: MAIN_CATEGORY,
       specific: LO_1
     }

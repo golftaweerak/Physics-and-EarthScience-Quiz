@@ -22,6 +22,28 @@ export const quizList = [
     "subCategory": "บทที่ 7: การเคลื่อนที่แนวโค้ง"
   },
   {
+    "id": "phy_m4/phy_m4_ch7-3",
+    "title": "การเคลื่อนที่แนวโค้ง (ชุดที่ 3)",
+    "amount": 30,
+    "description": "บทที่ 7: การเคลื่อนที่แนวโค้ง (ชุดที่ 3 - การเคลื่อนที่แบบโพรเจกไทล์)",
+    "url": "./quiz/index.html?id=phy_m4/phy_m4_ch7-3",
+    "storageKey": "quizState-phy_m4_ch7-3",
+    "icon": "./assets/icons/circular-motion.png",
+    "category": "PhysicsM4",
+    "subCategory": "บทที่ 7: การเคลื่อนที่แนวโค้ง"
+  },
+    {
+    "id": "phy_m4/phy_m4_ch7-4",
+    "title": "การเคลื่อนที่แนวโค้ง (ชุดที่ 4)",
+    "amount": 30,
+    "description": "บทที่ 7: การเคลื่อนที่แนวโค้ง (ชุดที่ 4 - การเคลื่อนที่แบบโพรเจกไทล์",
+    "url": "./quiz/index.html?id=phy_m4/phy_m4_ch7-4",
+    "storageKey": "quizState-phy_m4_ch7-4",
+    "icon": "./assets/icons/circular-motion.png",
+    "category": "PhysicsM4",
+    "subCategory": "บทที่ 7: การเคลื่อนที่แนวโค้ง"
+  },
+  {
     "id": "phy_m4/phy_m4_ch5-1",
     "title": "งานและพลังงาน (ชุดที่ 1)",
     "amount": 40,

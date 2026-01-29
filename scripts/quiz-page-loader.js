@@ -90,6 +90,15 @@ async function main() {
         // This function will handle loading data and setting up the quiz logic.
         const { initializeQuiz } = await quizLoaderPromise;
         await initializeQuiz();
+
+        // --- Initialize Scientific Calculator ---
+        try {
+            const { ScientificCalculator } = await import('./calculator.js');
+            window.scientificCalculator = new ScientificCalculator();
+        } catch (calcError) {
+            console.error("Failed to initialize calculator:", calcError);
+        }
+
         document.body.dataset.appInitialized = 'true';
         console.log("🚀 Quiz Page fully initialized");
     } catch (error) {
