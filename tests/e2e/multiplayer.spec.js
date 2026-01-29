@@ -10,12 +10,13 @@ test.describe('Multiplayer Lobby', () => {
     const menuBtn = page.locator('#main-menu-btn');
     const dropdown = page.locator('#main-menu-dropdown');
 
-    await expect(async () => {
-      if (await dropdown.isHidden()) {
-        await menuBtn.click();
-      }
-      await expect(dropdown).toBeVisible();
-    }).toPass({ timeout: 10000 });
+    // 1. Open Main Menu if needed
+    // Deterministic check: only click if currently hidden
+    if (await dropdown.isHidden()) {
+      await menuBtn.click();
+    }
+    // Verify it ends up visible
+    await expect(dropdown).toBeVisible();
 
     // 2. Click "Play with friends"
     await page.locator('#header-challenge-menu-btn').click();
@@ -54,12 +55,12 @@ test.describe('Multiplayer Lobby', () => {
     const menuBtn = page.locator('#main-menu-btn');
     const dropdown = page.locator('#main-menu-dropdown');
 
-    await expect(async () => {
-      if (await dropdown.isHidden()) {
-        await menuBtn.click();
-      }
-      await expect(dropdown).toBeVisible();
-    }).toPass({ timeout: 10000 });
+    // 1. Open Main Menu if needed
+    // Deterministic check
+    if (await dropdown.isHidden()) {
+      await menuBtn.click();
+    }
+    await expect(dropdown).toBeVisible();
 
     // 2. Click "Play with friends"
     await page.locator('#header-challenge-menu-btn').click();

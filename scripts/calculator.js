@@ -1,6 +1,6 @@
 /**
- * Scientific Calculator for Physics and Earth Science Quiz
- * Uses math.js for robust expression evaluation.
+ * Scientific Calculator - Advanced Generic Style
+ * Features: Natural Display, SOLVE, Calculus (Diff/Int), STO/RCL, ENG
  */
 
 export class ScientificCalculator {
@@ -9,9 +9,17 @@ export class ScientificCalculator {
     this.display = null;
     this.history = [];
     this.isOpen = false;
-    this.isDegreeMode = true; // Default to degrees for school physics
+    this.isDegreeMode = true;
 
-    // Touch/Mouse dragging state
+    // Modes
+    this.isShift = false;
+    this.isAlpha = false;
+    this.isStore = false; // STO mode
+
+    // Variables storage
+    this.variables = { A: 0, B: 0, C: 0, D: 0, E: 0, F: 0, x: 0, y: 0, M: 0 };
+
+    // Dragging
     this.isDragging = false;
     this.dragStartX = 0;
     this.dragStartY = 0;
@@ -21,6 +29,7 @@ export class ScientificCalculator {
     this.rawExpression = '';
     this.currentResult = null;
     this.resultFormat = 'auto'; // 'auto', 'decimal', 'fraction'
+    this.engMode = 0; // 0=Normal, 1=Eng, -1=EngInverse... (For simple toggle usually just Eng on/off or cycling)
 
     this.init();
   }
@@ -32,418 +41,581 @@ export class ScientificCalculator {
   }
 
   createUI() {
+    // Cleanup existing
+    const existing = document.getElementById('scientific-calculator-modal');
+    if (existing && existing.parentNode) {
+      existing.parentNode.removeChild(existing);
+    }
+
     const modal = document.createElement('div');
     modal.id = 'scientific-calculator-modal';
-    modal.className = 'fixed hidden z-[1000] bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 w-80 sm:w-96 overflow-hidden transition-all duration-300 transform scale-95 opacity-0';
+    // Style: Modern Dark/Neutral Professional
+    modal.className = 'fixed hidden z-[1000] bg-gray-900 rounded-xl shadow-2xl border border-gray-700 w-80 sm:w-96 overflow-hidden font-sans transition-all duration-300 transform scale-95 opacity-0';
     modal.style.bottom = '20px';
     modal.style.right = '20px';
 
     modal.innerHTML = `
-            <!-- Header/Draggable Area -->
-            <div class="bg-gray-100 dark:bg-gray-700/50 p-3 flex items-center justify-between cursor-move" id="calc-header">
+            <!-- Header (Generic Professional) -->
+            <div class="bg-gray-800 p-2 flex items-center justify-between cursor-move border-b border-gray-700" id="calc-header">
                 <div class="flex items-center gap-2">
-                    <span class="text-xl">🧮</span>
-                    <span class="font-bold text-sm dark:text-gray-200">เครื่องคิดเลขวิทยาศาสตร์</span>
+                    <span class="text-gray-400 text-lg">∫</span>
+                    <span class="text-xs text-gray-300 font-bold tracking-wider uppercase">Scientific</span>
                 </div>
-                <div class="flex items-center gap-1">
-                    <button id="calc-mode-toggle" class="px-2 py-1 text-[10px] bg-blue-500 text-white rounded font-bold uppercase tracking-wider">DEG</button>
-                    <button id="calc-close" class="p-1 hover:bg-red-500 hover:text-white rounded-lg transition-colors text-gray-400">
+                <div class="flex items-center gap-2">
+                    <div class="text-xs px-3 py-1 bg-gray-700 hover:bg-gray-600 text-teal-400 rounded cursor-pointer font-bold transition-colors" id="calc-mode-indicator">DEG</div>
+                    <button id="calc-close" class="text-gray-500 hover:text-white transition-colors p-1">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                     </button>
                 </div>
             </div>
 
-            <!-- Display Area (KaTeX rendered) -->
-            <div class="p-4 bg-gray-50 dark:bg-gray-900/50 relative min-h-[100px] flex flex-col justify-end">
-                <div id="calc-history" class="text-right text-xs text-gray-400 dark:text-gray-500 h-6 overflow-hidden mb-1 font-mono"></div>
-                <div id="calc-display-rendered" 
-                    class="w-full text-right text-2xl font-mono dark:text-white overflow-x-auto whitespace-nowrap scrollbar-hide min-h-[40px] flex items-center justify-end">
-                    0
+            <!-- Display (High Contrast LCD) -->
+            <div class="p-3 bg-white border-x-8 border-t-8 border-gray-900">
+                <div class="bg-[#f4f6f0] border-2 border-gray-400 shadow-inner p-2 min-h-[90px] flex flex-col justify-between relative rounded-sm">
+                   <!-- Status Indicators -->
+                   <div class="flex gap-1 text-[9px] font-bold text-gray-800 h-3">
+                        <span id="ind-shift" class="hidden bg-yellow-600 text-white px-0.5">S</span>
+                        <span id="ind-alpha" class="hidden bg-red-600 text-white px-0.5">A</span>
+                        <span id="ind-sto" class="hidden bg-blue-600 text-white px-0.5">STO</span>
+                        <span id="ind-mode">D</span>
+                   </div>
+                   
+                   <!-- Expression -->
+                   <div id="calc-display-rendered" class="text-lg w-full text-left font-serif text-black overflow-x-auto whitespace-nowrap scrollbar-hide"></div>
+                   
+                   <!-- Result -->
+                   <div id="calc-result-area" class="text-right text-xl font-medium text-black h-8 overflow-hidden"></div>
                 </div>
-                <!-- Cursor simulation -->
-                <div id="calc-cursor" class="absolute right-4 bottom-5 w-[2px] h-8 bg-blue-500 animate-pulse hidden"></div>
             </div>
 
             <!-- Keypad -->
-            <div class="p-3 grid grid-cols-5 gap-1.5 bg-white dark:bg-gray-800">
-                <!-- Row 1 -->
-                <button class="calc-btn sci" data-val="sin(">sin</button>
-                <button class="calc-btn sci" data-val="cos(">cos</button>
-                <button class="calc-btn sci" data-val="tan(">tan</button>
-                <button class="calc-btn sci" data-val="FRAC" title="Fraction">■/□</button>
-                <button class="calc-btn func" data-val="AC">AC</button>
+            <div class="bg-gray-900 p-2 pb-4 grid grid-cols-5 gap-1.5 select-none text-white">
+                <!-- Row 1: Function Keys -->
+                <button class="c-btn shift" id="btn-shift" data-action="shift">SHIFT</button>
+                <button class="c-btn alpha" id="btn-alpha" data-action="alpha">ALPHA</button>
+                <button class="c-btn nav" data-val="<">←</button>
+                <button class="c-btn nav" data-val=">">→</button>
+                <button class="c-btn on" data-action="on">ON</button>
 
                 <!-- Row 2 -->
-                <button class="calc-btn sci" data-val="log(">log</button>
-                <button class="calc-btn sci" data-val="ln(">ln</button>
-                <button class="calc-btn sci" data-val="sqrt(">√</button>
-                <button class="calc-btn sci" data-val="^">xʸ</button>
-                <button class="calc-btn func" data-val="DEL">⌫</button>
+                <button class="c-btn sm" data-val="optn">OPTN</button>
+                <button class="c-btn sm" data-action="calc" title="Solve (Shift)">CALC<span class="sub-y">SOLVE</span><span class="sub-r">=</span></button>
+                <button class="c-btn sm" data-val="int">∫dx<span class="sub-y">d/dx</span></button>
+                <button class="c-btn sm" data-val="x">x</button>
+                <button class="c-btn sm" data-val="frac">■/□</button>
 
                 <!-- Row 3 -->
-                <button class="calc-btn sci" data-val="PI">π</button>
-                <button class="calc-btn sci" data-val="(">(</button>
-                <button class="calc-btn sci" data-val=")">)</button>
-                <button class="calc-btn sci" data-val="SD" title="Switch Format">S⇔D</button>
-                <button class="calc-btn op" data-val="/">÷</button>
+                <button class="c-btn sm" data-val="sqrt">√</button>
+                <button class="c-btn sm" data-val="sqr">x²</button>
+                <button class="c-btn sm" data-val="pow">xʸ</button>
+                <button class="c-btn sm" data-val="log">log<span class="sub-y">10ʸ</span></button>
+                <button class="c-btn sm" data-val="ln">ln<span class="sub-y">eʸ</span></button>
 
                 <!-- Row 4 -->
-                <button class="calc-btn num" data-val="7">7</button>
-                <button class="calc-btn num" data-val="8">8</button>
-                <button class="calc-btn num" data-val="9">9</button>
-                <button class="calc-btn op" data-val="*">×</button>
-                <button class="calc-btn op" data-val="-">−</button>
-
+                <button class="c-btn sm" data-val="neg">(-)<span class="sub-r">A</span></button>
+                <button class="c-btn sm" data-val="deg">°'"<span class="sub-r">B</span></button>
+                <button class="c-btn sm" data-val="hyp">hyp<span class="sub-r">C</span></button>
+                <button class="c-btn sm" data-val="sin">sin<span class="sub-y">sin⁻¹</span><span class="sub-r">D</span></button>
+                <button class="c-btn sm" data-val="cos">cos<span class="sub-y">cos⁻¹</span><span class="sub-r">E</span></button>
+                
                 <!-- Row 5 -->
-                <button class="calc-btn num" data-val="4">4</button>
-                <button class="calc-btn num" data-val="5">5</button>
-                <button class="calc-btn num" data-val="6">6</button>
-                <button class="calc-btn op" data-val="+">+</button>
-                <button class="calc-btn eq row-span-2" id="calc-equals" data-val="=">=</button>
+                <button class="c-btn sm" data-val="tan">tan<span class="sub-y">tan⁻¹</span><span class="sub-r">F</span></button>
+                <button class="c-btn sm" data-action="sto">STO</button>
+                <button class="c-btn sm" data-action="eng">ENG<span class="sub-y">←</span></button>
+                <button class="c-btn sm" data-val="(">(</button>
+                <button class="c-btn sm" data-val=")">)<span class="sub-y">,</span></button>
 
                 <!-- Row 6 -->
-                <button class="calc-btn num" data-val="1">1</button>
-                <button class="calc-btn num" data-val="2">2</button>
-                <button class="calc-btn num" data-val="3">3</button>
-                <button class="calc-btn num" data-val="0">0</button>
-                
-                <!-- Row 7 items integrated into row 6/5 grid -->
-                <button class="calc-btn num" data-val=".">.</button>
+                <button class="c-btn sm" data-val="sd">S⇔D</button>
+                <button class="c-btn sm" data-val="m+">M+</button>
+                <button class="c-btn num" data-val="7">7</button>
+                <button class="c-btn num" data-val="8">8</button>
+                <button class="c-btn num" data-val="9">9</button>
+
+                <!-- Row 7 -->
+                <button class="c-btn blue" data-val="DEL">DEL</button>
+                <button class="c-btn blue" data-val="AC">AC</button>
+                <button class="c-btn num" data-val="4">4</button>
+                <button class="c-btn num" data-val="5">5</button>
+                <button class="c-btn num" data-val="6">6</button>
+
+                <!-- Row 8 -->
+                <button class="c-btn op" data-val="*">×</button>
+                <button class="c-btn op" data-val="/">÷</button>
+                <button class="c-btn num" data-val="1">1</button>
+                <button class="c-btn num" data-val="2">2</button>
+                <button class="c-btn num" data-val="3">3</button>
+
+                <!-- Row 9 -->
+                <button class="c-btn op" data-val="+">+</button>
+                <button class="c-btn op" data-val="-">-</button>
+                <button class="c-btn num" data-val="0">0</button>
+                <button class="c-btn num" data-val=".">.</button>
+                <button class="c-btn num" data-val="exp">x10ˣ<span class="sub-y">π</span><span class="sub-r">e</span></button>
+
+                <!-- Row 10 -->
+                <button class="c-btn num" data-val="ans">Ans</button>
+                <button class="c-btn eq col-span-4" id="btn-equals" data-val="=">=</button>
             </div>
         `;
 
-    // Add Styles
+    // Inject CSS
     const style = document.createElement('style');
     style.textContent = `
-            .calc-btn {
-                padding: 0.5rem;
-                font-size: 0.875rem;
-                font-weight: 700;
-                border-radius: 0.5rem;
-                transition: all 0.2s;
-                user-select: none;
-                border: 1px solid rgba(0,0,0,0.05);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-            .calc-btn:active { transform: scale(0.9); }
-            .dark .calc-btn { border-color: rgba(255,255,255,0.05); }
-            
-            .calc-btn.num { 
-                background-color: rgb(249 250 251); 
-                color: rgb(55 65 81); 
-            }
-            .dark .calc-btn.num { 
-                background-color: rgb(55 65 81); 
-                color: rgb(229 231 235); 
-            }
-            .calc-btn.num:hover { background-color: rgb(243 244 246); }
-            .dark .calc-btn.num:hover { background-color: rgb(75 85 99); }
+        .c-btn {
+            position: relative;
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 38px;
+            font-size: 14px;
+            transition: transform 0.1s;
+            box-shadow: 0 3px 0 rgba(0,0,0,0.5);
+            background: #2d3748;
+            color: white;
+            border: 1px solid #1a202c;
+        }
+        .c-btn:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(0,0,0,0.5); }
+        
+        .c-btn.shift { background: #E6B800; color: #000; font-weight: bold; font-size: 11px; box-shadow: 0 3px 0 #b38f00; border: none; }
+        .c-btn.alpha { background: #CC0000; color: #fff; font-weight: bold; font-size: 11px; box-shadow: 0 3px 0 #990000; border: none; }
+        .c-btn.nav { background: #4a5568; }
+        .c-btn.on { background: #2d3748; border: 1px solid #718096; font-size: 11px; }
+        
+        .c-btn.sm { background: #1a202c; font-size: 12px; } 
+        .c-btn.num { background: #edf2f7; color: #1a202c; font-weight: bold; font-size: 16px; box-shadow: 0 3px 0 #cbd5e0; }
+        .c-btn.op { background: #4a5568; font-size: 16px; font-weight: bold; }
+        .c-btn.blue { background: #3182ce; font-weight: bold; font-size: 13px; box-shadow: 0 3px 0 #2b6cb0; }
+        .c-btn.eq { background: #3182ce; font-size: 18px; font-weight: bold; box-shadow: 0 3px 0 #2b6cb0; }
+        
+        .c-btn .sub-y { position: absolute; top: -14px; left: 0; width: 100%; text-align: center; color: #E6B800; font-size: 9px; pointer-events: none; white-space: nowrap; }
+        .c-btn .sub-r { position: absolute; top: -14px; right: 2px; color: #FF4444; font-size: 9px; font-weight: bold; pointer-events: none; }
 
-            .calc-btn.op { 
-                background-color: rgb(239 246 255); 
-                color: rgb(37 99 235); 
-            }
-            .dark .calc-btn.op { 
-                background-color: rgba(30, 58, 138, 0.2); 
-                color: rgb(96 165 250); 
-            }
-            .calc-btn.op:hover { background-color: rgb(219 234 254); }
-
-            .calc-btn.sci { 
-                background-color: rgb(243 244 246); 
-                color: rgb(75 85 99); 
-                font-size: 0.75rem;
-            }
-            .dark .calc-btn.sci { 
-                background-color: rgba(55, 65, 81, 0.5); 
-                color: rgb(156 163 175); 
-            }
-            .calc-btn.sci:hover { background-color: rgb(229 231 235); }
-
-            .calc-btn.func { 
-                background-color: rgb(254 242 242); 
-                color: rgb(220 38 38); 
-            }
-            .dark .calc-btn.func { 
-                background-color: rgba(127, 29, 29, 0.2); 
-                color: rgb(248 113 113); 
-            }
-            .calc-btn.func:hover { background-color: rgb(254 226 226); }
-
-            .calc-btn.eq { 
-                background-color: rgb(37 99 235); 
-                color: white; 
-                box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3);
-            }
-            .calc-btn.eq:hover { background-color: rgb(29 78 216); }
-            
-            #scientific-calculator-modal {
-                pointer-events: none;
-            }
-            #scientific-calculator-modal.visible {
-                display: block;
-                transform: scale(1);
-                opacity: 1;
-                pointer-events: auto;
-            }
-
-            .scrollbar-hide::-webkit-scrollbar { display: none; }
-            .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
-        `;
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        #scientific-calculator-modal.visible { display: block; transform: scale(1); opacity: 1; }
+    `;
     document.head.appendChild(style);
     document.body.appendChild(modal);
 
     this.container = modal;
     this.displayRendered = modal.querySelector('#calc-display-rendered');
-    this.historyDisplay = modal.querySelector('#calc-history');
-    this.modeToggle = modal.querySelector('#calc-mode-toggle');
+    this.resultArea = modal.querySelector('#calc-result-area');
+    this.indShift = modal.querySelector('#ind-shift');
+    this.indAlpha = modal.querySelector('#ind-alpha');
+    this.indSto = modal.querySelector('#ind-sto');
+    this.indMode = modal.querySelector('#ind-mode');
+    this.headerMode = modal.querySelector('#calc-mode-indicator');
   }
 
   bindEvents() {
-    // Toggle Logic
+    // Global Toggle
     const toggleBtn = document.getElementById('calculator-toggle-btn');
     if (toggleBtn) {
-      toggleBtn.addEventListener('click', () => this.toggle());
+      this.boundToggle = () => this.toggle();
+      toggleBtn.addEventListener('click', this.boundToggle);
     }
 
-    this.container.querySelector('#calc-close').addEventListener('click', () => this.close());
+    const closeBtn = this.container.querySelector('#calc-close');
+    closeBtn.addEventListener('click', () => this.close());
+    closeBtn.addEventListener('mousedown', (e) => e.stopPropagation());
+    closeBtn.addEventListener('touchstart', (e) => e.stopPropagation());
 
-    // Button clicks
-    this.container.querySelectorAll('.calc-btn').forEach(btn => {
+    this.container.querySelector('.on').addEventListener('click', () => {
+      this.clear();
+      this.rawExpression = '';
+      this.renderDisplay();
+    });
+
+    if (this.headerMode) {
+      this.headerMode.addEventListener('mousedown', (e) => e.stopPropagation());
+      this.headerMode.addEventListener('touchstart', (e) => e.stopPropagation());
+      this.headerMode.addEventListener('click', () => this.toggleMode());
+    }
+
+    // Buttons
+    this.container.querySelectorAll('.c-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
-        const val = e.target.closest('button').dataset.val;
-        if (!val && e.target.id !== 'calc-equals') return;
-        this.handleInput(val);
+        const el = e.currentTarget;
+        const action = el.dataset.action;
+        const val = el.dataset.val;
+
+        if (action === 'shift') { this.toggleShift(); return; }
+        if (action === 'alpha') { this.toggleAlpha(); return; }
+        if (action === 'sto') { this.toggleStore(); return; }
+        if (action === 'eng') { this.toggleEng(); return; }
+        if (action === 'calc') {
+          if (this.isShift) { this.solve(); }
+          else if (this.isAlpha) { this.handleInput('='); }
+          return;
+        }
+
+        if (val) this.handleInput(val);
       });
     });
 
-    // Mode toggle (DEG/RAD)
-    this.modeToggle.addEventListener('click', () => {
-      this.isDegreeMode = !this.isDegreeMode;
-      this.modeToggle.textContent = this.isDegreeMode ? 'DEG' : 'RAD';
-      this.modeToggle.classList.toggle('bg-blue-500', this.isDegreeMode);
-      this.modeToggle.classList.toggle('bg-purple-500', !this.isDegreeMode);
-    });
+    // Dragging (Header)
+    const header = this.container.querySelector('#calc-header');
+    this.boundDragStart = (e) => this.startDragging(e);
+    this.boundDrag = (e) => this.drag(e);
+    this.boundDragEnd = () => this.stopDragging();
 
-    // Keyboard Support
-    document.addEventListener('keydown', (e) => {
+    header.addEventListener('mousedown', (e) => this.startDragging(e));
+    window.addEventListener('mousemove', this.boundDrag);
+    window.addEventListener('mouseup', this.boundDragEnd);
+    header.addEventListener('touchstart', (e) => this.startDragging(e.touches[0]));
+    window.addEventListener('touchmove', (e) => this.drag(e.touches[0]));
+    window.addEventListener('touchend', this.boundDragEnd);
+
+    // Keyboard
+    this.boundKeydown = (e) => {
       if (!this.isOpen) return;
-      if (e.key >= '0' && e.key <= '9') this.handleInput(e.key);
-      if (e.key === '.') this.handleInput('.');
-      if (['+', '-', '*', '/'].includes(e.key)) this.handleInput(e.key);
+      if (e.key === 'Escape') this.close();
       if (e.key === 'Enter') this.handleInput('=');
       if (e.key === 'Backspace') this.handleInput('DEL');
-      if (e.key === 'Escape') this.close();
-    });
+      if (/[0-9.+\-*/()^]/.test(e.key)) this.handleInput(e.key);
+      if (e.key === 'x' || e.key === 'X') this.handleInput('x');
+    };
+    document.addEventListener('keydown', this.boundKeydown);
+  }
 
-    // Dragging Logic
-    const header = this.container.querySelector('#calc-header');
-    header.addEventListener('mousedown', (e) => {
-      if (e.target.closest('button')) return;
-      this.startDragging(e);
-    });
-    window.addEventListener('mousemove', (e) => this.drag(e));
-    window.addEventListener('mouseup', () => this.stopDragging());
+  toggleShift() {
+    this.isShift = !this.isShift;
+    this.isAlpha = false;
+    this.isStore = false;
+    this.updateIndicators();
+  }
 
-    // Touch Drags
-    header.addEventListener('touchstart', (e) => {
-      if (e.target.closest('button')) return;
-      this.startDragging(e.touches[0]);
-    });
-    window.addEventListener('touchmove', (e) => this.drag(e.touches[0]));
-    window.addEventListener('touchend', () => this.stopDragging());
+  toggleAlpha() {
+    this.isAlpha = !this.isAlpha;
+    this.isShift = false;
+    this.isStore = false;
+    this.updateIndicators();
+  }
+
+  toggleStore() {
+    this.isStore = !this.isStore;
+    this.isShift = false;
+    this.isAlpha = false;
+    this.updateIndicators();
+  }
+
+  resetModifiers() {
+    this.isShift = false;
+    this.isAlpha = false;
+    this.isStore = false;
+    this.updateIndicators();
+  }
+
+  updateIndicators() {
+    this.indShift.style.display = this.isShift ? 'inline-block' : 'none';
+    this.indAlpha.style.display = this.isAlpha ? 'inline-block' : 'none';
+    this.indSto.style.display = this.isStore ? 'inline-block' : 'none';
+  }
+
+  toggleEng() {
+    // Toggle Engineering Notation on result
+    // Actually normally ENG is a transformation of the current result to move decimal 3 places
+    if (this.currentResult === null) return;
+    // Simple implementation: cycle through standard -> eng
+    this.engMode = (this.engMode === 0) ? 1 : 0;
+    this.renderResult();
   }
 
   handleInput(val) {
-    if (this.rawExpression === 'Error') {
+    if (this.rawExpression === 'Error') this.rawExpression = '';
+
+    // STO Handling
+    if (this.isStore) {
+      // Expecting A-F, x, y, M
+      const validVars = ['neg', 'deg', 'hyp', 'sin', 'cos', 'tan', 'x', 'y', 'm+'];
+      // Map button val to Var Name
+      // neg->A, deg->B, hyp->C, sin->D, cos->E, tan->F, x->x, y->y, m+->M
+      let targetVar = null;
+      if (val === 'neg') targetVar = 'A';
+      else if (val === 'deg') targetVar = 'B';
+      else if (val === 'hyp') targetVar = 'C';
+      else if (val === 'sin') targetVar = 'D';
+      else if (val === 'cos') targetVar = 'E';
+      else if (val === 'tan') targetVar = 'F';
+      else if (val === 'x') targetVar = 'x';
+      else if (val === 'y') targetVar = 'y';
+      else if (val === 'm+') targetVar = 'M';
+
+      if (targetVar && this.currentResult !== null) {
+        this.variables[targetVar] = this.currentResult;
+        this.showNotification(`Stored -> ${targetVar}`);
+      }
+      this.resetModifiers();
+      return;
+    }
+
+    // RCL (Recall) using Alpha
+    if (this.isAlpha) {
+      let varName = null;
+      if (val === 'neg') varName = 'A';
+      else if (val === 'deg') varName = 'B';
+      else if (val === 'hyp') varName = 'C';
+      else if (val === 'sin') varName = 'D';
+      else if (val === 'cos') varName = 'E';
+      else if (val === 'tan') varName = 'F';
+
+      if (varName) {
+        this.rawExpression += varName;
+        this.resetModifiers();
+        this.renderDisplay();
+        return;
+      }
+    }
+
+    // If we have a result and user types an operator, keep Ans.
+    if (this.currentResult !== null && ['+', '-', '*', '/', '^'].includes(val)) {
+      this.rawExpression = this.rawExpression + val;
+      this.currentResult = null;
+    } else if (this.currentResult !== null && !['=', 'DEL', 'sd', 'eng', 'sto'].includes(val)) {
       this.rawExpression = '';
+      this.currentResult = null;
     }
 
     switch (val) {
-      case 'AC':
-        this.clear();
-        this.renderDisplay();
+      case 'AC': this.clear(); break;
+      case 'DEL': this.deleteLast(); break;
+      case '=': this.calculate(); break;
+      case 'sd': this.toggleFormat(); break;
+      case 'sqrt': this.rawExpression += 'sqrt('; break;
+      case 'sqr': this.rawExpression += '^2'; break;
+      case 'pow': this.rawExpression += '^'; break;
+      case 'log': this.rawExpression += 'log('; break;
+      case 'ln': this.rawExpression += 'ln('; break;
+      case 'sin': this.rawExpression += this.isShift ? 'asin(' : 'sin('; break;
+      case 'cos': this.rawExpression += this.isShift ? 'acos(' : 'cos('; break;
+      case 'tan': this.rawExpression += this.isShift ? 'atan(' : 'tan('; break;
+
+      case 'int':
+        if (this.isShift) this.rawExpression += 'derivative(';
+        else this.rawExpression += 'integral(';
         break;
-      case 'DEL':
-        this.deleteLast();
-        this.renderDisplay();
+
+      case 'frac':
+        // Better frac behavior: wrap recent number or wait for input
+        // If expression ends in number, wrap it? Too complex for string append.
+        // Just append '/'
+        this.rawExpression += '/';
         break;
-      case '=':
-        this.calculate();
-        // displayResult is called inside calculate, no need for renderDisplay here
+
+      case 'exp':
+        if (this.isShift) this.rawExpression += 'pi';
+        else if (this.isAlpha) this.rawExpression += 'e';
+        else this.rawExpression += '*10^';
         break;
-      case 'SD':
-        this.toggleFormat();
+
+      case ')':
+        if (this.isShift) this.rawExpression += ',';
+        else this.rawExpression += ')';
         break;
-      case 'FRAC':
-        // If empty or ends with operator, start a fraction numerator
-        if (!this.rawExpression || /[+*−/]$/.test(this.rawExpression)) {
-          this.rawExpression += '1/2'; // Just a placeholder for now, making it real Casio-like is hard in 1-pass
-        } else {
-          this.rawExpression += '/';
-        }
-        this.renderDisplay();
-        break;
+
+      case 'x': this.rawExpression += 'x'; break;
+      case 'ans': this.rawExpression += 'Ans'; break;
+
+      // Ignore modifier keys if pressed without valid combo
+      case 'neg': if (!this.isAlpha) this.rawExpression += '-'; break;
+      case 'deg': if (!this.isAlpha) this.rawExpression += 'deg'; break;
+
       default:
-        if (val) this.rawExpression += val;
-        this.renderDisplay();
-        break;
+        if (!['shift', 'alpha', 'sto', 'eng', 'calc', 'optn', 'hyp'].includes(val)) {
+          this.rawExpression += val;
+        }
     }
+
+    if (!this.isStore) this.resetModifiers(); // Don't reset if we just entered STO mode
+    this.renderDisplay();
+  }
+
+  showNotification(msg) {
+    this.resultArea.innerHTML = `<span class="text-xs text-blue-600">${msg}</span>`;
+    setTimeout(() => { if (this.currentResult !== null) this.renderResult(); }, 1000);
   }
 
   deleteLast() {
-    this.rawExpression = this.rawExpression.slice(0, -1);
+    this.rawExpression = this.rawExpression.toString().slice(0, -1);
+    this.currentResult = null;
   }
 
   clear() {
     this.rawExpression = '';
-    this.historyDisplay.textContent = '';
     this.currentResult = null;
-    this.resultFormat = 'auto';
+    this.resultArea.innerHTML = '';
+    this.renderDisplay();
   }
 
   toggleFormat() {
-    if (this.currentResult === null) return;
-    this.resultFormat = this.resultFormat === 'decimal' ? 'fraction' : 'decimal';
-    this.displayResult();
+    if (this.resultFormat === 'fraction') this.resultFormat = 'decimal';
+    else this.resultFormat = 'fraction';
+    this.renderResult();
   }
 
-  renderDisplay() {
-    if (!this.displayRendered) return;
-
-    let expr = this.rawExpression || '0';
-    let latex = this.convertToLatex(expr);
-
-    try {
-      katex.render(latex, this.displayRendered, {
-        throwOnError: false,
-        displayMode: false
-      });
-    } catch (e) {
-      this.displayRendered.textContent = expr;
-    }
+  toggleMode() {
+    this.isDegreeMode = !this.isDegreeMode;
+    const text = this.isDegreeMode ? 'DEG' : 'RAD';
+    if (this.headerMode) this.headerMode.textContent = text;
+    if (this.indMode) this.indMode.textContent = this.isDegreeMode ? 'D' : 'R';
   }
 
-  convertToLatex(expr) {
-    // Simple TeX conversion for common symbols
-    return expr
-      .replace(/\//g, '\\div ')
-      .replace(/\*/g, '\\times ')
-      .replace(/-/g, '-')
-      .replace(/sqrt\(/g, '\\sqrt{')
-      .replace(/PI/g, '\\pi ')
-      .replace(/\^/g, '^')
-      .replace(/sin\(/g, '\\sin(')
-      .replace(/cos\(/g, '\\cos(')
-      .replace(/tan\(/g, '\\tan(')
-      .replace(/log\(/g, '\\log(')
-      .replace(/ln\(/g, '\\ln(');
+  solve() {
+    this.renderDisplay();
+    this.resultArea.innerHTML = '<span class="text-sm text-gray-500">Solving...</span>';
+    setTimeout(() => {
+      try {
+        let expr = this.rawExpression;
+        if (!expr.includes('x')) throw new Error("No x");
+        let fnStr = expr;
+        if (expr.includes('=')) {
+          const parts = expr.split('=');
+          fnStr = `(${parts[0]}) - (${parts[1]})`;
+        }
+
+        let x = 1;
+        const f = (val) => {
+          const scope = { ...this.variables, x: val, pi: Math.PI, e: Math.E };
+          return math.evaluate(fnStr, scope);
+        };
+        const df = (val) => (f(val + 1e-6) - f(val)) / 1e-6;
+
+        for (let i = 0; i < 50; i++) {
+          const y = f(x);
+          const dy = df(x);
+          if (Math.abs(dy) < 1e-9) break;
+          const xn = x - y / dy;
+          if (Math.abs(xn - x) < 1e-6) { x = xn; break; }
+          x = xn;
+        }
+        this.currentResult = x;
+        this.resultArea.innerHTML = `x = ${math.format(x, { precision: 8 })}`;
+      } catch (e) {
+        this.resultArea.textContent = "Cannot Solve";
+      }
+    }, 50);
   }
 
   calculate() {
     try {
-      let expression = this.rawExpression;
-      if (!expression) return;
+      let expr = this.rawExpression;
 
-      let processedExpr = expression
-        .replace(/×/g, '*')
-        .replace(/÷/g, '/')
-        .replace(/−/g, '-')
-        .replace(/PI/g, 'pi');
-
+      // Pre-processing
       if (this.isDegreeMode) {
-        processedExpr = processedExpr.replace(/sin\(([^)]+)\)/g, 'sin($1 deg)');
-        processedExpr = processedExpr.replace(/cos\(([^)]+)\)/g, 'cos($1 deg)');
-        processedExpr = processedExpr.replace(/tan\(([^)]+)\)/g, 'tan($1 deg)');
-        processedExpr = processedExpr.replace(/asin\(([^)]+)\)/g, 'asin($1) deg');
-        processedExpr = processedExpr.replace(/acos\(([^)]+)\)/g, 'acos($1) deg');
-        processedExpr = processedExpr.replace(/atan\(([^)]+)\)/g, 'atan($1) deg');
+        expr = expr.replace(/sin\(([^)]+)\)/g, 'sin($1 deg)')
+          .replace(/cos\(([^)]+)\)/g, 'cos($1 deg)')
+          .replace(/tan\(([^)]+)\)/g, 'tan($1 deg)');
       }
 
-      this.currentResult = math.evaluate(processedExpr);
-      this.historyDisplay.textContent = this.rawExpression + ' =';
-      this.displayResult();
-    } catch (error) {
-      console.error('Calculation Error:', error);
-      this.rawExpression = 'Error';
-      this.renderDisplay();
-    }
-  }
+      // Quote expressions for calculus functions to prevent premature evaluation
+      // derivative(expr, val) -> derivative("expr", val)
+      expr = expr.replace(/derivative\(([^,]+),/g, 'derivative("$1",');
+      // integral(expr, a, b) -> integral("expr", a, b)
+      expr = expr.replace(/integral\(([^,]+),/g, 'integral("$1",');
 
-  displayResult() {
-    if (this.currentResult === null) return;
+      expr = expr.replace('Ans', this.currentResult || 0);
 
-    let formatted;
-    if (this.resultFormat === 'fraction') {
-      try {
-        const frac = math.fraction(this.currentResult);
-        if (frac.d === 1) {
-          formatted = (frac.n * frac.s).toString();
-        } else {
-          formatted = `\\frac{${frac.n * frac.s}}{${frac.d}}`;
-        }
-      } catch (e) {
-        formatted = math.format(this.currentResult, { precision: 10 });
-      }
-    } else {
-      if (typeof this.currentResult === 'number') {
-        formatted = math.format(this.currentResult, { precision: 10 });
+      // Variable scope
+      const scope = { ...this.variables, pi: Math.PI, e: Math.E };
+
+      // Add custom functions to scope
+      scope.derivative = (fnIdx, xVal) => {
+        // Lim(h->0) ... Wait, fnIdx needs to be a function?
+        // Math.js evaluate can't pass a function definition easily unless we define f(x).
+        // Simplified: We rely on math.derivative for symbolic if possible.
+        // Try: math.derivative('x^2', 'x').evaluate({x: 3})
+        return math.derivative(fnIdx, 'x').evaluate({ x: xVal });
+      };
+
+      scope.integral = (fnIdx, a, b) => {
+        // Numerical integration (Simpson)
+        // fnIdx is string like 'x^2'
+        const f = (v) => math.evaluate(fnIdx, { x: v, ...this.variables });
+        const n = 100;
+        const h = (b - a) / n;
+        let s = f(a) + f(b);
+        for (let i = 1; i < n; i += 2) s += 4 * f(a + i * h);
+        for (let i = 2; i < n - 1; i += 2) s += 2 * f(a + i * h);
+        return (h / 3) * s;
+      };
+
+      const res = math.evaluate(expr, scope);
+
+      // Snap to zero if very small (e.g. sin(pi))
+      if (Math.abs(res) < 1e-12) {
+        this.currentResult = 0;
       } else {
-        formatted = this.currentResult.toString();
+        this.currentResult = res;
       }
-    }
 
-    try {
-      katex.render(formatted, this.displayRendered, {
-        throwOnError: false,
-        displayMode: false
-      });
-      // Update raw expression to the decimal result for subsequent calculation
-      this.rawExpression = (typeof this.currentResult === 'number')
-        ? math.format(this.currentResult, { precision: 10 })
-        : this.currentResult.toString();
+      this.renderResult();
     } catch (e) {
-      this.displayRendered.textContent = formatted;
+      console.error(e);
+      this.resultArea.textContent = "Syntax Error";
     }
   }
 
-  toggle() {
-    if (this.isOpen) this.close();
-    else this.open();
+  renderDisplay() {
+    this.displayRendered.innerHTML = '';
+    let latex = this.rawExpression
+      .replace(/\*/g, '\\times ')
+      .replace(/\//g, '\\div ')
+      .replace(/sqrt\(/g, '\\sqrt{')
+      .replace(/pi/g, '\\pi')
+      .replace(/integral\(/g, '\\int ')
+      .replace(/derivative\(/g, '\\frac{d}{dx} ');
+
+    if (!latex) return;
+    try { katex.render(latex, this.displayRendered, { throwingOnError: false }); }
+    catch (e) { this.displayRendered.textContent = this.rawExpression; }
   }
 
+  renderResult() {
+    if (this.currentResult === null) { this.resultArea.innerHTML = ''; return; }
+
+    this.resultArea.innerHTML = '';
+    let displayVal;
+
+    if (this.engMode === 1) {
+      displayVal = math.format(this.currentResult, { notation: 'engineering', precision: 10 });
+    } else if (this.resultFormat === 'fraction') {
+      try {
+        const f = math.fraction(this.currentResult);
+        displayVal = f.d === 1 ? f.n : `\\frac{${f.n}}{${f.d}}`;
+      } catch { displayVal = this.currentResult; }
+    } else {
+      displayVal = math.format(this.currentResult, { precision: 10 });
+    }
+
+    try { katex.render(displayVal.toString(), this.resultArea, { throwingOnError: false }); }
+    catch (e) { this.resultArea.textContent = displayVal; }
+  }
+
+  toggle() { this.isOpen ? this.close() : this.open(); }
   open() {
     this.isOpen = true;
     this.container.classList.remove('hidden');
     void this.container.offsetWidth;
     this.container.classList.add('visible');
   }
-
   close() {
     this.isOpen = false;
     this.container.classList.remove('visible');
-    setTimeout(() => {
-      if (!this.isOpen) {
-        this.container.classList.add('hidden');
-      }
-    }, 300);
+    setTimeout(() => this.container.classList.add('hidden'), 300);
   }
 
   startDragging(e) {
     this.isDragging = true;
     this.dragStartX = e.clientX;
     this.dragStartY = e.clientY;
-    const rect = this.container.getBoundingClientRect();
-    this.modalX = rect.left;
-    this.modalY = rect.top;
-    this.container.style.bottom = 'auto';
-    this.container.style.right = 'auto';
+    const r = this.container.getBoundingClientRect();
+    this.modalX = r.left; this.modalY = r.top;
     this.container.style.left = this.modalX + 'px';
     this.container.style.top = this.modalY + 'px';
+    this.container.style.bottom = 'auto'; this.container.style.right = 'auto';
   }
-
   drag(e) {
     if (!this.isDragging) return;
     const dx = e.clientX - this.dragStartX;
@@ -451,8 +623,13 @@ export class ScientificCalculator {
     this.container.style.left = (this.modalX + dx) + 'px';
     this.container.style.top = (this.modalY + dy) + 'px';
   }
+  stopDragging() { this.isDragging = false; }
 
-  stopDragging() {
-    this.isDragging = false;
+  destroy() {
+    if (this.boundToggle) {
+      const t = document.getElementById('calculator-toggle-btn');
+      if (t) t.removeEventListener('click', this.boundToggle);
+    }
+    if (this.container && this.container.parentNode) this.container.parentNode.removeChild(this.container);
   }
 }

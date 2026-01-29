@@ -302,6 +302,17 @@ export const quizList = [
     "subCategory": "บทที่ 6: โมเมนตัมและการชน"
   },
   {
+    "id": "phy_m4/phy_m4_ch6-7",
+    "title": "โมเมนตัมและการชน (ชุดที่ 7)",
+    "amount": 30,
+    "description": "บทที่ 6: โมเมนตัมและการชน (ชุดที่ 7 - การชนแบบยืดหยุ่นและไม่ยืดหยุ่น)",
+    "url": "./quiz/index.html?id=phy_m4/phy_m4_ch6-7",
+    "storageKey": "quizState-phy_m4_ch6-7",
+    "icon": "./assets/icons/collision.png",
+    "category": "PhysicsM4",
+    "subCategory": "บทที่ 6: โมเมนตัมและการชน"
+  },
+  {
     "id": "phy_m4/phy_m4_Ch3-1",
     "title": "แรงและกฎการเคลื่อนที่ (ชุดที่ 1)",
     "amount": 40,

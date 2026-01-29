@@ -3,6 +3,12 @@
  * This acts as the main entry point after the DOM is loaded.
  */
 async function main() {
+    if (window.QUIZ_PAGE_LOADER_INITIALIZED) {
+        console.warn("Quiz page loader already initialized. Skipping.");
+        return;
+    }
+    window.QUIZ_PAGE_LOADER_INITIALIZED = true;
+
     // Create and inject loading spinner immediately
     const spinner = document.createElement('div');
     spinner.id = 'quiz-loading-spinner';
@@ -94,6 +100,12 @@ async function main() {
         // --- Initialize Scientific Calculator ---
         try {
             const { ScientificCalculator } = await import('./calculator.js');
+
+            // Clean up existing instance if it exists to prevent duplicate event listeners
+            if (window.scientificCalculator && typeof window.scientificCalculator.destroy === 'function') {
+                window.scientificCalculator.destroy();
+            }
+
             window.scientificCalculator = new ScientificCalculator();
         } catch (calcError) {
             console.error("Failed to initialize calculator:", calcError);
