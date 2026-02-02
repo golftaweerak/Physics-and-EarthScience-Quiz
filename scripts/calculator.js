@@ -101,13 +101,13 @@ export class ScientificCalculator {
                 <button class="c-btn sm" data-val="optn">OPTN</button>
                 <button class="c-btn sm" data-action="calc">CALC<span class="sub-y">SOLVE</span><span class="sub-r">=</span></button>
                 <button class="c-btn sm" data-val="int">∫dx<span class="sub-y">d/dx</span></button>
-                <button class="c-btn sm" data-val="x">x</button>
-                <button class="c-btn sm" data-val="frac">■/□</button>
+                <button class="c-btn sm" data-val="x"><i class="font-serif italic">x</i></button>
+                <button class="c-btn sm" data-val="frac"><span class="flex flex-col items-center leading-none text-[10px]"><span>■</span><span class="border-t border-gray-400 w-3 my-[1px]"></span><span>□</span></span></button>
 
                 <!-- Row 3 -->
-                <button class="c-btn sm" data-val="sqrt">√</button>
-                <button class="c-btn sm" data-val="sqr">x²</button>
-                <button class="c-btn sm" data-val="pow">xʸ</button>
+                <button class="c-btn sm" data-val="sqrt">√■</button>
+                <button class="c-btn sm" data-val="sqr"><i class="font-serif italic">x</i>²</button>
+                <button class="c-btn sm" data-val="pow"><i class="font-serif italic">x</i>ʸ</button>
                 <button class="c-btn sm" data-val="log">log<span class="sub-y">10ʸ</span></button>
                 <button class="c-btn sm" data-val="ln">ln<span class="sub-y">eʸ</span></button>
 
@@ -641,18 +641,39 @@ export class ScientificCalculator {
 
   renderDisplay() {
     this.displayRendered.innerHTML = '';
-    let latex = this.rawExpression
-      .replace(/\*/g, '\\times ')
-      .replace(/\//g, '\\div ')
-      .replace(/sqrt\(/g, '\\sqrt{')
-      .replace(/pi/g, '\\pi')
-      .replace(/integral\(/g, '\\int ')
-      .replace(/derivative\(/g, '\\frac{d}{dx} ');
+    const expr = this.rawExpression;
+    if (!expr) return;
+
+    let latex = '';
+    try {
+      // Try to parse partial expression for Natural Display
+      // math.parse handles fractions (1/2), powers (2^3), etc. naturally
+      const node = math.parse(expr);
+      latex = node.toTex({ parenthesis: 'keep', implicit: 'hide' });
+    } catch (e) {
+      // Fallback for partial/incomplete expressions
+      latex = expr
+        .replace(/\*/g, '\\times ')
+        .replace(/\//g, '\\div ')
+        .replace(/sqrt\(/g, '\\sqrt{')
+        .replace(/\^/g, '^')
+        .replace(/pi/g, '\\pi')
+        .replace(/integral\(/g, '\\int ')
+        .replace(/derivative\(/g, '\\frac{d}{dx} ')
+        .replace(/Ans/g, '\\text{Ans}')
+        .replace(/sin\(/g, '\\sin(')
+        .replace(/cos\(/g, '\\cos(')
+        .replace(/tan\(/g, '\\tan(')
+        .replace(/log\(/g, '\\log(')
+        .replace(/ln\(/g, '\\ln(')
+        .replace(/deg/g, '^\\circ');
+    }
 
     if (!latex) return;
-    try { katex.render(latex, this.displayRendered, { throwingOnError: false }); }
+    try { katex.render(latex, this.displayRendered, { throwingOnError: false, displayMode: false }); }
     catch (e) { this.displayRendered.textContent = this.rawExpression; }
   }
+
 
   renderResult() {
     if (this.currentResult === null) { this.resultArea.innerHTML = ''; return; }
