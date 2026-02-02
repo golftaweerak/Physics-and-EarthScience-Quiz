@@ -49,47 +49,47 @@ export class ScientificCalculator {
 
     const modal = document.createElement('div');
     modal.id = 'scientific-calculator-modal';
-    // Style: Modern Dark/Neutral Professional
-    modal.className = 'fixed hidden z-[1000] bg-gray-900 rounded-xl shadow-2xl border border-gray-700 w-80 sm:w-96 overflow-hidden font-sans transition-all duration-300 transform scale-95 opacity-0';
+    // Style: Premium Modern Dark
+    modal.className = 'fixed hidden z-[1000] bg-[#1a202c] rounded-2xl shadow-2xl border border-gray-700 w-80 sm:w-96 overflow-hidden font-sans transition-all duration-300 transform scale-95 opacity-0 select-none';
     modal.style.bottom = '20px';
     modal.style.right = '20px';
 
     modal.innerHTML = `
-            <!-- Header (Generic Professional) -->
-            <div class="bg-gray-800 p-2 flex items-center justify-between cursor-move border-b border-gray-700" id="calc-header">
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-gray-800 to-gray-900 p-3 flex items-center justify-between cursor-move border-b border-gray-700 shadow-md" id="calc-header">
                 <div class="flex items-center gap-2">
-                    <span class="text-gray-400 text-lg">∫</span>
-                    <span class="text-xs text-gray-300 font-bold tracking-wider uppercase">Scientific</span>
+                    <div class="w-2 h-2 rounded-full bg-teal-400 shadow-[0_0_8px_rgba(45,212,191,0.6)]"></div>
+                    <span class="text-xs text-gray-300 font-bold tracking-[0.15em] uppercase">Scientific</span>
                 </div>
-                <div class="flex items-center gap-2">
-                    <div class="text-xs px-3 py-1 bg-gray-700 hover:bg-gray-600 text-teal-400 rounded cursor-pointer font-bold transition-colors" id="calc-mode-indicator">DEG</div>
-                    <button id="calc-close" class="text-gray-500 hover:text-white transition-colors p-1">
+                <div class="flex items-center gap-3">
+                    <div class="text-[10px] px-2 py-0.5 bg-gray-900 border border-gray-700 text-teal-400 rounded cursor-pointer font-bold hover:bg-gray-800 transition-colors shadow-inner" id="calc-mode-indicator">DEG</div>
+                    <button id="calc-close" class="text-gray-500 hover:text-white transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                     </button>
                 </div>
             </div>
 
-            <!-- Display (High Contrast LCD) -->
-            <div class="p-3 bg-white border-x-8 border-t-8 border-gray-900">
-                <div class="bg-[#f4f6f0] border-2 border-gray-400 shadow-inner p-2 min-h-[90px] flex flex-col justify-between relative rounded-sm">
+            <!-- Display -->
+            <div class="p-4 pb-2 bg-[#1a202c]">
+                <div class="bg-[#eef2f5] border-l-4 border-l-teal-500 rounded-md shadow-[inset_0_2px_4px_rgba(0,0,0,0.1)] p-3 min-h-[96px] flex flex-col justify-between relative overflow-hidden">
                    <!-- Status Indicators -->
-                   <div class="flex gap-1 text-[9px] font-bold text-gray-800 h-3">
-                        <span id="ind-shift" class="hidden bg-yellow-600 text-white px-0.5">S</span>
-                        <span id="ind-alpha" class="hidden bg-red-600 text-white px-0.5">A</span>
-                        <span id="ind-sto" class="hidden bg-blue-600 text-white px-0.5">STO</span>
+                   <div class="flex gap-1 text-[9px] font-extrabold tracking-tight h-3 text-gray-600">
+                        <span id="ind-shift" class="hidden text-[#a67c00]">S</span>
+                        <span id="ind-alpha" class="hidden text-[#c53030]">A</span>
+                        <span id="ind-sto" class="hidden text-blue-700">STO</span>
                         <span id="ind-mode">D</span>
                    </div>
                    
                    <!-- Expression -->
-                   <div id="calc-display-rendered" class="text-lg w-full text-left font-serif text-black overflow-x-auto whitespace-nowrap scrollbar-hide"></div>
+                   <div id="calc-display-rendered" class="text-lg w-full text-left font-serif text-gray-900 overflow-x-auto whitespace-nowrap scrollbar-hide py-1"></div>
                    
                    <!-- Result -->
-                   <div id="calc-result-area" class="text-right text-xl font-medium text-black h-8 overflow-hidden"></div>
+                   <div id="calc-result-area" class="text-right text-2xl font-semibold text-gray-800 h-9 overflow-hidden tracking-normal"></div>
                 </div>
             </div>
 
             <!-- Keypad -->
-            <div class="bg-gray-900 p-2 pb-4 grid grid-cols-5 gap-1.5 select-none text-white">
+            <div class="bg-[#1a202c] p-3 pt-2 grid grid-cols-5 gap-2 text-white pb-5">
                 <!-- Row 1: Function Keys -->
                 <button class="c-btn shift" id="btn-shift" data-action="shift">SHIFT</button>
                 <button class="c-btn alpha" id="btn-alpha" data-action="alpha">ALPHA</button>
@@ -99,7 +99,7 @@ export class ScientificCalculator {
 
                 <!-- Row 2 -->
                 <button class="c-btn sm" data-val="optn">OPTN</button>
-                <button class="c-btn sm" data-action="calc" title="Solve (Shift)">CALC<span class="sub-y">SOLVE</span><span class="sub-r">=</span></button>
+                <button class="c-btn sm" data-action="calc">CALC<span class="sub-y">SOLVE</span><span class="sub-r">=</span></button>
                 <button class="c-btn sm" data-val="int">∫dx<span class="sub-y">d/dx</span></button>
                 <button class="c-btn sm" data-val="x">x</button>
                 <button class="c-btn sm" data-val="frac">■/□</button>
@@ -162,36 +162,119 @@ export class ScientificCalculator {
     // Inject CSS
     const style = document.createElement('style');
     style.textContent = `
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        
+        #scientific-calculator-modal {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
         .c-btn {
             position: relative;
-            border-radius: 4px;
+            border-radius: 6px; /* Slightly rounder */
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 38px;
-            font-size: 14px;
-            transition: transform 0.1s;
-            box-shadow: 0 3px 0 rgba(0,0,0,0.5);
-            background: #2d3748;
-            color: white;
-            border: 1px solid #1a202c;
+            height: 36px;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.05s ease-out;
+            box-shadow: 0 3px 0 rgba(0,0,0,0.3), 0 2px 2px rgba(0,0,0,0.2);
+            background: linear-gradient(to bottom, #3f4a5a, #2d3748);
+            color: #e2e8f0;
+            border: 1px solid rgba(255,255,255,0.05);
+            padding-top: 2px;
         }
-        .c-btn:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(0,0,0,0.5); }
+        .c-btn:active { 
+            transform: translateY(2px); 
+            box-shadow: 0 1px 0 rgba(0,0,0,0.3); 
+        }
         
-        .c-btn.shift { background: #E6B800; color: #000; font-weight: bold; font-size: 11px; box-shadow: 0 3px 0 #b38f00; border: none; }
-        .c-btn.alpha { background: #CC0000; color: #fff; font-weight: bold; font-size: 11px; box-shadow: 0 3px 0 #990000; border: none; }
-        .c-btn.nav { background: #4a5568; }
-        .c-btn.on { background: #2d3748; border: 1px solid #718096; font-size: 11px; }
+        /* Specific Button Types */
+        .c-btn.shift { 
+            background: linear-gradient(to bottom, #f6e05e, #d69e2e); /* Gold/Yellow */
+            color: #443204; 
+            font-weight: 800; 
+            font-size: 11px; 
+            box-shadow: 0 3px 0 #b7791f;
+            border: none;
+        }
+        .c-btn.alpha { 
+            background: linear-gradient(to bottom, #fc8181, #e53e3e); /* Red */
+            color: #580d0d; 
+            font-weight: 800; 
+            font-size: 11px; 
+            box-shadow: 0 3px 0 #c53030;
+            border: none;
+        }
+        .c-btn.nav { 
+            background: linear-gradient(to bottom, #718096, #4a5568); 
+            box-shadow: 0 3px 0 #2d3748;
+        }
+        .c-btn.on { 
+            background: #2d3748; 
+            font-size: 11px;
+            border: 1px solid #4a5568; 
+            box-shadow: 0 2px 0 #1a202c;
+        }
         
-        .c-btn.sm { background: #1a202c; font-size: 12px; } 
-        .c-btn.num { background: #edf2f7; color: #1a202c; font-weight: bold; font-size: 16px; box-shadow: 0 3px 0 #cbd5e0; }
-        .c-btn.op { background: #4a5568; font-size: 16px; font-weight: bold; }
-        .c-btn.blue { background: #3182ce; font-weight: bold; font-size: 13px; box-shadow: 0 3px 0 #2b6cb0; }
-        .c-btn.eq { background: #3182ce; font-size: 18px; font-weight: bold; box-shadow: 0 3px 0 #2b6cb0; }
+        .c-btn.sm { 
+            background: linear-gradient(to bottom, #2d3748, #1a202c); 
+            font-size: 12px; 
+            color: #cbd5e0;
+            box-shadow: 0 3px 0 #111;
+        } 
+        .c-btn.num { 
+            background: linear-gradient(to bottom, #ffffff, #edf2f7); 
+            color: #1a202c; 
+            font-weight: 700; 
+            font-size: 16px; 
+            box-shadow: 0 3px 0 #cbd5e0; 
+        }
+        .c-btn.op { 
+            background: linear-gradient(to bottom, #718096, #4a5568); 
+            font-size: 16px; 
+            font-weight: 700; 
+            box-shadow: 0 3px 0 #2d3748;
+        }
+        .c-btn.blue { 
+            background: linear-gradient(to bottom, #4299e1, #3182ce); 
+            font-weight: 700; 
+            color: white;
+            font-size: 12px; 
+            box-shadow: 0 3px 0 #2b6cb0; 
+        }
+        .c-btn.eq { 
+            background: linear-gradient(to bottom, #4299e1, #2b6cb0); 
+            font-size: 18px; 
+            font-weight: 700; 
+            box-shadow: 0 3px 0 #2c5282; 
+        }
         
-        .c-btn .sub-y { position: absolute; top: -14px; left: 0; width: 100%; text-align: center; color: #E6B800; font-size: 9px; pointer-events: none; white-space: nowrap; }
-        .c-btn .sub-r { position: absolute; top: -14px; right: 2px; color: #FF4444; font-size: 9px; font-weight: bold; pointer-events: none; }
+        /* Sub-labels */
+        .c-btn .sub-y { 
+            position: absolute; 
+            top: -14px; 
+            left: 50%; 
+            transform: translateX(-50%);
+            color: #d69e2e; /* Match shift */
+            font-size: 9px; 
+            font-weight: 600;
+            pointer-events: none; 
+            white-space: nowrap; 
+            text-shadow: 0 1px 1px rgba(0,0,0,1);
+        }
+        .c-btn .sub-r { 
+            position: absolute; 
+            top: -14px; 
+            right: 2px; 
+            color: #fc8181; /* Match alpha */
+            font-size: 9px; 
+            font-weight: 700; 
+            pointer-events: none; 
+            text-shadow: 0 1px 1px rgba(0,0,0,1);
+        }
 
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         #scientific-calculator-modal.visible { display: block; transform: scale(1); opacity: 1; }
@@ -462,12 +545,25 @@ export class ScientificCalculator {
     if (this.indMode) this.indMode.textContent = this.isDegreeMode ? 'D' : 'R';
   }
 
+  prepareExpression(expr) {
+    if (this.isDegreeMode) {
+      expr = expr.replace(/sin\(([^)]+)\)/g, 'sin($1 deg)')
+        .replace(/cos\(([^)]+)\)/g, 'cos($1 deg)')
+        .replace(/tan\(([^)]+)\)/g, 'tan($1 deg)');
+    }
+    expr = expr.replace(/derivative\(([^,]+),/g, 'derivative("$1",');
+    expr = expr.replace(/integral\(([^,]+),/g, 'integral("$1",');
+    expr = expr.replace(/Ans/g, this.currentResult || 0);
+    return expr;
+  }
+
   solve() {
     this.renderDisplay();
     this.resultArea.innerHTML = '<span class="text-sm text-gray-500">Solving...</span>';
     setTimeout(() => {
       try {
-        let expr = this.rawExpression;
+        let expr = this.prepareExpression(this.rawExpression);
+
         if (!expr.includes('x')) throw new Error("No x");
         let fnStr = expr;
         if (expr.includes('=')) {
@@ -500,22 +596,8 @@ export class ScientificCalculator {
 
   calculate() {
     try {
-      let expr = this.rawExpression;
+      let expr = this.prepareExpression(this.rawExpression);
 
-      // Pre-processing
-      if (this.isDegreeMode) {
-        expr = expr.replace(/sin\(([^)]+)\)/g, 'sin($1 deg)')
-          .replace(/cos\(([^)]+)\)/g, 'cos($1 deg)')
-          .replace(/tan\(([^)]+)\)/g, 'tan($1 deg)');
-      }
-
-      // Quote expressions for calculus functions to prevent premature evaluation
-      // derivative(expr, val) -> derivative("expr", val)
-      expr = expr.replace(/derivative\(([^,]+),/g, 'derivative("$1",');
-      // integral(expr, a, b) -> integral("expr", a, b)
-      expr = expr.replace(/integral\(([^,]+),/g, 'integral("$1",');
-
-      expr = expr.replace('Ans', this.currentResult || 0);
 
       // Variable scope
       const scope = { ...this.variables, pi: Math.PI, e: Math.E };
