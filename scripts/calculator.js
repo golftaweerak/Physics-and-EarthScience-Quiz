@@ -9,7 +9,8 @@ export class ScientificCalculator {
     this.display = null;
     this.history = [];
     this.isOpen = false;
-    this.isDegreeMode = true;
+    this.history = []; // { expr: string, result: any }
+    this.historyIndex = -1; // -1 = current (new), 0..N = historical item
 
     // Modes
     this.isShift = false;
@@ -93,35 +94,35 @@ export class ScientificCalculator {
                 <!-- Row 1: Function Keys -->
                 <button class="c-btn shift" id="btn-shift" data-action="shift">SHIFT</button>
                 <button class="c-btn alpha" id="btn-alpha" data-action="alpha">ALPHA</button>
-                <button class="c-btn nav" data-val="<">←</button>
-                <button class="c-btn nav" data-val=">">→</button>
+                <button class="c-btn nav" data-val="UP">▲</button>
+                <button class="c-btn nav" data-val="DOWN">▼</button>
                 <button class="c-btn on" data-action="on">ON</button>
 
                 <!-- Row 2 -->
                 <button class="c-btn sm" data-val="optn">OPTN</button>
-                <button class="c-btn sm" data-action="calc">CALC<span class="sub-y">SOLVE</span><span class="sub-r">=</span></button>
-                <button class="c-btn sm" data-val="int">∫dx<span class="sub-y">d/dx</span></button>
+                <button class="c-btn sm" data-action="calc" data-shift="SOLVE" data-alpha="=">CALC</button>
+                <button class="c-btn sm" data-val="int" data-shift="derivative(">∫dx</button>
                 <button class="c-btn sm" data-val="x"><i class="font-serif italic">x</i></button>
                 <button class="c-btn sm" data-val="frac"><span class="flex flex-col items-center leading-none text-[10px]"><span>■</span><span class="border-t border-gray-400 w-3 my-[1px]"></span><span>□</span></span></button>
 
                 <!-- Row 3 -->
                 <button class="c-btn sm" data-val="sqrt">√■</button>
-                <button class="c-btn sm" data-val="sqr"><i class="font-serif italic">x</i>²</button>
-                <button class="c-btn sm" data-val="pow"><i class="font-serif italic">x</i>ʸ</button>
-                <button class="c-btn sm" data-val="log">log<span class="sub-y">10ʸ</span></button>
-                <button class="c-btn sm" data-val="ln">ln<span class="sub-y">eʸ</span></button>
+                <button class="c-btn sm" data-val="sqr" data-label="x²" data-shift="√"><i class="font-serif italic">x</i>²</button>
+                <button class="c-btn sm" data-val="pow" data-label="xʸ" data-shift="x√"><i class="font-serif italic">x</i>ʸ</button>
+                <button class="c-btn sm" data-val="log" data-shift="10^">log</button>
+                <button class="c-btn sm" data-val="ln" data-shift="e^">ln</button>
 
                 <!-- Row 4 -->
-                <button class="c-btn sm" data-val="neg">(-)<span class="sub-r">A</span></button>
-                <button class="c-btn sm" data-val="deg">°'"<span class="sub-r">B</span></button>
-                <button class="c-btn sm" data-val="hyp">hyp<span class="sub-r">C</span></button>
-                <button class="c-btn sm" data-val="sin">sin<span class="sub-y">sin⁻¹</span><span class="sub-r">D</span></button>
-                <button class="c-btn sm" data-val="cos">cos<span class="sub-y">cos⁻¹</span><span class="sub-r">E</span></button>
+                <button class="c-btn sm" data-val="neg" data-alpha="A">(-)</button>
+                <button class="c-btn sm" data-val="deg" data-alpha="B">°'"</button>
+                <button class="c-btn sm" data-val="hyp" data-alpha="C">hyp</button>
+                <button class="c-btn sm" data-val="sin" data-shift="sin⁻¹" data-alpha="D">sin</button>
+                <button class="c-btn sm" data-val="cos" data-shift="cos⁻¹" data-alpha="E">cos</button>
                 
                 <!-- Row 5 -->
-                <button class="c-btn sm" data-val="tan">tan<span class="sub-y">tan⁻¹</span><span class="sub-r">F</span></button>
+                <button class="c-btn sm" data-val="tan" data-shift="tan⁻¹" data-alpha="F">tan</button>
                 <button class="c-btn sm" data-action="sto">STO</button>
-                <button class="c-btn sm" data-action="eng">ENG<span class="sub-y">←</span></button>
+                <button class="c-btn sm" data-action="eng" data-shift="←">ENG</button>
                 <button class="c-btn sm" data-val="(">(</button>
                 <button class="c-btn sm" data-val=")">)<span class="sub-y">,</span></button>
 
@@ -151,12 +152,13 @@ export class ScientificCalculator {
                 <button class="c-btn op" data-val="-">-</button>
                 <button class="c-btn num" data-val="0">0</button>
                 <button class="c-btn num" data-val=".">.</button>
-                <button class="c-btn num" data-val="exp">x10ˣ<span class="sub-y">π</span><span class="sub-r">e</span></button>
+                <button class="c-btn num" data-val="exp" data-shift="π" data-alpha="e">x10ˣ</button>
 
                 <!-- Row 10 -->
                 <button class="c-btn num" data-val="ans">Ans</button>
                 <button class="c-btn eq col-span-4" id="btn-equals" data-val="=">=</button>
             </div>
+
         `;
 
     // Inject CSS
@@ -278,6 +280,9 @@ export class ScientificCalculator {
 
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         #scientific-calculator-modal.visible { display: block; transform: scale(1); opacity: 1; }
+        
+        .c-btn.active-shift { color: #f6e05e !important; text-shadow: 0 0 2px rgba(246, 224, 94, 0.4); }
+        .c-btn.active-alpha { color: #fc8181 !important; text-shadow: 0 0 2px rgba(252, 129, 129, 0.4); }
     `;
     document.head.appendChild(style);
     document.body.appendChild(modal);
@@ -320,6 +325,9 @@ export class ScientificCalculator {
     // Buttons
     this.container.querySelectorAll('.c-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
+        // Haptic Feedback
+        if (navigator.vibrate) navigator.vibrate(5);
+
         const el = e.currentTarget;
         const action = el.dataset.action;
         const val = el.dataset.val;
@@ -357,6 +365,8 @@ export class ScientificCalculator {
       if (e.key === 'Escape') this.close();
       if (e.key === 'Enter') this.handleInput('=');
       if (e.key === 'Backspace') this.handleInput('DEL');
+      if (e.key === 'ArrowUp') this.handleInput('UP');
+      if (e.key === 'ArrowDown') this.handleInput('DOWN');
       if (/[0-9.+\-*/()^]/.test(e.key)) this.handleInput(e.key);
       if (e.key === 'x' || e.key === 'X') this.handleInput('x');
     };
@@ -368,6 +378,7 @@ export class ScientificCalculator {
     this.isAlpha = false;
     this.isStore = false;
     this.updateIndicators();
+    this.updateButtonLabels();
   }
 
   toggleAlpha() {
@@ -375,6 +386,7 @@ export class ScientificCalculator {
     this.isShift = false;
     this.isStore = false;
     this.updateIndicators();
+    this.updateButtonLabels();
   }
 
   toggleStore() {
@@ -382,6 +394,7 @@ export class ScientificCalculator {
     this.isShift = false;
     this.isAlpha = false;
     this.updateIndicators();
+    this.updateButtonLabels();
   }
 
   resetModifiers() {
@@ -389,12 +402,48 @@ export class ScientificCalculator {
     this.isAlpha = false;
     this.isStore = false;
     this.updateIndicators();
+    this.updateButtonLabels();
   }
 
   updateIndicators() {
     this.indShift.style.display = this.isShift ? 'inline-block' : 'none';
     this.indAlpha.style.display = this.isAlpha ? 'inline-block' : 'none';
     this.indSto.style.display = this.isStore ? 'inline-block' : 'none';
+  }
+
+  updateButtonLabels() {
+    const buttons = this.container.querySelectorAll('.c-btn[data-shift], .c-btn[data-alpha]');
+    buttons.forEach(btn => {
+      // Store original label if not stored
+      if (!btn.dataset.original) {
+        // Special handling for HTML content buttons (x, frac, etc)
+        if (btn.children.length > 0 && !btn.dataset.label) {
+          // If manual control is needed, we rely on data-label.
+          // If pure text, innerText is fine.
+          // For simplicity, if contains HTML, we only swap if data-label is explicit or we just swap textContent?
+          // Best strategy: Only swap if data-shift/data-alpha is present.
+          // If currently showing Shift, and we toggle off, restore Original.
+          btn.dataset.original = btn.innerHTML; // Saving HTML
+        } else {
+          btn.dataset.original = btn.innerHTML;
+        }
+      }
+
+      if (this.isShift && btn.dataset.shift) {
+        btn.textContent = btn.dataset.shift;
+        btn.classList.add('active-shift');
+        btn.classList.remove('active-alpha');
+      } else if (this.isAlpha && btn.dataset.alpha) {
+        btn.textContent = btn.dataset.alpha;
+        btn.classList.add('active-alpha');
+        btn.classList.remove('active-shift');
+      } else {
+        // Restore
+        btn.innerHTML = btn.dataset.original;
+        btn.classList.remove('active-shift');
+        btn.classList.remove('active-alpha');
+      }
+    });
   }
 
   toggleEng() {
@@ -408,6 +457,49 @@ export class ScientificCalculator {
 
   handleInput(val) {
     if (this.rawExpression === 'Error') this.rawExpression = '';
+
+    // History Navigation
+    if (val === 'UP') {
+      if (this.history.length === 0) return;
+      if (this.historyIndex === -1) {
+        // Start navigating from end
+        this.historyIndex = this.history.length - 1;
+      } else if (this.historyIndex > 0) {
+        this.historyIndex--;
+      }
+      // Load history
+      const item = this.history[this.historyIndex];
+      this.rawExpression = item.expr;
+      this.currentResult = item.result; // Temporarily show result too?
+      // Actually standard calc: show expr involved. Result area might show previous result or cleared.
+      // Usually user wants to edit previous expression.
+      this.renderDisplay();
+      // Optionally show previous result in result area immediately?
+      // this.renderResult(); 
+      return;
+    }
+    if (val === 'DOWN') {
+      if (this.historyIndex === -1) return; // Already at new
+      if (this.historyIndex < this.history.length - 1) {
+        this.historyIndex++;
+        const item = this.history[this.historyIndex];
+        this.rawExpression = item.expr;
+        this.currentResult = item.result;
+        this.renderDisplay();
+      } else {
+        // Return to new empty/current input?
+        this.historyIndex = -1;
+        this.rawExpression = ''; // Or keep what was typed?
+        // Usually down from last history item clears or goes to blank new line
+        this.clear();
+      }
+      return;
+    }
+
+    // Reset history index if typing
+    if (val !== 'UP' && val !== 'DOWN' && val !== '=' && val !== 'sto' && val !== 'eng') {
+      this.historyIndex = -1;
+    }
 
     // STO Handling
     if (this.isStore) {
@@ -466,12 +558,19 @@ export class ScientificCalculator {
       case 'DEL': this.deleteLast(); break;
       case '=': this.calculate(); break;
       case 'sd': this.toggleFormat(); break;
-      case 'sqrt': this.rawExpression += 'sqrt('; break;
-      case 'sqr': this.rawExpression += '^2'; break;
-      case 'pow': this.rawExpression += '^'; break;
-      case 'log': this.rawExpression += 'log('; break;
-      case 'ln': this.rawExpression += 'ln('; break;
+      case 'sqrt': this.rawExpression += 'sqrt('; break; // Old case, might be unused
+      case 'sqr':
+        if (this.isShift) this.rawExpression += 'sqrt(';
+        else this.rawExpression += '^2';
+        break;
+      case 'pow':
+        if (this.isShift) this.rawExpression += 'nthRoot('; // nthRoot(val, root)
+        else this.rawExpression += '^';
+        break;
+      case 'log': this.rawExpression += 'log10('; break; // Base 10
+      case 'ln': this.rawExpression += 'log('; break; // Natural Log (math.js log is ln)
       case 'sin': this.rawExpression += this.isShift ? 'asin(' : 'sin('; break;
+
       case 'cos': this.rawExpression += this.isShift ? 'acos(' : 'cos('; break;
       case 'tan': this.rawExpression += this.isShift ? 'atan(' : 'tan('; break;
 
@@ -528,6 +627,7 @@ export class ScientificCalculator {
   clear() {
     this.rawExpression = '';
     this.currentResult = null;
+    this.historyIndex = -1; // Reset history pointer
     this.resultArea.innerHTML = '';
     this.renderDisplay();
   }
@@ -546,13 +646,27 @@ export class ScientificCalculator {
   }
 
   prepareExpression(expr) {
+    // Manual degree conversion to avoid unit scope issues
+    const PI = 3.141592653589793;
+    const E = 2.718281828459045;
+    // sin(x) -> sin((x) * PI / 180)
     if (this.isDegreeMode) {
-      expr = expr.replace(/sin\(([^)]+)\)/g, 'sin($1 deg)')
-        .replace(/cos\(([^)]+)\)/g, 'cos($1 deg)')
-        .replace(/tan\(([^)]+)\)/g, 'tan($1 deg)');
+      expr = expr.replace(/sin\(([^)]+?)(?:\s*deg)?\)/g, `sin(($1) * ${PI} / 180)`)
+        .replace(/cos\(([^)]+?)(?:\s*deg)?\)/g, `cos(($1) * ${PI} / 180)`)
+        .replace(/tan\(([^)]+?)(?:\s*deg)?\)/g, `tan(($1) * ${PI} / 180)`);
+
+      // Inverse Trig: rad -> deg
+      // asin(x) -> (asin(x) * 180 / PI)
+      expr = expr.replace(/asin\(([^)]+?)(?:\s*deg)?\)/g, `(asin($1) * 180 / ${PI})`)
+        .replace(/acos\(([^)]+?)(?:\s*deg)?\)/g, `(acos($1) * 180 / ${PI})`)
+        .replace(/atan\(([^)]+?)(?:\s*deg)?\)/g, `(atan($1) * 180 / ${PI})`);
     }
+
     expr = expr.replace(/derivative\(([^,]+),/g, 'derivative("$1",');
     expr = expr.replace(/integral\(([^,]+),/g, 'integral("$1",');
+    // Use numeric replacement for constants to avoid scope issues
+    expr = expr.replace(/e/g, '2.718281828459045');
+    // Remove Ans replacement if possible or replace raw value as before
     expr = expr.replace(/Ans/g, this.currentResult || 0);
     return expr;
   }
@@ -623,7 +737,22 @@ export class ScientificCalculator {
         return (h / 3) * s;
       };
 
-      const res = math.evaluate(expr, scope);
+      // Variables logic: if we have user variables, we MIGHT need scope.
+      // But if passing scope fails math functions, we must manually replace vars?
+      // Or spread math functions into scope?
+      // Try passing NO scope first to verify trig.
+      // If we need variables later, we fix scope.
+      // const scope = { ...this.variables, pi: Math.PI, e: Math.E };
+
+      let res = math.evaluate(expr, scope);
+
+      // Handle weird results (e.g. Complex numbers or units if they leak)
+      if (res && res.toJSON) res = res.toNumber();
+      if (res && res.re) res = res.re; // Complex
+
+      if (isNaN(res) || res === undefined) {
+        throw new Error("Result is NaN");
+      }
 
       // Snap to zero if very small (e.g. sin(pi))
       if (Math.abs(res) < 1e-12) {
@@ -632,10 +761,22 @@ export class ScientificCalculator {
         this.currentResult = res;
       }
 
+      // Add to History
+      if (this.rawExpression.trim() !== '') {
+        const entry = { expr: this.rawExpression, result: this.currentResult };
+        // Avoid duplicates at top
+        if (this.history.length === 0 || this.history[this.history.length - 1].expr !== entry.expr) {
+          this.history.push(entry);
+          if (this.history.length > 50) this.history.shift();
+        }
+      }
+      this.historyIndex = -1; // Reset pointer to "new"
+
       this.renderResult();
     } catch (e) {
-      console.error(e);
-      this.resultArea.textContent = "Syntax Error";
+      console.error('Calculation Error:', e);
+      this.currentResult = null;
+      this.resultArea.textContent = 'Error: ' + e.message; // Show specific error for debugging
     }
   }
 
@@ -663,11 +804,21 @@ export class ScientificCalculator {
         .replace(/Ans/g, '\\text{Ans}')
         .replace(/sin\(/g, '\\sin(')
         .replace(/cos\(/g, '\\cos(')
-        .replace(/tan\(/g, '\\tan(')
-        .replace(/log\(/g, '\\log(')
-        .replace(/ln\(/g, '\\ln(')
-        .replace(/deg/g, '^\\circ');
+
+      // Secondary replacements (using resulting string)
+      latex = latex
+        .replace(/sqrt\(([^)]+)\)/g, '\\sqrt{$1}')
+        .replace(/nthRoot\(([^,]+),([^)]+)\)/g, '\\sqrt[$2]{$1}')
+        .replace(/nthRoot\(([^)]+)\)/g, '\\sqrt{$1}')
+        .replace(/log10\(([^)]+)\)/g, '\\log_{10}($1)')
+        .replace(/ln\(([^)]+)\)/g, '\\ln($1)') // Fixed regex to match content
+        .replace(/ln\(/g, '\\ln(')             // Fallback
+        .replace(/deg/g, '^\\circ')
+        .replace(/asin\(/g, '\\sin^{-1}(')
+        .replace(/acos\(/g, '\\cos^{-1}(')
+        .replace(/atan\(/g, '\\tan^{-1}(');
     }
+
 
     if (!latex) return;
     try { katex.render(latex, this.displayRendered, { throwingOnError: false, displayMode: false }); }
