@@ -175,7 +175,7 @@ export class ScientificCalculator {
             position: relative;
             border-radius: 6px; /* Slightly rounder */
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
             align-items: center;
             justify-content: center;
             height: 36px;
