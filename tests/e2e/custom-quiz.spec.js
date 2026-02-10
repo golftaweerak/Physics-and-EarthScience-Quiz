@@ -87,5 +87,8 @@ test('create and start a custom quiz', async ({ page }) => {
 
   // 9. Verify Navigation and Quiz Screen
   // Use a selector that only matches visible elements to avoid strict mode violations
-  await expect(page.locator('#quiz-screen:visible, #start-screen:visible')).toBeVisible({ timeout: 30000 });
+  // 9. Verify Navigation and Quiz Screen
+  // Use a selector that only matches visible elements to avoid strict mode violations
+  await expect(page.locator('#quiz-screen')).toBeVisible({ timeout: 30000 });
+  await expect(page.locator('#start-screen')).toBeHidden();
 });

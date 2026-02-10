@@ -82,8 +82,10 @@ test('verify scientific calculator functionality', async ({ page }) => {
   await clickBtn(')');
   await equalsBtn.click();
   const val = await resultDisplay.innerText();
+  // KaTeX might use U+2212 for minus, and innerText might have newlines
+  const cleanVal = val.replace(/\u2212/g, '-').replace(/\n/g, '').trim();
   // We use closeTo because floating point precision
-  expect(parseFloat(val)).toBeCloseTo(0.5, 5);
+  expect(parseFloat(cleanVal)).toBeCloseTo(0.5, 5);
 
   // 6. Trigonometry - RAD Mode: sin(pi) approx 0
   await modeBtn.click({ force: true });
@@ -140,7 +142,10 @@ test('verify scientific calculator functionality', async ({ page }) => {
   await equalsBtn.click();
   // Numerical diff might be 6.0000...
   const diffVal = await resultDisplay.innerText();
-  expect(parseFloat(diffVal)).toBeCloseTo(6, 4);
+  // KaTeX might render display twice (MathML + HTML) or with hidden text
+  // Split by newline to get just the first representation
+  const cleanDiffVal = diffVal.split('\n')[0].replace(/\u2212/g, '-').trim();
+  expect(parseFloat(cleanDiffVal)).toBeCloseTo(6, 4);
 
   // 9c. ENG Notation
   await clickBtn('AC');

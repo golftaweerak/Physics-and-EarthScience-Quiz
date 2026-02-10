@@ -11,6 +11,7 @@ export class ScientificCalculator {
     this.isOpen = false;
     this.history = []; // { expr: string, result: any }
     this.historyIndex = -1; // -1 = current (new), 0..N = historical item
+    this.isDegreeMode = true; // Default to DEG
 
     // Modes
     this.isShift = false;
@@ -664,8 +665,6 @@ export class ScientificCalculator {
 
     expr = expr.replace(/derivative\(([^,]+),/g, 'derivative("$1",');
     expr = expr.replace(/integral\(([^,]+),/g, 'integral("$1",');
-    // Use numeric replacement for constants to avoid scope issues
-    expr = expr.replace(/e/g, '2.718281828459045');
     // Remove Ans replacement if possible or replace raw value as before
     expr = expr.replace(/Ans/g, this.currentResult || 0);
     return expr;
