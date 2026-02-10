@@ -123,7 +123,7 @@ export const quizItems = [
   {
     number: 9,
     type: "fill-in-number",
-    question: "วัตถุหนัก 50 N ถูกกดติดกับกำแพงในแนวดิ่งด้วยแรง F ที่ดันขึ้นทำมุม 27° กับแนวราบดังรูป ถ้าสัมประสิทธิ์ความเสียดทานสถิตคือ 0.5 จงหาขนาดของแรง F ที่น้อยที่สุดที่ทำให้วัตถุไม่ไถลลงมา (\\(\\sin27° \\approx 0.454, \\cos27° \\approx 0.891\\))<br><br><div class='flex justify-center'><img src='../assets/images/phy_m4_ch4-3_q18.png' alt='แผนภาพแรงสำหรับคำถามข้อ 15' class='max-w-xs'></div>",
+    question: "วัตถุหนัก 50 N ถูกกดติดกับกำแพงในแนวดิ่งด้วยแรง F ที่ดันขึ้นทำมุม 27° กับแนวราบดังรูป ถ้าสัมประสิทธิ์ความเสียดทานสถิตคือ 0.5 จงหาขนาดของแรง F ที่น้อยที่สุดที่ทำให้วัตถุไม่ไถลลงมา (\\(\\sin27° \\approx 0.454, \\cos27° \\approx 0.891\\))<br><br><div class='flex justify-center'><img src='../assets/images/phy_m4_ch4-3_q9.png' alt='แผนภาพแรงสำหรับคำถามข้อ 9' class='max-w-xs'></div>",
     answer: 55.56,
     unit: "N",
     decimalPlaces: 2,

@@ -179,7 +179,9 @@ def plot_phy_m4_ch6_2_q35():
     ax.text(3, 10, '(3, 10)', fontsize=9, verticalalignment='bottom', horizontalalignment='left')
     ax.text(4, 0, '(4, 0)', fontsize=9, verticalalignment='top', horizontalalignment='center')
 
-    output_path = os.path.join('assets', 'images', 'phy_m4_ch6-2_q35.png')
+    output_path = get_output_path('phy_m4_ch6-2_q35.png')
+    
+    # Ensure the directory exists
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     
     plt.tight_layout()
@@ -187,10 +189,64 @@ def plot_phy_m4_ch6_2_q35():
     plt.close(fig)
     print(f"Graph saved to {output_path}")
 
+def plot_phy_m4_ch6_4_q30():
+    """
+    Generates the graph for phy_m4_ch6-4, question 30.
+    Description: Force vs. Time graph (Rectangle).
+    Constant force 20N from t=0 to t=4.
+    Points for filling: (0,0) -> (0,20) -> (4,20) -> (4,0).
+    """
+    fig, ax = plt.subplots(figsize=(6, 4))
+    
+    # Data points for line
+    x = [0, 4]
+    y = [20, 20]
+    
+    # Plot the line
+    ax.plot(x, y, 'b-', linewidth=2, label='Force')
+    
+    # Fill the area
+    ax.fill_between(x, 0, y, color='salmon', alpha=0.5)
+    
+    # Drop lines
+    ax.plot([4, 4], [0, 20], 'k--', alpha=0.5)
+    ax.plot([0, 0], [0, 20], 'k--', alpha=0.5)
+
+    # Labels and Title
+    ax.set_title("Force vs. Time")
+    ax.set_xlabel("Time (t) [s]")
+    ax.set_ylabel("Force (F) [N]")
+    
+    # Grid and Limits
+    ax.grid(True, linestyle='--', alpha=0.7)
+    ax.set_xlim(0, 5)
+    ax.set_ylim(0, 25)
+    
+    # Annotate points
+    ax.text(2, 20, 'F = 20 N', fontsize=12, verticalalignment='bottom', horizontalalignment='center')
+    ax.text(4, 0, 't = 4 s', fontsize=10, verticalalignment='bottom', horizontalalignment='center')
+
+    output_path = get_output_path('phy_m4_ch6-4_q30.png')
+    
+    # Ensure the directory exists
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=100)
+    plt.close(fig)
+    print(f"Graph saved to {output_path}")
+
+def get_output_path(filename):
+    """Returns the absolute path for the output image in public/assets/images."""
+    # Assuming script is in tools/, go up one level to root, then public/assets/images
+    root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    return os.path.join(root_dir, 'public', 'assets', 'images', filename)
+
 if __name__ == "__main__":
     # Generate graph
-    # plot_phy_m4_ch6_5_q16() # Commented out as it's already done
-    plot_phy_m4_ch6_2_q18()
-    plot_phy_m4_ch6_3_q15()
-    plot_phy_m4_ch6_2_q35()
+    # plot_phy_m4_ch6_5_q16() 
+    # plot_phy_m4_ch6_2_q18()
+    # plot_phy_m4_ch6_3_q15()
+    # plot_phy_m4_ch6_2_q35()
+    plot_phy_m4_ch6_4_q30()
     print("\nGraph generation complete.")
