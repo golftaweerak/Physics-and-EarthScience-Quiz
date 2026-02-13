@@ -329,6 +329,69 @@ def plot_phy_m5_ch8_5_q12():
     plt.close(fig)
     print(f"Graph saved to {output_path}")
 
+def plot_phy_m5_ch8_5_q21():
+    """
+    Generates the Potential Energy vs Displacement graph for phy_m5_ch8-5, question 21.
+    Parabola opening up. U = 0.5 * k * x^2.
+    Max U = 2.0 J at x = +/- 0.2 m.
+    """
+    fig, ax = plt.subplots(figsize=(6, 4))
+    x = np.linspace(-0.25, 0.25, 100)
+    # 2.0 = 0.5 * k * 0.04 => k = 100
+    u = 0.5 * 100 * x**2
+    
+    ax.plot(x, u, 'm-', linewidth=2)
+    ax.set_title("Potential Energy vs. Displacement")
+    ax.set_xlabel("Displacement (x) [m]")
+    ax.set_ylabel("Potential Energy (Ep) [J]")
+    ax.grid(True, linestyle='--', alpha=0.7)
+    ax.set_xlim(-0.3, 0.3)
+    ax.set_ylim(0, 2.5)
+    
+    # Annotate points
+    ax.plot(0.2, 2.0, 'ko')
+    ax.text(0.21, 2.0, '(0.2, 2.0)', verticalalignment='center')
+    ax.plot(-0.2, 2.0, 'ko')
+    ax.text(-0.21, 2.0, '(-0.2, 2.0)', verticalalignment='center', horizontalalignment='right')
+
+    output_path = get_output_path('phy_m5_ch8-5_q21.png')
+    create_directory_if_not_exists(os.path.dirname(output_path))
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=100)
+    plt.close(fig)
+    print(f"Graph saved to {output_path}")
+
+def plot_phy_m5_ch8_5_q24():
+    """
+    Generates the Kinetic Energy vs Time graph for phy_m5_ch8-5, question 24.
+    Sine squared shape. Max Ek = 8 J.
+    Starts at 0, peaks at 1s, 0 at 2s. Period of motion is 4s.
+    """
+    fig, ax = plt.subplots(figsize=(6, 4))
+    t = np.linspace(0, 4, 400)
+    # T_motion = 4s => omega = 2pi/4 = pi/2.
+    # Ek = Emax * sin^2(omega * t) (starts at 0)
+    ek = 8 * np.sin(np.pi/2 * t)**2
+    
+    ax.plot(t, ek, 'c-', linewidth=2)
+    ax.set_title("Kinetic Energy vs. Time")
+    ax.set_xlabel("Time (t) [s]")
+    ax.set_ylabel("Kinetic Energy (Ek) [J]")
+    ax.grid(True, linestyle='--', alpha=0.7)
+    ax.set_xlim(0, 4.5)
+    ax.set_ylim(0, 9)
+    
+    # Annotate peak
+    ax.annotate('Max Ek (8J)', xy=(1, 8), xytext=(1.5, 8.5),
+                arrowprops=dict(facecolor='black', arrowstyle='->'))
+
+    output_path = get_output_path('phy_m5_ch8-5_q24.png')
+    create_directory_if_not_exists(os.path.dirname(output_path))
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=100)
+    plt.close(fig)
+    print(f"Graph saved to {output_path}")
+
 def get_output_path(filename):
     """Returns the absolute path for the output image in public/assets/images."""
     # Assuming script is in tools/, go up one level to root, then public/assets/images
@@ -345,4 +408,6 @@ if __name__ == "__main__":
     plot_phy_m5_ch8_5_q6()
     plot_phy_m5_ch8_5_q9()
     plot_phy_m5_ch8_5_q12()
+    plot_phy_m5_ch8_5_q21()
+    plot_phy_m5_ch8_5_q24()
     print("\nGraph generation complete.")
