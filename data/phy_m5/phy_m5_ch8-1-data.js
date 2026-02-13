@@ -230,40 +230,47 @@ export const quizItems = [
 
   // --- More Calculation & Analysis Questions ---
   {
-    number: 16,
-    type: "fill-in-number",
-    question: "วัตถุหนึ่งเคลื่อนที่แบบ SHM ด้วยสมการ \\(x(t) = 5 \\cos(4\\pi t)\\) โดย \\(x\\) มีหน่วยเป็นเมตร และ \\(t\\) เป็นวินาที จงหาแอมพลิจูดของการเคลื่อนที่ (ตอบเป็นจำนวนเต็มในหน่วย m)",
-    answer: 5,
-    unit: "m",
-    explanation: "จากสมการรูปแบบทั่วไป \\(x(t) = A \\cos(\\omega t + \\phi)\\), แอมพลิจูด (\\(A\\)) คือค่าสัมประสิทธิ์หน้าฟังก์ชัน cos ซึ่งในที่นี้คือ 5 เมตร",
-    subCategory: { 
-      main: MAIN_CATEGORY,
-      specific: LO_1
-    }
-  },
-  {
-    number: 17,
-    type: "fill-in-number",
-    question: "จากสมการในข้อ 16 จงหาความถี่เชิงมุม (\\(\\omega\\)) (ตอบเป็นจำนวนเต็มในหน่วย rad/s, ไม่ต้องใส่ \\(\\pi\\))",
-    answer: 4,
-    unit: "π rad/s",
-    explanation: "จากสมการ \\(x(t) = 5 \\cos(4\\pi t)\\), ความถี่เชิงมุม (\\(\\omega\\)) คือค่าสัมประสิทธิ์ของ \\(t\\) ภายในฟังก์ชัน cos ซึ่งคือ \\(4\\pi\\) rad/s.",
-    subCategory: { 
-      main: MAIN_CATEGORY,
-      specific: LO_1
-    }
-  },
-  {
-    number: 18,
-    type: "fill-in-number",
-    question: "จากสมการในข้อ 16 จงหาความถี่ (\\(f\\)) ของการสั่น (ตอบเป็นจำนวนเต็มในหน่วย Hz)",
-    answer: 2,
-    unit: "Hz",
-    explanation: "จาก \\(\\omega = 2\\pi f\\), จะได้ \\(f = \\omega / 2\\pi = 4\\pi / 2\\pi = 2\\) Hz.",
-    subCategory: { 
-      main: MAIN_CATEGORY,
-      specific: LO_1
-    }
+    type: "scenario",
+    title: "สถานการณ์: สมการการเคลื่อนที่ SHM",
+    description: "วัตถุหนึ่งเคลื่อนที่แบบ SHM ด้วยสมการ \\(x(t) = 5 \\cos(4\\pi t)\\) โดย \\(x\\) มีหน่วยเป็นเมตร และ \\(t\\) เป็นวินาที",
+    questions: [
+      {
+        number: 16,
+        type: "fill-in-number",
+        question: "จงหาแอมพลิจูดของการเคลื่อนที่ (ตอบเป็นจำนวนเต็มในหน่วย m)",
+        answer: 5,
+        unit: "m",
+        explanation: "จากสมการรูปแบบทั่วไป \\(x(t) = A \\cos(\\omega t + \\phi)\\), แอมพลิจูด (\\(A\\)) คือค่าสัมประสิทธิ์หน้าฟังก์ชัน cos ซึ่งในที่นี้คือ 5 เมตร",
+        subCategory: { 
+          main: MAIN_CATEGORY,
+          specific: LO_1
+        }
+      },
+      {
+        number: 17,
+        type: "fill-in-number",
+        question: "จงหาความถี่เชิงมุม (\\(\\omega\\)) (ตอบเป็นจำนวนเต็มในหน่วย rad/s, ไม่ต้องใส่ \\(\\pi\\))",
+        answer: 4,
+        unit: "π rad/s",
+        explanation: "จากสมการ \\(x(t) = 5 \\cos(4\\pi t)\\), ความถี่เชิงมุม (\\(\\omega\\)) คือค่าสัมประสิทธิ์ของ \\(t\\) ภายในฟังก์ชัน cos ซึ่งคือ \\(4\\pi\\) rad/s.",
+        subCategory: { 
+          main: MAIN_CATEGORY,
+          specific: LO_1
+        }
+      },
+      {
+        number: 18,
+        type: "fill-in-number",
+        question: "จงหาความถี่ (\\(f\\)) ของการสั่น (ตอบเป็นจำนวนเต็มในหน่วย Hz)",
+        answer: 2,
+        unit: "Hz",
+        explanation: "จาก \\(\\omega = 2\\pi f\\), จะได้ \\(f = \\omega / 2\\pi = 4\\pi / 2\\pi = 2\\) Hz.",
+        subCategory: { 
+          main: MAIN_CATEGORY,
+          specific: LO_1
+        }
+      }
+    ]
   },
   {
     number: 19,

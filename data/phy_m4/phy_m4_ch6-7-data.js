@@ -83,24 +83,31 @@ export const quizItems = [
 
   // --- Calculation Questions ---
   {
-    number: 6,
-    type: "fill-in-number",
-    question: "รถยนต์มวล 1000 kg วิ่งด้วยความเร็ว 10 m/s เข้าชนท้ายรถบรรทุกมวล 4000 kg ที่จอดอยู่นิ่ง หลังชนรถทั้งสองติดกันไป จงหาความเร็วหลังชน (ตอบเป็นจำนวนเต็มในหน่วย m/s)",
-    answer: 2,
-    unit: "m/s",
-    hint: "ใช้กฎการอนุรักษ์โมเมนตัมสำหรับการชนแบบไม่ยืดหยุ่นสมบูรณ์: \\(m_1u_1 + m_2u_2 = (m_1+m_2)v\\)",
-    explanation: "จากกฎการอนุรักษ์โมเมนตัม: \\((1000)(10) + (4000)(0) = (1000+4000)v \\Rightarrow 10000 = 5000v \\Rightarrow v = 2\\) m/s.",
-    subCategory: { main: MAIN_CATEGORY, specific: LO_15 }
-  },
-  {
-    number: 7,
-    type: "fill-in-number",
-    question: "จากข้อ 6 พลังงานจลน์ที่สูญเสียไปจากการชนเป็นกี่จูล (ตอบเป็นจำนวนเต็มในหน่วย J)",
-    answer: 40000,
-    unit: "J",
-    hint: "หาพลังงานจลน์ก่อนชนและหลังชน แล้วนำมาลบกัน (\\(KE_{loss} = KE_i - KE_f\\))",
-    explanation: "พลังงานจลน์ก่อนชน: \\(KE_i = \\frac{1}{2}(1000)(10)^2 = 50,000\\) J. พลังงานจลน์หลังชน: \\(KE_f = \\frac{1}{2}(5000)(2)^2 = 10,000\\) J. พลังงานที่สูญเสีย = \\(50000 - 10000 = 40,000\\) J.",
-    subCategory: { main: MAIN_CATEGORY, specific: LO_15 }
+    type: "scenario",
+    title: "สถานการณ์: รถชนท้าย",
+    description: "รถยนต์มวล 1000 kg วิ่งด้วยความเร็ว 10 m/s เข้าชนท้ายรถบรรทุกมวล 4000 kg ที่จอดอยู่นิ่ง หลังชนรถทั้งสองติดกันไป",
+    questions: [
+      {
+        number: 6,
+        type: "fill-in-number",
+        question: "จงหาความเร็วหลังชน (ตอบเป็นจำนวนเต็มในหน่วย m/s)",
+        answer: 2,
+        unit: "m/s",
+        hint: "ใช้กฎการอนุรักษ์โมเมนตัมสำหรับการชนแบบไม่ยืดหยุ่นสมบูรณ์: \\(m_1u_1 + m_2u_2 = (m_1+m_2)v\\)",
+        explanation: "จากกฎการอนุรักษ์โมเมนตัม: \\((1000)(10) + (4000)(0) = (1000+4000)v \\Rightarrow 10000 = 5000v \\Rightarrow v = 2\\) m/s.",
+        subCategory: { main: MAIN_CATEGORY, specific: LO_15 }
+      },
+      {
+        number: 7,
+        type: "fill-in-number",
+        question: "พลังงานจลน์ที่สูญเสียไปจากการชนเป็นกี่จูล (ตอบเป็นจำนวนเต็มในหน่วย J)",
+        answer: 40000,
+        unit: "J",
+        hint: "หาพลังงานจลน์ก่อนชนและหลังชน แล้วนำมาลบกัน (\\(KE_{loss} = KE_i - KE_f\\))",
+        explanation: "พลังงานจลน์ก่อนชน: \\(KE_i = \\frac{1}{2}(1000)(10)^2 = 50,000\\) J. พลังงานจลน์หลังชน: \\(KE_f = \\frac{1}{2}(5000)(2)^2 = 10,000\\) J. พลังงานที่สูญเสีย = \\(50000 - 10000 = 40,000\\) J.",
+        subCategory: { main: MAIN_CATEGORY, specific: LO_15 }
+      }
+    ]
   },
   {
     number: 8,
@@ -123,24 +130,31 @@ export const quizItems = [
     subCategory: { main: MAIN_CATEGORY, specific: LO_15 }
   },
   {
-    number: 10,
-    type: "fill-in-number",
-    question: "วัตถุ A มวล 1 kg เคลื่อนที่ด้วยความเร็ว 10 m/s เข้าชนวัตถุ B มวล 4 kg ที่อยู่นิ่งแบบยืดหยุ่นสมบูรณ์ ความเร็วของวัตถุ A หลังชนเป็นเท่าใด (ตอบเป็นจำนวนเต็มในหน่วย m/s, ถ้าทิศตรงข้ามให้ใส่เครื่องหมายลบ)",
-    answer: -6,
-    unit: "m/s",
-    hint: "ใช้สูตรลัด \\(v_1 = \\frac{m_1-m_2}{m_1+m_2}u_1\\) สำหรับการชนแบบยืดหยุ่นที่วัตถุเป้านิ่ง",
-    explanation: "\\(v_A = \\frac{1-4}{1+4}(10) = \\frac{-3}{5}(10) = -6\\) m/s. วัตถุ A จะกระดอนกลับด้วยความเร็ว 6 m/s.",
-    subCategory: { main: MAIN_CATEGORY, specific: LO_15 }
-  },
-  {
-    number: 11,
-    type: "fill-in-number",
-    question: "จากข้อ 10 ความเร็วของวัตถุ B หลังชนเป็นเท่าใด (ตอบเป็นจำนวนเต็มในหน่วย m/s)",
-    answer: 4,
-    unit: "m/s",
-    hint: "ใช้สูตรลัด \\(v_2 = \\frac{2m_1}{m_1+m_2}u_1\\) สำหรับการชนแบบยืดหยุ่นที่วัตถุเป้านิ่ง",
-    explanation: "\\(v_B = \\frac{2(1)}{1+4}(10) = \\frac{2}{5}(10) = 4\\) m/s.",
-    subCategory: { main: MAIN_CATEGORY, specific: LO_15 }
+    type: "scenario",
+    title: "สถานการณ์: การชนแบบยืดหยุ่นของมวลต่างกัน",
+    description: "วัตถุ A มวล 1 kg เคลื่อนที่ด้วยความเร็ว 10 m/s เข้าชนวัตถุ B มวล 4 kg ที่อยู่นิ่งแบบยืดหยุ่นสมบูรณ์",
+    questions: [
+      {
+        number: 10,
+        type: "fill-in-number",
+        question: "ความเร็วของวัตถุ A หลังชนเป็นเท่าใด (ตอบเป็นจำนวนเต็มในหน่วย m/s, ถ้าทิศตรงข้ามให้ใส่เครื่องหมายลบ)",
+        answer: -6,
+        unit: "m/s",
+        hint: "ใช้สูตรลัด \\(v_1 = \\frac{m_1-m_2}{m_1+m_2}u_1\\) สำหรับการชนแบบยืดหยุ่นที่วัตถุเป้านิ่ง",
+        explanation: "\\(v_A = \\frac{1-4}{1+4}(10) = \\frac{-3}{5}(10) = -6\\) m/s. วัตถุ A จะกระดอนกลับด้วยความเร็ว 6 m/s.",
+        subCategory: { main: MAIN_CATEGORY, specific: LO_15 }
+      },
+      {
+        number: 11,
+        type: "fill-in-number",
+        question: "ความเร็วของวัตถุ B หลังชนเป็นเท่าใด (ตอบเป็นจำนวนเต็มในหน่วย m/s)",
+        answer: 4,
+        unit: "m/s",
+        hint: "ใช้สูตรลัด \\(v_2 = \\frac{2m_1}{m_1+m_2}u_1\\) สำหรับการชนแบบยืดหยุ่นที่วัตถุเป้านิ่ง",
+        explanation: "\\(v_B = \\frac{2(1)}{1+4}(10) = \\frac{2}{5}(10) = 4\\) m/s.",
+        subCategory: { main: MAIN_CATEGORY, specific: LO_15 }
+      }
+    ]
   },
   {
     number: 12,

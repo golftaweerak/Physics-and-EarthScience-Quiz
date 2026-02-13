@@ -236,6 +236,99 @@ def plot_phy_m4_ch6_4_q30():
     plt.close(fig)
     print(f"Graph saved to {output_path}")
 
+def plot_phy_m5_ch8_5_q6():
+    """
+    Generates the Displacement-Time graph for phy_m5_ch8-5, question 6.
+    Sine wave: A=0.2m, T=4s.
+    """
+    fig, ax = plt.subplots(figsize=(6, 4))
+    t = np.linspace(0, 8, 400)
+    x = 0.2 * np.sin(2 * np.pi * t / 4)
+    
+    ax.plot(t, x, 'b-', linewidth=2)
+    ax.set_title("Displacement vs. Time")
+    ax.set_xlabel("Time (t) [s]")
+    ax.set_ylabel("Displacement (x) [m]")
+    ax.grid(True, linestyle='--', alpha=0.7)
+    ax.set_xlim(0, 8)
+    ax.set_ylim(-0.25, 0.25)
+    
+    # Annotate Amplitude and Period
+    ax.annotate('Amplitude (0.2)', xy=(1, 0.2), xytext=(2, 0.22),
+                arrowprops=dict(facecolor='black', arrowstyle='->'))
+    ax.annotate('Period (4s)', xy=(4, 0), xytext=(4.5, -0.1),
+                arrowprops=dict(facecolor='black', arrowstyle='->'))
+
+    output_path = get_output_path('phy_m5_ch8-5_q6.png')
+    create_directory_if_not_exists(os.path.dirname(output_path))
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=100)
+    plt.close(fig)
+    print(f"Graph saved to {output_path}")
+
+def plot_phy_m5_ch8_5_q9():
+    """
+    Generates the Velocity-Time graph for phy_m5_ch8-5, question 9.
+    Cosine wave: Vmax=4 m/s, T=2s.
+    """
+    fig, ax = plt.subplots(figsize=(6, 4))
+    t = np.linspace(0, 4, 400)
+    v = 4 * np.cos(2 * np.pi * t / 2)
+    
+    ax.plot(t, v, 'r-', linewidth=2)
+    ax.set_title("Velocity vs. Time")
+    ax.set_xlabel("Time (t) [s]")
+    ax.set_ylabel("Velocity (v) [m/s]")
+    ax.grid(True, linestyle='--', alpha=0.7)
+    ax.set_xlim(0, 4)
+    ax.set_ylim(-5, 5)
+    
+    # Annotate Vmax
+    ax.annotate('Vmax (4)', xy=(0, 4), xytext=(0.5, 4.5),
+                arrowprops=dict(facecolor='black', arrowstyle='->'))
+
+    output_path = get_output_path('phy_m5_ch8-5_q9.png')
+    create_directory_if_not_exists(os.path.dirname(output_path))
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=100)
+    plt.close(fig)
+    print(f"Graph saved to {output_path}")
+
+def plot_phy_m5_ch8_5_q12():
+    """
+    Generates the Acceleration-Displacement graph for phy_m5_ch8-5, question 12.
+    Linear with negative slope: a = -40x.
+    Points: (0.1, -4), (-0.1, 4).
+    """
+    fig, ax = plt.subplots(figsize=(6, 4))
+    x = np.linspace(-0.15, 0.15, 100)
+    a = -40 * x
+    
+    ax.plot(x, a, 'g-', linewidth=2)
+    ax.set_title("Acceleration vs. Displacement")
+    ax.set_xlabel("Displacement (x) [m]")
+    ax.set_ylabel("Acceleration (a) [m/s²]")
+    ax.grid(True, linestyle='--', alpha=0.7)
+    
+    # Mark points
+    ax.plot(0.1, -4, 'ko')
+    ax.text(0.11, -4, '(0.1, -4)', verticalalignment='center')
+    ax.plot(-0.1, 4, 'ko')
+    ax.text(-0.14, 4, '(-0.1, 4)', verticalalignment='center')
+    
+    # Draw axes through origin
+    ax.spines['left'].set_position('zero')
+    ax.spines['bottom'].set_position('zero')
+    ax.spines['right'].set_color('none')
+    ax.spines['top'].set_color('none')
+
+    output_path = get_output_path('phy_m5_ch8-5_q12.png')
+    create_directory_if_not_exists(os.path.dirname(output_path))
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=100)
+    plt.close(fig)
+    print(f"Graph saved to {output_path}")
+
 def get_output_path(filename):
     """Returns the absolute path for the output image in public/assets/images."""
     # Assuming script is in tools/, go up one level to root, then public/assets/images
@@ -248,5 +341,8 @@ if __name__ == "__main__":
     # plot_phy_m4_ch6_2_q18()
     # plot_phy_m4_ch6_3_q15()
     # plot_phy_m4_ch6_2_q35()
-    plot_phy_m4_ch6_4_q30()
+    # plot_phy_m4_ch6_4_q30()
+    plot_phy_m5_ch8_5_q6()
+    plot_phy_m5_ch8_5_q9()
+    plot_phy_m5_ch8_5_q12()
     print("\nGraph generation complete.")

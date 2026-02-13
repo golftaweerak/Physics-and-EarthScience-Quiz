@@ -171,25 +171,32 @@ export const quizItems = [
     subCategory: { main: MAIN_CATEGORY, specific: LO_16 }
   },
   {
-    number: 16,
-    type: "fill-in-number",
-    question: "ยิงวัตถุจากพื้นด้วยความเร็วต้น 40 m/s ทำมุม 30° กับแนวราบ เมื่อเวลาผ่านไป 3 วินาที วัตถุจะอยู่ที่ความสูงเท่าใด (\\(g=10 \\text{ m/s}^2, \\sin30^\\circ=0.5\\))",
-    answer: 15,
-    unit: "m",
-    hint: "ใช้สมการ \\(s_y = u_y t - \\frac{1}{2}gt^2\\)",
-    explanation: "\\(u_y = 40 \\sin(30^\\circ) = 20\\) m/s. \\(s_y = (20)(3) - 0.5(10)(3)^2 = 60 - 45 = 15\\) เมตร.",
-    subCategory: { main: MAIN_CATEGORY, specific: LO_16 }
-  },
-  {
-    number: 17,
-    type: "fill-in-number",
-    question: "จากข้อ 16, ที่เวลา 3 วินาที ขนาดของความเร็วลัพธ์ของวัตถุเป็นเท่าใด (\\(g=10, \\cos30^\\circ \\approx 0.866\\)) (ตอบเป็นทศนิยม 1 ตำแหน่งในหน่วย m/s)",
-    answer: 36.1,
-    unit: "m/s",
-    tolerance: 0.1,
-    hint: "หา \\(v_x\\) และ \\(v_y\\) ที่เวลา 3 วินาที แล้วรวมเวกเตอร์แบบพีทาโกรัส",
-    explanation: "\\(v_x = u_x = 40 \\cos(30^\\circ) \\approx 34.64\\) m/s. \\(v_y = u_y - gt = 20 - 10(3) = -10\\) m/s. \\(v = \\sqrt{v_x^2 + v_y^2} = \\sqrt{34.64^2 + (-10)^2} = \\sqrt{1200 + 100} = \\sqrt{1300} \\approx 36.05\\) m/s.",
-    subCategory: { main: MAIN_CATEGORY, specific: LO_16 }
+    type: "scenario",
+    title: "สถานการณ์: การยิงวัตถุทำมุม 30 องศา",
+    description: "ยิงวัตถุจากพื้นด้วยความเร็วต้น 40 m/s ทำมุม 30° กับแนวราบ (\\(g=10 \\text{ m/s}^2, \\sin30^\\circ=0.5, \\cos30^\\circ \\approx 0.866\\))",
+    questions: [
+      {
+        number: 16,
+        type: "fill-in-number",
+        question: "เมื่อเวลาผ่านไป 3 วินาที วัตถุจะอยู่ที่ความสูงเท่าใด",
+        answer: 15,
+        unit: "m",
+        hint: "ใช้สมการ \\(s_y = u_y t - \\frac{1}{2}gt^2\\)",
+        explanation: "\\(u_y = 40 \\sin(30^\\circ) = 20\\) m/s. \\(s_y = (20)(3) - 0.5(10)(3)^2 = 60 - 45 = 15\\) เมตร.",
+        subCategory: { main: MAIN_CATEGORY, specific: LO_16 }
+      },
+      {
+        number: 17,
+        type: "fill-in-number",
+        question: "ที่เวลา 3 วินาที ขนาดของความเร็วลัพธ์ของวัตถุเป็นเท่าใด (ตอบเป็นทศนิยม 1 ตำแหน่ง)",
+        answer: 36.1,
+        unit: "m/s",
+        tolerance: 0.1,
+        hint: "หา \\(v_x\\) และ \\(v_y\\) ที่เวลา 3 วินาที แล้วรวมเวกเตอร์แบบพีทาโกรัส",
+        explanation: "\\(v_x = u_x = 40 \\cos(30^\\circ) \\approx 34.64\\) m/s. \\(v_y = u_y - gt = 20 - 10(3) = -10\\) m/s. \\(v = \\sqrt{v_x^2 + v_y^2} = \\sqrt{34.64^2 + (-10)^2} = \\sqrt{1200 + 100} = \\sqrt{1300} \\approx 36.05\\) m/s.",
+        subCategory: { main: MAIN_CATEGORY, specific: LO_16 }
+      }
+    ]
   },
   {
     number: 18,
