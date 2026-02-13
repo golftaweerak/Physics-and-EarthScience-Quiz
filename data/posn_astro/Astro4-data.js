@@ -192,7 +192,7 @@ export const quizItems = [
       "\\(K = 2.5 \\times 10^9\\) J, \\(U = -7.5 \\times 10^9\\) J",
       "\\(K = -5 \\times 10^9\\) J, \\(U = 0\\)",
     ],
-    answer: "$K = 5 \\times 10^9$ J, $U = -10 \\times 10^9$ J",
+    answer: "\\(K = 5 \\times 10^9\\) J, \\(U = -10 \\times 10^9\\) J",
     explanation: "สำหรับวงโคจรวงกลม, \\(E = -K\\) และ \\(E = U/2\\). ดังนั้น \\(K = -E = 5 \\times 10^9\\) J และ \\(U = 2E = -10 \\times 10^9\\) J.",
     subCategory: {
       main: "POSN_Astronomy",

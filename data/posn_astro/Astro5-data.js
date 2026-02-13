@@ -357,7 +357,7 @@ export const quizItems = [
       "\\(3 \\times 10^{8}\\) m/s",
       "\\(3 \\times 10^{9}\\) m/s",
     ],
-    answer: "\\(3 \\times 10^8\\) m/s",
+    answer: "\\(3 \\times 10^{8}\\) m/s",
     explanation: "300,000 กิโลเมตร เท่ากับ 300,000,000 เมตร หรือ \\(3 \\times 10^{8}\\) เมตร",
     subCategory: { main: "POSN_Astronomy", specific: "การแปลงหน่วยและสัญลักษณ์ทางวิทยาศาสตร์" }
   },
