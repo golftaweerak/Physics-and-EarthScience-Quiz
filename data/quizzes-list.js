@@ -630,6 +630,17 @@ export const quizList = [
     "subCategory": "การเปลี่ยนแปลงภูมิอากาศ"
   },
   {
+    "id": "ess_basic/ess_basic_m6_ch9-3", 
+    "title": "การเปลี่ยนแปลงภูมิอากาศ (ชุดที่ 3)",
+    "amount": 30,
+    "description": "บทที่ 9: การเปลี่ยนแปลงภูมิอากาศ (ชุดที่ 3 - เน้นรายละเอียดเชิงลึกและการประยุกต์ใช้)",
+    "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_ch9-3",
+    "storageKey": "quizState-ess_basic_m6_ch9-3",
+    "icon": "./assets/icons/wind.png",
+    "category": "EarthSpaceScienceBasic",
+    "subCategory": "การเปลี่ยนแปลงภูมิอากาศ"
+  },
+  {
     "id": "ess_basic/ess_basic_m6_ch6-1",
     "title": "การแปรสัณฐานของแผ่นธรณี (เน้นการวิเคราะห์และเชื่อมโยง)",
     "amount": 30,
