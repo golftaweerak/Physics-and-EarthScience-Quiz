@@ -32,7 +32,7 @@ export const quizList = [
     "category": "PhysicsM4",
     "subCategory": "บทที่ 7: การเคลื่อนที่แนวโค้ง"
   },
-    {
+  {
     "id": "phy_m4/phy_m4_ch7-4",
     "title": "การเคลื่อนที่แนวโค้ง (ชุดที่ 4)",
     "amount": 30,
@@ -630,7 +630,7 @@ export const quizList = [
     "subCategory": "การเปลี่ยนแปลงภูมิอากาศ"
   },
   {
-    "id": "ess_basic/ess_basic_m6_ch9-3", 
+    "id": "ess_basic/ess_basic_m6_ch9-3",
     "title": "การเปลี่ยนแปลงภูมิอากาศ (ชุดที่ 3)",
     "amount": 30,
     "description": "บทที่ 9: การเปลี่ยนแปลงภูมิอากาศ (ชุดที่ 3 - เน้นรายละเอียดเชิงลึกและการประยุกต์ใช้)",
@@ -1009,6 +1009,42 @@ export const quizList = [
     "storageKey": "quizState-ess_basic_m6_mid2-review-4",
     "icon": "./assets/icons/earth.png",
     "altText": "ไอคอนสำหรับ ess_basic_m6_mid2-review-4",
+    "category": "EarthSpaceScienceBasic",
+    "subCategory": "แนวข้อสอบ"
+  },
+  {
+    "id": "ess_basic/ess_basic_m6_final2-review-1",
+    "title": "แนวข้อสอบปลายภาค เทอม 2 ชุดที่ 1",
+    "amount": 60,
+    "description": "แนวข้อสอบปลายภาค เทอม 2 ชุดที่ 1",
+    "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_final2-review-1",
+    "storageKey": "quizState-ess_basic_m6_final2-review-1",
+    "icon": "./assets/icons/earth.png",
+    "altText": "ไอคอนสำหรับ ess_basic_m6_final2-review-1",
+    "category": "EarthSpaceScienceBasic",
+    "subCategory": "แนวข้อสอบ"
+  },
+  {
+    "id": "ess_basic/ess_basic_m6_final2-review-2",
+    "title": "แนวข้อสอบปลายภาค เทอม 2 ชุดที่ 2",
+    "amount": 60,
+    "description": "แนวข้อสอบปลายภาค เทอม 2 ชุดที่ 2 (เน้นการวิเคราะห์และเชื่อมโยง)",
+    "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_final2-review-2",
+    "storageKey": "quizState-ess_basic_m6_final2-review-2",
+    "icon": "./assets/icons/earth.png",
+    "altText": "ไอคอนสำหรับ ess_basic_m6_final2-review-2",
+    "category": "EarthSpaceScienceBasic",
+    "subCategory": "แนวข้อสอบ"
+  },
+  {
+    "id": "ess_basic/ess_basic_m6_final2-review-3",
+    "title": "แนวข้อสอบปลายภาค เทอม 2 ชุดที่ 3",
+    "amount": 60,
+    "description": "แนวข้อสอบปลายภาค เทอม 2 ชุดที่ 3 (เน้นการวิเคราะห์สถานการณ์ใหม่)",
+    "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_final2-review-3",
+    "storageKey": "quizState-ess_basic_m6_final2-review-3",
+    "icon": "./assets/icons/earth.png",
+    "altText": "ไอคอนสำหรับ ess_basic_m6_final2-review-3",
     "category": "EarthSpaceScienceBasic",
     "subCategory": "แนวข้อสอบ"
   },
