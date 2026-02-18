@@ -312,6 +312,15 @@ export function initializePage() {
       const iconBgClass = `bg-${colorName}-100 dark:bg-${colorName}-900/30`;
       const titleHoverClass = `group-hover:text-${colorName}-600 dark:group-hover:text-${colorName}-300`;
 
+      // Generate Badges based on title keywords
+      const badges = [];
+      if (quiz.title.includes('กลางภาค')) badges.push({ text: 'กลางภาค', color: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-200 border-yellow-200 dark:border-yellow-800' });
+      if (quiz.title.includes('ปลายภาค')) badges.push({ text: 'ปลายภาค', color: 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-200 border-red-200 dark:border-red-800' });
+      if (quiz.title.includes('เทอม 1') || quiz.title.includes('ภาค 1')) badges.push({ text: 'เทอม 1', color: 'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-200 border-blue-200 dark:border-blue-800' });
+      if (quiz.title.includes('เทอม 2') || quiz.title.includes('ภาค 2')) badges.push({ text: 'เทอม 2', color: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/40 dark:text-indigo-200 border-indigo-200 dark:border-indigo-800' });
+
+      const badgesHTML = badges.length > 0 ? `<div class="flex flex-wrap gap-1 mt-1.5 mb-0.5">${badges.map(b => `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium border ${b.color}">${b.text}</span>`).join('')}</div>` : '';
+
       card.innerHTML = `
        <div class="flex-grow flex items-start gap-4">
          <div class="shrink-0 h-12 w-12 rounded-lg flex items-center justify-center ${iconBgClass} p-2 transition-all duration-300 group-hover:shadow-lg group-hover:shadow-${colorName}-500/20 overflow-hidden" 
@@ -322,9 +331,10 @@ export function initializePage() {
          </div>
          
          <div class="flex-grow min-w-0 overflow-hidden">
-           <h3 class="text-base font-bold text-gray-800 dark:text-gray-100 font-kanit leading-tight transition-colors ${titleHoverClass} truncate">
+           <h3 class="text-base font-bold text-gray-800 dark:text-gray-100 font-kanit leading-tight transition-colors ${titleHoverClass} line-clamp-2" title="${quiz.title}">
              ${quiz.title}
            </h3>
+           ${badgesHTML}
            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">จำนวน ${totalQuestions} ข้อ</p>
          </div>
        </div>

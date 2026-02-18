@@ -871,7 +871,7 @@ export const quizList = [
   },
   {
     "id": "ess_basic/ess_basic_m6_ch4-1",
-    "title": "เทคโนโลยีอวกาศ",
+    "title": "เทคโนโลยีอวกาศ ชุดที่ 1",
     "amount": 30,
     "description": "บทที่ 4: เทคโนโลยีอวกาศ",
     "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_ch4-1",
@@ -883,7 +883,7 @@ export const quizList = [
   },
   {
     "id": "ess_basic/ess_basic_m6_ch4-2",
-    "title": "เทคโนโลยีอวกาศ",
+    "title": "เทคโนโลยีอวกาศ ชุดที่ 2",
     "amount": 40,
     "description": "บทที่ 4: เทคโนโลยีอวกาศ (เน้นประวัติศาสตร์และไทม์ไลน์การสำรวจอวกาศ)",
     "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_ch4-2",
