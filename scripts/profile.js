@@ -1,4 +1,17 @@
-import { Gamification, BADGES, ACHIEVEMENTS, SHOP_ITEMS, XP_THRESHOLDS, TRACK_TITLES, PROFICIENCY_GROUPS, getLevelBorderClass, getAvatarFrameClass, THEME_DEFINITIONS } from './gamification.js';
+import {
+    Gamification,
+    initializeGamification,
+    getAvatarFrameClass,
+    getLevelBorderClass,
+    PROFICIENCY_GROUPS,
+    TRACK_TITLES,
+    BADGES, // Imported for profile display
+    ACHIEVEMENTS,
+    SHOP_ITEMS, // Imported for shop display
+    XP_THRESHOLDS,
+    THEME_DEFINITIONS
+} from './gamification.js';
+import { openProfileModal } from './profile-modal.js';
 import { getDetailedProgressForAllQuizzes, calculateStrengthsAndWeaknesses } from './data-manager.js';
 import { renderDailyQuests } from './daily-quests-renderer.js';
 import { ModalHandler } from './modal-handler.js';
@@ -910,7 +923,7 @@ function setupLeaderboardSystem(game) {
                 `;
 
                 return `
-                    <div class="flex items-center gap-2 sm:gap-4 p-2 sm:p-3 rounded-lg ${isMe ? 'bg-blue-50 border border-blue-200 dark:bg-blue-900/20 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-900/30 hover:shadow-md hover:scale-[1.02] z-10 relative' : 'hover:bg-gray-50 dark:hover:bg-gray-700/30'} transition-all duration-200">
+                    <div onclick="window.openProfileModal(this)" data-user='${JSON.stringify(user).replace(/'/g, "&#39;")}' class="cursor-pointer flex items-center gap-2 sm:gap-4 p-2 sm:p-3 rounded-lg ${isMe ? 'bg-blue-50 border border-blue-200 dark:bg-blue-900/20 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-900/30 hover:shadow-md hover:scale-[1.02] z-10 relative' : 'hover:bg-gray-50 dark:hover:bg-gray-700/30'} transition-all duration-200">
                         <div class="flex items-center justify-center w-6 sm:w-8 flex-shrink-0">
                             ${rankDisplay}
                         </div>
@@ -935,6 +948,14 @@ function setupLeaderboardSystem(game) {
                         </div>
                     </div>
                 `;
+            };
+
+            // Expose function globally for the onclick handler (since modules capture scope)
+            window.openProfileModal = (element) => {
+                try {
+                    const userData = JSON.parse(element.dataset.user);
+                    openProfileModal(userData);
+                } catch (e) { console.error("Error opening profile", e); }
             };
 
             let listHtml = leaderboard.map((user, index) => renderRow(user, index + 1, user.id === currentUserId)).join('');

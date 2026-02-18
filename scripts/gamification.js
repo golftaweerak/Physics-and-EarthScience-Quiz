@@ -12,6 +12,7 @@ import {
     XP_THRESHOLDS,
     THEME_DEFINITIONS
 } from '../data/gamification-registry.js';
+import { quizList } from '../data/quizzes-list.js'; // Import quizList for metadata lookup
 export { BADGES, DAILY_QUESTS, ACHIEVEMENTS, SHOP_ITEMS, XP_THRESHOLDS, THEME_DEFINITIONS };
 
 // ชื่อยศสำหรับแต่ละสาย (Titles)
@@ -86,6 +87,7 @@ export class Gamification {
             this.state.activeQuests = this.generateDailyQuests();
             this.state.rerolls = 3;
             this.state.lastQuestDate = today;
+            this.state.dailyQuizCount = 0; // Reset daily quiz count
             this.state.dailyQuest = null; // Clear legacy quest data if any
         }
 
@@ -279,7 +281,11 @@ export class Gamification {
             theoryXP: 0, // NEW: สะสม XP จากข้อทฤษฎี
             calculationXP: 0, // NEW: สะสม XP จากข้อคำนวณ
             itemUsageCount: 0, // NEW: จำนวนครั้งที่ใช้ไอเทม
-            lastQuizTime: null // NEW: เก็บเวลาที่ทำชุดโจทย์ล่าสุด
+            theoryXP: 0, // NEW: สะสม XP จากข้อทฤษฎี
+            calculationXP: 0, // NEW: สะสม XP จากข้อคำนวณ
+            itemUsageCount: 0, // NEW: จำนวนครั้งที่ใช้ไอเทม
+            lastQuizTime: null, // NEW: เก็บเวลาที่ทำชุดโจทย์ล่าสุด
+            totalQuestionsAnswered: 0 // NEW: Track total questions for accuracy calc
         };
 
         // Dynamic Categories
@@ -576,10 +582,14 @@ export class Gamification {
         // Otherwise keep existing.
         this.state.generalXP = Math.max(this.state.generalXP || 0, generalQuizXP);
 
+
         // Apply calculated topic XPs (Math.max)
         for (const [field, xp] of Object.entries(topicXPs)) {
             this.state[field] = Math.max(this.state[field] || 0, xp);
         }
+
+        // Save calculated total questions
+        this.state.totalQuestionsAnswered = Math.max(this.state.totalQuestionsAnswered || 0, totalQuestionsAnswered);
 
         // ตรวจสอบและปลดล็อกเหรียญรางวัลจากข้อมูลเก่าทันที
         this.checkBadges(0);
@@ -1350,6 +1360,9 @@ export class Gamification {
     // นี่คือฟังก์ชันหลักที่ quiz-logic.js เรียกใช้เมื่อส่งคำตอบ
     // จัดการทั้ง XP, สถิติรายข้อ, และการปลดล็อก Badge/Achievement ในที่เดียว
     submitQuizResult(totalXP, percentage, questionCount, isCustomQuiz, topicXPs = {}, questStats = {}) {
+        // Increment daily quiz count
+        this.state.dailyQuizCount = (this.state.dailyQuizCount || 0) + 1;
+
         // FIX: ป้องกันการส่งคะแนนซ้ำ (Debounce / Idempotency Check)
         // ตรวจสอบว่า Quiz ID นี้เพิ่งถูกประมวลผลไปเมื่อไม่นานมานี้หรือไม่ (< 5 วินาที)
         const now = Date.now();
@@ -1413,6 +1426,7 @@ export class Gamification {
 
         // --- NEW: Bonus XP for every 20 questions answered ---
         const qCount = questionCount || 0;
+        this.state.totalQuestionsAnswered = (this.state.totalQuestionsAnswered || 0) + qCount; // Track total questions
         this.state.accumulatedQuestionsForBonus = (this.state.accumulatedQuestionsForBonus || 0) + qCount;
         const bonusStep = 20;
         const bonusXPPerStep = 20; // แจก 20 XP ทุกๆ 20 ข้อ
@@ -1464,9 +1478,9 @@ export class Gamification {
 
         this.updateLevel();
 
-        // Check for new badges and achievements.
-        // OPTIMIZATION: checkBadges no longer saves state internally.
-        const newBadges = this.checkBadges(percentage, questionCount, isCustomQuiz);
+        // Check Badges & Achievements
+        // Pass quizId from questStats to checkBadges
+        const newBadges = this.checkBadges(percentage, questionCount, isCustomQuiz, questStats.quizId);
         const newAchievements = this.checkAchievements();
 
         // DEBUG: Debug Quest Update
@@ -1723,8 +1737,17 @@ export class Gamification {
 
     // ฟังก์ชันตรวจสอบและปลดล็อก Badge
     // Logic: ตรวจสอบเงื่อนไขต่างๆ และมอบเหรียญรางวัลหากยังไม่เคยได้รับ
-    checkBadges(lastQuizScorePercent, questionCount = 0, isCustomQuiz = false) {
+    checkBadges(lastQuizScorePercent, questionCount = 0, isCustomQuiz = false, quizId = null) {
         const newBadges = [];
+
+        // Lookup Quiz Metadata
+        const quiz = quizId ? quizList.find(q => q.id === quizId) : null;
+        // Check if it's an "Exam" type quiz (Practice Exam)
+        const isExam = quiz && (
+            (quiz.subCategory && quiz.subCategory.includes('แนวข้อสอบ')) ||
+            (quiz.title && quiz.title.includes('แนวข้อสอบ')) ||
+            (quiz.category && quiz.category.includes('Exam'))
+        );
 
         const unlock = (badgeId) => {
             if (!this.state.badges.includes(badgeId)) {
@@ -1817,6 +1840,31 @@ export class Gamification {
             const hour = date.getHours();
             if (hour >= 0 && hour < 5) unlock('night_owl');
             if (hour >= 5 && hour < 8) unlock('early_bird');
+        }
+
+        // Exam Prep Badges (Based on current month AND isExam flag)
+        const currentMonth = new Date().getMonth(); // 0 = Jan, 11 = Dec
+
+        if (isExam) {
+            // Midterm: July(6), Aug(7), Dec(11), Jan(0)
+            if ([0, 6, 7, 11].includes(currentMonth)) {
+                unlock('midterm_prep');
+            }
+
+            // Final: Feb(1), Mar(2), Sep(8), Oct(9)
+            if ([1, 2, 8, 9].includes(currentMonth)) {
+                unlock('final_prep');
+            }
+
+            // Exam Ace: Score >= 80% on Exam
+            if (lastQuizScorePercent >= 80) {
+                unlock('exam_ace');
+            }
+        }
+
+        // Hard Worker: 5 quizzes in a day
+        if ((this.state.dailyQuizCount || 0) >= 5) {
+            unlock('hard_worker');
         }
 
         // Speed Badge (Simplified check: if perfect score on non-custom quiz with sufficient questions, assume speed if we had data,

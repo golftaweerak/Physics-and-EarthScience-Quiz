@@ -2,6 +2,7 @@ import { authManager } from './auth-manager.js';
 import { db } from './firebase-config.js';
 import { collection, query, orderBy, limit, getDocs, where, getCountFromServer } from "firebase/firestore";
 import { XP_THRESHOLDS, TRACK_TITLES, PROFICIENCY_GROUPS, getLevelBorderClass, getAvatarFrameClass } from './gamification.js';
+import { openProfileModal } from './profile-modal.js';
 
 function getLevelInfoForLeaderboard(xp, type) {
     let track = 'overall';
@@ -215,7 +216,7 @@ export async function initializeLeaderboard() {
                 `;
 
                 return `
-                    <div class="flex items-center gap-4 p-3 rounded-xl ${isMe ? 'bg-blue-50 border-2 border-blue-200 dark:bg-blue-900/30 dark:border-blue-700 shadow-lg scale-[1.01] z-10 relative' : 'bg-white dark:bg-gray-800/60 border border-gray-200 dark:border-gray-700/80 hover:bg-gray-50 dark:hover:bg-gray-700/60'} transition-all duration-200">
+                    <div onclick="window.openProfileModal(this)" data-user='${JSON.stringify(user).replace(/'/g, "&#39;")}' class="cursor-pointer flex items-center gap-4 p-3 rounded-xl ${isMe ? 'bg-blue-50 border-2 border-blue-200 dark:bg-blue-900/30 dark:border-blue-700 shadow-lg scale-[1.01] z-10 relative' : 'bg-white dark:bg-gray-800/60 border border-gray-200 dark:border-gray-700/80 hover:bg-gray-50 dark:hover:bg-gray-700/60'} transition-all duration-200">
                         <div class="flex-shrink-0">${rankDisplay}</div>
                         <div class="flex-shrink-0">${avatarHtml}</div>
                         <div class="flex-grow min-w-0 flex flex-col justify-center">
@@ -236,6 +237,14 @@ export async function initializeLeaderboard() {
                         </div>
                     </div>
                 `;
+            };
+
+            // Expose function globally for the onclick handler
+            window.openProfileModal = (element) => {
+                try {
+                    const userData = JSON.parse(element.dataset.user);
+                    openProfileModal(userData);
+                } catch (e) { console.error("Error opening profile", e); }
             };
 
             let listHtml = leaderboard.map((user, index) => renderRow(user, index + 1, user.id === currentUserId)).join('');

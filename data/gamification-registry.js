@@ -62,7 +62,15 @@ export const BADGES = [
   { id: 'night_owl', icon: '🦉', name: 'นกฮูกราตรี', desc: 'ทำแบบทดสอบในช่วงเวลา 00:00 - 05:00', tier: 'silver' },
   { id: 'early_bird', icon: '🌅', name: 'นกเช้าตรู่', desc: 'ทำแบบทดสอบในช่วงเวลา 05:00 - 08:00', tier: 'silver' },
   { id: 'speed_runner', icon: '⚡', name: 'เสือปืนไว', desc: 'ตอบถูก 5 ข้อติดต่อกันโดยใช้เวลาน้อยกว่า 30 วินาที', tier: 'gold' },
-  { id: 'item_user_10', icon: '🧪', name: 'นักทดลองไอเทม', desc: 'ใช้ไอเทมช่วยเหลือครบ 10 ครั้ง', tier: 'silver' }
+  { id: 'item_user_10', icon: '🧪', name: 'นักทดลองไอเทม', desc: 'ใช้ไอเทมช่วยเหลือครบ 10 ครั้ง', tier: 'silver' },
+
+  // Exam Prep Badges
+  { id: 'midterm_prep', icon: '📝', name: 'เตรียมสอบกลางภาค', desc: 'ทำแบบทดสอบ "แนวข้อสอบ" ในช่วงเตรียมสอบกลางภาค (ธ.ค.-ม.ค. หรือ ก.ค.-ส.ค.)', tier: 'bronze' },
+  { id: 'final_prep', icon: '🏁', name: 'เตรียมสอบปลายภาค', desc: 'ทำแบบทดสอบ "แนวข้อสอบ" ในช่วงเตรียมสอบปลายภาค (ก.พ.-มี.ค. หรือ ก.ย.-ต.ค.)', tier: 'silver' },
+
+  // New Badges
+  { id: 'exam_ace', icon: '🎓', name: 'เซียนสนามสอบ', desc: 'ได้คะแนน 80% ขึ้นไปในชุด "แนวข้อสอบ"', tier: 'gold' },
+  { id: 'hard_worker', icon: '🔥', name: 'ขยันหมั่นเพียร', desc: 'ทำแบบทดสอบครบ 5 ชุดใน 1 วัน', tier: 'silver' }
 ];
 
 export const DAILY_QUESTS = [
