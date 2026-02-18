@@ -3,6 +3,8 @@ import { getSavedCustomQuizzes } from './custom-quiz-handler.js';
 import { db } from './firebase-config.js';
 import { doc, getDoc } from "firebase/firestore";
 import { getDataModules } from './quiz-data-loader.js';
+import { fetchAllQuizData } from './data-manager.js';
+import { SiteConfig } from './site-config.js';
 
 /**
  * Populates the common elements of the quiz page (titles, descriptions).
@@ -141,6 +143,74 @@ export async function initializeQuiz() {
         // Pass finalTimerMode to init
         initQuizApp(customQuizData.questions, customQuizData.storageKey, customQuizData.title, finalCustomTime, action, false, lives, finalTimerMode);
         return;
+    }
+
+    // --- NEW: Handle Smart Focus Mode ---
+    const mode = urlParams.get('mode');
+    if (mode === 'smart_focus' || (mode === 'custom' && urlParams.get('topic'))) {
+        const topicKey = urlParams.get('topic');
+        if (!topicKey) {
+            handleQuizError("ไม่พบหัวข้อ", "ไม่พบข้อมูลหัวข้อสำหรับการฝึกฝน");
+            return;
+        }
+
+        try {
+            populatePage("Smart Focus", "กำลังค้นหาโจทย์ที่เหมาะกับคุณ...");
+
+            // 1. Get Keywords for this Topic from SiteConfig
+            let keywords = [];
+            let topicLabel = topicKey;
+
+            // Check if it's a proficiency group
+            if (SiteConfig.proficiencyGroups && SiteConfig.proficiencyGroups[topicKey]) {
+                const group = SiteConfig.proficiencyGroups[topicKey];
+                keywords = group.keywords || [];
+                topicLabel = group.label || topicKey;
+            } else {
+                // Fallback: Use the key itself as a keyword
+                keywords = [topicKey];
+            }
+
+            // 2. Fetch All Data
+            // We use the data-manager's fetchAllQuizData which caches results
+            const { allQuestions } = await fetchAllQuizData();
+
+            // 3. Filter Questions
+            // Logic similar to what might be used in a search, but stricter or broader as needed
+            const filteredQuestions = allQuestions.filter(q => {
+                if (!q.searchableText) return false;
+                // Check if ANY keyword matches
+                return keywords.some(k => q.searchableText.includes(k.toLowerCase()));
+            });
+
+            console.log(`[Smart Focus] Topic: "${topicLabel}" (${topicKey})`);
+            console.log(`[Smart Focus] Keywords:`, keywords);
+            console.log(`[Smart Focus] Found ${filteredQuestions.length} matching questions.`);
+
+            if (filteredQuestions.length === 0) {
+                handleQuizError("ไม่พบโจทย์", `ไม่พบโจทย์ที่เกี่ยวกับ "${topicLabel}" ในขณะนี้`);
+                return;
+            }
+
+            // 4. Randomize and Limit (Optional: limit to 20 or 30 questions)
+            const rng = mulberry32(Date.now()); // Random seed
+            for (let i = filteredQuestions.length - 1; i > 0; i--) {
+                const j = Math.floor(rng() * (i + 1));
+                [filteredQuestions[i], filteredQuestions[j]] = [filteredQuestions[j], filteredQuestions[i]];
+            }
+
+            const selectedQuestions = filteredQuestions.slice(0, 30); // Limit to 30 items for focus
+
+            populatePage(`Smart Focus: ${topicLabel}`, `แบบฝึกหัดเน้นจุดอ่อนของคุณในเรื่อง "${topicLabel}" จำนวน ${selectedQuestions.length} ข้อ`);
+
+            initQuizApp(selectedQuestions, `quizState-smartfocus-${topicKey}`, `Smart Focus: ${topicLabel}`, null, action, true, 1, 'none');
+            return;
+
+        } catch (error) {
+            console.error("Smart Focus Error:", error);
+            handleQuizError("เกิดข้อผิดพลาด", "ไม่สามารถสร้างแบบฝึกฝน Smart Focus ได้");
+            return;
+        }
     }
 
     // --- NEW: Handle Random Quiz (for Challenge Mode) ---
