@@ -2173,10 +2173,14 @@ function updateSmartFocus(stats, track) {
 
     focusBtn.onclick = () => {
         // Logic to redirect to a quiz or search for this topic
-        // For now, let's use a toast as feedback and potentially redirect to custom quiz with pre-filled topic
+        // Use weakest[0] which is the key (e.g., 'Mechanics'), not the label
+        const topicKey = weakest[0];
+
         showToast('Smart Focus', `กำลังเตรียมตะลุยโจทย์: ${weakest[1].label}`, '🔥');
         setTimeout(() => {
-            window.location.href = `quiz.html?mode=custom&topic=${encodeURIComponent(weakest[1].label)}`;
+            // Changed to mode=smart_focus to distinguish from generic custom quizzes
+            // Point to the quiz directory correctly
+            window.location.href = `quiz/index.html?mode=smart_focus&topic=${encodeURIComponent(topicKey)}`;
         }, 1000);
     };
 }

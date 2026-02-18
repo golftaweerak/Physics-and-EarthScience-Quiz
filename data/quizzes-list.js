@@ -33,6 +33,7 @@ export const quizList = [
     "subCategory": "บทที่ 7: การเคลื่อนที่แนวโค้ง"
   },
   {
+  {
     "id": "phy_m4/phy_m4_ch7-4",
     "title": "การเคลื่อนที่แนวโค้ง (ชุดที่ 4)",
     "amount": 30,
@@ -678,6 +679,7 @@ export const quizList = [
     "subCategory": "การเปลี่ยนแปลงภูมิอากาศ"
   },
   {
+    "id": "ess_basic/ess_basic_m6_ch9-3",
     "id": "ess_basic/ess_basic_m6_ch9-3",
     "title": "การเปลี่ยนแปลงภูมิอากาศ (ชุดที่ 3)",
     "amount": 30,
