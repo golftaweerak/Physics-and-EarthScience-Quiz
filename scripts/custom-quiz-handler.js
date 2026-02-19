@@ -1070,6 +1070,43 @@ export function initializeCustomQuizHandler() {
                 }
             }
 
+            // --- FIX: Move "บทที่ 8" (Final Exam) from M.4 to M.5 ---
+            // Because some M.4 Final Exams contain M.5 content (Chapter 8), users requested this content be moved to M.5
+            if (groupedQuestions['PhysicsM4']) {
+                const m4Root = groupedQuestions['PhysicsM4'];
+                if (!groupedQuestions['PhysicsM5']) groupedQuestions['PhysicsM5'] = {};
+                const m5Root = groupedQuestions['PhysicsM5'];
+
+                Object.keys(m4Root).forEach(chapterKey => {
+                    // Check if the chapter key starts with "บทที่ 8" (Chapter 8)
+                    // Or if it explicitly mentions "Final" or "ปลายภาค" and contains Chapter 8 content text
+                    if (chapterKey.startsWith('บทที่ 8') || chapterKey.includes('ปลายภาค')) {
+                        console.log(`[FIX] Moving "${chapterKey}" from PhysicsM4 to PhysicsM5`);
+
+                        // Move logic: merge if exists, else assign
+                        if (!m5Root[chapterKey]) {
+                            m5Root[chapterKey] = m4Root[chapterKey];
+                        } else {
+                            const target = m5Root[chapterKey];
+                            const source = m4Root[chapterKey];
+
+                            // Merge topics within the chapter
+                            Object.keys(source).forEach(topic => {
+                                if (!target[topic]) {
+                                    target[topic] = source[topic];
+                                } else {
+                                    target[topic].theory.push(...source[topic].theory);
+                                    target[topic].calculation.push(...source[topic].calculation);
+                                }
+                            });
+                        }
+
+                        // Remove from M.4
+                        delete m4Root[chapterKey];
+                    }
+                });
+            }
+
             console.log(`[DEBUG] buildAndShowCreationModal: groupedQuestions built for ${Object.keys(groupedQuestions).length} subjects`);
 
             let categoryHTML = '';
