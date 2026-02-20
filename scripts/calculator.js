@@ -505,6 +505,9 @@ export class ScientificCalculator {
 
   // Helper to safely insert text into MathField
   insert(text) {
+    if (!this.mf) {
+        this.mf = this.container.querySelector('#calc-math-field');
+    }
     if (!this.mf) return;
 
     if (typeof this.mf.executeCommand === 'function') {
@@ -518,23 +521,41 @@ export class ScientificCalculator {
       return;
     }
 
+    // Fallback: If MathLive is not ready, append to innerText so user sees something
+    // and MathLive can parse it when it eventually initializes.
+    // We try to map complex LaTeX to simple text for readability in fallback mode.
+    let fallbackText = text;
+    if (text.includes('\\frac')) fallbackText = '/'; // Keep / for fractions to indicate division clearly or use '÷'? / is better for fractions
+    else if (text.includes('\\sqrt')) fallbackText = '√(';
+    else if (text.includes('\\times')) fallbackText = '×';
+    else if (text.includes('\\div')) fallbackText = '÷';
+    else if (text.includes('\\sin')) fallbackText = 'sin(';
+    else if (text.includes('\\cos')) fallbackText = 'cos(';
+    else if (text.includes('\\tan')) fallbackText = 'tan(';
+    else if (text.includes('\\log')) fallbackText = 'log(';
+    else if (text.includes('\\ln')) fallbackText = 'ln(';
+    else if (text.includes('\\pi')) fallbackText = 'pi';
+    else if (text.includes('^')) fallbackText = '^';
+    
+    // Remove other latex command chars if any
+    if (fallbackText.startsWith('\\')) fallbackText = fallbackText.replace(/\\/g, '');
+
+    this.mf.innerText += fallbackText;
+
     // Fallback: Wait for upgrade
     if (window.customElements) {
       console.debug("MathField not ready. Waiting for upgrade...");
       customElements.whenDefined('math-field').then(() => {
         // Re-check element reference or method availability
         if (typeof this.mf.executeCommand === 'function') {
-           this.mf.executeCommand(['insert', text]);
-        } else if (typeof this.mf.insert === 'function') {
-           this.mf.insert(text);
+           // If we appended text manually, MathLive might have already parsed it during upgrade.
+           // So we don't re-insert here to avoid duplication.
+           // Just ensure we have the correct reference.
         } else {
            // Try to re-query in case of DOM issues
            const newMf = this.container.querySelector('#calc-math-field');
            if (newMf && typeof newMf.executeCommand === 'function') {
              this.mf = newMf;
-             this.mf.executeCommand(['insert', text]);
-           } else {
-             console.error("MathField upgraded but executeCommand still missing on:", this.mf);
            }
         }
       });
@@ -555,7 +576,10 @@ export class ScientificCalculator {
       }
       // Load history
       const item = this.history[this.historyIndex];
-      if (this.mf) this.mf.value = item.expr;
+      if (this.mf) {
+          if (this.mf.setValue) this.mf.setValue(item.expr);
+          else { this.mf.value = item.expr; this.mf.innerText = item.expr; }
+      }
       this.currentResult = item.result; // Temporarily show result too?
       return;
     }
@@ -564,7 +588,10 @@ export class ScientificCalculator {
       if (this.historyIndex < this.history.length - 1) {
         this.historyIndex++;
         const item = this.history[this.historyIndex];
-        if (this.mf) this.mf.value = item.expr;
+        if (this.mf) {
+            if (this.mf.setValue) this.mf.setValue(item.expr);
+            else { this.mf.value = item.expr; this.mf.innerText = item.expr; }
+        }
         this.currentResult = item.result;
       } else {
         // Return to new empty/current input?
@@ -629,10 +656,16 @@ export class ScientificCalculator {
 
     // Auto-clear or keep Ans based on previous result
     if (this.currentResult !== null && ['+', '-', '*', '/', '^', 'pow', 'sqr'].includes(val)) {
-      if (this.mf) this.mf.setValue('{\\text{Ans}}');
+      if (this.mf) {
+          if (this.mf.setValue) this.mf.setValue('{\\text{Ans}}');
+          else { this.mf.value = '{\\text{Ans}}'; this.mf.innerText = 'Ans'; }
+      }
       this.currentResult = null;
     } else if (this.currentResult !== null && !['=', 'DEL', 'sd', 'eng', 'sto', 'UP', 'DOWN'].includes(val)) {
-      if (this.mf) this.mf.setValue('');
+      if (this.mf) {
+          if (this.mf.setValue) this.mf.setValue('');
+          else { this.mf.value = ''; this.mf.innerText = ''; }
+      }
       this.currentResult = null;
     }
 
@@ -645,9 +678,12 @@ export class ScientificCalculator {
           if (typeof this.mf.executeCommand === 'function') {
              this.mf.executeCommand('deleteBackward');
           } else {
-             // Try waiting for upgrade for delete too?
-             // Or just ignore for now as it's less critical than insert
-             this.deleteLast();
+             // Fallback for not upgraded element
+             if (this.mf.innerText && this.mf.innerText.length > 0) {
+                 this.mf.innerText = this.mf.innerText.slice(0, -1);
+             } else {
+                 this.deleteLast();
+             }
           }
         } else {
           this.deleteLast();
@@ -753,7 +789,10 @@ export class ScientificCalculator {
 
   clear() {
     this.rawExpression = '';
-    if (this.mf) this.mf.value = '';
+    if (this.mf) {
+        this.mf.value = '';
+        this.mf.innerText = ''; // Clear fallback text
+    }
     this.currentResult = null;
     this.historyIndex = -1; // Reset history pointer
     this.resultArea.innerHTML = '';
@@ -787,8 +826,10 @@ export class ScientificCalculator {
 
     // Operators
     expr = expr.replace(/\\times/g, '*');
+    expr = expr.replace(/×/g, '*');
     expr = expr.replace(/\\cdot/g, '*');
     expr = expr.replace(/\\div/g, '/');
+    expr = expr.replace(/÷/g, '/');
     expr = expr.replace(/\\pi/g, 'pi');
     expr = expr.replace(/\\text\{Ans\}/g, this.currentResult || 0);
 
@@ -809,6 +850,7 @@ export class ScientificCalculator {
     // Roots
     expr = expr.replace(/\\sqrt\[([^\]]+)\]{([^{}]+)}/g, 'nthRoot($2, $1)');
     expr = expr.replace(/\\sqrt{([^{}]+)}/g, 'sqrt($1)');
+    expr = expr.replace(/√/g, 'sqrt');
 
     // Logs
     expr = expr.replace(/\\log_\{10\}\\left\(([^)]+)\\right\)/g, 'log10($1)');
@@ -817,26 +859,23 @@ export class ScientificCalculator {
     expr = expr.replace(/\\ln\(([^)]+)\)/g, 'log($1)');
 
     // Degree conversion for Trig
-    const PI = 3.141592653589793;
-    if (this.isDegreeMode) {
-      expr = expr.replace(/\\sin\(([^)]+?)(?:\\circ)?\)/g, `sin(($1) * ${PI} / 180)`);
-      expr = expr.replace(/\\cos\(([^)]+?)(?:\\circ)?\)/g, `cos(($1) * ${PI} / 180)`);
-      expr = expr.replace(/\\tan\(([^)]+?)(?:\\circ)?\)/g, `tan(($1) * ${PI} / 180)`);
-
-      expr = expr.replace(/\\arcsin\(([^)]+?)\)/g, `(asin($1) * 180 / ${PI})`);
-      expr = expr.replace(/\\arccos\(([^)]+?)\)/g, `(acos($1) * 180 / ${PI})`);
-      expr = expr.replace(/\\arctan\(([^)]+?)\)/g, `(atan($1) * 180 / ${PI})`);
-    } else {
-      expr = expr.replace(/\\sin/g, 'sin');
-      expr = expr.replace(/\\cos/g, 'cos');
-      expr = expr.replace(/\\tan/g, 'tan');
-      expr = expr.replace(/\\arcsin/g, 'asin');
-      expr = expr.replace(/\\arccos/g, 'acos');
-      expr = expr.replace(/\\arctan/g, 'atan');
-    }
+    // We now handle unit conversion in the evaluate scope, so we just normalize names here.
+    expr = expr.replace(/\\sin/g, 'sin');
+    expr = expr.replace(/\\cos/g, 'cos');
+    expr = expr.replace(/\\tan/g, 'tan');
+    expr = expr.replace(/\\arcsin/g, 'asin');
+    expr = expr.replace(/\\arccos/g, 'acos');
+    expr = expr.replace(/\\arctan/g, 'atan');
 
     // Clean up leftover brackets { } from LaTeX
     expr = expr.replace(/\{/g, '(').replace(/\}/g, ')');
+
+    // Auto-balance parentheses to prevent syntax errors
+    const openCount = (expr.match(/\(/g) || []).length;
+    const closeCount = (expr.match(/\)/g) || []).length;
+    if (openCount > closeCount) {
+        expr += ')'.repeat(openCount - closeCount);
+    }
 
     // Manual degree symbol
     expr = expr.replace(/\^{\\circ}/g, 'deg');
@@ -882,7 +921,7 @@ export class ScientificCalculator {
 
   calculate() {
     try {
-      const latexExpr = this.mf ? (this.mf.value || '') : this.rawExpression;
+      const latexExpr = this.mf ? (this.mf.value || this.mf.innerText || '') : this.rawExpression;
       
       // If empty, do nothing or clear
       if (!latexExpr || latexExpr.trim() === '') {
@@ -894,7 +933,39 @@ export class ScientificCalculator {
       let expr = this.prepareExpression(latexExpr);
 
       // Variable scope
-      const scope = { ...this.variables, pi: Math.PI, e: Math.E };
+      const scope = { 
+        ...this.variables, 
+        pi: Math.PI, 
+        e: Math.E,
+        sin: (x) => {
+            // Check if x is a number? mathjs might pass BigNumber or Complex if configured, but here standard
+            if (this.isDegreeMode) return Math.sin(x * Math.PI / 180);
+            return Math.sin(x);
+        },
+        cos: (x) => {
+            if (this.isDegreeMode) return Math.cos(x * Math.PI / 180);
+            return Math.cos(x);
+        },
+        tan: (x) => {
+            if (this.isDegreeMode) return Math.tan(x * Math.PI / 180);
+            return Math.tan(x);
+        },
+        asin: (x) => {
+            const val = Math.asin(x);
+            if (this.isDegreeMode) return val * 180 / Math.PI;
+            return val;
+        },
+        acos: (x) => {
+            const val = Math.acos(x);
+            if (this.isDegreeMode) return val * 180 / Math.PI;
+            return val;
+        },
+        atan: (x) => {
+            const val = Math.atan(x);
+            if (this.isDegreeMode) return val * 180 / Math.PI;
+            return val;
+        }
+      };
 
       // Add custom functions to scope
       scope.derivative = (fnIdx, xVal) => {
@@ -913,6 +984,11 @@ export class ScientificCalculator {
 
       let res = math.evaluate(expr, scope);
       console.log("[DEBUG CALC]", { latex: latexExpr, expr, res });
+
+      // Handle incomplete expressions returning functions
+      if (typeof res === 'function') {
+        throw new Error("Result is a function (incomplete expression)");
+      }
 
       // Handle weird results (e.g. Complex numbers or units if they leak)
       if (res && res.toJSON) res = res.toNumber();
@@ -956,15 +1032,33 @@ export class ScientificCalculator {
     this.resultArea.innerHTML = '';
     let displayVal;
 
+    // Standard 991ES behavior: Prefer fractions/surds over decimals unless Shift+Eq or SD is used.
+    // For now, we auto-detect simple fractions.
+    
     if (this.engMode === 1) {
       displayVal = math.format(this.currentResult, { notation: 'engineering', precision: 10 });
-    } else if (this.resultFormat === 'fraction') {
-      try {
-        const f = math.fraction(this.currentResult);
-        displayVal = f.d === 1 ? f.n : `\\frac{${f.n}}{${f.d}}`;
-      } catch { displayVal = this.currentResult; }
+    } else if (this.resultFormat === 'decimal') {
+       // Explicit decimal requested via S<=>D
+       displayVal = math.format(this.currentResult, { precision: 10 });
     } else {
-      displayVal = math.format(this.currentResult, { precision: 10 });
+       // Auto/Fraction mode (Default)
+       let isSimple = false;
+       try {
+         // Check if it converts to a nice fraction
+         const f = math.fraction(this.currentResult);
+         // Limit denominator to reasonable size to avoid ugly huge fractions for irrational approx
+         if (f.d !== 1 && f.d < 10000) {
+            displayVal = `\\frac{${f.n}}{${f.d}}`;
+            isSimple = true;
+         } else if (f.d === 1) {
+            displayVal = f.n; // Integer
+            isSimple = true;
+         }
+       } catch (e) {}
+
+       if (!isSimple) {
+          displayVal = math.format(this.currentResult, { precision: 10 });
+       }
     }
 
     try { katex.render(displayVal.toString(), this.resultArea, { throwingOnError: false }); }

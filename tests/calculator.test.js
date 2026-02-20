@@ -97,6 +97,13 @@ describe('ScientificCalculator Integration Tests', () => {
       calculator.handleInput('=');
       expect(calculator.currentResult).toBeCloseTo(1, 10);
     });
+
+    it('should calculate sin(30) correctly with plain text input in Degree Mode', () => {
+      calculator.isDegreeMode = true;
+      calculator.mf.value = 'sin(30)';
+      calculator.calculate();
+      expect(calculator.currentResult).toBeCloseTo(0.5, 10);
+    });
   });
 
   describe('Shift and Alpha Modifiers', () => {
@@ -219,6 +226,23 @@ describe('ScientificCalculator Integration Tests', () => {
       // Go DOWN to history index 1 (2+2)
       calculator.handleInput('DOWN');
       expect(calculator.mf.value).toBe('2+2');
+    });
+  });
+
+  describe('UI Interactions', () => {
+    it('should insert = when CALC is pressed with ALPHA', () => {
+      calculator.toggleAlpha();
+      const calcBtn = calculator.container.querySelector('button[data-action="calc"]');
+      calcBtn.click();
+      expect(calculator.mf.value).toContain('=');
+      expect(calculator.isAlpha).toBe(false);
+    });
+
+    it('should clear display when ON is pressed', () => {
+      calculator.mf.value = '123';
+      const onBtn = calculator.container.querySelector('.on');
+      onBtn.click();
+      expect(calculator.mf.value).toBe('');
     });
   });
 });
