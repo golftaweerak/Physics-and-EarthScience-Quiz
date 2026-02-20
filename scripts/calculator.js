@@ -9,7 +9,6 @@ export class ScientificCalculator {
     this.display = null;
     this.history = [];
     this.isOpen = false;
-    this.history = []; // { expr: string, result: any }
     this.historyIndex = -1; // -1 = current (new), 0..N = historical item
     this.isDegreeMode = true; // Default to DEG
 
@@ -39,7 +38,7 @@ export class ScientificCalculator {
   init() {
     this.createUI();
     this.bindEvents();
-    this.renderDisplay();
+    // this.renderDisplay() is removed
   }
 
   createUI() {
@@ -73,20 +72,20 @@ export class ScientificCalculator {
 
             <!-- Display -->
             <div class="p-4 pb-2 bg-[#1a202c]">
-                <div class="bg-[#eef2f5] border-l-4 border-l-teal-500 rounded-md shadow-[inset_0_2px_4px_rgba(0,0,0,0.1)] p-3 min-h-[96px] flex flex-col justify-between relative overflow-hidden">
+                <div class="bg-[#9ea79c] border-2 border-gray-600 rounded shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)] p-2 min-h-[96px] flex flex-col justify-between relative overflow-hidden" style="font-family: 'Courier New', monospace;">
                    <!-- Status Indicators -->
-                   <div class="flex gap-1 text-[9px] font-extrabold tracking-tight h-3 text-gray-600">
-                        <span id="ind-shift" class="hidden text-[#a67c00]">S</span>
-                        <span id="ind-alpha" class="hidden text-[#c53030]">A</span>
-                        <span id="ind-sto" class="hidden text-blue-700">STO</span>
+                   <div class="flex gap-2 text-[10px] font-bold tracking-tight h-3 text-[#111827]">
+                        <span id="ind-shift" class="hidden">S</span>
+                        <span id="ind-alpha" class="hidden">A</span>
+                        <span id="ind-sto" class="hidden">STO</span>
                         <span id="ind-mode">D</span>
                    </div>
                    
-                   <!-- Expression -->
-                   <div id="calc-display-rendered" class="text-lg w-full text-left font-serif text-gray-900 overflow-x-auto whitespace-nowrap scrollbar-hide py-1"></div>
+                   <!-- Expression (MathLive) -->
+                   <math-field id="calc-math-field" class="block w-full h-full pt-4" style="background: transparent; border: none; font-size: 1.75rem; color: #111827; box-shadow: none; outline: none; --contains-highlight-background: transparent; --selection-background-color: #798b73;"></math-field>
                    
                    <!-- Result -->
-                   <div id="calc-result-area" class="text-right text-2xl font-semibold text-gray-800 h-9 overflow-hidden tracking-normal"></div>
+                   <div id="calc-result-area" class="text-right text-3xl font-bold text-[#111827] h-10 overflow-hidden tracking-normal"></div>
                 </div>
             </div>
 
@@ -100,17 +99,17 @@ export class ScientificCalculator {
                 <button class="c-btn on" data-action="on">ON</button>
 
                 <!-- Row 2 -->
-                <button class="c-btn sm" data-val="optn">OPTN</button>
+                <button class="c-btn sm opacity-0 pointer-events-none"></button>
                 <button class="c-btn sm" data-action="calc" data-shift="SOLVE" data-alpha="=">CALC</button>
-                <button class="c-btn sm" data-val="int" data-shift="derivative(">∫dx</button>
+                <button class="c-btn sm" data-val="int" data-shift="derivative(">∫■dx</button>
                 <button class="c-btn sm" data-val="x"><i class="font-serif italic">x</i></button>
-                <button class="c-btn sm" data-val="frac"><span class="flex flex-col items-center leading-none text-[10px]"><span>■</span><span class="border-t border-gray-400 w-3 my-[1px]"></span><span>□</span></span></button>
+                <button class="c-btn sm" data-val="log" data-shift="10^">log</button>
 
                 <!-- Row 3 -->
+                <button class="c-btn sm" data-val="frac"><span class="flex flex-col items-center leading-none text-[10px]"><span>■</span><span class="border-t border-gray-400 w-3 my-[1px]"></span><span>□</span></span></button>
                 <button class="c-btn sm" data-val="sqrt">√■</button>
                 <button class="c-btn sm" data-val="sqr" data-label="x²" data-shift="√"><i class="font-serif italic">x</i>²</button>
                 <button class="c-btn sm" data-val="pow" data-label="xʸ" data-shift="x√"><i class="font-serif italic">x</i>ʸ</button>
-                <button class="c-btn sm" data-val="log" data-shift="10^">log</button>
                 <button class="c-btn sm" data-val="ln" data-shift="e^">ln</button>
 
                 <!-- Row 4 -->
@@ -125,39 +124,42 @@ export class ScientificCalculator {
                 <button class="c-btn sm" data-action="sto">STO</button>
                 <button class="c-btn sm" data-action="eng" data-shift="←">ENG</button>
                 <button class="c-btn sm" data-val="(">(</button>
-                <button class="c-btn sm" data-val=")">)<span class="sub-y">,</span></button>
+                <button class="c-btn sm" data-val=")" data-alpha="x">)<span class="sub-r">x</span><span class="sub-y">,</span></button>
 
                 <!-- Row 6 -->
-                <button class="c-btn sm" data-val="sd">S⇔D</button>
-                <button class="c-btn sm" data-val="m+">M+</button>
+                <button class="c-btn sm opacity-0 pointer-events-none"></button>
+                <button class="c-btn sm opacity-0 pointer-events-none"></button>
+                <button class="c-btn sm opacity-0 pointer-events-none"></button>
+                <button class="c-btn sm" data-val="sd" data-alpha="y">S⇔D<span class="sub-r">y</span></button>
+                <button class="c-btn sm" data-val="m+" data-alpha="m+">M+<span class="sub-r">M</span></button>
+
+                <!-- Row 7 -->
                 <button class="c-btn num" data-val="7">7</button>
                 <button class="c-btn num" data-val="8">8</button>
                 <button class="c-btn num" data-val="9">9</button>
-
-                <!-- Row 7 -->
                 <button class="c-btn blue" data-val="DEL">DEL</button>
                 <button class="c-btn blue" data-val="AC">AC</button>
+
+                <!-- Row 8 -->
                 <button class="c-btn num" data-val="4">4</button>
                 <button class="c-btn num" data-val="5">5</button>
                 <button class="c-btn num" data-val="6">6</button>
-
-                <!-- Row 8 -->
                 <button class="c-btn op" data-val="*">×</button>
                 <button class="c-btn op" data-val="/">÷</button>
+
+                <!-- Row 9 -->
                 <button class="c-btn num" data-val="1">1</button>
                 <button class="c-btn num" data-val="2">2</button>
                 <button class="c-btn num" data-val="3">3</button>
-
-                <!-- Row 9 -->
                 <button class="c-btn op" data-val="+">+</button>
                 <button class="c-btn op" data-val="-">-</button>
+
+                <!-- Row 10 -->
                 <button class="c-btn num" data-val="0">0</button>
                 <button class="c-btn num" data-val=".">.</button>
                 <button class="c-btn num" data-val="exp" data-shift="π" data-alpha="e">x10ˣ</button>
-
-                <!-- Row 10 -->
                 <button class="c-btn num" data-val="ans">Ans</button>
-                <button class="c-btn eq col-span-4" id="btn-equals" data-val="=">=</button>
+                <button class="c-btn eq" id="btn-equals" data-val="=">=</button>
             </div>
 
         `;
@@ -289,7 +291,40 @@ export class ScientificCalculator {
     document.body.appendChild(modal);
 
     this.container = modal;
-    this.displayRendered = modal.querySelector('#calc-display-rendered');
+    this.mf = modal.querySelector('#calc-math-field');
+
+    // Configure MathLive
+    if (this.mf) {
+        if (window.customElements) {
+            customElements.whenDefined('math-field').then(() => {
+                if (typeof this.mf.setOptions === 'function') {
+                    this.mf.setOptions({
+                        virtualKeyboardMode: 'off',
+                        smartFence: false,
+                        smartSuperscript: false
+                    });
+                }
+            });
+        }
+      
+      // Also try immediately if already defined
+      if (typeof this.mf.setOptions === 'function') {
+        this.mf.setOptions({
+          virtualKeyboardMode: 'off',
+          smartFence: false,
+          smartSuperscript: false
+        });
+      }
+
+      // Let MathLive handle its own rendering, but we can hook into changes
+      this.mf.addEventListener('input', () => {
+        if (this.currentResult !== null) {
+          this.currentResult = null;
+          this.resultArea.innerHTML = '';
+        }
+      });
+    }
+
     this.resultArea = modal.querySelector('#calc-result-area');
     this.indShift = modal.querySelector('#ind-shift');
     this.indAlpha = modal.querySelector('#ind-alpha');
@@ -314,7 +349,6 @@ export class ScientificCalculator {
     this.container.querySelector('.on').addEventListener('click', () => {
       this.clear();
       this.rawExpression = '';
-      this.renderDisplay();
     });
 
     if (this.headerMode) {
@@ -337,9 +371,22 @@ export class ScientificCalculator {
         if (action === 'alpha') { this.toggleAlpha(); return; }
         if (action === 'sto') { this.toggleStore(); return; }
         if (action === 'eng') { this.toggleEng(); return; }
+        if (action === 'optn') {
+          this.showNotification("OPTN Menu (Coming Soon)");
+          return;
+        }
         if (action === 'calc') {
           if (this.isShift) { this.solve(); }
-          else if (this.isAlpha) { this.handleInput('='); }
+          else if (this.isAlpha) {
+            this.insert('=');
+            this.resetModifiers();
+          } else {
+            if (this.rawExpression && !this.rawExpression.includes('=')) {
+              this.calculate();
+            } else {
+              this.showNotification("CALC: Input expression");
+            }
+          }
           return;
         }
 
@@ -456,6 +503,44 @@ export class ScientificCalculator {
     this.renderResult();
   }
 
+  // Helper to safely insert text into MathField
+  insert(text) {
+    if (!this.mf) return;
+
+    if (typeof this.mf.executeCommand === 'function') {
+      this.mf.executeCommand(['insert', text]);
+      return;
+    }
+    
+    // Fallback: If executeCommand is missing, check if it's the old API
+    if (typeof this.mf.insert === 'function') {
+      this.mf.insert(text);
+      return;
+    }
+
+    // Fallback: Wait for upgrade
+    if (window.customElements) {
+      console.debug("MathField not ready. Waiting for upgrade...");
+      customElements.whenDefined('math-field').then(() => {
+        // Re-check element reference or method availability
+        if (typeof this.mf.executeCommand === 'function') {
+           this.mf.executeCommand(['insert', text]);
+        } else if (typeof this.mf.insert === 'function') {
+           this.mf.insert(text);
+        } else {
+           // Try to re-query in case of DOM issues
+           const newMf = this.container.querySelector('#calc-math-field');
+           if (newMf && typeof newMf.executeCommand === 'function') {
+             this.mf = newMf;
+             this.mf.executeCommand(['insert', text]);
+           } else {
+             console.error("MathField upgraded but executeCommand still missing on:", this.mf);
+           }
+        }
+      });
+    }
+  }
+
   handleInput(val) {
     if (this.rawExpression === 'Error') this.rawExpression = '';
 
@@ -470,13 +555,8 @@ export class ScientificCalculator {
       }
       // Load history
       const item = this.history[this.historyIndex];
-      this.rawExpression = item.expr;
+      if (this.mf) this.mf.value = item.expr;
       this.currentResult = item.result; // Temporarily show result too?
-      // Actually standard calc: show expr involved. Result area might show previous result or cleared.
-      // Usually user wants to edit previous expression.
-      this.renderDisplay();
-      // Optionally show previous result in result area immediately?
-      // this.renderResult(); 
       return;
     }
     if (val === 'DOWN') {
@@ -484,9 +564,8 @@ export class ScientificCalculator {
       if (this.historyIndex < this.history.length - 1) {
         this.historyIndex++;
         const item = this.history[this.historyIndex];
-        this.rawExpression = item.expr;
+        if (this.mf) this.mf.value = item.expr;
         this.currentResult = item.result;
-        this.renderDisplay();
       } else {
         // Return to new empty/current input?
         this.historyIndex = -1;
@@ -536,83 +615,130 @@ export class ScientificCalculator {
       else if (val === 'sin') varName = 'D';
       else if (val === 'cos') varName = 'E';
       else if (val === 'tan') varName = 'F';
+      // New mappings for x, y, M
+      else if (val === ')') varName = 'x';
+      else if (val === 'sd') varName = 'y';
+      else if (val === 'm+') varName = 'M';
 
       if (varName) {
-        this.rawExpression += varName;
+        this.insert(varName);
         this.resetModifiers();
-        this.renderDisplay();
         return;
       }
     }
 
-    // If we have a result and user types an operator, keep Ans.
-    if (this.currentResult !== null && ['+', '-', '*', '/', '^'].includes(val)) {
-      this.rawExpression = this.rawExpression + val;
+    // Auto-clear or keep Ans based on previous result
+    if (this.currentResult !== null && ['+', '-', '*', '/', '^', 'pow', 'sqr'].includes(val)) {
+      if (this.mf) this.mf.setValue('{\\text{Ans}}');
       this.currentResult = null;
-    } else if (this.currentResult !== null && !['=', 'DEL', 'sd', 'eng', 'sto'].includes(val)) {
-      this.rawExpression = '';
+    } else if (this.currentResult !== null && !['=', 'DEL', 'sd', 'eng', 'sto', 'UP', 'DOWN'].includes(val)) {
+      if (this.mf) this.mf.setValue('');
       this.currentResult = null;
     }
 
     switch (val) {
-      case 'AC': this.clear(); break;
-      case 'DEL': this.deleteLast(); break;
-      case '=': this.calculate(); break;
-      case 'sd': this.toggleFormat(); break;
-      case 'sqrt': this.rawExpression += 'sqrt('; break; // Old case, might be unused
+      case 'AC':
+        this.clear();
+        break;
+      case 'DEL':
+        if (this.mf) {
+          if (typeof this.mf.executeCommand === 'function') {
+             this.mf.executeCommand('deleteBackward');
+          } else {
+             // Try waiting for upgrade for delete too?
+             // Or just ignore for now as it's less critical than insert
+             this.deleteLast();
+          }
+        } else {
+          this.deleteLast();
+        }
+        break;
+      case '=':
+        this.calculate();
+        break;
+      case 'sd':
+        this.toggleFormat();
+        break;
+      case 'sqrt':
+        this.insert('\\sqrt{#0}');
+        break;
       case 'sqr':
-        if (this.isShift) this.rawExpression += 'sqrt(';
-        else this.rawExpression += '^2';
+        if (this.isShift) this.insert('\\sqrt{#0}');
+        else this.insert('^2');
         break;
       case 'pow':
-        if (this.isShift) this.rawExpression += 'nthRoot('; // nthRoot(val, root)
-        else this.rawExpression += '^';
+        if (this.isShift) this.insert('\\sqrt[#0]{#0}');
+        else this.insert('^{#0}');
         break;
-      case 'log': this.rawExpression += 'log10('; break; // Base 10
-      case 'ln': this.rawExpression += 'log('; break; // Natural Log (math.js log is ln)
-      case 'sin': this.rawExpression += this.isShift ? 'asin(' : 'sin('; break;
-
-      case 'cos': this.rawExpression += this.isShift ? 'acos(' : 'cos('; break;
-      case 'tan': this.rawExpression += this.isShift ? 'atan(' : 'tan('; break;
-
+      case 'log':
+        if (this.isShift) this.insert('10^{#0}');
+        else this.insert('\\log_{10}\\left(#0\\right)');
+        break;
+      case 'ln':
+        if (this.isShift) this.insert('e^{#0}');
+        else this.insert('\\ln\\left(#0\\right)');
+        break;
+      case 'sin':
+        this.insert(this.isShift ? '\\arcsin\\left(#0\\right)' : '\\sin\\left(#0\\right)');
+        break;
+      case 'cos':
+        this.insert(this.isShift ? '\\arccos\\left(#0\\right)' : '\\cos\\left(#0\\right)');
+        break;
+      case 'tan':
+        this.insert(this.isShift ? '\\arctan\\left(#0\\right)' : '\\tan\\left(#0\\right)');
+        break;
       case 'int':
-        if (this.isShift) this.rawExpression += 'derivative(';
-        else this.rawExpression += 'integral(';
-        break;
-
-      case 'frac':
-        // Better frac behavior: wrap recent number or wait for input
-        // If expression ends in number, wrap it? Too complex for string append.
-        // Just append '/'
-        this.rawExpression += '/';
-        break;
-
-      case 'exp':
-        if (this.isShift) this.rawExpression += 'pi';
-        else if (this.isAlpha) this.rawExpression += 'e';
-        else this.rawExpression += '*10^';
-        break;
-
-      case ')':
-        if (this.isShift) this.rawExpression += ',';
-        else this.rawExpression += ')';
-        break;
-
-      case 'x': this.rawExpression += 'x'; break;
-      case 'ans': this.rawExpression += 'Ans'; break;
-
-      // Ignore modifier keys if pressed without valid combo
-      case 'neg': if (!this.isAlpha) this.rawExpression += '-'; break;
-      case 'deg': if (!this.isAlpha) this.rawExpression += 'deg'; break;
-
-      default:
-        if (!['shift', 'alpha', 'sto', 'eng', 'calc', 'optn', 'hyp'].includes(val)) {
-          this.rawExpression += val;
+        if (this.isShift) this.insert('\\frac{d}{dx}\\left(#0\\right)'); // Basic derivative notation
+        else {
+          this.insert('\\int_{#0}^{#0} #0 \\, dx');
         }
+        break;
+      case 'frac':
+        this.insert('\\frac{#0}{#0}');
+        break;
+      case 'exp':
+        if (this.isShift) this.insert('\\pi');
+        else if (this.isAlpha) this.insert('e');
+        else this.insert('\\times 10^{#0}');
+        break;
+      case '(':
+        this.insert('(');
+        break;
+      case ')':
+        if (this.isShift) this.insert(',');
+        else this.insert(')');
+        break;
+      case 'x':
+        this.insert('x');
+        break;
+      case 'ans':
+        this.insert('{\\text{Ans}}');
+        break;
+      case 'neg':
+        if (!this.isAlpha) this.insert('-');
+        break;
+      case 'deg':
+        if (!this.isAlpha) this.insert('^{\\circ}');
+        break;
+      case '*':
+        this.insert('\\times ');
+        break;
+      case '/':
+        this.insert('\\div ');
+        break;
+      case '+':
+      case '-':
+      case '.':
+      case '0': case '1': case '2': case '3': case '4':
+      case '5': case '6': case '7': case '8': case '9':
+        this.insert(val);
+        break;
+      default:
+        // Ignore modifier keys if unhandled
+        break;
     }
 
-    if (!this.isStore) this.resetModifiers(); // Don't reset if we just entered STO mode
-    this.renderDisplay();
+    if (!this.isStore) this.resetModifiers();
   }
 
   showNotification(msg) {
@@ -627,10 +753,10 @@ export class ScientificCalculator {
 
   clear() {
     this.rawExpression = '';
+    if (this.mf) this.mf.value = '';
     this.currentResult = null;
     this.historyIndex = -1; // Reset history pointer
     this.resultArea.innerHTML = '';
-    this.renderDisplay();
   }
 
   toggleFormat() {
@@ -646,36 +772,83 @@ export class ScientificCalculator {
     if (this.indMode) this.indMode.textContent = this.isDegreeMode ? 'D' : 'R';
   }
 
-  prepareExpression(expr) {
-    // Manual degree conversion to avoid unit scope issues
-    const PI = 3.141592653589793;
-    const E = 2.718281828459045;
-    // sin(x) -> sin((x) * PI / 180)
-    if (this.isDegreeMode) {
-      expr = expr.replace(/sin\(([^)]+?)(?:\s*deg)?\)/g, `sin(($1) * ${PI} / 180)`)
-        .replace(/cos\(([^)]+?)(?:\s*deg)?\)/g, `cos(($1) * ${PI} / 180)`)
-        .replace(/tan\(([^)]+?)(?:\s*deg)?\)/g, `tan(($1) * ${PI} / 180)`);
+  prepareExpression(latex) {
+    if (!latex) return '';
 
-      // Inverse Trig: rad -> deg
-      // asin(x) -> (asin(x) * 180 / PI)
-      expr = expr.replace(/asin\(([^)]+?)(?:\s*deg)?\)/g, `(asin($1) * 180 / ${PI})`)
-        .replace(/acos\(([^)]+?)(?:\s*deg)?\)/g, `(acos($1) * 180 / ${PI})`)
-        .replace(/atan\(([^)]+?)(?:\s*deg)?\)/g, `(atan($1) * 180 / ${PI})`);
+    let expr = latex;
+
+    // Basic cleaning
+    expr = expr.replace(/\\left/g, '');
+    expr = expr.replace(/\\right/g, '');
+    expr = expr.replace(/\\,/g, ' ');
+    expr = expr.replace(/\\:/g, ' ');
+    expr = expr.replace(/\\;/g, ' ');
+    expr = expr.replace(/\s+/g, ''); // Remove spaces
+
+    // Operators
+    expr = expr.replace(/\\times/g, '*');
+    expr = expr.replace(/\\cdot/g, '*');
+    expr = expr.replace(/\\div/g, '/');
+    expr = expr.replace(/\\pi/g, 'pi');
+    expr = expr.replace(/\\text\{Ans\}/g, this.currentResult || 0);
+
+    // Integrals: \int_{A}^{B} E dx
+    expr = expr.replace(/\\int_\{([^{}]+)\}\^\{([^{}]+)\}(.+?)dx/g, 'integral("$3", $1, $2)');
+
+    // Derivative: \frac{d}{dx}(E) -> \frac{d}{dx}E
+    expr = expr.replace(/\\frac\{d\}\{dx\}\(([^)]+)\)/g, 'derivative("$1", x)');
+
+    // Fractions: \frac{A}{B} -> (A)/(B)
+    for (let i = 0; i < 5; i++) {
+      expr = expr.replace(/\\frac{([^{}]+|{[^{}]+})*}{([^{}]+|{[^{}]+})*}/g, (match, num, den) => {
+        return `(${num})/(${den})`;
+      });
+      expr = expr.replace(/\\frac{([^{}]*)}{([^{}]*)}/g, '($1)/($2)');
     }
 
-    expr = expr.replace(/derivative\(([^,]+),/g, 'derivative("$1",');
-    expr = expr.replace(/integral\(([^,]+),/g, 'integral("$1",');
-    // Remove Ans replacement if possible or replace raw value as before
-    expr = expr.replace(/Ans/g, this.currentResult || 0);
+    // Roots
+    expr = expr.replace(/\\sqrt\[([^\]]+)\]{([^{}]+)}/g, 'nthRoot($2, $1)');
+    expr = expr.replace(/\\sqrt{([^{}]+)}/g, 'sqrt($1)');
+
+    // Logs
+    expr = expr.replace(/\\log_\{10\}\\left\(([^)]+)\\right\)/g, 'log10($1)');
+    expr = expr.replace(/\\log_\{10\}\(([^)]+)\)/g, 'log10($1)');
+    expr = expr.replace(/\\ln\\left\(([^)]+)\\right\)/g, 'log($1)');
+    expr = expr.replace(/\\ln\(([^)]+)\)/g, 'log($1)');
+
+    // Degree conversion for Trig
+    const PI = 3.141592653589793;
+    if (this.isDegreeMode) {
+      expr = expr.replace(/\\sin\(([^)]+?)(?:\\circ)?\)/g, `sin(($1) * ${PI} / 180)`);
+      expr = expr.replace(/\\cos\(([^)]+?)(?:\\circ)?\)/g, `cos(($1) * ${PI} / 180)`);
+      expr = expr.replace(/\\tan\(([^)]+?)(?:\\circ)?\)/g, `tan(($1) * ${PI} / 180)`);
+
+      expr = expr.replace(/\\arcsin\(([^)]+?)\)/g, `(asin($1) * 180 / ${PI})`);
+      expr = expr.replace(/\\arccos\(([^)]+?)\)/g, `(acos($1) * 180 / ${PI})`);
+      expr = expr.replace(/\\arctan\(([^)]+?)\)/g, `(atan($1) * 180 / ${PI})`);
+    } else {
+      expr = expr.replace(/\\sin/g, 'sin');
+      expr = expr.replace(/\\cos/g, 'cos');
+      expr = expr.replace(/\\tan/g, 'tan');
+      expr = expr.replace(/\\arcsin/g, 'asin');
+      expr = expr.replace(/\\arccos/g, 'acos');
+      expr = expr.replace(/\\arctan/g, 'atan');
+    }
+
+    // Clean up leftover brackets { } from LaTeX
+    expr = expr.replace(/\{/g, '(').replace(/\}/g, ')');
+
+    // Manual degree symbol
+    expr = expr.replace(/\^{\\circ}/g, 'deg');
+
     return expr;
   }
 
   solve() {
-    this.renderDisplay();
     this.resultArea.innerHTML = '<span class="text-sm text-gray-500">Solving...</span>';
     setTimeout(() => {
       try {
-        let expr = this.prepareExpression(this.rawExpression);
+        let expr = this.prepareExpression(this.mf ? (this.mf.value || '') : this.rawExpression);
 
         if (!expr.includes('x')) throw new Error("No x");
         let fnStr = expr;
@@ -709,25 +882,27 @@ export class ScientificCalculator {
 
   calculate() {
     try {
-      let expr = this.prepareExpression(this.rawExpression);
+      const latexExpr = this.mf ? (this.mf.value || '') : this.rawExpression;
+      
+      // If empty, do nothing or clear
+      if (!latexExpr || latexExpr.trim() === '') {
+        this.currentResult = null;
+        this.resultArea.innerHTML = '';
+        return;
+      }
 
+      let expr = this.prepareExpression(latexExpr);
 
       // Variable scope
       const scope = { ...this.variables, pi: Math.PI, e: Math.E };
 
       // Add custom functions to scope
       scope.derivative = (fnIdx, xVal) => {
-        // Lim(h->0) ... Wait, fnIdx needs to be a function?
-        // Math.js evaluate can't pass a function definition easily unless we define f(x).
-        // Simplified: We rely on math.derivative for symbolic if possible.
-        // Try: math.derivative('x^2', 'x').evaluate({x: 3})
-        return math.derivative(fnIdx, 'x').evaluate({ x: xVal });
+        return math.derivative(fnIdx, 'x').evaluate({ ...this.variables, x: xVal });
       };
 
       scope.integral = (fnIdx, a, b) => {
-        // Numerical integration (Simpson)
-        // fnIdx is string like 'x^2'
-        const f = (v) => math.evaluate(fnIdx, { x: v, ...this.variables });
+        const f = (v) => math.evaluate(fnIdx, { ...this.variables, x: v });
         const n = 100;
         const h = (b - a) / n;
         let s = f(a) + f(b);
@@ -736,14 +911,8 @@ export class ScientificCalculator {
         return (h / 3) * s;
       };
 
-      // Variables logic: if we have user variables, we MIGHT need scope.
-      // But if passing scope fails math functions, we must manually replace vars?
-      // Or spread math functions into scope?
-      // Try passing NO scope first to verify trig.
-      // If we need variables later, we fix scope.
-      // const scope = { ...this.variables, pi: Math.PI, e: Math.E };
-
       let res = math.evaluate(expr, scope);
+      console.log("[DEBUG CALC]", { latex: latexExpr, expr, res });
 
       // Handle weird results (e.g. Complex numbers or units if they leak)
       if (res && res.toJSON) res = res.toNumber();
@@ -761,8 +930,8 @@ export class ScientificCalculator {
       }
 
       // Add to History
-      if (this.rawExpression.trim() !== '') {
-        const entry = { expr: this.rawExpression, result: this.currentResult };
+      if (latexExpr.trim() !== '') {
+        const entry = { expr: latexExpr, result: this.currentResult };
         // Avoid duplicates at top
         if (this.history.length === 0 || this.history[this.history.length - 1].expr !== entry.expr) {
           this.history.push(entry);
@@ -775,54 +944,10 @@ export class ScientificCalculator {
     } catch (e) {
       console.error('Calculation Error:', e);
       this.currentResult = null;
-      this.resultArea.textContent = 'Error: ' + e.message; // Show specific error for debugging
+      this.resultArea.textContent = 'Syntax ERROR'; // Standard Casio error feedback
     }
   }
 
-  renderDisplay() {
-    this.displayRendered.innerHTML = '';
-    const expr = this.rawExpression;
-    if (!expr) return;
-
-    let latex = '';
-    try {
-      // Try to parse partial expression for Natural Display
-      // math.parse handles fractions (1/2), powers (2^3), etc. naturally
-      const node = math.parse(expr);
-      latex = node.toTex({ parenthesis: 'keep', implicit: 'hide' });
-    } catch (e) {
-      // Fallback for partial/incomplete expressions
-      latex = expr
-        .replace(/\*/g, '\\times ')
-        .replace(/\//g, '\\div ')
-        .replace(/sqrt\(/g, '\\sqrt{')
-        .replace(/\^/g, '^')
-        .replace(/pi/g, '\\pi')
-        .replace(/integral\(/g, '\\int ')
-        .replace(/derivative\(/g, '\\frac{d}{dx} ')
-        .replace(/Ans/g, '\\text{Ans}')
-        .replace(/sin\(/g, '\\sin(')
-        .replace(/cos\(/g, '\\cos(')
-
-      // Secondary replacements (using resulting string)
-      latex = latex
-        .replace(/sqrt\(([^)]+)\)/g, '\\sqrt{$1}')
-        .replace(/nthRoot\(([^,]+),([^)]+)\)/g, '\\sqrt[$2]{$1}')
-        .replace(/nthRoot\(([^)]+)\)/g, '\\sqrt{$1}')
-        .replace(/log10\(([^)]+)\)/g, '\\log_{10}($1)')
-        .replace(/ln\(([^)]+)\)/g, '\\ln($1)') // Fixed regex to match content
-        .replace(/ln\(/g, '\\ln(')             // Fallback
-        .replace(/deg/g, '^\\circ')
-        .replace(/asin\(/g, '\\sin^{-1}(')
-        .replace(/acos\(/g, '\\cos^{-1}(')
-        .replace(/atan\(/g, '\\tan^{-1}(');
-    }
-
-
-    if (!latex) return;
-    try { katex.render(latex, this.displayRendered, { throwingOnError: false, displayMode: false }); }
-    catch (e) { this.displayRendered.textContent = this.rawExpression; }
-  }
 
 
   renderResult() {

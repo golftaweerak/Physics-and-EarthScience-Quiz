@@ -152,7 +152,7 @@ export const quizItems = [
     answer: 30000,
     unit: "kg·m/s",
     hint: "ใช้สูตร \\(p = mv\\)",
-    explanation: "\\(p = mv = 1500 \\times 20 = 30,000 \\text{ kg} \\cdot \\text{m/s}\\)",
+    explanation: "จากสูตรโมเมนตัม \\(p = mv\\). <br>แทนค่า \\(p = 1500 \\times 20 = 30,000\\) kg·m/s",
     subCategory: {
       main: "บทที่ 6: โมเมนตัมและการชน",
       specific: "14. อธิบายและคำนวณโมเมนตัมของวัตถุและการดล"
@@ -178,7 +178,7 @@ export const quizItems = [
     answer: 1000,
     unit: "N",
     hint: "\\(F_{avg} = \\Delta p / \\Delta t\\)",
-    explanation: "\\(\\Delta p = m(v_f - v_i) = 2(0 - 5) = -10 \\text{ kg} \\cdot \\text{m/s}\\). ขนาดแรงเฉลี่ย \\(F = |\\Delta p| / \\Delta t = 10 / 0.01 = 1000 \\text{ N}\\)",
+    explanation: "หาการเปลี่ยนแปลงโมเมนตัม: \\(\\Delta p = m(v_f - v_i) = 2(0 - 5) = -10\\) kg·m/s. <br>หาแรงเฉลี่ยจากสูตร \\(F = \\frac{\\Delta p}{\\Delta t}\\). <br>แทนค่า \\(F = \\frac{10}{0.01} = 1000\\) N",
     subCategory: {
       main: "บทที่ 6: โมเมนตัมและการชน",
       specific: "14. อธิบายและคำนวณโมเมนตัมของวัตถุและการดล"
@@ -196,7 +196,7 @@ export const quizItems = [
         answer: 60,
         unit: "N·s",
         hint: "\\(J = F \\Delta t\\)",
-        explanation: "\\(J = F \\Delta t = 20 \\times 3 = 60 \\text{ N} \\cdot \\text{s}\\)",
+        explanation: "จากสูตรการดล \\(J = F \\Delta t\\). <br>แทนค่า \\(J = 20 \\times 3 = 60\\) N·s",
         subCategory: {
           main: "บทที่ 6: โมเมนตัมและการชน",
           specific: "14. อธิบายและคำนวณโมเมนตัมของวัตถุและการดล"
@@ -209,7 +209,7 @@ export const quizItems = [
         answer: 15,
         unit: "m/s",
         hint: "การดลเท่ากับการเปลี่ยนแปลงโมเมนตัม \\(J = m(v - u)\\)",
-        explanation: "\\(J = m(v - u) \\Rightarrow 60 = 4(v - 0) \\Rightarrow v = 60/4 = 15 \\text{ m/s}\\)",
+        explanation: "จากทฤษฎีบทการดล-โมเมนตัม \\(J = m(v - u)\\). <br>แทนค่า \\(60 = 4(v - 0) \\Rightarrow v = 15\\) m/s",
         subCategory: {
           main: "บทที่ 6: โมเมนตัมและการชน",
           specific: "14. อธิบายและคำนวณโมเมนตัมของวัตถุและการดล"
@@ -224,7 +224,7 @@ export const quizItems = [
     answer: 2,
     unit: "",
     hint: "คำนวณ \\(E_k = \\frac{1}{2}mv^2\\) ของแต่ละวัตถุแล้วหาอัตราส่วน",
-    explanation: "\\(E_{kA} = \\frac{1}{2}(2)(4^2) = 16 \\text{ J}\\). \\(E_{kB} = \\frac{1}{2}(4)(2^2) = 8 \\text{ J}\\). อัตราส่วน \\(16/8 = 2\\)",
+    explanation: "หาพลังงานจลน์ A: \\(E_{kA} = \\frac{1}{2}(2)(4^2) = 16\\) J. <br>หาพลังงานจลน์ B: \\(E_{kB} = \\frac{1}{2}(4)(2^2) = 8\\) J. <br>อัตราส่วน \\(E_{kA}/E_{kB} = 16/8 = 2\\)",
     subCategory: {
       main: "บทที่ 6: โมเมนตัมและการชน",
       specific: "14. อธิบายและคำนวณโมเมนตัมของวัตถุและการดล"
@@ -237,7 +237,7 @@ export const quizItems = [
     answer: 4,
     unit: "เท่า",
     hint: "ใช้ความสัมพันธ์ \\(E_k = p^2 / 2m\\)",
-    explanation: "\\(E_k \\propto p^2\\). ถ้า \\(p\\) เพิ่มเป็น 2 เท่า, \\(E_k\\) จะเพิ่มเป็น \\(2^2 = 4\\) เท่า",
+    explanation: "จากความสัมพันธ์ \\(E_k = \\frac{p^2}{2m}\\) จะเห็นว่า \\(E_k \\propto p^2\\). <br>ถ้า \\(p\\) เพิ่มเป็น 2 เท่า, \\(E_k\\) จะเพิ่มเป็น \\(2^2 = 4\\) เท่า",
     subCategory: {
       main: "บทที่ 6: โมเมนตัมและการชน",
       specific: "14. อธิบายและคำนวณโมเมนตัมของวัตถุและการดล"
@@ -268,7 +268,7 @@ export const quizItems = [
       answer: 360,
       unit: "N",
       hint: "\\(F_{avg} = \\Delta p / \\Delta t\\)",
-      explanation: "\\(F_{avg} = 3.6 / 0.01 = 360 \\text{ N}\\)",
+      explanation: "จากสูตรแรงดล \\(F_{avg} = \\frac{\\Delta p}{\\Delta t}\\). <br>แทนค่า \\(F_{avg} = \\frac{3.6}{0.01} = 360\\) N",
       subCategory: {
         main: "บทที่ 6: โมเมนตัมและการชน",
         specific: "14. อธิบายและคำนวณโมเมนตัมของวัตถุและการดล"
@@ -288,7 +288,7 @@ export const quizItems = [
       answer: 40,
       unit: "N·s",
       hint: "การดลคือพื้นที่ใต้กราฟ F-t (พื้นที่สามเหลี่ยม)",
-      explanation: "พื้นที่ใต้กราฟ = \\(\\frac{1}{2} \\times \\text{ฐาน} \\times \\text{สูง} = \\frac{1}{2} \\times 4 \\times 20 = 40 \\text{ N} \\cdot \\text{s}\\)",
+      explanation: "การดลเท่ากับพื้นที่ใต้กราฟ F-t. <br>พื้นที่สามเหลี่ยม = \\(\\frac{1}{2} \\times 4 \\times 20 = 40\\) N·s",
       subCategory: {
         main: "บทที่ 6: โมเมนตัมและการชน",
         specific: "14. อธิบายและคำนวณโมเมนตัมของวัตถุและการดล"
@@ -300,7 +300,7 @@ export const quizItems = [
       answer: 20,
       unit: "m/s",
       hint: "\\(J = m(v - u)\\)",
-      explanation: "\\(40 = 2(v - 0) \\Rightarrow v = 20 \\text{ m/s}\\)",
+      explanation: "จาก \\(J = m(v - u)\\). <br>แทนค่า \\(40 = 2(v - 0) \\Rightarrow v = 20\\) m/s",
       subCategory: {
         main: "บทที่ 6: โมเมนตัมและการชน",
         specific: "14. อธิบายและคำนวณโมเมนตัมของวัตถุและการดล"
@@ -316,7 +316,7 @@ export const quizItems = [
     answer: 330,
     unit: "N",
     hint: "หาความเร็วขณะกระทบพื้นก่อน (\\(v = \\sqrt{2gh}\\)) แล้วหาแรงดล (\\(F_{net} = \\Delta p / t\\)) อย่าลืมรวมน้ำหนักวัตถุด้วยถ้าถามแรงที่ทรายกระทำ (แต่ปกติโจทย์แบบนี้มักถามแรงดลเฉลี่ยสุทธิ หรือแรงต้านเฉลี่ย ให้ตอบแรงต้านเฉลี่ยที่รวมน้ำหนักแล้ว)",
-    explanation: "1. หาความเร็วตกกระทบ: \\(v = \\sqrt{2gh} = \\sqrt{2(10)(5)} = 10 \\text{ m/s}\\). 2. หาแรงดลสุทธิ: \\(F_{net} = \\Delta p / t = 3(0 - 10)/0.1 = -300 \\text{ N}\\) (ทิศขึ้น). 3. แรงที่ทรายกระทำ (\\(R\\)): \\(F_{net} = R - mg \\Rightarrow 300 = R - 3(10) \\Rightarrow R = 330 \\text{ N}\\).",
+    explanation: "1. หาความเร็วตกกระทบ: \\(v = \\sqrt{2gh} = \\sqrt{2(10)(5)} = 10\\) m/s. <br>2. หาแรงดลสุทธิ: \\(F_{net} = \\frac{\\Delta p}{t} = \\frac{3(0 - 10)}{0.1} = -300\\) N (ทิศขึ้น). <br>3. แรงที่ทรายกระทำ (R) ต้องต้านน้ำหนักด้วย: \\(F_{net} = R - mg \\Rightarrow 300 = R - 30 \\Rightarrow R = 330\\) N",
     subCategory: {
       main: "บทที่ 6: โมเมนตัมและการชน",
       specific: "14. อธิบายและคำนวณโมเมนตัมของวัตถุและการดล"
@@ -329,7 +329,7 @@ export const quizItems = [
     answer: 16,
     unit: "N·s",
     hint: "\\(J = m(v_f - v_i)\\) ระวังทิศทาง",
-    explanation: "ให้ทิศกลับเป็นบวก. \\(J = 0.4(25 - (-15)) = 0.4(40) = 16 \\text{ N} \\cdot \\text{s}\\)",
+    explanation: "จากสูตรการดล \\(J = m(v - u)\\). <br>ให้ทิศกลับเป็นบวก: \\(J = 0.4(25 - (-15)) = 0.4(40) = 16\\) N·s",
     subCategory: {
       main: "บทที่ 6: โมเมนตัมและการชน",
       specific: "14. อธิบายและคำนวณโมเมนตัมของวัตถุและการดล"
@@ -342,7 +342,7 @@ export const quizItems = [
     answer: 100,
     unit: "N·s",
     hint: "พื้นที่สี่เหลี่ยม = กว้าง x สูง",
-    explanation: "พื้นที่ = \\(0.5 \\times 200 = 100 \\text{ N} \\cdot \\text{s}\\)",
+    explanation: "การดลเท่ากับพื้นที่ใต้กราฟ F-t. <br>พื้นที่สี่เหลี่ยม = \\(0.5 \\times 200 = 100\\) N·s",
     subCategory: {
       main: "บทที่ 6: โมเมนตัมและการชน",
       specific: "14. อธิบายและคำนวณโมเมนตัมของวัตถุและการดล"
@@ -355,7 +355,7 @@ export const quizItems = [
     answer: 2,
     unit: "mv",
     hint: "\\(\\Delta p = m(v - (-v))\\)",
-    explanation: "\\(\\Delta p = mv - m(-v) = 2mv\\). ตอบ 2",
+    explanation: "การเปลี่ยนแปลงโมเมนตัม \\(\\Delta p = m(v_f - v_i)\\). <br>แทนค่า \\(\\Delta p = m(v - (-v)) = 2mv\\). ตอบ 2",
     subCategory: {
       main: "บทที่ 6: โมเมนตัมและการชน",
       specific: "14. อธิบายและคำนวณโมเมนตัมของวัตถุและการดล"
@@ -385,7 +385,7 @@ export const quizItems = [
     answer: 3.46,
     unit: "kg·m/s",
     hint: "พิจารณาการเปลี่ยนแปลงโมเมนตัมในแนวแกนตั้งฉากกับพื้น (แกน y) ส่วนแกนขนานพื้น (แกน x) ไม่เปลี่ยน",
-    explanation: "\\(\\Delta p_x = 0\\). \\(\\Delta p_y = m(v_y - u_y) = m(v\\cos30^\\circ - (-v\\cos30^\\circ)) = 2mv\\cos30^\\circ\\). \\(\\Delta p = 2(0.2)(10)(0.866) = 3.464\\). ตอบ 3.46",
+    explanation: "การเปลี่ยนแปลงโมเมนตัมเกิดขึ้นเฉพาะในแนวตั้งฉากกับพื้น (แกน y). <br>\\(\\Delta p = 2mv\\cos(30^\\circ) = 2(0.2)(10)(0.866) = 3.464\\) kg·m/s. ตอบ 3.46",
     subCategory: {
       main: "บทที่ 6: โมเมนตัมและการชน",
       specific: "14. อธิบายและคำนวณโมเมนตัมของวัตถุและการดล"
@@ -404,7 +404,7 @@ export const quizItems = [
       answer: 300,
       unit: "kg·m/s",
       hint: "ใน 1 วินาที มีมวลน้ำ 20 kg พุ่งชนด้วยความเร็ว 15 m/s",
-      explanation: "มวลใน 1 วินาที \\(m = 20 \\text{ kg}\\). \\(p = mv = 20 \\times 15 = 300 \\text{ kg} \\cdot \\text{m/s}\\)",
+      explanation: "ในเวลา 1 วินาที มีมวลน้ำ 20 kg. <br>โมเมนตัม \\(p = mv = 20 \\times 15 = 300\\) kg·m/s",
       subCategory: {
         main: "บทที่ 6: โมเมนตัมและการชน",
         specific: "14. อธิบายและคำนวณโมเมนตัมของวัตถุและการดล"
@@ -416,7 +416,7 @@ export const quizItems = [
       answer: 300,
       unit: "N",
       hint: "\\(F = \\Delta p / \\Delta t\\). น้ำหยุดนิ่งหลังชน ดังนั้น \\(\\Delta p = p_{initial}\\)",
-      explanation: "\\(F = \\frac{\\Delta p}{\\Delta t} = \\frac{m(v-0)}{t} = (\\frac{m}{t})v = 20 \\times 15 = 300 \\text{ N}\\)",
+      explanation: "จากสูตรแรงดล \\(F = \\frac{\\Delta p}{\\Delta t} = \\frac{m(v-0)}{t} = (\\frac{m}{t})v\\). <br>แทนค่า \\(F = 20 \\times 15 = 300\\) N",
       subCategory: {
         main: "บทที่ 6: โมเมนตัมและการชน",
         specific: "14. อธิบายและคำนวณโมเมนตัมของวัตถุและการดล"
@@ -436,7 +436,7 @@ export const quizItems = [
       answer: 40,
       unit: "N·s",
       hint: "พื้นที่ใต้กราฟสามเหลี่ยม",
-      explanation: "พื้นที่ = \\(1/2 \\times 0.1 \\times 800 = 40 \\text{ N} \\cdot \\text{s}\\)",
+      explanation: "การดลเท่ากับพื้นที่ใต้กราฟ F-t. <br>พื้นที่สามเหลี่ยม = \\(1/2 \\times 0.1 \\times 800 = 40\\) N·s",
       subCategory: {
         main: "บทที่ 6: โมเมนตัมและการชน",
         specific: "14. อธิบายและคำนวณโมเมนตัมของวัตถุและการดล"
@@ -448,7 +448,7 @@ export const quizItems = [
       answer: 100,
       unit: "m/s",
       hint: "\\(J = m\\Delta v\\)",
-      explanation: "\\(40 = 0.4(v - 0) \\Rightarrow v = 100 \\text{ m/s}\\)",
+      explanation: "จาก \\(J = m(v - u)\\). <br>แทนค่า \\(40 = 0.4(v - 0) \\Rightarrow v = 100\\) m/s",
       subCategory: {
         main: "บทที่ 6: โมเมนตัมและการชน",
         specific: "14. อธิบายและคำนวณโมเมนตัมของวัตถุและการดล"
@@ -464,7 +464,7 @@ export const quizItems = [
     answer: 5000,
     unit: "N",
     hint: "\\(F = m\\Delta v / \\Delta t\\)",
-    explanation: "\\(F = \\frac{1(10-0)}{0.002} = \\frac{10}{0.002} = 5000 \\text{ N}\\)",
+    explanation: "จากสูตรแรงดล \\(F = \\frac{m\\Delta v}{\\Delta t}\\). <br>แทนค่า \\(F = \\frac{1(10-0)}{0.002} = 5000\\) N",
     subCategory: {
       main: "บทที่ 6: โมเมนตัมและการชน",
       specific: "14. อธิบายและคำนวณโมเมนตัมของวัตถุและการดล"
@@ -489,7 +489,7 @@ export const quizItems = [
     answer: 2,
     unit: "kg",
     hint: "\\(E_k = p^2 / 2m \\Rightarrow m = p^2 / 2E_k\\)",
-    explanation: "\\(m = \\frac{20^2}{2(100)} = \\frac{400}{200} = 2 \\text{ kg}\\)",
+    explanation: "จาก \\(E_k = \\frac{p^2}{2m} \\Rightarrow m = \\frac{p^2}{2E_k}\\). <br>แทนค่า \\(m = \\frac{20^2}{2(100)} = 2\\) kg",
     subCategory: {
       main: "บทที่ 6: โมเมนตัมและการชน",
       specific: "14. อธิบายและคำนวณโมเมนตัมของวัตถุและการดล"
@@ -519,7 +519,7 @@ export const quizItems = [
     answer: 1.5,
     unit: "mv",
     hint: "\\(\\Delta p = m(v_f - v_i)\\) ทิศสวนทางกัน",
-    explanation: "\\(\\Delta p = m(v/2 - (-v)) = m(1.5v) = 1.5mv\\)",
+    explanation: "จาก \\(\\Delta p = m(v_f - v_i)\\). <br>แทนค่า \\(\\Delta p = m(v/2 - (-v)) = 1.5mv\\)",
     subCategory: {
       main: "บทที่ 6: โมเมนตัมและการชน",
       specific: "14. อธิบายและคำนวณโมเมนตัมของวัตถุและการดล"
@@ -532,7 +532,7 @@ export const quizItems = [
     answer: 30,
     unit: "N·s",
     hint: "พื้นที่สี่เหลี่ยมคางหมู = \\(1/2 \\times (\\text{ผลบวกด้านคู่ขนาน}) \\times \\text{สูง}\\)",
-    explanation: "พื้นที่ = \\(0.5 \\times (2+4) \\times 10 = 0.5 \\times 6 \\times 10 = 30 \\text{ N} \\cdot \\text{s}\\)",
+    explanation: "การดลเท่ากับพื้นที่ใต้กราฟ F-t. <br>พื้นที่สี่เหลี่ยมคางหมู = \\(0.5 \\times (2+4) \\times 10 = 30\\) N·s",
     subCategory: {
       main: "บทที่ 6: โมเมนตัมและการชน",
       specific: "14. อธิบายและคำนวณโมเมนตัมของวัตถุและการดล"
@@ -562,7 +562,7 @@ export const quizItems = [
     answer: 10,
     unit: "kg·m/s",
     hint: "รวมเวกเตอร์โมเมนตัม \\(p_1 = 6, p_2 = 8\\) (ตั้งฉากกัน)",
-    explanation: "\\(p_1 = 2 \\times 3 = 6\\). \\(p_2 = 2 \\times 4 = 8\\). \\(p_{total} = \\sqrt{6^2 + 8^2} = 10\\)",
+    explanation: "หาโมเมนตัมย่อย: \\(p_1 = 2 \\times 3 = 6\\), \\(p_2 = 2 \\times 4 = 8\\). <br>รวมเวกเตอร์: \\(p_{total} = \\sqrt{6^2 + 8^2} = 10\\) kg·m/s",
     subCategory: {
       main: "บทที่ 6: โมเมนตัมและการชน",
       specific: "14. อธิบายและคำนวณโมเมนตัมของวัตถุและการดล"
@@ -575,7 +575,7 @@ export const quizItems = [
     answer: 20,
     unit: "N·s",
     hint: "อินทิเกรต \\(\\int F dt\\) หรือหาพื้นที่ใต้กราฟ (กราฟเป็นรูปสามเหลี่ยม ฐาน 2 สูง 20)",
-    explanation: "ที่ \\(t=2, F=20\\). กราฟเป็นเส้นตรงจาก (0,0) ถึง (2,20). พื้นที่ = \\(1/2 \\times 2 \\times 20 = 20 \\text{ N} \\cdot \\text{s}\\)",
+    explanation: "ที่ \\(t=2, F=10(2)=20\\). กราฟเป็นรูปสามเหลี่ยม. <br>การดล = พื้นที่ใต้กราฟ = \\(1/2 \\times 2 \\times 20 = 20\\) N·s",
     subCategory: {
       main: "บทที่ 6: โมเมนตัมและการชน",
       specific: "14. อธิบายและคำนวณโมเมนตัมของวัตถุและการดล"
@@ -605,7 +605,7 @@ export const quizItems = [
     answer: 100,
     unit: "N·s",
     hint: "\\(\\Delta p = m(v_f - v_i)\\)",
-    explanation: "\\(\\Delta p = 5(0 - 20) = -100\\). ขนาดคือ 100",
+    explanation: "จาก \\(\\Delta p = m(v_f - v_i)\\). <br>แทนค่า \\(\\Delta p = 5(0 - 20) = -100\\) N·s. ขนาดคือ 100",
     subCategory: {
       main: "บทที่ 6: โมเมนตัมและการชน",
       specific: "14. อธิบายและคำนวณโมเมนตัมของวัตถุและการดล"

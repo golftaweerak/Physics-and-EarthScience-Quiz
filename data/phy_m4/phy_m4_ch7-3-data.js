@@ -79,7 +79,7 @@ export const quizItems = [
         answer: 180,
         unit: "m",
         hint: "ใช้สมการ \\(s_y = u_y t + \\frac{1}{2}gt^2\\) หรือ \\(v_y^2 = u_y^2 + 2gs_y\\)",
-        explanation: "\\(s_y = u_y t + \\frac{1}{2}at^2 = (60)(6) + 0.5(-10)(6)^2 = 360 - 180 = 180\\) เมตร",
+        explanation: "\\(u_y = 100 \\sin(37^\\circ) = 60\\) m/s. ที่จุดสูงสุด \\(v_y = 0\\). จาก \\(v_y^2 = u_y^2 + 2gs_y \\Rightarrow 0 = 60^2 + 2(-10)s_y \\Rightarrow 20s_y = 3600 \\Rightarrow s_y = 180\\) เมตร",
         subCategory: { main: MAIN_CATEGORY, specific: LO_16 }
       },
       {
@@ -89,7 +89,7 @@ export const quizItems = [
         answer: 960,
         unit: "m",
         hint: "ระยะทางแนวราบ = ความเร็วแนวราบ × เวลาทั้งหมด (เวลาขึ้น + เวลาลง)",
-        explanation: "เวลาทั้งหมด = \\(2 \\times 6 = 12\\) s. \\(u_x = u \\cos(37^\\circ) = 100 \\times 0.8 = 80\\) m/s. \\(s_x = u_x t = 80 \\times 12 = 960\\) เมตร",
+        explanation: "\\(u_y = 60\\) m/s. เวลาขึ้นสูงสุด \\(t = u_y/g = 6\\) s. เวลาทั้งหมด \\(T = 12\\) s. \\(u_x = 100\\cos(37^\\circ) = 80\\) m/s. \\(s_x = u_x T = 80 \\times 12 = 960\\) เมตร",
         subCategory: { main: MAIN_CATEGORY, specific: LO_16 }
       }
     ]
@@ -101,7 +101,7 @@ export const quizItems = [
     answer: 10,
     unit: "m/s",
     hint: "หาเวลาที่ใช้ในการตกจากแนวดิ่งก่อน (\\(s_y = \\frac{1}{2}gt^2\\)) แล้วจึงนำไปคำนวณความเร็วในแนวราบ (\\(s_x = u_x t\\))",
-    explanation: "1. หาเวลาตก: \\(80 = 0.5(10)t^2 \\Rightarrow t^2 = 16 \\Rightarrow t = 4\\) s. 2. หาความเร็วแนวราบ: \\(40 = u_x \\times 4 \\Rightarrow u_x = 10\\) m/s.",
+    explanation: "1. หาเวลาตก (แนวดิ่ง \\(u_y=0\\)): จาก \\(h = \\frac{1}{2}gt^2\\) จะได้ \\(80 = \\frac{1}{2}(10)t^2 \\Rightarrow 80 = 5t^2 \\Rightarrow t = 4\\) s. <br>2. หาความเร็วแนวราบ: จาก \\(s_x = u_x t\\) จะได้ \\(40 = u_x(4) \\Rightarrow u_x = 10\\) m/s.",
     subCategory: { main: MAIN_CATEGORY, specific: LO_16 }
   },
   {
@@ -146,7 +146,7 @@ export const quizItems = [
         answer: 240,
         unit: "m",
         hint: "เวลาทั้งหมดคือ 2 เท่าของเวลาถึงจุดสูงสุด. ระยะทางแนวราบ = \\(u_x \\times t_{total}\\)",
-        explanation: "เวลาทั้งหมด = \\(2 \\times 4 = 8\\) s. \\(u_x = u \\cos(53^\\circ) = 50 \\times 0.6 = 30\\) m/s. \\(s_x = 30 \\times 8 = 240\\) เมตร.",
+        explanation: "เวลาทั้งหมด \\(T = 2 \\times 4 = 8\\) s. หา \\(u_y\\) จาก \\(v_y = u_y - gt \\Rightarrow 0 = u_y - 10(4) \\Rightarrow u_y = 40\\). \\(u_x = u_y \\cot 53^\\circ = 30\\) m/s. \\(s_x = 30 \\times 8 = 240\\) เมตร.",
         subCategory: { main: MAIN_CATEGORY, specific: LO_16 }
       }
     ]
@@ -193,7 +193,7 @@ export const quizItems = [
         unit: "m/s",
         tolerance: 0.1,
         hint: "หา \\(v_x\\) และ \\(v_y\\) ที่เวลา 3 วินาที แล้วรวมเวกเตอร์แบบพีทาโกรัส",
-        explanation: "\\(v_x = u_x = 40 \\cos(30^\\circ) \\approx 34.64\\) m/s. \\(v_y = u_y - gt = 20 - 10(3) = -10\\) m/s. \\(v = \\sqrt{v_x^2 + v_y^2} = \\sqrt{34.64^2 + (-10)^2} = \\sqrt{1200 + 100} = \\sqrt{1300} \\approx 36.05\\) m/s.",
+        explanation: "\\(u_x = 40 \\cos(30^\\circ) \\approx 34.64\\) m/s. \\(u_y = 40 \\sin(30^\\circ) = 20\\) m/s. \\(v_y = u_y - gt = 20 - 10(3) = -10\\) m/s. \\(v = \\sqrt{u_x^2 + v_y^2} = \\sqrt{34.64^2 + (-10)^2} = \\sqrt{1200 + 100} \\approx 36.1\\) m/s.",
         subCategory: { main: MAIN_CATEGORY, specific: LO_16 }
       }
     ]
@@ -224,8 +224,8 @@ export const quizItems = [
     answer: 4.47,
     unit: "s",
     tolerance: 0.01,
-    hint: "พิจารณาเฉพาะการเคลื่อนที่ในแนวดิ่ง ใช้ \\(s_y = \\frac{1}{2}gt^2\\)",
-    explanation: "\\(100 = 0.5(10)t^2 \\Rightarrow t^2 = 20 \\Rightarrow t = \\sqrt{20} \\approx 4.47\\) วินาที.",
+    hint: "พิจารณาเฉพาะการเคลื่อนที่ในแนวดิ่ง (\\(u_y=0\\)) ใช้ \\(s_y = \\frac{1}{2}gt^2\\)",
+    explanation: "พิจารณาการเคลื่อนที่ในแนวดิ่ง (\\(u_y=0\\)): จาก \\(h = \\frac{1}{2}gt^2\\) จะได้ \\(100 = \\frac{1}{2}(10)t^2 \\Rightarrow 100 = 5t^2 \\Rightarrow t = \\sqrt{20} \\approx 4.47\\) s.",
     subCategory: { main: MAIN_CATEGORY, specific: LO_16 }
   },
   {
