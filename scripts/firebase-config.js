@@ -2,7 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
-import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager, getFirestore } from "firebase/firestore";
+import { initializeFirestore, memoryLocalCache, getFirestore, enableNetwork } from "firebase/firestore";
 
 
 const firebaseConfig = {
@@ -28,17 +28,25 @@ let db;
 // Persistent cache (IndexedDB) can cause significant startup lag on some devices.
 try {
     db = initializeFirestore(app, {
-        localCache: persistentLocalCache({
-            tabManager: persistentMultipleTabManager()
-        })
-        // If you want purely memory cache (fastest startup, no offline persistence across reloads):
-        // localCache: memoryLocalCache()
+        localCache: memoryLocalCache()
     });
 } catch (e) {
     console.warn("Firestore persistence failed, falling back to default:", e);
     // iOS often falls back here anyway if multiple tabs are open or storage is restricted
     db = getFirestore(app);
 }
+
+// FIX: iOS Safari aggressively suspends WebSockets and IndexedDB when the app is backgrounded.
+// This listener forces Firestore to reconnect its network immediately upon foregrounding,
+// preventing "infinite loading" loops when joining or starting lobbies.
+document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") {
+        console.log("[Firebase] App foregrounded. Forcing network reconnect for iOS compatibility.");
+        if (db) {
+            enableNetwork(db).catch(err => console.error("Error enabling network:", err));
+        }
+    }
+});
 
 const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({

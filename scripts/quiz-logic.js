@@ -2906,29 +2906,74 @@ function updatePlayersListUI(players) {
   if (!container) return;
 
   const myUid = authManager.currentUser?.uid;
-  container.innerHTML = players
-    .filter(p => p.uid !== myUid)
-    .map(p => {
-      const isEliminated = p.eliminated;
-      const progress = Math.min(100, (p.progress / state.questionCount) * 100);
-      return `
-        <div class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm p-2 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 flex items-center gap-2 anim-slide-in-right ${isEliminated ? 'opacity-50 grayscale' : ''}">
-          <div class="relative">
-            <div class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-sm border border-gray-200 dark:border-gray-600 overflow-hidden">
-               ${p.avatar && (p.avatar.includes('/') || p.avatar.includes('.')) ? `<img src="${p.avatar}" class="w-full h-full object-cover">` : (p.avatar || '🧑‍🎓')}
-            </div>
-            ${isEliminated ? '<span class="absolute -top-1 -right-1 text-[10px]">💀</span>' : ''}
+  const otherPlayers = players.filter(p => p.uid !== myUid);
+
+  // 1. Get existing rows to track what to keep
+  const existingRows = container.querySelectorAll('[data-uid]');
+  const existingUids = new Set();
+  existingRows.forEach(row => existingUids.add(row.dataset.uid));
+
+  // 2. Update existing or create new
+  otherPlayers.forEach(p => {
+    existingUids.delete(p.uid); // Mark as kept
+    const progress = Math.min(100, ((p.progress || 0) / (state.questionCount || 1)) * 100);
+    const isEliminated = p.eliminated;
+
+    let row = container.querySelector(`[data-uid="${p.uid}"]`);
+
+    if (row) {
+      // IN-PLACE UPDATE (avoids resetting animations)
+      const progressBar = row.querySelector('.progress-fill');
+      if (progressBar) progressBar.style.width = `${progress}%`;
+
+      const scoreEl = row.querySelector('.score-text');
+      if (scoreEl && scoreEl.textContent !== String(p.score)) {
+        scoreEl.textContent = p.score || 0;
+        scoreEl.classList.add('text-green-500', 'scale-125'); // Quick pop animation
+        setTimeout(() => scoreEl.classList.remove('text-green-500', 'scale-125'), 300);
+      }
+
+      if (isEliminated && !row.classList.contains('opacity-50')) {
+        row.classList.add('opacity-50', 'grayscale');
+        const avatarContainer = row.querySelector('.avatar-container');
+        if (avatarContainer && !avatarContainer.querySelector('.skull-icon')) {
+          avatarContainer.innerHTML += '<span class="skull-icon absolute -top-1 -right-1 text-[10px]">💀</span>';
+        }
+      }
+    } else {
+      // CREATE NEW ROW
+      row = document.createElement('div');
+      row.dataset.uid = p.uid;
+      row.className = `bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm p-2 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 flex items-center gap-2 anim-slide-in-right transition-all duration-300 ${isEliminated ? 'opacity-50 grayscale' : ''}`;
+
+      row.innerHTML = `
+        <div class="relative avatar-container">
+          <div class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-sm border border-gray-200 dark:border-gray-600 overflow-hidden">
+              ${p.avatar && (p.avatar.includes('/') || p.avatar.includes('.')) ? `<img src="${p.avatar}" class="w-full h-full object-cover">` : (p.avatar || '🧑‍🎓')}
           </div>
-          <div class="flex-1 min-w-0">
-            <div class="text-[10px] font-bold truncate dark:text-gray-300">${p.name}</div>
-            <div class="w-full bg-gray-100 dark:bg-gray-700 h-1 rounded-full mt-0.5">
-              <div class="bg-blue-500 h-full rounded-full transition-all duration-500" style="width: ${progress}%"></div>
-            </div>
-          </div>
-          <div class="text-[10px] font-bold text-blue-600 dark:text-blue-400">${p.score}</div>
+          ${isEliminated ? '<span class="skull-icon absolute -top-1 -right-1 text-[10px]">💀</span>' : ''}
         </div>
+        <div class="flex-1 min-w-0">
+          <div class="text-[10px] font-bold truncate dark:text-gray-300 name-text">${p.name}</div>
+          <div class="w-full bg-gray-100 dark:bg-gray-700 h-1 rounded-full mt-0.5">
+            <div class="progress-fill bg-blue-500 h-full rounded-full transition-all duration-500" style="width: ${progress}%"></div>
+          </div>
+        </div>
+        <div class="score-text text-[10px] font-bold text-blue-600 dark:text-blue-400 transition-all duration-300 origin-center">${p.score || 0}</div>
       `;
-    }).join('');
+      container.appendChild(row);
+    }
+  });
+
+  // 3. Remove rows for players who left
+  existingUids.forEach(uid => {
+    const rowToRemove = container.querySelector(`[data-uid="${uid}"]`);
+    if (rowToRemove) {
+      rowToRemove.classList.remove('anim-slide-in-right');
+      rowToRemove.classList.add('opacity-0', 'scale-95'); // Fade out
+      setTimeout(() => rowToRemove.remove(), 300);
+    }
+  });
 }
 
 async function updateLobbyScore() {
@@ -2954,7 +2999,7 @@ async function updateLobbyScore() {
     // Since it doesn't, we'll fetch and update.
     const { runTransaction } = await import("firebase/firestore");
 
-    await runTransaction(db, async (transaction) => {
+    const transactionPromise = runTransaction(db, async (transaction) => {
       const lobbySnap = await transaction.get(lobbyRef);
       if (!lobbySnap.exists()) return;
 
@@ -2983,8 +3028,14 @@ async function updateLobbyScore() {
       }
     });
 
+    const timeoutPromise = new Promise((_, reject) => {
+      setTimeout(() => reject(new Error('Connection Timeout: ไม่สามารถอัปเดตคะแนนได้ชั่วคราว')), 8000);
+    });
+
+    await Promise.race([transactionPromise, timeoutPromise]);
+
   } catch (e) {
-    console.error("Error updating score to lobby:", e);
+    console.warn("Error updating score to lobby (will retry on next question if possible):", e);
   }
 }
 

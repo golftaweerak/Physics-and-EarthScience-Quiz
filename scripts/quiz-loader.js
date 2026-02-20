@@ -89,12 +89,17 @@ export async function initializeQuiz() {
     if (lobbyId) {
         try {
             const lobbyRef = doc(db, 'lobbies', lobbyId);
-            const lobbySnap = await getDoc(lobbyRef);
+            const timeoutPromise = new Promise((_, reject) => {
+                setTimeout(() => reject(new Error('Connection Timeout: โหลดข้อมูลห้องช้าเกินไป')), 10000);
+            });
+            const lobbySnap = await Promise.race([getDoc(lobbyRef), timeoutPromise]);
             if (lobbySnap.exists()) {
                 lobbyConfig = lobbySnap.data().quizConfig;
             }
         } catch (e) {
             console.error("Error fetching lobby config:", e);
+            handleQuizError("ข้อผิดพลาดการเชื่อมต่อ", "ไม่สามารถดึงข้อมูลห้องได้ กรุณาตรวจสอบอินเทอร์เน็ตแล้วลองใหม่");
+            return;
         }
     }
 
