@@ -299,7 +299,7 @@ export const quizItems = [
   {
     number: 29,
     type: "fill-in-number",
-    question: "ยิงวัตถุทำมุม 30° กับแนวราบ ถ้าความเร็วต้น 20 m/s วัตถุจะลอยนานกี่วินาที (\(g=10\) m/s^2)",
+    question: "ยิงวัตถุทำมุม 30° กับแนวราบ ถ้าความเร็วต้น 20 m/s วัตถุจะลอยนานกี่วินาที (\\(g=10\\) m/s^2)",
     answer: 2,
     unit: "s",
     hint: "\\(t = 2u\\sin\\theta/g\\)",
