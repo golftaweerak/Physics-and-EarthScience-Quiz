@@ -172,7 +172,7 @@ export const quizItems = [
         answer: 30,
         unit: "m",
         hint: "ระยะทางในแนวราบ (\\(s_x\\)) = ความเร็วในแนวราบ (\\(v_x\\)) × เวลาทั้งหมด (\\(t\\)). หากยังไม่ได้คำนวณเวลา ให้หาจากข้อมูลการเคลื่อนที่ในแนวดิ่งก่อน",
-        explanation: "1. หาเวลาตก ($u_y=0$): $45 = 5t^2 \\Rightarrow t=3$ s. <br>2. หาระยะทางแนวราบ: $s_x = v_x t = (10)(3) = 30$ เมตร",
+        explanation: "1. หาเวลาตก ($u_y=0$): จากสูตร $s_y = u_y t + \\frac{1}{2}gt^2$. แทนค่า $45 = 0 + \\frac{1}{2}(10)t^2 \\implies 45 = 5t^2 \\implies t^2 = 9 \\implies t = 3$ วินาที <br>2. หาระยะทางแนวราบ: จากสูตร $s_x = u_x t$. แทนค่า $s_x = (10)(3) = 30$ เมตร",
         subCategory: {
           main: MAIN_CATEGORY,
           specific: LO_16
@@ -192,7 +192,7 @@ export const quizItems = [
         answer: 20,
         unit: "m",
         hint: "หาความเร็วต้นในแนวดิ่ง ($u_y$) ก่อน แล้วใช้สูตร $v_y^2 = u_y^2 + 2as$ ที่จุดสูงสุด $v_y=0$",
-        explanation: "หาความเร็วต้นในแนวดิ่ง: $u_y = 40 \\sin(30^\\circ) = 20$ m/s. <br>ที่จุดสูงสุด $v_y = 0$. จากสูตร $v_y^2 = u_y^2 + 2g s_y$. <br>แทนค่า $0 = 20^2 + 2(-10)s \\implies 20s = 400 \\implies s = 20$ เมตร",
+        explanation: "หาความเร็วต้นในแนวดิ่ง:\\(u_y = u \\sin\\theta\\) \\implies u_y = 40 \\sin(30^\\circ) = 20$ m/s. <br>ที่จุดสูงสุด $v_y = 0$. จากสูตร $v_y^2 = u_y^2 + 2g s_y$. <br>แทนค่า $0 = 20^2 + 2(-10)s \\implies 20s = 400 \\implies s = 20$ เมตร",
         subCategory: {
           main: MAIN_CATEGORY,
           specific: LO_16
