@@ -101,7 +101,7 @@ export const quizItems = [
     answer: 2,
     unit: "m/s",
     hint: "ใช้กฎการอนุรักษ์โมเมนตัม \\(m_1u_1 + m_2u_2 = (m_1+m_2)v\\)",
-    explanation: "\\(p_{before} = p_{after} \\Rightarrow (2)(4) + (2)(0) = (2+2)v \\Rightarrow 8 = 4v \\Rightarrow v = 2\\) m/s",
+    explanation: "จากกฎการอนุรักษ์โมเมนตัม \\(m_1u_1 + m_2u_2 = (m_1+m_2)v\\). <br>แทนค่า \\((2)(4) + (2)(0) = (2+2)v \\Rightarrow 8 = 4v \\Rightarrow v = 2\\) m/s",
     subCategory: {
       main: "บทที่ 6: โมเมนตัมและการชน",
       specific: "15. ทดลอง อธิบาย และคำนวณปริมาณต่างๆ ที่เกี่ยวกับการชนของวัตถุในหนึ่งมิติ และการดีดตัวแยกจากกัน"
@@ -114,7 +114,7 @@ export const quizItems = [
     answer: 8,
     unit: "m/s",
     hint: "ระวังทิศทางของ A หลังชน (v = -2) ใช้สมการ \\(m_Au_A + m_Bu_B = m_Av_A + m_Bv_B\\)",
-    explanation: "\\(4(10) + 0 = 4(-2) + 6(v_B) \\Rightarrow 40 = -8 + 6v_B \\Rightarrow 48 = 6v_B \\Rightarrow v_B = 8\\) m/s",
+    explanation: "จากกฎการอนุรักษ์โมเมนตัม \\(m_Au_A + m_Bu_B = m_Av_A + m_Bv_B\\). <br>แทนค่า \\(4(10) + 0 = 4(-2) + 6(v_B) \\Rightarrow 40 = -8 + 6v_B \\Rightarrow 48 = 6v_B \\Rightarrow v_B = 8\\) m/s",
     subCategory: {
       main: "บทที่ 6: โมเมนตัมและการชน",
       specific: "15. ทดลอง อธิบาย และคำนวณปริมาณต่างๆ ที่เกี่ยวกับการชนของวัตถุในหนึ่งมิติ และการดีดตัวแยกจากกัน"
@@ -127,7 +127,7 @@ export const quizItems = [
     answer: 4,
     unit: "m/s",
     hint: "เป็นการชนแบบไม่ยืดหยุ่นสมบูรณ์ (ติดกันไป) \\(m_1u_1 = (m_1+m_2)v\\)",
-    explanation: "\\((0.02)(400) = (0.02 + 1.98)v \\Rightarrow 8 = 2v \\Rightarrow v = 4\\) m/s",
+    explanation: "จากกฎการอนุรักษ์โมเมนตัม \\(m_1u_1 = (m_1+m_2)v\\). <br>แทนค่า \\((0.02)(400) = (0.02 + 1.98)v \\Rightarrow 8 = 2v \\Rightarrow v = 4\\) m/s",
     subCategory: {
       main: "บทที่ 6: โมเมนตัมและการชน",
       specific: "15. ทดลอง อธิบาย และคำนวณปริมาณต่างๆ ที่เกี่ยวกับการชนของวัตถุในหนึ่งมิติ และการดีดตัวแยกจากกัน"
@@ -179,7 +179,7 @@ export const quizItems = [
     answer: 1,
     unit: "m/s",
     hint: "โมเมนตัมก่อนยิงเป็นศูนย์ \\(0 = m_gv_g + m_bv_b\\)",
-    explanation: "\\(0 = 1000v_g + 5(200) \\Rightarrow 1000v_g = -1000 \\Rightarrow v_g = -1\\) m/s. อัตราเร็วคือ 1 m/s",
+    explanation: "จากกฎการอนุรักษ์โมเมนตัม (ก่อนยิง p=0): \\(0 = m_gv_g + m_bv_b\\). <br>แทนค่า \\(0 = 1000v_g + 5(200) \\Rightarrow 1000v_g = -1000 \\Rightarrow v_g = -1\\) m/s. อัตราเร็วคือ 1 m/s",
     subCategory: {
       main: "บทที่ 6: โมเมนตัมและการชน",
       specific: "15. ทดลอง อธิบาย และคำนวณปริมาณต่างๆ ที่เกี่ยวกับการชนของวัตถุในหนึ่งมิติ และการดีดตัวแยกจากกัน"
@@ -192,7 +192,7 @@ export const quizItems = [
     answer: 10,
     unit: "m/s",
     hint: "มวลส่วนที่สองคือ 5 - 2 = 3 kg. โมเมนตัมต้องหักล้างกัน",
-    explanation: "\\(m_1v_1 + m_2v_2 = 0 \\Rightarrow 2(15) + 3(v_2) = 0 \\Rightarrow 30 = -3v_2 \\Rightarrow v_2 = -10\\) m/s. อัตราเร็วคือ 10 m/s",
+    explanation: "จากกฎการอนุรักษ์โมเมนตัม (ก่อนระเบิด p=0): \\(m_1v_1 + m_2v_2 = 0\\). <br>แทนค่า \\(2(15) + 3(v_2) = 0 \\Rightarrow 30 = -3v_2 \\Rightarrow v_2 = -10\\) m/s. อัตราเร็วคือ 10 m/s",
     subCategory: {
       main: "บทที่ 6: โมเมนตัมและการชน",
       specific: "15. ทดลอง อธิบาย และคำนวณปริมาณต่างๆ ที่เกี่ยวกับการชนของวัตถุในหนึ่งมิติ และการดีดตัวแยกจากกัน"
@@ -212,7 +212,7 @@ export const quizItems = [
         answer: 9,
         unit: "N·s",
         hint: "ระวังทิศทางความเร็ว \\(J = m(v - u)\\) ให้ทิศขึ้นเป็นบวก",
-        explanation: "\\(u = -10, v = +8\\). \\(J = 0.5(8 - (-10)) = 0.5(18) = 9\\) N·s",
+    explanation: "จากสูตรการดล \\(J = m(v - u)\\). ให้ทิศขึ้นเป็นบวก \\(u = -10, v = +8\\). <br>แทนค่า \\(J = 0.5(8 - (-10)) = 0.5(18) = 9\\) N·s",
         subCategory: {
           main: "บทที่ 6: โมเมนตัมและการชน",
           specific: "14. อธิบายและคำนวณโมเมนตัมของวัตถุและการดล"
@@ -225,7 +225,7 @@ export const quizItems = [
         answer: 180,
         unit: "N",
         hint: "\\(F_{avg} = J / \\Delta t\\)",
-        explanation: "\\(F = 9 / 0.05 = 180\\) N",
+    explanation: "จากสูตรแรงดลเฉลี่ย \\(F_{avg} = J / \\Delta t\\). <br>แทนค่า \\(F = 9 / 0.05 = 180\\) N",
         subCategory: {
           main: "บทที่ 6: โมเมนตัมและการชน",
           specific: "14. อธิบายและคำนวณโมเมนตัมของวัตถุและการดล"
@@ -271,7 +271,7 @@ export const quizItems = [
       answer: 200,
       unit: "m/s",
       hint: "ใช้กฎการอนุรักษ์โมเมนตัมช่วงชน \\(mu = (M+m)V\\)",
-      explanation: "\\(0.01u = (0.01 + 0.99)(2) \\Rightarrow 0.01u = 2 \\Rightarrow u = 200\\) m/s",
+    explanation: "จากกฎการอนุรักษ์โมเมนตัม \\(mu = (M+m)V\\). <br>แทนค่า \\(0.01u = (0.01 + 0.99)(2) \\Rightarrow 0.01u = 2 \\Rightarrow u = 200\\) m/s",
       subCategory: {
         main: "บทที่ 6: โมเมนตัมและการชน",
         specific: "15. ทดลอง อธิบาย และคำนวณปริมาณต่างๆ ที่เกี่ยวกับการชนของวัตถุในหนึ่งมิติ และการดีดตัวแยกจากกัน"
@@ -305,7 +305,7 @@ export const quizItems = [
         answer: 2.5,
         unit: "m/s",
         hint: "\\(v = p_{total} / (m_1+m_2)\\)",
-        explanation: "\\(v = 10 / (2+2) = 2.5\\) m/s",
+    explanation: "จากสูตร \\(v = p_{total} / (m_1+m_2)\\). <br>แทนค่า \\(v = 10 / (2+2) = 2.5\\) m/s",
         subCategory: {
           main: "บทที่ 6: โมเมนตัมและการชน",
           specific: "15. ทดลอง อธิบาย และคำนวณปริมาณต่างๆ ที่เกี่ยวกับการชนของวัตถุในหนึ่งมิติ และการดีดตัวแยกจากกัน"
@@ -352,7 +352,7 @@ export const quizItems = [
     answer: 50,
     unit: "%",
     hint: "หา KE ก่อนและหลังชน แล้วเทียบสัดส่วน",
-    explanation: "ก่อนชน: \\(KE_i = 0.5(2)(100) = 100\\) J. หลังชน (v=5 m/s): \\(KE_f = 0.5(4)(25) = 50\\) J. หายไป 50 J คิดเป็น 50%",
+    explanation: "1. หาความเร็วหลังชน: \\(m_1u_1 = (m_1+m_2)v \\Rightarrow 2(10) = 4v \\Rightarrow v=5\\) m/s. <br>2. พลังงานจลน์ก่อนชน: \\(KE_i = \\frac{1}{2}(2)(10^2) = 100\\) J. <br>3. พลังงานจลน์หลังชน: \\(KE_f = \\frac{1}{2}(4)(5^2) = 50\\) J. <br>4. พลังงานที่หายไป: \\(100 - 50 = 50\\) J คิดเป็น 50%",
     subCategory: {
       main: "บทที่ 6: โมเมนตัมและการชน",
       specific: "15. ทดลอง อธิบาย และคำนวณปริมาณต่างๆ ที่เกี่ยวกับการชนของวัตถุในหนึ่งมิติ และการดีดตัวแยกจากกัน"
@@ -382,7 +382,7 @@ export const quizItems = [
     answer: 200,
     unit: "N",
     hint: "\\(F = \\Delta p / \\Delta t = (m/t) \\Delta v\\)",
-    explanation: "\\(F = (10)(20 - 0) = 200\\) N",
+    explanation: "จากสูตรแรงดล \\(F = \\frac{m(v-u)}{t}\\) (เมื่อพิจารณามวลน้ำที่ชนใน 1 วินาที). <br>แทนค่า \\(F = (10)(20 - 0) = 200\\) N",
     subCategory: {
       main: "บทที่ 6: โมเมนตัมและการชน",
       specific: "14. อธิบายและคำนวณโมเมนตัมของวัตถุและการดล"
@@ -425,7 +425,7 @@ export const quizItems = [
     answer: 2,
     unit: "เท่า",
     hint: "\\(E_k = p^2 / 2m\\)",
-    explanation: "\\(E_{kA} = 100/4 = 25\\). \\(E_{kB} = 100/8 = 12.5\\). อัตราส่วนคือ 2 เท่า",
+    explanation: "จากสูตร \\(E_k = \\frac{p^2}{2m}\\). <br>\\(E_{kA} = \\frac{10^2}{2(2)} = 25\\) J. <br>\\(E_{kB} = \\frac{10^2}{2(4)} = 12.5\\) J. <br>อัตราส่วน \\(25/12.5 = 2\\) เท่า",
     subCategory: {
       main: "บทที่ 6: โมเมนตัมและการชน",
       specific: "14. อธิบายและคำนวณโมเมนตัมของวัตถุและการดล"
@@ -438,7 +438,7 @@ export const quizItems = [
     answer: 1.5,
     unit: "N·s",
     hint: "หาความเร็วตกกระทบ \\(v_1 = \\sqrt{2gh_1}\\) และความเร็วกระดอน \\(v_2 = \\sqrt{2gh_2}\\) แล้วหา \\(\\Delta p\\)",
-    explanation: "\\(v_1 = \\sqrt{2(10)(5)} = 10\\) (ทิศลง). \\(v_2 = \\sqrt{2(10)(1.25)} = 5\\) (ทิศขึ้น). \\(J = 0.1(5 - (-10)) = 1.5\\) N·s",
+    explanation: "1. หาความเร็วตกกระทบ: \\(v_1 = \\sqrt{2gh_1} = \\sqrt{2(10)(5)} = 10\\) m/s (ทิศลง). <br>2. หาความเร็วกระดอน: \\(v_2 = \\sqrt{2gh_2} = \\sqrt{2(10)(1.25)} = 5\\) m/s (ทิศขึ้น). <br>3. หาการดล: \\(J = m(v_2 - (-v_1)) = 0.1(5 - (-10)) = 1.5\\) N·s",
     subCategory: {
       main: "บทที่ 6: โมเมนตัมและการชน",
       specific: "14. อธิบายและคำนวณโมเมนตัมของวัตถุและการดล"
@@ -468,7 +468,7 @@ export const quizItems = [
     answer: 4000,
     unit: "N",
     hint: "\\(F = m(v-u)/t\\)",
-    explanation: "\\(F = 1000(0-20)/5 = -4000\\) N. ขนาดคือ 4000 N",
+    explanation: "จากสูตรแรงดล \\(F = \\frac{m(v-u)}{t}\\). <br>แทนค่า \\(F = \\frac{1000(0-20)}{5} = -4000\\) N. ขนาดคือ 4000 N",
     subCategory: {
       main: "บทที่ 6: โมเมนตัมและการชน",
       specific: "14. อธิบายและคำนวณโมเมนตัมของวัตถุและการดล"
@@ -481,7 +481,7 @@ export const quizItems = [
     answer: 20,
     unit: "m/s",
     hint: "อนุรักษ์โมเมนตัม \\(Mv = (M/2)(0) + (M/2)v'\\)",
-    explanation: "\\(M(10) = 0 + 0.5M(v') \\Rightarrow 10 = 0.5v' \\Rightarrow v' = 20\\) m/s",
+    explanation: "จากกฎการอนุรักษ์โมเมนตัม \\(Mv = m_1v_1 + m_2v_2\\). <br>แทนค่า \\(M(10) = (0.5M)(0) + (0.5M)v' \\Rightarrow 10 = 0.5v' \\Rightarrow v' = 20\\) m/s",
     subCategory: {
       main: "บทที่ 6: โมเมนตัมและการชน",
       specific: "15. ทดลอง อธิบาย และคำนวณปริมาณต่างๆ ที่เกี่ยวกับการชนของวัตถุในหนึ่งมิติ และการดีดตัวแยกจากกัน"
@@ -494,7 +494,7 @@ export const quizItems = [
     answer: 5,
     unit: "m/s",
     hint: "กำหนดทิศทางให้ชัดเจน (ขวา+, ซ้าย-)",
-    explanation: "\\(2(10) + 3(-5) = 2(-5) + 3(v_B) \\Rightarrow 20 - 15 = -10 + 3v_B \\Rightarrow 5 = -10 + 3v_B \\Rightarrow 15 = 3v_B \\Rightarrow v_B = 5\\) m/s",
+    explanation: "จากกฎการอนุรักษ์โมเมนตัม \\(m_Au_A + m_Bu_B = m_Av_A + m_Bv_B\\). <br>แทนค่า \\(2(10) + 3(-5) = 2(-5) + 3(v_B) \\Rightarrow 20 - 15 = -10 + 3v_B \\Rightarrow 5 = -10 + 3v_B \\Rightarrow 15 = 3v_B \\Rightarrow v_B = 5\\) m/s",
     subCategory: {
       main: "บทที่ 6: โมเมนตัมและการชน",
       specific: "15. ทดลอง อธิบาย และคำนวณปริมาณต่างๆ ที่เกี่ยวกับการชนของวัตถุในหนึ่งมิติ และการดีดตัวแยกจากกัน"
@@ -532,7 +532,7 @@ export const quizItems = [
     answer: 500,
     unit: "N",
     hint: "\\(F = m(v-u)/t\\)",
-    explanation: "\\(F = 0.2(30 - (-20)) / 0.02 = 0.2(50) / 0.02 = 10 / 0.02 = 500\\) N",
+    explanation: "จากสูตรแรงดลเฉลี่ย \\(F = \\frac{m(v-u)}{t}\\). <br>แทนค่า \\(F = \\frac{0.2(30 - (-20))}{0.02} = \\frac{0.2(50)}{0.02} = 500\\) N",
     subCategory: {
       main: "บทที่ 6: โมเมนตัมและการชน",
       specific: "14. อธิบายและคำนวณโมเมนตัมของวัตถุและการดล"
@@ -563,7 +563,7 @@ export const quizItems = [
     unit: "m/s",
     decimalPlaces: 1,
     hint: "\\(m_1u_1 + m_2u_2 = (m_1+m_2)v\\)",
-    explanation: "\\(3(4) + 2(2) = (3+2)v \\Rightarrow 12 + 4 = 5v \\Rightarrow 16 = 5v \\Rightarrow v = 3.2\\) m/s",
+    explanation: "จากกฎการอนุรักษ์โมเมนตัม \\(m_1u_1 + m_2u_2 = (m_1+m_2)v\\). <br>แทนค่า \\(3(4) + 2(2) = (3+2)v \\Rightarrow 12 + 4 = 5v \\Rightarrow 16 = 5v \\Rightarrow v = 3.2\\) m/s",
     subCategory: {
       main: "บทที่ 6: โมเมนตัมและการชน",
       specific: "15. ทดลอง อธิบาย และคำนวณปริมาณต่างๆ ที่เกี่ยวกับการชนของวัตถุในหนึ่งมิติ และการดีดตัวแยกจากกัน"
@@ -601,7 +601,7 @@ export const quizItems = [
     answer: -6,
     unit: "m/s",
     hint: "ใช้สูตร \\(v_1 = \\frac{m_1-m_2}{m_1+m_2}u_1\\)",
-    explanation: "\\(v_A = \\frac{2-8}{2+8}(10) = \\frac{-6}{10}(10) = -6\\) m/s",
+    explanation: "จากสูตร \\(v_1 = \\frac{m_1-m_2}{m_1+m_2}u_1\\). <br>แทนค่า \\(v_A = \\frac{2-8}{2+8}(10) = \\frac{-6}{10}(10) = -6\\) m/s",
     subCategory: {
       main: "บทที่ 6: โมเมนตัมและการชน",
       specific: "15. ทดลอง อธิบาย และคำนวณปริมาณต่างๆ ที่เกี่ยวกับการชนของวัตถุในหนึ่งมิติ และการดีดตัวแยกจากกัน"
