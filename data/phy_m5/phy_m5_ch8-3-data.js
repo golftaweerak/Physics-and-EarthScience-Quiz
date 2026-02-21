@@ -161,7 +161,7 @@ export const quizItems = [
     unit: "cm/s",
     tolerance: 0.1,
     hint: "\\(v_{max} = \\omega A = 2\\pi f A\\)",
-    explanation: "\\(v_{max} = 2\\pi(2)(5) = 20\\pi \\approx 20(3.14) = 62.8\\) cm/s",
+    explanation: "จากสูตร \\(v_{max} = 2\\pi f A\\). แทนค่า \\(v_{max} = 2\\pi(2)(5) = 20\\pi \\approx 20(3.14) = 62.8\\) cm/s",
     subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
   },
   {
@@ -172,7 +172,7 @@ export const quizItems = [
     unit: "s",
     tolerance: 0.01,
     hint: "หา \\(k\\) จาก \\(mg = kx\\) ก่อน แล้วหา \\(T\\)",
-    explanation: "\\(k = mg/x = 2(10)/0.1 = 200\\) N/m. \\(T = 2\\pi\\sqrt{m/k} = 2(3.14)\\sqrt{2/200} = 6.28(0.1) = 0.628 \\approx 0.63\\) s",
+    explanation: "หาค่า k จาก \\(k = mg/x\\). แทนค่า \\(k = 2(10)/0.1 = 200\\) N/m. หาคาบจาก \\(T = 2\\pi\\sqrt{m/k}\\). แทนค่า \\(T = 2(3.14)\\sqrt{2/200} = 6.28(0.1) = 0.628 \\approx 0.63\\) s",
     subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
   },
   {
@@ -183,7 +183,7 @@ export const quizItems = [
     unit: "s",
     tolerance: 0.05,
     hint: "\\(T = 2\\pi\\sqrt{L/g}\\)",
-    explanation: "\\(T = 2(3.16)\\sqrt{1/10} = 6.32(0.316) \\approx 1.997 \\approx 2.00\\) s (หรือใช้ \\(\\pi^2 \\approx g\\) จะได้ \\(T \\approx 2\\) s พอดี)",
+    explanation: "จากสูตร \\(T = 2\\pi\\sqrt{L/g}\\). แทนค่า \\(T = 2(3.16)\\sqrt{1/10} = 6.32(0.316) \\approx 1.997 \\approx 2.00\\) s (หรือใช้ \\(\\pi^2 \\approx g\\) จะได้ \\(T \\approx 2\\) s พอดี)",
     subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
   },
   {
@@ -193,7 +193,7 @@ export const quizItems = [
     answer: 400,
     unit: "cm/s²",
     hint: "\\(a_{max} = \\omega^2 A\\)",
-    explanation: "\\(\\omega = 10, A = 4\\). \\(a_{max} = (10)^2(4) = 100(4) = 400\\) cm/s²",
+    explanation: "จากสมการ \\(x = 4\\cos(10t)\\) จะได้ \\(\\omega = 10\\) rad/s และ \\(A = 4\\) cm. จากสูตร \\(a_{max} = \\omega^2 A\\). แทนค่า \\(a_{max} = (10)^2(4) = 100(4) = 400\\) cm/s²",
     subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
   },
   {
@@ -203,7 +203,7 @@ export const quizItems = [
     answer: 10,
     unit: "cm",
     hint: "\\(E = \\frac{1}{2}kA^2\\)",
-    explanation: "\\(0.5 = \\frac{1}{2}(100)A^2 \\Rightarrow 1 = 100A^2 \\Rightarrow A^2 = 0.01 \\Rightarrow A = 0.1\\) m = 10 cm",
+    explanation: "จากสูตร \\(E = \\frac{1}{2}kA^2\\). แทนค่า \\(0.5 = \\frac{1}{2}(100)A^2 \\Rightarrow 1 = 100A^2 \\Rightarrow A^2 = 0.01 \\Rightarrow A = 0.1\\) m = 10 cm",
     subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
   },
   {
@@ -214,7 +214,7 @@ export const quizItems = [
     unit: "s",
     tolerance: 0.01,
     hint: "ใช้สมการ \\(x = A\\sin(\\frac{2\\pi}{T}t)\\) แทนค่า \\(x=A/2\\)",
-    explanation: "\\(A/2 = A\\sin(\\frac{2\\pi}{4}t) \\Rightarrow 0.5 = \\sin(\\frac{\\pi}{2}t)\\). มุมคือ \\(\\pi/6\\). ดังนั้น \\(\\frac{\\pi}{2}t = \\frac{\\pi}{6} \\Rightarrow t = 1/3 \\approx 0.33\\) s",
+    explanation: "จากสมการ \\(x = A\\sin(\\frac{2\\pi}{T}t)\\). แทนค่า \\(x=A/2\\) และ \\(T=4\\) จะได้ \\(A/2 = A\\sin(\\frac{2\\pi}{4}t) \\Rightarrow 0.5 = \\sin(\\frac{\\pi}{2}t)\\). มุมคือ \\(\\pi/6\\). ดังนั้น \\(\\frac{\\pi}{2}t = \\frac{\\pi}{6} \\Rightarrow t = 1/3 \\approx 0.33\\) s",
     subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
   },
   {
@@ -224,7 +224,7 @@ export const quizItems = [
     answer: 1,
     unit: "kg",
     hint: "\\(f \\propto 1/\\sqrt{m}\\) หรือ \\(f_1/f_2 = \\sqrt{m_2/m_1}\\)",
-    explanation: "\\(2/4 = \\sqrt{m_2/4} \\Rightarrow 1/2 = \\sqrt{m_2}/2 \\Rightarrow 1 = \\sqrt{m_2} \\Rightarrow m_2 = 1\\) kg",
+    explanation: "จาก \\(f_1/f_2 = \\sqrt{m_2/m_1}\\). แทนค่า \\(2/4 = \\sqrt{m_2/4} \\Rightarrow 1/2 = \\sqrt{m_2}/2 \\Rightarrow 1 = \\sqrt{m_2} \\Rightarrow m_2 = 1\\) kg",
     subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
   },
   {
@@ -234,7 +234,7 @@ export const quizItems = [
     answer: 4,
     unit: "rad/s",
     hint: "\\(v_{max} = \\omega A\\) และ \\(a_{max} = \\omega^2 A\\) นำมาหารกัน",
-    explanation: "\\(a_{max}/v_{max} = (\\omega^2 A)/(\\omega A) = \\omega = 40/10 = 4\\) rad/s",
+    explanation: "จาก \\(a_{max}/v_{max} = (\\omega^2 A)/(\\omega A) = \\omega\\). แทนค่า \\(\\omega = 40/10 = 4\\) rad/s",
     subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
   },
   {
@@ -244,7 +244,7 @@ export const quizItems = [
     answer: 4,
     unit: "s",
     hint: "\\(T \\propto 1/\\sqrt{g}\\)",
-    explanation: "\\(T_2/T_1 = \\sqrt{g_1/g_2} = \\sqrt{10/2.5} = \\sqrt{4} = 2\\). ดังนั้น \\(T_2 = 2(2) = 4\\) s",
+    explanation: "จาก \\(T \\propto 1/\\sqrt{g}\\) จะได้ \\(T_2/T_1 = \\sqrt{g_1/g_2}\\). แทนค่า \\(T_2/2 = \\sqrt{10/2.5} = \\sqrt{4} = 2\\). ดังนั้น \\(T_2 = 2(2) = 4\\) s",
     subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
   },
   {
@@ -254,7 +254,7 @@ export const quizItems = [
     answer: 0.8,
     unit: "เท่า",
     hint: "\\(v = \\omega\\sqrt{A^2-x^2}\\) และ \\(v_{max} = \\omega A\\)",
-    explanation: "\\(v/v_{max} = \\frac{\\sqrt{A^2-x^2}}{A} = \\sqrt{1 - (x/A)^2} = \\sqrt{1 - (0.6)^2} = \\sqrt{0.64} = 0.8\\)",
+    explanation: "จาก \\(v/v_{max} = \\frac{\\omega\\sqrt{A^2-x^2}}{\\omega A} = \\sqrt{1 - (x/A)^2}\\). แทนค่า \\(v/v_{max} = \\sqrt{1 - (6/10)^2} = \\sqrt{1 - 0.36} = \\sqrt{0.64} = 0.8\\)",
     subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
   },
   {
@@ -265,7 +265,7 @@ export const quizItems = [
     unit: "s",
     tolerance: 0.02,
     hint: "หา \\(k_{eq}\\) แบบอนุกรมก่อน (\\(1/k_{eq} = 1/k_1 + 1/k_2\\))",
-    explanation: "\\(k_{eq} = 50\\) N/m. \\(T = 2\\pi\\sqrt{2/50} = 2(3.14)\\sqrt{0.04} = 6.28(0.2) = 1.256 \\approx 1.26\\) s",
+    explanation: "หาค่า k รวมแบบอนุกรม: \\(1/k_{eq} = 1/100 + 1/100 = 2/100 \\Rightarrow k_{eq} = 50\\) N/m. หาคาบจาก \\(T = 2\\pi\\sqrt{m/k_{eq}}\\). แทนค่า \\(T = 2(3.14)\\sqrt{2/50} = 2(3.14)\\sqrt{0.04} = 6.28(0.2) = 1.256 \\approx 1.26\\) s",
     subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
   },
   {
@@ -275,7 +275,7 @@ export const quizItems = [
     answer: 0.5,
     unit: "A",
     hint: "\\(E_k = 3E_p \\Rightarrow E_{total} = 4E_p\\)",
-    explanation: "\\(\\frac{1}{2}kA^2 = 4(\\frac{1}{2}kx^2) \\Rightarrow A^2 = 4x^2 \\Rightarrow x = A/2 = 0.5A\\)",
+    explanation: "จาก \\(E_{total} = E_k + E_p = 3E_p + E_p = 4E_p\\). แทนค่า \\(\\frac{1}{2}kA^2 = 4(\\frac{1}{2}kx^2) \\Rightarrow A^2 = 4x^2 \\Rightarrow x = A/2 = 0.5A\\)",
     subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
   },
   {
@@ -286,7 +286,7 @@ export const quizItems = [
     unit: "m/s",
     tolerance: 0.1,
     hint: "ใช้กฎอนุรักษ์พลังงาน \\(mgh = \\frac{1}{2}mv^2\\) โดย \\(h = L(1-\\cos\\theta)\\)",
-    explanation: "\\(h = 1(1-\\cos60) = 1(0.5) = 0.5\\) m. \\(v = \\sqrt{2gh} = \\sqrt{2(10)(0.5)} = \\sqrt{10} \\approx 3.16\\) m/s",
+    explanation: "หาความสูง h จาก \\(h = L(1-\\cos\\theta) = 1(1-\\cos60) = 1(0.5) = 0.5\\) m. หาความเร็วจาก \\(v = \\sqrt{2gh}\\). แทนค่า \\(v = \\sqrt{2(10)(0.5)} = \\sqrt{10} \\approx 3.16\\) m/s",
     subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
   },
   {
@@ -296,7 +296,7 @@ export const quizItems = [
     answer: 24,
     unit: "rad/s",
     hint: "หา \\(f\\) ก่อน (รอบ/วินาที)",
-    explanation: "\\(f = 240/60 = 4\\) Hz. \\(\\omega = 2\\pi f = 2(3)(4) = 24\\) rad/s",
+    explanation: "หาความถี่ \\(f = 240/60 = 4\\) Hz. หาความถี่เชิงมุม \\(\\omega = 2\\pi f\\). แทนค่า \\(\\omega = 2(3)(4) = 24\\) rad/s",
     subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
   },
   {
@@ -307,7 +307,7 @@ export const quizItems = [
     unit: "s",
     tolerance: 0.01,
     hint: "เทียบกับ \\(a = -\\omega^2 x\\)",
-    explanation: "\\(\\omega^2 = 16 \\Rightarrow \\omega = 4\\). \\(T = 2\\pi/\\omega = 2(3.14)/4 = 1.57\\) s",
+    explanation: "จากสมการ \\(a = -\\omega^2 x\\) เทียบกับ \\(a = -16x\\) จะได้ \\(\\omega^2 = 16 \\Rightarrow \\omega = 4\\) rad/s. หาคาบจาก \\(T = 2\\pi/\\omega\\). แทนค่า \\(T = 2(3.14)/4 = 1.57\\) s",
     subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
   },
   {
@@ -317,7 +317,7 @@ export const quizItems = [
     answer: 40,
     unit: "cm/s²",
     hint: "\\(v_{max} = \\omega A\\), \\(a_{max} = \\omega^2 A = \\omega v_{max}\\)",
-    explanation: "\\(\\omega = v_{max}/A = 20/10 = 2\\) rad/s. \\(a_{max} = (2)(20) = 40\\) cm/s²",
+    explanation: "หา \\(\\omega\\) จาก \\(v_{max} = \\omega A \\Rightarrow \\omega = 20/10 = 2\\) rad/s. หา \\(a_{max}\\) จาก \\(a_{max} = \\omega v_{max}\\). แทนค่า \\(a_{max} = (2)(20) = 40\\) cm/s²",
     subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
   },
   {
@@ -327,7 +327,7 @@ export const quizItems = [
     answer: 3,
     unit: "เท่า",
     hint: "\\(k \\propto 1/L\\)",
-    explanation: "ความยาวลดลง 3 เท่า ค่า k จะเพิ่มขึ้น 3 เท่า",
+    explanation: "ค่าคงที่สปริงแปรผกผันกับความยาว (\\(k \\propto 1/L\\)). เมื่อความยาวลดลง 3 เท่า (เหลือ L/3) ค่า k จะเพิ่มขึ้นเป็น 3 เท่า",
     subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
   },
   {
@@ -337,7 +337,7 @@ export const quizItems = [
     answer: 0.5,
     unit: "Hz",
     hint: "\\(f = N/t\\)",
-    explanation: "\\(f = 10/20 = 0.5\\) Hz",
+    explanation: "จากสูตรความถี่ \\(f = \\frac{\\text{จำนวนรอบ}}{\\text{เวลา}}\\). แทนค่า \\(f = 10/20 = 0.5\\) Hz",
     subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
   },
   {
@@ -357,7 +357,7 @@ export const quizItems = [
     answer: 50,
     unit: "J",
     hint: "ที่สมดุล พลังงานศักย์เป็นศูนย์",
-    explanation: "ที่สมดุล \\(E_p = 0\\) ดังนั้น \\(E_k = E_{total} = 50\\) J",
+    explanation: "พลังงานกลรวม \\(E_{total} = E_k + E_p\\). ที่ตำแหน่งสมดุล \\(E_p = 0\\). ดังนั้น \\(E_k = E_{total} = 50\\) J",
     subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
   }
 ];

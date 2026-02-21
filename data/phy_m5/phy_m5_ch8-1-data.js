@@ -129,7 +129,7 @@ export const quizItems = [
       question: "ความถี่เชิงมุม (\\(\\omega\\)) ของการสั่นเป็นเท่าใด (ตอบเป็นจำนวนเต็มในหน่วย rad/s)",
       answer: 20,
       unit: "rad/s",
-      explanation: "\\(\\omega = \\sqrt{k/m} = \\sqrt{200/0.5} = \\sqrt{400} = 20\\) rad/s.",
+      explanation: "จากสูตร \\(\\omega = \\sqrt{k/m}\\). แทนค่า \\(\\omega = \\sqrt{200/0.5} = \\sqrt{400} = 20\\) rad/s.",
       subCategory: { 
         main: MAIN_CATEGORY,
         specific: LO_1
@@ -142,7 +142,7 @@ export const quizItems = [
       unit: "s",
       decimalPlaces: 2,
       tolerance: 0.01,
-      explanation: "\\(T = 2\\pi/\\omega = 2(3.14)/20 = 0.314 \\approx 0.31\\) s.",
+      explanation: "หาความถี่เชิงมุม \\(\\omega = \\sqrt{k/m} = \\sqrt{200/0.5} = 20\\) rad/s. <br>หาคาบ \\(T = 2\\pi/\\omega = 2(3.14)/20 = 0.314 \\approx 0.31\\) s.",
       subCategory: { 
         main: MAIN_CATEGORY,
         specific: LO_1
@@ -153,7 +153,7 @@ export const quizItems = [
       question: "ความเร็วสูงสุด (\\(v_{max}\\)) ของมวลเป็นเท่าใด (ตอบเป็นจำนวนเต็มในหน่วย m/s)",
       answer: 2,
       unit: "m/s",
-      explanation: "แอมพลิจูด \\(A\\) = 10 cm = 0.1 m. \\(v_{max} = \\omega A = 20 \\times 0.1 = 2\\) m/s.",
+      explanation: "หาความถี่เชิงมุม \\(\\omega = \\sqrt{k/m} = 20\\) rad/s. <br>หาความเร็วสูงสุด \\(v_{max} = \\omega A = 20(0.1) = 2\\) m/s.",
       subCategory: { 
         main: MAIN_CATEGORY,
         specific: LO_1
@@ -164,7 +164,7 @@ export const quizItems = [
       question: "ความเร่งสูงสุด (\\(a_{max}\\)) ของมวลเป็นเท่าใด (ตอบเป็นจำนวนเต็มในหน่วย m/s²)",
       answer: 40,
       unit: "m/s²",
-      explanation: "\\(a_{max} = \\omega^2 A = (20)^2 \\times 0.1 = 400 \\times 0.1 = 40\\) m/s².",
+      explanation: "หาความถี่เชิงมุม \\(\\omega = \\sqrt{k/m} = 20\\) rad/s. <br>หาความเร่งสูงสุด \\(a_{max} = \\omega^2 A = (20)^2(0.1) = 40\\) m/s².",
       subCategory: { 
         main: MAIN_CATEGORY,
         specific: LO_1
@@ -175,7 +175,7 @@ export const quizItems = [
       question: "พลังงานกลรวมของระบบเป็นเท่าใด (ตอบเป็นจำนวนเต็มในหน่วย J)",
       answer: 1,
       unit: "J",
-      explanation: "พลังงานรวมเท่ากับพลังงานศักย์สูงสุด: \\(E = \\frac{1}{2}kA^2 = \\frac{1}{2}(200)(0.1)^2 = 100(0.01) = 1\\) J.",
+      explanation: "จากสูตรพลังงานกลรวม \\(E = \\frac{1}{2}kA^2\\). แทนค่า \\(E = \\frac{1}{2}(200)(0.1)^2 = 100(0.01) = 1\\) J.",
       subCategory: {
         main: MAIN_CATEGORY,
         specific: LO_1
@@ -196,7 +196,7 @@ export const quizItems = [
       unit: "s",
       decimalPlaces: 2,
       tolerance: 0.01,
-      explanation: "\\(T = 2\\pi\\sqrt{L/g} = 2\\pi\\sqrt{2.5/10} = 2\\pi\\sqrt{0.25} = 2\\pi(0.5) = \\pi \\approx 3.14\\) s.",
+      explanation: "จากสูตร \\(T = 2\\pi\\sqrt{L/g}\\). แทนค่า \\(T = 2\\pi\\sqrt{2.5/10} = 2\\pi\\sqrt{0.25} = 2\\pi(0.5) = \\pi \\approx 3.14\\) s.",
       subCategory: { 
         main: MAIN_CATEGORY,
         specific: LO_1
@@ -209,7 +209,7 @@ export const quizItems = [
       unit: "Hz",
       decimalPlaces: 2,
       tolerance: 0.01,
-      explanation: "\\(f = 1/T = 1/\\pi \\approx 1/3.14 \\approx 0.318\\) Hz.",
+      explanation: "หาคาบ \\(T = \\text{เวลา}/\\text{รอบ} = 60/30 = 2\\) s. <br>หาความถี่ \\(f = 1/T = 1/2 = 0.5\\) Hz.",
       subCategory: { 
         main: MAIN_CATEGORY,
         specific: LO_1
@@ -220,7 +220,7 @@ export const quizItems = [
       question: "ถ้าต้องการให้คาบการแกว่งเป็น 2 เท่าของเดิม จะต้องใช้เชือกยาวกี่เมตร (ตอบเป็นจำนวนเต็ม)",
       answer: 10,
       unit: "m",
-      explanation: "จาก \\(T \\propto \\sqrt{L}\\), ถ้าต้องการให้ \\(T\\) เพิ่ม 2 เท่า จะต้องเพิ่ม \\(L\\) เป็น \\(2^2 = 4\\) เท่า. ความยาวใหม่ = \\(4 \\times 2.5 = 10\\) เมตร.",
+      explanation: "จากสูตร \\(T = 2\\pi\\sqrt{L/g}\\) จะได้ \\(T \\propto \\sqrt{L}\\). ถ้าต้องการให้ \\(T\\) เพิ่มเป็น 2 เท่า ความยาว \\(L\\) ต้องเพิ่มเป็น \\(2^2 = 4\\) เท่า. ความยาวใหม่ \\(L' = 4L = 4(2.5) = 10\\) m.",
       subCategory: { 
         main: MAIN_CATEGORY,
         specific: LO_1
@@ -291,7 +291,7 @@ export const quizItems = [
     answer: 0.2,
     unit: "m",
     hint: "เขียนสมการการเคลื่อนที่ในรูป \\(x(t) = A \\sin(\\omega t)\\) ก่อน แล้วจึงแทนค่า \\(t\\)",
-    explanation: "\\(\\omega = 2\\pi/T = 2\\pi/4 = \\pi/2\\). สมการคือ \\(x(t) = 0.2 \\sin(\\frac{\\pi}{2} t)\\). ที่ \\(t=1\\), \\(x(1) = 0.2 \\sin(\\pi/2) = 0.2(1) = 0.2\\) m.",
+    explanation: "หาความถี่เชิงมุม: \\(\\omega = 2\\pi/T = 2\\pi/4 = \\pi/2\\) rad/s. สมการการเคลื่อนที่คือ \\(x(t) = A \\sin(\\omega t)\\). แทนค่า \\(x(1) = 0.2 \\sin((\\pi/2)(1)) = 0.2(1) = 0.2\\) m.",
     subCategory: { 
       main: MAIN_CATEGORY,
       specific: LO_1
@@ -371,7 +371,7 @@ export const quizItems = [
     unit: "m/s",
     decimalPlaces: 2,
     tolerance: 0.01,
-    explanation: "\\(\\omega = 2\\pi f = 2\\pi(5) = 10\\pi\\). \\(v_{max} = \\omega A = (10\\pi)(0.1) = \\pi \\approx 3.14\\) m/s.",
+    explanation: "หาความถี่เชิงมุม: \\(\\omega = 2\\pi f = 2\\pi(5) = 10\\pi\\) rad/s. หาความเร็วสูงสุด: \\(v_{max} = \\omega A = (10\\pi)(0.1) = \\pi \\approx 3.14\\) m/s.",
     subCategory: { 
       main: MAIN_CATEGORY,
       specific: LO_1
@@ -396,7 +396,7 @@ export const quizItems = [
     answer: 0.2,
     unit: "s",
     hint: "จาก \\(T \\propto \\sqrt{m}\\), ตั้งอัตราส่วน \\(T_2/T_1 = \\sqrt{m_2/m_1}\\)",
-    explanation: "\\(T_2/T_1 = \\sqrt{m_2/m_1} \\implies T_2 / 0.4 = \\sqrt{0.2/0.8} = \\sqrt{1/4} = 1/2\\). ดังนั้น \\(T_2 = 0.4 / 2 = 0.2\\) s.",
+    explanation: "จากสูตร \\(T = 2\\pi\\sqrt{m/k}\\) จะได้ \\(T \\propto \\sqrt{m}\\). ตั้งสมการเปรียบเทียบ: \\(T_2/T_1 = \\sqrt{m_2/m_1}\\). แทนค่า \\(T_2/0.4 = \\sqrt{0.2/0.8} = \\sqrt{1/4} = 0.5\\). ดังนั้น \\(T_2 = 0.4(0.5) = 0.2\\) s.",
     subCategory: { 
       main: MAIN_CATEGORY,
       specific: LO_1
@@ -423,7 +423,7 @@ export const quizItems = [
     decimalPlaces: 2,
     tolerance: 0.01,
     hint: "จาก \\(T \\propto 1/\\sqrt{g}\\), ตั้งอัตราส่วนเพื่อหาคาบบนดวงจันทร์",
-    explanation: "\\(T_{moon}/T_{earth} = \\sqrt{g_{earth}/g_{moon}} = \\sqrt{g / (g/6)} = \\sqrt{6}\\). ดังนั้น \\(T_{moon} = T_{earth} \\times \\sqrt{6} = 2 \\times 2.45 = 4.90\\) s.",
+    explanation: "จากสูตร \\(T = 2\\pi\\sqrt{L/g}\\) จะได้ \\(T \\propto 1/\\sqrt{g}\\). ตั้งสมการเปรียบเทียบ: \\(T_{moon}/T_{earth} = \\sqrt{g_{earth}/g_{moon}} = \\sqrt{g/(g/6)} = \\sqrt{6}\\). แทนค่า \\(T_{moon} = 2(\\sqrt{6}) \\approx 2(2.45) = 4.90\\) s.",
     subCategory: {
       main: MAIN_CATEGORY,
       specific: LO_1

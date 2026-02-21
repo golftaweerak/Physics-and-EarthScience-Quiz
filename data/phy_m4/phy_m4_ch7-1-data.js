@@ -159,7 +159,7 @@ export const quizItems = [
         answer: 3,
         unit: "s",
         hint: "พิจารณาเฉพาะการเคลื่อนที่ในแนวดิ่ง ใช้สูตร $s_y = u_y t + \\frac{1}{2}gt^2$",
-        explanation: "ในแนวดิ่ง $u_y = 0$. จาก $s_y = \\frac{1}{2}gt^2 \\implies 45 = \\frac{1}{2}(10)t^2 \\implies t^2 = 9 \\implies t = 3$ วินาที",
+        explanation: "พิจารณาการเคลื่อนที่ในแนวดิ่ง ($u_y = 0$): จากสูตร $s_y = u_y t + \\frac{1}{2}gt^2$. <br>แทนค่า $45 = 0 + \\frac{1}{2}(10)t^2 \\implies 45 = 5t^2 \\implies t^2 = 9 \\implies t = 3$ วินาที",
         subCategory: {
           main: MAIN_CATEGORY,
           specific: LO_16
@@ -172,7 +172,7 @@ export const quizItems = [
         answer: 30,
         unit: "m",
         hint: "ระยะทางในแนวราบ (\\(s_x\\)) = ความเร็วในแนวราบ (\\(v_x\\)) × เวลาทั้งหมด (\\(t\\)). หากยังไม่ได้คำนวณเวลา ให้หาจากข้อมูลการเคลื่อนที่ในแนวดิ่งก่อน",
-        explanation: "ระยะทางแนวราบ $s_x = v_x t = (10 \\text{ m/s})(3 \\text{ s}) = 30$ เมตร",
+        explanation: "1. หาเวลาตก ($u_y=0$): $45 = 5t^2 \\Rightarrow t=3$ s. <br>2. หาระยะทางแนวราบ: $s_x = v_x t = (10)(3) = 30$ เมตร",
         subCategory: {
           main: MAIN_CATEGORY,
           specific: LO_16
@@ -192,7 +192,7 @@ export const quizItems = [
         answer: 20,
         unit: "m",
         hint: "หาความเร็วต้นในแนวดิ่ง ($u_y$) ก่อน แล้วใช้สูตร $v_y^2 = u_y^2 + 2as$ ที่จุดสูงสุด $v_y=0$",
-        explanation: "$u_y = 40 \\sin(30^\\circ) = 20$ m/s. จาก $0^2 = 20^2 + 2(-10)s \\implies 20s = 400 \\implies s = 20$ เมตร",
+        explanation: "หาความเร็วต้นในแนวดิ่ง: $u_y = 40 \\sin(30^\\circ) = 20$ m/s. <br>ที่จุดสูงสุด $v_y = 0$. จากสูตร $v_y^2 = u_y^2 + 2g s_y$. <br>แทนค่า $0 = 20^2 + 2(-10)s \\implies 20s = 400 \\implies s = 20$ เมตร",
         subCategory: {
           main: MAIN_CATEGORY,
           specific: LO_16
@@ -205,7 +205,7 @@ export const quizItems = [
         answer: 4,
         unit: "s",
         hint: "หาเวลาที่ใช้ขึ้นถึงจุดสูงสุด ($t_{up} = u_y/g$) แล้วคูณสอง",
-        explanation: "เวลาที่ใช้ขึ้นถึงจุดสูงสุด $t_{up} = u_y/g = 20/10 = 2$ วินาที. เวลาทั้งหมดในอากาศ $t_{total} = 2 \\times t_{up} = 4$ วินาที",
+        explanation: "หาเวลาขึ้นถึงจุดสูงสุดจาก $v_y = u_y + gt \\implies 0 = 20 - 10t \\implies t_{up} = 2$ วินาที. <br>เวลาทั้งหมดในอากาศ $t_{total} = 2 \\times t_{up} = 4$ วินาที",
         subCategory: {
           main: MAIN_CATEGORY,
           specific: LO_16
@@ -219,7 +219,7 @@ export const quizItems = [
         unit: "m",
         tolerance: 0.1,
         hint: "ระยะทางแนวราบ = ความเร็วแนวราบ × เวลาทั้งหมด",
-        explanation: "$u_x = 40 \\cos(30^\\circ) \\approx 34.64$ m/s. ระยะทาง $s_x = u_x t = 34.64 \\times 4 \\approx 138.56$ เมตร",
+        explanation: "1. หาเวลาทั้งหมด: $t = \\frac{2u\\sin\\theta}{g} = \\frac{2(40)(0.5)}{10} = 4$ s. <br>2. หาความเร็วแนวราบ: $u_x = 40 \\cos(30^\\circ) \\approx 34.64$ m/s. <br>3. ระยะทางแนวราบ $s_x = 34.64 \\times 4 \\approx 138.6$ เมตร",
         subCategory: {
           main: MAIN_CATEGORY,
           specific: LO_16
@@ -239,7 +239,7 @@ export const quizItems = [
       question: "ความเร็วต้นในแนวดิ่ง ($u_y$) มีค่าเท่าใด (ตอบเป็นจำนวนเต็มในหน่วย m/s)",
       answer: 20,
       unit: "m/s",
-      explanation: "$u_y = u \\sin(53^\\circ) = 25 \\times 0.8 = 20$ m/s",
+      explanation: "จาก $u_y = u \\sin\\theta$. <br>แทนค่า $u_y = 25 \\sin(53^\\circ) = 25(0.8) = 20$ m/s",
       subCategory: {
         main: MAIN_CATEGORY,
         specific: LO_16
@@ -250,7 +250,7 @@ export const quizItems = [
       question: "ลูกบอลใช้เวลาเท่าใดในการขึ้นไปถึงจุดสูงสุด (ตอบเป็นจำนวนเต็มในหน่วย s)",
       answer: 2,
       unit: "s",
-      explanation: "$t_{up} = u_y / g = 20 / 10 = 2$ วินาที",
+      explanation: "ที่จุดสูงสุด $v_y = 0$. จาก $v_y = u_y - gt \\implies 0 = 20 - 10t$. <br>ดังนั้น $t = 2$ วินาที",
       subCategory: {
         main: MAIN_CATEGORY,
         specific: LO_16
@@ -261,7 +261,7 @@ export const quizItems = [
       question: "ลูกบอลลอยอยู่ในอากาศทั้งหมดกี่วินาที",
       answer: 4,
       unit: "s",
-      explanation: "เวลาทั้งหมด = $2 \\times t_{up} = 2 \\times 2 = 4$ วินาที",
+      explanation: "หาเวลาขึ้นถึงจุดสูงสุด ($v_y=0$): $0 = 25\\sin(53^\\circ) - 10t \\Rightarrow 10t = 20 \\Rightarrow t=2$ s. <br>เวลาทั้งหมด = $2 \\times 2 = 4$ วินาที",
       subCategory: {
         main: MAIN_CATEGORY,
         specific: LO_16
@@ -272,7 +272,7 @@ export const quizItems = [
       question: "ลูกบอลตกไกลจากจุดที่เตะในแนวราบเป็นระยะทางเท่าใด (ตอบเป็นจำนวนเต็มในหน่วย m)",
       answer: 60,
       unit: "m",
-      explanation: "$u_x = u \\cos(53^\\circ) = 25 \\times 0.6 = 15$ m/s. ระยะทาง $s_x = u_x t_{total} = 15 \\times 4 = 60$ เมตร",
+      explanation: "1. หาเวลาทั้งหมด: $t = \\frac{2u\\sin\\theta}{g} = \\frac{2(25)(0.8)}{10} = 4$ s. <br>2. หาความเร็วแนวราบ: $u_x = 25(0.6) = 15$ m/s. <br>3. ระยะทางแนวราบ $s_x = 15 \\times 4 = 60$ เมตร",
       subCategory: {
         main: MAIN_CATEGORY,
         specific: LO_16
@@ -299,7 +299,7 @@ export const quizItems = [
     options: ["$1500 \\text{ m}$", "$2000 \\text{ m}$", "$3000 \\text{ m}$", "$4500 \\text{ m}$"],
     answer: "$3000 \\text{ m}$",
     hint: "หาเวลาที่ใช้ในการตกจากแนวดิ่งก่อน แล้วจึงนำไปคำนวณระยะทางในแนวราบ",
-    explanation: "1. หาเวลาตก ($t$): $s_y = \\frac{1}{2}gt^2 \\implies 2000 = 5t^2 \\implies t^2 = 400 \\implies t = 20$ s. 2. หาระยะทางแนวราบ ($s_x$): $s_x = v_x t = 150 \\times 20 = 3000$ m.",
+    explanation: "1. หาเวลาตก ($t$) จากแนวดิ่ง ($u_y=0$): $s_y = \\frac{1}{2}gt^2 \\implies 2000 = \\frac{1}{2}(10)t^2 \\implies t^2 = 400 \\implies t = 20$ s. <br>2. หาระยะทางแนวราบ ($s_x$): $s_x = v_x t = 150 \\times 20 = 3000$ m.",
     subCategory: {
       main: MAIN_CATEGORY,
       specific: LO_16
@@ -324,7 +324,7 @@ export const quizItems = [
     answer: 10,
     unit: "m",
     hint: "ใช้สูตรระยะทางแนวราบ $R = \\frac{u^2 \\sin(2\\theta)}{g}$",
-    explanation: "ระยะทาง $R = \\frac{10^2 \\sin(2 \\times 45^\\circ)}{10} = \\frac{100 \\sin(90^\\circ)}{10} = \\frac{100(1)}{10} = 10$ เมตร",
+    explanation: "จากสูตร $R = \\frac{u^2 \\sin(2\\theta)}{g}$. <br>แทนค่า $R = \\frac{10^2 \\sin(90^\\circ)}{10} = \\frac{100(1)}{10} = 10$ เมตร",
     subCategory: {
       main: MAIN_CATEGORY,
       specific: LO_16
@@ -350,7 +350,7 @@ export const quizItems = [
     unit: "m/s",
     tolerance: 0.5,
     hint: "หา $u_y$ จาก $v_y^2 = u_y^2 + 2as$ ก่อน แล้วจึงหา $u$ จาก $u_y = u \\sin\\theta$",
-    explanation: "1. หา $u_y$: $0^2 = u_y^2 + 2(-10)(15) \\implies u_y^2 = 300 \\implies u_y = \\sqrt{300} \\approx 17.32$ m/s. 2. หา $u$: $u = u_y / \\sin(60^\\circ) = 17.32 / 0.866 = 20$ m/s.",
+    explanation: "1. หาความเร็วต้นในแนวดิ่ง ($u_y$): ที่จุดสูงสุด $v_y=0$. จาก $v_y^2 = u_y^2 + 2g s_y$. <br>แทนค่า $0 = u_y^2 + 2(-10)(15) \\implies u_y^2 = 300 \\implies u_y = \\sqrt{300} \\approx 17.32$ m/s. <br>2. หาความเร็วต้น ($u$): จาก $u_y = u \\sin(60^\\circ) \\implies u = 17.32 / 0.866 = 20$ m/s.",
     subCategory: {
       main: MAIN_CATEGORY,
       specific: LO_16
@@ -377,7 +377,7 @@ export const quizItems = [
     decimalPlaces: 2,
     tolerance: 0.01,
     hint: "ใช้สมการ $s_y = u_y t + \\frac{1}{2}gt^2$ โดย $u_y$ มีทิศลง (เป็นบวก) และแก้สมการกำลังสอง",
-    explanation: "$u_y = 10 \\sin(30^\\circ) = 5$ m/s. จาก $20 = 5t + 5t^2 \\implies t^2 + t - 4 = 0$. ใช้สูตรแก้สมการกำลังสอง จะได้ $t \\approx 1.56$ s (เลือกค่าบวก).",
+    explanation: "หาความเร็วต้นแนวดิ่ง (ทิศลง): $u_y = 10 \\sin(30^\\circ) = 5$ m/s. <br>จาก $s_y = u_y t + \\frac{1}{2}gt^2 \\implies 20 = 5t + 5t^2$. <br>จัดรูปสมการ: $t^2 + t - 4 = 0$. ใช้สูตร $t = \\frac{-1 \\pm \\sqrt{1 - 4(1)(-4)}}{2} \\approx 1.56$ s.",
     subCategory: {
       main: MAIN_CATEGORY,
       specific: LO_16
@@ -407,7 +407,7 @@ export const quizItems = [
         answer: 40,
         unit: "m",
         hint: "ใช้สมการ $s_y = u_y t - \\frac{1}{2}gt^2$",
-        explanation: "$u_y = 50 \\sin(37^\\circ) = 30$ m/s. $s_y = (30)(2) - \\frac{1}{2}(10)(2^2) = 60 - 20 = 40$ เมตร",
+        explanation: "หาความเร็วต้นแนวดิ่ง: $u_y = 50 \\sin(37^\\circ) = 30$ m/s. <br>หาความสูงจาก $s_y = u_y t - \\frac{1}{2}gt^2$. <br>แทนค่า $s_y = (30)(2) - 5(2^2) = 60 - 20 = 40$ เมตร",
         subCategory: {
           main: MAIN_CATEGORY,
           specific: LO_16
@@ -421,7 +421,7 @@ export const quizItems = [
         unit: "m/s",
         tolerance: 0.01,
         hint: "หา $v_x$ และ $v_y$ ที่เวลา 2 วินาที แล้วรวมเวกเตอร์แบบพีทาโกรัส",
-        explanation: "$v_x = u_x = 50 \\cos(37^\\circ) = 40$ m/s. $v_y = u_y - gt = 30 - 10(2) = 10$ m/s. $v = \\sqrt{v_x^2 + v_y^2} = \\sqrt{40^2 + 10^2} = \\sqrt{1700} \\approx 41.23$ m/s.",
+        explanation: "หาความเร็วแนวราบ: $v_x = u_x = 50 \\cos(37^\\circ) = 40$ m/s. <br>หาความเร็วแนวดิ่ง: $v_y = u_y - gt = 30 - 10(2) = 10$ m/s. <br>หาความเร็วลัพธ์: $v = \\sqrt{v_x^2 + v_y^2} = \\sqrt{40^2 + 10^2} = \\sqrt{1700} \\approx 41.23$ m/s.",
         subCategory: {
           main: MAIN_CATEGORY,
           specific: LO_16
@@ -521,7 +521,7 @@ export const quizItems = [
     unit: "m/s",
     tolerance: 0.2,
     hint: "ใช้สูตรระยะทางแนวราบ $R = \\frac{u^2 \\sin(2\\theta)}{g}$ แล้วแก้สมการหา $u$",
-    explanation: "$20 = \\frac{u^2 \\sin(90^\\circ)}{10} \\implies u^2 = 200 \\implies u = \\sqrt{200} \\approx 14.14$ m/s.",
+    explanation: "จากสูตร $R = \\frac{u^2 \\sin(2\\theta)}{g}$. <br>แทนค่า $20 = \\frac{u^2 \\sin(90^\\circ)}{10} \\implies u^2 = 200 \\implies u = \\sqrt{200} \\approx 14.14$ m/s.",
     subCategory: {
       main: MAIN_CATEGORY,
       specific: LO_16
@@ -546,7 +546,7 @@ export const quizItems = [
     answer: 4,
     unit: "s",
     hint: "พิจารณาเฉพาะการเคลื่อนที่ในแนวดิ่ง",
-    explanation: "จาก $s_y = \\frac{1}{2}gt^2 \\implies 80 = 5t^2 \\implies t^2 = 16 \\implies t = 4$ วินาที",
+    explanation: "พิจารณาการเคลื่อนที่ในแนวดิ่ง ($u_y=0$): จาก $s_y = \\frac{1}{2}gt^2$. <br>แทนค่า $80 = 5t^2 \\implies t^2 = 16 \\implies t = 4$ วินาที",
     subCategory: {
       main: MAIN_CATEGORY,
       specific: LO_16

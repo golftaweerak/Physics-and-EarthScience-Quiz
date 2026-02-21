@@ -69,7 +69,7 @@ export const quizItems = [
         answer: 6,
         unit: "s",
         hint: "ที่จุดสูงสุด ความเร็วในแนวดิ่งเป็นศูนย์ ใช้สมการ \\(v_y = u_y + gt\\)",
-        explanation: "\\(u_y = u \\sin(37^\\circ) = 100 \\times 0.6 = 60\\) m/s. จาก \\(v_y = u_y + at \\Rightarrow 0 = 60 + (-10)t \\Rightarrow t = 6\\) วินาที",
+        explanation: "หาความเร็วต้นในแนวดิ่ง: \\(u_y = u \\sin(37^\\circ) = 100(0.6) = 60\\) m/s. <br>ที่จุดสูงสุด \\(v_y = 0\\). จาก \\(v_y = u_y + gt \\Rightarrow 0 = 60 + (-10)t \\Rightarrow t = 6\\) วินาที",
         subCategory: { main: MAIN_CATEGORY, specific: LO_16 }
       },
       {
@@ -79,7 +79,7 @@ export const quizItems = [
         answer: 180,
         unit: "m",
         hint: "ใช้สมการ \\(s_y = u_y t + \\frac{1}{2}gt^2\\) หรือ \\(v_y^2 = u_y^2 + 2gs_y\\)",
-        explanation: "\\(u_y = 100 \\sin(37^\\circ) = 60\\) m/s. ที่จุดสูงสุด \\(v_y = 0\\). จาก \\(v_y^2 = u_y^2 + 2gs_y \\Rightarrow 0 = 60^2 + 2(-10)s_y \\Rightarrow 20s_y = 3600 \\Rightarrow s_y = 180\\) เมตร",
+        explanation: "หาความเร็วต้นในแนวดิ่ง: \\(u_y = 100 \\sin(37^\\circ) = 60\\) m/s. <br>ที่จุดสูงสุด \\(v_y = 0\\). จาก \\(v_y^2 = u_y^2 + 2gs_y \\Rightarrow 0 = 60^2 + 2(-10)s_y \\Rightarrow 20s_y = 3600 \\Rightarrow s_y = 180\\) เมตร",
         subCategory: { main: MAIN_CATEGORY, specific: LO_16 }
       },
       {
@@ -89,7 +89,7 @@ export const quizItems = [
         answer: 960,
         unit: "m",
         hint: "ระยะทางแนวราบ = ความเร็วแนวราบ × เวลาทั้งหมด (เวลาขึ้น + เวลาลง)",
-        explanation: "\\(u_y = 60\\) m/s. เวลาขึ้นสูงสุด \\(t = u_y/g = 6\\) s. เวลาทั้งหมด \\(T = 12\\) s. \\(u_x = 100\\cos(37^\\circ) = 80\\) m/s. \\(s_x = u_x T = 80 \\times 12 = 960\\) เมตร",
+        explanation: "หาความเร็วต้นในแนวดิ่ง: \\(u_y = 60\\) m/s. <br>หาเวลาขึ้นถึงจุดสูงสุด: \\(t_{up} = u_y/g = 60/10 = 6\\) s. เวลาทั้งหมด \\(T = 2t_{up} = 12\\) s. <br>หาความเร็วแนวราบ: \\(u_x = 100\\cos(37^\\circ) = 80\\) m/s. <br>ระยะทางแนวราบ: \\(s_x = u_x T = 80 \\times 12 = 960\\) เมตร",
         subCategory: { main: MAIN_CATEGORY, specific: LO_16 }
       }
     ]
@@ -136,7 +136,7 @@ export const quizItems = [
         answer: 50,
         unit: "m/s",
         hint: "ที่จุดสูงสุด \\(v_y=0\\). ใช้ \\(v_y = u_y - gt\\) เพื่อหา \\(u_y\\) ก่อน แล้วจึงหา \\(u\\) จาก \\(u_y = u \\sin\\theta\\)",
-        explanation: "\\(0 = u_y - 10(4) \\Rightarrow u_y = 40\\) m/s. จาก \\(40 = u \\sin(53^\\circ) = u(0.8) \\Rightarrow u = 40/0.8 = 50\\) m/s.",
+        explanation: "ที่จุดสูงสุด \\(v_y=0\\). จาก \\(v_y = u_y - gt \\Rightarrow 0 = u_y - 10(4) \\Rightarrow u_y = 40\\) m/s. <br>จาก \\(u_y = u \\sin(53^\\circ) \\Rightarrow 40 = u(0.8) \\Rightarrow u = 40/0.8 = 50\\) m/s.",
         subCategory: { main: MAIN_CATEGORY, specific: LO_16 }
       },
       {
@@ -146,7 +146,7 @@ export const quizItems = [
         answer: 240,
         unit: "m",
         hint: "เวลาทั้งหมดคือ 2 เท่าของเวลาถึงจุดสูงสุด. ระยะทางแนวราบ = \\(u_x \\times t_{total}\\)",
-        explanation: "เวลาทั้งหมด \\(T = 2 \\times 4 = 8\\) s. หา \\(u_y\\) จาก \\(v_y = u_y - gt \\Rightarrow 0 = u_y - 10(4) \\Rightarrow u_y = 40\\). \\(u_x = u_y \\cot 53^\\circ = 30\\) m/s. \\(s_x = 30 \\times 8 = 240\\) เมตร.",
+        explanation: "เวลาทั้งหมด \\(T = 2 \\times 4 = 8\\) s. <br>หาความเร็วต้นในแนวดิ่ง: จาก \\(v_y = u_y - gt \\Rightarrow 0 = u_y - 10(4) \\Rightarrow u_y = 40\\) m/s. <br>หาความเร็วแนวราบ: \\(u_x = u_y \\cot 53^\\circ = 40(3/4) = 30\\) m/s. <br>ระยะทางแนวราบ: \\(s_x = u_x T = 30 \\times 8 = 240\\) เมตร.",
         subCategory: { main: MAIN_CATEGORY, specific: LO_16 }
       }
     ]
@@ -182,7 +182,7 @@ export const quizItems = [
         answer: 15,
         unit: "m",
         hint: "ใช้สมการ \\(s_y = u_y t - \\frac{1}{2}gt^2\\)",
-        explanation: "\\(u_y = 40 \\sin(30^\\circ) = 20\\) m/s. \\(s_y = (20)(3) - 0.5(10)(3)^2 = 60 - 45 = 15\\) เมตร.",
+        explanation: "หาความเร็วต้นในแนวดิ่ง: \\(u_y = 40 \\sin(30^\\circ) = 20\\) m/s. <br>หาความสูงจาก \\(s_y = u_y t - \\frac{1}{2}gt^2\\). <br>แทนค่า \\(s_y = (20)(3) - 0.5(10)(3)^2 = 60 - 45 = 15\\) เมตร.",
         subCategory: { main: MAIN_CATEGORY, specific: LO_16 }
       },
       {
@@ -193,7 +193,7 @@ export const quizItems = [
         unit: "m/s",
         tolerance: 0.1,
         hint: "หา \\(v_x\\) และ \\(v_y\\) ที่เวลา 3 วินาที แล้วรวมเวกเตอร์แบบพีทาโกรัส",
-        explanation: "\\(u_x = 40 \\cos(30^\\circ) \\approx 34.64\\) m/s. \\(u_y = 40 \\sin(30^\\circ) = 20\\) m/s. \\(v_y = u_y - gt = 20 - 10(3) = -10\\) m/s. \\(v = \\sqrt{u_x^2 + v_y^2} = \\sqrt{34.64^2 + (-10)^2} = \\sqrt{1200 + 100} \\approx 36.1\\) m/s.",
+        explanation: "หาความเร็วแนวราบ: \\(u_x = 40 \\cos(30^\\circ) \\approx 34.64\\) m/s. <br>หาความเร็วต้นในแนวดิ่ง: \\(u_y = 40 \\sin(30^\\circ) = 20\\) m/s. <br>หาความเร็วแนวดิ่งที่เวลา 3s: \\(v_y = u_y - gt = 20 - 10(3) = -10\\) m/s. <br>หาความเร็วลัพธ์: \\(v = \\sqrt{u_x^2 + v_y^2} = \\sqrt{34.64^2 + (-10)^2} = \\sqrt{1200 + 100} \\approx 36.1\\) m/s.",
         subCategory: { main: MAIN_CATEGORY, specific: LO_16 }
       }
     ]
@@ -214,7 +214,7 @@ export const quizItems = [
     answer: 20,
     unit: "m/s",
     hint: "ใช้สูตรระยะทางแนวราบ \\(R = \\frac{u^2 \\sin(2\\theta)}{g}\\) แล้วแก้สมการหา \\(u\\)",
-    explanation: "\\(40 = \\frac{u^2 \\sin(90^\\circ)}{10} \\Rightarrow u^2 = 400 \\Rightarrow u = 20\\) m/s.",
+    explanation: "จากสูตร \\(R = \\frac{u^2 \\sin(2\\theta)}{g}\\). <br>แทนค่า \\(160 = \\frac{u^2 \\sin(90°)}{10} \\Rightarrow u^2 = 1600 \\Rightarrow u = 40\\) m/s.",
     subCategory: { main: MAIN_CATEGORY, specific: LO_16 }
   },
   {

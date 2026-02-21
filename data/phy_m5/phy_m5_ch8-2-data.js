@@ -160,7 +160,7 @@ export const quizItems = [
     answer: 30,
     unit: "rad/s",
     hint: "ใช้สูตร \\(\\omega = 2\\pi f\\)",
-    explanation: "\\(\\omega = 2\\pi f = 2(3)(5) = 30\\) rad/s",
+    explanation: "จากสูตร \\(\\omega = 2\\pi f\\). แทนค่า \\(\\omega = 2(3)(5) = 30\\) rad/s",
     subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
   },
   {
@@ -171,7 +171,7 @@ export const quizItems = [
     unit: "s",
     tolerance: 0.1,
     hint: "ใช้สูตร \\(T = 2\\pi\\sqrt{m/k}\\)",
-    explanation: "\\(T = 2\\pi\\sqrt{1/100} = 2(3.14)(0.1) = 0.628 \\approx 0.6\\) s",
+    explanation: "จากสูตร \\(T = 2\\pi\\sqrt{m/k}\\). แทนค่า \\(T = 2(3.14)\\sqrt{1/100} = 2(3.14)(0.1) = 0.628 \\approx 0.6\\) s",
     subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
   },
   {
@@ -186,7 +186,7 @@ export const quizItems = [
         answer: 2,
         unit: "m/s",
         hint: "อัตราเร็วสูงสุด \\(v_{max} = \\omega A\\)",
-        explanation: "\\(v_{max} = \\omega A = 4 \\times 0.5 = 2\\) m/s",
+        explanation: "จากสูตร \\(v_{max} = \\omega A\\). แทนค่า \\(v_{max} = 4 \\times 0.5 = 2\\) m/s",
         subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
       },
       {
@@ -196,7 +196,7 @@ export const quizItems = [
         answer: 8,
         unit: "m/s²",
         hint: "ความเร่งสูงสุด \\(a_{max} = \\omega^2 A\\)",
-        explanation: "\\(a_{max} = \\omega^2 A = 4^2 \\times 0.5 = 16 \\times 0.5 = 8\\) m/s²",
+        explanation: "จากสูตร \\(a_{max} = \\omega^2 A\\). แทนค่า \\(a_{max} = 4^2 \\times 0.5 = 16 \\times 0.5 = 8\\) m/s²",
         subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
       }
     ]
@@ -208,7 +208,7 @@ export const quizItems = [
     answer: -20,
     unit: "cm/s",
     hint: "หาอนุพันธ์ของ x เทียบกับ t จะได้สมการความเร็ว \\(v = \\omega A \\cos(\\omega t)\\) หรือแทนค่าในสูตร",
-    explanation: "\\(v = \\frac{dx}{dt} = 10(2)\\cos(2t) = 20\\cos(2t)\\). เมื่อ \\(t = \\pi/2\\), \\(v = 20\\cos(\\pi) = 20(-1) = -20\\) cm/s",
+    explanation: "ความเร็วคืออนุพันธ์ของการกระจัด: \\(v = \\frac{dx}{dt} = 10(2)\\cos(2t) = 20\\cos(2t)\\). แทนค่า \\(t = \\pi/2\\) จะได้ \\(v = 20\\cos(\\pi) = 20(-1) = -20\\) cm/s",
     subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
   },
   {
@@ -219,7 +219,7 @@ export const quizItems = [
     unit: "s",
     tolerance: 0.1,
     hint: "ใช้สูตร \\(T = 2\\pi\\sqrt{L/g}\\)",
-    explanation: "\\(T = 2(3)\\sqrt{1.6/4} = 6\\sqrt{0.4} \\approx 6(0.632) \\approx 3.79\\) s. (ถ้าใช้ \\(\\pi=3.14\\) จะได้ \\(3.97\\) s). ตอบประมาณ 3.8 s",
+    explanation: "จากสูตร \\(T = 2\\pi\\sqrt{L/g}\\). แทนค่า \\(T = 2(3)\\sqrt{1.6/4} = 6\\sqrt{0.4} \\approx 6(0.632) \\approx 3.79\\) s. (ถ้าใช้ \\(\\pi=3.14\\) จะได้ \\(3.97\\) s). ตอบประมาณ 3.8 s",
     subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
   },
   {
@@ -229,7 +229,7 @@ export const quizItems = [
     answer: 200,
     unit: "N/m",
     hint: "ใช้กฎของฮุค \\(F = kx\\) โดย \\(F = mg\\) และเปลี่ยนหน่วย cm เป็น m",
-    explanation: "\\(mg = kx \\Rightarrow 2(10) = k(0.1) \\Rightarrow 20 = 0.1k \\Rightarrow k = 200\\) N/m",
+    explanation: "จากกฎของฮุค \\(F = kx\\) และ \\(F = mg\\). แทนค่า \\(2(10) = k(0.1) \\Rightarrow 20 = 0.1k \\Rightarrow k = 200\\) N/m",
     subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
   },
   {
@@ -239,7 +239,7 @@ export const quizItems = [
     answer: 40,
     unit: "J",
     hint: "พลังงานกลรวม = พลังงานจลน์ + พลังงานศักย์",
-    explanation: "\\(E = E_k + E_p \\Rightarrow 100 = E_k + 60 \\Rightarrow E_k = 40\\) J",
+    explanation: "จากกฎการอนุรักษ์พลังงานกล \\(E = E_k + E_p\\). แทนค่า \\(100 = E_k + 60 \\Rightarrow E_k = 40\\) J",
     subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
   },
   {
@@ -249,7 +249,7 @@ export const quizItems = [
     answer: 4,
     unit: "m/s",
     hint: "ใช้สูตร \\(v = \\omega\\sqrt{A^2 - x^2}\\)",
-    explanation: "\\(v = 10\\sqrt{0.5^2 - 0.3^2} = 10\\sqrt{0.25 - 0.09} = 10\\sqrt{0.16} = 10(0.4) = 4\\) m/s",
+    explanation: "จากสูตร \\(v = \\omega\\sqrt{A^2 - x^2}\\). แทนค่า \\(v = 10\\sqrt{0.5^2 - 0.3^2} = 10\\sqrt{0.25 - 0.09} = 10\\sqrt{0.16} = 10(0.4) = 4\\) m/s",
     subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
   },
   {
@@ -269,7 +269,7 @@ export const quizItems = [
     answer: 0.25,
     unit: "m",
     hint: "\\(T \\propto \\sqrt{L}\\) หรือ \\(T_1/T_2 = \\sqrt{L_1/L_2}\\)",
-    explanation: "\\(2/1 = \\sqrt{1/L_2} \\Rightarrow 4 = 1/L_2 \\Rightarrow L_2 = 1/4 = 0.25\\) m",
+    explanation: "จาก \\(T \\propto \\sqrt{L}\\). ตั้งสมการเปรียบเทียบ \\(T_1/T_2 = \\sqrt{L_1/L_2}\\). แทนค่า \\(2/1 = \\sqrt{1/L_2} \\Rightarrow 4 = 1/L_2 \\Rightarrow L_2 = 1/4 = 0.25\\) m",
     subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
   },
   {
@@ -279,7 +279,7 @@ export const quizItems = [
     answer: 2,
     unit: "Hz",
     hint: "ความถี่ = จำนวนรอบ / เวลา (วินาที)",
-    explanation: "\\(f = 120 / 60 = 2\\) Hz",
+    explanation: "จากสูตร \\(f = \\frac{\\text{จำนวนรอบ}}{\\text{เวลา}}\\). แทนค่า \\(f = 120 / 60 = 2\\) Hz",
     subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
   },
   {
@@ -289,7 +289,7 @@ export const quizItems = [
     answer: 4,
     unit: "rad/s",
     hint: "ความชันของกราฟ a-x คือ \\(-\\omega^2\\)",
-    explanation: "ความชัน \\(= -\\omega^2 = -16 \\Rightarrow \\omega^2 = 16 \\Rightarrow \\omega = 4\\) rad/s",
+    explanation: "จากสมการ \\(a = -\\omega^2 x\\) ความชันของกราฟ a-x คือ \\(-\\omega^2\\). ดังนั้น \\(-\\omega^2 = -16 \\Rightarrow \\omega^2 = 16 \\Rightarrow \\omega = 4\\) rad/s",
     subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
   },
   {
@@ -299,7 +299,7 @@ export const quizItems = [
     answer: 5,
     unit: "m/s",
     hint: "\\(E_{k,max} = \\frac{1}{2}mv_{max}^2\\)",
-    explanation: "\\(50 = \\frac{1}{2}(4)v_{max}^2 \\Rightarrow 50 = 2v_{max}^2 \\Rightarrow v_{max}^2 = 25 \\Rightarrow v_{max} = 5\\) m/s",
+    explanation: "จากสูตร \\(E_{k,max} = \\frac{1}{2}mv_{max}^2\\). แทนค่า \\(50 = \\frac{1}{2}(4)v_{max}^2 \\Rightarrow 50 = 2v_{max}^2 \\Rightarrow v_{max}^2 = 25 \\Rightarrow v_{max} = 5\\) m/s",
     subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
   },
   {
@@ -309,7 +309,7 @@ export const quizItems = [
     answer: 5,
     unit: "m",
     hint: "จากสมการ \\(v_{max} = \\omega A\\) เทียบสัมประสิทธิ์หน้า cos",
-    explanation: "\\(v_{max} = 10\\) และ \\(\\omega = 2\\). จาก \\(v_{max} = \\omega A \\Rightarrow 10 = 2A \\Rightarrow A = 5\\) m",
+    explanation: "จากสมการความเร็ว \\(v = v_{max} \\cos(\\omega t)\\). เทียบสัมประสิทธิ์จะได้ \\(v_{max} = 10\\) และ \\(\\omega = 2\\). จาก \\(v_{max} = \\omega A \\Rightarrow 10 = 2A \\Rightarrow A = 5\\) m",
     subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
   },
   {
@@ -319,7 +319,7 @@ export const quizItems = [
     answer: 2,
     unit: "s",
     hint: "เวลาจากสมดุลถึงจุดปลายคือ \\(T/4\\)",
-    explanation: "\\(t = T/4 = 0.5 \\Rightarrow T = 0.5 \\times 4 = 2\\) s",
+    explanation: "เวลาที่ใช้เคลื่อนที่จากสมดุลถึงจุดสูงสุดคือ \\(T/4\\). ดังนั้น \\(T/4 = 0.5 \\Rightarrow T = 0.5 \\times 4 = 2\\) s",
     subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
   },
   {
@@ -329,7 +329,7 @@ export const quizItems = [
     answer: 1,
     unit: "Hz",
     hint: "\\(f \\propto 1/\\sqrt{m}\\)",
-    explanation: "\\(f_2/f_1 = \\sqrt{m_1/m_2} = \\sqrt{1/4} = 1/2\\). ดังนั้น \\(f_2 = f_1/2 = 2/2 = 1\\) Hz",
+    explanation: "จาก \\(f = \\frac{1}{2\\pi}\\sqrt{\\frac{k}{m}}\\) จะได้ \\(f \\propto \\frac{1}{\\sqrt{m}}\\). ตั้งสมการเปรียบเทียบ \\(f_2/f_1 = \\sqrt{m_1/m_2} = \\sqrt{1/4} = 1/2\\). ดังนั้น \\(f_2 = f_1/2 = 2/2 = 1\\) Hz",
     subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
   },
   {
@@ -339,7 +339,7 @@ export const quizItems = [
     answer: 0.25,
     unit: "",
     hint: "\\(E_p / E_{total} = (\\frac{1}{2}kx^2) / (\\frac{1}{2}kA^2) = (x/A)^2\\)",
-    explanation: "\\(E_p / E_{total} = (2/4)^2 = (0.5)^2 = 0.25\\)",
+    explanation: "จากสูตร \\(E_p = \\frac{1}{2}kx^2\\) และ \\(E_{total} = \\frac{1}{2}kA^2\\). อัตราส่วน \\(E_p / E_{total} = (x/A)^2 = (2/4)^2 = (0.5)^2 = 0.25\\)",
     subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
   },
   {
@@ -349,7 +349,7 @@ export const quizItems = [
     answer: 1,
     unit: "s",
     hint: "\\(T \\propto 1/\\sqrt{g}\\)",
-    explanation: "\\(T_{new} = T_{earth} \\sqrt{g_{earth}/g_{new}} = 2 \\sqrt{1/4} = 2(1/2) = 1\\) s",
+    explanation: "จาก \\(T = 2\\pi\\sqrt{L/g}\\) จะได้ \\(T \\propto 1/\\sqrt{g}\\). ตั้งสมการเปรียบเทียบ \\(T_{new}/T_{earth} = \\sqrt{g_{earth}/g_{new}} = \\sqrt{1/4} = 1/2\\). ดังนั้น \\(T_{new} = 2(1/2) = 1\\) s",
     subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
   },
   {
@@ -359,7 +359,7 @@ export const quizItems = [
     answer: 5,
     unit: "rad/s",
     hint: "\\(a_{max} = \\omega^2 A\\) และ \\(v_{max} = \\omega A\\) นำมาหารกัน",
-    explanation: "\\(a_{max}/v_{max} = (\\omega^2 A) / (\\omega A) = \\omega\\). ดังนั้น \\(\\omega = 20/4 = 5\\) rad/s",
+    explanation: "จาก \\(a_{max} = \\omega^2 A\\) และ \\(v_{max} = \\omega A\\). นำมาหารกันจะได้ \\(a_{max}/v_{max} = \\omega\\). แทนค่า \\(\\omega = 20/4 = 5\\) rad/s",
     subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
   }
 ];

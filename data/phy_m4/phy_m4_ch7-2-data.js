@@ -109,7 +109,7 @@ export const quizItems = [
     answer: 50,
     unit: "N",
     hint: "ใช้สูตร \\(F_c = \\frac{mv^2}{r}\\)",
-    explanation: "\\(F_c = \\frac{(2)(5^2)}{1} = 50\\) N.",
+    explanation: "จากสูตรแรงสู่ศูนย์กลาง \\(F_c = \\frac{mv^2}{r}\\). <br>แทนค่า \\(F_c = \\frac{(2)(5^2)}{1} = 50\\) N.",
     subCategory: { main: MAIN_CATEGORY, specific: LO_17 }
   },
   {
@@ -119,7 +119,7 @@ export const quizItems = [
     answer: 31.4,
     unit: "rad/s",
     hint: "แปลงจาก 'รอบต่อนาที' เป็น 'รอบต่อวินาที' (ความถี่ f) ก่อน แล้วใช้สูตร \\(\\omega = 2\\pi f\\)",
-    explanation: "ความถี่ \\(f = 300 \\text{ รอบ} / 60 \\text{ s} = 5\\) Hz. อัตราเร็วเชิงมุม \\(\\omega = 2\\pi f = 2(3.14)(5) = 31.4\\) rad/s.",
+    explanation: "หาความถี่: \\(f = \\frac{300}{60} = 5\\) Hz. <br>หาอัตราเร็วเชิงมุม: \\(\\omega = 2\\pi f = 2(3.14)(5) = 31.4\\) rad/s.",
     subCategory: { main: MAIN_CATEGORY, specific: LO_17 }
   },
   {
@@ -222,7 +222,7 @@ export const quizItems = [
     answer: 10,
     unit: "rad/s",
     hint: "ใช้สมการการเคลื่อนที่เชิงมุม \\(\\omega_f = \\omega_i + \\alpha t\\)",
-    explanation: "\\(\\omega_f = 0 + (2)(5) = 10\\) rad/s.",
+    explanation: "จากสมการการเคลื่อนที่เชิงมุม \\(\\omega_f = \\omega_i + \\alpha t\\). <br>แทนค่า \\(\\omega_f = 0 + (2)(5) = 10\\) rad/s.",
     subCategory: { main: MAIN_CATEGORY, specific: LO_17 }
   },
   {
@@ -232,7 +232,7 @@ export const quizItems = [
     answer: 1.26,
     unit: "s",
     hint: "หาคาบ (T) จากความสัมพันธ์ \\(v = 2\\pi r / T\\)",
-    explanation: "\\(T = \\frac{2\\pi r}{v} = \\frac{2(3.14)(2)}{10} = \\frac{12.56}{10} = 1.256 \\approx 1.26\\) s.",
+    explanation: "จากสูตรคาบ \\(T = \\frac{2\\pi r}{v}\\). <br>แทนค่า \\(T = \\frac{2(3.14)(2)}{10} = \\frac{12.56}{10} \\approx 1.26\\) s.",
     subCategory: { main: MAIN_CATEGORY, specific: LO_17 }
   },
   {
@@ -242,19 +242,17 @@ export const quizItems = [
     answer: 20,
     unit: "m/s",
     hint: "แรงเสียดทานสถิตสูงสุดทำหน้าที่เป็นแรงสู่ศูนย์กลาง: \\(\\mu_s mg = mv^2/r\\)",
-    explanation: "\\(v_{max} = \\sqrt{\\mu_s g r} = \\sqrt{0.5 \\times 10 \\times 80} = \\sqrt{400} = 20\\) m/s.",
+    explanation: "จากสูตรอัตราเร็วสูงสุดบนทางโค้งราบ \\(v_{max} = \\sqrt{\\mu_s g r}\\). <br>แทนค่า \\(v_{max} = \\sqrt{0.5 \\times 10 \\times 80} = \\sqrt{400} = 20\\) m/s.",
     subCategory: { main: MAIN_CATEGORY, specific: LO_17 }
   },
   {
     number: 24,
     type: "fill-in-number",
-    question: "ถนนโค้งถูกออกแบบให้ยกขอบนอกสูงกว่าขอบในทำมุม 14° กับแนวระดับ เพื่อให้รถเลี้ยวโค้งรัศมี 100 เมตร ได้พอดีโดยไม่ต้องอาศัยแรงเสียดทาน จงหาอัตราเร็วที่เหมาะสมสำหรับโค้งนี้ (g=10, tan14°≈0.25) (ตอบเป็นจำนวนเต็มในหน่วย m/s)",
+    question: "ถนนโค้งถูกออกแบบให้ยกขอบนอกสูงกว่าขอบในทำมุม 14° กับแนวระดับ เพื่อให้รถเลี้ยวโค้งรัศมี 250 เมตร ได้พอดีโดยไม่ต้องอาศัยแรงเสียดทาน จงหาอัตราเร็วที่เหมาะสมสำหรับโค้งนี้ (g=10, tan14°≈0.25) (ตอบเป็นจำนวนเต็มในหน่วย m/s)",
     answer: 25,
     unit: "m/s",
     hint: "สำหรับโค้งเอียงที่ไม่มีแรงเสียดทาน \\(\\tan\\theta = v^2 / gr\\)",
-    explanation: "\\(v = \\sqrt{gr \\tan\\theta} = \\sqrt{10 \\times 100 \\times 0.25} = \\sqrt{250} \\approx 15.8\\) m/s. (ขออภัยครับ โจทย์น่าจะตั้งใจให้คำตอบเป็น 50 m/s ซึ่งต้องใช้ g=10 และ tanθ=0.25 และ r=1000 หรือ r=100 และ tanθ=2.5 ซึ่งไม่สมจริง) **ปรับแก้โจทย์เพื่อให้คำนวณลงตัวมากขึ้น:** หากเปลี่ยนรัศมีเป็น 62.5 เมตร จะได้ \\(v = \\sqrt{10 \\times 62.5 \\times 0.25} = \\sqrt{156.25} = 12.5\\) m/s. **ปรับแก้ตามเจตนาเดิมที่น่าจะเป็นไปได้มากที่สุด:** หากต้องการคำตอบ 25 m/s จะต้องมีรัศมี 250 เมตร (\\(v = \\sqrt{10 \\times 250 \\times 0.25} = \\sqrt{625} = 25\\) m/s). ขอปรับคำตอบเป็น 25 และปรับคำอธิบายตามรัศมี 250 เมตร",
-    question: "ถนนโค้งถูกออกแบบให้ยกขอบนอกสูงกว่าขอบในทำมุม 14° กับแนวระดับ เพื่อให้รถเลี้ยวโค้งรัศมี 250 เมตร ได้พอดีโดยไม่ต้องอาศัยแรงเสียดทาน จงหาอัตราเร็วที่เหมาะสมสำหรับโค้งนี้ (g=10, tan14°≈0.25) (ตอบเป็นจำนวนเต็มในหน่วย m/s)",
-    explanation: "\\(v = \\sqrt{gr \\tan\\theta} = \\sqrt{10 \\times 250 \\times 0.25} = \\sqrt{625} = 25\\) m/s.",
+    explanation: "จากสูตรอัตราเร็วบนทางโค้งเอียง \\(v = \\sqrt{gr \\tan\\theta}\\). <br>แทนค่า \\(v = \\sqrt{10 \\times 250 \\times 0.25} = \\sqrt{625} = 25\\) m/s.",
     subCategory: { main: MAIN_CATEGORY, specific: LO_17 }
   },
   {
@@ -278,7 +276,7 @@ export const quizItems = [
       answer: 3.14,
       unit: "m/s",
       hint: "ใช้สูตร \\(v = 2\\pi r / T\\)",
-      explanation: "\\(v = \\frac{2(3.14)(1.5)}{3} = 3.14\\) m/s.",
+    explanation: "จากสูตร \\(v = \\frac{2\\pi r}{T}\\). <br>แทนค่า \\(v = \\frac{2(3.14)(1.5)}{3} = 3.14\\) m/s.",
       subCategory: { main: MAIN_CATEGORY, specific: LO_17 }
     }, {
       number: 27,
@@ -297,7 +295,7 @@ export const quizItems = [
     answer: 200,
     unit: "N",
     hint: "ใช้สูตร \\(F_c = m\\omega^2 r\\)",
-    explanation: "\\(F_c = (4)(5^2)(2) = 4(25)(2) = 200\\) N.",
+    explanation: "จากสูตรแรงสู่ศูนย์กลาง \\(F_c = m\\omega^2 r\\). <br>แทนค่า \\(F_c = (4)(5^2)(2) = 4(25)(2) = 200\\) N.",
     subCategory: { main: MAIN_CATEGORY, specific: LO_17 }
   },
   {
@@ -307,7 +305,7 @@ export const quizItems = [
     answer: 0.262,
     unit: "rad/h",
     hint: "ใช้สูตร \\(\\omega = 2\\pi / T\\) โดย T คือคาบในหน่วยชั่วโมง",
-    explanation: "\\(\\omega = \\frac{2\\pi}{T} = \\frac{2(3.14)}{24} \\approx 0.2617\\) rad/h.",
+    explanation: "จากสูตร \\(\\omega = \\frac{2\\pi}{T}\\). <br>แทนค่า \\(\\omega = \\frac{2(3.14)}{24} \\approx 0.2617\\) rad/h.",
     subCategory: { main: MAIN_CATEGORY, specific: LO_17 }
   },
   {

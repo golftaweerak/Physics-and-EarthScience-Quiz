@@ -197,7 +197,7 @@ export const quizItems = [
         unit: "s",
         tolerance: 0.02,
         hint: "\\(T = 2\\pi/\\omega\\)",
-        explanation: "\\(T = 2(3.14)/6.32 \\approx 0.99\\) s",
+        explanation: "จากกราฟ ความชัน \\(-\\omega^2 = -40 \\Rightarrow \\omega \\approx 6.32\\) rad/s. <br>หาคาบ \\(T = 2\\pi/\\omega = 2(3.14)/6.32 \\approx 0.99\\) s",
         subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
       }
     ]
@@ -309,7 +309,7 @@ export const quizItems = [
         answer: 1.50,
         unit: "J",
         hint: "หา \\(E_p\\) ที่ x=0.1 แล้วนำไปลบออกจากพลังงานรวม",
-        explanation: "\\(E_p = \\frac{1}{2}(100)(0.1)^2 = 50(0.01) = 0.5\\) J. \\(E_k = E_{total} - E_p = 2.0 - 0.5 = 1.5\\) J",
+        explanation: "จากกราฟ \\(E_{total}=2.0\\) J และคำนวณได้ \\(k=100\\) N/m. <br>หาพลังงานศักย์ที่ x=0.1: \\(E_p = \\frac{1}{2}kx^2 = \\frac{1}{2}(100)(0.1)^2 = 0.5\\) J. <br>หาพลังงานจลน์: \\(E_k = E_{total} - E_p = 2.0 - 0.5 = 1.5\\) J",
         subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
       }
     ]
@@ -348,7 +348,7 @@ export const quizItems = [
         answer: 4,
         unit: "J",
         hint: "ที่ t=0.5s เป็นครึ่งทางระหว่างจุดที่พลังงานจลน์ต่ำสุดและสูงสุด (มุมเฟส 45 องศา)",
-        explanation: "คาบ T=4s, \\(\\omega = 2\\pi/4 = \\pi/2\\). ที่ t=0.5s, มุมเฟส \\(\\theta = \\omega t = (\\pi/2)(0.5) = \\pi/4\\) หรือ 45°. ที่มุม 45° พลังงานจลน์และศักย์จะเท่ากัน คือครึ่งหนึ่งของพลังงานรวม. \\(E_p = 8/2 = 4\\) J.",
+        explanation: "จากกราฟ คาบ T=4s. ความถี่เชิงมุม \\(\\omega = 2\\pi/T = \\pi/2\\) rad/s. <br>ที่ t=0.5s, มุมเฟส \\(\\theta = \\omega t = (\\pi/2)(0.5) = \\pi/4\\) (45°). <br>ที่มุม 45° พลังงานจลน์และศักย์จะเท่ากัน คือครึ่งหนึ่งของพลังงานรวม (8 J). \\(E_p = 8/2 = 4\\) J.",
         subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
       }
     ]

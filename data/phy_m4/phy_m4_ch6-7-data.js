@@ -94,7 +94,7 @@ export const quizItems = [
         answer: 2,
         unit: "m/s",
         hint: "ใช้กฎการอนุรักษ์โมเมนตัมสำหรับการชนแบบไม่ยืดหยุ่นสมบูรณ์: \\(m_1u_1 + m_2u_2 = (m_1+m_2)v\\)",
-        explanation: "จากกฎการอนุรักษ์โมเมนตัม: \\((1000)(10) + (4000)(0) = (1000+4000)v \\Rightarrow 10000 = 5000v \\Rightarrow v = 2\\) m/s.",
+        explanation: "จากกฎการอนุรักษ์โมเมนตัม \\(m_1u_1 + m_2u_2 = (m_1+m_2)v\\). <br>แทนค่า \\((1000)(10) + (4000)(0) = (1000+4000)v \\Rightarrow 10000 = 5000v \\Rightarrow v = 2\\) m/s.",
         subCategory: { main: MAIN_CATEGORY, specific: LO_15 }
       },
       {
@@ -126,7 +126,7 @@ export const quizItems = [
     answer: 6,
     unit: "m/s",
     hint: "มวลส่วนที่สองคือ 8 - 3 = 5 kg. ใช้กฎการอนุรักษ์โมเมนตัม",
-    explanation: "จากกฎการอนุรักษ์โมเมนตัม: \\(0 = m_1v_1 + m_2v_2 \\Rightarrow 0 = (3)(10) + (5)v_2 \\Rightarrow -30 = 5v_2 \\Rightarrow v_2 = -6\\) m/s. อัตราเร็วคือ 6 m/s.",
+    explanation: "จากกฎการอนุรักษ์โมเมนตัม (ก่อนระเบิด p=0): \\(0 = m_1v_1 + m_2v_2\\). <br>แทนค่า \\(0 = (3)(10) + (5)v_2 \\Rightarrow -30 = 5v_2 \\Rightarrow v_2 = -6\\) m/s. อัตราเร็วคือ 6 m/s.",
     subCategory: { main: MAIN_CATEGORY, specific: LO_15 }
   },
   {
@@ -141,7 +141,7 @@ export const quizItems = [
         answer: -6,
         unit: "m/s",
         hint: "ใช้สูตรลัด \\(v_1 = \\frac{m_1-m_2}{m_1+m_2}u_1\\) สำหรับการชนแบบยืดหยุ่นที่วัตถุเป้านิ่ง",
-        explanation: "\\(v_A = \\frac{1-4}{1+4}(10) = \\frac{-3}{5}(10) = -6\\) m/s. วัตถุ A จะกระดอนกลับด้วยความเร็ว 6 m/s.",
+        explanation: "จากสูตร \\(v_1 = \\frac{m_1-m_2}{m_1+m_2}u_1\\). <br>แทนค่า \\(v_A = \\frac{1-4}{1+4}(10) = \\frac{-3}{5}(10) = -6\\) m/s. วัตถุ A จะกระดอนกลับด้วยความเร็ว 6 m/s.",
         subCategory: { main: MAIN_CATEGORY, specific: LO_15 }
       },
       {
@@ -151,7 +151,7 @@ export const quizItems = [
         answer: 4,
         unit: "m/s",
         hint: "ใช้สูตรลัด \\(v_2 = \\frac{2m_1}{m_1+m_2}u_1\\) สำหรับการชนแบบยืดหยุ่นที่วัตถุเป้านิ่ง",
-        explanation: "\\(v_B = \\frac{2(1)}{1+4}(10) = \\frac{2}{5}(10) = 4\\) m/s.",
+        explanation: "จากสูตร \\(v_2 = \\frac{2m_1}{m_1+m_2}u_1\\). <br>แทนค่า \\(v_B = \\frac{2(1)}{1+4}(10) = \\frac{2}{5}(10) = 4\\) m/s.",
         subCategory: { main: MAIN_CATEGORY, specific: LO_15 }
       }
     ]
@@ -163,7 +163,7 @@ export const quizItems = [
     answer: 1.75,
     unit: "m/s",
     hint: "กำหนดทิศทางให้ชัดเจน (เช่น ขวาเป็นบวก, ซ้ายเป็นลบ) แล้วใช้กฎการอนุรักษ์โมเมนตัม",
-    explanation: "ให้ทิศขวาเป็นบวก. \\(p_{before} = (5)(4) + (3)(-2) = 20 - 6 = 14\\) kg·m/s. \\(p_{after} = (5+3)v = 8v\\). ดังนั้น \\(8v = 14 \\Rightarrow v = 14/8 = 1.75\\) m/s (เคลื่อนที่ไปทางขวา).",
+    explanation: "ให้ทิศขวาเป็นบวก. \\(p_{before} = m_A u_A + m_B u_B = (5)(4) + (3)(-2) = 20 - 6 = 14\\) kg·m/s. <br>\\(p_{after} = (m_A+m_B)v = (5+3)v = 8v\\). <br>จาก \\(p_{before} = p_{after} \\Rightarrow 14 = 8v \\Rightarrow v = 1.75\\) m/s.",
     subCategory: { main: MAIN_CATEGORY, specific: LO_15 }
   },
   {
@@ -186,7 +186,7 @@ export const quizItems = [
       answer: 120,
       unit: "m/s",
       hint: "ใช้กฎการอนุรักษ์โมเมนตัมช่วงชน \\(mu = (M+m)V\\)",
-      explanation: "มวลรวม \\(M+m = 1.95 + 0.05 = 2\\) kg. จากกฎการอนุรักษ์โมเมนตัม: \\((0.05)u = (2)(3) \\Rightarrow 0.05u = 6 \\Rightarrow u = 6/0.05 = 120\\) m/s.",
+      explanation: "มวลรวม \\(M+m = 1.95 + 0.05 = 2\\) kg. จากกฎการอนุรักษ์โมเมนตัม \\(mu = (M+m)V\\). <br>แทนค่า \\((0.05)u = (2)(3) \\Rightarrow 0.05u = 6 \\Rightarrow u = 6/0.05 = 120\\) m/s.",
       subCategory: { main: MAIN_CATEGORY, specific: LO_15 }
     }]
   },
@@ -197,7 +197,7 @@ export const quizItems = [
     answer: 38.4,
     unit: "J",
     hint: "หาความเร็วของ B หลังชนก่อน แล้วจึงคำนวณพลังงานจลน์ก่อนและหลังชนเพื่อหาผลต่าง",
-    explanation: "1. หา \\(v_B\\): \\(3(8) = 5v_B \\Rightarrow v_B = 24/5 = 4.8\\) m/s. <br>2. \\(KE_i = \\frac{1}{2}(3)(8)^2 = 96\\) J. <br>3. \\(KE_f = \\frac{1}{2}(5)(4.8)^2 = 57.6\\) J. <br>4. พลังงานที่สูญเสีย = \\(96 - 57.6 = 38.4\\) J.",
+    explanation: "1. หาความเร็วหลังชน (A หยุดนิ่ง): จากกฎอนุรักษ์โมเมนตัม \\(m_A u_A = m_B v_B \\Rightarrow 3(8) = 5v_B \\Rightarrow v_B = 4.8\\) m/s. <br>2. \\(KE_i = \\frac{1}{2}(3)(8)^2 = 96\\) J. <br>3. \\(KE_f = \\frac{1}{2}(5)(4.8)^2 = 57.6\\) J. <br>4. พลังงานที่สูญเสีย = \\(96 - 57.6 = 38.4\\) J.",
     subCategory: { main: MAIN_CATEGORY, specific: LO_15 }
   },
   {
@@ -207,7 +207,7 @@ export const quizItems = [
     answer: 2,
     unit: "m/s",
     hint: "โมเมนตัมรวมของระบบ (คน+เรือ) ก่อนและหลังกระโดดต้องเท่ากัน (เป็นศูนย์)",
-    explanation: "จากกฎการอนุรักษ์โมเมนตัม: \\(0 = m_{คน}v_{คน} + m_{เรือ}v_{เรือ} \\Rightarrow 0 = (70)(6) + (210)v_{เรือ} \\Rightarrow -420 = 210v_{เรือ} \\Rightarrow v_{เรือ} = -2\\) m/s. อัตราเร็วคือ 2 m/s.",
+    explanation: "จากกฎการอนุรักษ์โมเมนตัม (ก่อนกระโดด p=0): \\(0 = m_{คน}v_{คน} + m_{เรือ}v_{เรือ}\\). <br>แทนค่า \\(0 = (70)(6) + (210)v_{เรือ} \\Rightarrow -420 = 210v_{เรือ} \\Rightarrow v_{เรือ} = -2\\) m/s. อัตราเร็วคือ 2 m/s.",
     subCategory: { main: MAIN_CATEGORY, specific: LO_15 }
   },
   {
@@ -217,7 +217,7 @@ export const quizItems = [
     answer: 2,
     unit: "m/s",
     hint: "ใช้กฎการอนุรักษ์โมเมนตัม \\(Mv_{before} = m_1v_1 + m_2v_2\\)",
-    explanation: "โมเมนตัมก่อนระเบิด = \\(5 \\times 4 = 20\\). โมเมนตัมหลังระเบิด = \\((2)(7) + (3)v_2\\). ดังนั้น \\(20 = 14 + 3v_2 \\Rightarrow 6 = 3v_2 \\Rightarrow v_2 = 2\\) m/s.",
+    explanation: "จากกฎการอนุรักษ์โมเมนตัม \\(Mv_{before} = m_1v_1 + m_2v_2\\). <br>แทนค่า \\(5(4) = (2)(7) + (3)v_2 \\Rightarrow 20 = 14 + 3v_2 \\Rightarrow 6 = 3v_2 \\Rightarrow v_2 = 2\\) m/s.",
     subCategory: { main: MAIN_CATEGORY, specific: LO_15 }
   },
   {
@@ -247,7 +247,7 @@ export const quizItems = [
     answer: 2.0,
     unit: "m/s",
     hint: "หาโมเมนตัมรวมในแต่ละแกนก่อน แล้วรวมแบบเวกเตอร์เพื่อหาโมเมนตัมลัพธ์ จากนั้นจึงหาความเร็ว",
-    explanation: "\\(p_x = 2(4) = 8\\). \\(p_y = 3(2) = 6\\). โมเมนตัมลัพธ์ \\(p_{total} = \\sqrt{8^2 + 6^2} = 10\\) kg·m/s. จาก \\(p_{total} = (m_A+m_B)v\\), จะได้ \\(10 = (2+3)v \\Rightarrow 5v=10 \\Rightarrow v=2.0\\) m/s.",
+    explanation: "หาโมเมนตัมย่อย: \\(p_x = 2(4) = 8\\), \\(p_y = 3(2) = 6\\). <br>โมเมนตัมลัพธ์ \\(p_{total} = \\sqrt{8^2 + 6^2} = 10\\) kg·m/s. <br>จาก \\(p_{total} = (m_A+m_B)v\\), จะได้ \\(10 = (2+3)v \\Rightarrow 5v=10 \\Rightarrow v=2.0\\) m/s.",
     subCategory: { main: MAIN_CATEGORY, specific: LO_15 }
   },
   {
@@ -257,7 +257,7 @@ export const quizItems = [
     answer: 60,
     unit: "J",
     hint: "หาความเร็วหลังชนก่อน แล้วคำนวณ \\(KE_{loss} = KE_i - KE_f\\)",
-    explanation: "1. หาความเร็วหลังชน (v): \\(2(10) = (2+3)v \\Rightarrow v = 4\\) m/s. <br>2. \\(KE_i = \\frac{1}{2}(2)(10)^2 = 100\\) J. <br>3. \\(KE_f = \\frac{1}{2}(5)(4)^2 = 40\\) J. <br>4. พลังงานที่สูญเสีย = \\(100 - 40 = 60\\) J.",
+    explanation: "1. หาความเร็วหลังชน (v): จากกฎอนุรักษ์โมเมนตัม \\(2(10) = (2+3)v \\Rightarrow v = 4\\) m/s. <br>2. \\(KE_i = \\frac{1}{2}(2)(10)^2 = 100\\) J. <br>3. \\(KE_f = \\frac{1}{2}(5)(4)^2 = 40\\) J. <br>4. พลังงานที่สูญเสีย = \\(100 - 40 = 60\\) J.",
     subCategory: { main: MAIN_CATEGORY, specific: LO_15 }
   },
   {
@@ -267,7 +267,7 @@ export const quizItems = [
     answer: -3,
     unit: "m/s",
     hint: "ใช้กฎการอนุรักษ์โมเมนตัม และระวังเครื่องหมายของความเร็ว",
-    explanation: "ให้ทิศเดิมของ A เป็นบวก. \\(p_i = (3)(5) + (2)(-5) = 5\\). \\(p_f = 3v_A + 2(7) = 3v_A + 14\\). จาก \\(p_i = p_f\\), \\(5 = 3v_A + 14 \\Rightarrow -9 = 3v_A \\Rightarrow v_A = -3\\) m/s.",
+    explanation: "ให้ทิศเดิมของ A เป็นบวก. \\(p_i = (3)(5) + (2)(-5) = 5\\). \\(p_f = 3v_A + 2(7) = 3v_A + 14\\). <br>จาก \\(p_i = p_f\\), จะได้ \\(5 = 3v_A + 14 \\Rightarrow -9 = 3v_A \\Rightarrow v_A = -3\\) m/s.",
     subCategory: { main: MAIN_CATEGORY, specific: LO_15 }
   },
   {
@@ -296,7 +296,7 @@ export const quizItems = [
     answer: 64,
     unit: "J",
     hint: "หาความเร็วของ B หลังชนก่อน (\\(v_B = \\frac{2m_A}{m_A+m_B}u_A\\)) แล้วจึงคำนวณพลังงานจลน์ของ B",
-    explanation: "1. หา \\(v_B\\): \\(v_B = \\frac{2(2)}{2+8}(10) = \\frac{4}{10}(10) = 4\\) m/s. <br>2. หา \\(KE_B\\): \\(KE_B = \\frac{1}{2}m_B v_B^2 = \\frac{1}{2}(8)(4)^2 = 64\\) J.",
+    explanation: "1. หา \\(v_B\\) จากสูตรชนยืดหยุ่น: \\(v_B = \\frac{2m_A}{m_A+m_B}u_A = \\frac{2(2)}{2+8}(10) = \\frac{4}{10}(10) = 4\\) m/s. <br>2. หา \\(KE_B\\): \\(KE_B = \\frac{1}{2}m_B v_B^2 = \\frac{1}{2}(8)(4)^2 = 64\\) J.",
     subCategory: { main: MAIN_CATEGORY, specific: LO_15 }
   },
   {
@@ -306,7 +306,7 @@ export const quizItems = [
     answer: 60,
     unit: "%",
     hint: "หาความเร็วหลังชนก่อน แล้วคำนวณ \\(KE_{loss} = KE_i - KE_f\\) แล้วเทียบเป็นเปอร์เซ็นต์",
-    explanation: "1. หา v หลังชน: \\(4(5) = (4+6)v \\Rightarrow 20 = 10v \\Rightarrow v = 2\\) m/s. <br>2. หา KE ก่อน: \\(KE_i = \\frac{1}{2}(4)(5^2) = 50\\) J. <br>3. หา KE หลัง: \\(KE_f = \\frac{1}{2}(10)(2^2) = 20\\) J. <br>4. สูญเสีย: \\(50 - 20 = 30\\) J. <br>5. คิดเป็นเปอร์เซ็นต์: \\(\\frac{30}{50} \\times 100\\% = 60\\%\\).",
+    explanation: "1. หา v หลังชน (ติดกันไป): \\(4(5) = (4+6)v \\Rightarrow 20 = 10v \\Rightarrow v = 2\\) m/s. <br>2. หา KE ก่อน: \\(KE_i = \\frac{1}{2}(4)(5^2) = 50\\) J. <br>3. หา KE หลัง: \\(KE_f = \\frac{1}{2}(10)(2^2) = 20\\) J. <br>4. สูญเสีย: \\(50 - 20 = 30\\) J. <br>5. คิดเป็นเปอร์เซ็นต์: \\(\\frac{30}{50} \\times 100\\% = 60\\%\\).",
     subCategory: { main: MAIN_CATEGORY, specific: LO_15 }
   },
   {
@@ -335,7 +335,7 @@ export const quizItems = [
     answer: -5,
     unit: "m/s",
     hint: "ใช้กฎการอนุรักษ์โมเมนตัม \\(Mv_{before} = m_1v_1 + m_2v_2\\)",
-    explanation: "โมเมนตัมก่อนระเบิด = \\(6 \\times 10 = 60\\). โมเมนตัมหลังระเบิด = \\((3)(25) + (3)v_2\\). ดังนั้น \\(60 = 75 + 3v_2 \\Rightarrow -15 = 3v_2 \\Rightarrow v_2 = -5\\) m/s.",
+    explanation: "จากกฎการอนุรักษ์โมเมนตัม \\(Mv_{before} = m_1v_1 + m_2v_2\\). <br>แทนค่า \\(6(10) = (3)(25) + (3)v_2 \\Rightarrow 60 = 75 + 3v_2 \\Rightarrow -15 = 3v_2 \\Rightarrow v_2 = -5\\) m/s.",
     subCategory: { main: MAIN_CATEGORY, specific: LO_15 }
   },
   {
@@ -345,7 +345,7 @@ export const quizItems = [
     answer: 8,
     unit: "m/s",
     hint: "ใช้สูตรลัด \\(v_2 = \\frac{2m_1}{m_1+m_2}u_1\\) สำหรับการชนแบบยืดหยุ่นที่วัตถุเป้านิ่ง",
-    explanation: "\\(v_B = \\frac{2(2)}{2+3}(10) = \\frac{4}{5}(10) = 8\\) m/s.",
+    explanation: "จากสูตร \\(v_2 = \\frac{2m_1}{m_1+m_2}u_1\\). <br>แทนค่า \\(v_B = \\frac{2(2)}{2+3}(10) = \\frac{4}{5}(10) = 8\\) m/s.",
     subCategory: { main: MAIN_CATEGORY, specific: LO_15 }
   }
 ];

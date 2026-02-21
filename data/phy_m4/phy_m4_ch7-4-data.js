@@ -95,7 +95,7 @@ export const quizItems = [
     unit: "m/s",
     tolerance: 0.1,
     hint: "ใช้สูตรระยะทางแนวราบ \\(R = \\frac{u^2 \\sin(2\\theta)}{g}\\) แล้วแก้สมการหา u",
-    explanation: "\\(80 = \\frac{u^2 \\sin(90°)}{10} \\Rightarrow u^2 = 800 \\Rightarrow u = \\sqrt{800} \\approx 28.28\\) m/s.",
+    explanation: "จากสูตร \\(R = \\frac{u^2 \\sin(2\\theta)}{g}\\). <br>แทนค่า \\(80 = \\frac{u^2 \\sin(90°)}{10} \\Rightarrow u^2 = 800 \\Rightarrow u = \\sqrt{800} \\approx 28.28\\) m/s.",
     subCategory: { main: MAIN_CATEGORY, specific: LO_16 }
   },
   {
@@ -154,7 +154,7 @@ export const quizItems = [
     unit: "m",
     tolerance: 1,
     hint: "หาเวลาที่พัสดุใช้ในการตกถึงพื้นก่อน (\\(s_y = \\frac{1}{2}gt^2\\)) แล้วจึงคำนวณระยะทางในแนวราบ",
-    explanation: "1. หาเวลาตก: \\(1250 = \\frac{1}{2}(10)t^2 \\Rightarrow t^2 = 250 \\Rightarrow t = \\sqrt{250} \\approx 15.81\\) s. <br>2. หาระยะทางแนวราบ: \\(s_x = u_x t = 180 \\times 15.81 \\approx 2846\\) m.",
+    explanation: "1. หาเวลาตก (\\(u_y=0\\)): จาก \\(s_y = \\frac{1}{2}gt^2\\) จะได้ \\(1250 = \\frac{1}{2}(10)t^2 \\Rightarrow t^2 = 250 \\Rightarrow t = \\sqrt{250} \\approx 15.81\\) s. <br>2. หาระยะทางแนวราบ: \\(s_x = u_x t = 180 \\times 15.81 \\approx 2846\\) m.",
     subCategory: { main: MAIN_CATEGORY, specific: LO_16 }
   },
   {
@@ -174,13 +174,11 @@ export const quizItems = [
   {
     number: 14,
     type: "fill-in-number",
-    question: "ยิงวัตถุจากพื้นด้วยความเร็วต้น 50 m/s ทำมุม 37° กับแนวราบ เมื่อเวลาผ่านไป 5 วินาที ขนาดของความเร็วลัพธ์ของวัตถุเป็นเท่าใด (\\(g=10, \\sin 37°=0.6, \\cos 37°=0.8\\))",
+    question: "ยิงวัตถุจากพื้นด้วยความเร็วต้น 50 m/s ทำมุม 37° กับแนวราบ เมื่อเวลาผ่านไป 6 วินาที ขนาดของความเร็วลัพธ์ของวัตถุเป็นเท่าใด (g=10, sin37°=0.6, cos37°=0.8)",
     answer: 50,
     unit: "m/s",
     hint: "หา \\(v_x\\) และ \\(v_y\\) ที่เวลา 5 วินาที แล้วรวมเวกเตอร์แบบพีทาโกรัส",
-    explanation: "\\(v_x = u_x = 50\\cos(37°) = 40\\) m/s. \\(u_y = 50\\sin(37°) = 30\\) m/s. \\(v_y = u_y - gt = 30 - 10(5) = -20\\) m/s. \\(v = \\sqrt{v_x^2 + v_y^2} = \\sqrt{40^2 + (-20)^2} = \\sqrt{1600 + 400} = \\sqrt{2000} \\approx 44.7\\) m/s. **ขออภัยครับ โจทย์น่าจะตั้งใจให้คำตอบลงตัวกว่านี้** หากเปลี่ยนเวลาเป็น 4 วินาที จะได้ \\(v_y = 30-40 = -10\\) และ \\(v = \\sqrt{40^2+(-10)^2} = \\sqrt{1700} \\approx 41.2\\). หากเปลี่ยนเวลาเป็น 2 วินาที จะได้ \\(v_y = 30-20=10\\) และ \\(v=\\sqrt{1700}\\). **ปรับแก้โจทย์เพื่อให้คำนวณง่ายขึ้น:** ให้เวลาเป็น 6 วินาที. \\(v_y = 30 - 10(6) = -30\\) m/s. \\(v = \\sqrt{40^2 + (-30)^2} = \\sqrt{1600+900} = \\sqrt{2500} = 50\\) m/s. **ขอปรับคำถามเป็นเวลา 6 วินาที**",
-    question: "ยิงวัตถุจากพื้นด้วยความเร็วต้น 50 m/s ทำมุม 37° กับแนวราบ เมื่อเวลาผ่านไป 6 วินาที ขนาดของความเร็วลัพธ์ของวัตถุเป็นเท่าใด (g=10, sin37°=0.6, cos37°=0.8)",
-    explanation: "\\(v_x = u_x = 50\\cos(37°) = 40\\) m/s. \\(u_y = 50\\sin(37°) = 30\\) m/s. ที่ t=6s, \\(v_y = u_y - gt = 30 - 10(6) = -30\\) m/s. \\(v = \\sqrt{v_x^2 + v_y^2} = \\sqrt{40^2 + (-30)^2} = \\sqrt{1600 + 900} = \\sqrt{2500} = 50\\) m/s.",
+    explanation: "หาความเร็วแนวราบ: \\(v_x = u_x = 50\\cos(37°) = 40\\) m/s. <br>หาความเร็วต้นในแนวดิ่ง: \\(u_y = 50\\sin(37°) = 30\\) m/s. <br>หาความเร็วแนวดิ่งที่เวลา 6s: \\(v_y = u_y - gt = 30 - 10(6) = -30\\) m/s. <br>หาความเร็วลัพธ์: \\(v = \\sqrt{v_x^2 + v_y^2} = \\sqrt{40^2 + (-30)^2} = \\sqrt{1600 + 900} = \\sqrt{2500} = 50\\) m/s.",
     subCategory: { main: MAIN_CATEGORY, specific: LO_16 }
   },
   {
@@ -252,7 +250,7 @@ export const quizItems = [
     answer: -20,
     unit: "m/s",
     hint: "หา \\(u_y\\) ก่อน แล้วใช้ \\(v_y = u_y - gt\\). เครื่องหมายลบแสดงว่ากำลังตกลง",
-    explanation: "\\(u_y = 60 \\sin(30°) = 30\\) m/s. \\(v_y = u_y - gt = 30 - 10(5) = -20\\) m/s.",
+    explanation: "หาความเร็วต้นในแนวดิ่ง: \\(u_y = 60 \\sin(30°) = 30\\) m/s. <br>หาความเร็วแนวดิ่งที่เวลา 5s: \\(v_y = u_y - gt = 30 - 10(5) = -20\\) m/s.",
     subCategory: { main: MAIN_CATEGORY, specific: LO_16 }
   },
   {
@@ -262,7 +260,7 @@ export const quizItems = [
     answer: 320,
     unit: "m",
     hint: "ใช้สมการ \\(s_y = u_y t - \\frac{1}{2}gt^2\\)",
-    explanation: "\\(u_y = 100 \\sin(53°) = 80\\) m/s. \\(s_y = (80)(8) - 0.5(10)(8)^2 = 640 - 320 = 320\\) เมตร.",
+    explanation: "หาความเร็วต้นในแนวดิ่ง: \\(u_y = 100 \\sin(53°) = 80\\) m/s. <br>หาความสูงจาก \\(s_y = u_y t - \\frac{1}{2}gt^2\\). <br>แทนค่า \\(s_y = (80)(8) - 0.5(10)(8)^2 = 640 - 320 = 320\\) เมตร.",
     subCategory: { main: MAIN_CATEGORY, specific: LO_16 }
   },
   {
@@ -273,7 +271,7 @@ export const quizItems = [
     unit: "m/s",
     tolerance: 0.1,
     hint: "ใช้สูตรระยะทางแนวราบ \\(R = \\frac{u^2 \\sin(2\\theta)}{g}\\) แล้วแก้สมการหา \\(u\\)",
-    explanation: "\\(50 = \\frac{u^2 \\sin(90°)}{10} \\Rightarrow u^2 = 500 \\Rightarrow u = \\sqrt{500} \\approx 22.36\\) m/s.",
+    explanation: "จากสูตร \\(R = \\frac{u^2 \\sin(2\\theta)}{g}\\). <br>แทนค่า \\(50 = \\frac{u^2 \\sin(90°)}{10} \\Rightarrow u^2 = 500 \\Rightarrow u = \\sqrt{500} \\approx 22.36\\) m/s.",
     subCategory: { main: MAIN_CATEGORY, specific: LO_16 }
   },
   // Scenario for Q23, Q24
@@ -289,7 +287,7 @@ export const quizItems = [
         answer: 6,
         unit: "s",
         hint: "พิจารณาเฉพาะการเคลื่อนที่ในแนวดิ่ง (\\(u_y=0\\)) ใช้ \\(s_y = \\frac{1}{2}gt^2\\)",
-        explanation: "แนวดิ่ง (ตกอิสระ): \\(180 = 0.5(10)t^2 \\Rightarrow t^2 = 36 \\Rightarrow t = 6\\) วินาที.",
+        explanation: "พิจารณาการเคลื่อนที่ในแนวดิ่ง (\\(u_y=0\\)): จาก \\(s_y = \\frac{1}{2}gt^2\\) จะได้ \\(180 = 0.5(10)t^2 \\Rightarrow 180 = 5t^2 \\Rightarrow t^2 = 36 \\Rightarrow t = 6\\) วินาที.",
         subCategory: { main: MAIN_CATEGORY, specific: LO_16 }
       },
       {
@@ -298,8 +296,7 @@ export const quizItems = [
         question: "วัตถุจะตกห่างจากเชิงหน้าผาในแนวราบเป็นระยะทางเท่าใด",
         answer: 150,
         unit: "m",
-        hint: "หาเวลาที่ใช้ในการตกจากความสูง 180 เมตรก่อน แล้วจึงคำนวณระยะทางแนวราบ",
-        explanation: "1. หาเวลาตก (\\(u_y=0\\)): จาก \\(h = \\frac{1}{2}gt^2\\) จะได้ \\(180 = \\frac{1}{2}(10)t^2 \\Rightarrow 180 = 5t^2 \\Rightarrow t=6\\) s. <br>2. หาระยะทางแนวราบ: จาก \\(s_x = u_x t\\) จะได้ \\(s_x = 25 \\times 6 = 150\\) m.",
+        explanation: "1. หาเวลาตก (\\(u_y=0\\)): \\(h = \\frac{1}{2}gt^2 \\Rightarrow 180 = 5t^2 \\Rightarrow t=6\\) s. <br>2. หาระยะทางแนวราบ: \\(s_x = u_x t = 25 \\times 6 = 150\\) m.",
         subCategory: { main: MAIN_CATEGORY, specific: LO_16 }
       }
     ]
@@ -320,7 +317,7 @@ export const quizItems = [
     question: "ยิงวัตถุจากพื้นด้วยความเร็วต้น 80 m/s ทำมุม 30° กับแนวราบ หลังจากยิงไปแล้ว 2 วินาที วัตถุจะมีความเร็วในแนวดิ่งเท่าใด (\\(g=10, \\sin 30°=0.5\\))",
     answer: 20,
     unit: "m/s",
-    explanation: "\\(u_y = 80 \\sin(30°) = 40\\) m/s. \\(v_y = u_y - gt = 40 - 10(2) = 20\\) m/s.",
+    explanation: "หาความเร็วต้นในแนวดิ่ง: \\(u_y = 80 \\sin(30°) = 40\\) m/s. <br>หาความเร็วแนวดิ่งที่เวลา 2s: \\(v_y = u_y - gt = 40 - 10(2) = 20\\) m/s.",
     subCategory: { main: MAIN_CATEGORY, specific: LO_16 }
   },
   {
@@ -330,7 +327,7 @@ export const quizItems = [
     answer: 40,
     unit: "m/s",
     hint: "ใช้สูตรระยะทางแนวราบ \\(R = \\frac{u^2 \\sin(2\\theta)}{g}\\) แล้วแก้สมการหา \\(u\\)",
-    explanation: "\\(160 = \\frac{u^2 \\sin(90°)}{10} \\Rightarrow u^2 = 1600 \\Rightarrow u = 40\\) m/s.",
+    explanation: "จากสูตร \\(R = \\frac{u^2 \\sin(2\\theta)}{g}\\). <br>แทนค่า \\(160 = \\frac{u^2 \\sin(90°)}{10} \\Rightarrow u^2 = 1600 \\Rightarrow u = 40\\) m/s.",
     subCategory: { main: MAIN_CATEGORY, specific: LO_16 }
   },
   {
@@ -340,7 +337,7 @@ export const quizItems = [
     answer: -20,
     unit: "m/s",
     hint: "เครื่องหมายลบแสดงว่าวัตถุกำลังเคลื่อนที่ลง",
-    explanation: "\\(u_y = 100 \\sin(53°) = 80\\) m/s. \\(v_y = u_y - gt = 80 - 10(10) = -20\\) m/s.",
+    explanation: "หาความเร็วต้นในแนวดิ่ง: \\(u_y = 100 \\sin(53°) = 80\\) m/s. <br>หาความเร็วแนวดิ่งที่เวลา 10s: \\(v_y = u_y - gt = 80 - 10(10) = -20\\) m/s.",
     subCategory: { main: MAIN_CATEGORY, specific: LO_16 }
   },
   // Scenario for Q29, Q30

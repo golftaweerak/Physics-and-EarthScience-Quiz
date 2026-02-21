@@ -209,7 +209,7 @@ export const quizItems = [
         answer: 15,
         unit: "m/s",
         hint: "การดลเท่ากับการเปลี่ยนแปลงโมเมนตัม \\(J = m(v - u)\\)",
-        explanation: "จากทฤษฎีบทการดล-โมเมนตัม \\(J = m(v - u)\\). <br>แทนค่า \\(60 = 4(v - 0) \\Rightarrow v = 15\\) m/s",
+        explanation: "การดล \\(J = F\\Delta t = 20(3) = 60\\) N·s. <br>จาก \\(J = m(v - u) \\Rightarrow 60 = 4(v - 0) \\Rightarrow v = 15\\) m/s",
         subCategory: {
           main: "บทที่ 6: โมเมนตัมและการชน",
           specific: "14. อธิบายและคำนวณโมเมนตัมของวัตถุและการดล"
@@ -268,7 +268,7 @@ export const quizItems = [
       answer: 360,
       unit: "N",
       hint: "\\(F_{avg} = \\Delta p / \\Delta t\\)",
-      explanation: "จากสูตรแรงดล \\(F_{avg} = \\frac{\\Delta p}{\\Delta t}\\). <br>แทนค่า \\(F_{avg} = \\frac{3.6}{0.01} = 360\\) N",
+      explanation: "การเปลี่ยนแปลงโมเมนตัม \\(\\Delta p = m(v_f - v_i) = 0.06(40 - (-20)) = 3.6\\) kg·m/s. <br>แรงเฉลี่ย \\(F_{avg} = \\frac{3.6}{0.01} = 360\\) N",
       subCategory: {
         main: "บทที่ 6: โมเมนตัมและการชน",
         specific: "14. อธิบายและคำนวณโมเมนตัมของวัตถุและการดล"
@@ -300,7 +300,7 @@ export const quizItems = [
       answer: 20,
       unit: "m/s",
       hint: "\\(J = m(v - u)\\)",
-      explanation: "จาก \\(J = m(v - u)\\). <br>แทนค่า \\(40 = 2(v - 0) \\Rightarrow v = 20\\) m/s",
+      explanation: "การดล (พื้นที่ใต้กราฟ) = \\(0.5 \\times 4 \\times 20 = 40\\) N·s. <br>จาก \\(J = m(v - u) \\Rightarrow 40 = 2(v - 0) \\Rightarrow v = 20\\) m/s",
       subCategory: {
         main: "บทที่ 6: โมเมนตัมและการชน",
         specific: "14. อธิบายและคำนวณโมเมนตัมของวัตถุและการดล"
@@ -444,7 +444,7 @@ export const quizItems = [
       answer: 100,
       unit: "m/s",
       hint: "\\(J = m\\Delta v\\)",
-      explanation: "จาก \\(J = m(v - u)\\). <br>แทนค่า \\(40 = 0.4(v - 0) \\Rightarrow v = 100\\) m/s",
+      explanation: "การดล (พื้นที่ใต้กราฟ) = \\(0.5 \\times 0.1 \\times 800 = 40\\) N·s. <br>จาก \\(J = m(v - u) \\Rightarrow 40 = 0.4(v - 0) \\Rightarrow v = 100\\) m/s",
       subCategory: {
         main: "บทที่ 6: โมเมนตัมและการชน",
         specific: "14. อธิบายและคำนวณโมเมนตัมของวัตถุและการดล"

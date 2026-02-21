@@ -144,7 +144,7 @@ export const quizItems = [
         answer: 20,
         unit: "m/s",
         hint: "ใช้ทฤษฎีบทการดล-โมเมนตัม (\\(I = \\Delta p\\))",
-        explanation: "จากข้อที่แล้ว การดล \\(I = 200\\) N·s. จากทฤษฎีบทการดล-โมเมนตัม \\(I = \\Delta p = m(v_f - v_i)\\). ดังนั้น \\(200 = 10(v_f - 0) \\Rightarrow v_f = 200/10 = 20\\) m/s.",
+        explanation: "แรงกระทำ \\(F=50\\) N เป็นเวลา 4 วินาที ได้การดล \\(I = 200\\) N·s. <br>จาก \\(I = m(v_f - v_i) \\Rightarrow 200 = 10(v_f - 0) \\Rightarrow v_f = 20\\) m/s.",
         subCategory: {
           main: "บทที่ 6: โมเมนตัมและการชน",
           specific: "14. อธิบายและคำนวณโมเมนตัมของวัตถุและการดล"
@@ -248,7 +248,7 @@ export const quizItems = [
         question: "ความเร็วของวัตถุที่วินาทีที่ 6 เป็นเท่าใด (ตอบเป็นทศนิยม 1 ตำแหน่งในหน่วย m/s)",
         answer: 22.5,
         unit: "m/s",
-        explanation: "จากข้อที่แล้ว การดล \\(I = 90\\) N·s. จาก \\(I = \\Delta p = m(v_f - v_i)\\), จะได้ \\(90 = 4(v_f - 0) \\Rightarrow v_f = 90/4 = 22.5\\) m/s.",
+        explanation: "พื้นที่ใต้กราฟ (การดล) คือ \\(I = 90\\) N·s. <br>จาก \\(I = m(v_f - v_i) \\Rightarrow 90 = 4(v_f - 0) \\Rightarrow v_f = 22.5\\) m/s.",
         subCategory: {
           main: "บทที่ 6: โมเมนตัมและการชน",
           specific: "14. อธิบายและคำนวณโมเมนตัมของวัตถุและการดล"

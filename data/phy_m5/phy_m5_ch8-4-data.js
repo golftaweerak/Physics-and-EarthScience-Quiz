@@ -210,7 +210,7 @@ export const quizItems = [
     unit: "s",
     tolerance: 0.1,
     hint: "\\(T = 2\\pi\\sqrt{L/g}\\)",
-    explanation: "\\(T = 2(3)\\sqrt{0.9/4} = 6\\sqrt{0.225} \\approx 6(0.474) \\approx 2.84\\) s. ตอบ 2.8 s",
+    explanation: "จากสูตร \\(T = 2\\pi\\sqrt{L/g}\\). แทนค่า \\(T = 2(3)\\sqrt{0.9/4} = 6\\sqrt{0.225} \\approx 6(0.474) \\approx 2.84\\) s. ตอบ 2.8 s",
     subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
   },
   {
@@ -236,7 +236,7 @@ export const quizItems = [
         unit: "s",
         tolerance: 0.02,
         hint: "สปริงต่ออนุกรม \\(1/k_{eq} = 1/k_1 + 1/k_2\\)",
-        explanation: "\\(1/k_{eq} = 1/100 + 1/100 = 2/100 \\Rightarrow k_{eq} = 50\\) N/m. \\(T = 2\\pi\\sqrt{2/50} = 2(3.14)\\sqrt{0.04} = 6.28(0.2) = 1.256 \\approx 1.26\\) s",
+        explanation: "หาค่า k รวมแบบอนุกรม: \\(1/k_{eq} = 1/100 + 1/100 = 2/100 \\Rightarrow k_{eq} = 50\\) N/m. หาคาบจาก \\(T = 2\\pi\\sqrt{m/k_{eq}}\\). แทนค่า \\(T = 2(3.14)\\sqrt{2/50} = 2(3.14)\\sqrt{0.04} = 6.28(0.2) = 1.256 \\approx 1.26\\) s",
         subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
       },
       {
@@ -247,7 +247,7 @@ export const quizItems = [
         unit: "s",
         tolerance: 0.02,
         hint: "สปริงต่อขนาน \\(k_{eq} = k_1 + k_2\\)",
-        explanation: "\\(k_{eq} = 100 + 100 = 200\\) N/m. \\(T = 2\\pi\\sqrt{2/200} = 2(3.14)\\sqrt{0.01} = 6.28(0.1) = 0.628 \\approx 0.63\\) s",
+        explanation: "หาค่า k รวมแบบขนาน: \\(k_{eq} = 100 + 100 = 200\\) N/m. หาคาบจาก \\(T = 2\\pi\\sqrt{m/k_{eq}}\\). แทนค่า \\(T = 2(3.14)\\sqrt{2/200} = 2(3.14)\\sqrt{0.01} = 6.28(0.1) = 0.628 \\approx 0.63\\) s",
         subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
       }
     ]
@@ -259,7 +259,7 @@ export const quizItems = [
     answer: 0.025,
     unit: "s",
     hint: "เวลาจากสมดุลถึงจุดปลายคือ \\(T/4\\) และ \\(T = 1/f\\)",
-    explanation: "\\(T = 1/10 = 0.1\\) s. เวลาที่ใช้ = \\(T/4 = 0.1/4 = 0.025\\) s",
+    explanation: "จากสูตร \\(T = 1/f\\). แทนค่า \\(T = 1/10 = 0.1\\) s. เวลาที่ใช้เคลื่อนที่จากสมดุลถึงจุดสูงสุดคือ \\(T/4\\). ดังนั้นเวลา = \\(0.1/4 = 0.025\\) s",
     subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
   },
   {
@@ -279,7 +279,7 @@ export const quizItems = [
     answer: 10,
     unit: "m/s",
     hint: "\\(E_{k,max} = \\frac{1}{2}mv_{max}^2\\)",
-    explanation: "\\(20 = \\frac{1}{2}(0.4)v_{max}^2 \\Rightarrow 20 = 0.2v_{max}^2 \\Rightarrow v_{max}^2 = 100 \\Rightarrow v_{max} = 10\\) m/s",
+    explanation: "จากสูตร \\(E_{k,max} = \\frac{1}{2}mv_{max}^2\\). แทนค่า \\(20 = \\frac{1}{2}(0.4)v_{max}^2 \\Rightarrow 20 = 0.2v_{max}^2 \\Rightarrow v_{max}^2 = 100 \\Rightarrow v_{max} = 10\\) m/s",
     subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
   },
   {
@@ -289,7 +289,7 @@ export const quizItems = [
     answer: 2,
     unit: "m",
     hint: "เทียบกับ \\(v = \\omega A \\cos(\\omega t)\\)",
-    explanation: "\\(\\omega = 2\\pi\\). \\(v_{max} = \\omega A = 4\\pi\\). ดังนั้น \\(A = 4\\pi / 2\\pi = 2\\) m",
+    explanation: "จากสมการความเร็ว \\(v = v_{max} \\cos(\\omega t)\\). เทียบสัมประสิทธิ์จะได้ \\(\\omega = 2\\pi\\) และ \\(v_{max} = \\omega A = 4\\pi\\). ดังนั้น \\(A = 4\\pi / 2\\pi = 2\\) m",
     subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
   },
   {
@@ -299,7 +299,7 @@ export const quizItems = [
     answer: 4,
     unit: "rad/s",
     hint: "\\(a_{max} = \\omega v_{max}\\)",
-    explanation: "\\(\\omega = a_{max}/v_{max} = 16/4 = 4\\) rad/s",
+    explanation: "จาก \\(a_{max} = \\omega^2 A\\) และ \\(v_{max} = \\omega A\\). นำมาหารกันจะได้ \\(a_{max}/v_{max} = \\omega\\). แทนค่า \\(\\omega = 16/4 = 4\\) rad/s",
     subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
   },
   {
@@ -349,7 +349,7 @@ export const quizItems = [
     answer: 2,
     unit: "m/s",
     hint: "ใช้กฎอนุรักษ์พลังงาน \\(mgh = \\frac{1}{2}mv^2\\) โดย \\(h = L(1-\\cos\\theta)\\)",
-    explanation: "\\(h = 0.4(1-\\cos60) = 0.4(0.5) = 0.2\\) m. \\(v = \\sqrt{2gh} = \\sqrt{2(10)(0.2)} = \\sqrt{4} = 2\\) m/s",
+    explanation: "หาความสูง h จาก \\(h = L(1-\\cos\\theta) = 0.4(1-\\cos60) = 0.4(0.5) = 0.2\\) m. หาความเร็วจาก \\(v = \\sqrt{2gh}\\). แทนค่า \\(v = \\sqrt{2(10)(0.2)} = \\sqrt{4} = 2\\) m/s",
     subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
   },
   {
@@ -359,7 +359,7 @@ export const quizItems = [
     answer: 30,
     unit: "rad/s",
     hint: "หา \\(f\\) ก่อน (รอบ/วินาที) แล้วหา \\(\\omega = 2\\pi f\\)",
-    explanation: "\\(f = 300/60 = 5\\) Hz. \\(\\omega = 2\\pi(5) = 10\\pi \\approx 30\\) rad/s",
+    explanation: "หาความถี่ \\(f = 300/60 = 5\\) Hz. หาความถี่เชิงมุม \\(\\omega = 2\\pi f\\). แทนค่า \\(\\omega = 2\\pi(5) = 10\\pi \\approx 30\\) rad/s",
     subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
   },
   {
@@ -370,7 +370,7 @@ export const quizItems = [
     unit: "s",
     tolerance: 0.01,
     hint: "เทียบกับ \\(a = -\\omega^2 x\\)",
-    explanation: "\\(\\omega^2 = 25 \\Rightarrow \\omega = 5\\). \\(T = 2\\pi/\\omega = 2(3.14)/5 = 6.28/5 = 1.256 \\approx 1.26\\) s",
+    explanation: "จากสมการ \\(a = -\\omega^2 x\\) เทียบกับ \\(a = -25x\\) จะได้ \\(\\omega^2 = 25 \\Rightarrow \\omega = 5\\) rad/s. หาคาบจาก \\(T = 2\\pi/\\omega\\). แทนค่า \\(T = 2(3.14)/5 = 6.28/5 = 1.256 \\approx 1.26\\) s",
     subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
   },
   {
@@ -481,7 +481,7 @@ export const quizItems = [
     answer: 200,
     unit: "N/m",
     hint: "ขนานกัน: \\(k_p = k_1 + k_2\\). อนุกรม: \\(1/k_{eq} = 1/k_p + 1/k_3\\)",
-    explanation: "ขนาน 2 ตัว: \\(k_p = 300 + 300 = 600\\) N/m. อนุกรมกับตัวที่ 3: \\(1/k_{eq} = 1/600 + 1/300 = 1/600 + 2/600 = 3/600\\). \\(k_{eq} = 600/3 = 200\\) N/m",
+    explanation: "หาค่า k รวมแบบขนาน: \\(k_p = 300 + 300 = 600\\) N/m. หาค่า k รวมแบบอนุกรมกับตัวที่ 3: \\(1/k_{eq} = 1/600 + 1/300 = 1/600 + 2/600 = 3/600\\). ดังนั้น \\(k_{eq} = 600/3 = 200\\) N/m",
     subCategory: { main: MAIN_CATEGORY, specific: LO_1 }
   },
   {
