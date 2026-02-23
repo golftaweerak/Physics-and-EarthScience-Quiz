@@ -1,7 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
-const files = [
+const args = process.argv.slice(2);
+const files = args.length > 0 ? args : [
     'ES7-data.js',
     'ES8-data.js',
     'ES9-data.js',
@@ -61,7 +62,12 @@ for (const file of files) {
         report += `Error in ${file}: ${e.message}\n`;
     }
 
-    fs.unlinkSync(tempPath);
+    // Clean up
+    delete require.cache[require.resolve(tempPath)];
+    if (fs.existsSync(tempPath)) {
+        fs.unlinkSync(tempPath);
+    }
 }
 
+console.log(report);
 fs.writeFileSync(path.join(__dirname, 'report.txt'), report, 'utf-8');

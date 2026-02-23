@@ -757,7 +757,7 @@ export const quizItems = [
       "ดาวยักษ์แดง (Red Giant) → ซูเปอร์โนวา (Supernova) → ดาวนิวตรอน (Neutron Star)",
       "ดาวยักษ์ใหญ่สีน้ำเงิน (Blue Supergiant) → ซูเปอร์โนวา (Supernova) → หลุมดำ (Black Hole)",
       "ดาวยักษ์แดง (Red Giant) → เนบิวลาดาวเคราะห์ (Planetary Nebula) → ดาวแคระขาว (White Dwarf)",
-      "ดาวแคระน้ำตาล (Brown Dwarf) → ไม่มีการเปลี่ยนแปลง",
+      "ดาวแคระน้ำตาล (Brown Dwarf) → สภาวะการเย็นตัวลงและดับมอดลงอย่างช้าๆ โดยไม่มีการเปลี่ยนแปลงพิกัดระยะ",
     ],
     answer:
       "ดาวยักษ์แดง (Red Giant) → เนบิวลาดาวเคราะห์ (Planetary Nebula) → ดาวแคระขาว (White Dwarf)",
