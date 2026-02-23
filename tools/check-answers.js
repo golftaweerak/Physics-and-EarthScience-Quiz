@@ -102,26 +102,36 @@ async function checkAnswers() {
                                     });
 
                                     if (bestMatch) {
-                                        console.log(`   💡 Fixing... replacing with: "${bestMatch}"`);
-                                        try {
-                                            const content = fs.readFileSync(file, 'utf8');
-                                            // Regex to find the specific answer field for this question number
-                                            const regex = new RegExp(`(number:\\s*${item.number}\\b[\\s\\S]*?answer:\\s*)(["'\`])(?:\\\\.|[^\\\\])*?\\2`, 'g');
-                                            
-                                            let replacementMade = false;
-                                            const newContent = content.replace(regex, (match, prefix) => {
-                                                replacementMade = true;
-                                                return `${prefix}${JSON.stringify(bestMatch)}`;
-                                            });
+                                        // Safety check: Don't fix if the difference is too large (e.g., > 50% of length)
+                                        const maxLength = Math.max(String(ans).length, String(bestMatch).length);
+                                        const similarityThreshold = 0.5;
+                                        
+                                        if (minDistance > maxLength * similarityThreshold) {
+                                            console.log(`   ⚠️ Skipping auto-fix: Match too different (Dist: ${minDistance}). Best match: "${bestMatch}"`);
+                                        } else if (item.number === undefined) {
+                                            console.log(`   ⚠️ Skipping auto-fix: Question number is undefined.`);
+                                        } else {
+                                            console.log(`   💡 Fixing... replacing with: "${bestMatch}"`);
+                                            try {
+                                                const content = fs.readFileSync(file, 'utf8');
+                                                // Regex to find the specific answer field for this question number
+                                                const regex = new RegExp(`(number:\\s*${item.number}\\b[\\s\\S]*?answer:\\s*)(["'\`])(?:\\\\.|[^\\\\])*?\\2`, 'g');
+                                                
+                                                let replacementMade = false;
+                                                const newContent = content.replace(regex, (match, prefix) => {
+                                                    replacementMade = true;
+                                                    return `${prefix}${JSON.stringify(bestMatch)}`;
+                                                });
 
-                                            if (replacementMade && newContent !== content) {
-                                                fs.writeFileSync(file, newContent, 'utf8');
-                                                console.log(`   ✅ Fixed.`);
-                                            } else {
-                                                console.log(`   ⚠️ Could not auto-fix (regex match failed or content identical).`);
+                                                if (replacementMade && newContent !== content) {
+                                                    fs.writeFileSync(file, newContent, 'utf8');
+                                                    console.log(`   ✅ Fixed.`);
+                                                } else {
+                                                    console.log(`   ⚠️ Could not auto-fix (regex match failed or content identical).`);
+                                                }
+                                            } catch (err) {
+                                                console.log(`   ❌ Error fixing: ${err.message}`);
                                             }
-                                        } catch (err) {
-                                            console.log(`   ❌ Error fixing: ${err.message}`);
                                         }
                                     }
                                 }
