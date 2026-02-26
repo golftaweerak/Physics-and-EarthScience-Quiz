@@ -144,7 +144,7 @@ export function renderStudentSearchResultCards(results, container, options) {
         if (!isClickable) {
             return `<div class="${commonClasses}">${cardInnerHtml}</div>`;
         } else if (cardType === 'link') {
-            return `<a href="${basePath}scores.html?id=${student.id}" class="${commonClasses}">${cardInnerHtml}</a>`;
+            return `<a href="${basePath}scores.html?id=${student.id}&auto=1" class="${commonClasses}">${cardInnerHtml}</a>`;
         } else { // 'button'
             return `<button data-student-id="${student.id}" class="student-card-btn ${commonClasses}">${cardInnerHtml}</button>`;
         }

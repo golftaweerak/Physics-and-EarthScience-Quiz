@@ -668,7 +668,7 @@ function updateRoomSummaryTable() {
         }
 
         return `
-            <tr data-room="${room}" class="room-detail-trigger border-b dark:border-gray-700 last:border-b-0 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors duration-150 cursor-pointer">
+            <tr data-room="${room}" class="border-b dark:border-gray-700 last:border-b-0">
                 <td class="px-4 py-3 align-middle">
                     <div class="font-bold text-lg text-gray-900 dark:text-white">ห้อง ${room}</div>
                     <div class="text-sm text-gray-500 dark:text-gray-400">${roomData.studentCount} คน</div>
@@ -999,28 +999,6 @@ export async function initializeSummaryPage() {
                 }
             });
 
-            // Add listener for room detail view and export button using event delegation
-            const roomSummaryTbody = document.getElementById('room-summary-tbody');
-            const roomDetailContainer = document.getElementById('room-detail-container');
-
-            if (roomSummaryTbody) {
-                roomSummaryTbody.addEventListener('click', (event) => {
-                    const row = event.target.closest('.room-detail-trigger');
-                    if (!row) return;
-
-                    const room = row.dataset.room;
-                    selectedRoomForDetails = room; // Set the selected room for CSV export
-                    renderStudentTableForRoom(room, scores);
-                });
-            }
-
-            if (roomDetailContainer) {
-                roomDetailContainer.addEventListener('click', event => {
-                    if (event.target.id === 'export-csv-btn') {
-                        handleExportCSV(scores);
-                    }
-                });
-            }
         };
 
         // Use sessionStorage to check if a semester was explicitly chosen in THIS session/tab.

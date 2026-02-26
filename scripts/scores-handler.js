@@ -299,7 +299,20 @@ export async function initializeScoreSearch() {
         }
     });
 
-    // (Automatic search based on URL parameters has been removed as per user request)
+    // Check for student ID in URL parameters on page load
+    const urlParams = new URLSearchParams(window.location.search);
+    const studentIdFromUrl = urlParams.get('id');
+    const autoSearch = urlParams.get('auto');
+
+    if (studentIdFromUrl && /^\d{5}$/.test(studentIdFromUrl)) {
+        studentIdInput.value = studentIdFromUrl;
+        clearBtn.classList.remove('hidden');
+
+        // Only auto-search if the 'auto=1' parameter is also present
+        if (autoSearch === '1') {
+            searchScores();
+        }
+    }
 
     clearBtn.addEventListener('click', () => {
         studentIdInput.value = '';
