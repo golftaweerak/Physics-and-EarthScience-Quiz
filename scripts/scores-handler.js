@@ -28,7 +28,7 @@ const ASSIGNMENT_URL_MAP = {
     'Quiz 7': 'https://forms.office.com/r/x6XEYgXLMG',
     'Quiz 8': 'https://forms.office.com/r/LmJASCtdX2',
     'Quiz 9': 'https://forms.office.com/r/jiUCum58kV',
-    'Quiz 10': 'https://forms.office.com/r/ZcvePkp98'
+    'Quiz 10': 'https://forms.office.com/r/ZcvePkp98p'
 };
 
 /** A map for renaming specific assignment names for display. */
