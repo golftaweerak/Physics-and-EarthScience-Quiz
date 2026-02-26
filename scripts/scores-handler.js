@@ -205,13 +205,28 @@ export async function initializeScoreSearch() {
         const studentId = card.dataset.studentId;
         if (!studentId) return;
 
-        // Note: For search result clicking, we re-fetch to ensure fresh data
         displayMessage('กำลังโหลดข้อมูล...', 'info');
-        const student = await getSingleStudentScoreFromCloud(studentId);
-        if (student) {
-            displayResult(student);
-        } else {
-            displayMessage('ไม่พบข้อมูลนักเรียนนี้ในระบบ', 'error');
+
+        // Priority 1: Search local studentScores first to avoid unnecessary cloud fetches
+        // and bypass permission issues if the data is already available locally.
+        const localStudent = studentScores.find(s => s.id === studentId);
+
+        if (localStudent) {
+            displayResult(localStudent);
+            return;
+        }
+
+        // Priority 2: Fallback to Firestore if not found locally
+        try {
+            const student = await getSingleStudentScoreFromCloud(studentId);
+            if (student) {
+                displayResult(student);
+            } else {
+                displayMessage('ไม่พบข้อมูลนักเรียนนี้ในระบบ', 'error');
+            }
+        } catch (error) {
+            console.warn("Cloud ID lookup failed on card click:", error);
+            displayMessage('ไม่สามารถดึงข้อมูลจากเซิร์ฟเวอร์ได้แบบเรียลไทม์ กรุณาลองใหม่', 'error');
         }
     });
 
