@@ -12,6 +12,11 @@ service cloud.firestore {
         allow read, write: if request.auth != null && request.auth.uid == userId;
       }
     }
+    // Student Scores (from the main site)
+    match /student_scores/{studentId} {
+      allow read: if true; // Anyone can read a score if they know the exact ID
+      allow write: if request.auth != null && request.auth.token.email == "taweerak.t@promma.ac.th"; // Only teacher can upload
+    }
 
     // Leaderboard
     match /leaderboard/{userId} {

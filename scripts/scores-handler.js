@@ -1,4 +1,4 @@
-import { getStudentScores, getCurrentSemester, setCurrentSemester, getCurrentCourseCode } from './data-manager.js';
+import { getStudentScores, getCurrentSemester, setCurrentSemester, getCurrentCourseCode, getSingleStudentScoreFromCloud } from './data-manager.js';
 import { renderStudentSearchResultCards } from './student-card-renderer.js';
 import { ModalHandler } from './modal-handler.js';
 import { getDataModules } from './quiz-data-loader.js';
@@ -129,16 +129,7 @@ export async function initializeScoreSearch() {
         return;
     }
 
-    // Fetch both original and potentially merged scores
-    const dataModulesFetcher = getDataModules();
-    const currentSemester_file = getCurrentSemester() === '2/2568' ? 'scores-data-2-2568.js' : 'scores-data.js';
-    const semesterKey = Object.keys(dataModulesFetcher).find(k => k.endsWith(currentSemester_file));
-
-    if (!semesterKey) throw new Error(`Semester data not found in glob: ${currentSemester_file}`);
-
-    const { studentScores: baseScores } = await dataModulesFetcher[semesterKey]();
-    originalScoresData = baseScores;
-    const studentScores = await getStudentScores();
+    // (Removed initial massive array load. We will fetch on demand.)
 
     // --- Edit Mode Logic ---
     function enableEditMode() {
@@ -204,59 +195,86 @@ export async function initializeScoreSearch() {
         return;
     }
 
-    resultContainer.addEventListener('click', (event) => {
+    resultContainer.addEventListener('click', async (event) => {
         const card = event.target.closest('.student-card-btn');
         if (!card) return;
 
         const studentId = card.dataset.studentId;
         if (!studentId) return;
 
-        const student = studentScores.find(s => s.id === studentId);
+        // Note: For search result clicking, we re-fetch to ensure fresh data
+        displayMessage('กำลังโหลดข้อมูล...', 'info');
+        const student = await getSingleStudentScoreFromCloud(studentId);
         if (student) {
             displayResult(student);
+        } else {
+            displayMessage('ไม่พบข้อมูลนักเรียนนี้ในระบบ', 'error');
         }
     });
 
-    const searchScores = () => {
+    const searchScores = async () => {
         const query = studentIdInput.value.trim();
         if (query.length === 0) {
-            displayMessage('กรุณากรอกรหัสนักเรียน, ชื่อ, หรือห้องเรียนเพื่อค้นหา', 'error');
-            return;
-        }
-        const lowerCaseQuery = query.toLowerCase();
-
-        let results = [];
-
-        // Priority 1: Exact ID match.
-        const idMatch = studentScores.find(s => s.id.toLowerCase() === lowerCaseQuery);
-        if (idMatch) {
-            displayResult(idMatch);
+            displayMessage('กรุณากรอกรหัสนักเรียนเพื่อค้นหา', 'error');
             return;
         }
 
-        // Priority 2: Exact Room match.
-        const roomMatches = studentScores.filter(s => s.room && s.room.toLowerCase() === lowerCaseQuery);
-        if (roomMatches.length > 0) {
-            results = roomMatches.sort((a, b) => {
-                const ordinalA = parseInt(a.ordinal, 10) || 999;
-                const ordinalB = parseInt(b.ordinal, 10) || 999;
-                return ordinalA - ordinalB;
-            });
-            renderStudentSearchResultCards(results, resultContainer, { cardType: 'button' });
-            return;
-        }
+        searchBtn.disabled = true;
+        const originalBtnHtml = searchBtn.innerHTML;
+        searchBtn.innerHTML = `
+            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            กำลังค้นหา...
+        `;
 
-        // Priority 3: Partial Name match.
-        const nameMatches = studentScores.filter(s => s.name.toLowerCase().includes(lowerCaseQuery));
-        if (nameMatches.length > 1) {
-            results = nameMatches.sort((a, b) => a.id.localeCompare(b.id));
-            renderStudentSearchResultCards(results, resultContainer, { cardType: 'button' });
-        } else if (nameMatches.length === 1) {
-            displayResult(nameMatches[0]);
-        } else {
-            displayMessage(`ไม่พบข้อมูลสำหรับ "${query}"`, 'error');
+        try {
+            // First treat query as an exact ID
+            const exactStudent = await getSingleStudentScoreFromCloud(query);
+
+            if (exactStudent) {
+                displayResult(exactStudent);
+                return;
+            }
+
+            // If not found, we fetch the whole list (rarely happens unless teacher is searching by name/room)
+            // But for UI speed on student side, we prioritize direct ID lookup above.
+            const allScores = await getStudentScores();
+            const lowerCaseQuery = query.toLowerCase();
+            let results = [];
+
+            // Priority 2: Exact Room match.
+            const roomMatches = allScores.filter(s => s.room && s.room.toLowerCase() === lowerCaseQuery);
+            if (roomMatches.length > 0) {
+                results = roomMatches.sort((a, b) => {
+                    const ordinalA = parseInt(a.ordinal, 10) || 999;
+                    const ordinalB = parseInt(b.ordinal, 10) || 999;
+                    return ordinalA - ordinalB;
+                });
+                renderStudentSearchResultCards(results, resultContainer, { cardType: 'button' });
+                return;
+            }
+
+            // Priority 3: Partial Name match.
+            const nameMatches = allScores.filter(s => s.name.toLowerCase().includes(lowerCaseQuery));
+            if (nameMatches.length > 1) {
+                results = nameMatches.sort((a, b) => a.id.localeCompare(b.id));
+                renderStudentSearchResultCards(results, resultContainer, { cardType: 'button' });
+            } else if (nameMatches.length === 1) {
+                displayResult(nameMatches[0]);
+            } else {
+                displayMessage(`ไม่พบข้อมูลสำหรับ "${query}"`, 'error');
+            }
+        } catch (error) {
+            console.error("Search failed:", error);
+            displayMessage('เกิดข้อผิดพลาดในการดึงข้อมูล กรุณาลองใหม่', 'error');
+        } finally {
+            searchBtn.disabled = false;
+            searchBtn.innerHTML = originalBtnHtml;
         }
     };
+
 
     searchBtn.addEventListener('click', searchScores);
 
@@ -331,13 +349,13 @@ export async function initializeScoreSearch() {
 
         let scoreDisplay;
         if (isEditMode) {
-            scoreDisplay = `<input type="number" data-key="${scoreKey}" class="score-input w-20 text-right p-1 rounded bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600" value="${scoreValue ?? ''}">`;
+            scoreDisplay = `< input type = "number" data - key="${scoreKey}" class="score-input w-20 text-right p-1 rounded bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600" value = "${scoreValue ?? ''}" > `;
         } else {
-            scoreDisplay = `<span class="font-mono text-sm text-gray-700 dark:text-gray-300">${Math.round(scoreValue)}</span>`;
+            scoreDisplay = `< span class="font-mono text-sm text-gray-700 dark:text-gray-300" > ${Math.round(scoreValue)}</span > `;
         }
 
         return `
-            <tr class="bg-gray-50 dark:bg-gray-800/50">
+        < tr class="bg-gray-50 dark:bg-gray-800/50" >
                 <td class="py-2 px-4 pl-10 text-sm text-gray-500 dark:text-gray-400 flex items-center">
                     <svg class="h-3 w-3 mr-2 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
@@ -347,7 +365,7 @@ export async function initializeScoreSearch() {
                 <td class="py-2 px-4 text-right">
                     ${scoreDisplay}
                 </td>
-            </tr>
+            </tr >
         `;
     }
 
@@ -374,25 +392,25 @@ export async function initializeScoreSearch() {
             if (!isSubmitted && lowerCaseName.includes('quiz')) {
                 displayScore = 'ขาด';
             }
-            statusHtml = `<span class="px-2 py-1 text-xs font-semibold ${colorClass} rounded-full">${displayScore}</span>`;
+            statusHtml = `< span class="px-2 py-1 text-xs font-semibold ${colorClass} rounded-full" > ${displayScore}</span > `;
         } else {
             // Handle numeric scores
-            statusHtml = `<span class="font-mono font-bold text-gray-800 dark:text-gray-200">${score}</span>`;
+            statusHtml = `< span class="font-mono font-bold text-gray-800 dark:text-gray-200" > ${score}</span > `;
         }
 
         const contentHtml = `
-            <div class="flex-grow min-w-0 pr-4">
-                <span class="text-gray-700 dark:text-gray-300 text-sm font-medium">${displayName}</span>
-            </div>
-            <div class="flex items-center gap-3 flex-shrink-0">
-                ${statusHtml}
-                ${url ? `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400 group-hover:text-blue-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>` : '<div class="w-4 h-4"></div>'}
-            </div>
-        `;
+        < div class="flex-grow min-w-0 pr-4" >
+            <span class="text-gray-700 dark:text-gray-300 text-sm font-medium">${displayName}</span>
+            </div >
+        <div class="flex items-center gap-3 flex-shrink-0">
+            ${statusHtml}
+            ${url ? `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400 group-hover:text-blue-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>` : '<div class="w-4 h-4"></div>'}
+        </div>
+    `;
         if (url) {
-            return `<li class="block"><a href="${url}" target="_blank" rel="noopener noreferrer" class="group flex justify-between items-center py-3 px-4 hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors duration-200">${contentHtml}</a></li>`;
+            return `< li class="block" > <a href="${url}" target="_blank" rel="noopener noreferrer" class="group flex justify-between items-center py-3 px-4 hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors duration-200">${contentHtml}</a></li > `;
         } else {
-            return `<li class="flex justify-between items-center py-3 px-4 opacity-75">${contentHtml}</li>`;
+            return `< li class="flex justify-between items-center py-3 px-4 opacity-75" > ${contentHtml}</li > `;
         }
     }
 
@@ -514,13 +532,13 @@ export async function initializeScoreSearch() {
                 let valueDisplay;
                 if (isEditMode) {
                     const inputType = (typeof value === 'number' && !isGrade) ? 'number' : 'text';
-                    valueDisplay = `<input type="${inputType}" data-key="${key}" class="score-input w-24 text-right p-1 rounded bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600" value="${value ?? ''}">`;
+                    valueDisplay = `< input type = "${inputType}" data - key="${key}" class="score-input w-24 text-right p-1 rounded bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600" value = "${value ?? ''}" > `;
                 } else {
                     let displayValue = (value !== null && value !== undefined) ? value : '-';
                     if (typeof value === 'number' && !isGrade) {
                         displayValue = Math.round(value);
                     }
-                    valueDisplay = `<span class="${valueClass}">${displayValue}</span>`;
+                    valueDisplay = `< span class="${valueClass}" > ${displayValue}</span > `;
                 }
 
                 let retestStatusHtml = '';
@@ -529,18 +547,18 @@ export async function initializeScoreSearch() {
                     const retestStatus = retestData.trim();
                     const isPositiveStatus = retestStatus.includes('ไม่ต้อง') || retestStatus.includes('ซ่อมแล้ว');
                     const statusColor = isPositiveStatus ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400';
-                    retestStatusHtml = `<div class="text-xs font-normal ${statusColor} pt-1">สถานะการสอบซ่อม: ${retestStatus}</div>`;
+                    retestStatusHtml = `< div class="text-xs font-normal ${statusColor} pt-1" > สถานะการสอบซ่อม: ${retestStatus}</div > `;
                 }
 
                 let mainRowHtml = `
-                    <tr class="border-b border-gray-200 dark:border-gray-700 last:border-b-0 ${rowClass}">
+        < tr class="border-b border-gray-200 dark:border-gray-700 last:border-b-0 ${rowClass}" >
                         <td class="py-3 px-4 ${labelClass}">${key}</td>
                         <td class="py-3 px-4 text-right">
                             ${valueDisplay}
                             ${retestStatusHtml}
                         </td>
-                    </tr>
-                `;
+                    </tr >
+        `;
 
                 if (breakdownMap[key]) {
                     mainRowHtml += breakdownMap[key].map(item => createBreakdownRow(student, item.label, item.key)).join('');
@@ -552,7 +570,7 @@ export async function initializeScoreSearch() {
         }).join('');
 
         const summaryScoreSection = `
-            <figure class="mb-6">
+        < figure class="mb-6" >
                 <figcaption class="p-3 text-lg font-semibold text-left text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-800 rounded-t-lg border-x border-t border-gray-200 dark:border-gray-700">
                     สรุปคะแนน
                 </figcaption>
@@ -563,7 +581,7 @@ export async function initializeScoreSearch() {
                         </tbody>
                     </table>
                 </div>
-            </figure>
+            </figure >
         `;
 
         // 1. Filter out non-trackable assignments and calculate stats
@@ -581,7 +599,7 @@ export async function initializeScoreSearch() {
 
         // 3. Build the HTML
         const summaryCardsHtml = `
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+        < div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6" >
                 <button id="show-submitted-btn" class="p-4 bg-green-100 dark:bg-green-900/50 rounded-lg text-center border border-green-200 dark:border-green-700 transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
                     <div class="text-4xl font-bold text-green-600 dark:text-green-400">${submittedCount}</div>
                     <div class="text-sm font-medium text-green-800 dark:text-green-300">งานที่ส่งแล้ว</div>
@@ -594,11 +612,11 @@ export async function initializeScoreSearch() {
                     <div class="text-3xl font-bold text-blue-600 dark:text-blue-400">${completionPercentage.toFixed(0)}%</div>
                     <div class="text-sm font-medium text-blue-800 dark:text-blue-300">ความสมบูรณ์</div>
                 </div>
-            </div>
-            <div class="w-full bg-gray-200 rounded-full h-3 dark:bg-gray-700 mb-8 overflow-hidden">
-                <div class="bg-gradient-to-r from-blue-400 to-blue-600 h-3 rounded-full transition-all duration-500" style="width: ${completionPercentage}%"></div>
-            </div>
-        `;
+            </div >
+        <div class="w-full bg-gray-200 rounded-full h-3 dark:bg-gray-700 mb-8 overflow-hidden">
+            <div class="bg-gradient-to-r from-blue-400 to-blue-600 h-3 rounded-full transition-all duration-500" style="width: ${completionPercentage}%"></div>
+        </div>
+    `;
 
         // 2.5 Build Quiz Shortcut Cards Section
         const quizAssignments = trackableAssignments.filter(a => a.name.toLowerCase().includes('quiz'));
@@ -613,17 +631,17 @@ export async function initializeScoreSearch() {
                 let cardStyle;
                 let iconColor;
                 if (isSubmitted) {
-                    statusBadge = `<span class="px-2.5 py-1 text-xs font-bold text-green-700 bg-green-100 dark:text-green-300 dark:bg-green-900/50 rounded-full border border-green-200 dark:border-green-800">${score}</span>`;
+                    statusBadge = `< span class="px-2.5 py-1 text-xs font-bold text-green-700 bg-green-100 dark:text-green-300 dark:bg-green-900/50 rounded-full border border-green-200 dark:border-green-800" > ${score}</span > `;
                     cardStyle = 'border-green-200 dark:border-green-800 bg-green-50/30 dark:bg-green-900/10 hover:bg-green-50 dark:hover:bg-green-900/20';
                     iconColor = 'text-green-500';
                 } else {
-                    statusBadge = `<span class="px-2.5 py-1 text-xs font-bold text-red-700 bg-red-100 dark:text-red-300 dark:bg-red-900/50 rounded-full border border-red-200 dark:border-red-800">ขาด</span>`;
+                    statusBadge = `< span class="px-2.5 py-1 text-xs font-bold text-red-700 bg-red-100 dark:text-red-300 dark:bg-red-900/50 rounded-full border border-red-200 dark:border-red-800" > ขาด</span > `;
                     cardStyle = 'border-red-200 dark:border-red-800 bg-red-50/30 dark:bg-red-900/10 hover:bg-red-50 dark:hover:bg-red-900/20';
                     iconColor = 'text-red-500';
                 }
 
                 return `
-                    <a href="${url}" target="_blank" rel="noopener noreferrer" class="group flex flex-col justify-between p-4 rounded-xl border ${cardStyle} transition-all duration-300 hover:shadow-md hover:-translate-y-1">
+        < a href = "${url}" target = "_blank" rel = "noopener noreferrer" class="group flex flex-col justify-between p-4 rounded-xl border ${cardStyle} transition-all duration-300 hover:shadow-md hover:-translate-y-1" >
                         <div class="flex justify-between items-start mb-3">
                             <div class="p-2 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 ${iconColor}">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -636,12 +654,12 @@ export async function initializeScoreSearch() {
                             <h4 class="font-bold text-gray-900 dark:text-white font-kanit group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">${quiz.name}</h4>
                             <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 flex items-center gap-1">คลิกเพื่อทำแบบทดสอบ <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg></p>
                         </div>
-                    </a>
-                `;
+                    </a >
+        `;
             }).join('');
 
             quizCardsSection = `
-                <figure class="mb-8">
+        < figure class="mb-8" >
                     <figcaption class="p-3 text-lg font-semibold text-left text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-800 rounded-t-lg border-x border-t border-gray-200 dark:border-gray-700 font-kanit flex items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-500" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd" />
@@ -653,12 +671,12 @@ export async function initializeScoreSearch() {
                             ${quizCardsHtml}
                         </div>
                     </div>
-                </figure>
-            `;
+                </figure >
+        `;
         }
 
         const assignmentsSection = Object.keys(groupedAssignments).length > 0 ? `
-            <figure>
+        < figure >
                 <figcaption class="p-4 text-lg font-semibold text-left text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-800">
                     รายการงานที่ต้องส่ง
                 </figcaption>
@@ -677,11 +695,11 @@ export async function initializeScoreSearch() {
                         </details>
                     `).join('')}
                 </div>
-            </figure>
+            </figure >
         ` : '';
 
         resultContainer.innerHTML = `
-            <div class="student-card-container bg-white dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden anim-card-pop-in" data-student-id="${student.id}">
+        < div class="student-card-container bg-white dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden anim-card-pop-in" data - student - id="${student.id}" >
                 <div class="p-6 bg-gradient-to-br from-blue-50 to-gray-100 dark:from-gray-900 dark:to-gray-800/50 border-b border-gray-200 dark:border-gray-700 flex items-center gap-4">
                     <div class="flex-shrink-0 h-16 w-16 rounded-full flex items-center justify-center bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 border-4 border-white dark:border-gray-800 shadow-md">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
@@ -711,17 +729,17 @@ export async function initializeScoreSearch() {
                         สร้างโค้ดสำหรับบันทึกการแก้ไข
                     </button>
                 </div>
-            </div>
+            </div >
         `;
 
         // Attach event listeners for the new modal buttons
         document.getElementById('show-submitted-btn')?.addEventListener('click', () => {
             const submittedAssignments = trackableAssignments.filter(a => a.score && a.score.toLowerCase() !== 'ยังไม่ส่ง');
-            createInteractiveAssignmentModal('submitted', `งานที่ส่งแล้ว (${submittedAssignments.length} รายการ)`, submittedAssignments);
+            createInteractiveAssignmentModal('submitted', `งานที่ส่งแล้ว(${submittedAssignments.length} รายการ)`, submittedAssignments);
         });
         document.getElementById('show-missing-btn')?.addEventListener('click', () => {
             const missingAssignments = trackableAssignments.filter(a => !a.score || a.score.toLowerCase() === 'ยังไม่ส่ง');
-            createInteractiveAssignmentModal('missing', `งานที่ค้างส่ง (${missingAssignments.length} รายการ)`, missingAssignments);
+            createInteractiveAssignmentModal('missing', `งานที่ค้างส่ง(${missingAssignments.length} รายการ)`, missingAssignments);
         });
 
         document.getElementById('edit-mode-btn')?.addEventListener('click', () => {
@@ -794,7 +812,7 @@ export async function initializeScoreSearch() {
                 newOverrides[studentId] = { ...(existingOverrides[studentId] || {}), ...studentOverrides };
 
                 const encryptedString = btoa(JSON.stringify(newOverrides, null, 2));
-                overrideCodeContent.value = `export const encryptedScoreOverrides = "${encryptedString}";`;
+                overrideCodeContent.value = `export const encryptedScoreOverrides = "${encryptedString}"; `;
 
                 // 2. Generate CSV log data
                 const csvHeader = "timestamp,student_id,student_name,score_key,original_value,new_value\n";

@@ -4,6 +4,8 @@
  */
 
 import { getDataModules } from './quiz-data-loader.js';
+import { db } from './firebase-config.js';
+import { doc, getDoc, collection, getDocs } from "firebase/firestore";
 
 // Single source of truth for all category metadata.
 export const categoryDetails = {
@@ -197,56 +199,89 @@ export async function getStudentScores() {
     return mergedScoresCache;
   }
 
+  // --- Start Firestore Migration Logic ---
   try {
-    // Determine which data file to load based on the semester
-    const dataModules = getDataModules();
-    const dataFileName = semester === '2/2568' ? 'scores-data-2-2568.js' : 'scores-data.js';
+    const scoresRef = collection(db, "student_scores");
+    const snapshot = await getDocs(scoresRef);
 
-    // Find the module in the glob mapping
-    const dataModuleKey = Object.keys(dataModules).find(k => k.endsWith(dataFileName));
-    const overrideModuleKey = Object.keys(dataModules).find(k => k.endsWith('score-overrides.js'));
-
-    if (!dataModuleKey) {
-      throw new Error(`Data module not found: ${dataFileName}`);
+    if (snapshot.empty) {
+      console.warn("No student scores found on Firestore. Fallback to []");
+      return [];
     }
 
-    // Parallelize the loading of base scores and overrides.
-    const [baseScoresModule, overrideModule] = await Promise.all([
-      dataModules[dataModuleKey](),
-      overrideModuleKey ? dataModules[overrideModuleKey]().catch(() => null) : Promise.resolve(null)
-    ]);
+    // We will still format it as a list of students, focusing on the requested semester
+    const baseScores = [];
+    snapshot.forEach(docSnap => {
+      const data = docSnap.data();
+      // Ensure the student has data for this semester
+      if (data.semesters && data.semesters[semester]) {
+        // Transform the nested Firestore map back into the legacy "assignments" array array expected by the UI
+        const assignmentMap = data.semesters[semester];
+        const assignmentsArray = Object.keys(assignmentMap).map(key => ({
+          name: key,
+          score: assignmentMap[key]
+        }));
 
-    const baseScores = baseScoresModule.studentScores;
-    let scoreOverrides = {};
-
-    // Process overrides if the module was loaded successfully
-    if (overrideModule && overrideModule.encryptedScoreOverrides && overrideModule.encryptedScoreOverrides.trim() !== "") {
-      try {
-        const decodedString = atob(overrideModule.encryptedScoreOverrides);
-        scoreOverrides = JSON.parse(decodedString);
-      } catch (parseError) {
-        console.error("Failed to decode or parse score-overrides.js. The data might be corrupt.", parseError);
-        scoreOverrides = {};
+        // Also ensure "รวม [100]" and "เกรด" are correctly passed or derived if present
+        baseScores.push({
+          id: data.id,
+          name: data.name,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          room: data.room,
+          ordinal: data.ordinal,
+          assignments: assignmentsArray
+        });
       }
-    }
+    });
 
-    if (Object.keys(scoreOverrides).length === 0) {
-      mergedScoresCache = baseScores;
-      currentLoadedSemester = semester;
-      return baseScores;
-    }
-
-    // Perform a merge. Create new student objects for those with overrides.
-    const mergedScores = baseScores.map(student =>
-      scoreOverrides[student.id] ? { ...student, ...scoreOverrides[student.id] } : student
-    );
-
-    mergedScoresCache = mergedScores;
+    mergedScoresCache = baseScores;
     currentLoadedSemester = semester;
-    return mergedScores;
+    return baseScores;
   } catch (error) {
-    console.error(`Failed to load or merge student scores for ${semester}:`, error);
+    console.error(`Failed to load student scores for ${semester} from Firestore:`, error);
     return []; // Return an empty array on failure.
+  }
+}
+
+/**
+ * Retrieves a single student's score from Firestore directly.
+ * Useful for the student login search where we don't need to load the whole school.
+ * @param {string} studentId - The student ID to look up.
+ * @returns {Promise<object|null>} The student data or null if not found.
+ */
+export async function getSingleStudentScoreFromCloud(studentId) {
+  const semester = getCurrentSemester();
+  try {
+    const docRef = doc(db, "student_scores", studentId);
+    const docSnap = await getDoc(docRef);
+
+    if (!docSnap.exists()) {
+      return null;
+    }
+
+    const data = docSnap.data();
+    if (data.semesters && data.semesters[semester]) {
+      const assignmentMap = data.semesters[semester];
+      const assignmentsArray = Object.keys(assignmentMap).map(key => ({
+        name: key,
+        score: assignmentMap[key]
+      }));
+
+      return {
+        id: data.id,
+        name: data.name,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        room: data.room,
+        ordinal: data.ordinal,
+        assignments: assignmentsArray
+      };
+    }
+    return null;
+  } catch (err) {
+    console.error("Error fetching single student score from cloud:", err);
+    return null;
   }
 }
 

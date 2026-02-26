@@ -2,6 +2,9 @@ import { getStudentScores, getCurrentSemester, setCurrentSemester } from './data
 import { ModalHandler } from './modal-handler.js';
 import { renderStudentSearchResultCards } from './student-card-renderer.js';
 import { getDataModules } from './quiz-data-loader.js';
+import { db } from './firebase-config.js';
+import { doc, writeBatch } from "firebase/firestore";
+import { showToast } from './toast.js';
 
 let originalScoresData = [];
 let studentScores = [];
@@ -68,6 +71,7 @@ export async function initializeScoreEditor() {
     const actionContainer = document.getElementById('action-buttons-container');
     const generateBtn = document.getElementById('generate-overrides-btn');
     const exportCsvBtn = document.getElementById('export-csv-btn');
+    const syncCloudBtn = document.getElementById('sync-cloud-btn');
     const tablePlaceholder = document.getElementById('table-placeholder');
 
     // Modals for code generation
@@ -85,6 +89,10 @@ export async function initializeScoreEditor() {
             setCurrentSemester(semesterSelector.value);
             window.location.reload();
         });
+    }
+
+    if (syncCloudBtn) {
+        syncCloudBtn.addEventListener('click', handleCloudSync);
     }
 
     // 2. Setup Password Protection
@@ -123,18 +131,19 @@ export async function initializeScoreEditor() {
 
         // Fetch data
         try {
-            const dataModules = getDataModules();
-            const currentSemester_file = getCurrentSemester() === '2/2568' ? 'scores-data-2-2568.js' : 'scores-data.js';
-            const semesterKey = Object.keys(dataModules).find(k => k.endsWith(currentSemester_file));
-
-            if (!semesterKey) throw new Error(`Semester data not found in glob: ${currentSemester_file}`);
-
-            const { studentScores: baseScores } = await dataModules[semesterKey]();
-            originalScoresData = baseScores;
+            tableContainer.innerHTML = `<div class="text-center py-16"><div class="animate-spin inline-block h-8 w-8 text-blue-500 border-b-2 border-r-2 border-blue-500 rounded-full" viewBox="0 0 24 24"></div><p class="mt-4 text-gray-500">กำลังโหลดข้อมูลจาก Cloud...</p></div>`;
             studentScores = await getStudentScores();
+            // Store a deep copy to compare against when downloading the override script
+            originalScoresData = JSON.parse(JSON.stringify(studentScores));
+
+            if (!studentScores || studentScores.length === 0) {
+                throw new Error("No student scores returned from Cloud.");
+            }
+            // Clear the placeholder layout
+            tableContainer.innerHTML = '';
         } catch (error) {
-            console.error("Failed to load student score data:", error);
-            tableContainer.innerHTML = `<div class="text-center py-16 text-red-500"><h3>เกิดข้อผิดพลาดในการโหลดข้อมูลนักเรียน</h3></div>`;
+            console.error("Failed to load student score data from Cloud:", error);
+            tableContainer.innerHTML = `<div class="text-center py-16 text-red-500"><h3>เกิดข้อผิดพลาดในการโหลดข้อมูลนักเรียนจาก Cloud</h3></div>`;
             return;
         }
 
