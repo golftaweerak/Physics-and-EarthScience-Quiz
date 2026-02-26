@@ -157,7 +157,30 @@ export function getCategoryDisplayName(categoryKey) {
 }
 
 
+const SEMESTER_STORAGE_KEY = 'current_semester';
+const DEFAULT_SEMESTER = '1/2568';
+
+/**
+ * Gets the current active semester from localStorage.
+ * @returns {string} The semester string (e.g., '1/2568', '2/2568').
+ */
+export function getCurrentSemester() {
+  return localStorage.getItem(SEMESTER_STORAGE_KEY) || DEFAULT_SEMESTER;
+}
+
+/**
+ * Sets the current active semester and clears the cache to force a reload.
+ * @param {string} semester - The semester string to set.
+ */
+export function setCurrentSemester(semester) {
+  if (semester !== getCurrentSemester()) {
+    localStorage.setItem(SEMESTER_STORAGE_KEY, semester);
+    mergedScoresCache = null; // Clear cache to reload data for the new semester
+  }
+}
+
 let mergedScoresCache = null;
+let currentLoadedSemester = null;
 
 /**
  * Fetches base scores and manual overrides, merges them, and caches the result.
@@ -165,16 +188,21 @@ let mergedScoresCache = null;
  * @returns {Promise<Array<object>>} A promise that resolves to the merged student scores.
  */
 export async function getStudentScores() {
-  if (mergedScoresCache) {
+  const semester = getCurrentSemester();
+
+  // Return cache if it exists and matches the requested semester
+  if (mergedScoresCache && currentLoadedSemester === semester) {
     return mergedScoresCache;
   }
 
   try {
+    // Determine which data file to load based on the semester
+    const dataFilePath = semester === '2/2568' ? '../data/scores-data-2-2568.js' : '../data/scores-data.js';
+
     // Parallelize the loading of base scores and overrides.
-    // 'scores-data.js' is required, so we let it throw if it fails.
-    // 'score-overrides.js' is optional, so we catch its error and return null.
+    // Base scores file path is dynamic.
     const [baseScoresModule, overrideModule] = await Promise.all([
-      import('../data/scores-data.js'),
+      import(/* @vite-ignore */ dataFilePath),
       import('../data/score-overrides.js').catch(() => null)
     ]);
 
@@ -194,6 +222,7 @@ export async function getStudentScores() {
 
     if (Object.keys(scoreOverrides).length === 0) {
       mergedScoresCache = baseScores;
+      currentLoadedSemester = semester;
       return baseScores;
     }
 
@@ -203,9 +232,10 @@ export async function getStudentScores() {
     );
 
     mergedScoresCache = mergedScores;
+    currentLoadedSemester = semester;
     return mergedScores;
   } catch (error) {
-    console.error("Failed to load or merge student scores:", error);
+    console.error(`Failed to load or merge student scores for ${semester}:`, error);
     return []; // Return an empty array on failure.
   }
 }
@@ -609,4 +639,12 @@ export async function calculateStrengthsAndWeaknesses() {
     .slice(0, 3);
 
   return { strengths, weaknesses };
+}
+
+/**
+ * Returns the correct course code for the current semester.
+ * @returns {string} The course code ('ว30161' or 'ว30162').
+ */
+export function getCurrentCourseCode() {
+  return getCurrentSemester() === '2/2568' ? 'ว30162' : 'ว30161';
 }

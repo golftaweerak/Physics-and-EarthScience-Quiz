@@ -23,23 +23,60 @@ async function main() {
 
         const urlParams = new URLSearchParams(window.location.search);
         const isDevMode = urlParams.get('dev') === 'true';
+        const isSchoolEmail = (user && user.email && user.email.endsWith('@promma.ac.th')) || isDevMode;
 
-        // 4. (Disabled) Email restriction check
-        /*
-        if (!isDevMode && (!user || !user.email || !user.email.endsWith('@promma.ac.th'))) {
-            // ...
-            const loadingSpinner = document.getElementById('loading-spinner');
-            if (loadingSpinner) loadingSpinner.style.display = 'none';
-            // Show access denied modal or redirect (optional implementation)
-            // For now, just return to stop loading
-             return;
+        const mainContent = document.getElementById('main-content');
+        const loadingSpinner = document.getElementById('loading-spinner');
+
+        if (isSchoolEmail) {
+            // อนุญาตให้เข้าถึง: แสดงเนื้อหาหลัก
+            if (mainContent) mainContent.classList.remove('hidden');
+
+            // 5. ถ้ามีสิทธิ์ ให้โหลดข้อมูลสรุปผลต่อ
+            const { initializeSummaryPage } = await import('./summary-handler.js');
+            await initializeSummaryPage();
+
+            if (loadingSpinner) loadingSpinner.classList.add('hidden');
+        } else {
+            // ไม่มีสิทธิ์: แสดง Modal
+            if (loadingSpinner) loadingSpinner.classList.add('hidden');
+
+            const showAccessDenied = () => {
+                const modal = document.getElementById('access-denied-modal');
+                if (modal) {
+                    modal.classList.remove('hidden');
+                    const loginBtn = document.getElementById('access-denied-login-btn');
+                    if (loginBtn) {
+                        loginBtn.addEventListener('click', () => {
+                            authManager.login().catch(console.error);
+                        });
+                    }
+
+                    // Animation
+                    requestAnimationFrame(() => {
+                        requestAnimationFrame(() => {
+                            modal.classList.remove('opacity-0');
+                            const content = modal.querySelector('.transform');
+                            if (content) content.classList.replace('scale-95', 'scale-100');
+                        });
+                    });
+                } else {
+                    // Fallback to insertion if modal component failed to load
+                    document.body.insertAdjacentHTML('beforeend', `
+                        <div class="fixed inset-0 z-[99999] flex items-center justify-center bg-black/90 backdrop-blur-md font-sarabun">
+                            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4 text-center border border-gray-200 dark:border-gray-700">
+                                <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-3 font-kanit">สงวนสิทธิ์การเข้าถึง</h3>
+                                <p class="text-gray-600 dark:text-gray-300 mb-8">ขออภัย หน้านี้สำหรับอีเมล <br><span class="font-bold text-blue-600 dark:text-blue-400">@promma.ac.th</span> เท่านั้น</p>
+                                <div class="flex flex-col gap-3">
+                                    <button onclick="location.reload()" class="inline-block w-full px-6 py-3.5 font-bold rounded-xl text-white bg-blue-600 hover:bg-blue-700 transition-all">ลองใหม่อีกครั้ง</button>
+                                    <a href="./index.html" class="inline-block w-full px-6 py-3.5 font-bold rounded-xl text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-all">กลับสู่หน้าหลัก</a>
+                                </div>
+                            </div>
+                        </div>`);
+                }
+            };
+            showAccessDenied();
         }
-        */
-
-        // 5. ถ้ามีสิทธิ์ ให้โหลดข้อมูลสรุปผลต่อ
-        const { initializeSummaryPage } = await import('./summary-handler.js');
-        // Build the summary page content
-        await initializeSummaryPage();
 
     } catch (error) {
         console.error("Failed to initialize summary page:", error);

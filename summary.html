@@ -5,110 +5,113 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ภาพรวมนักเรียนทั้งหมด - สรุปคะแนน</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;700&family=Sarabun:wght@400;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="./styles/bundle.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="./scripts/summary-loader.js" type="module"></script>
-    <script type="module">
-        import { authManager } from './scripts/auth-manager.js';
-
-        authManager.waitForAuthReady().then(user => {
-            const mainContent = document.getElementById('main-content');
-            const urlParams = new URLSearchParams(window.location.search);
-            const isDevMode = urlParams.get('dev') === 'true';
-            const isSchoolEmail = (user && user.email && user.email.endsWith('@promma.ac.th')) || isDevMode;
-
-            if (isSchoolEmail) {
-                // อนุญาตให้เข้าถึง: แสดงเนื้อหาหลัก
-                if (mainContent) mainContent.classList.remove('hidden');
-            } else {
-                // ไม่มีสิทธิ์: แสดง Modal (สำหรับ user ที่ไม่ได้ล็อกอิน หรืออีเมลผิด)
-                let attempts = 0;
-                const showModal = () => {
-                    const modal = document.getElementById('access-denied-modal');
-                    if (modal) {
-                        modal.classList.remove('hidden');
-                        const loginBtn = document.getElementById('access-denied-login-btn');
-                        if (loginBtn) {
-                            loginBtn.addEventListener('click', () => {
-                                // เมื่อกดปุ่ม ให้เรียกฟังก์ชัน login จาก authManager
-                                authManager.login();
-                            });
-                        }
-
-                        requestAnimationFrame(() => {
-                            requestAnimationFrame(() => {
-                                modal.classList.remove('opacity-0');
-                                const content = modal.querySelector('.transform');
-                                if(content) content.classList.replace('scale-95', 'scale-100');
-                            });
-                        });
-                    } else {
-                        attempts++;
-                        if (attempts > 30) {
-                            document.body.insertAdjacentHTML('beforeend', `
-                                <div class="fixed inset-0 z-[99999] flex items-center justify-center bg-black/90 backdrop-blur-md font-sarabun">
-                                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4 text-center border border-gray-200 dark:border-gray-700">
-                                        <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-3 font-kanit">สงวนสิทธิ์การเข้าถึง</h3>
-                                        <p class="text-gray-600 dark:text-gray-300 mb-8">ขออภัย หน้านี้สำหรับอีเมล <br><span class="font-bold text-blue-600 dark:text-blue-400">@promma.ac.th</span> เท่านั้น</p>
-                                        <a href="./index.html" class="inline-block w-full px-6 py-3.5 font-bold rounded-xl text-white bg-red-600 hover:bg-red-700 transition-all">กลับสู่หน้าหลัก</a>
-                                    </div>
-                                </div>`);
-                            return;
-                        }
-                        setTimeout(showModal, 100); // ลองใหม่ใน 100ms
-                    }
-                };
-                showModal();
-            }
-        });
-    </script>
     <link rel="icon" href="./assets/icons/exam.png" type="image/png">
 </head>
 
-<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 font-sarabun">
+<body
+    class="bg-gray-100 dark:bg-gray-950 text-gray-800 dark:text-gray-200 font-sarabun selection:bg-blue-100 dark:selection:bg-blue-900/40">
     <div id="main_header-placeholder" class="fixed top-0 left-0 w-full z-50"></div>
     <div id="modals-placeholder"></div>
 
-    <main id="main-content" class="container mx-auto px-4 pb-8 hidden" style="padding-top: var(--header-height-offset, 5rem);">
-        <header class="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
-            <div>
-                <h1 class="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white font-kanit ">ภาพรวมคะแนน:
-                    <br>รายวิชาวิทยาศาสตร์โลกและอวกาศ ม.4
-                </h1>
-                <p class="mt-2 text-lg text-gray-600 dark:text-gray-400">
-                    แดชบอร์ดสรุปข้อมูลและสถิติสำคัญของนักเรียนในทุกห้องเรียน</p>
-            </div>
-            <div class="w-full md:w-auto relative group">
-                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-500 dark:text-gray-400 group-hover:text-blue-500 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
+    <main id="main-content" class="container mx-auto px-4 pb-12 hidden"
+        style="padding-top: var(--header-height-offset, 5.5rem);">
+        <div class="max-w-5xl mx-auto">
+            <div
+                class="relative mb-10 fade-in-up bg-white dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800 rounded-3xl p-6 md:p-10 overflow-hidden shadow-sm">
+                <div
+                    class="absolute inset-0 bg-grid-slate-100 [mask-image:linear-gradient(0deg,#fff,rgba(255,255,255,0))] dark:bg-grid-slate-700/25 dark:[mask-image:linear-gradient(0deg,rgba(255,255,255,0.1),rgba(255,255,255,0))] translate-y-[-50%]">
                 </div>
-                <select id="semester-selector" class="appearance-none bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white text-base rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 block w-full md:w-72 pl-10 p-3 pr-10 font-kanit shadow-sm transition-all hover:border-blue-400 dark:hover:border-blue-500 cursor-pointer">
-                    <option value="" disabled selected>-- กรุณาเลือกภาคเรียน --</option>
-                    <option value="1/2568">ภาคเรียนที่ 1/2568</option>
-                    <option value="2/2568">ภาคเรียนที่ 2/2568</option>
-                </select>
-                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 group-hover:text-blue-500 transition-colors">
-                    <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-                </div>
-            </div>
-        </header>
 
-        <!-- Container for summary content -->
-        <div id="summary-container" class="space-y-8">
-            <!-- Summary content will be rendered here by JavaScript -->
-            <div id="loading-spinner" class="text-center py-16">
-                <svg class="animate-spin h-8 w-8 text-blue-600 dark:text-blue-400 mx-auto"
-                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                    </path>
-                </svg>
-                <p class="mt-4 text-gray-500 dark:text-gray-400">กำลังโหลดข้อมูล...</p>
+                <div class="relative flex flex-col lg:flex-row lg:items-center justify-between gap-8">
+                    <div class="flex flex-col md:flex-row items-center md:items-start gap-6">
+                        <!-- School Logo -->
+                        <div class="flex-shrink-0 relative group">
+                            <div
+                                class="absolute -inset-2 bg-gradient-to-r from-pink-500 to-rose-500 rounded-full blur opacity-20 group-hover:opacity-40 transition duration-500">
+                            </div>
+                            <img src="./assets/icons/promma-logo.png" alt="โลโก้โรงเรียนพรหมานุสรณ์"
+                                class="relative w-24 h-24 md:w-32 md:h-32 object-contain drop-shadow-md">
+                        </div>
+
+                        <div class="flex-grow text-center md:text-left">
+                            <div
+                                class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 dark:bg-white/5 text-white dark:text-white text-xs font-bold font-kanit mb-4 border border-white/20 dark:border-white/10 shadow-sm backdrop-blur-md">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                </svg>
+                                Academic Analytics
+                            </div>
+                            <h1 class="text-3xl md:text-5xl font-extrabold font-kanit tracking-tight leading-tight">
+                                <span
+                                    class="inline-block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400">วิทยาศาสตร์โลกและอวกาศ
+                                    ม.4</span><br>
+                                <span
+                                    class="inline-block text-transparent bg-clip-text font-bold text-xl md:text-3xl mt-2 select-none"
+                                    style="background-image: linear-gradient(to right, #FFB6C1, #FF69B4); -webkit-background-clip: text; background-clip: text;">โรงเรียนพรหมานุสรณ์จังหวัดเพชรบุรี</span>
+                            </h1>
+                            <p
+                                class="mt-4 text-base md:text-lg text-gray-600 dark:text-gray-400 max-w-2xl leading-relaxed">
+                                แดชบอร์ดแสดงสถิติผลการเรียนและการส่งงานของนักเรียนทุกห้องเรียน
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="w-full lg:w-auto relative group flex-shrink-0">
+                        <div
+                            class="absolute -inset-1 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-2xl blur opacity-10 group-hover:opacity-25 transition duration-300">
+                        </div>
+                        <div
+                            class="relative bg-white dark:bg-gray-800 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 shadow-sm transition-all duration-300 group-hover:border-blue-400 dark:group-hover:border-blue-500 flex items-center">
+                            <div class="flex-shrink-0 flex items-center pl-4 pr-2 pointer-events-none text-blue-500">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                            </div>
+                            <select id="semester-selector"
+                                class="appearance-none flex-grow bg-transparent text-gray-900 dark:text-white text-base md:text-lg font-bold font-kanit block w-full lg:w-56 py-3 pr-12 focus:outline-none cursor-pointer border-none outline-none">
+                                <option value="" disabled selected>เลือกภาคเรียน</option>
+                                <option value="1/2568">ภาคเรียนที่ 1/2568</option>
+                                <option value="2/2568">ภาคเรียนที่ 2/2568</option>
+                            </select>
+                            <div
+                                class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-400 group-hover:text-blue-500 transition-colors">
+                                <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                        clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
+
+            <!-- Container for summary content -->
+            <div id="summary-container" class="space-y-8">
+                <!-- Summary content will be rendered here by JavaScript -->
+                <div id="loading-spinner" class="text-center py-16">
+                    <svg class="animate-spin h-8 w-8 text-blue-600 dark:text-blue-400 mx-auto"
+                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                        </circle>
+                        <path class="opacity-75" fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                        </path>
+                    </svg>
+                    <p class="mt-4 text-gray-500 dark:text-gray-400">กำลังโหลดข้อมูล...</p>
+                </div>
+            </div>
 
 
     </main>

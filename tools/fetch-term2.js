@@ -10,32 +10,46 @@ import { convertTerm2Scores } from './convert-scores-term2.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-// ลิงก์ที่คุณให้มา (เติม ?download=1 เพื่อขอไฟล์โดยตรง)
-const googleSheetLink = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTTZ_j7TUPhcOcoex1eRgWCiurCx1ieLFJeWPH0ej81-QUKWoRQY8vlBwt4c_Uy2N-jwuUT0zWnj99c/pub?gid=0&single=true&output=csv";
+// ลิงก์ SharePoint (เติม &download=1 เพื่อบังคับดาวน์โหลด)
+const googleSheetLink = "https://prommaacth-my.sharepoint.com/:x:/g/personal/taweerak_t_promma_ac_th/IQAFBGdGpXSPTo7eli_ghxWmAQWeBF5CLhSO3DbgO7ojVWM?e=Bk4o42&download=1";
 
-// ตำแหน่งที่จะบันทึกไฟล์ (โฟลเดอร์ xlsx ต้องมีอยู่แล้ว)
-const outputDir = path.join(__dirname, '../csv');
-const outputPath = path.join(outputDir, '68-EarthScience-Term2.csv');
+// เปลี่ยนตำแหน่งบันทึกเป็นโฟลเดอร์ xlsx และนามสกุล .xlsx
+const outputDir = path.join(__dirname, '../xlsx');
+const outputPath = path.join(outputDir, '68-EarthScience-Term2.xlsx');
 
 // สร้างโฟลเดอร์ถ้ายังไม่มี
 if (!fs.existsSync(outputDir)){
     fs.mkdirSync(outputDir, { recursive: true });
 }
 
-console.log(`กำลังดาวน์โหลดไฟล์ CSV จาก Google Sheets...`);
+console.log(`กำลังดาวน์โหลดไฟล์ Excel จาก SharePoint...`);
 console.log(`URL: ${googleSheetLink}`);
 
-const downloadFile = (url, dest) => {
+const downloadFile = (url, dest, cookies = []) => {
     const fileStream = fs.createWriteStream(dest);
+    let isRedirected = false;
 
-    https.get(url, (response) => {
+    const options = {
+        headers: {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+        }
+    };
+
+    if (cookies.length > 0) {
+        options.headers['Cookie'] = cookies.map(c => c.split(';')[0]).join('; ');
+    }
+
+    https.get(url, options, (response) => {
         // Handle Redirects (301, 302, 307, etc.)
         if (response.statusCode >= 300 && response.statusCode < 400 && response.headers.location) {
+            isRedirected = true;
             fileStream.close();
             fs.unlink(dest, () => {}); // Delete partial file
+            const newCookies = response.headers['set-cookie'] || [];
+            const nextCookies = [...cookies, ...newCookies];
             const redirectUrl = new URL(response.headers.location, url).href;
             console.log(`Redirecting (Status: ${response.statusCode}) to: ${redirectUrl}`);
-            downloadFile(redirectUrl, dest); // Recursive call
+            downloadFile(redirectUrl, dest, nextCookies); // Recursive call
             return;
         }
 
@@ -56,6 +70,7 @@ const downloadFile = (url, dest) => {
             convertTerm2Scores();
         });
     }).on('error', (e) => {
+        if (isRedirected) return; // Ignore errors from the redirected request
         console.error(`เกิดข้อผิดพลาดในการดาวน์โหลด: ${e.message}`);
         fileStream.close();
         fs.unlink(dest, () => {});

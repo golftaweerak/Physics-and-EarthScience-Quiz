@@ -19,7 +19,7 @@ export function renderDailyQuests(gameOrId, optionalId) {
 
     const container = document.getElementById(containerId);
     if (!container) {
-        console.warn(`Container for daily quests not found: ${containerId}`);
+        // Container not found on this page, silently return
         return;
     }
 

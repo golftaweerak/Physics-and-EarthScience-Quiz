@@ -1,7 +1,6 @@
-import { getStudentScores } from './data-manager.js';
+import { getStudentScores, getCurrentSemester, setCurrentSemester, getCurrentCourseCode } from './data-manager.js';
 import { renderStudentSearchResultCards } from './student-card-renderer.js';
 import { ModalHandler } from './modal-handler.js';
-import { lastUpdated as scoresLastUpdated } from '../data/scores-data.js';
 
 /** A map of assignment names to their corresponding Microsoft Forms URL. */
 const ASSIGNMENT_URL_MAP = {
@@ -23,7 +22,12 @@ const ASSIGNMENT_URL_MAP = {
     'แบบฝึก 5.1': 'https://forms.office.com/r/afG0eGdjH5',
     'แบบฝึก 5.2': 'https://forms.office.com/r/mmB2LXmSNn',
     'ท้ายบท 5': 'https://forms.office.com/r/1uf2B3y7sM',
-    'Quiz 5': 'https://forms.office.com/r/gMTxMUjiT6'
+    'Quiz 5': 'https://forms.office.com/r/gMTxMUjiT6',
+    'Quiz 6': 'https://forms.office.com/r/dAs6nwpZ9e',
+    'Quiz 7': 'https://forms.office.com/r/x6XEYgXLMG',
+    'Quiz 8': 'https://forms.office.com/r/LmJASCtdX2',
+    'Quiz 9': 'https://forms.office.com/r/jiUCum58kV',
+    'Quiz 10': 'https://forms.office.com/r/ZcvePkp98'
 };
 
 /** A map for renaming specific assignment names for display. */
@@ -41,7 +45,7 @@ const SUMMARY_ASSIGNMENT_PATTERNS = [
 ];
 
 /** The desired display order for assignment groups. */
-const CHAPTER_ORDER = ['บทที่ 1', 'บทที่ 2', 'บทที่ 3', 'กลางภาค', 'บทที่ 4', 'บทที่ 5', 'อื่นๆ'];
+const CHAPTER_ORDER = ['บทที่ 1', 'บทที่ 2', 'บทที่ 3', 'กลางภาค', 'บทที่ 4', 'บทที่ 5', 'บทที่ 6', 'บทที่ 7', 'บทที่ 8', 'บทที่ 9', 'บทที่ 10', 'อื่นๆ'];
 
 let isEditMode = false;
 let originalScoresData = []; // To store the pristine data for comparison
@@ -66,23 +70,51 @@ export async function initializeScoreSearch() {
     const copyLogDataBtn = document.getElementById('copy-log-data-btn');
     const downloadOverrideFileBtn = document.getElementById('download-override-file-btn');
 
+    const semesterSelector = document.getElementById('semester-selector');
+    if (semesterSelector) {
+        semesterSelector.value = getCurrentSemester();
+        semesterSelector.addEventListener('change', () => {
+            setCurrentSemester(semesterSelector.value);
+            // Refresh the page or just clear results and reload data
+            window.location.reload();
+        });
+    }
+
     // --- Render Last Updated Timestamp ---
     const mainContentContainer = document.querySelector('.max-w-3xl.mx-auto');
     const searchBoxContainer = document.querySelector('#student-id-input')?.closest('.bg-white');
-    if (mainContentContainer && searchBoxContainer && scoresLastUpdated) {
-        const lastUpdatedDate = new Date(scoresLastUpdated);
-        const formattedDate = lastUpdatedDate.toLocaleString('th-TH', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-            timeZone: 'Asia/Bangkok'
-        });
-        const timestampDiv = document.createElement('div');
-        timestampDiv.className = 'text-center text-sm text-gray-500 dark:text-gray-400 mb-4 -mt-4';
-        timestampDiv.textContent = `อัปเดตข้อมูลล่าสุด: ${formattedDate} น.`;
-        mainContentContainer.insertBefore(timestampDiv, searchBoxContainer);
+
+    // Dynamic import for lastUpdated based on semester
+    const currentSemester = getCurrentSemester();
+    const courseCode = getCurrentCourseCode();
+    const courseDisplay = document.getElementById('course-code-display');
+    const titleCourseDisplay = document.getElementById('title-course-code');
+    if (courseDisplay) courseDisplay.textContent = courseCode;
+    if (titleCourseDisplay) titleCourseDisplay.textContent = courseCode;
+
+    const dataFilePath = currentSemester === '2/2568' ? '../data/scores-data-2-2568.js' : '../data/scores-data.js';
+
+    try {
+        const dataModule = await import(/* @vite-ignore */ dataFilePath);
+        const scoresLastUpdated = dataModule.lastUpdated;
+
+        if (mainContentContainer && searchBoxContainer && scoresLastUpdated) {
+            const lastUpdatedDate = new Date(scoresLastUpdated);
+            const formattedDate = lastUpdatedDate.toLocaleString('th-TH', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                timeZone: 'Asia/Bangkok'
+            });
+            const timestampDiv = document.createElement('div');
+            timestampDiv.className = 'text-center text-sm text-gray-500 dark:text-gray-400 mb-4 -mt-4';
+            timestampDiv.textContent = `อัปเดตข้อมูลล่าสุด: ${formattedDate} น.`;
+            mainContentContainer.insertBefore(timestampDiv, searchBoxContainer);
+        }
+    } catch (e) {
+        console.warn("Could not load lastUpdated for semester", currentSemester);
     }
 
 
@@ -94,7 +126,8 @@ export async function initializeScoreSearch() {
     }
 
     // Fetch both original and potentially merged scores
-    const { studentScores: baseScores } = await import(`../data/scores-data.js?v=${Date.now()}`);
+    const currentSemester_file = getCurrentSemester() === '2/2568' ? 'scores-data-2-2568.js' : 'scores-data.js';
+    const { studentScores: baseScores } = await import(/* @vite-ignore */ `../data/${currentSemester_file}?v=${Date.now()}`);
     originalScoresData = baseScores;
     const studentScores = await getStudentScores();
 
@@ -182,9 +215,9 @@ export async function initializeScoreSearch() {
             return;
         }
         const lowerCaseQuery = query.toLowerCase();
-        
+
         let results = [];
-        
+
         // Priority 1: Exact ID match.
         const idMatch = studentScores.find(s => s.id.toLowerCase() === lowerCaseQuery);
         if (idMatch) {
@@ -251,8 +284,8 @@ export async function initializeScoreSearch() {
     function displayMessage(message, type = 'info') {
         if (defaultMessage) defaultMessage.classList.add('hidden');
         const isError = type === 'error';
-        
-        const icon = isError 
+
+        const icon = isError
             ? `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`
             : `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`;
 
@@ -324,10 +357,15 @@ export async function initializeScoreSearch() {
         if (isNaN(parseFloat(score))) {
             // Handle text-based scores like "ส่งแล้ว", "ยังไม่ส่ง"
             const isSubmitted = score && score.toLowerCase() !== 'ยังไม่ส่ง';
-            const colorClass = isSubmitted 
-                ? 'text-green-800 bg-green-100 dark:text-green-200 dark:bg-green-900/50' 
+            const colorClass = isSubmitted
+                ? 'text-green-800 bg-green-100 dark:text-green-200 dark:bg-green-900/50'
                 : 'text-red-800 bg-red-100 dark:text-red-200 dark:bg-red-900/50';
-            statusHtml = `<span class="px-2 py-1 text-xs font-semibold ${colorClass} rounded-full">${score || 'ยังไม่ส่ง'}</span>`;
+
+            let displayScore = score || 'ยังไม่ส่ง';
+            if (!isSubmitted && lowerCaseName.includes('quiz')) {
+                displayScore = 'ขาด';
+            }
+            statusHtml = `<span class="px-2 py-1 text-xs font-semibold ${colorClass} rounded-full">${displayScore}</span>`;
         } else {
             // Handle numeric scores
             statusHtml = `<span class="font-mono font-bold text-gray-800 dark:text-gray-200">${score}</span>`;
@@ -363,7 +401,18 @@ export async function initializeScoreSearch() {
             }
         }
 
-        const summaryOrder = [
+        // Term-specific adjustments
+        const isTerm2 = getCurrentSemester() === '2/2568';
+
+        const summaryOrder = isTerm2 ? [
+            'ก่อนกลางภาค [25]',
+            'กลางภาค [20]',
+            'หลังกลางภาค [25]',
+            'ก่อนปลายภาค [70]',
+            'ปลายภาค [30]',
+            'รวม [100]',
+            'เกรด'
+        ] : [
             'ก่อนกลางภาค [25]',
             'กลางภาค [20]',
             'หลังกลางภาค [25]',
@@ -372,9 +421,42 @@ export async function initializeScoreSearch() {
             'รวม [100]',
             'เกรด'
         ];
+        if (isTerm2) {
+            // Map root properties that have different names in Term 2
+            if (student.hasOwnProperty('กลางภาค') && !student.hasOwnProperty('กลางภาค [20]')) {
+                student['กลางภาค [20]'] = student['กลางภาค'];
+            }
+            if (student.hasOwnProperty('ปลายภาค') && !student.hasOwnProperty('ปลายภาค [30]')) {
+                student['ปลายภาค [30]'] = student['ปลายภาค'];
+            }
+
+            // In Term 2, summary scores and breakdown items are often inside the 'assignments' array instead of top-level
+            if (student.assignments) {
+                student.assignments.forEach(a => {
+                    // Promote if it has a value, isn't already promoted, and isn't an empty string
+                    if (!student.hasOwnProperty(a.name) && a.score !== null && a.score !== undefined && a.score !== "") {
+                        const score = parseFloat(a.score);
+                        student[a.name] = isNaN(score) ? a.score : score;
+                    }
+                });
+            }
+        }
 
 
-        const breakdownMap = {
+        const breakdownMap = isTerm2 ? {
+            'ก่อนกลางภาค [25]': [
+                { label: 'บทที่ 6', key: 'บท 6 [10]' },
+                { label: 'บทที่ 7', key: 'บท 7 [10]' },
+                { label: 'กิจกรรม ธรณีพิบัติภัย', key: 'กิจกรรม [5]' }
+            ],
+            'หลังกลางภาค [25]': [
+                { label: 'บทที่ 8', key: 'บท 8 [10]' },
+                { label: 'บทที่ 9', key: 'บท 9 [5]' },
+                { label: 'บทที่ 10', key: 'บท 10 [10]' },
+
+            ],
+            'รวม [100]': [{ label: 'คะแนนก่อนสอบกลางภาค', key: 'ก่อนกลางภาค [25]' }, { label: 'คะแนนสอบกลางภาค', key: 'กลางภาค [20]' }, { label: 'คะแนนก่อนสอบปลายภาค', key: 'ก่อนปลายภาค [70]' }, { label: 'คะแนนสอบปลายภาค', key: 'ปลายภาค [30]' }]
+        } : {
             'ก่อนกลางภาค [25]': [
                 { label: 'บทที่ 1', key: 'บท 1 [10]' },
                 { label: 'บทที่ 2', key: 'บท 2 [10]' },
@@ -384,7 +466,8 @@ export async function initializeScoreSearch() {
                 { label: 'บทที่ 4', key: 'บท 4 [10]' },
                 { label: 'บทที่ 5', key: 'บท 5 [10]' },
                 { label: 'นำเสนอ', key: 'นำเสนอ [5]' }
-            ]
+            ],
+            'รวม [100]': [{ label: 'คะแนนก่อนสอบกลางภาค', key: 'ก่อนกลางภาค [25]' }, { label: 'คะแนนสอบกลางภาค', key: 'กลางภาค [20]' }, { label: 'คะแนนก่อนสอบปลายภาค', key: 'ก่อนปลายภาค [70]' }, { label: 'คะแนนสอบปลายภาค', key: 'ปลายภาค [30]' }]
         };
 
         const scoreRows = summaryOrder.map(key => {
@@ -400,11 +483,25 @@ export async function initializeScoreSearch() {
                 const rowClass = isImportant ? 'bg-blue-50 dark:bg-gray-800/60' : '';
                 const labelClass = isImportant ? 'font-bold text-blue-900 dark:text-blue-300' : 'font-medium text-gray-700 dark:text-gray-300';
                 let valueClass = isImportant ? 'font-bold' : 'font-semibold';
-                if (isGrade) valueClass += ' text-2xl text-blue-600 dark:text-blue-400';
+                if (isGrade) {
+                    valueClass += ' text-2xl ';
+                    const numericGrade = parseFloat(value);
+                    if (value === '4' || value === '4.0' || numericGrade === 4) {
+                        valueClass += 'text-green-600 dark:text-green-400';
+                    } else if (numericGrade >= 3) {
+                        valueClass += 'text-blue-600 dark:text-blue-400';
+                    } else if (numericGrade >= 2) {
+                        valueClass += 'text-yellow-600 dark:text-yellow-400';
+                    } else if (numericGrade >= 1) {
+                        valueClass += 'text-orange-500 dark:text-orange-400';
+                    } else {
+                        valueClass += 'text-red-600 dark:text-red-400';
+                    }
+                }
                 else if (isTotal) valueClass += ' text-xl text-green-600 dark:text-green-400';
                 else if (isMidterm || isFinal) valueClass += ' text-lg text-gray-900 dark:text-white';
                 else valueClass += ' text-gray-900 dark:text-white';
-                
+
                 let valueDisplay;
                 if (isEditMode) {
                     const inputType = (typeof value === 'number' && !isGrade) ? 'number' : 'text';
@@ -418,8 +515,9 @@ export async function initializeScoreSearch() {
                 }
 
                 let retestStatusHtml = '';
-                if (key === 'กลางภาค [20]' && student.ซ่อมมั้ย && student.ซ่อมมั้ย.trim() !== '-') {
-                    const retestStatus = student.ซ่อมมั้ย.trim();
+                const retestData = student.ซ่อมมั้ย || student.ซ่อมกลางภาค;
+                if (key === 'กลางภาค [20]' && retestData && retestData.trim() !== '-') {
+                    const retestStatus = retestData.trim();
                     const isPositiveStatus = retestStatus.includes('ไม่ต้อง') || retestStatus.includes('ซ่อมแล้ว');
                     const statusColor = isPositiveStatus ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400';
                     retestStatusHtml = `<div class="text-xs font-normal ${statusColor} pt-1">สถานะการสอบซ่อม: ${retestStatus}</div>`;
@@ -460,7 +558,7 @@ export async function initializeScoreSearch() {
         `;
 
         // 1. Filter out non-trackable assignments and calculate stats
-        const TRACKABLE_KEYWORDS = ['กิจกรรม', 'แบบฝึก', 'quiz', 'ท้ายบท'];
+        const TRACKABLE_KEYWORDS = ['กิจกรรม', 'แบบฝึก', 'quiz', 'ท้ายบท', 'ใบงาน'];
         const trackableAssignments = student.assignments.filter(assignment =>
             TRACKABLE_KEYWORDS.some(keyword => assignment.name.toLowerCase().includes(keyword))
         );
@@ -492,6 +590,63 @@ export async function initializeScoreSearch() {
                 <div class="bg-gradient-to-r from-blue-400 to-blue-600 h-3 rounded-full transition-all duration-500" style="width: ${completionPercentage}%"></div>
             </div>
         `;
+
+        // 2.5 Build Quiz Shortcut Cards Section
+        const quizAssignments = trackableAssignments.filter(a => a.name.toLowerCase().includes('quiz'));
+        let quizCardsSection = '';
+        if (quizAssignments.length > 0) {
+            const quizCardsHtml = quizAssignments.map(quiz => {
+                const url = ASSIGNMENT_URL_MAP[quiz.name] || '#';
+                const score = quiz.score;
+                const isSubmitted = score && score.toLowerCase() !== 'ยังไม่ส่ง' && !isNaN(parseFloat(score));
+
+                let statusBadge;
+                let cardStyle;
+                let iconColor;
+                if (isSubmitted) {
+                    statusBadge = `<span class="px-2.5 py-1 text-xs font-bold text-green-700 bg-green-100 dark:text-green-300 dark:bg-green-900/50 rounded-full border border-green-200 dark:border-green-800">${score}</span>`;
+                    cardStyle = 'border-green-200 dark:border-green-800 bg-green-50/30 dark:bg-green-900/10 hover:bg-green-50 dark:hover:bg-green-900/20';
+                    iconColor = 'text-green-500';
+                } else {
+                    statusBadge = `<span class="px-2.5 py-1 text-xs font-bold text-red-700 bg-red-100 dark:text-red-300 dark:bg-red-900/50 rounded-full border border-red-200 dark:border-red-800">ขาด</span>`;
+                    cardStyle = 'border-red-200 dark:border-red-800 bg-red-50/30 dark:bg-red-900/10 hover:bg-red-50 dark:hover:bg-red-900/20';
+                    iconColor = 'text-red-500';
+                }
+
+                return `
+                    <a href="${url}" target="_blank" rel="noopener noreferrer" class="group flex flex-col justify-between p-4 rounded-xl border ${cardStyle} transition-all duration-300 hover:shadow-md hover:-translate-y-1">
+                        <div class="flex justify-between items-start mb-3">
+                            <div class="p-2 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 ${iconColor}">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                                </svg>
+                            </div>
+                            ${statusBadge}
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-900 dark:text-white font-kanit group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">${quiz.name}</h4>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 flex items-center gap-1">คลิกเพื่อทำแบบทดสอบ <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg></p>
+                        </div>
+                    </a>
+                `;
+            }).join('');
+
+            quizCardsSection = `
+                <figure class="mb-8">
+                    <figcaption class="p-3 text-lg font-semibold text-left text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-800 rounded-t-lg border-x border-t border-gray-200 dark:border-gray-700 font-kanit flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-500" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd" />
+                        </svg>
+                        Quiz
+                    </figcaption>
+                    <div class="p-4 sm:p-5 bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-b-lg shadow-inner">
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
+                            ${quizCardsHtml}
+                        </div>
+                    </div>
+                </figure>
+            `;
+        }
 
         const assignmentsSection = Object.keys(groupedAssignments).length > 0 ? `
             <figure>
@@ -538,6 +693,7 @@ export async function initializeScoreSearch() {
                 </div>
                 <div class="p-6 space-y-8">
                     ${summaryScoreSection}
+                    ${quizCardsSection}
                     ${summaryCardsHtml}
                     ${assignmentsSection}
                 </div>
@@ -661,7 +817,7 @@ export async function initializeScoreSearch() {
 
         const groups = assignments.reduce((acc, assignment) => {
             const name = assignment.name.toLowerCase();
-            
+
             // Exclude summary-like assignments from being displayed in the detailed view
             if (SUMMARY_ASSIGNMENT_PATTERNS.some(pattern => pattern.test(name))) {
                 return acc;
@@ -670,11 +826,13 @@ export async function initializeScoreSearch() {
             let chapterKey;
             if (name.includes('mid') || name.includes('ซ่อมแล้วกลางภาค')) {
                 chapterKey = 'กลางภาค';
+            } else if (name.includes('quiz')) {
+                chapterKey = 'แบบทดสอบท้ายบท (Quiz)';
             } else {
                 const match = name.match(/(\d+)/); // Find the first number
                 chapterKey = match ? `บทที่ ${match[1]}` : 'อื่นๆ';
             }
-            
+
             if (!acc[chapterKey]) {
                 acc[chapterKey] = [];
             }
@@ -696,6 +854,12 @@ export async function initializeScoreSearch() {
                 orderedGroups[key] = groups[key];
             }
         });
+
+        // Specific request: Remove "บทที่ 5" (Term 2 only) and "แบบทดสอบท้ายบท (Quiz)" (always, as it's now in shortcuts)
+        if (getCurrentSemester() === '2/2568') {
+            delete orderedGroups['บทที่ 5'];
+        }
+        delete orderedGroups['แบบทดสอบท้ายบท (Quiz)'];
 
         return orderedGroups;
     }

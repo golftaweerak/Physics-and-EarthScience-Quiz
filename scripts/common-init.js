@@ -130,5 +130,12 @@ export async function initializeCommonComponents() {
     if (yearSpan) {
         yearSpan.textContent = new Date().getFullYear();
     }
+
+    // Set course code in navigation menu
+    const { getCurrentCourseCode: getCode } = await import('./data-manager.js');
+    const navCodeSpan = document.getElementById("nav-course-code");
+    if (navCodeSpan) {
+        navCodeSpan.textContent = getCode();
+    }
     console.log("✅ common-init: initializeCommonComponents COMPLETE.");
 }

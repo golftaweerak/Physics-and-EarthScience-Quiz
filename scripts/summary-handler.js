@@ -1,7 +1,6 @@
-import { getStudentScores } from './data-manager.js';
+import { getStudentScores, getCurrentSemester, setCurrentSemester, getCurrentCourseCode } from './data-manager.js';
 import { ModalHandler } from './modal-handler.js';
 import { renderStudentSearchResultCards, calculateStudentCompletion } from './student-card-renderer.js';
-import { lastUpdated as scoresLastUpdated } from '../data/scores-data.js';
 
 // Define data keys mapping
 const DATA_KEYS = {
@@ -13,7 +12,7 @@ const DATA_KEYS = {
     GRADE: 'เกรด'
 };
 
-let currentSemester = '1/2568'; // Default semester
+let currentSemester = getCurrentSemester();
 // Module-level state for summary data and sorting configuration
 let summaryDataStore = null;
 let roomSortConfig = {
@@ -71,6 +70,65 @@ function calculateOverallSummary(scores) {
     let studentsWithNoMissing = 0, studentsWithMissing = 0;
 
     scores.forEach(student => {
+        // --- Normalization Phase ---
+        // Term 2 specific logic: Normalize special data structures to standard format BEFORE calculations
+        if (currentSemester === '2/2568') {
+            // Helper to find score by partial name
+            const findScore = (keywords) => {
+                if (!Array.isArray(keywords)) keywords = [keywords];
+                if (!student.assignments) return '-';
+                const assignment = student.assignments.find(a => a && a.name && keywords.some(k => a.name.toLowerCase().includes(k.toLowerCase())));
+                return assignment ? assignment.score : '-';
+            };
+
+            // Term 2 specific logic: Promote total and Retest status
+            // Prioritize Column1 (for legacy/custom) or 'รวม [100]' from assignments
+            let totalScoreValue = student[DATA_KEYS.TOTAL_SCORE]; // Fallback to top-level if exists
+
+            const col1 = findScore(['Column1', 'รวม [100]']);
+            if (col1 !== '-') totalScoreValue = parseFloat(col1);
+
+            student['คะแนนรวม'] = totalScoreValue;
+            // Write it back to the generic top-level key so generic calculations use it:
+            if (!isNaN(totalScoreValue)) {
+                student[DATA_KEYS.TOTAL_SCORE] = totalScoreValue;
+            }
+
+            // Map requested fields
+            // Midterm: Try to find explicit total column (e.g. MID [20]), otherwise sum the parts
+            let midScore = findScore(['MID', 'รวมกลางภาค']);
+            if (midScore === '-' || midScore === '') {
+                const p1 = parseFloat(student['กลางภาคข้อกา']);
+                const p2 = parseFloat(student['กลางภาคข้อเขียน']);
+                if (!isNaN(p1) || !isNaN(p2)) {
+                    midScore = ((isNaN(p1) ? 0 : p1) + (isNaN(p2) ? 0 : p2));
+                }
+            }
+            student['คะแนนกลางภาค'] = midScore;
+
+            // Remedial: Prioritize score/result, fallback to status
+            let remedial = findScore(['ซ่อมแล้ว', 'ซ่อมกลางภาค']);
+            if (remedial === '-' || remedial === '') remedial = findScore('ซ่อมมั้ย');
+            student['การซ่อมกลางภาค'] = remedial;
+
+            // Calculate Quiz Count (Quizzes 6-10)
+            let quizCount = 0;
+            const quizTargets = [['Quiz 6'], ['Quiz 7'], ['Quiz 8', 'Qzuiz 8'], ['Quiz 9'], ['Quiz 10']];
+
+            quizTargets.forEach(keys => {
+                const score = findScore(keys);
+                // Check if score indicates submission (not empty, not '-', not 'ยังไม่ส่ง')
+                if (score && score !== '-' && score !== 'ยังไม่ส่ง') {
+                    quizCount++;
+                }
+            });
+            student['จำนวน Quiz'] = `${quizCount}/${quizTargets.length}`;
+
+            // Final
+            student['คะแนนปลายภาค'] = findScore(['ปลายภาค', 'Final']);
+        }
+
+        // --- Calculation Phase ---
         // Overall average score
         const totalScore = student[DATA_KEYS.TOTAL_SCORE];
         if (typeof totalScore === 'number') {
@@ -108,6 +166,8 @@ function calculateOverallSummary(scores) {
             };
         }
         summaryByRoom[room].studentCount++;
+
+        // Accumulate generic score stats for room
         if (typeof totalScore === 'number') {
             summaryByRoom[room].totalScoreSum += totalScore;
             summaryByRoom[room].validScoresCount++;
@@ -130,15 +190,8 @@ function calculateOverallSummary(scores) {
             summaryByRoom[room].validMidtermScoresCountTerm2++;
         }
 
-        // Term 2 specific logic: Promote Column1 (Total) and Retest status
+        // Calculate Pass/Fail specifically for Term 2 passing threshold if applicable
         if (currentSemester === '2/2568') {
-            const col1 = student.assignments.find(a => a.name === 'Column1');
-            if (col1) student['คะแนนรวม'] = col1.score;
-            
-            const retest = student.assignments.find(a => a.name === 'ซ่อมมั้ย');
-            if (retest) student['ซ่อมมั้ย'] = retest.score;
-
-            // Calculate Pass/Fail based on Total Score > 12
             const totalScoreTerm2 = parseFloat(student['คะแนนรวม']);
             if (!isNaN(totalScoreTerm2)) {
                 if (totalScoreTerm2 >= 12) {
@@ -600,8 +653,8 @@ function updateRoomSummaryTable() {
         const completionPercentage = parseFloat(roomData.completionPercentage);
         const completionTextColorClass = getCompletionTextColor(completionPercentage);
         const completionBarColorClass = completionPercentage >= 90 ? 'bg-teal-500' :
-                                      completionPercentage >= 75 ? 'bg-sky-500' :
-                                      completionPercentage >= 50 ? 'bg-amber-500' : 'bg-red-500';
+            completionPercentage >= 75 ? 'bg-sky-500' :
+                completionPercentage >= 50 ? 'bg-amber-500' : 'bg-red-500';
 
         // For Average Grade Color
         const avgGrade = parseFloat(roomData.averageGrade);
@@ -741,50 +794,34 @@ function renderSummary(summaryData, studentScores, lastUpdatedTimestamp) {
     const rooms = [...new Set(studentScores.map(s => s.room).filter(Boolean).map(String))].sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
     const roomOptions = `<option value="all">นักเรียนทั้งหมด</option>` + rooms.map(r => `<option value="${r}">ห้อง ${r}</option>`).join('');
 
-    // Determine if we should show full stats (Term 1) or simplified view (Term 2)
-    const isTerm2 = currentSemester === '2/2568';
-    const hideStatsClass = isTerm2 ? 'hidden' : '';
-
-    let tableHeaderHtml;
-    if (isTerm2) {
-        tableHeaderHtml = `
-            <tr>
-                <th scope="col" class="px-4 py-3 text-left">ห้องเรียน</th>
-                <th scope="col" class="px-4 py-3 text-center">คะแนนกลางภาคเฉลี่ย</th>
-                <th scope="col" class="px-4 py-3 text-center">ผ่าน (>=12)</th>
-                <th scope="col" class="px-4 py-3 text-center">ตก (<12)</th>
-            </tr>
-        `;
-    } else {
-        tableHeaderHtml = `
-            <tr>
-                <th scope="col" class="px-4 py-3 text-left">
-                    <button id="sort-room-btn" class="inline-flex items-center gap-1 group font-bold focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-md px-1">
-                        <span>ห้องเรียน</span>
-                        <span id="sort-indicator-room" class="text-gray-500 dark:text-gray-400 transition-opacity"></span>
-                    </button>
-                </th>
-                <th scope="col" class="px-4 py-3 text-center">
-                    <button id="sort-avg-score-btn" class="inline-flex items-center gap-1 group font-bold focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-md px-1">
-                        <span>คะแนนรวมเฉลี่ย</span>
-                        <span id="sort-indicator-score" class="text-gray-500 dark:text-gray-400 transition-opacity"></span>
-                    </button>
-                </th>
-                <th scope="col" class="px-4 py-3 text-center w-1/4">
-                    <button id="sort-completion-btn" class="inline-flex items-center gap-1 group font-bold focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-md px-1">
-                        <span>การส่งงาน</span>
-                        <span id="sort-indicator-completion" class="text-gray-500 dark:text-gray-400 transition-opacity"></span>
-                    </button>
-                </th>
-                <th scope="col" class="px-4 py-3 text-center">
-                    <button id="sort-avg-grade-btn" class="inline-flex items-center gap-1 group font-bold focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-md px-1">
-                        <span>เกรดเฉลี่ย</span>
-                        <span id="sort-indicator-grade" class="text-gray-500 dark:text-gray-400 transition-opacity"></span>
-                    </button>
-                </th>
-            </tr>
-        `;
-    }
+    const tableHeaderHtml = `
+        <tr>
+            <th scope="col" class="px-4 py-3 text-left">
+                <button id="sort-room-btn" class="inline-flex items-center gap-1 group font-bold focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-md px-1">
+                    <span>ห้องเรียน</span>
+                    <span id="sort-indicator-room" class="text-gray-500 dark:text-gray-400 transition-opacity"></span>
+                </button>
+            </th>
+            <th scope="col" class="px-4 py-3 text-center">
+                <button id="sort-avg-score-btn" class="inline-flex items-center gap-1 group font-bold focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-md px-1">
+                    <span>คะแนนรวมเฉลี่ย</span>
+                    <span id="sort-indicator-score" class="text-gray-500 dark:text-gray-400 transition-opacity"></span>
+                </button>
+            </th>
+            <th scope="col" class="px-4 py-3 text-center w-1/4">
+                <button id="sort-completion-btn" class="inline-flex items-center gap-1 group font-bold focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-md px-1">
+                    <span>การส่งงาน</span>
+                    <span id="sort-indicator-completion" class="text-gray-500 dark:text-gray-400 transition-opacity"></span>
+                </button>
+            </th>
+            <th scope="col" class="px-4 py-3 text-center">
+                <button id="sort-avg-grade-btn" class="inline-flex items-center gap-1 group font-bold focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-md px-1">
+                    <span>เกรดเฉลี่ย</span>
+                    <span id="sort-indicator-grade" class="text-gray-500 dark:text-gray-400 transition-opacity"></span>
+                </button>
+            </th>
+        </tr>
+    `;
 
     const summaryHtml = `
         <!-- Student Search Section -->
@@ -815,7 +852,7 @@ function renderSummary(summaryData, studentScores, lastUpdatedTimestamp) {
         </div>
 
         <!-- Overall Stats Cards -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8 ${hideStatsClass}">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
             <!-- Student Counts Box -->
             <div class="bg-white dark:bg-gray-800/50 p-4 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 flex flex-col">
                 <h3 class="text-lg font-bold text-gray-800 dark:text-white font-kanit mb-4">ภาพรวมนักเรียน</h3>
@@ -860,7 +897,7 @@ function renderSummary(summaryData, studentScores, lastUpdatedTimestamp) {
         </div>
 
         <!-- Grade Distribution Chart -->
-        <div class="mt-8 bg-white dark:bg-gray-800/80 backdrop-blur-sm p-4 sm:p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700/60 ${hideStatsClass}">
+        <div class="mt-8 bg-white dark:bg-gray-800/80 backdrop-blur-sm p-4 sm:p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700/60">
             <div class="flex flex-wrap justify-between items-center gap-4 mb-4">
                 <h3 id="grade-chart-title" class="text-lg font-bold text-gray-800 dark:text-white font-kanit">การกระจายของเกรด</h3>
                 <div class="relative">
@@ -907,42 +944,7 @@ function renderSummary(summaryData, studentScores, lastUpdatedTimestamp) {
     container.innerHTML = summaryHtml;
 
     // Perform the initial render of the sortable table
-    if (!isTerm2) updateRoomSummaryTable();
-    else {
-        // For Term 2, render a simplified table with average midterm scores
-        const tbody = document.getElementById('room-summary-tbody');
-        if (tbody && summaryDataStore) {
-             const sortedRooms = Object.keys(summaryDataStore.summaryByRoom).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
-             tbody.innerHTML = sortedRooms.map(room => {
-                const roomData = summaryDataStore.summaryByRoom[room];
-                const avgMidtermScore = roomData.averageMidtermTerm2;
-                const scoreTextColorClass = getMidtermTerm2ScoreTextColor(parseFloat(avgMidtermScore));
-                const passCount = roomData.passCountTerm2 || 0;
-                const failCount = roomData.failCountTerm2 || 0;
-
-                return `
-                    <tr data-room="${room}" class="room-detail-trigger border-b dark:border-gray-700 last:border-b-0 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors duration-150 cursor-pointer">
-                        <td class="px-4 py-3 align-middle">
-                            <div class="font-bold text-lg text-gray-900 dark:text-white">ห้อง ${room}</div>
-                            <div class="text-sm text-gray-500 dark:text-gray-400">${roomData.studentCount} คน</div>
-                        </td>
-                        <td class="px-4 py-3 text-center align-middle">
-                            <div class="font-bold text-xl ${scoreTextColorClass}">${avgMidtermScore}</div>
-                            <div class="text-xs text-gray-500 dark:text-gray-400">คะแนนกลางภาคเฉลี่ย</div>
-                        </td>
-                        <td class="px-4 py-3 text-center align-middle">
-                            <div class="font-bold text-xl text-green-600 dark:text-green-400">${passCount}</div>
-                            <div class="text-xs text-gray-500 dark:text-gray-400">ผ่าน</div>
-                        </td>
-                        <td class="px-4 py-3 text-center align-middle">
-                            <div class="font-bold text-xl text-red-600 dark:text-red-400">${failCount}</div>
-                            <div class="text-xs text-gray-500 dark:text-gray-400">ตก</div>
-                        </td>
-                    </tr>
-                `;
-             }).join('');
-        }
-    }
+    updateRoomSummaryTable();
 
     initializeStudentSearch(studentScores);
 }
@@ -952,8 +954,15 @@ function renderSummary(summaryData, studentScores, lastUpdatedTimestamp) {
  */
 export async function initializeSummaryPage() {
     try {
-        // โหลดข้อมูลคะแนน (ปัจจุบันเป็นของ 1/2568)
-        const studentScores1_2568 = await getStudentScores();
+        // Initial semester from global state
+        currentSemester = getCurrentSemester();
+
+        // Update course code display
+        const courseCode = getCurrentCourseCode();
+        const courseDisplay = document.getElementById('course-code-display');
+        const titleCourseDisplay = document.getElementById('title-course-code');
+        if (courseDisplay) courseDisplay.textContent = courseCode;
+        if (titleCourseDisplay) titleCourseDisplay.textContent = courseCode;
 
         // ฟังก์ชันสำหรับตั้งค่า Event Listeners หลังจากการ Render
         const setupEventListeners = (scores) => {
@@ -1013,31 +1022,55 @@ export async function initializeSummaryPage() {
             }
         };
 
+        // Use sessionStorage to check if a semester was explicitly chosen in THIS session/tab.
+        // This allows a "Landing State" (Select Semester first) on new visits,
+        // but keeps the choice while the user is working.
+        const SESSION_KEY = 'summary_session_semester_selected';
+        let sessionSemester = sessionStorage.getItem(SESSION_KEY);
+
         // ฟังก์ชันสำหรับ Render หน้าเว็บตามภาคเรียนที่เลือก
         const renderSemester = async (semester) => {
-            currentSemester = semester; // Update current semester state
+            currentSemester = semester;
             const container = document.getElementById('summary-container');
-            if (semester === '1/2568') {
-                summaryDataStore = calculateOverallSummary(studentScores1_2568);
-                renderSummary(summaryDataStore, studentScores1_2568, scoresLastUpdated);
-                setupEventListeners(studentScores1_2568);
-            } else if (semester === '2/2568') {
-                // ลองโหลดข้อมูลภาคเรียนที่ 2 (ถ้ามีไฟล์)
+            if (!container) return;
+
+            // Update selector to match state
+            const semesterSelector = document.getElementById('semester-selector');
+            if (semesterSelector) semesterSelector.value = semester;
+
+            if (semester === '1/2568' || semester === '2/2568') {
+                sessionStorage.setItem(SESSION_KEY, semester);
+                const isT1 = semester === '1/2568';
+                const currentSemester_file = isT1 ? 'scores-data.js' : 'scores-data-2-2568.js';
+
                 let loaded = false;
                 try {
-                    // ใช้ ?v=${Date.now()} เพื่อป้องกันปัญหา Cache จากเบราว์เซอร์
-                    const module = await import(`../data/scores-data-2-2568.js?v=${Date.now()}`);
+                    const module = await import(`../data/${currentSemester_file}?v=${Date.now()}`);
                     if (module && module.studentScores) {
-                        summaryDataStore = calculateOverallSummary(module.studentScores);
-                        renderSummary(summaryDataStore, module.studentScores, module.lastUpdated);
-                        setupEventListeners(module.studentScores);
-                        loaded = true;
+                        try {
+                            const scores = JSON.parse(JSON.stringify(module.studentScores));
+                            summaryDataStore = calculateOverallSummary(scores);
+                            renderSummary(summaryDataStore, scores, module.lastUpdated);
+                            setupEventListeners(scores);
+                            loaded = true;
+                        } catch (err) {
+                            console.error("Error during rendering:", err);
+                            container.innerHTML = `
+                                <div class="flex flex-col items-center justify-center py-16 px-4 text-center min-h-[400px]">
+                                    <div class="bg-red-50 dark:bg-red-900/20 p-8 rounded-2xl shadow-lg border border-red-200 dark:border-red-900 max-w-2xl text-left">
+                                        <h3 class="text-xl font-bold text-red-800 dark:text-red-400 font-kanit mb-4">เกิดข้อผิดพลาดในการแสดงผลข้อมูล</h3>
+                                        <pre class="text-sm text-red-600 dark:text-red-300 whitespace-pre-wrap overflow-auto max-h-64 font-mono">${err.stack || err.message}</pre>
+                                    </div>
+                                </div>
+                            `;
+                            return;
+                        }
                     }
                 } catch (e) {
-                    console.log("Term 2 data not found yet.", e);
+                    console.warn(`Semester ${semester} data not found or error loading:`, e);
                 }
 
-                if (!loaded && container) {
+                if (!loaded) {
                     container.innerHTML = `
                         <div class="flex flex-col items-center justify-center py-16 px-4 text-center min-h-[400px]">
                             <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 max-w-md">
@@ -1047,47 +1080,43 @@ export async function initializeSummaryPage() {
                                     </svg>
                                 </div>
                                 <h3 class="text-2xl font-bold text-gray-800 dark:text-white font-kanit mb-2">ยังไม่เปิดภาคเรียน</h3>
-                                <p class="text-gray-600 dark:text-gray-400">ข้อมูลสำหรับภาคเรียนที่ 2/2568 จะแสดงที่นี่เมื่อเริ่มภาคเรียน</p>                                
+                                <p class="text-gray-600 dark:text-gray-400">ข้อมูลสำหรับภาคเรียนที่ ${semester} จะแสดงที่นี่เมื่อเริ่มภาคเรียน</p>
                             </div>
                         </div>
                     `;
                 }
             } else {
-                // กรณีไม่ได้เลือกภาคเรียน (Default state)
-                if (container) {
-                    container.innerHTML = `
-                        <div class="flex flex-col items-center justify-center py-16 px-4 text-center min-h-[50vh] relative overflow-hidden anim-fade-in">
-                            <div class="absolute inset-0 bg-grid-slate-100 [mask-image:linear-gradient(0deg,#fff,rgba(255,255,255,0))] dark:bg-grid-slate-700/25 dark:[mask-image:linear-gradient(0deg,rgba(255,255,255,0.1),rgba(255,255,255,0))]"></div>
-                            <div class="relative z-10">
-                                <div class="bg-gradient-to-br from-blue-100 to-indigo-200 dark:from-blue-900/50 dark:to-indigo-900/50 w-28 h-28 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg border-4 border-white/50 dark:border-gray-800/50">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V7a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                    </svg>
-                                </div>
-                                <h3 class="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white font-kanit mb-3">เริ่มต้นดูคะแนน</h3>
-                                <p class="text-gray-600 dark:text-gray-400 text-lg max-w-md mx-auto">
-                                    กรุณาเลือกภาคเรียนที่ต้องการจากเมนูด้านบน เพื่อแสดงข้อมูลสรุปและสถิติคะแนน
-                                </p>
-                                <div class="mt-12">
-                                    <svg class="animate-bounce mx-auto h-8 w-8 text-gray-400 dark:text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" /></svg>
-                                </div>
-                            </div>
+                // Return to original empty state
+                container.innerHTML = `
+                    <div class="flex flex-col items-center justify-center py-20 px-4 text-center min-h-[50vh]">
+                        <div class="bg-blue-900/40 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner ring-4 ring-blue-500/10">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-blue-400 font-bold" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                            </svg>
                         </div>
-                    `;
-                }
+                        <h3 class="text-3xl font-bold text-gray-800 dark:text-white font-kanit mb-4 tracking-wide">เริ่มต้นดูคะแนน</h3>
+                        <p class="text-gray-500 dark:text-gray-400 font-sarabun text-lg max-w-md leading-relaxed">กรุณาเลือกภาคเรียนที่ต้องการจากเมนูด้านบน<br/>เพื่อแสดงข้อมูลสรุปและสถิติคะแนน</p>
+                    </div>
+                `;
             }
         };
 
-        // เริ่มต้นแสดงผลแบบยังไม่เลือกภาคเรียน
-        renderSemester('');
-
-        // เพิ่ม Event Listener ให้กับ Dropdown เลือกภาคเรียน
+        // เริ่มต้นแสดงผล: แสดงหน้าว่างเสมอเมื่อเปิดหน้าเว็บ
         const semesterSelector = document.getElementById('semester-selector');
         if (semesterSelector) {
+            semesterSelector.value = '';
             semesterSelector.addEventListener('change', (e) => {
-                renderSemester(e.target.value);
+                const newSemester = e.target.value;
+                if (newSemester) {
+                    setCurrentSemester(newSemester);
+                    renderSemester(newSemester);
+                } else {
+                    renderSemester('');
+                }
             });
         }
+
+        renderSemester('');
 
     } catch (error) {
         console.error("Failed to initialize summary page:", error);
@@ -1221,22 +1250,20 @@ function initializeStudentSearch(studentScores) {
             const redColor = 'text-red-500 dark:text-red-400';
             options.customFields = [
                 {
-                    label: 'ข้อกา',
-                    key: 'กลางภาคข้อกา',
+                    label: 'จำนวน Quiz',
+                    key: 'จำนวน Quiz',
                     formatter: (value) => {
-                        const score = parseFloat(value);
-                        const defaultColor = 'text-blue-600 dark:text-blue-400';
-                        const colorClass = !isNaN(score) && score < 21 ? redColor : defaultColor;
-                        return `<p class="font-bold text-base sm:text-lg ${colorClass}">${value ?? '-'}</p>`;
+                        const defaultColor = 'text-purple-600 dark:text-purple-400';
+                        return `<p class="font-bold text-base sm:text-lg ${defaultColor}">${value ?? '-'}</p>`;
                     }
                 },
                 {
-                    label: 'ข้อเขียน',
-                    key: 'กลางภาคข้อเขียน',
+                    label: 'ปลายภาค',
+                    key: 'ปลายภาค',
                     formatter: (value) => {
                         const score = parseFloat(value);
-                        const defaultColor = 'text-purple-600 dark:text-purple-400';
-                        const colorClass = !isNaN(score) && score < 3 ? redColor : defaultColor;
+                        const defaultColor = 'text-blue-600 dark:text-blue-400';
+                        const colorClass = (!isNaN(score) && score < 15) ? redColor : defaultColor;
                         return `<p class="font-bold text-base sm:text-lg ${colorClass}">${value ?? '-'}</p>`;
                     }
                 },
@@ -1246,24 +1273,30 @@ function initializeStudentSearch(studentScores) {
                     formatter: (value) => {
                         const score = parseFloat(value);
                         const defaultColor = 'text-green-600 dark:text-green-400';
-                        const colorClass = !isNaN(score) && score < 12 ? redColor : defaultColor;
+                        const colorClass = (!isNaN(score) && score < 50) ? redColor : defaultColor;
                         return `<p class="font-bold text-base sm:text-lg ${colorClass}">${value ?? '-'}</p>`;
                     }
                 },
                 {
-                    label: 'ซ่อมมั้ย',
-                    key: 'ซ่อมมั้ย',
+                    label: 'เกรด',
+                    key: 'เกรด',
                     formatter: (value) => {
-                        if (!value || value === '-') {
-                            return `<p class="font-bold text-base sm:text-lg text-gray-400">-</p>`;
+                        const gradeNum = parseFloat(value);
+                        let gradeColorClass = 'text-gray-700 dark:text-gray-200';
+                        if (!isNaN(gradeNum)) {
+                            if (gradeNum >= 4) gradeColorClass = 'text-teal-600 dark:text-teal-400';
+                            else if (gradeNum >= 3) gradeColorClass = 'text-sky-600 dark:text-sky-400';
+                            else if (gradeNum >= 2) gradeColorClass = 'text-amber-600 dark:text-amber-400';
+                            else if (gradeNum >= 1) gradeColorClass = 'text-orange-600 dark:text-orange-400';
+                            else gradeColorClass = redColor;
+                        } else if (value && value !== '-' && value !== 'N/A') {
+                            gradeColorClass = redColor; // For "ร", "มส", etc.
                         }
-                        const isPositiveStatus = value.includes('ไม่ต้อง') || value.includes('ซ่อมแล้ว');
-                        const statusColor = isPositiveStatus ? 'text-green-600 dark:text-green-400' : redColor;
-                        return `<p class="font-bold text-base sm:text-lg ${statusColor}">${value}</p>`;
+                        return `<p class="font-bold text-base sm:text-lg px-2 rounded-md ${gradeColorClass} bg-gray-100 dark:bg-gray-800">${value ?? 'N/A'}</p>`;
                     }
                 }
             ];
-            options.isClickable = false;
+            // Remove 'options.isClickable = false;' so they can click the card to go to the scores page
         }
 
         renderStudentSearchResultCards(results, resultsContainer, options);
@@ -1330,8 +1363,10 @@ function renderStudentTableForRoom(room, studentScores) {
     let desiredOrder = [];
     if (currentSemester === '2/2568') {
         desiredOrder = [
-            DATA_KEYS.ID, DATA_KEYS.ORDINAL, DATA_KEYS.NAME, 
-            'กลางภาคข้อกา', 'กลางภาคข้อเขียน', 'คะแนนรวม', 'ซ่อมมั้ย'
+            DATA_KEYS.ID, DATA_KEYS.ORDINAL, DATA_KEYS.NAME,
+            'คะแนนกลางภาค', 'การซ่อมกลางภาค',
+            'จำนวน Quiz',
+            'คะแนนปลายภาค'
         ];
     } else {
         desiredOrder = [
@@ -1436,20 +1471,26 @@ function handleExportCSV(studentScores) {
     }
 
     let exportHeaderMap = {};
-    
+
     if (currentSemester === '2/2568') {
         exportHeaderMap = {
             [DATA_KEYS.ROOM]: 'ห้อง', [DATA_KEYS.ID]: 'เลขประจำตัว', [DATA_KEYS.ORDINAL]: 'เลขที่', [DATA_KEYS.NAME]: 'ชื่อ-นามสกุล',
-            'กลางภาคข้อกา': 'กลางภาคข้อกา', 'กลางภาคข้อเขียน': 'กลางภาคข้อเขียน',
-            'คะแนนรวม': 'คะแนนรวม', 'ซ่อมมั้ย': 'ซ่อมมั้ย'
+            'บทที่ 6 [10]': 'บทที่ 6', 'บทที่ 7 [10]': 'บทที่ 7', 'กิจกรรม [5]': 'กิจกรรม',
+            'ก่อนกลางภาค [25]': 'ก่อนกลางภาค', 'กลางภาค [20]': 'กลางภาค',
+            'บทที่ 8 [10]': 'บทที่ 8', 'บทที่ 9 [5]': 'บทที่ 9', 'บทที่ 10 [10]': 'บทที่ 10',
+            'หลังกลางภาค [25]': 'หลังกลางภาค', 'การซ่อมกลางภาค': 'การซ่อมกลางภาค', 'ก่อนปลายภาค [70]': 'ก่อนปลายภาค', 'ปลายภาค [30]': 'ปลายภาค',
+            [DATA_KEYS.TOTAL_SCORE]: 'รวม', [DATA_KEYS.GRADE]: 'เกรด',
+            'จำนวน Quiz': 'จำนวน Quiz',
+            'คะแนนปลายภาค': 'คะแนนปลายภาค'
         };
     } else {
         exportHeaderMap = {
             [DATA_KEYS.ROOM]: 'ห้อง', [DATA_KEYS.ID]: 'เลขประจำตัว', [DATA_KEYS.ORDINAL]: 'เลขที่', [DATA_KEYS.NAME]: 'ชื่อ-นามสกุล',
             'บท 1 [10]': 'บทที่ 1', 'บท 2 [10]': 'บทที่ 2', 'บท 3 [5]': 'บทที่ 3',
-            'ก่อนกลางภาค [25]': 'ก่อนกลางภาค', 'กลางภาค [20]': 'กลางภาค', 'บท 4 [10]': 'บทที่ 4',
-            'นำเสนอ [5]': 'นำเสนอ', 'บท 5 [10]': 'บทที่ 5', 'หลังกลางภาค [25]': 'หลังกลางภาค',
-            'ก่อนปลายภาค [70]': 'ก่อนปลายภาค', 'ปลายภาค [30]': 'ปลายภาค', [DATA_KEYS.TOTAL_SCORE]: 'รวม', [DATA_KEYS.GRADE]: 'เกรด'
+            'ก่อนกลางภาค [25]': 'ก่อนกลางภาค', 'กลางภาค [20]': 'กลางภาค',
+            'บท 4 [10]': 'บทที่ 4', 'นำเสนอ [5]': 'นำเสนอ', 'บท 5 [10]': 'บทที่ 5',
+            'หลังกลางภาค [25]': 'หลังกลางภาค', 'ก่อนปลายภาค [70]': 'ก่อนปลายภาค', 'ปลายภาค [30]': 'ปลายภาค',
+            [DATA_KEYS.TOTAL_SCORE]: 'รวม', [DATA_KEYS.GRADE]: 'เกรด'
         };
     }
 

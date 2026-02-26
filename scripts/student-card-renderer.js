@@ -4,7 +4,7 @@
  * @returns {{submitted: number, total: number, percentage: string, missing: number}} An object with completion stats.
  */
 export function calculateStudentCompletion(student) {
-    const TRACKABLE_KEYWORDS = ['กิจกรรม', 'แบบฝึก', 'quiz', 'ท้ายบท'];
+    const TRACKABLE_KEYWORDS = ['กิจกรรม', 'แบบฝึก', 'quiz', 'ท้ายบท', 'ใบงาน'];
     if (!student.assignments || !Array.isArray(student.assignments)) {
         return { submitted: 0, total: 0, percentage: '0', missing: 0 };
     }

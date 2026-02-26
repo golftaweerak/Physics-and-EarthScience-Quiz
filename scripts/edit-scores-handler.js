@@ -1,4 +1,4 @@
-import { getStudentScores } from './data-manager.js';
+import { getStudentScores, getCurrentSemester, setCurrentSemester } from './data-manager.js';
 import { ModalHandler } from './modal-handler.js';
 import { renderStudentSearchResultCards } from './student-card-renderer.js';
 
@@ -44,7 +44,7 @@ const SUMMARY_ASSIGNMENT_PATTERNS = [
 ];
 
 /** The desired display order for assignment groups. */
-const CHAPTER_ORDER = ['บทที่ 1', 'บทที่ 2', 'บทที่ 3', 'กลางภาค', 'บทที่ 4', 'บทที่ 5', 'อื่นๆ'];
+const CHAPTER_ORDER = ['บทที่ 1', 'บทที่ 2', 'บทที่ 3', 'บทที่ 6', 'บทที่ 7', 'บทที่ 8', 'บทที่ 9', 'บทที่ 10', 'กลางภาค', 'บทที่ 4', 'บทที่ 5', 'อื่นๆ'];
 
 /**
  * Initializes the score editor page with password protection.
@@ -76,6 +76,15 @@ export async function initializeScoreEditor() {
     const copyOverrideCodeBtn = document.getElementById('copy-override-code-btn');
     const copyLogDataBtn = document.getElementById('copy-log-data-btn');
     const downloadOverrideFileBtn = document.getElementById('download-override-file-btn');
+
+    const semesterSelector = document.getElementById('semester-selector');
+    if (semesterSelector) {
+        semesterSelector.value = getCurrentSemester();
+        semesterSelector.addEventListener('change', () => {
+            setCurrentSemester(semesterSelector.value);
+            window.location.reload();
+        });
+    }
 
     // 2. Setup Password Protection
     if (enterEditModeBtn) {
@@ -113,7 +122,8 @@ export async function initializeScoreEditor() {
 
         // Fetch data
         try {
-            const { studentScores: baseScores } = await import(`../data/scores-data.js?v=${Date.now()}`);
+            const currentSemester_file = getCurrentSemester() === '2/2568' ? 'scores-data-2-2568.js' : 'scores-data.js';
+            const { studentScores: baseScores } = await import(`../data/${currentSemester_file}?v=${Date.now()}`);
             originalScoresData = baseScores;
             studentScores = await getStudentScores();
         } catch (error) {
@@ -200,24 +210,30 @@ export async function initializeScoreEditor() {
             return;
         }
 
-        const desiredOrder = [
-            'id',
-            'ordinal',
-            'name',
-            'บท 1 [10]',
-            'บท 2 [10]',
-            'บท 3 [5]',
-            'ก่อนกลางภาค [25]',
-            'กลางภาค [20]',
-            'บท 4 [10]',
-            'นำเสนอ [5]',
-            'บท 5 [10]',
-            'หลังกลางภาค [25]',
-            'ก่อนปลายภาค [70]',
-            'ปลายภาค [30]',
-            'รวม [100]',
-            'เกรด'
+        const isTerm2 = getCurrentSemester() === '2/2568';
+        const desiredOrder = isTerm2 ? [
+            'id', 'ordinal', 'name',
+            'บท 6 [10]', 'บท 7 [10]', 'Quiz 6', 'Quiz 7', 'กิจกรรม [5]',
+            'ก่อนกลางภาค [25]', 'กลางภาค [20]', 'ซ่อมกลางภาค',
+            'บท 8 [10]', 'บท 9 [5]', 'บท 10 [10]', 'Quiz 8', 'Quiz 9', 'Quiz 10',
+            'หลังกลางภาค [25]', 'ก่อนปลายภาค [70]', 'ปลายภาค [30]', 'รวม [100]', 'เกรด'
+        ] : [
+            'id', 'ordinal', 'name',
+            'บท 1 [10]', 'บท 2 [10]', 'บท 3 [5]',
+            'ก่อนกลางภาค [25]', 'กลางภาค [20]',
+            'บท 4 [10]', 'นำเสนอ [5]', 'บท 5 [10]',
+            'หลังกลางภาค [25]', 'ก่อนปลายภาค [70]', 'ปลายภาค [30]', 'รวม [100]', 'เกรด'
         ];
+
+        // Term-specific adjustments for display
+        studentsInRoom.forEach(student => {
+            if (isTerm2 && !student.hasOwnProperty('รวม [100]') && student.assignments) {
+                const totalAssignment = student.assignments.find(a => a.name === 'รวม [100]');
+                if (totalAssignment) {
+                    student['รวม [100]'] = totalAssignment.score;
+                }
+            }
+        });
 
         const allKeys = new Set();
         studentsInRoom.forEach(student => {
@@ -242,7 +258,7 @@ export async function initializeScoreEditor() {
             // Horizontally sticky header cells need a higher z-index to appear above other header cells.
             const zIndexClass = isSticky ? 'z-20' : 'z-10';
             const thClasses = `sticky top-0 px-2 py-2 bg-gray-100 dark:bg-gray-900 text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider ${zIndexClass}`;
-            
+
             return `<th class="${thClasses} ${stickyClasses}">${key}</th>`;
         }).join('')}</tr>`;
 
@@ -435,6 +451,24 @@ function handleExportCSV() {
         'เกรด': 'เกรด'
     };
 
+    // Update keys for Term 2 in CSV export
+    if (getCurrentSemester() === '2/2568') {
+        exportHeaderMap['บท 6 [10]'] = 'บทที่ 6';
+        exportHeaderMap['บท 7 [10]'] = 'บทที่ 7';
+        exportHeaderMap['กิจกรรม [5]'] = 'กิจกรรม';
+        exportHeaderMap['บท 8 [10]'] = 'บทที่ 8';
+        exportHeaderMap['บท 9 [5]'] = 'บทที่ 9';
+        exportHeaderMap['บท 10 [10]'] = 'บทที่ 10';
+
+        // Remove Term 1 specific keys
+        delete exportHeaderMap['บท 1 [10]'];
+        delete exportHeaderMap['บท 2 [10]'];
+        delete exportHeaderMap['บท 3 [5]'];
+        delete exportHeaderMap['บท 4 [10]'];
+        delete exportHeaderMap['บท 5 [10]'];
+        delete exportHeaderMap['นำเสนอ [5]'];
+    }
+
     const exportKeys = Object.keys(exportHeaderMap);
     const csvHeaders = Object.values(exportHeaderMap);
 
@@ -457,7 +491,7 @@ function handleExportCSV() {
     const blob = new Blob([`\uFEFF${csvContent}`], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.download = `scores-room-${selectedRoom}-${new Date().toISOString().slice(0,10)}.csv`;
+    link.download = `scores-room-${selectedRoom}-${new Date().toISOString().slice(0, 10)}.csv`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -558,7 +592,7 @@ function initializeStudentSearch(studentScores) {
 function createBreakdownRow(student, label, scoreKey) {
     const scoreValue = student[scoreKey];
     if (!student.hasOwnProperty(scoreKey) || scoreValue === null) return '';
- 
+
     const scoreDisplay = `<span class="font-semibold text-gray-800 dark:text-gray-200">${scoreValue ?? '-'}</span>`;
 
     return `
@@ -593,19 +627,53 @@ function createAssignmentItemHTML(assignment) {
 
 function groupAssignments(assignments) {
     if (!assignments || assignments.length === 0) return {};
+
     const groups = assignments.reduce((acc, assignment) => {
         const name = assignment.name.toLowerCase();
-        if (SUMMARY_ASSIGNMENT_PATTERNS.some(pattern => pattern.test(name))) return acc;
-        const match = name.match(/(\d+)/);
-        const chapterKey = name.includes('mid') ? 'กลางภาค' : (match ? `บทที่ ${match[1]}` : 'อื่นๆ');
-        if (!acc[chapterKey]) acc[chapterKey] = [];
+
+        // Exclude summary-like assignments from being displayed in the detailed view
+        if (SUMMARY_ASSIGNMENT_PATTERNS.some(pattern => pattern.test(name))) {
+            return acc;
+        }
+
+        let chapterKey;
+        if (name.includes('mid') || name.includes('ซ่อมแล้วกลางภาค')) {
+            chapterKey = 'กลางภาค';
+        } else if (name.includes('quiz')) {
+            chapterKey = 'แบบทดสอบท้ายบท (Quiz)';
+        } else {
+            const match = name.match(/(\d+)/); // Find the first number
+            chapterKey = match ? `บทที่ ${match[1]}` : 'อื่นๆ';
+        }
+
+        if (!acc[chapterKey]) {
+            acc[chapterKey] = [];
+        }
         acc[chapterKey].push(assignment);
         return acc;
     }, {});
 
+    // Order the groups according to the predefined CHAPTER_ORDER
     const orderedGroups = {};
-    CHAPTER_ORDER.forEach(key => { if (groups[key]) orderedGroups[key] = groups[key]; });
-    Object.keys(groups).forEach(key => { if (!orderedGroups[key]) orderedGroups[key] = groups[key]; });
+    CHAPTER_ORDER.forEach(key => {
+        if (groups[key]) {
+            orderedGroups[key] = groups[key];
+        }
+    });
+
+    // Add any other groups that weren't in the predefined order
+    Object.keys(groups).forEach(key => {
+        if (!orderedGroups[key]) {
+            orderedGroups[key] = groups[key];
+        }
+    });
+
+    // Specific request: Remove "บทที่ 5" (Term 2 only) and "แบบทดสอบท้ายบท (Quiz)" (always, as it's now in shortcuts)
+    if (getCurrentSemester() === '2/2568') {
+        delete orderedGroups['บทที่ 5'];
+    }
+    delete orderedGroups['แบบทดสอบท้ายบท (Quiz)'];
+
     return orderedGroups;
 }
 
@@ -626,12 +694,58 @@ function displayStudentDetails(student, container) {
         }
     }
 
-    const summaryOrder = ['ก่อนกลางภาค [25]', 'กลางภาค [20]', 'หลังกลางภาค [25]', 'ก่อนปลายภาค [70]', 'ปลายภาค [30]', 'รวม [100]', 'เกรด'];
-    const breakdownMap = {
-        'ก่อนกลางภาค [25]': [{ label: 'บทที่ 1', key: 'บท 1 [10]' }, { label: 'บทที่ 2', key: 'บท 2 [10]' }, { label: 'บทที่ 3', key: 'บท 3 [5]' }],
-        'หลังกลางภาค [25]': [{ label: 'บทที่ 4', key: 'บท 4 [10]' }, { label: 'บทที่ 5', key: 'บท 5 [10]' }, { label: 'นำเสนอ', key: 'นำเสนอ [5]' }],
+    const isTerm2 = getCurrentSemester() === '2/2568';
+    const summaryOrder = isTerm2 ? [
+        'ก่อนกลางภาค [25]', 'กลางภาค [20]', 'หลังกลางภาค [25]', 'ก่อนปลายภาค [70]', 'ปลายภาค [30]', 'รวม [100]', 'เกรด'
+    ] : [
+        'ก่อนกลางภาค [25]', 'กลางภาค [20]', 'หลังกลางภาค [25]', 'ก่อนปลายภาค [70]', 'ปลายภาค [30]', 'รวม [100]', 'เกรด'
+    ];
+    const breakdownMap = isTerm2 ? {
+        'ก่อนกลางภาค [25]': [
+            { label: 'บทที่ 6', key: 'บท 6 [10]' },
+            { label: 'บทที่ 7', key: 'บท 7 [10]' },
+            { label: 'กิจกรรม', key: 'กิจกรรม [5]' }
+        ],
+        'หลังกลางภาค [25]': [
+            { label: 'บทที่ 8', key: 'บท 8 [10]' },
+            { label: 'บทที่ 9', key: 'บท 9 [5]' },
+            { label: 'บทที่ 10', key: 'บท 10 [10]' }
+        ],
+        'รวม [100]': [{ label: 'คะแนนก่อนสอบปลายภาค', key: 'ก่อนปลายภาค [70]' }, { label: 'คะแนนสอบปลายภาค', key: 'ปลายภาค [30]' }]
+    } : {
+        'ก่อนกลางภาค [25]': [
+            { label: 'บทที่ 1', key: 'บท 1 [10]' },
+            { label: 'บทที่ 2', key: 'บท 2 [10]' },
+            { label: 'บทที่ 3', key: 'บท 3 [5]' }
+        ],
+        'หลังกลางภาค [25]': [
+            { label: 'บทที่ 4', key: 'บท 4 [10]' },
+            { label: 'บทที่ 5', key: 'บท 5 [10]' },
+            { label: 'นำเสนอ', key: 'นำเสนอ [5]' }
+        ],
         'รวม [100]': [{ label: 'คะแนนก่อนสอบปลายภาค', key: 'ก่อนปลายภาค [70]' }, { label: 'คะแนนสอบปลายภาค', key: 'ปลายภาค [30]' }]
     };
+
+    if (isTerm2) {
+        // Map root properties that have different names in Term 2
+        if (student.hasOwnProperty('กลางภาค') && !student.hasOwnProperty('กลางภาค [20]')) {
+            student['กลางภาค [20]'] = student['กลางภาค'];
+        }
+        if (student.hasOwnProperty('ปลายภาค') && !student.hasOwnProperty('ปลายภาค [30]')) {
+            student['ปลายภาค [30]'] = student['ปลายภาค'];
+        }
+
+        // In Term 2, summary scores and breakdown items are often inside the 'assignments' array instead of top-level
+        if (student.assignments) {
+            student.assignments.forEach(a => {
+                // Promote if it has a value, isn't already promoted, and isn't an empty string
+                if (!student.hasOwnProperty(a.name) && a.score !== null && a.score !== undefined && a.score !== "") {
+                    const score = parseFloat(a.score);
+                    student[a.name] = isNaN(score) ? a.score : score;
+                }
+            });
+        }
+    }
 
     const scoreRows = summaryOrder.map(key => {
         if (!student.hasOwnProperty(key)) return '';
@@ -645,7 +759,21 @@ function displayStudentDetails(student, container) {
         const rowClass = isImportant ? 'bg-blue-50 dark:bg-gray-800/60' : '';
         const labelClass = isImportant ? 'font-bold text-blue-900 dark:text-blue-300' : 'font-medium text-gray-700 dark:text-gray-300';
         let valueClass = isImportant ? 'font-bold' : 'font-semibold';
-        if (isGrade) valueClass += ' text-2xl text-blue-600 dark:text-blue-400';
+        if (isGrade) {
+            valueClass += ' text-2xl ';
+            const numericGrade = parseFloat(value);
+            if (value === '4' || value === '4.0' || numericGrade === 4) {
+                valueClass += 'text-green-600 dark:text-green-400';
+            } else if (numericGrade >= 3) {
+                valueClass += 'text-blue-600 dark:text-blue-400';
+            } else if (numericGrade >= 2) {
+                valueClass += 'text-yellow-600 dark:text-yellow-400';
+            } else if (numericGrade >= 1) {
+                valueClass += 'text-orange-500 dark:text-orange-400';
+            } else {
+                valueClass += 'text-red-600 dark:text-red-400';
+            }
+        }
         else if (isTotal) valueClass += ' text-xl text-green-600 dark:text-green-400';
         else if (isMidterm || isFinal) valueClass += ' text-lg text-gray-900 dark:text-white';
         else valueClass += ' text-gray-900 dark:text-white';
@@ -656,8 +784,9 @@ function displayStudentDetails(student, container) {
 
 
         let retestStatusHtml = '';
-        if (key === 'กลางภาค [20]' && student.ซ่อมมั้ย && student.ซ่อมมั้ย.trim() !== '-') {
-            const retestStatus = student.ซ่อมมั้ย.trim();
+        const retestData = student.ซ่อมมั้ย || student.ซ่อมกลางภาค;
+        if (key === 'กลางภาค [20]' && retestData && retestData.trim() !== '-') {
+            const retestStatus = retestData.trim();
             const isPositiveStatus = retestStatus.includes('ไม่ต้อง') || retestStatus.includes('ซ่อมแล้ว');
             const statusColor = isPositiveStatus ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400';
             retestStatusHtml = `<div class="text-xs font-normal ${statusColor} pt-1">สถานะการสอบซ่อม: ${retestStatus}</div>`;
@@ -670,7 +799,7 @@ function displayStudentDetails(student, container) {
 
     const summaryScoreSection = `<figure class="mb-6"><figcaption class="p-3 text-lg font-semibold text-left text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-800 rounded-t-lg border-x border-t border-gray-200 dark:border-gray-700">คะแนนสรุป</figcaption><div class="border border-gray-200 dark:border-gray-700 rounded-b-lg overflow-hidden"><table class="w-full text-base"><tbody>${scoreRows}</tbody></table></div></figure>`;
 
-    const TRACKABLE_KEYWORDS = ['กิจกรรม', 'แบบฝึก', 'quiz', 'ท้ายบท'];
+    const TRACKABLE_KEYWORDS = ['กิจกรรม', 'แบบฝึก', 'quiz', 'ท้ายบท', 'ใบงาน'];
     const trackableAssignments = student.assignments.filter(a => TRACKABLE_KEYWORDS.some(k => a.name.toLowerCase().includes(k)));
     const submittedCount = trackableAssignments.filter(a => a.score && a.score.toLowerCase() !== 'ยังไม่ส่ง').length;
     const missingCount = trackableAssignments.length - submittedCount;
