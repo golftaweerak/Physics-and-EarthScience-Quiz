@@ -110,7 +110,7 @@ function parseDocxContent(text) {
             }
             return;
         }
-        
+
         // --- End of Scenario ---
         if (currentItem && currentItem.type === 'scenario' && trimmedLine === '---') {
             finalizeCurrentItem();
@@ -196,9 +196,9 @@ function populateGenerator(itemsContainer, addQuestionBtn, items) {
     items.forEach((itemData) => {
         if (itemData.type === 'scenario') {
             // Create a scenario block
-           const newScenarioBlock = document.createElement('div');
-           newScenarioBlock.className = 'gen-scenario-block bg-blue-50 dark:bg-blue-900/40 rounded-xl border border-blue-200 dark:border-blue-800 overflow-hidden shadow-md';
-           newScenarioBlock.innerHTML = `
+            const newScenarioBlock = document.createElement('div');
+            newScenarioBlock.className = 'gen-scenario-block bg-blue-50 dark:bg-blue-900/40 rounded-xl border border-blue-200 dark:border-blue-800 overflow-hidden shadow-md';
+            newScenarioBlock.innerHTML = `
                <div class="p-4 bg-blue-100/50 dark:bg-blue-900/30 flex justify-between items-center border-b border-blue-200 dark:border-blue-800">
                    <h4 class="font-bold text-lg font-kanit text-blue-800 dark:text-blue-300">สถานการณ์ (Scenario)</h4>
                    <button type="button" class="gen-remove-scenario-btn p-2 text-gray-500 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/50 dark:hover:text-red-400 rounded-full transition-colors" aria-label="ลบสถานการณ์">
@@ -225,7 +225,7 @@ function populateGenerator(itemsContainer, addQuestionBtn, items) {
             // Populate scenario fields
             newScenarioBlock.querySelector('.gen-scenario-title').value = itemData.title || '';
             newScenarioBlock.querySelector('.gen-scenario-desc').value = itemData.description || '';
-            
+
             const subQuestionsContainer = newScenarioBlock.querySelector('.gen-sub-questions-container');
             if (itemData.questions && Array.isArray(itemData.questions)) {
                 itemData.questions.forEach((subQuestionData, index) => {
@@ -275,7 +275,7 @@ function generateCode(generatorForm, itemsContainer, outputList, outputData, out
             answer = choiceInputs[correctIndex]?.value || '';
         }
         const explanation = block.querySelector('.gen-explanation').value;
-        
+
         // New logic for subCategory
         const mainSubCatSelect = block.querySelector('.gen-sub-cat-main');
         const specificSubCatSelect = block.querySelector('.gen-sub-cat-specific');
@@ -283,8 +283,8 @@ function generateCode(generatorForm, itemsContainer, outputList, outputData, out
 
         if (mainSubCatSelect && mainSubCatSelect.value) {
             const mainValue = mainSubCatSelect.value;
-            const specificValue = (specificSubCatSelect && specificSubCatSelect.value) 
-                ? specificSubCatSelect.value 
+            const specificValue = (specificSubCatSelect && specificSubCatSelect.value)
+                ? specificSubCatSelect.value
                 : mainValue; // Fallback to main value if specific is not selected
 
             subCategory = {
@@ -504,7 +504,7 @@ export function initializeGenerator() {
 
     // Add a new 'change' listener for the dropdowns
     if (itemsContainer) {
-        itemsContainer.addEventListener('change', (e) => {            
+        itemsContainer.addEventListener('change', (e) => {
             if (e.target.classList.contains('gen-sub-cat-main')) {
                 const mainQuizCategory = document.getElementById('gen-category').value;
                 const selectedChapterTitle = e.target.value;
@@ -549,14 +549,14 @@ export function initializeGenerator() {
             if (!file) return;
 
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = function (e) {
                 const arrayBuffer = e.target.result;
                 // mammoth must be globally available from a <script> tag
                 mammoth.extractRawText({ arrayBuffer: arrayBuffer })
-                    .then(result => { 
+                    .then(result => {
                         const parsedQuestions = parseDocxContent(result.value || '');
                         if (parsedQuestions.length > 0) {
-                            populateGenerator(itemsContainer, addQuestionBtn, parsedQuestions); 
+                            populateGenerator(itemsContainer, addQuestionBtn, parsedQuestions);
                         } else {
                             alert("ไม่สามารถแยกแยะข้อมูลคำถามจากไฟล์ได้ โปรดตรวจสอบรูปแบบของไฟล์ .docx");
                         }

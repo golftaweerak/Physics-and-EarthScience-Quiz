@@ -66,11 +66,15 @@ function mulberry32(a) {
 }
 
 export async function initializeQuiz() {
-    const { quizList } = await import('../data/quizzes-list.js');
-
     // Use import.meta.glob to allow water importing
     const dataModules = getDataModules();
     console.log('[DEBUG] quiz-loader: Available modules keys:', Object.keys(dataModules));
+
+    // Find quizzes-list in the glob mapping
+    const quizzesListKey = Object.keys(dataModules).find(k => k.endsWith('quizzes-list.js'));
+    if (!quizzesListKey) throw new Error('quizzes-list.js not found in data modules.');
+
+    const { quizList } = await dataModules[quizzesListKey]();
 
     const urlParams = new URLSearchParams(window.location.search);
     const seedParam = urlParams.get('seed');
@@ -227,17 +231,17 @@ export async function initializeQuiz() {
 
             const promises = quizList.map(async (q) => {
                 // Fix for missing path prefixes (matching logic in data-manager.js):
-                let folder = '';
-                if (q.id.includes('/')) {
-                    // Already has path? assume valid relative path if it starts with .., otherwise custom
-                } else {
-                    if (q.id.startsWith('phy_m4')) folder = 'phy_m4/';
-                    else if (q.id.startsWith('phy_m5')) folder = 'phy_m5/';
-                    else if (q.id.startsWith('phy_m6')) folder = 'phy_m6/';
-                    else if (q.id.startsWith('ess_basic')) folder = 'ess_basic/';
-                    else if (q.id.startsWith('ess_adv')) folder = 'ess_adv/';
-                }
-                const path = `../data/${folder}${q.id}-data.js`;
+                const quizId = q.id;
+                const expectedSuffix = `${quizId}-data.js`;
+                const path = Object.keys(dataModules).find(k => {
+                    if (quizId.includes('/')) {
+                        return k.endsWith(`${quizId}-data.js`);
+                    } else {
+                        // Check if it's in a suspected folder
+                        const possibleFolders = ['phy_m4/', 'phy_m5/', 'phy_m6/', 'ess_basic/', 'ess_adv/'];
+                        return k.endsWith(expectedSuffix) || possibleFolders.some(f => k.endsWith(`${f}${expectedSuffix}`));
+                    }
+                });
 
                 if (!dataModules[path]) {
                     console.warn(`Random generation: Module not found for ${path}`);
@@ -301,20 +305,16 @@ export async function initializeQuiz() {
         }
 
         // Fix for missing path prefixes (matching logic in data-manager.js):
-        let scriptPath;
-        if (quizId.includes('/')) {
-            scriptPath = `../data/${quizId}-data.js`;
-        } else {
-            // Auto-detect folder based on ID prefix
-            let folder = '';
-            if (quizId.startsWith('phy_m4')) folder = 'phy_m4/';
-            else if (quizId.startsWith('phy_m5')) folder = 'phy_m5/';
-            else if (quizId.startsWith('phy_m6')) folder = 'phy_m6/';
-            else if (quizId.startsWith('ess_basic')) folder = 'ess_basic/';
-            else if (quizId.startsWith('ess_adv')) folder = 'ess_adv/';
-
-            scriptPath = `../data/${folder}${quizId}-data.js`;
-        }
+        const expectedSuffix = `${quizId}-data.js`;
+        let scriptPath = Object.keys(dataModules).find(k => {
+            if (quizId.includes('/')) {
+                return k.endsWith(`${quizId}-data.js`);
+            } else {
+                // Check if it's in a suspected folder
+                const possibleFolders = ['phy_m4/', 'phy_m5/', 'phy_m6/', 'ess_basic/', 'ess_adv/'];
+                return k.endsWith(expectedSuffix) || possibleFolders.some(f => k.endsWith(`${f}${expectedSuffix}`));
+            }
+        });
         console.log('[DEBUG] quiz-loader: Resolved scriptPath=', scriptPath);
 
         if (!dataModules[scriptPath]) {

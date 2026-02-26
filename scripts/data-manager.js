@@ -3,6 +3,8 @@
  * quiz progress, and fetching quiz question data.
  */
 
+import { getDataModules } from './quiz-data-loader.js';
+
 // Single source of truth for all category metadata.
 export const categoryDetails = {
   // Main categories for the index page accordion
@@ -197,13 +199,21 @@ export async function getStudentScores() {
 
   try {
     // Determine which data file to load based on the semester
-    const dataFilePath = semester === '2/2568' ? '../data/scores-data-2-2568.js' : '../data/scores-data.js';
+    const dataModules = getDataModules();
+    const dataFileName = semester === '2/2568' ? 'scores-data-2-2568.js' : 'scores-data.js';
+
+    // Find the module in the glob mapping
+    const dataModuleKey = Object.keys(dataModules).find(k => k.endsWith(dataFileName));
+    const overrideModuleKey = Object.keys(dataModules).find(k => k.endsWith('score-overrides.js'));
+
+    if (!dataModuleKey) {
+      throw new Error(`Data module not found: ${dataFileName}`);
+    }
 
     // Parallelize the loading of base scores and overrides.
-    // Base scores file path is dynamic.
     const [baseScoresModule, overrideModule] = await Promise.all([
-      import(/* @vite-ignore */ dataFilePath),
-      import('../data/score-overrides.js').catch(() => null)
+      dataModules[dataModuleKey](),
+      overrideModuleKey ? dataModules[overrideModuleKey]().catch(() => null) : Promise.resolve(null)
     ]);
 
     const baseScores = baseScoresModule.studentScores;
@@ -325,7 +335,7 @@ export function loadQuizState(storageKey) {
  * @returns {Promise<Array<object>>} An array of detailed progress objects.
  */
 export async function getDetailedProgressForAllQuizzes() {
-  const { quizList } = await import(`../data/quizzes-list.js`);
+  const { quizList } = await import(/* @vite-ignore */ `/Physics-and-EarthScience-Quiz/data/quizzes-list.js?v=${Date.now()}`);
   const { getSavedCustomQuizzes } = await import("./custom-quiz-handler.js");
 
   // Add timeout to prevent hanging
@@ -359,7 +369,7 @@ export async function getDetailedProgressForAllQuizzes() {
  * @returns {Promise<Array<object>>} An array of progress objects for all quizzes.
  */
 export async function getAllQuizProgress() {
-  const { quizList } = await import(`../data/quizzes-list.js`);
+  const { quizList } = await import(/* @vite-ignore */ `/Physics-and-EarthScience-Quiz/data/quizzes-list.js?v=${Date.now()}`);
   const { getSavedCustomQuizzes } = await import("./custom-quiz-handler.js");
 
   // Add timeout to prevent hanging
@@ -414,7 +424,7 @@ export async function fetchAllQuizData() {
 
   let quizList;
   try {
-    const module = await import(`../data/quizzes-list.js`);
+    const module = await import(/* @vite-ignore */ `/Physics-and-EarthScience-Quiz/data/quizzes-list.js?v=${Date.now()}`);
     quizList = module.quizList;
     console.log(`[DEBUG] fetchAllQuizData: Loaded quizList with ${quizList?.length} items`);
   } catch (error) {
@@ -431,7 +441,7 @@ export async function fetchAllQuizData() {
     // Fix for missing path prefixes:
     let scriptPath;
     if (quiz.id.includes('/')) {
-      scriptPath = `../data/${quiz.id}-data.js`;
+      scriptPath = `/Physics-and-EarthScience-Quiz/data/${quiz.id}-data.js`;
     } else {
       // Auto-detect folder based on ID prefix
       let folder = '';
@@ -446,7 +456,7 @@ export async function fetchAllQuizData() {
       else if (quiz.id.startsWith('adv_meteorology')) folder = 'posn_earth/';
       else if (quiz.id.startsWith('adv_oceanography')) folder = 'posn_earth/';
 
-      scriptPath = `../data/${folder}${quiz.id}-data.js`;
+      scriptPath = `/Physics-and-EarthScience-Quiz/data/${folder}${quiz.id}-data.js`;
     }
 
     if (!dataModules[scriptPath]) {

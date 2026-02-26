@@ -6,6 +6,12 @@ export default defineConfig({
   plugins: [
     tailwindcss(),
   ],
+  resolve: {
+    alias: {
+      '/Physics-and-EarthScience-Quiz/': resolve(__dirname, 'public/'),
+      '/data/': resolve(__dirname, 'data/'),
+    },
+  },
   build: {
     rollupOptions: {
       input: {

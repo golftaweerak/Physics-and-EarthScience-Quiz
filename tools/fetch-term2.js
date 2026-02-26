@@ -18,7 +18,7 @@ const outputDir = path.join(__dirname, '../xlsx');
 const outputPath = path.join(outputDir, '68-EarthScience-Term2.xlsx');
 
 // สร้างโฟลเดอร์ถ้ายังไม่มี
-if (!fs.existsSync(outputDir)){
+if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir, { recursive: true });
 }
 
@@ -44,7 +44,7 @@ const downloadFile = (url, dest, cookies = []) => {
         if (response.statusCode >= 300 && response.statusCode < 400 && response.headers.location) {
             isRedirected = true;
             fileStream.close();
-            fs.unlink(dest, () => {}); // Delete partial file
+            fs.unlink(dest, () => { }); // Delete partial file
             const newCookies = response.headers['set-cookie'] || [];
             const nextCookies = [...cookies, ...newCookies];
             const redirectUrl = new URL(response.headers.location, url).href;
@@ -56,7 +56,7 @@ const downloadFile = (url, dest, cookies = []) => {
         if (response.statusCode !== 200) {
             console.error(`ดาวน์โหลดไม่สำเร็จ Status Code: ${response.statusCode}`);
             fileStream.close();
-            fs.unlink(dest, () => {}); // ลบไฟล์ที่ว่างเปล่า
+            fs.unlink(dest, () => { }); // ลบไฟล์ที่ว่างเปล่า
             return;
         }
 
@@ -68,12 +68,14 @@ const downloadFile = (url, dest, cookies = []) => {
             console.log(`บันทึกไฟล์ไว้ที่: ${dest}`);
             console.log('\n--- ขั้นตอนที่ 2: เริ่มการแปลงข้อมูลเป็นไฟล์ JavaScript ---');
             convertTerm2Scores();
+            // Explicitly exit to ensure all network connections are closed
+            setTimeout(() => process.exit(0), 500);
         });
     }).on('error', (e) => {
         if (isRedirected) return; // Ignore errors from the redirected request
         console.error(`เกิดข้อผิดพลาดในการดาวน์โหลด: ${e.message}`);
         fileStream.close();
-        fs.unlink(dest, () => {});
+        fs.unlink(dest, () => { });
     });
 };
 

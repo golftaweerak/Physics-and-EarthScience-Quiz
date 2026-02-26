@@ -11,7 +11,9 @@ export default defineConfig({
     alias: {
       '@': path.resolve(__dirname, './'),
       'scripts': path.resolve(__dirname, './scripts'),
-      'data': path.resolve(__dirname, './data')
+      'data': path.resolve(__dirname, './data'),
+      '/Physics-and-EarthScience-Quiz/': path.resolve(__dirname, './public/'),
+      '/data/': path.resolve(__dirname, './data/'),
     },
     coverage: {
       provider: 'v8',
@@ -22,7 +24,9 @@ export default defineConfig({
     alias: {
       '@': path.resolve(__dirname, './'),
       'scripts': path.resolve(__dirname, './scripts'),
-      'data': path.resolve(__dirname, './data')
+      'data': path.resolve(__dirname, './data'),
+      '/Physics-and-EarthScience-Quiz/': path.resolve(__dirname, './public/'),
+      '/data/': path.resolve(__dirname, './data/'),
     },
   },
 });

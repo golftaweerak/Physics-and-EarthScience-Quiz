@@ -1,10 +1,10 @@
 import { describe, it, expect } from 'vitest';
-import { quizList } from '../data/quizzes-list.js';
+import { quizList } from '../public/data/quizzes-list.js';
 import fs from 'fs';
 import path from 'path';
 
 const PROJECT_ROOT = path.resolve(__dirname, '..');
-const DATA_DIR = path.join(PROJECT_ROOT, 'data');
+const DATA_DIR = path.join(PROJECT_ROOT, 'public', 'data');
 
 /**
  * Helper to resolve expected file path from quiz ID

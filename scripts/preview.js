@@ -926,7 +926,7 @@ export async function initializePreviewPage() {
             return;
         }
 
-        const scriptPath = `../data/${scriptName}`;
+        const scriptPath = `/Physics-and-EarthScience-Quiz/data/${scriptName}`;
         //scriptNameEl.textContent = `กำลังแสดงผลจาก: ${scriptPath}`;
         container.innerHTML = `<div class="text-center p-8 text-gray-500 dark:text-gray-400">
                                     <svg class="animate-spin h-8 w-8 mx-auto mb-4" xmlns="http://www.w3.org/2000/

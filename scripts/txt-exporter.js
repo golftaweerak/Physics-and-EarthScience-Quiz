@@ -118,8 +118,8 @@ export function exportQuizToTxt(quizData, includeKeyInFilename = false) {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-                    const filename = `${quizData.id || 'quiz'}${includeKeyInFilename ? '-key' : ''}.txt`;
-            a.download = filename;
+        const filename = `${quizData.id || 'quiz'}${includeKeyInFilename ? '-key' : ''}.txt`;
+        a.download = filename;
         document.body.appendChild(a); // Required for Firefox
         a.click();
         window.URL.revokeObjectURL(url);

@@ -1,6 +1,7 @@
 import { getStudentScores, getCurrentSemester, setCurrentSemester } from './data-manager.js';
 import { ModalHandler } from './modal-handler.js';
 import { renderStudentSearchResultCards } from './student-card-renderer.js';
+import { getDataModules } from './quiz-data-loader.js';
 
 let originalScoresData = [];
 let studentScores = [];
@@ -122,8 +123,13 @@ export async function initializeScoreEditor() {
 
         // Fetch data
         try {
+            const dataModules = getDataModules();
             const currentSemester_file = getCurrentSemester() === '2/2568' ? 'scores-data-2-2568.js' : 'scores-data.js';
-            const { studentScores: baseScores } = await import(`../data/${currentSemester_file}?v=${Date.now()}`);
+            const semesterKey = Object.keys(dataModules).find(k => k.endsWith(currentSemester_file));
+
+            if (!semesterKey) throw new Error(`Semester data not found in glob: ${currentSemester_file}`);
+
+            const { studentScores: baseScores } = await dataModules[semesterKey]();
             originalScoresData = baseScores;
             studentScores = await getStudentScores();
         } catch (error) {
@@ -320,7 +326,7 @@ export async function initializeScoreEditor() {
 
         let existingOverrides = {};
         try {
-            const overrideModule = await import(`../data/score-overrides.js?v=${Date.now()}`);
+            const overrideModule = await import(/* @vite-ignore */ `/Physics-and-EarthScience-Quiz/data/score-overrides.js?v=${Date.now()}`);
             if (overrideModule.encryptedScoreOverrides && overrideModule.encryptedScoreOverrides.trim() !== "") {
                 existingOverrides = JSON.parse(atob(overrideModule.encryptedScoreOverrides));
             }
@@ -952,7 +958,7 @@ async function handleSaveIndividualOverrides(e) {
 
         let existingOverrides = {};
         try {
-            const overrideModule = await import(`../data/score-overrides.js?v=${Date.now()}`);
+            const overrideModule = await import(/* @vite-ignore */ `/Physics-and-EarthScience-Quiz/data/score-overrides.js?v=${Date.now()}`);
             if (overrideModule.encryptedScoreOverrides && overrideModule.encryptedScoreOverrides.trim() !== "") {
                 existingOverrides = JSON.parse(atob(overrideModule.encryptedScoreOverrides));
             }

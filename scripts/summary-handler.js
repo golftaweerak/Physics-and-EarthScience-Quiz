@@ -1,6 +1,7 @@
 import { getStudentScores, getCurrentSemester, setCurrentSemester, getCurrentCourseCode } from './data-manager.js';
 import { ModalHandler } from './modal-handler.js';
 import { renderStudentSearchResultCards, calculateStudentCompletion } from './student-card-renderer.js';
+import { getDataModules } from './quiz-data-loader.js';
 
 // Define data keys mapping
 const DATA_KEYS = {
@@ -1043,9 +1044,13 @@ export async function initializeSummaryPage() {
                 const isT1 = semester === '1/2568';
                 const currentSemester_file = isT1 ? 'scores-data.js' : 'scores-data-2-2568.js';
 
+                const dataModules = getDataModules();
+                const semesterKey = Object.keys(dataModules).find(k => k.endsWith(currentSemester_file));
+
                 let loaded = false;
                 try {
-                    const module = await import(`../data/${currentSemester_file}?v=${Date.now()}`);
+                    if (!semesterKey) throw new Error(`Semester data not found in glob: ${currentSemester_file}`);
+                    const module = await dataModules[semesterKey]();
                     if (module && module.studentScores) {
                         try {
                             const scores = JSON.parse(JSON.stringify(module.studentScores));

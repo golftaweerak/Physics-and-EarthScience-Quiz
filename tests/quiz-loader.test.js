@@ -48,6 +48,12 @@ describe('QuizLoader Integration', () => {
 
     // Setup return value for the mocked getDataModules
     QuizDataLoader.getDataModules.mockReturnValue({
+      '../data/quizzes-list.js': () => Promise.resolve({
+        quizList: [
+          { id: 'test-quiz', title: 'Test Quiz', description: 'Description', category: 'General', storageKey: 'test-options' },
+          { id: 'phy_m4_test', title: 'Phy M4', description: 'Physics', category: 'Physics', storageKey: 'phy-options' }
+        ]
+      }),
       '../data/test-quiz-data.js': () => Promise.resolve({ quizData: [{ question: 'Q1', type: 'choice' }] }),
       '../data/phy_m4/phy_m4_test-data.js': () => Promise.resolve({ quizItems: [{ question: 'Q2', type: 'choice' }] })
     });

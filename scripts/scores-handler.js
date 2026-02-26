@@ -1,6 +1,7 @@
 import { getStudentScores, getCurrentSemester, setCurrentSemester, getCurrentCourseCode } from './data-manager.js';
 import { renderStudentSearchResultCards } from './student-card-renderer.js';
 import { ModalHandler } from './modal-handler.js';
+import { getDataModules } from './quiz-data-loader.js';
 
 /** A map of assignment names to their corresponding Microsoft Forms URL. */
 const ASSIGNMENT_URL_MAP = {
@@ -92,10 +93,13 @@ export async function initializeScoreSearch() {
     if (courseDisplay) courseDisplay.textContent = courseCode;
     if (titleCourseDisplay) titleCourseDisplay.textContent = courseCode;
 
-    const dataFilePath = currentSemester === '2/2568' ? '../data/scores-data-2-2568.js' : '../data/scores-data.js';
+    const dataModules = getDataModules();
+    const dataFileName = currentSemester === '2/2568' ? 'scores-data-2-2568.js' : 'scores-data.js';
+    const dataModuleKey = Object.keys(dataModules).find(k => k.endsWith(dataFileName));
 
     try {
-        const dataModule = await import(/* @vite-ignore */ dataFilePath);
+        if (!dataModuleKey) throw new Error(`Data module not found: ${dataFileName}`);
+        const dataModule = await dataModules[dataModuleKey]();
         const scoresLastUpdated = dataModule.lastUpdated;
 
         if (mainContentContainer && searchBoxContainer && scoresLastUpdated) {
@@ -126,8 +130,13 @@ export async function initializeScoreSearch() {
     }
 
     // Fetch both original and potentially merged scores
+    const dataModulesFetcher = getDataModules();
     const currentSemester_file = getCurrentSemester() === '2/2568' ? 'scores-data-2-2568.js' : 'scores-data.js';
-    const { studentScores: baseScores } = await import(/* @vite-ignore */ `../data/${currentSemester_file}?v=${Date.now()}`);
+    const semesterKey = Object.keys(dataModulesFetcher).find(k => k.endsWith(currentSemester_file));
+
+    if (!semesterKey) throw new Error(`Semester data not found in glob: ${currentSemester_file}`);
+
+    const { studentScores: baseScores } = await dataModulesFetcher[semesterKey]();
     originalScoresData = baseScores;
     const studentScores = await getStudentScores();
 
@@ -773,7 +782,7 @@ export async function initializeScoreSearch() {
                 // 1. Generate JS override code
                 let existingOverrides = {};
                 try {
-                    const overrideModule = await import(`../data/score-overrides.js?v=${Date.now()}`);
+                    const overrideModule = await import(/* @vite-ignore */ `/Physics-and-EarthScience-Quiz/data/score-overrides.js?v=${Date.now()}`);
                     if (overrideModule.encryptedScoreOverrides && overrideModule.encryptedScoreOverrides.trim() !== "") {
                         existingOverrides = JSON.parse(atob(overrideModule.encryptedScoreOverrides));
                     }
