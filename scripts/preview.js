@@ -1,7 +1,7 @@
 import { initializeMenu } from './menu-handler.js';
 import { ModalHandler } from './modal-handler.js';
-import { quizList } from '../data/quizzes-list.js'; // Import quizList
-import { fetchAllQuizData, categoryDetails as allCategoryDetails } from './data-manager.js';
+// Removed static import of quizList here
+import { fetchAllQuizData, categoryDetails as allCategoryDetails, getQuizzesList } from './data-manager.js';
 import {
     EARTH_SCIENCE_BASIC_SYLLABUS,
     EARTH_SCIENCE_ADVANCE_SYLLABUS,
@@ -26,6 +26,7 @@ const CONFIG = {
 };
 
 let currentQuizData = []; // Store the full data for the selected quiz to be rendered
+let quizListCache = []; // Store fetched quizList
 
 /**
  * Populates the category filter dropdown with all unique sub-categories from all quizzes.
@@ -184,7 +185,7 @@ function createQuestionElement(item, displayIndex, keyword) {
     questionDiv.appendChild(questionHeader);
 
     // NEW: Add syllabus info for Basic Earth Science and Physics quizzes
-    const quizInfo = quizList.find(q => q.title === item.sourceQuizTitle);
+    const quizInfo = quizListCache.find(q => q.title === item.sourceQuizTitle);
     const categoryKey = quizInfo ? quizInfo.category : null;
 
     let standardInfo = '';
@@ -706,6 +707,8 @@ svg" fill="none" viewBox="0 0 24 24">
 
 // Main execution
 export async function initializePreviewPage() {
+    quizListCache = await getQuizzesList();
+
     // Defensively initialize shared components that might rely on elements
     // not present on every page. This prevents an error in one component
     // from breaking the entire page's script execution.
@@ -748,7 +751,7 @@ export async function initializePreviewPage() {
             const selectedOption = quizSelector.options[quizSelector.selectedIndex];
             const quizTitle = selectedOption ? selectedOption.text : 'Exported Quiz';
             const quizId = selectedOption ? selectedOption.value.replace('-data.js', '') : 'custom-quiz';
-            const quizInfo = quizList.find(q => q.id === quizId); // Find quiz info
+            const quizInfo = quizListCache.find(q => q.id === quizId); // Find quiz info
             const category = quizInfo ? quizInfo.category : null; // Get category
 
             if (currentQuizData.length === 0) {
@@ -781,7 +784,7 @@ export async function initializePreviewPage() {
             const selectedOption = quizSelector.options[quizSelector.selectedIndex];
             const quizTitle = selectedOption ? selectedOption.text : 'Exported Quiz';
             const quizId = selectedOption ? selectedOption.value.replace('-data.js', '') : 'custom-quiz';
-            const quizInfo = quizList.find(q => q.id === quizId); // Find quiz info
+            const quizInfo = quizListCache.find(q => q.id === quizId); // Find quiz info
             const category = quizInfo ? quizInfo.category : null; // Get category
 
             if (currentQuizData.length === 0) {

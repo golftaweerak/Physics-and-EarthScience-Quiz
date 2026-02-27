@@ -29,7 +29,6 @@ import {
     renderDetailedList, setupActionListeners, renderInDepthStats,
     calculateScoreDistribution, renderScoreDistributionChart
 } from './stats.js';
-import { quizList } from '../data/quizzes-list.js';
 import { getSavedCustomQuizzes } from './custom-quiz-handler.js';
 
 const AVATARS = [
@@ -209,6 +208,8 @@ async function renderAnalysisTab(game) {
         return;
     }
 
+    const { getQuizzesList } = await import('./data-manager.js');
+    const quizList = await getQuizzesList();
     const summary = calculateSummary(allStats, quizList.length + customQuizzes.length);
     renderSummaryCards(summary);
 

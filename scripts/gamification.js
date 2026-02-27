@@ -743,7 +743,7 @@ export class Gamification {
             const classesToRemove = [
                 'ring-2', 'ring-4', 'ring-gray-200', 'dark:ring-gray-700',
                 'ring-green-500', 'ring-purple-500', 'ring-yellow-400',
-                'legendary-frame', 'p-0.5'
+                'legendary-frame'
             ];
             profileLink.classList.remove(...classesToRemove);
 
@@ -1737,10 +1737,12 @@ export class Gamification {
 
     // ฟังก์ชันตรวจสอบและปลดล็อก Badge
     // Logic: ตรวจสอบเงื่อนไขต่างๆ และมอบเหรียญรางวัลหากยังไม่เคยได้รับ
-    checkBadges(lastQuizScorePercent, questionCount = 0, isCustomQuiz = false, quizId = null) {
+    async checkBadges(lastQuizScorePercent, questionCount = 0, isCustomQuiz = false, quizId = null) {
         const newBadges = [];
 
         // Lookup Quiz Metadata
+        const { getQuizzesList } = await import('./data-manager.js');
+        const quizList = await getQuizzesList();
         const quiz = quizId ? quizList.find(q => q.id === quizId) : null;
         // Check if it's an "Exam" type quiz (Practice Exam)
         const isExam = quiz && (

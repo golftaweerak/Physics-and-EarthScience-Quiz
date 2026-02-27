@@ -1,6 +1,6 @@
 import { ModalHandler } from './modal-handler.js';
-import { getQuizProgress, categoryDetails as allCategoryDetails } from './data-manager.js';
-import { quizList } from '../data/quizzes-list.js';
+import { getQuizProgress, categoryDetails as allCategoryDetails, getQuizzesList } from './data-manager.js';
+// Removed static import of quizList here
 import { getSavedCustomQuizzes } from './custom-quiz-handler.js';
 import { getSyllabusForCategory } from './syllabus-manager.js';
 
@@ -101,12 +101,17 @@ export async function initializeMenu() {
         // --- Get All Quizzes and Progress ---
         // Add timeout to prevent menu from hanging if auth fails
         const customQuizzesPromise = getSavedCustomQuizzes();
+        const quizListPromise = getQuizzesList();
+
         const timeoutPromise = new Promise(resolve => setTimeout(() => resolve([]), 3000));
         let customQuizzesList = [];
+        let quizList = [];
         try {
-            customQuizzesList = await Promise.race([customQuizzesPromise, timeoutPromise]);
+            [customQuizzesList, quizList] = await Promise.race([Promise.all([customQuizzesPromise, quizListPromise]), timeoutPromise]);
+            if (!quizList) quizList = []; // Fallback if timed out
         } catch (e) {
             customQuizzesList = [];
+            quizList = [];
         }
 
         const allQuizzes = [...quizList, ...customQuizzesList];

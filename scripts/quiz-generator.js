@@ -1,7 +1,7 @@
 import { subCategoryData } from '../data/sub-category-data.js';
 import { categoryDetails } from './data-manager.js';
-import { quizList as quizzesList } from '../data/quizzes-list.js';
-
+import { categoryDetails } from './data-manager.js';
+// Removed static quizzesList import
 document.addEventListener('DOMContentLoaded', () => {
     let questions = []; // State for added questions
     let editingIndex = null; // State to track which question is being edited
@@ -197,9 +197,9 @@ document.addEventListener('DOMContentLoaded', () => {
     /**
      * Validates the Quiz ID for format and uniqueness.
      * Provides real-time feedback to the user.
-     * @returns {boolean} True if the ID is valid, false otherwise.
+     * @returns {Promise<boolean>} True if the ID is valid, false otherwise.
      */
-    function validateQuizId() {
+    async function validateQuizId() {
         if (!quizIdValidationEl || !quizIdInput) return false;
         const quizId = quizIdInput.value.trim();
         quizIdValidationEl.textContent = '';
@@ -217,6 +217,8 @@ document.addEventListener('DOMContentLoaded', () => {
             return false;
         }
 
+        const { getQuizzesList } = await import('./data-manager.js');
+        const quizzesList = await getQuizzesList();
         const isDuplicate = quizzesList.some(quiz => quiz.id === quizId);
         if (isDuplicate) {
             quizIdValidationEl.textContent = 'ID นี้มีอยู่แล้วในระบบ';
@@ -498,8 +500,8 @@ document.addEventListener('DOMContentLoaded', () => {
     /**
      * Generates the final code snippets for the quiz data and list files.
      */
-    function handleGenerateClick() {
-        const isIdValid = validateQuizId();
+    async function handleGenerateClick() {
+        const isIdValid = await validateQuizId();
         const quizTitle = quizTitleInput.value.trim();
         const quizCategory = categorySelect.value;
 

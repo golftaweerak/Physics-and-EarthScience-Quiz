@@ -439,6 +439,20 @@ let questionsBySubCategoryCache = {};
 let scenariosCache = new Map();
 
 /**
+ * Safely loads the quizList dynamically.
+ * @returns {Promise<Array<object>>} The quiz list array.
+ */
+export async function getQuizzesList() {
+  try {
+    const module = await import(/* @vite-ignore */ `/Physics-and-EarthScience-Quiz/data/quizzes-list.js?v=${Date.now()}`);
+    return module.quizList || [];
+  } catch (error) {
+    console.error(`Failed to load quizzes-list.js:`, error);
+    return [];
+  }
+}
+
+/**
  * Fetches and processes all questions from all quiz data files.
  * Caches the result for subsequent calls.
  * @returns {Promise<{allQuestions: Array, byCategory: object}>}
