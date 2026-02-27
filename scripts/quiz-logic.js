@@ -1881,7 +1881,7 @@ function showResults(isViewOnly = false) {
         theoryXP: (correctTheory * 4) * state.xpMultiplier, // Base 4 XP for badge tracking
         calculationXP: (correctCalculation * 6) * state.xpMultiplier, // Base 6 XP for badge tracking
         itemsUsedCount: state.itemsUsedInQuiz || 0, // NEW: Track item usage
-        quizId: state.quizId,
+        quizId: state.storageKey,
         questionCount: totalQuestions,
         groupCounts: topicXPs.groupCounts || {}, // NEW: Pass detailed group counts
         isCustomQuiz: state.isCustomQuiz

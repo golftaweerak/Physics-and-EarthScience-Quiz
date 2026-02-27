@@ -1412,9 +1412,61 @@ export class Gamification {
         const newTrackXPs = {};
         SiteConfig.categories.forEach(cat => newTrackXPs[cat.track] = 0);
 
+        // --- NEW: Anti-Farming & Diminishing Returns System ---
+
+        // 1. Limit Custom Quiz XP (Max 5 per day)
+        const todayStr = new Date().toLocaleDateString('th-TH');
+        if (!this.state.customQuizDailyCounts) this.state.customQuizDailyCounts = {};
+        if (this.state.customQuizDailyCounts.date !== todayStr) {
+            this.state.customQuizDailyCounts = { date: todayStr, count: 0 };
+        }
+
+        if (isCustomQuiz) {
+            this.state.customQuizDailyCounts.count++;
+            if (this.state.customQuizDailyCounts.count > 5) {
+                console.warn("Daily custom quiz limit reached. Zero XP awarded.");
+                totalXP = 0;
+                topicXPs = {};
+                questStats.theoryXP = 0;
+                questStats.calculationXP = 0;
+            }
+        }
+
+        // 2. Diminishing Returns for Replaying the SAME Quiz on the same day
+        if (!this.state.quizPlayHistory) this.state.quizPlayHistory = {};
+        if (this.state.quizPlayHistory.date !== todayStr) {
+            this.state.quizPlayHistory = { date: todayStr, plays: {} }; // Reset daily
+        }
+
+        let xpMultiplier = 1;
+        if (!isCustomQuiz && questStats.quizId) {
+            const playCount = this.state.quizPlayHistory.plays[questStats.quizId] || 0;
+
+            if (playCount === 1) {
+                xpMultiplier = 0.5; // 2nd play: 50% XP
+                showToast('แจ้งเตือน', 'เล่นซ้ำข้อสอบเดิมได้ XP 50%', '⚠️', 'yellow');
+            } else if (playCount >= 2) {
+                xpMultiplier = 0; // 3rd play+: 0 XP
+                showToast('แจ้งเตือน', 'เล่นซ้ำข้อสอบเดิมเกินโควต้า (0 XP)', '⛔', 'red');
+            }
+
+            this.state.quizPlayHistory.plays[questStats.quizId] = playCount + 1;
+
+            // Apply multiplier
+            totalXP = Math.round(totalXP * xpMultiplier);
+            questStats.theoryXP = Math.round((questStats.theoryXP || 0) * xpMultiplier);
+            questStats.calculationXP = Math.round((questStats.calculationXP || 0) * xpMultiplier);
+            for (const key in topicXPs) {
+                if (typeof topicXPs[key] === 'number') {
+                    topicXPs[key] = Math.round(topicXPs[key] * xpMultiplier);
+                }
+            }
+        }
+        // -----------------------------------------------------
+
         // Calculate track XP from the detailed topicXPs
         for (const [groupKey, groupDef] of Object.entries(PROFICIENCY_GROUPS)) {
-            const xpForTopic = topicXPs[groupDef.field] || 0;
+            const xpForTopic = (topicXPs[groupDef.field] || 0);
             if (newTrackXPs[groupDef.track] !== undefined) {
                 newTrackXPs[groupDef.track] += xpForTopic;
             }
