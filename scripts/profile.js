@@ -2698,9 +2698,12 @@ async function renderProficiencyHistoryChart(game, allProgress = null, range = '
             let searchString = (quiz.category || '').toLowerCase();
             if (firstAnswer && firstAnswer.subCategory) {
                 if (typeof firstAnswer.subCategory === 'string') {
-                    searchString += ' ' + firstAnswer.subCategory.toLowerCase();
+                    searchString += ' ' + String(firstAnswer.subCategory).toLowerCase();
                 } else {
-                    searchString += ' ' + (firstAnswer.subCategory.main || '').toLowerCase() + ' ' + (firstAnswer.subCategory.specific || '').toLowerCase();
+                    const mainStr = String(firstAnswer.subCategory.main || '').toLowerCase();
+                    const specific = firstAnswer.subCategory.specific;
+                    const specificStr = Array.isArray(specific) ? specific.join(' ') : String(specific || '');
+                    searchString += ' ' + mainStr + ' ' + specificStr.toLowerCase();
                 }
             }
 
