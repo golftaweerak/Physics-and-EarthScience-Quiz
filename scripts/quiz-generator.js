@@ -1,6 +1,5 @@
 import { subCategoryData } from '../data/sub-category-data.js';
 import { categoryDetails } from './data-manager.js';
-import { categoryDetails } from './data-manager.js';
 // Removed static quizzesList import
 document.addEventListener('DOMContentLoaded', () => {
     let questions = []; // State for added questions
