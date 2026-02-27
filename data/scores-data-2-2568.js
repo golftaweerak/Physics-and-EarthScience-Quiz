@@ -1,4 +1,4 @@
-export const lastUpdated = "2026-02-27T02:13:09.261Z";
+export const lastUpdated = "2026-02-27T04:18:23.246Z";
 export const studentScores = [
   {
     "assignments": [
@@ -13034,19 +13034,19 @@ export const studentScores = [
       },
       {
         "name": "บท 10 [10]",
-        "score": "8"
+        "score": "9"
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "23"
+        "score": "24"
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "57"
+        "score": "58"
       },
       {
         "name": "รวม [100]",
-        "score": "72"
+        "score": "73"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -13174,7 +13174,7 @@ export const studentScores = [
       },
       {
         "name": "Quiz 10",
-        "score": "ยังไม่ส่ง"
+        "score": "6"
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
@@ -28828,7 +28828,7 @@ export const studentScores = [
       },
       {
         "name": "Quiz 7",
-        "score": "ยังไม่ส่ง"
+        "score": "0"
       },
       {
         "name": "MID [20]2",
@@ -98952,7 +98952,7 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "0"
+        "score": "1"
       },
       {
         "name": "บท 7 [10]",
@@ -98964,7 +98964,7 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "5"
+        "score": "6"
       },
       {
         "name": "บท 8 [10]",
@@ -98984,11 +98984,11 @@ export const studentScores = [
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "13"
+        "score": "14"
       },
       {
         "name": "รวม [100]",
-        "score": "23"
+        "score": "24"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -99052,7 +99052,7 @@ export const studentScores = [
       },
       {
         "name": "Quiz 6",
-        "score": "ยังไม่ส่ง"
+        "score": "7"
       },
       {
         "name": "Quiz 7",
