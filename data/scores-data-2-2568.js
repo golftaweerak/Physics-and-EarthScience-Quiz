@@ -1,4 +1,4 @@
-export const lastUpdated = "2026-02-27T00:46:40.490Z";
+export const lastUpdated = "2026-02-27T00:48:40.129Z";
 export const studentScores = [
   {
     "assignments": [
@@ -13030,7 +13030,7 @@ export const studentScores = [
       },
       {
         "name": "บท 9 [5]",
-        "score": "3"
+        "score": "5"
       },
       {
         "name": "บท 10 [10]",
@@ -13038,15 +13038,15 @@ export const studentScores = [
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "21"
+        "score": "23"
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "55"
+        "score": "57"
       },
       {
         "name": "รวม [100]",
-        "score": "70"
+        "score": "72"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -13170,7 +13170,7 @@ export const studentScores = [
       },
       {
         "name": "Quiz 9",
-        "score": "ยังไม่ส่ง"
+        "score": "8"
       },
       {
         "name": "Quiz 10",
