@@ -371,7 +371,7 @@ export class ChallengeManager {
 
     let quizList = [];
     try {
-      const module = await import(/* @vite-ignore */ `/Physics-and-EarthScience-Quiz/data/quizzes-list.js?v=${Date.now()}`);
+      const module = await import("../data/quizzes-list.js");
       quizList = module.quizList || [];
     } catch (e) {
       console.error("Failed to load quiz list", e);

@@ -335,282 +335,279 @@ export async function initializeScoreEditor() {
 
         let existingOverrides = {};
         try {
-            const overrideModule = await import(/* @vite-ignore */ `/Physics-and-EarthScience-Quiz/data/score-overrides.js?v=${Date.now()}`);
+            const overrideModule = await import("../data/score-overrides.js");
             if (overrideModule.encryptedScoreOverrides && overrideModule.encryptedScoreOverrides.trim() !== "") {
                 existingOverrides = JSON.parse(atob(overrideModule.encryptedScoreOverrides));
+            }
+            document.querySelectorAll('tbody tr[data-student-id]').forEach(row => {
+                const studentId = row.dataset.studentId;
+                const originalStudent = originalScoresData.find(s => s.id === studentId);
+                if (!originalStudent) return;
+
+                const studentOverrides = {};
+                let studentHasChanges = false;
+
+                row.querySelectorAll('input[data-key]').forEach(input => {
+                    const key = input.dataset.key;
+                    if (['id', 'name', 'ordinal'].includes(key)) return;
+
+                    const originalValue = originalStudent[key];
+                    let newValue = input.value;
+
+                    if (typeof originalValue === 'number' || (!originalValue && !isNaN(parseFloat(newValue)))) {
+                        newValue = (newValue === '') ? null : parseFloat(newValue);
+                        if (isNaN(newValue)) newValue = null;
+                    }
+
+                    const originalExists = originalValue !== null && originalValue !== undefined && originalValue !== '';
+                    const newExists = newValue !== null && newValue !== undefined && newValue !== '';
+
+                    if ((originalExists !== newExists) || (originalExists && newExists && newValue !== originalValue)) {
+                        studentOverrides[key] = newValue;
+                        studentHasChanges = true;
+                        hasChanges = true;
+
+                        logEntries.push({
+                            timestamp: new Date().toISOString(),
+                            student_id: studentId,
+                            student_name: originalStudent.name,
+                            score_key: key,
+                            original_value: originalValue ?? 'N/A',
+                            new_value: newValue ?? 'N/A'
+                        });
+                    }
+                });
+
+                if (studentHasChanges) {
+                    allOverrides[studentId] = { ...(existingOverrides[studentId] || {}), ...studentOverrides };
+                }
+            });
+
+            if (hasChanges) {
+                const newOverrides = { ...existingOverrides, ...allOverrides };
+
+                const encryptedString = btoa(JSON.stringify(newOverrides, null, 2));
+                overrideCodeContent.value = `export const encryptedScoreOverrides = "${encryptedString}";`;
+
+                const csvHeader = "timestamp,student_id,student_name,score_key,original_value,new_value\n";
+                const csvRows = logEntries.map(entry => {
+                    const escape = (val) => `"${String(val ?? '').replace(/"/g, '""')}"`;
+                    return [
+                        escape(entry.timestamp), escape(entry.student_id), escape(entry.student_name),
+                        escape(entry.score_key), escape(entry.original_value), escape(entry.new_value)
+                    ].join(',');
+                }).join('\n');
+                logDataContent.value = csvHeader + csvRows;
+
+                overrideCodeModal.open();
+            } else {
+                alert('ไม่มีการเปลี่ยนแปลงคะแนน');
             }
         } catch (e) {
             console.log("No existing score-overrides.js found or it's empty, creating new one.");
         }
-        document.querySelectorAll('tbody tr[data-student-id]').forEach(row => {
-            const studentId = row.dataset.studentId;
-            const originalStudent = originalScoresData.find(s => s.id === studentId);
-            if (!originalStudent) return;
-
-            const studentOverrides = {};
-            let studentHasChanges = false;
-
-            row.querySelectorAll('input[data-key]').forEach(input => {
-                const key = input.dataset.key;
-                if (['id', 'name', 'ordinal'].includes(key)) return;
-
-                const originalValue = originalStudent[key];
-                let newValue = input.value;
-
-                if (typeof originalValue === 'number' || (!originalValue && !isNaN(parseFloat(newValue)))) {
-                    newValue = (newValue === '') ? null : parseFloat(newValue);
-                    if (isNaN(newValue)) newValue = null;
+        /**
+         * Extracts the first name from a full Thai name string.
+         * @param { string } fullName The full name(e.g., "นายนันทิวรรธน์ ปิ่นทอง").
+         * @returns { string } The extracted first name.
+         */
+        function getFirstName(fullName) {
+            if (!fullName) return '';
+            const titles = ['นาย', 'นางสาว', 'เด็กชาย', 'เด็กหญิง'];
+            let nameWithoutTitle = fullName.trim();
+            for (const title of titles) {
+                if (nameWithoutTitle.startsWith(title)) {
+                    nameWithoutTitle = nameWithoutTitle.substring(title.length);
+                    break;
                 }
+            }
+            const parts = nameWithoutTitle.trim().split(' ');
+            return parts[0] || fullName; // Return the first part, or the original name if split fails
+        }
 
-                const originalExists = originalValue !== null && originalValue !== undefined && originalValue !== '';
-                const newExists = newValue !== null && newValue !== undefined && newValue !== '';
+        /**
+         * Handles exporting the current room's data to a CSV file.
+         */
+        function handleExportCSV() {
+            const roomSelector = document.getElementById('room-selector');
+            const selectedRoom = roomSelector.value;
+            if (!selectedRoom) {
+                alert('กรุณาเลือกห้องเรียนก่อนทำการ Export');
+                return;
+            }
 
-                if ((originalExists !== newExists) || (originalExists && newExists && newValue !== originalValue)) {
-                    studentOverrides[key] = newValue;
-                    studentHasChanges = true;
-                    hasChanges = true;
+            const studentsInRoom = studentScores.filter(s => s.room === selectedRoom).sort((a, b) => (parseInt(a.ordinal, 10) || 999) - (parseInt(b.ordinal, 10) || 999));
+            if (studentsInRoom.length === 0) {
+                alert('ไม่พบข้อมูลนักเรียนในห้องที่เลือก');
+                return;
+            }
 
-                    logEntries.push({
-                        timestamp: new Date().toISOString(),
-                        student_id: studentId,
-                        student_name: originalStudent.name,
-                        score_key: key,
-                        original_value: originalValue ?? 'N/A',
-                        new_value: newValue ?? 'N/A'
-                    });
-                }
+            // Define the specific order and display names for the CSV export
+            const exportHeaderMap = {
+                'room': 'ห้อง',
+                'id': 'เลขประจำตัว',
+                'ordinal': 'เลขที่',
+                'name': 'ชื่อ-นามสกุล',
+                'บท 1 [10]': 'บทที่ 1',
+                'บท 2 [10]': 'บทที่ 2',
+                'บท 3 [5]': 'บทที่ 3',
+                'ก่อนกลางภาค [25]': 'ก่อนกลางภาค',
+                'กลางภาค [20]': 'กลางภาค',
+                'บท 4 [10]': 'บทที่ 4',
+                'นำเสนอ [5]': 'นำเสนอ',
+                'บท 5 [10]': 'บทที่ 5',
+                'หลังกลางภาค [25]': 'หลังกลางภาค',
+                'ก่อนปลายภาค [70]': 'ก่อนปลายภาค',
+                'ปลายภาค [30]': 'ปลายภาค',
+                'รวม [100]': 'รวม',
+                'เกรด': 'เกรด'
+            };
+
+            // Update keys for Term 2 in CSV export
+            if (getCurrentSemester() === '2/2568') {
+                exportHeaderMap['บท 6 [10]'] = 'บทที่ 6';
+                exportHeaderMap['บท 7 [10]'] = 'บทที่ 7';
+                exportHeaderMap['กิจกรรม [5]'] = 'กิจกรรม';
+                exportHeaderMap['บท 8 [10]'] = 'บทที่ 8';
+                exportHeaderMap['บท 9 [5]'] = 'บทที่ 9';
+                exportHeaderMap['บท 10 [10]'] = 'บทที่ 10';
+
+                // Remove Term 1 specific keys
+                delete exportHeaderMap['บท 1 [10]'];
+                delete exportHeaderMap['บท 2 [10]'];
+                delete exportHeaderMap['บท 3 [5]'];
+                delete exportHeaderMap['บท 4 [10]'];
+                delete exportHeaderMap['บท 5 [10]'];
+                delete exportHeaderMap['นำเสนอ [5]'];
+            }
+
+            const exportKeys = Object.keys(exportHeaderMap);
+            const csvHeaders = Object.values(exportHeaderMap);
+
+            const rows = studentsInRoom.map(student => {
+                return exportKeys.map(key => student[key] ?? '');
             });
 
-            if (studentHasChanges) {
-                allOverrides[studentId] = { ...(existingOverrides[studentId] || {}), ...studentOverrides };
+            const escapeCsvCell = (cell) => {
+                const strCell = String(cell ?? '');
+                if (strCell.includes(',') || strCell.includes('"') || strCell.includes('\n')) {
+                    return `"${strCell.replace(/"/g, '""')}"`;
+                }
+                return strCell;
+            };
+
+            const csvContent = [
+                csvHeaders.map(escapeCsvCell).join(','),
+                ...rows.map(row => row.map(escapeCsvCell).join(','))
+            ].join('\n');
+            const blob = new Blob([`\uFEFF${csvContent}`], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = `scores-room-${selectedRoom}-${new Date().toISOString().slice(0, 10)}.csv`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        /**
+         * Initializes the student search functionality.
+         * @param {Array<object>} studentScores - The array of all student score objects.
+         */
+        function initializeStudentSearch(studentScores) {
+            const searchInput = document.getElementById('student-search-input');
+            const searchBtn = document.getElementById('student-search-btn');
+            const clearBtn = document.getElementById('student-search-clear-btn');
+            const resultsContainer = document.getElementById('student-search-results');
+
+            if (!searchInput || !resultsContainer || !searchBtn || !clearBtn) {
+                console.error('Student search elements not found for teacher hub.');
+                return;
             }
-        });
 
-        if (hasChanges) {
-            const newOverrides = { ...existingOverrides, ...allOverrides };
+            resultsContainer.innerHTML = `<p class="text-center text-gray-500 dark:text-gray-400 py-4">ค้นหานักเรียนเพื่อดูคะแนนรายบุคคล</p>`;
 
-            const encryptedString = btoa(JSON.stringify(newOverrides, null, 2));
-            overrideCodeContent.value = `export const encryptedScoreOverrides = "${encryptedString}";`;
+            const performSearch = () => {
+                const query = searchInput.value.trim().toLowerCase();
 
-            const csvHeader = "timestamp,student_id,student_name,score_key,original_value,new_value\n";
-            const csvRows = logEntries.map(entry => {
-                const escape = (val) => `"${String(val ?? '').replace(/"/g, '""')}"`;
-                return [
-                    escape(entry.timestamp), escape(entry.student_id), escape(entry.student_name),
-                    escape(entry.score_key), escape(entry.original_value), escape(entry.new_value)
-                ].join(',');
-            }).join('\n');
-            logDataContent.value = csvHeader + csvRows;
+                if (query.length === 0) {
+                    resultsContainer.innerHTML = `<p class="text-center text-gray-500 dark:text-gray-400 py-4">กรุณาพิมพ์คำค้นหา</p>`;
+                    return;
+                }
 
-            overrideCodeModal.open();
-        } else {
-            alert('ไม่มีการเปลี่ยนแปลงคะแนน');
-        }
-    }
-}
+                // Priority 1: Exact ID match.
+                const idMatch = studentScores.find(s => s.id.toLowerCase() === query);
+                if (idMatch) {
+                    displayStudentDetails(idMatch, resultsContainer);
+                    return;
+                }
 
-/**
- * Extracts the first name from a full Thai name string.
- * @param {string} fullName The full name (e.g., "นายนันทิวรรธน์ ปิ่นทอง").
- * @returns {string} The extracted first name.
- */
-function getFirstName(fullName) {
-    if (!fullName) return '';
-    const titles = ['นาย', 'นางสาว', 'เด็กชาย', 'เด็กหญิง'];
-    let nameWithoutTitle = fullName.trim();
-    for (const title of titles) {
-        if (nameWithoutTitle.startsWith(title)) {
-            nameWithoutTitle = nameWithoutTitle.substring(title.length);
-            break;
-        }
-    }
-    const parts = nameWithoutTitle.trim().split(' ');
-    return parts[0] || fullName; // Return the first part, or the original name if split fails
-}
+                // Priority 2: Exact Room match.
+                const roomMatches = studentScores.filter(s => s.room && s.room.toLowerCase() === query);
+                if (roomMatches.length > 0) {
+                    const results = roomMatches.sort((a, b) => (parseInt(a.ordinal, 10) || 999) - (parseInt(b.ordinal, 10) || 999));
+                    renderStudentSearchResultCards(results, resultsContainer, { cardType: 'button' });
+                    return;
+                }
 
-/**
- * Handles exporting the current room's data to a CSV file.
- */
-function handleExportCSV() {
-    const roomSelector = document.getElementById('room-selector');
-    const selectedRoom = roomSelector.value;
-    if (!selectedRoom) {
-        alert('กรุณาเลือกห้องเรียนก่อนทำการ Export');
-        return;
-    }
+                // Priority 3: Partial Name match.
+                const nameMatches = studentScores.filter(student => student.name && student.name.toLowerCase().includes(query));
+                if (nameMatches.length > 1) {
+                    const results = nameMatches.sort((a, b) => a.id.localeCompare(b.id));
+                    renderStudentSearchResultCards(results, resultsContainer, { cardType: 'button' });
+                } else if (nameMatches.length === 1) {
+                    displayStudentDetails(nameMatches[0], resultsContainer);
+                } else {
+                    // No results found, render the "not found" message.
+                    renderStudentSearchResultCards([], resultsContainer, { cardType: 'button' });
+                }
+            };
 
-    const studentsInRoom = studentScores.filter(s => s.room === selectedRoom).sort((a, b) => (parseInt(a.ordinal, 10) || 999) - (parseInt(b.ordinal, 10) || 999));
-    if (studentsInRoom.length === 0) {
-        alert('ไม่พบข้อมูลนักเรียนในห้องที่เลือก');
-        return;
-    }
+            resultsContainer.addEventListener('click', (event) => {
+                const card = event.target.closest('.student-card-btn');
+                if (!card) return;
 
-    // Define the specific order and display names for the CSV export
-    const exportHeaderMap = {
-        'room': 'ห้อง',
-        'id': 'เลขประจำตัว',
-        'ordinal': 'เลขที่',
-        'name': 'ชื่อ-นามสกุล',
-        'บท 1 [10]': 'บทที่ 1',
-        'บท 2 [10]': 'บทที่ 2',
-        'บท 3 [5]': 'บทที่ 3',
-        'ก่อนกลางภาค [25]': 'ก่อนกลางภาค',
-        'กลางภาค [20]': 'กลางภาค',
-        'บท 4 [10]': 'บทที่ 4',
-        'นำเสนอ [5]': 'นำเสนอ',
-        'บท 5 [10]': 'บทที่ 5',
-        'หลังกลางภาค [25]': 'หลังกลางภาค',
-        'ก่อนปลายภาค [70]': 'ก่อนปลายภาค',
-        'ปลายภาค [30]': 'ปลายภาค',
-        'รวม [100]': 'รวม',
-        'เกรด': 'เกรด'
-    };
+                const studentId = card.dataset.studentId;
+                if (!studentId) return;
 
-    // Update keys for Term 2 in CSV export
-    if (getCurrentSemester() === '2/2568') {
-        exportHeaderMap['บท 6 [10]'] = 'บทที่ 6';
-        exportHeaderMap['บท 7 [10]'] = 'บทที่ 7';
-        exportHeaderMap['กิจกรรม [5]'] = 'กิจกรรม';
-        exportHeaderMap['บท 8 [10]'] = 'บทที่ 8';
-        exportHeaderMap['บท 9 [5]'] = 'บทที่ 9';
-        exportHeaderMap['บท 10 [10]'] = 'บทที่ 10';
+                const student = studentScores.find(s => s.id === studentId);
+                if (student) {
+                    displayStudentDetails(student, resultsContainer);
+                }
 
-        // Remove Term 1 specific keys
-        delete exportHeaderMap['บท 1 [10]'];
-        delete exportHeaderMap['บท 2 [10]'];
-        delete exportHeaderMap['บท 3 [5]'];
-        delete exportHeaderMap['บท 4 [10]'];
-        delete exportHeaderMap['บท 5 [10]'];
-        delete exportHeaderMap['นำเสนอ [5]'];
-    }
+            });
 
-    const exportKeys = Object.keys(exportHeaderMap);
-    const csvHeaders = Object.values(exportHeaderMap);
+            clearBtn.addEventListener('click', () => {
+                searchInput.value = '';
+                resultsContainer.innerHTML = `<p class="text-center text-gray-500 dark:text-gray-400 py-4">ค้นหานักเรียนเพื่อดูคะแนนรายบุคคล</p>`;
+                clearBtn.classList.add('hidden');
+                searchInput.focus();
+            });
 
-    const rows = studentsInRoom.map(student => {
-        return exportKeys.map(key => student[key] ?? '');
-    });
+            searchInput.addEventListener('input', () => {
+                clearBtn.classList.toggle('hidden', searchInput.value.length === 0);
+            });
 
-    const escapeCsvCell = (cell) => {
-        const strCell = String(cell ?? '');
-        if (strCell.includes(',') || strCell.includes('"') || strCell.includes('\n')) {
-            return `"${strCell.replace(/"/g, '""')}"`;
-        }
-        return strCell;
-    };
+            clearBtn.classList.toggle('hidden', searchInput.value.length === 0);
 
-    const csvContent = [
-        csvHeaders.map(escapeCsvCell).join(','),
-        ...rows.map(row => row.map(escapeCsvCell).join(','))
-    ].join('\n');
-    const blob = new Blob([`\uFEFF${csvContent}`], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = `scores-room-${selectedRoom}-${new Date().toISOString().slice(0, 10)}.csv`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-}
+            searchBtn.addEventListener('click', performSearch);
 
-/**
- * Initializes the student search functionality.
- * @param {Array<object>} studentScores - The array of all student score objects.
- */
-function initializeStudentSearch(studentScores) {
-    const searchInput = document.getElementById('student-search-input');
-    const searchBtn = document.getElementById('student-search-btn');
-    const clearBtn = document.getElementById('student-search-clear-btn');
-    const resultsContainer = document.getElementById('student-search-results');
-
-    if (!searchInput || !resultsContainer || !searchBtn || !clearBtn) {
-        console.error('Student search elements not found for teacher hub.');
-        return;
-    }
-
-    resultsContainer.innerHTML = `<p class="text-center text-gray-500 dark:text-gray-400 py-4">ค้นหานักเรียนเพื่อดูคะแนนรายบุคคล</p>`;
-
-    const performSearch = () => {
-        const query = searchInput.value.trim().toLowerCase();
-
-        if (query.length === 0) {
-            resultsContainer.innerHTML = `<p class="text-center text-gray-500 dark:text-gray-400 py-4">กรุณาพิมพ์คำค้นหา</p>`;
-            return;
+            searchInput.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    performSearch();
+                }
+            });
         }
 
-        // Priority 1: Exact ID match.
-        const idMatch = studentScores.find(s => s.id.toLowerCase() === query);
-        if (idMatch) {
-            displayStudentDetails(idMatch, resultsContainer);
-            return;
-        }
+        // --- Student Detail Display Logic (Adapted from scores-handler.js) ---
 
-        // Priority 2: Exact Room match.
-        const roomMatches = studentScores.filter(s => s.room && s.room.toLowerCase() === query);
-        if (roomMatches.length > 0) {
-            const results = roomMatches.sort((a, b) => (parseInt(a.ordinal, 10) || 999) - (parseInt(b.ordinal, 10) || 999));
-            renderStudentSearchResultCards(results, resultsContainer, { cardType: 'button' });
-            return;
-        }
+        function createBreakdownRow(student, label, scoreKey) {
+            const scoreValue = student[scoreKey];
+            if (!student.hasOwnProperty(scoreKey) || scoreValue === null) return '';
 
-        // Priority 3: Partial Name match.
-        const nameMatches = studentScores.filter(student => student.name && student.name.toLowerCase().includes(query));
-        if (nameMatches.length > 1) {
-            const results = nameMatches.sort((a, b) => a.id.localeCompare(b.id));
-            renderStudentSearchResultCards(results, resultsContainer, { cardType: 'button' });
-        } else if (nameMatches.length === 1) {
-            displayStudentDetails(nameMatches[0], resultsContainer);
-        } else {
-            // No results found, render the "not found" message.
-            renderStudentSearchResultCards([], resultsContainer, { cardType: 'button' });
-        }
-    };
+            const scoreDisplay = `<span class="font-semibold text-gray-800 dark:text-gray-200">${scoreValue ?? '-'}</span>`;
 
-    resultsContainer.addEventListener('click', (event) => {
-        const card = event.target.closest('.student-card-btn');
-        if (!card) return;
-
-        const studentId = card.dataset.studentId;
-        if (!studentId) return;
-
-        const student = studentScores.find(s => s.id === studentId);
-        if (student) {
-            displayStudentDetails(student, resultsContainer);
-        }
-
-    });
-
-    clearBtn.addEventListener('click', () => {
-        searchInput.value = '';
-        resultsContainer.innerHTML = `<p class="text-center text-gray-500 dark:text-gray-400 py-4">ค้นหานักเรียนเพื่อดูคะแนนรายบุคคล</p>`;
-        clearBtn.classList.add('hidden');
-        searchInput.focus();
-    });
-
-    searchInput.addEventListener('input', () => {
-        clearBtn.classList.toggle('hidden', searchInput.value.length === 0);
-    });
-
-    clearBtn.classList.toggle('hidden', searchInput.value.length === 0);
-
-    searchBtn.addEventListener('click', performSearch);
-
-    searchInput.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            performSearch();
-        }
-    });
-}
-
-// --- Student Detail Display Logic (Adapted from scores-handler.js) ---
-
-function createBreakdownRow(student, label, scoreKey) {
-    const scoreValue = student[scoreKey];
-    if (!student.hasOwnProperty(scoreKey) || scoreValue === null) return '';
-
-    const scoreDisplay = `<span class="font-semibold text-gray-800 dark:text-gray-200">${scoreValue ?? '-'}</span>`;
-
-    return `
+            return `
         <tr class="bg-gray-50 dark:bg-gray-800/50">
             <td class="py-2 px-4 pl-10 text-sm text-gray-500 dark:text-gray-400 flex items-center">
                 <svg class="h-3 w-3 mr-2 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" /></svg>
@@ -619,210 +616,210 @@ function createBreakdownRow(student, label, scoreKey) {
             <td class="py-2 px-4 text-right">${scoreDisplay}</td>
         </tr>
     `;
-}
+        }
 
-function createAssignmentItemHTML(assignment) {
-    const url = ASSIGNMENT_URL_MAP[assignment.name] || null;
-    const lowerCaseName = assignment.name.toLowerCase();
-    const displayName = ASSIGNMENT_DISPLAY_NAME_MAP[lowerCaseName] || assignment.name;
-    const score = assignment.score;
-    let statusHtml;
+        function createAssignmentItemHTML(assignment) {
+            const url = ASSIGNMENT_URL_MAP[assignment.name] || null;
+            const lowerCaseName = assignment.name.toLowerCase();
+            const displayName = ASSIGNMENT_DISPLAY_NAME_MAP[lowerCaseName] || assignment.name;
+            const score = assignment.score;
+            let statusHtml;
 
-    statusHtml = `<input type="text" data-assignment-name="${assignment.name}" class="assignment-score-input w-24 text-center p-1 rounded bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600" value="${score ?? ''}">`;
+            statusHtml = `<input type="text" data-assignment-name="${assignment.name}" class="assignment-score-input w-24 text-center p-1 rounded bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600" value="${score ?? ''}">`;
 
-    const contentHtml = `
+            const contentHtml = `
         <div class="flex-grow min-w-0 pr-4"><span class="text-gray-700 dark:text-gray-300 text-sm font-medium">${displayName}</span></div>
         <div class="flex items-center gap-3 flex-shrink-0">
             ${statusHtml}
             ${url ? `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400 group-hover:text-blue-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>` : '<div class="w-4 h-4"></div>'}
         </div>`;
 
-    return url ? `<li class="block"><a href="${url}" target="_blank" rel="noopener noreferrer" class="group flex justify-between items-center py-3 px-4 hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors duration-200">${contentHtml}</a></li>` : `<li class="flex justify-between items-center py-3 px-4 opacity-75">${contentHtml}</li>`;
-}
-
-function groupAssignments(assignments) {
-    if (!assignments || assignments.length === 0) return {};
-
-    const groups = assignments.reduce((acc, assignment) => {
-        const name = assignment.name.toLowerCase();
-
-        // Exclude summary-like assignments from being displayed in the detailed view
-        if (SUMMARY_ASSIGNMENT_PATTERNS.some(pattern => pattern.test(name))) {
-            return acc;
+            return url ? `<li class="block"><a href="${url}" target="_blank" rel="noopener noreferrer" class="group flex justify-between items-center py-3 px-4 hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors duration-200">${contentHtml}</a></li>` : `<li class="flex justify-between items-center py-3 px-4 opacity-75">${contentHtml}</li>`;
         }
 
-        let chapterKey;
-        if (name.includes('mid') || name.includes('ซ่อมแล้วกลางภาค')) {
-            chapterKey = 'กลางภาค';
-        } else if (name.includes('quiz')) {
-            chapterKey = 'แบบทดสอบท้ายบท (Quiz)';
-        } else {
-            const match = name.match(/(\d+)/); // Find the first number
-            chapterKey = match ? `บทที่ ${match[1]}` : 'อื่นๆ';
-        }
+        function groupAssignments(assignments) {
+            if (!assignments || assignments.length === 0) return {};
 
-        if (!acc[chapterKey]) {
-            acc[chapterKey] = [];
-        }
-        acc[chapterKey].push(assignment);
-        return acc;
-    }, {});
+            const groups = assignments.reduce((acc, assignment) => {
+                const name = assignment.name.toLowerCase();
 
-    // Order the groups according to the predefined CHAPTER_ORDER
-    const orderedGroups = {};
-    CHAPTER_ORDER.forEach(key => {
-        if (groups[key]) {
-            orderedGroups[key] = groups[key];
-        }
-    });
+                // Exclude summary-like assignments from being displayed in the detailed view
+                if (SUMMARY_ASSIGNMENT_PATTERNS.some(pattern => pattern.test(name))) {
+                    return acc;
+                }
 
-    // Add any other groups that weren't in the predefined order
-    Object.keys(groups).forEach(key => {
-        if (!orderedGroups[key]) {
-            orderedGroups[key] = groups[key];
-        }
-    });
+                let chapterKey;
+                if (name.includes('mid') || name.includes('ซ่อมแล้วกลางภาค')) {
+                    chapterKey = 'กลางภาค';
+                } else if (name.includes('quiz')) {
+                    chapterKey = 'แบบทดสอบท้ายบท (Quiz)';
+                } else {
+                    const match = name.match(/(\d+)/); // Find the first number
+                    chapterKey = match ? `บทที่ ${match[1]}` : 'อื่นๆ';
+                }
 
-    // Specific request: Remove "บทที่ 5" (Term 2 only) and "แบบทดสอบท้ายบท (Quiz)" (always, as it's now in shortcuts)
-    if (getCurrentSemester() === '2/2568') {
-        delete orderedGroups['บทที่ 5'];
-    }
-    delete orderedGroups['แบบทดสอบท้ายบท (Quiz)'];
+                if (!acc[chapterKey]) {
+                    acc[chapterKey] = [];
+                }
+                acc[chapterKey].push(assignment);
+                return acc;
+            }, {});
 
-    return orderedGroups;
-}
-
-/**
- * Displays the detailed score result for a single student in a read-only view.
- * @param {object} student - The student data object.
- * @param {HTMLElement} container - The container element to render the result into.
- */
-function displayStudentDetails(student, container) {
-    // Promote final exam score from assignments to a top-level property if it doesn't exist.
-    // This ensures it's available for the summary table rendering logic below.
-    if (!student.hasOwnProperty('ปลายภาค [30]') && student.assignments) {
-        const finalAssignment = student.assignments.find(a => a.name === 'ปลายภาค [30]');
-        if (finalAssignment && finalAssignment.score !== null && finalAssignment.score !== undefined) {
-            const score = parseFloat(finalAssignment.score);
-            // Use the raw score (can be text like "ขาดสอบ") if it's not a valid number
-            student['ปลายภาค [30]'] = isNaN(score) ? finalAssignment.score : score;
-        }
-    }
-
-    const isTerm2 = getCurrentSemester() === '2/2568';
-    const summaryOrder = isTerm2 ? [
-        'ก่อนกลางภาค [25]', 'กลางภาค [20]', 'หลังกลางภาค [25]', 'ก่อนปลายภาค [70]', 'ปลายภาค [30]', 'รวม [100]', 'เกรด'
-    ] : [
-        'ก่อนกลางภาค [25]', 'กลางภาค [20]', 'หลังกลางภาค [25]', 'ก่อนปลายภาค [70]', 'ปลายภาค [30]', 'รวม [100]', 'เกรด'
-    ];
-    const breakdownMap = isTerm2 ? {
-        'ก่อนกลางภาค [25]': [
-            { label: 'บทที่ 6', key: 'บท 6 [10]' },
-            { label: 'บทที่ 7', key: 'บท 7 [10]' },
-            { label: 'กิจกรรม', key: 'กิจกรรม [5]' }
-        ],
-        'หลังกลางภาค [25]': [
-            { label: 'บทที่ 8', key: 'บท 8 [10]' },
-            { label: 'บทที่ 9', key: 'บท 9 [5]' },
-            { label: 'บทที่ 10', key: 'บท 10 [10]' }
-        ],
-        'รวม [100]': [{ label: 'คะแนนก่อนสอบปลายภาค', key: 'ก่อนปลายภาค [70]' }, { label: 'คะแนนสอบปลายภาค', key: 'ปลายภาค [30]' }]
-    } : {
-        'ก่อนกลางภาค [25]': [
-            { label: 'บทที่ 1', key: 'บท 1 [10]' },
-            { label: 'บทที่ 2', key: 'บท 2 [10]' },
-            { label: 'บทที่ 3', key: 'บท 3 [5]' }
-        ],
-        'หลังกลางภาค [25]': [
-            { label: 'บทที่ 4', key: 'บท 4 [10]' },
-            { label: 'บทที่ 5', key: 'บท 5 [10]' },
-            { label: 'นำเสนอ', key: 'นำเสนอ [5]' }
-        ],
-        'รวม [100]': [{ label: 'คะแนนก่อนสอบปลายภาค', key: 'ก่อนปลายภาค [70]' }, { label: 'คะแนนสอบปลายภาค', key: 'ปลายภาค [30]' }]
-    };
-
-    if (isTerm2) {
-        // Map root properties that have different names in Term 2
-        if (student.hasOwnProperty('กลางภาค') && !student.hasOwnProperty('กลางภาค [20]')) {
-            student['กลางภาค [20]'] = student['กลางภาค'];
-        }
-        if (student.hasOwnProperty('ปลายภาค') && !student.hasOwnProperty('ปลายภาค [30]')) {
-            student['ปลายภาค [30]'] = student['ปลายภาค'];
-        }
-
-        // In Term 2, summary scores and breakdown items are often inside the 'assignments' array instead of top-level
-        if (student.assignments) {
-            student.assignments.forEach(a => {
-                // Promote if it has a value, isn't already promoted, and isn't an empty string
-                if (!student.hasOwnProperty(a.name) && a.score !== null && a.score !== undefined && a.score !== "") {
-                    const score = parseFloat(a.score);
-                    student[a.name] = isNaN(score) ? a.score : score;
+            // Order the groups according to the predefined CHAPTER_ORDER
+            const orderedGroups = {};
+            CHAPTER_ORDER.forEach(key => {
+                if (groups[key]) {
+                    orderedGroups[key] = groups[key];
                 }
             });
-        }
-    }
 
-    const scoreRows = summaryOrder.map(key => {
-        if (!student.hasOwnProperty(key)) return '';
-        const value = student[key];
-        const isGrade = key === 'เกรด';
-        const isTotal = key === 'รวม [100]';
-        const isMidterm = key === 'กลางภาค [20]';
-        const isFinal = key === 'ปลายภาค [30]';
-        const isImportant = isGrade || isTotal || isMidterm || isFinal;
+            // Add any other groups that weren't in the predefined order
+            Object.keys(groups).forEach(key => {
+                if (!orderedGroups[key]) {
+                    orderedGroups[key] = groups[key];
+                }
+            });
 
-        const rowClass = isImportant ? 'bg-blue-50 dark:bg-gray-800/60' : '';
-        const labelClass = isImportant ? 'font-bold text-blue-900 dark:text-blue-300' : 'font-medium text-gray-700 dark:text-gray-300';
-        let valueClass = isImportant ? 'font-bold' : 'font-semibold';
-        if (isGrade) {
-            valueClass += ' text-2xl ';
-            const numericGrade = parseFloat(value);
-            if (value === '4' || value === '4.0' || numericGrade === 4) {
-                valueClass += 'text-green-600 dark:text-green-400';
-            } else if (numericGrade >= 3) {
-                valueClass += 'text-blue-600 dark:text-blue-400';
-            } else if (numericGrade >= 2) {
-                valueClass += 'text-yellow-600 dark:text-yellow-400';
-            } else if (numericGrade >= 1) {
-                valueClass += 'text-orange-500 dark:text-orange-400';
-            } else {
-                valueClass += 'text-red-600 dark:text-red-400';
+            // Specific request: Remove "บทที่ 5" (Term 2 only) and "แบบทดสอบท้ายบท (Quiz)" (always, as it's now in shortcuts)
+            if (getCurrentSemester() === '2/2568') {
+                delete orderedGroups['บทที่ 5'];
             }
-        }
-        else if (isTotal) valueClass += ' text-xl text-green-600 dark:text-green-400';
-        else if (isMidterm || isFinal) valueClass += ' text-lg text-gray-900 dark:text-white';
-        else valueClass += ' text-gray-900 dark:text-white';
+            delete orderedGroups['แบบทดสอบท้ายบท (Quiz)'];
 
-        let valueDisplay;
-        const inputType = (typeof value === 'number' && !isGrade) ? 'number' : 'text';
-        valueDisplay = `<input type="${inputType}" data-key="${key}" class="score-input w-24 text-right p-1 rounded bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600" value="${value ?? ''}">`;
-
-
-        let retestStatusHtml = '';
-        const retestData = student.ซ่อมมั้ย || student.ซ่อมกลางภาค;
-        if (key === 'กลางภาค [20]' && retestData && retestData.trim() !== '-') {
-            const retestStatus = retestData.trim();
-            const isPositiveStatus = retestStatus.includes('ไม่ต้อง') || retestStatus.includes('ซ่อมแล้ว');
-            const statusColor = isPositiveStatus ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400';
-            retestStatusHtml = `<div class="text-xs font-normal ${statusColor} pt-1">สถานะการสอบซ่อม: ${retestStatus}</div>`;
+            return orderedGroups;
         }
 
-        let mainRowHtml = `<tr class="border-b border-gray-200 dark:border-gray-700 last:border-b-0 ${rowClass}"><td class="py-3 px-4 ${labelClass}">${key}</td><td class="py-3 px-4 text-right">${valueDisplay}${retestStatusHtml}</td></tr>`;
-        if (breakdownMap[key]) mainRowHtml += breakdownMap[key].map(item => createBreakdownRow(student, item.label, item.key)).join('');
-        return mainRowHtml;
-    }).join('');
+        /**
+         * Displays the detailed score result for a single student in a read-only view.
+         * @param {object} student - The student data object.
+         * @param {HTMLElement} container - The container element to render the result into.
+         */
+        function displayStudentDetails(student, container) {
+            // Promote final exam score from assignments to a top-level property if it doesn't exist.
+            // This ensures it's available for the summary table rendering logic below.
+            if (!student.hasOwnProperty('ปลายภาค [30]') && student.assignments) {
+                const finalAssignment = student.assignments.find(a => a.name === 'ปลายภาค [30]');
+                if (finalAssignment && finalAssignment.score !== null && finalAssignment.score !== undefined) {
+                    const score = parseFloat(finalAssignment.score);
+                    // Use the raw score (can be text like "ขาดสอบ") if it's not a valid number
+                    student['ปลายภาค [30]'] = isNaN(score) ? finalAssignment.score : score;
+                }
+            }
 
-    const summaryScoreSection = `<figure class="mb-6"><figcaption class="p-3 text-lg font-semibold text-left text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-800 rounded-t-lg border-x border-t border-gray-200 dark:border-gray-700">คะแนนสรุป</figcaption><div class="border border-gray-200 dark:border-gray-700 rounded-b-lg overflow-hidden"><table class="w-full text-base"><tbody>${scoreRows}</tbody></table></div></figure>`;
+            const isTerm2 = getCurrentSemester() === '2/2568';
+            const summaryOrder = isTerm2 ? [
+                'ก่อนกลางภาค [25]', 'กลางภาค [20]', 'หลังกลางภาค [25]', 'ก่อนปลายภาค [70]', 'ปลายภาค [30]', 'รวม [100]', 'เกรด'
+            ] : [
+                'ก่อนกลางภาค [25]', 'กลางภาค [20]', 'หลังกลางภาค [25]', 'ก่อนปลายภาค [70]', 'ปลายภาค [30]', 'รวม [100]', 'เกรด'
+            ];
+            const breakdownMap = isTerm2 ? {
+                'ก่อนกลางภาค [25]': [
+                    { label: 'บทที่ 6', key: 'บท 6 [10]' },
+                    { label: 'บทที่ 7', key: 'บท 7 [10]' },
+                    { label: 'กิจกรรม', key: 'กิจกรรม [5]' }
+                ],
+                'หลังกลางภาค [25]': [
+                    { label: 'บทที่ 8', key: 'บท 8 [10]' },
+                    { label: 'บทที่ 9', key: 'บท 9 [5]' },
+                    { label: 'บทที่ 10', key: 'บท 10 [10]' }
+                ],
+                'รวม [100]': [{ label: 'คะแนนก่อนสอบปลายภาค', key: 'ก่อนปลายภาค [70]' }, { label: 'คะแนนสอบปลายภาค', key: 'ปลายภาค [30]' }]
+            } : {
+                'ก่อนกลางภาค [25]': [
+                    { label: 'บทที่ 1', key: 'บท 1 [10]' },
+                    { label: 'บทที่ 2', key: 'บท 2 [10]' },
+                    { label: 'บทที่ 3', key: 'บท 3 [5]' }
+                ],
+                'หลังกลางภาค [25]': [
+                    { label: 'บทที่ 4', key: 'บท 4 [10]' },
+                    { label: 'บทที่ 5', key: 'บท 5 [10]' },
+                    { label: 'นำเสนอ', key: 'นำเสนอ [5]' }
+                ],
+                'รวม [100]': [{ label: 'คะแนนก่อนสอบปลายภาค', key: 'ก่อนปลายภาค [70]' }, { label: 'คะแนนสอบปลายภาค', key: 'ปลายภาค [30]' }]
+            };
 
-    const TRACKABLE_KEYWORDS = ['กิจกรรม', 'แบบฝึก', 'quiz', 'ท้ายบท', 'ใบงาน'];
-    const trackableAssignments = student.assignments.filter(a => TRACKABLE_KEYWORDS.some(k => a.name.toLowerCase().includes(k)));
-    const submittedCount = trackableAssignments.filter(a => a.score && a.score.toLowerCase() !== 'ยังไม่ส่ง').length;
-    const missingCount = trackableAssignments.length - submittedCount;
-    const completionPercentage = trackableAssignments.length > 0 ? (submittedCount / trackableAssignments.length) * 100 : 0;
+            if (isTerm2) {
+                // Map root properties that have different names in Term 2
+                if (student.hasOwnProperty('กลางภาค') && !student.hasOwnProperty('กลางภาค [20]')) {
+                    student['กลางภาค [20]'] = student['กลางภาค'];
+                }
+                if (student.hasOwnProperty('ปลายภาค') && !student.hasOwnProperty('ปลายภาค [30]')) {
+                    student['ปลายภาค [30]'] = student['ปลายภาค'];
+                }
 
-    const groupedAssignments = groupAssignments(trackableAssignments);
+                // In Term 2, summary scores and breakdown items are often inside the 'assignments' array instead of top-level
+                if (student.assignments) {
+                    student.assignments.forEach(a => {
+                        // Promote if it has a value, isn't already promoted, and isn't an empty string
+                        if (!student.hasOwnProperty(a.name) && a.score !== null && a.score !== undefined && a.score !== "") {
+                            const score = parseFloat(a.score);
+                            student[a.name] = isNaN(score) ? a.score : score;
+                        }
+                    });
+                }
+            }
 
-    const summaryCardsHtml = `
+            const scoreRows = summaryOrder.map(key => {
+                if (!student.hasOwnProperty(key)) return '';
+                const value = student[key];
+                const isGrade = key === 'เกรด';
+                const isTotal = key === 'รวม [100]';
+                const isMidterm = key === 'กลางภาค [20]';
+                const isFinal = key === 'ปลายภาค [30]';
+                const isImportant = isGrade || isTotal || isMidterm || isFinal;
+
+                const rowClass = isImportant ? 'bg-blue-50 dark:bg-gray-800/60' : '';
+                const labelClass = isImportant ? 'font-bold text-blue-900 dark:text-blue-300' : 'font-medium text-gray-700 dark:text-gray-300';
+                let valueClass = isImportant ? 'font-bold' : 'font-semibold';
+                if (isGrade) {
+                    valueClass += ' text-2xl ';
+                    const numericGrade = parseFloat(value);
+                    if (value === '4' || value === '4.0' || numericGrade === 4) {
+                        valueClass += 'text-green-600 dark:text-green-400';
+                    } else if (numericGrade >= 3) {
+                        valueClass += 'text-blue-600 dark:text-blue-400';
+                    } else if (numericGrade >= 2) {
+                        valueClass += 'text-yellow-600 dark:text-yellow-400';
+                    } else if (numericGrade >= 1) {
+                        valueClass += 'text-orange-500 dark:text-orange-400';
+                    } else {
+                        valueClass += 'text-red-600 dark:text-red-400';
+                    }
+                }
+                else if (isTotal) valueClass += ' text-xl text-green-600 dark:text-green-400';
+                else if (isMidterm || isFinal) valueClass += ' text-lg text-gray-900 dark:text-white';
+                else valueClass += ' text-gray-900 dark:text-white';
+
+                let valueDisplay;
+                const inputType = (typeof value === 'number' && !isGrade) ? 'number' : 'text';
+                valueDisplay = `<input type="${inputType}" data-key="${key}" class="score-input w-24 text-right p-1 rounded bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600" value="${value ?? ''}">`;
+
+
+                let retestStatusHtml = '';
+                const retestData = student.ซ่อมมั้ย || student.ซ่อมกลางภาค;
+                if (key === 'กลางภาค [20]' && retestData && retestData.trim() !== '-') {
+                    const retestStatus = retestData.trim();
+                    const isPositiveStatus = retestStatus.includes('ไม่ต้อง') || retestStatus.includes('ซ่อมแล้ว');
+                    const statusColor = isPositiveStatus ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400';
+                    retestStatusHtml = `<div class="text-xs font-normal ${statusColor} pt-1">สถานะการสอบซ่อม: ${retestStatus}</div>`;
+                }
+
+                let mainRowHtml = `<tr class="border-b border-gray-200 dark:border-gray-700 last:border-b-0 ${rowClass}"><td class="py-3 px-4 ${labelClass}">${key}</td><td class="py-3 px-4 text-right">${valueDisplay}${retestStatusHtml}</td></tr>`;
+                if (breakdownMap[key]) mainRowHtml += breakdownMap[key].map(item => createBreakdownRow(student, item.label, item.key)).join('');
+                return mainRowHtml;
+            }).join('');
+
+            const summaryScoreSection = `<figure class="mb-6"><figcaption class="p-3 text-lg font-semibold text-left text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-800 rounded-t-lg border-x border-t border-gray-200 dark:border-gray-700">คะแนนสรุป</figcaption><div class="border border-gray-200 dark:border-gray-700 rounded-b-lg overflow-hidden"><table class="w-full text-base"><tbody>${scoreRows}</tbody></table></div></figure>`;
+
+            const TRACKABLE_KEYWORDS = ['กิจกรรม', 'แบบฝึก', 'quiz', 'ท้ายบท', 'ใบงาน'];
+            const trackableAssignments = student.assignments.filter(a => TRACKABLE_KEYWORDS.some(k => a.name.toLowerCase().includes(k)));
+            const submittedCount = trackableAssignments.filter(a => a.score && a.score.toLowerCase() !== 'ยังไม่ส่ง').length;
+            const missingCount = trackableAssignments.length - submittedCount;
+            const completionPercentage = trackableAssignments.length > 0 ? (submittedCount / trackableAssignments.length) * 100 : 0;
+
+            const groupedAssignments = groupAssignments(trackableAssignments);
+
+            const summaryCardsHtml = `
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
             <button id="show-submitted-btn" class="p-4 bg-green-100 dark:bg-green-900/50 rounded-lg text-center border border-green-200 dark:border-green-700 transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
                 <div class="text-4xl font-bold text-green-600 dark:text-green-400">${submittedCount}</div>
@@ -841,7 +838,7 @@ function displayStudentDetails(student, container) {
             <div class="bg-gradient-to-r from-blue-400 to-blue-600 h-3 rounded-full transition-all duration-500" style="width: ${completionPercentage}%"></div>
         </div>`;
 
-    const assignmentsSection = Object.keys(groupedAssignments).length > 0 ? `
+            const assignmentsSection = Object.keys(groupedAssignments).length > 0 ? `
         <figure>
             <figcaption class="p-4 text-lg font-semibold text-left text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-800">รายการงานที่ต้องส่ง</figcaption>
             <div class="space-y-2 p-4 bg-gray-50 dark:bg-gray-900/30">
@@ -857,7 +854,7 @@ function displayStudentDetails(student, container) {
             </div>
         </figure>` : '';
 
-    container.innerHTML = `
+            container.innerHTML = `
         <div class="student-card-container bg-white dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden anim-card-pop-in" data-student-id="${student.id}">
             <div class="p-6 bg-gradient-to-br from-blue-50 to-gray-100 dark:from-gray-900 dark:to-gray-800/50 border-b border-gray-200 dark:border-gray-700 flex items-center gap-4">
                 <div class="flex-shrink-0 h-16 w-16 rounded-full flex items-center justify-center bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 border-4 border-white dark:border-gray-800 shadow-md">
@@ -884,127 +881,127 @@ function displayStudentDetails(student, container) {
             </div>
         </div>`;
 
-    // Attach event listeners for the new modal buttons
-    document.getElementById('show-submitted-btn')?.addEventListener('click', () => {
-        const submittedAssignments = trackableAssignments.filter(a => a.score && a.score.toLowerCase() !== 'ยังไม่ส่ง');
-        createInteractiveAssignmentModal('submitted', `งานที่ส่งแล้ว (${submittedAssignments.length} รายการ)`, submittedAssignments);
-    });
-    document.getElementById('show-missing-btn')?.addEventListener('click', () => {
-        const missingAssignments = trackableAssignments.filter(a => !a.score || a.score.toLowerCase() === 'ยังไม่ส่ง');
-        createInteractiveAssignmentModal('missing', `งานที่ค้างส่ง (${missingAssignments.length} รายการ)`, missingAssignments);
-    });
+            // Attach event listeners for the new modal buttons
+            document.getElementById('show-submitted-btn')?.addEventListener('click', () => {
+                const submittedAssignments = trackableAssignments.filter(a => a.score && a.score.toLowerCase() !== 'ยังไม่ส่ง');
+                createInteractiveAssignmentModal('submitted', `งานที่ส่งแล้ว (${submittedAssignments.length} รายการ)`, submittedAssignments);
+            });
+            document.getElementById('show-missing-btn')?.addEventListener('click', () => {
+                const missingAssignments = trackableAssignments.filter(a => !a.score || a.score.toLowerCase() === 'ยังไม่ส่ง');
+                createInteractiveAssignmentModal('missing', `งานที่ค้างส่ง (${missingAssignments.length} รายการ)`, missingAssignments);
+            });
 
-    document.getElementById('save-individual-overrides-btn')?.addEventListener('click', handleSaveIndividualOverrides);
-}
-
-/**
- * Handles saving overrides for a single student view.
- * @param {Event} e The click event from the save button.
- */
-async function handleSaveIndividualOverrides(e) {
-    const studentId = e.target.dataset.studentid;
-    const student = studentScores.find(s => s.id === studentId);
-    const originalStudent = originalScoresData.find(s => s.id === studentId);
-    if (!originalStudent || !student) {
-        alert('Error: Could not find student data to compare.');
-        return;
-    }
-
-    const studentOverrides = {};
-    const logEntries = [];
-    let hasChanges = false;
-
-    const cardContainer = document.querySelector(`.student-card-container[data-student-id="${studentId}"]`);
-    if (!cardContainer) return;
-
-    // 1. Handle summary score changes
-    cardContainer.querySelectorAll('.score-input').forEach(input => {
-        const key = input.dataset.key;
-        const originalValue = originalStudent[key];
-        let newValue = input.value;
-
-        if (typeof originalValue === 'number' || (!originalValue && !isNaN(parseFloat(newValue)))) {
-            newValue = (newValue === '') ? null : parseFloat(newValue);
-            if (isNaN(newValue)) newValue = null;
+            document.getElementById('save-individual-overrides-btn')?.addEventListener('click', handleSaveIndividualOverrides);
         }
 
-        const originalExists = originalValue !== null && originalValue !== undefined && originalValue !== '';
-        const newExists = newValue !== null && newValue !== undefined && newValue !== '';
+        /**
+         * Handles saving overrides for a single student view.
+         * @param {Event} e The click event from the save button.
+         */
+        async function handleSaveIndividualOverrides(e) {
+            const studentId = e.target.dataset.studentid;
+            const student = studentScores.find(s => s.id === studentId);
+            const originalStudent = originalScoresData.find(s => s.id === studentId);
+            if (!originalStudent || !student) {
+                alert('Error: Could not find student data to compare.');
+                return;
+            }
 
-        if ((originalExists !== newExists) || (originalExists && newExists && newValue !== originalValue)) {
-            studentOverrides[key] = newValue;
-            hasChanges = true;
-            logEntries.push({ timestamp: new Date().toISOString(), student_id: studentId, student_name: student.name, score_key: key, original_value: originalValue ?? 'N/A', new_value: newValue ?? 'N/A' });
-        }
-    });
+            const studentOverrides = {};
+            const logEntries = [];
+            let hasChanges = false;
 
-    // 2. Handle assignment score changes
-    const newAssignments = JSON.parse(JSON.stringify(student.assignments)); // Deep copy
-    let assignmentsChanged = false;
-    cardContainer.querySelectorAll('.assignment-score-input').forEach(input => {
-        const assignmentName = input.dataset.assignmentName;
-        const newValue = input.value.trim();
-        const assignmentIndex = newAssignments.findIndex(a => a.name === assignmentName);
-        if (assignmentIndex > -1) {
-            const originalScore = student.assignments[assignmentIndex]?.score ?? '';
-            if (String(originalScore).trim() !== newValue) {
-                newAssignments[assignmentIndex].score = newValue;
-                assignmentsChanged = true;
-                hasChanges = true;
-                logEntries.push({ timestamp: new Date().toISOString(), student_id: studentId, student_name: student.name, score_key: `assignments[${assignmentName}]`, original_value: originalScore, new_value: newValue });
+            const cardContainer = document.querySelector(`.student-card-container[data-student-id="${studentId}"]`);
+            if (!cardContainer) return;
+
+            // 1. Handle summary score changes
+            cardContainer.querySelectorAll('.score-input').forEach(input => {
+                const key = input.dataset.key;
+                const originalValue = originalStudent[key];
+                let newValue = input.value;
+
+                if (typeof originalValue === 'number' || (!originalValue && !isNaN(parseFloat(newValue)))) {
+                    newValue = (newValue === '') ? null : parseFloat(newValue);
+                    if (isNaN(newValue)) newValue = null;
+                }
+
+                const originalExists = originalValue !== null && originalValue !== undefined && originalValue !== '';
+                const newExists = newValue !== null && newValue !== undefined && newValue !== '';
+
+                if ((originalExists !== newExists) || (originalExists && newExists && newValue !== originalValue)) {
+                    studentOverrides[key] = newValue;
+                    hasChanges = true;
+                    logEntries.push({ timestamp: new Date().toISOString(), student_id: studentId, student_name: student.name, score_key: key, original_value: originalValue ?? 'N/A', new_value: newValue ?? 'N/A' });
+                }
+            });
+
+            // 2. Handle assignment score changes
+            const newAssignments = JSON.parse(JSON.stringify(student.assignments)); // Deep copy
+            let assignmentsChanged = false;
+            cardContainer.querySelectorAll('.assignment-score-input').forEach(input => {
+                const assignmentName = input.dataset.assignmentName;
+                const newValue = input.value.trim();
+                const assignmentIndex = newAssignments.findIndex(a => a.name === assignmentName);
+                if (assignmentIndex > -1) {
+                    const originalScore = student.assignments[assignmentIndex]?.score ?? '';
+                    if (String(originalScore).trim() !== newValue) {
+                        newAssignments[assignmentIndex].score = newValue;
+                        assignmentsChanged = true;
+                        hasChanges = true;
+                        logEntries.push({ timestamp: new Date().toISOString(), student_id: studentId, student_name: student.name, score_key: `assignments[${assignmentName}]`, original_value: originalScore, new_value: newValue });
+                    }
+                }
+            });
+
+            if (assignmentsChanged) {
+                studentOverrides.assignments = newAssignments;
+            }
+
+            if (hasChanges) {
+                const overrideCodeModal = new ModalHandler('override-code-modal');
+                const overrideCodeContent = document.getElementById('override-code-content');
+                const logDataContent = document.getElementById('log-data-content');
+
+                let existingOverrides = {};
+                try {
+                    const overrideModule = await import("../data/score-overrides.js");
+                    if (overrideModule.encryptedScoreOverrides && overrideModule.encryptedScoreOverrides.trim() !== "") {
+                        existingOverrides = JSON.parse(atob(overrideModule.encryptedScoreOverrides));
+                    }
+                } catch (e) { /* No existing overrides, continue */ }
+
+                const newOverrides = { ...existingOverrides };
+                newOverrides[studentId] = { ...(existingOverrides[studentId] || {}), ...studentOverrides };
+                const encryptedString = btoa(JSON.stringify(newOverrides, null, 2));
+                overrideCodeContent.value = `export const encryptedScoreOverrides = "${encryptedString}";`;
+
+                const csvHeader = "timestamp,student_id,student_name,score_key,original_value,new_value\n";
+                const csvRows = logEntries.map(entry => { const escape = (val) => `"${String(val ?? '').replace(/"/g, '""')}"`; return [escape(entry.timestamp), escape(entry.student_id), escape(entry.student_name), escape(entry.score_key), escape(entry.original_value), escape(entry.new_value)].join(','); }).join('\n');
+                logDataContent.value = csvHeader + csvRows;
+                overrideCodeModal.open();
+            } else {
+                alert('ไม่มีการเปลี่ยนแปลงคะแนน');
             }
         }
-    });
 
-    if (assignmentsChanged) {
-        studentOverrides.assignments = newAssignments;
-    }
+        /**
+         * Creates and displays a modal with a filterable list of assignments.
+         * @param {string} modalIdentifier - A unique string for the modal ID.
+         * @param {string} title - The title to display in the modal header.
+         * @param {Array<object>} assignments - The list of assignments to display.
+         */
+        function createInteractiveAssignmentModal(modalIdentifier, title, assignments) {
+            const modalId = `interactive-assignment-modal-${modalIdentifier}`;
 
-    if (hasChanges) {
-        const overrideCodeModal = new ModalHandler('override-code-modal');
-        const overrideCodeContent = document.getElementById('override-code-content');
-        const logDataContent = document.getElementById('log-data-content');
-
-        let existingOverrides = {};
-        try {
-            const overrideModule = await import(/* @vite-ignore */ `/Physics-and-EarthScience-Quiz/data/score-overrides.js?v=${Date.now()}`);
-            if (overrideModule.encryptedScoreOverrides && overrideModule.encryptedScoreOverrides.trim() !== "") {
-                existingOverrides = JSON.parse(atob(overrideModule.encryptedScoreOverrides));
+            // Remove old modal if it exists
+            const existingModal = document.getElementById(modalId);
+            if (existingModal) {
+                existingModal.remove();
             }
-        } catch (e) { /* No existing overrides, continue */ }
 
-        const newOverrides = { ...existingOverrides };
-        newOverrides[studentId] = { ...(existingOverrides[studentId] || {}), ...studentOverrides };
-        const encryptedString = btoa(JSON.stringify(newOverrides, null, 2));
-        overrideCodeContent.value = `export const encryptedScoreOverrides = "${encryptedString}";`;
+            const modalContentContainerId = `interactive-assignment-content-${modalIdentifier}`;
 
-        const csvHeader = "timestamp,student_id,student_name,score_key,original_value,new_value\n";
-        const csvRows = logEntries.map(entry => { const escape = (val) => `"${String(val ?? '').replace(/"/g, '""')}"`; return [escape(entry.timestamp), escape(entry.student_id), escape(entry.student_name), escape(entry.score_key), escape(entry.original_value), escape(entry.new_value)].join(','); }).join('\n');
-        logDataContent.value = csvHeader + csvRows;
-        overrideCodeModal.open();
-    } else {
-        alert('ไม่มีการเปลี่ยนแปลงคะแนน');
-    }
-}
-
-/**
- * Creates and displays a modal with a filterable list of assignments.
- * @param {string} modalIdentifier - A unique string for the modal ID.
- * @param {string} title - The title to display in the modal header.
- * @param {Array<object>} assignments - The list of assignments to display.
- */
-function createInteractiveAssignmentModal(modalIdentifier, title, assignments) {
-    const modalId = `interactive-assignment-modal-${modalIdentifier}`;
-
-    // Remove old modal if it exists
-    const existingModal = document.getElementById(modalId);
-    if (existingModal) {
-        existingModal.remove();
-    }
-
-    const modalContentContainerId = `interactive-assignment-content-${modalIdentifier}`;
-
-    const controlsHtml = `
+            const controlsHtml = `
         <div class="p-3 sm:p-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 space-y-3">
             <div class="relative">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -1015,7 +1012,7 @@ function createInteractiveAssignmentModal(modalIdentifier, title, assignments) {
         </div>
     `;
 
-    const modalHtml = `
+            const modalHtml = `
         <div id="${modalId}" class="modal fixed inset-0 flex items-center justify-center z-[9999] hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title-${modalId}">
             <div data-modal-overlay class="absolute inset-0 bg-gray-900 bg-opacity-60 backdrop-blur-sm" aria-hidden="true"></div>
             <div class="modal-container relative bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-2xl m-4 max-h-[90vh] flex flex-col">
@@ -1033,25 +1030,27 @@ function createInteractiveAssignmentModal(modalIdentifier, title, assignments) {
         </div>
     `;
 
-    document.getElementById('modals-placeholder').insertAdjacentHTML('beforeend', modalHtml);
+            document.getElementById('modals-placeholder').insertAdjacentHTML('beforeend', modalHtml);
 
-    const contentElement = document.getElementById(modalContentContainerId);
-    const searchInput = document.getElementById(`modal-search-input-${modalIdentifier}`);
+            const contentElement = document.getElementById(modalContentContainerId);
+            const searchInput = document.getElementById(`modal-search-input-${modalIdentifier}`);
 
-    const filterAndRender = () => {
-        const query = searchInput.value.toLowerCase();
-        const filteredAssignments = assignments.filter(assignment => !query || (assignment.name && assignment.name.toLowerCase().includes(query)));
+            const filterAndRender = () => {
+                const query = searchInput.value.toLowerCase();
+                const filteredAssignments = assignments.filter(assignment => !query || (assignment.name && assignment.name.toLowerCase().includes(query)));
 
-        if (filteredAssignments.length === 0) {
-            contentElement.innerHTML = `<p class="text-center text-gray-500 dark:text-gray-400 py-8">ไม่พบรายการที่ตรงกับคำค้นหา</p>`;
-        } else {
-            const listHtml = filteredAssignments.map(createAssignmentItemHTML).join('');
-            contentElement.innerHTML = `<ul class="divide-y divide-gray-200 dark:divide-gray-700">${listHtml}</ul>`;
+                if (filteredAssignments.length === 0) {
+                    contentElement.innerHTML = `<p class="text-center text-gray-500 dark:text-gray-400 py-8">ไม่พบรายการที่ตรงกับคำค้นหา</p>`;
+                } else {
+                    const listHtml = filteredAssignments.map(createAssignmentItemHTML).join('');
+                    contentElement.innerHTML = `<ul class="divide-y divide-gray-200 dark:divide-gray-700">${listHtml}</ul>`;
+                }
+            };
+
+            searchInput.addEventListener('input', filterAndRender);
+
+            filterAndRender(); // Initial render
+            new ModalHandler(modalId).open();
         }
-    };
-
-    searchInput.addEventListener('input', filterAndRender);
-
-    filterAndRender(); // Initial render
-    new ModalHandler(modalId).open();
+    }
 }

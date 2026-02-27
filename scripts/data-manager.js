@@ -370,7 +370,7 @@ export function loadQuizState(storageKey) {
  * @returns {Promise<Array<object>>} An array of detailed progress objects.
  */
 export async function getDetailedProgressForAllQuizzes() {
-  const { quizList } = await import(/* @vite-ignore */ `/Physics-and-EarthScience-Quiz/data/quizzes-list.js?v=${Date.now()}`);
+  const { quizList } = await import("../data/quizzes-list.js");
   const { getSavedCustomQuizzes } = await import("./custom-quiz-handler.js");
 
   // Add timeout to prevent hanging
@@ -404,7 +404,7 @@ export async function getDetailedProgressForAllQuizzes() {
  * @returns {Promise<Array<object>>} An array of progress objects for all quizzes.
  */
 export async function getAllQuizProgress() {
-  const { quizList } = await import(/* @vite-ignore */ `/Physics-and-EarthScience-Quiz/data/quizzes-list.js?v=${Date.now()}`);
+  const { quizList } = await import("../data/quizzes-list.js");
   const { getSavedCustomQuizzes } = await import("./custom-quiz-handler.js");
 
   // Add timeout to prevent hanging
@@ -444,7 +444,7 @@ let scenariosCache = new Map();
  */
 export async function getQuizzesList() {
   try {
-    const module = await import(/* @vite-ignore */ `/Physics-and-EarthScience-Quiz/data/quizzes-list.js?v=${Date.now()}`);
+    const module = await import("../data/quizzes-list.js");
     return module.quizList || [];
   } catch (error) {
     console.error(`Failed to load quizzes-list.js:`, error);
@@ -473,7 +473,7 @@ export async function fetchAllQuizData() {
 
   let quizList;
   try {
-    const module = await import(/* @vite-ignore */ `/Physics-and-EarthScience-Quiz/data/quizzes-list.js?v=${Date.now()}`);
+    const module = await import("../data/quizzes-list.js");
     quizList = module.quizList;
     console.log(`[DEBUG] fetchAllQuizData: Loaded quizList with ${quizList?.length} items`);
   } catch (error) {

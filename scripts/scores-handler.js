@@ -833,10 +833,9 @@ export async function initializeScoreSearch() {
             });
 
             if (hasChanges) {
-                // 1. Generate JS override code
                 let existingOverrides = {};
                 try {
-                    const overrideModule = await import(/* @vite-ignore */ `/Physics-and-EarthScience-Quiz/data/score-overrides.js?v=${Date.now()}`);
+                    const overrideModule = await import("../data/score-overrides.js");
                     if (overrideModule.encryptedScoreOverrides && overrideModule.encryptedScoreOverrides.trim() !== "") {
                         existingOverrides = JSON.parse(atob(overrideModule.encryptedScoreOverrides));
                     }
