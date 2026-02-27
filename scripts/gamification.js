@@ -242,6 +242,26 @@ export class Gamification {
             }
         }
 
+        // --- NEW: Migrate legacy XP to Level ---
+        // Fixes the issue where existing users with high XP were stuck at Level 1
+        // because they didn't complete newly introduced quest requirements.
+        if (!this.state.legacyMigrated && this.state.xp >= 100) {
+            let migratedLevel = 1;
+            for (const threshold of XP_THRESHOLDS) {
+                if (this.state.xp >= threshold.xp) {
+                    migratedLevel = threshold.level;
+                } else {
+                    break;
+                }
+            }
+            if (migratedLevel > this.state.level) {
+                console.log(`Migrating legacy user from Level ${this.state.level} to Level ${migratedLevel} based on ${this.state.xp} XP.`);
+                this.state.level = migratedLevel;
+            }
+            this.state.legacyMigrated = true;
+            needsSave = true;
+        }
+
         // --- NEW: Perform global achievement and badge check ---
         // This catches any missed unlocks from bugs or sync issues
         const newAchievements = this.checkAchievements();
@@ -1114,6 +1134,8 @@ export class Gamification {
                 return this.getAstronomyTrackLevel().level >= quest.target;
             case 'earth_level':
                 return this.getEarthLevel().level >= quest.target;
+            case 'physics_level':
+                return this.getPhysicsLevel().level >= quest.target;
             default:
                 return false; // Unknown quest type
         }
