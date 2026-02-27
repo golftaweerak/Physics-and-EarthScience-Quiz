@@ -294,6 +294,11 @@ class AuthManagerInternal {
                 return await Promise.race([operationPromise, timeoutPromise]);
             } catch (error) {
                 lastError = error;
+                // Explicitly do NOT retry Quota Exceeded errors as it will just spam the API
+                if (error.code === 'resource-exhausted' || error.message?.includes('Quota') || error.message?.includes('exceeded')) {
+                    throw error;
+                }
+
                 // Retry on network errors or unavailable service
                 const isRetryable = error.code === 'unavailable' ||
                     error.message?.includes('offline') ||

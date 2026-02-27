@@ -805,7 +805,8 @@ function setupLeaderboardSystem(game) {
                         try { cachedData = JSON.parse(cachedDataStr); } catch (e) { }
                     }
 
-                    const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+                    // For normal fetches, use 5 minutes. For rate-limited fallbacks, wait 4 hours to avoid spam.
+                    const CACHE_TTL = cachedData?.isFailure ? 4 * 60 * 60 * 1000 : 5 * 60 * 1000;
                     let rank = null;
 
                     if (cachedData && cachedData.score === userScore && (Date.now() - cachedData.timestamp < CACHE_TTL)) {
@@ -848,7 +849,8 @@ function setupLeaderboardSystem(game) {
                         localStorage.setItem(CACHE_KEY, JSON.stringify({
                             rank: fallbackRank,
                             score: game.state[type] || 0, // Use current score for consistency
-                            timestamp: Date.now() // Set timestamp so we don't try again for 5 mins
+                            timestamp: Date.now(), // Set timestamp
+                            isFailure: true // Flag so we wait 4 hours instead of 5 mins
                         }));
 
                         userRankData = {
