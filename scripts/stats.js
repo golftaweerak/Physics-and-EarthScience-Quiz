@@ -1,5 +1,5 @@
 import { getSavedCustomQuizzes } from "./custom-quiz-handler.js";
-import { getCategoryDisplayName } from "./data-manager.js";
+import { getCategoryDisplayName, categoryDetails } from "./data-manager.js";
 import { ModalHandler } from "./modal-handler.js";
 import { subCategoryData } from "../data/sub-category-data.js";
 
@@ -258,9 +258,9 @@ function createStatCard(value, label, icon, theme) {
     const card = document.createElement("div");
     card.className = `flex items - center gap - 4 p - 4 bg - white dark: bg - gray - 800 / 50 rounded - xl shadow - sm border border - gray - 200 dark: border - gray - 700`;
     card.innerHTML = `
-    < div class="flex-shrink-0 h-12 w-12 rounded-lg flex items-center justify-center ${classes.bg} ${classes.text}" >
+    <div class="flex-shrink-0 h-12 w-12 rounded-lg flex items-center justify-center ${classes.bg} ${classes.text}">
         ${icon}
-        </div >
+        </div>
     <div>
         <p class="text-xl font-bold text-gray-800 dark:text-gray-200">${value}</p>
         <p class="text-sm text-gray-500 dark:text-gray-400">${label}</p>
@@ -288,9 +288,9 @@ function createInsightCard(title, value, score, icon, theme) {
     const card = document.createElement("div");
     card.className = `p - 5 bg - white dark: bg - gray - 800 / 50 rounded - 2xl shadow - sm border ${classes.border} flex items - start gap - 4 transition - all duration - 300 hover: shadow - lg hover: -translate - y - 1`;
     card.innerHTML = `
-    < div class="flex-shrink-0 h-14 w-14 rounded-2xl flex items-center justify-center ${classes.bg} ${classes.text}" >
+    <div class="flex-shrink-0 h-14 w-14 rounded-2xl flex items-center justify-center ${classes.bg} ${classes.text}">
         ${icon.replace('h-6 w-6', 'h-8 w-8')}
-        </div >
+        </div>
     <div class="flex-grow min-w-0">
         <div class="flex justify-between items-start gap-2 mb-1">
             <p class="text-xs font-black uppercase tracking-widest text-gray-500 dark:text-gray-400">${title}</p>
@@ -331,7 +331,7 @@ export function renderInDepthStats(allStats) {
     const averageTimePerQuestion = totalQuestionsAnswered > 0
         ? (totalTimeSpentSeconds / totalQuestionsAnswered)
         : 0;
-    const timeIcon = `< svg xmlns = "http://www.w3.org/2000/svg" class="h-6 w-6" viewBox = "0 0 20 20" fill = "currentColor" > <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" /></svg > `;
+    const timeIcon = `<svg xmlns = "http://www.w3.org/2000/svg" class="h-6 w-6" viewBox = "0 0 20 20" fill = "currentColor" > <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" /></svg>`;
 
     if (totalQuestionsAnswered > 0) {
         const avgTimeCard = createStatCard(
@@ -346,20 +346,20 @@ export function renderInDepthStats(allStats) {
     // --- 2. Calculate and Render Best/Worst Topics (New Design) ---
     const topicPerformance = calculateTopicPerformance(allStats);
     if (topicPerformance.best) {
-        const bestTopicIcon = `< svg xmlns = "http://www.w3.org/2000/svg" class="h-8 w-8" viewBox = "0 0 20 20" fill = "currentColor" > <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg > `;
+        const bestTopicIcon = `<svg xmlns = "http://www.w3.org/2000/svg" class="h-8 w-8" viewBox = "0 0 20 20" fill = "currentColor" > <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>`;
         const bestTopicCard = createInsightCard('หัวข้อที่ถนัดที่สุด', topicPerformance.best.name, topicPerformance.best.score.toFixed(0), bestTopicIcon, 'green');
         insightContainer.appendChild(bestTopicCard);
     }
     if (topicPerformance.worst) {
-        const worstTopicIcon = `< svg xmlns = "http://www.w3.org/2000/svg" class="h-8 w-8" viewBox = "0 0 20 20" fill = "currentColor" > <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" /></svg > `;
+        const worstTopicIcon = `<svg xmlns = "http://www.w3.org/2000/svg" class="h-8 w-8" viewBox = "0 0 20 20" fill = "currentColor" > <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" /></svg>`;
         const worstTopicCard = createInsightCard('หัวข้อที่ควรทบทวน', topicPerformance.worst.name, topicPerformance.worst.score.toFixed(0), worstTopicIcon, 'red');
         insightContainer.appendChild(worstTopicCard);
     }
 
     // --- 3. Calculate and Render Question Type Performance ---
     const typePerformance = calculateQuestionTypePerformance(allStats);
-    const theoryIcon = `< svg xmlns = "http://www.w3.org/2000/svg" class="h-6 w-6" viewBox = "0 0 20 20" fill = "currentColor" ><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" /><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd" /></svg > `;
-    const calcIcon = `< svg xmlns = "http://www.w3.org/2000/svg" class="h-6 w-6" viewBox = "0 0 20 20" fill = "currentColor" > <path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2H6zm1 2a1 1 0 000 2h6a1 1 0 100-2H7zM6 7a1 1 0 011-1h4a1 1 0 110 2H7a1 1 0 01-1-1zm0 3a1 1 0 100 2h4a1 1 0 100-2H6z" clip-rule="evenodd" /></svg > `;
+    const theoryIcon = `<svg xmlns = "http://www.w3.org/2000/svg" class="h-6 w-6" viewBox = "0 0 20 20" fill = "currentColor" ><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" /><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd" /></svg>`;
+    const calcIcon = `<svg xmlns = "http://www.w3.org/2000/svg" class="h-6 w-6" viewBox = "0 0 20 20" fill = "currentColor" > <path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2H6zm1 2a1 1 0 000 2h6a1 1 0 100-2H7zM6 7a1 1 0 011-1h4a1 1 0 110 2H7a1 1 0 01-1-1zm0 3a1 1 0 100 2h4a1 1 0 100-2H6z" clip-rule="evenodd" /></svg>`;
 
     if (typePerformance.theory.total > 0) {
         const theoryCard = createStatCard(`${typePerformance.theory.score.toFixed(0)}% `, `ความแม่นยำ(ทฤษฎี)`, theoryIcon, 'blue');
@@ -431,7 +431,7 @@ export function renderScoreTrendChart(trendData) {
     // If there's not enough data to show a meaningful trend, display a message instead.
     if (trendData.labels.length < 2) {
         chartContainer.innerHTML = `
-    < h2 class="text-xl font-bold font-kanit mb-4 text-center" > แนวโน้มคะแนน(Score Trend)</h2 >
+    <h2 class="text-xl font-bold font-kanit mb-4 text-center"> แนวโน้มคะแนน(Score Trend)</h2>
         <div class="flex items-center justify-center h-56">
             <p class="text-center text-gray-500 dark:text-gray-400">ทำแบบทดสอบให้เสร็จอย่างน้อย 2 ชุด<br>เพื่อดูแนวโน้มคะแนนของคุณที่นี่</p>
         </div>
@@ -514,7 +514,7 @@ export function renderScoreDistributionChart(distributionData) {
     const totalScores = distributionData.data.reduce((a, b) => a + b, 0);
     if (totalScores === 0) {
         chartContainer.innerHTML = `
-    < h2 class="text-xl font-bold font-kanit mb-4 text-center" > การกระจายของคะแนน(Score Distribution)</h2 >
+    <h2 class="text-xl font-bold font-kanit mb-4 text-center"> การกระจายของคะแนน(Score Distribution)</h2>
         <div class="flex items-center justify-center h-56">
             <p class="text-center text-gray-500 dark:text-gray-400">ทำแบบทดสอบให้เสร็จเพื่อดูการกระจายของคะแนน</p>
         </div>
@@ -780,7 +780,7 @@ export function renderSummaryCards(summary) {
             value: `${summary.completedQuizzes} <span class="text-sm font-normal text-gray-500 dark:text-gray-400">/ ${summary.totalQuizCount} ชุด</span>`,
             percentage: completedPercentage,
             color: "bg-blue-500",
-            icon: `< svg xmlns = "http://www.w3.org/2000/svg" class="h-6 w-6" fill = "none" viewBox = "0 0 24 24" stroke = "currentColor" stroke - width="2" > <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg > `,
+            icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`,
             iconBgColor: "bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-300",
             borderColor: "border-blue-200 dark:border-blue-800/50",
             shadowColor: "hover:shadow-blue-500/10"
@@ -790,7 +790,7 @@ export function renderSummaryCards(summary) {
             value: `${summary.inProgressQuizzes} <span class="text-sm font-normal text-gray-500 dark:text-gray-400">/ ${summary.totalQuizCount} ชุด</span>`,
             percentage: inProgressPercentage,
             color: "bg-indigo-500",
-            icon: `< svg xmlns = "http://www.w3.org/2000/svg" class="h-6 w-6" fill = "none" viewBox = "0 0 24 24" stroke = "currentColor" stroke - width="2" > <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.586a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg > `,
+            icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.586a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>`,
             iconBgColor: "bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-300",
             borderColor: "border-indigo-200 dark:border-indigo-800/50",
             shadowColor: "hover:shadow-indigo-500/10"
@@ -800,7 +800,7 @@ export function renderSummaryCards(summary) {
             value: `${summary.totalCorrect} <span class="font-normal text-gray-500 text-sm">/ ${summary.totalQuestions} ข้อ</span>`,
             percentage: correctPercentage,
             color: "bg-green-500",
-            icon: `< svg xmlns = "http://www.w3.org/2000/svg" class="h-6 w-6" fill = "none" viewBox = "0 0 24 24" stroke = "currentColor" stroke - width="2" > <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg > `,
+            icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>`,
             iconBgColor: "bg-green-100 dark:bg-green-900/50 text-green-600 dark:text-green-300",
             borderColor: "border-green-200 dark:border-green-800/50",
             shadowColor: "hover:shadow-green-500/10"
@@ -810,7 +810,7 @@ export function renderSummaryCards(summary) {
             value: `${summary.averageScore}% `,
             percentage: parseFloat(summary.averageScore),
             color: "bg-purple-500",
-            icon: `< svg xmlns = "http://www.w3.org/2000/svg" class="h-6 w-6" fill = "none" viewBox = "0 0 24 24" stroke = "currentColor" stroke - width="2" > <path stroke-linecap="round" stroke-linejoin="round" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" /></svg > `,
+            icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" /></svg>`,
             iconBgColor: "bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-400",
             borderColor: "border-purple-200 dark:border-purple-800/50",
             shadowColor: "hover:shadow-purple-500/10"
@@ -821,7 +821,7 @@ export function renderSummaryCards(summary) {
         .map((card) => {
             const percentage = card.percentage.toFixed(0);
             return `
-    < div class="bg-white dark:bg-gray-800/50 p-4 rounded-2xl shadow-sm border ${card.borderColor || 'border-gray-200 dark:border-gray-700/60'} flex flex-col gap-3 transition-all duration-300 hover:shadow-lg ${card.shadowColor || ''} hover:-translate-y-1 group" >
+    <div class="bg-white dark:bg-gray-800/50 p-4 rounded-2xl shadow-sm border ${card.borderColor || 'border-gray-200 dark:border-gray-700/60'} flex flex-col gap-3 transition-all duration-300 hover:shadow-lg ${card.shadowColor || ''} hover:-translate-y-1 group">
             <div class="flex items-center justify-between">
                 <span class="font-bold text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wider">${card.label}</span>
                 <div class="flex-shrink-0 h-10 w-10 rounded-xl flex items-center justify-center ${card.iconBgColor} transition-transform group-hover:scale-110 duration-300">
@@ -835,7 +835,7 @@ export function renderSummaryCards(summary) {
                     </div>
                 </div>
             </div>
-        </div >
+        </div>
     `;
         })
         .join("");
@@ -1024,7 +1024,7 @@ export function renderPerformanceAccordions(groupedData) {
     const container = document.getElementById("subject-performance-container");
     if (!container) return;
 
-    container.innerHTML = `< h2 class="text-2xl font-bold font-kanit text-gray-800 dark:text-gray-100 mb-4" > วิเคราะห์คะแนนรายบทเรียน</h2 > `;
+    container.innerHTML = `<h2 class="text-2xl font-bold font-kanit text-gray-800 dark:text-gray-100 mb-4">วิเคราะห์คะแนนรายบทเรียน</h2>`;
 
     const sortedSubjects = Object.keys(groupedData).sort((a, b) => {
         const orderA = categoryDetails[a]?.order || 99;
@@ -1033,7 +1033,7 @@ export function renderPerformanceAccordions(groupedData) {
     });
 
     if (sortedSubjects.length === 0 || Object.values(groupedData).every(subject => Object.keys(subject).length === 0)) {
-        container.innerHTML += `< p class="text-center text-gray-500 dark:text-gray-400" > ไม่มีข้อมูลคะแนน</p > `;
+        container.innerHTML += `<p class="text-center text-gray-500 dark:text-gray-400">ไม่มีข้อมูลคะแนน</p>`;
         return;
     }
 
@@ -1064,7 +1064,7 @@ export function renderPerformanceAccordions(groupedData) {
                 const percentage = data.averageScore;
                 const colorClass = percentage >= 75 ? 'bg-green-500' : percentage >= 50 ? 'bg-yellow-500' : 'bg-red-500';
                 return `
-    < div class="p-3 border-t border-gray-200 dark:border-gray-700/50" >
+    <div class="p-3 border-t border-gray-200 dark:border-gray-700/50">
                         <div class="flex justify-between items-center text-sm">
                             <span class="font-medium text-gray-700 dark:text-gray-200">${data.name.replace(/^ว\s[\d\.]+\sม\.[\d\/]+\s/, '').replace(/^\d+\.\s/, '').trim()}</span>
                             <span class="font-semibold text-gray-800 dark:text-gray-100">${data.correct}/${data.total} <span class="font-normal text-gray-500 dark:text-gray-400">(${percentage.toFixed(0)}%)</span></span>
@@ -1072,12 +1072,12 @@ export function renderPerformanceAccordions(groupedData) {
                         <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mt-1.5">
                             <div class="${colorClass} h-2 rounded-full" style="width: ${percentage}%"></div>
                         </div>
-                    </div >
+                    </div>
     `;
             }).join('');
 
             chapterAccordionsHTML += `
-    < details class="group bg-gray-50 dark:bg-gray-800/30 rounded-lg mx-4 mb-2 border border-gray-200 dark:border-gray-700/50 overflow-hidden" >
+    <details class="group bg-gray-50 dark:bg-gray-800/30 rounded-lg mx-4 mb-2 border border-gray-200 dark:border-gray-700/50 overflow-hidden">
                     <summary class="flex justify-between items-center cursor-pointer p-3 hover:bg-gray-100 dark:hover:bg-gray-700/40 transition-colors list-none">
                         <div class="flex-grow min-w-0">
                             <div class="flex justify-between items-baseline mb-1">
@@ -1093,7 +1093,7 @@ export function renderPerformanceAccordions(groupedData) {
                     <div class="border-t border-gray-200 dark:border-gray-700/50">
                         ${outcomeItemsHTML}
                     </div>
-                </details >
+                </details>
     `;
         });
 
@@ -1105,7 +1105,7 @@ export function renderPerformanceAccordions(groupedData) {
         const subjectColorClass = subjectAvg >= 75 ? 'bg-green-500' : subjectAvg >= 50 ? 'bg-yellow-500' : 'bg-red-500';
 
         subjectAccordion.innerHTML = `
-    < details class="group" >
+    <details class="group">
                 <summary class="flex justify-between items-center cursor-pointer p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors list-none">
                     <div class="flex items-center flex-grow min-w-0 gap-3 sm:gap-4">
                         <div class="flex-shrink-0 h-10 w-10 sm:h-12 sm:w-12 rounded-full flex items-center justify-center border-4 ${subjectDetails.color} bg-white p-1 sm:p-1.5 overflow-hidden">
@@ -1126,7 +1126,7 @@ export function renderPerformanceAccordions(groupedData) {
                 <div class="border-t border-gray-200 dark:border-gray-700 pt-2">
                     ${chapterAccordionsHTML}
                 </div>
-            </details >
+            </details>
     `;
         container.appendChild(subjectAccordion);
     });
@@ -1150,7 +1150,7 @@ export function renderDetailedList(stats) {
     });
 
     if (stats.length === 0) {
-        container.innerHTML = `< p class="text-center text-gray-500 dark:text-gray-400 md:col-span-2" > ไม่มีประวัติการทำแบบทดสอบ</p > `;
+        container.innerHTML = `<p class="text-center text-gray-500 dark:text-gray-400 md:col-span-2">ไม่มีประวัติการทำแบบทดสอบ</p>`;
         return;
     }
 

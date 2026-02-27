@@ -796,10 +796,34 @@ function setupLeaderboardSystem(game) {
             if (!userInTop10 && currentUserId) {
                 try {
                     const userScore = game.state[type] || 0;
-                    // Count users with higher score
-                    const rankQuery = query(usersRef, where(type, '>', userScore));
-                    const snapshot = await game.authManager.retryOperation(() => getCountFromServer(rankQuery));
-                    const rank = snapshot.data().count + 1;
+
+                    // -- BEGIN CACHE LOGIC --
+                    const cacheKey = `cached_rank_${type}_${currentUserId}`;
+                    const cachedDataStr = localStorage.getItem(cacheKey);
+                    let cachedData = null;
+                    if (cachedDataStr) {
+                        try { cachedData = JSON.parse(cachedDataStr); } catch (e) { }
+                    }
+
+                    const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+                    let rank = null;
+
+                    if (cachedData && cachedData.score === userScore && (Date.now() - cachedData.timestamp < CACHE_TTL)) {
+                        rank = cachedData.rank;
+                    } else {
+                        // Cache miss or expired, count users with higher score
+                        const rankQuery = query(usersRef, where(type, '>', userScore));
+                        const snapshot = await game.authManager.retryOperation(() => getCountFromServer(rankQuery));
+                        rank = snapshot.data().count + 1;
+
+                        // Save to cache
+                        localStorage.setItem(cacheKey, JSON.stringify({
+                            rank: rank,
+                            score: userScore,
+                            timestamp: Date.now()
+                        }));
+                    }
+                    // -- END CACHE LOGIC --
 
                     userRankData = {
                         rank: rank,
@@ -812,7 +836,34 @@ function setupLeaderboardSystem(game) {
                         level: game.state.level // เพิ่ม level เพื่อให้ renderRow ใช้งานได้
                     };
                 } catch (err) {
-                    console.warn("Failed to fetch user rank:", err);
+                    // Suppress loud quota errors to keep console clean, but provide a fallback rank
+                    if (err.code === 'resource-exhausted' || err?.message?.includes('Quota') || err?.message?.includes('exceeded')) {
+                        console.debug("Leaderboard rank fetch quota exceeded (falling back to cached/50+)");
+
+                        // Prevent spamming the network by caching the failure state
+                        const CACHE_KEY = `cached_rank_${type}_${currentUserId}`;
+                        const cachedDataStr = localStorage.getItem(CACHE_KEY);
+                        const fallbackRank = cachedDataStr ? JSON.parse(cachedDataStr).rank : '50+';
+
+                        localStorage.setItem(CACHE_KEY, JSON.stringify({
+                            rank: fallbackRank,
+                            score: game.state[type] || 0, // Use current score for consistency
+                            timestamp: Date.now() // Set timestamp so we don't try again for 5 mins
+                        }));
+
+                        userRankData = {
+                            rank: fallbackRank,
+                            id: currentUserId,
+                            displayName: game.state.displayName,
+                            avatar: game.state.avatar,
+                            selectedTitle: game.state.selectedTitle,
+                            score: game.state[type] || 0,
+                            isMe: true,
+                            level: game.state.level
+                        };
+                    } else {
+                        console.warn("Failed to fetch user rank:", err);
+                    }
                 }
             }
 
