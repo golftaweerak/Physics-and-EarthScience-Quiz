@@ -201,7 +201,7 @@ async function renderAnalysisTab(game) {
     if (!container) return;
 
     const customQuizzes = await getSavedCustomQuizzes();
-    const allStats = getAllStats(customQuizzes);
+    const allStats = await getAllStats(customQuizzes);
 
     if (allStats.length === 0) {
         container.innerHTML = `<div class="text-center py-20 text-gray-500">ไม่มีสถิติสำหรับวิเคราะห์</div>`;
@@ -232,7 +232,7 @@ async function renderAnalysisTab(game) {
 
 async function renderHistoryTab(game) {
     const customQuizzes = await getSavedCustomQuizzes();
-    const allStats = getAllStats(customQuizzes);
+    const allStats = await getAllStats(customQuizzes);
 
     // Filter history based on search
     const filteredHistory = allStats.filter(s =>

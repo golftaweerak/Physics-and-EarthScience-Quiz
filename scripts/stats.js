@@ -1296,7 +1296,7 @@ export async function buildStatsPage() {
     const timeoutPromise = new Promise(resolve => setTimeout(() => resolve([]), 3000)); // Increased timeout to 3s for safety
     const customQuizzes = await Promise.race([customQuizzesPromise, timeoutPromise]);
 
-    const allStats = getAllStats(customQuizzes); // Pass data, don't re-fetch
+    const allStats = await getAllStats(customQuizzes); // Pass data, don't re-fetch
     globalStats = allStats; // Store globally for filtering
     const totalAvailableQuizzes = quizList.length + customQuizzes.length;
 
