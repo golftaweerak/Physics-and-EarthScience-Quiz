@@ -1511,12 +1511,15 @@ export class Gamification {
             const bonusXP = stepsCompleted * bonusXPPerStep;
             this.state.accumulatedQuestionsForBonus %= bonusStep; // เก็บเศษไว้รอบหน้า
 
-            this.state.xp += bonusXP;
-            this.state.generalXP = (this.state.generalXP || 0) + bonusXP;
+            // Only add bonus if the quiz itself was worth XP
+            if (totalXP > 0) {
+                this.state.xp += bonusXP;
+                this.state.generalXP = (this.state.generalXP || 0) + bonusXP;
 
-            setTimeout(() => {
-                showToast('โบนัสความขยัน! 🔥', `สะสมครบ ${stepsCompleted * bonusStep} ข้อ รับเพิ่ม ${bonusXP} XP`, '🎁');
-            }, 1500);
+                setTimeout(() => {
+                    showToast('โบนัสความขยัน! 🔥', `สะสมครบ ${stepsCompleted * bonusStep} ข้อ รับเพิ่ม ${bonusXP} XP`, '🎁');
+                }, 1500);
+            }
         }
         // -----------------------------------------------------
 

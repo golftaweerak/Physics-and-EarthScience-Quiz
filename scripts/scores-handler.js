@@ -874,57 +874,6 @@ export async function initializeScoreSearch() {
      * @param {Array<object>} assignments - The list of assignment objects for a student.
      * @returns {object} An object with chapter names as keys and arrays of assignments as values.
      */
-    function groupAssignments(assignments) {
-        if (!assignments || assignments.length === 0) return {};
-
-        const groups = assignments.reduce((acc, assignment) => {
-            const name = assignment.name.toLowerCase();
-
-            // Exclude summary-like assignments from being displayed in the detailed view
-            if (SUMMARY_ASSIGNMENT_PATTERNS.some(pattern => pattern.test(name))) {
-                return acc;
-            }
-
-            let chapterKey;
-            if (name.includes('mid') || name.includes('ซ่อมแล้วกลางภาค')) {
-                chapterKey = 'กลางภาค';
-            } else if (name.includes('quiz')) {
-                chapterKey = 'แบบทดสอบท้ายบท (Quiz)';
-            } else {
-                const match = name.match(/(\d+)/); // Find the first number
-                chapterKey = match ? `บทที่ ${match[1]}` : 'อื่นๆ';
-            }
-
-            if (!acc[chapterKey]) {
-                acc[chapterKey] = [];
-            }
-            acc[chapterKey].push(assignment);
-            return acc;
-        }, {});
-
-        // Order the groups according to the predefined CHAPTER_ORDER
-        const orderedGroups = {};
-        CHAPTER_ORDER.forEach(key => {
-            if (groups[key]) {
-                orderedGroups[key] = groups[key];
-            }
-        });
-
-        // Add any other groups that weren't in the predefined order
-        Object.keys(groups).forEach(key => {
-            if (!orderedGroups[key]) {
-                orderedGroups[key] = groups[key];
-            }
-        });
-
-        // Specific request: Remove "บทที่ 5" (Term 2 only) and "แบบทดสอบท้ายบท (Quiz)" (always, as it's now in shortcuts)
-        if (getCurrentSemester() === '2/2568') {
-            delete orderedGroups['บทที่ 5'];
-        }
-        delete orderedGroups['แบบทดสอบท้ายบท (Quiz)'];
-
-        return orderedGroups;
-    }
 }
 
 /**
@@ -995,4 +944,62 @@ function createInteractiveAssignmentModal(modalIdentifier, title, assignments) {
 
     filterAndRender(); // Initial render
     new ModalHandler(modalId).open();
+}
+
+
+/**
+ * Groups and orders assignments by chapter for display.
+ * @param {Array<object>} assignments - The list of assignment objects for a student.
+ * @returns {object} An object with chapter names as keys and arrays of assignments as values.
+ */
+export function groupAssignments(assignments) {
+    if (!assignments || assignments.length === 0) return {};
+
+    const groups = assignments.reduce((acc, assignment) => {
+        const name = assignment.name.toLowerCase();
+
+        // Exclude summary-like assignments from being displayed in the detailed view
+        if (SUMMARY_ASSIGNMENT_PATTERNS.some(pattern => pattern.test(name))) {
+            return acc;
+        }
+
+        let chapterKey;
+        if (name.includes('mid') || name.includes('ซ่อมแล้วกลางภาค')) {
+            chapterKey = 'กลางภาค';
+        } else if (name.includes('quiz')) {
+            chapterKey = 'แบบทดสอบท้ายบท (Quiz)';
+        } else {
+            const match = name.match(/(\d+)/); // Find the first number
+            chapterKey = match ? `บทที่ ${match[1]}` : 'อื่นๆ';
+        }
+
+        if (!acc[chapterKey]) {
+            acc[chapterKey] = [];
+        }
+        acc[chapterKey].push(assignment);
+        return acc;
+    }, {});
+
+    // Order the groups according to the predefined CHAPTER_ORDER
+    const orderedGroups = {};
+    CHAPTER_ORDER.forEach(key => {
+        if (groups[key]) {
+            orderedGroups[key] = groups[key];
+        }
+    });
+
+    // Add any other groups that weren't in the predefined order
+    Object.keys(groups).forEach(key => {
+        if (!orderedGroups[key]) {
+            orderedGroups[key] = groups[key];
+        }
+    });
+
+    // Specific request: Remove "บทที่ 5" (Term 2 only) and "แบบทดสอบท้ายบท (Quiz)" (always, as it's now in shortcuts)
+    if (getCurrentSemester() === '2/2568') {
+        delete orderedGroups['บทที่ 5'];
+    }
+    delete orderedGroups['แบบทดสอบท้ายบท (Quiz)'];
+
+    return orderedGroups;
 }

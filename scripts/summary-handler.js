@@ -42,7 +42,7 @@ const GRADE_THEME = {
  * @param {Array<object>} scores - The array of all student score objects.
  * @returns {object} An object containing various summary statistics.
  */
-function calculateOverallSummary(scores) {
+export function calculateOverallSummary(scores) {
     if (!scores || scores.length === 0) {
         return {
             totalStudents: 0,
@@ -1313,7 +1313,7 @@ function initializeStudentSearch(studentScores) {
  * @param {string} fullName The full name (e.g., "นายนันทิวรรธน์ ปิ่นทอง").
  * @returns {string} The extracted first name.
  */
-function getFirstName(fullName) {
+export function getFirstName(fullName) {
     if (!fullName) return '';
     const titles = ['นาย', 'นางสาว', 'เด็กชาย', 'เด็กหญิง'];
     let nameWithoutTitle = fullName.trim();
