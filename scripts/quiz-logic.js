@@ -280,15 +280,13 @@ export function init(quizData, storageKey, quizTitle, customTime, action, isChal
     setupMultiplayerUI();
   }
 
-  checkForSavedQuiz(action); // This will check localStorage and either show the start screen or a resume prompt.
-  setupPowerUpUI(); // Setup the power-up bar
-  showQuestionCountWarning();
-
   // NEW: Appy Dynamic Theme
   applyLocalTheme();
+  setupPowerUpUI(); // Setup the power-up bar
+  showQuestionCountWarning();
+  updateHearts(); // Initial hearts rendering (for Survival)
 
-  // NEW: Initial hearts rendering (for Survival)
-  updateHearts();
+  checkForSavedQuiz(action); // This will check localStorage and either show the start screen or a resume prompt.
 }
 
 /**
@@ -3367,12 +3365,15 @@ function bindEventListeners() {
   if (elements.skipBtn) {
     elements.skipBtn.addEventListener("click", skipQuestion);
   }
-  elements.nextBtn.addEventListener("click", handleNextButtonClick);
-  if (elements.nextBtn) elements.nextBtn.addEventListener("click", handleNextButtonClick);
+  if (elements.nextBtn) {
+    elements.nextBtn.addEventListener("click", handleNextButtonClick);
+  }
 
   // Keep other listeners as they are.
   // Keep other listeners as they are.
-  if (elements.startBtn) elements.startBtn.addEventListener("click", startQuiz);
+  if (elements.startBtn) {
+    elements.startBtn.addEventListener("click", startQuiz);
+  }
   if (elements.prevBtn) elements.prevBtn.addEventListener("click", showPreviousQuestion);
   if (elements.restartBtn) elements.restartBtn.addEventListener("click", startQuiz);
   if (elements.reviewBtn) elements.reviewBtn.addEventListener("click", showReview);

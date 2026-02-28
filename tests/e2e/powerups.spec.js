@@ -66,7 +66,7 @@ test.describe('Quiz Power-ups', () => {
 
     // Check if start screen title matches
     await expect(page.locator('#start-screen-title')).toHaveText('Powerup Test Quiz');
-    
+
     // Wait for the app to finish loading
     await page.waitForSelector('body[data-app-initialized="true"]', { timeout: 15000 });
 
@@ -76,6 +76,7 @@ test.describe('Quiz Power-ups', () => {
 
     // Wait for the bar to be present in DOM (animation handling)
     await page.locator('#power-up-bar').waitFor({ state: 'attached' });
+
     // Force visibility if animation is slow in test env
     await page.evaluate(() => {
       const el = document.getElementById('power-up-bar');
@@ -112,9 +113,9 @@ test.describe('Quiz Power-ups', () => {
     });
 
     await expect(page.locator('#start-screen-title')).toHaveText('Powerup Test Quiz');
-    
+
     await page.waitForSelector('body[data-app-initialized="true"]', { timeout: 15000 });
-    
+
     // Custom quizzes auto-start, so we don't need to click start-btn
     // Just verify that the quiz screen is visible
     await expect(page.locator('#quiz-screen')).toBeVisible();

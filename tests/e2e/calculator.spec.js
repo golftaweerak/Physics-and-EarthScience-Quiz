@@ -1,6 +1,10 @@
 import { test, expect } from '@playwright/test';
 
 test('verify scientific calculator functionality', async ({ page }) => {
+  // Listen for browser logs to help with debugging
+  page.on('console', msg => console.log(`[BROWSER]: ${msg.text()}`));
+  page.on('pageerror', exception => console.log(`[BROWSER ERR]: ${exception}`));
+
   test.setTimeout(60000); // Extended for additional feature tests
   // Navigate to quiz page (using a valid quiz ID)
   await page.goto('quiz/index.html?id=phy_m4/phy_m4_ch6-1');
@@ -19,7 +23,7 @@ test('verify scientific calculator functionality', async ({ page }) => {
   await expect(toggleBtn).toBeVisible();
   await toggleBtn.click();
   await expect(modal).toBeVisible();
-  
+
   // Wait for MathJS and MathLive to initialize
   await page.waitForFunction(() => window.math !== undefined);
   await page.waitForFunction(() => customElements.get('math-field') !== undefined);
@@ -27,8 +31,8 @@ test('verify scientific calculator functionality', async ({ page }) => {
 
   // Helper to click calculator buttons
   const clickBtn = async (val) => {
-    // Support both data-val and data-action
-    const btn = page.locator(`.c-btn[data-val="${val}"], .c-btn[data-action="${val}"]`);
+    // Support data-val, data-action, and nav classes
+    const btn = page.locator(`.c-btn[data-val="${val}"], .c-btn[data-action="${val}"], .nav[data-val="${val}"]`);
     await btn.first().click({ force: true });
   };
 
@@ -49,19 +53,28 @@ test('verify scientific calculator functionality', async ({ page }) => {
   // 4. Scientific - Square Root: sqrt(9) = 3
   await clickBtn('sqrt'); // Updated selector value
   await clickBtn('9');
-  await clickBtn(')');
+  await clickBtn('RIGHT'); // Natural Display uses right arrow to exit root
+
+  console.log('Clicking equals...');
   await equalsBtn.click();
+  console.log('Equals clicked, waiting for result...');
+
   await expect(resultDisplay).toContainText('3'); // Relaxed check for KaTeX
 
   // 4b. Fractions & S-D Toggle: 1/2 + 1/4 = 0.75 or 3/4
   await clickBtn('AC');
-  await clickBtn('1');
-  await clickBtn('frac'); // Updated selector value
-  await clickBtn('2');
+  await clickBtn('frac'); // Press fraction first
+  await clickBtn('1');    // Numerator
+  await clickBtn('DOWN'); // Move to denominator
+  await clickBtn('2');    // Denominator
+  await clickBtn('RIGHT'); // Exit fraction
   await clickBtn('+');
-  await clickBtn('1');
   await clickBtn('frac');
+  await clickBtn('1');
+  await clickBtn('DOWN');
   await clickBtn('4');
+  await clickBtn('RIGHT');
+
   await equalsBtn.click();
 
   // Toggle to fraction mode and check (math.js might default to decimal or fraction)
@@ -84,7 +97,7 @@ test('verify scientific calculator functionality', async ({ page }) => {
   await clickBtn('sin');
   await clickBtn('3');
   await clickBtn('0');
-  await clickBtn(')');
+  await clickBtn('RIGHT');
   await equalsBtn.click();
   const val = await resultDisplay.innerText();
   // KaTeX might use U+2212 for minus, and innerText might have newlines
@@ -102,7 +115,7 @@ test('verify scientific calculator functionality', async ({ page }) => {
   // PI is Shift + Exp
   await clickBtn('shift'); // Replaced shift logic
   await clickBtn('exp');
-  await clickBtn(')');
+  await clickBtn('RIGHT');
   await equalsBtn.click();
   const radVal = await resultDisplay.innerText(); // Corrected reading
   expect(parseFloat(radVal)).toBeCloseTo(0, 5);
@@ -143,7 +156,7 @@ test('verify scientific calculator functionality', async ({ page }) => {
   await clickBtn('shift');
   await clickBtn(')'); // ,
   await clickBtn('3');
-  await clickBtn(')');
+  await clickBtn('RIGHT');
   await equalsBtn.click();
   // Numerical diff might be 6.0000...
   const diffVal = await resultDisplay.innerText();

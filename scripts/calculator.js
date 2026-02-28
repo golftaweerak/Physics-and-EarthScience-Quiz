@@ -3,6 +3,12 @@
  * Features: Natural Display, SOLVE, Calculus (Diff/Int), STO/RCL, ENG
  */
 
+import * as math from 'mathjs';
+// Expose for compatibility and tests
+if (typeof window !== 'undefined') {
+  window.math = math;
+}
+
 export class ScientificCalculator {
   constructor() {
     this.container = null;
@@ -111,7 +117,7 @@ export class ScientificCalculator {
                 <button class="c-btn on" data-action="on">ON</button>
 
                 <!-- Row 2 -->
-                <button class="c-btn sm" data-action="calc" data-shift="SOLVE" data-alpha="=">CALC</button>
+                <button class="c-btn sm" data-val="int" data-shift="diff" data-label="∫">∫</button>
                 <button class="c-btn sm" data-val="frac"><span class="flex flex-col items-center leading-none text-[10px]"><span>■</span><span class="border-t border-gray-400 w-3 my-[1px]"></span><span>□</span></span></button>
                 <button class="c-btn sm" data-val="sqrt">√■</button>
                 <button class="c-btn sm" data-val="sqr" data-label="x²" data-shift="√"><i class="font-serif italic">x</i>²</button>
@@ -599,18 +605,25 @@ export class ScientificCalculator {
 
       // Otherwise move cursor up/down in expression
       if (this.mf && typeof this.mf.executeCommand === 'function') {
+        this.mf.focus();
         this.mf.executeCommand(val === 'UP' ? 'moveUp' : 'moveDown');
       }
       return;
     }
 
     if (val === 'LEFT') {
-      if (this.mf && typeof this.mf.executeCommand === 'function') this.mf.executeCommand('moveToPreviousChar');
+      if (this.mf && typeof this.mf.executeCommand === 'function') {
+        this.mf.focus();
+        this.mf.executeCommand('moveToPreviousChar');
+      }
       return;
     }
 
     if (val === 'RIGHT') {
-      if (this.mf && typeof this.mf.executeCommand === 'function') this.mf.executeCommand('moveToNextChar');
+      if (this.mf && typeof this.mf.executeCommand === 'function') {
+        this.mf.focus();
+        this.mf.executeCommand('moveToNextChar');
+      }
       return;
     }
 
@@ -686,6 +699,7 @@ export class ScientificCalculator {
         break;
       case 'DEL':
         if (this.mf) {
+          this.mf.focus();
           if (typeof this.mf.executeCommand === 'function') {
             this.mf.executeCommand('deleteBackward');
           } else {
@@ -735,10 +749,11 @@ export class ScientificCalculator {
         this.insert(this.isShift ? '\\arctan\\left(#0\\right)' : '\\tan\\left(#0\\right)');
         break;
       case 'int':
-        if (this.isShift) this.insert('\\frac{d}{dx}\\left(#0\\right)'); // Basic derivative notation
-        else {
-          this.insert('\\int_{#0}^{#0} #0 \\, dx');
-        }
+        if (this.isShift) this.insert('\\frac{d}{dx}\\left(#0\\right)');
+        else this.insert('\\int_{#0}^{#0} #0 \\, dx');
+        break;
+      case 'calc':
+        this.solve();
         break;
       case 'frac':
         this.insert('\\frac{#0}{#0}');
@@ -845,20 +860,28 @@ export class ScientificCalculator {
     expr = expr.replace(/\\text\{Ans\}/g, this.currentResult || 0);
 
     // Integrals: \int_{A}^{B} E dx
-    expr = expr.replace(/\\int_\{([^{}]+)\}\^\{([^{}]+)\}(.+?)dx/g, 'integral("$3", $1, $2)');
+    expr = expr.replace(/\\int_\{([^{}]+)\}\^\{([^{}]+)\}(.+?)dx/g, (match, a, b, body) => {
+      const cleanBody = body.replace(/\\,/g, '').replace(/\\left/g, '').replace(/\\right/g, '').trim();
+      return `integral("${cleanBody}", ${a}, ${b})`;
+    });
 
-    // Derivative: \frac{d}{dx}(E) -> \frac{d}{dx}E
-    expr = expr.replace(/\\frac\{d\}\{dx\}\(([^)]+)\)/g, 'derivative("$1", x)');
+    // Derivative: \frac{d}{dx}(E) -> derivative(E, x) or \frac{d}{dx}(E, a) -> derivative(E, a)
+    expr = expr.replace(/\\frac\{d\}\{dx\}\\?\((.+?)\)/g, (match, content) => {
+      if (content.includes(',')) {
+        const parts = content.split(',');
+        return `derivative("${parts[0].trim()}", ${parts[1].trim()})`;
+      }
+      return `derivative("${content.trim()}", x)`;
+    });
 
     // Fractions: \frac{A}{B} -> (A)/(B)
     for (let i = 0; i < 5; i++) {
-      expr = expr.replace(/\\frac{([^{}]+|{[^{}]+})*}{([^{}]+|{[^{}]+})*}/g, (match, num, den) => {
-        return `(${num})/(${den})`;
-      });
-      expr = expr.replace(/\\frac{([^{}]*)}{([^{}]*)}/g, '($1)/($2)');
+      // Improved regex to handle basic nested fractions or groups
+      // This handles one level of nesting in both numerator and denominator
+      expr = expr.replace(/\\frac\{([^{}]*|{[^{}]*})*\}\{([^{}]*|{[^{}]*})*\}/g, '($1)/($2)');
       expr = expr.replace(/\\frac([0-9a-zA-Z])([0-9a-zA-Z])/g, '($1)/($2)'); // \frac56
-      expr = expr.replace(/\\frac{([^{}]+)}([0-9a-zA-Z])/g, '($1)/($2)'); // \frac{12}5
-      expr = expr.replace(/\\frac([0-9a-zA-Z]){([^{}]+)}/g, '($1)/($2)'); // \frac5{12}
+      expr = expr.replace(/\\frac\{([^{}]*)\}([0-9a-zA-Z])/g, '($1)/($2)'); // \frac{12}5
+      expr = expr.replace(/\\frac([0-9a-zA-Z])\{([^{}]*)\}/g, '($1)/($2)'); // \frac5{12}
     }
 
     // Roots
@@ -935,6 +958,7 @@ export class ScientificCalculator {
   }
 
   calculate() {
+    let expr = '';
     try {
       const latexExpr = this.mf ? (this.mf.value || this.mf.innerText || '') : this.rawExpression;
 
@@ -945,7 +969,7 @@ export class ScientificCalculator {
         return;
       }
 
-      let expr = this.prepareExpression(latexExpr);
+      expr = this.prepareExpression(latexExpr);
 
       // Variable scope
       const scope = {
@@ -953,7 +977,6 @@ export class ScientificCalculator {
         pi: Math.PI,
         e: Math.E,
         sin: (x) => {
-          // Check if x is a number? mathjs might pass BigNumber or Complex if configured, but here standard
           if (this.isDegreeMode) return Math.sin(x * Math.PI / 180);
           return Math.sin(x);
         },
@@ -982,7 +1005,6 @@ export class ScientificCalculator {
         }
       };
 
-      // Add custom functions to scope
       scope.derivative = (fnIdx, xVal) => {
         return math.derivative(fnIdx, 'x').evaluate({ ...this.variables, x: xVal });
       };
@@ -998,48 +1020,40 @@ export class ScientificCalculator {
       };
 
       let res = math.evaluate(expr, scope);
-      console.log("[DEBUG CALC]", { latex: latexExpr, expr, res });
 
-      // Handle incomplete expressions returning functions
       if (typeof res === 'function') {
         throw new Error("Result is a function (incomplete expression)");
       }
 
-      // Handle weird results (e.g. Complex numbers or units if they leak)
       if (res && res.toJSON) res = res.toNumber();
-      if (res && res.re) res = res.re; // Complex
+      if (res && res.re) res = res.re;
 
       if (isNaN(res) || res === undefined) {
         throw new Error("Result is NaN");
       }
 
-      // Snap to zero if very small (e.g. sin(pi))
       if (Math.abs(res) < 1e-12) {
         this.currentResult = 0;
       } else {
         this.currentResult = res;
       }
 
-      // Add to History
       if (latexExpr.trim() !== '') {
         const entry = { expr: latexExpr, result: this.currentResult };
-        // Avoid duplicates at top
         if (this.history.length === 0 || this.history[this.history.length - 1].expr !== entry.expr) {
           this.history.push(entry);
           if (this.history.length > 50) this.history.shift();
         }
       }
-      this.historyIndex = -1; // Reset pointer to "new"
+      this.historyIndex = -1;
 
       this.renderResult();
     } catch (e) {
       console.error('Calculation Error:', e);
       this.currentResult = null;
-      this.resultArea.textContent = 'Syntax ERROR'; // Standard Casio error feedback
+      this.resultArea.textContent = 'Syntax ERROR';
     }
   }
-
-
 
   renderResult() {
     if (this.currentResult === null) { this.resultArea.innerHTML = ''; return; }
@@ -1080,17 +1094,24 @@ export class ScientificCalculator {
     catch (e) { this.resultArea.textContent = displayVal; }
   }
 
-  toggle() { this.isOpen ? this.close() : this.open(); }
+  toggle() {
+    if (!this.container) return;
+    this.isOpen ? this.close() : this.open();
+  }
   open() {
+    if (!this.container) return;
     this.isOpen = true;
     this.container.classList.remove('hidden');
     void this.container.offsetWidth;
     this.container.classList.add('visible');
   }
   close() {
+    if (!this.container) return;
     this.isOpen = false;
     this.container.classList.remove('visible');
-    setTimeout(() => this.container.classList.add('hidden'), 300);
+    setTimeout(() => {
+      if (this.container) this.container.classList.add('hidden');
+    }, 300);
   }
 
   startDragging(e) {

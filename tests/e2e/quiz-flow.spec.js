@@ -2,9 +2,10 @@ import { test, expect } from '@playwright/test';
 
 test('standard quiz flow', async ({ page }) => {
   page.on('console', msg => {
-    if (msg.type() === 'error' || msg.text().includes('[DEBUG]')) {
-      console.log(`[BROWSER] ${msg.type().toUpperCase()}: ${msg.text()}`);
-    }
+    console.log(`[BROWSER] ${msg.type().toUpperCase()}: ${msg.text()}`);
+  });
+  page.on('pageerror', err => {
+    console.log(`[BROWSER ERROR] ${err.message}`);
   });
   // 1. Go to a specific quiz directly (skip homepage navigation to isolate quiz logic)
   // Using a known ID from quizzes-list.js, e.g., 'phy_m4_ch2-1' (Nature of Physics 2 - Theory)
@@ -24,8 +25,9 @@ test('standard quiz flow', async ({ page }) => {
     `
   });
 
-  // Wait for app to be fully initialized
+  // Wait for app to be fully initialized and spinner to be removed
   await page.waitForSelector('body[data-app-initialized="true"]', { timeout: 15000 });
+  await page.waitForSelector('#quiz-loading-spinner', { state: 'detached', timeout: 10000 });
 
   // App loaded via modules, so 'networkidle' might trigger too early or be flaky.
   // Instead, wait for the app-loader to inject the start screen.
@@ -37,11 +39,11 @@ test('standard quiz flow', async ({ page }) => {
 
   // 3. Start Quiz
   const startBtn = page.locator('#start-btn');
-  await startBtn.click({ force: true });
+  await startBtn.click();
 
   // 4. Question Screen
   const quizScreen = page.locator('#quiz-screen');
-  await expect(quizScreen).toBeVisible();
+  await expect(quizScreen).toBeVisible({ timeout: 10000 });
 
   // Verify Question Text
   await expect(page.locator('#question')).toBeVisible();
