@@ -1,4 +1,4 @@
-export const lastUpdated = "2026-02-28T03:53:40.151Z";
+export const lastUpdated = "2026-02-28T10:37:02.484Z";
 export const studentScores = [
   {
     "assignments": [
@@ -180,6 +180,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -375,6 +423,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "1",
@@ -568,6 +664,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -763,6 +907,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": "4"
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": "3.5"
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": "3"
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": "2.5"
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": "2"
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": "1.5"
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": "1"
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "1",
@@ -808,23 +1000,23 @@ export const studentScores = [
       },
       {
         "name": "บท 9 [5]",
-        "score": "4"
+        "score": "5"
       },
       {
         "name": "บท 10 [10]",
-        "score": "9"
+        "score": "10"
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "23"
+        "score": "25"
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "61"
+        "score": "63"
       },
       {
         "name": "รวม [100]",
-        "score": "79"
+        "score": "81"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -948,15 +1140,63 @@ export const studentScores = [
       },
       {
         "name": "Quiz 9",
-        "score": "7"
+        "score": "8"
       },
       {
         "name": "Quiz 10",
-        "score": "7"
+        "score": "8"
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": "1"
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": "21"
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": "6"
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": "3"
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": "30"
       }
     ],
     "room": "1",
@@ -965,7 +1205,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 20,
     "กลางภาคข้อเขียน": 5,
     "ปลายภาค": 18,
-    "เกรด": "3.5",
+    "เกรด": "4",
     "ซ่อมกลางภาค": "ไม่ต้องซ่อม",
     "id": "42069",
     "name": "นายเพชรพิทักษ์ สุขประเสริฐ"
@@ -1151,6 +1391,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": "2"
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": "27"
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": "7"
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": "2"
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": "36"
       }
     ],
     "room": "1",
@@ -1345,6 +1633,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": "3"
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": "19"
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": "5"
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": "7"
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": "1"
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": "1"
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": "3"
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": "36"
       }
     ],
     "room": "1",
@@ -1539,6 +1875,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": "4"
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": "19"
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": "7"
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": "10"
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": "36"
       }
     ],
     "room": "1",
@@ -1733,6 +2117,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": "5"
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": "2"
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": "8"
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": "11"
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": "4"
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": "7"
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": "1"
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": "2"
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": "5"
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": "40"
       }
     ],
     "room": "1",
@@ -1927,6 +2359,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": "6"
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": "5"
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": "12"
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": "10"
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": "5"
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": "4"
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": "1"
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": "3"
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": "40"
       }
     ],
     "room": "1",
@@ -2121,6 +2601,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": "7"
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": "4"
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": "14"
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": "14"
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": "5"
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": "1"
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": "2"
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": "40"
       }
     ],
     "room": "1",
@@ -2315,6 +2843,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": "8"
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": "14"
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": "11"
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": "11"
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": "2"
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": "1"
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": "1"
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": "40"
       }
     ],
     "room": "1",
@@ -2509,6 +3085,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": "9"
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": "1"
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": "39"
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": "40"
       }
     ],
     "room": "1",
@@ -2703,6 +3327,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": "10"
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": "8"
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": "14"
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": "13"
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": "2"
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": "2"
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": "39"
       }
     ],
     "room": "1",
@@ -2897,6 +3569,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": "11"
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": "36"
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": "36"
       }
     ],
     "room": "1",
@@ -3091,6 +3811,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": "12"
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": "38"
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": "38"
       }
     ],
     "room": "1",
@@ -3285,6 +4053,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": "13"
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": "40"
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": "40"
       }
     ],
     "room": "1",
@@ -3479,6 +4295,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": "14"
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": "1"
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": "2"
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": "38"
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": "41"
       }
     ],
     "room": "1",
@@ -3673,6 +4537,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": "รวม"
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": "119"
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": "84"
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": "79"
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": "22"
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": "12"
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": "6"
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": "8"
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": "202"
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": "532"
       }
     ],
     "room": "1",
@@ -3866,6 +4778,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -4061,6 +5021,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": "0.5300751879699248"
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "1",
@@ -4254,6 +5262,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": "0.5714285714285714"
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -4449,6 +5505,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "1",
@@ -4642,6 +5746,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": "4"
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": "3.5"
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": "3"
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": "2.5"
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": "2"
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": "1.5"
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": "1"
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -4837,6 +5989,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": "1"
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": "0.7"
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": "0.2"
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": "0.1"
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": "0.9999999999999999"
       }
     ],
     "room": "1",
@@ -5031,6 +6231,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": "2"
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": "0.75"
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": "0.19444444444444445"
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": "0.05555555555555555"
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": "1"
       }
     ],
     "room": "1",
@@ -5225,6 +6473,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": "3"
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": "0.5277777777777778"
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": "0.1388888888888889"
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": "0.19444444444444445"
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": "0.027777777777777776"
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": "0.027777777777777776"
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": "0.08333333333333333"
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": "1"
       }
     ],
     "room": "1",
@@ -5419,6 +6715,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": "4"
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": "0.5277777777777778"
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": "0.19444444444444445"
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": "0.2777777777777778"
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": "1"
       }
     ],
     "room": "1",
@@ -5613,6 +6957,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": "5"
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": "0.05"
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": "0.2"
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": "0.275"
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": "0.1"
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": "0.175"
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": "0.025"
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": "0.05"
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": "0.125"
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": "1"
       }
     ],
     "room": "1",
@@ -5807,6 +7199,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": "6"
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": "0.125"
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": "0.3"
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": "0.25"
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": "0.125"
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": "0.1"
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": "0.025"
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": "0.075"
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": "1"
       }
     ],
     "room": "1",
@@ -6001,6 +7441,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": "7"
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": "0.1"
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": "0.35"
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": "0.35"
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": "0.125"
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": "0.025"
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": "0.05"
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": "1"
       }
     ],
     "room": "2",
@@ -6195,6 +7683,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": "8"
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": "0.35"
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": "0.275"
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": "0.275"
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": "0.05"
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": "0.025"
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": "0.025"
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": "1"
       }
     ],
     "room": "2",
@@ -6389,6 +7925,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": "9"
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": "0.025"
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": "0.975"
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": "1"
       }
     ],
     "room": "2",
@@ -6583,6 +8167,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": "10"
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": "0.20512820512820512"
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": "0.358974358974359"
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": "0.3333333333333333"
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": "0.05128205128205128"
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": "0.05128205128205128"
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": "1"
       }
     ],
     "room": "2",
@@ -6777,6 +8409,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": "11"
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": "1"
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": "1"
       }
     ],
     "room": "2",
@@ -6971,6 +8651,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": "12"
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": "1"
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": "1"
       }
     ],
     "room": "2",
@@ -7165,6 +8893,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": "13"
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": "1"
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": "1"
       }
     ],
     "room": "2",
@@ -7359,6 +9135,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": "14"
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": "0.024390243902439025"
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": "0"
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": "0.04878048780487805"
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": "0.926829268292683"
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": "1"
       }
     ],
     "room": "2",
@@ -7553,6 +9377,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": "รวม"
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": "0.2236842105263158"
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": "0.15789473684210525"
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": "0.14849624060150377"
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": "0.041353383458646614"
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": "0.022556390977443608"
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": "0.011278195488721804"
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": "0.015037593984962405"
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": "0.37969924812030076"
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": "0.9999999999999999"
       }
     ],
     "room": "2",
@@ -7746,6 +9618,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -7941,6 +9861,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "2",
@@ -8134,6 +10102,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -8329,6 +10345,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "2",
@@ -8522,6 +10586,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -8717,6 +10829,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "2",
@@ -8910,6 +11070,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -9105,6 +11313,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "2",
@@ -9298,6 +11554,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -9493,6 +11797,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "2",
@@ -9522,7 +11874,7 @@ export const studentScores = [
       },
       {
         "name": "บท 7 [10]",
-        "score": "9"
+        "score": "10"
       },
       {
         "name": "กิจกรรม [5]",
@@ -9530,7 +11882,7 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "24"
+        "score": "25"
       },
       {
         "name": "บท 8 [10]",
@@ -9550,11 +11902,11 @@ export const studentScores = [
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "58"
+        "score": "59"
       },
       {
         "name": "รวม [100]",
-        "score": "73"
+        "score": "74"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -9618,11 +11970,11 @@ export const studentScores = [
       },
       {
         "name": "Quiz 6",
-        "score": "8"
+        "score": "9"
       },
       {
         "name": "Quiz 7",
-        "score": "6"
+        "score": "9"
       },
       {
         "name": "MID [20]2",
@@ -9687,6 +12039,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "2",
@@ -9880,6 +12280,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -10075,6 +12523,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "2",
@@ -10268,6 +12764,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -10463,6 +13007,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "2",
@@ -10657,6 +13249,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "2",
@@ -10850,6 +13490,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -11045,6 +13733,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "2",
@@ -11238,6 +13974,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -11433,6 +14217,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "2",
@@ -11626,6 +14458,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -11821,6 +14701,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "2",
@@ -12014,6 +14942,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -12209,6 +15185,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "2",
@@ -12402,6 +15426,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -12597,6 +15669,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "2",
@@ -12790,6 +15910,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -12985,6 +16153,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "3",
@@ -13178,6 +16394,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -13373,6 +16637,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "3",
@@ -13566,6 +16878,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -13761,6 +17121,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "3",
@@ -13954,6 +17362,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -14149,6 +17605,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "3",
@@ -14342,6 +17846,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -14537,6 +18089,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "3",
@@ -14730,6 +18330,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -14925,6 +18573,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "3",
@@ -15118,6 +18814,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -15313,6 +19057,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "3",
@@ -15506,6 +19298,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -15701,6 +19541,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "3",
@@ -15746,7 +19634,7 @@ export const studentScores = [
       },
       {
         "name": "บท 9 [5]",
-        "score": "3"
+        "score": "5"
       },
       {
         "name": "บท 10 [10]",
@@ -15754,15 +19642,15 @@ export const studentScores = [
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "22"
+        "score": "24"
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "58"
+        "score": "60"
       },
       {
         "name": "รวม [100]",
-        "score": "80"
+        "score": "82"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -15886,7 +19774,7 @@ export const studentScores = [
       },
       {
         "name": "Quiz 9",
-        "score": "ยังไม่ส่ง"
+        "score": "8"
       },
       {
         "name": "Quiz 10",
@@ -15894,6 +19782,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -16089,6 +20025,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "3",
@@ -16282,6 +20266,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -16477,6 +20509,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "3",
@@ -16670,6 +20750,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -16865,6 +20993,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "3",
@@ -17058,6 +21234,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -17253,6 +21477,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "3",
@@ -17446,6 +21718,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -17641,6 +21961,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "3",
@@ -17834,6 +22202,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -18029,6 +22445,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "3",
@@ -18222,6 +22686,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -18417,6 +22929,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "3",
@@ -18610,6 +23170,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -18805,6 +23413,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "3",
@@ -18998,6 +23654,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -19193,6 +23897,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "3",
@@ -19386,6 +24138,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -19581,6 +24381,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "3",
@@ -19775,6 +24623,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "3",
@@ -19968,6 +24864,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -20163,6 +25107,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "4",
@@ -20356,6 +25348,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -20551,6 +25591,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "4",
@@ -20745,6 +25833,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "4",
@@ -20938,6 +26074,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -21133,6 +26317,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "4",
@@ -21327,6 +26559,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "4",
@@ -21376,19 +26656,19 @@ export const studentScores = [
       },
       {
         "name": "บท 10 [10]",
-        "score": "8"
+        "score": "10"
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "23"
+        "score": "25"
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "59"
+        "score": "61"
       },
       {
         "name": "รวม [100]",
-        "score": "76"
+        "score": "78"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -21516,11 +26796,59 @@ export const studentScores = [
       },
       {
         "name": "Quiz 10",
-        "score": "2"
+        "score": "8"
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "4",
@@ -21714,6 +27042,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -21909,6 +27285,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "4",
@@ -22103,6 +27527,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "4",
@@ -22296,6 +27768,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -22491,6 +28011,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "4",
@@ -22684,6 +28252,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -22879,6 +28495,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "4",
@@ -23073,6 +28737,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "4",
@@ -23266,6 +28978,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -23461,6 +29221,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "4",
@@ -23654,6 +29462,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -23849,6 +29705,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "4",
@@ -24043,6 +29947,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "4",
@@ -24236,6 +30188,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -24431,6 +30431,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "4",
@@ -24624,6 +30672,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -24819,6 +30915,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "4",
@@ -25013,6 +31157,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "4",
@@ -25206,6 +31398,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -25401,6 +31641,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "4",
@@ -25595,6 +31883,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "4",
@@ -25789,6 +32125,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "4",
@@ -25982,6 +32366,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -26177,6 +32609,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "4",
@@ -26370,6 +32850,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -26565,6 +33093,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "4",
@@ -26759,6 +33335,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "4",
@@ -26952,6 +33576,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -27147,6 +33819,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "5",
@@ -27340,6 +34060,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -27535,6 +34303,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "5",
@@ -27728,6 +34544,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -27923,6 +34787,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "5",
@@ -28117,6 +35029,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "5",
@@ -28310,6 +35270,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -28505,6 +35513,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "5",
@@ -28699,6 +35755,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "5",
@@ -28892,6 +35996,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -29087,6 +36239,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "5",
@@ -29281,6 +36481,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "5",
@@ -29474,6 +36722,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -29669,6 +36965,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "5",
@@ -29862,6 +37206,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -30057,6 +37449,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "5",
@@ -30251,6 +37691,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "5",
@@ -30444,6 +37932,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -30639,6 +38175,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "5",
@@ -30688,19 +38272,19 @@ export const studentScores = [
       },
       {
         "name": "บท 10 [10]",
-        "score": "9"
+        "score": "10"
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "24"
+        "score": "25"
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "61"
+        "score": "62"
       },
       {
         "name": "รวม [100]",
-        "score": "79"
+        "score": "80"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -30828,11 +38412,59 @@ export const studentScores = [
       },
       {
         "name": "Quiz 10",
-        "score": "7"
+        "score": "9"
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "5",
@@ -30841,7 +38473,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 12,
     "กลางภาคข้อเขียน": 2.5,
     "ปลายภาค": 18,
-    "เกรด": "3.5",
+    "เกรด": "4",
     "ซ่อมกลางภาค": "ซ่อมแล้ว",
     "id": "41965",
     "name": "นางสาวพัทธ์ธีรา นาคสวัสดิ์"
@@ -31027,6 +38659,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "5",
@@ -31221,6 +38901,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "5",
@@ -31414,6 +39142,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -31609,6 +39385,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "5",
@@ -31802,6 +39626,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -31997,6 +39869,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "5",
@@ -32191,6 +40111,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "5",
@@ -32385,6 +40353,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "5",
@@ -32579,6 +40595,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "5",
@@ -32772,6 +40836,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -32967,6 +41079,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "5",
@@ -33161,6 +41321,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "5",
@@ -33210,19 +41418,19 @@ export const studentScores = [
       },
       {
         "name": "บท 10 [10]",
-        "score": "9"
+        "score": "10"
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "23"
+        "score": "24"
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "59"
+        "score": "60"
       },
       {
         "name": "รวม [100]",
-        "score": "73"
+        "score": "74"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -33350,10 +41558,58 @@ export const studentScores = [
       },
       {
         "name": "Quiz 10",
-        "score": "7"
+        "score": "8"
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -33549,6 +41805,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "5",
@@ -33743,6 +42047,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "5",
@@ -33792,19 +42144,19 @@ export const studentScores = [
       },
       {
         "name": "บท 10 [10]",
-        "score": "9"
+        "score": "10"
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "24"
+        "score": "25"
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "59"
+        "score": "60"
       },
       {
         "name": "รวม [100]",
-        "score": "74"
+        "score": "75"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -33868,7 +42220,7 @@ export const studentScores = [
       },
       {
         "name": "Quiz 6",
-        "score": "6"
+        "score": "7"
       },
       {
         "name": "Quiz 7",
@@ -33932,11 +42284,59 @@ export const studentScores = [
       },
       {
         "name": "Quiz 10",
-        "score": "7"
+        "score": "8"
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "5",
@@ -33945,7 +42345,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 12,
     "กลางภาคข้อเขียน": 4,
     "ปลายภาค": 15,
-    "เกรด": "3",
+    "เกรด": "3.5",
     "ซ่อมกลางภาค": "ซ่อมแล้ว",
     "id": "43937",
     "name": "นางสาวณัฐณิชา พันธ์ฟัก"
@@ -34131,6 +42531,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "5",
@@ -34325,6 +42773,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "5",
@@ -34519,6 +43015,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "5",
@@ -34713,6 +43257,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "6",
@@ -34907,6 +43499,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "6",
@@ -35101,6 +43741,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "6",
@@ -35295,6 +43983,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "6",
@@ -35489,6 +44225,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "6",
@@ -35683,6 +44467,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "6",
@@ -35877,6 +44709,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "6",
@@ -36070,6 +44950,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -36265,6 +45193,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "6",
@@ -36458,6 +45434,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -36653,6 +45677,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "6",
@@ -36847,6 +45919,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "6",
@@ -37040,6 +46160,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -37235,6 +46403,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "6",
@@ -37428,6 +46644,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -37623,6 +46887,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "6",
@@ -37648,11 +46960,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "8"
+        "score": "10"
       },
       {
         "name": "บท 7 [10]",
-        "score": "9"
+        "score": "10"
       },
       {
         "name": "กิจกรรม [5]",
@@ -37660,31 +46972,31 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "22"
+        "score": "25"
       },
       {
         "name": "บท 8 [10]",
-        "score": "9"
+        "score": "10"
       },
       {
         "name": "บท 9 [5]",
-        "score": "4"
+        "score": "5"
       },
       {
         "name": "บท 10 [10]",
-        "score": "9"
+        "score": "10"
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "22"
+        "score": "25"
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "57"
+        "score": "63"
       },
       {
         "name": "รวม [100]",
-        "score": "77"
+        "score": "83"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -37748,11 +47060,11 @@ export const studentScores = [
       },
       {
         "name": "Quiz 6",
-        "score": "ยังไม่ส่ง"
+        "score": "9"
       },
       {
         "name": "Quiz 7",
-        "score": "5"
+        "score": "8"
       },
       {
         "name": "MID [20]2",
@@ -37804,18 +47116,66 @@ export const studentScores = [
       },
       {
         "name": "Quiz 8",
-        "score": "7"
+        "score": "9"
       },
       {
         "name": "Quiz 9",
-        "score": "3"
+        "score": "8"
       },
       {
         "name": "Quiz 10",
-        "score": "4"
+        "score": "9"
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -37825,7 +47185,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 22,
     "กลางภาคข้อเขียน": 3,
     "ปลายภาค": 20,
-    "เกรด": "3.5",
+    "เกรด": "4",
     "ซ่อมกลางภาค": "ไม่ต้องซ่อม",
     "id": "43945",
     "name": "นายศุภากร อ่วมรอด"
@@ -38011,6 +47371,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "6",
@@ -38205,6 +47613,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "6",
@@ -38399,6 +47855,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "6",
@@ -38593,6 +48097,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "6",
@@ -38787,6 +48339,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "6",
@@ -38981,6 +48581,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "6",
@@ -39175,6 +48823,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "6",
@@ -39369,6 +49065,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "6",
@@ -39563,6 +49307,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "6",
@@ -39757,6 +49549,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "6",
@@ -39950,6 +49790,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -40145,6 +50033,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "6",
@@ -40339,6 +50275,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "6",
@@ -40533,6 +50517,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "6",
@@ -40578,23 +50610,23 @@ export const studentScores = [
       },
       {
         "name": "บท 9 [5]",
-        "score": "4"
+        "score": "5"
       },
       {
         "name": "บท 10 [10]",
-        "score": "9"
+        "score": "10"
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "23"
+        "score": "25"
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "63"
+        "score": "65"
       },
       {
         "name": "รวม [100]",
-        "score": "83"
+        "score": "85"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -40718,14 +50750,62 @@ export const studentScores = [
       },
       {
         "name": "Quiz 9",
-        "score": "7"
+        "score": "9"
       },
       {
         "name": "Quiz 10",
-        "score": "5"
+        "score": "9"
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -40921,6 +51001,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "6",
@@ -40950,7 +51078,7 @@ export const studentScores = [
       },
       {
         "name": "บท 7 [10]",
-        "score": "9"
+        "score": "10"
       },
       {
         "name": "กิจกรรม [5]",
@@ -40958,7 +51086,7 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "24"
+        "score": "25"
       },
       {
         "name": "บท 8 [10]",
@@ -40978,11 +51106,11 @@ export const studentScores = [
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "62"
+        "score": "63"
       },
       {
         "name": "รวม [100]",
-        "score": "79"
+        "score": "80"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -41050,7 +51178,7 @@ export const studentScores = [
       },
       {
         "name": "Quiz 7",
-        "score": "6"
+        "score": "8"
       },
       {
         "name": "MID [20]2",
@@ -41115,6 +51243,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "6",
@@ -41123,7 +51299,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 22,
     "กลางภาคข้อเขียน": 4,
     "ปลายภาค": 17,
-    "เกรด": "3.5",
+    "เกรด": "4",
     "ซ่อมกลางภาค": "ไม่ต้องซ่อม",
     "id": "42289",
     "name": "นางสาวสมิตานัน มุขศรี"
@@ -41164,19 +51340,19 @@ export const studentScores = [
       },
       {
         "name": "บท 10 [10]",
-        "score": "9"
+        "score": "10"
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "24"
+        "score": "25"
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "61"
+        "score": "62"
       },
       {
         "name": "รวม [100]",
-        "score": "74"
+        "score": "75"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -41304,11 +51480,59 @@ export const studentScores = [
       },
       {
         "name": "Quiz 10",
-        "score": "6"
+        "score": "8"
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "6",
@@ -41317,7 +51541,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 16,
     "กลางภาคข้อเขียน": 5,
     "ปลายภาค": 13,
-    "เกรด": "3",
+    "เกรด": "3.5",
     "ซ่อมกลางภาค": "ซ่อมแล้ว",
     "id": "43946",
     "name": "นางสาวธัญญาเรศ แหยมน้อย"
@@ -41503,6 +51727,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "6",
@@ -41697,6 +51969,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "6",
@@ -41891,6 +52211,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "6",
@@ -42085,6 +52453,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "6",
@@ -42114,7 +52530,7 @@ export const studentScores = [
       },
       {
         "name": "บท 7 [10]",
-        "score": "9"
+        "score": "10"
       },
       {
         "name": "กิจกรรม [5]",
@@ -42122,7 +52538,7 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "24"
+        "score": "25"
       },
       {
         "name": "บท 8 [10]",
@@ -42142,11 +52558,11 @@ export const studentScores = [
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "61"
+        "score": "62"
       },
       {
         "name": "รวม [100]",
-        "score": "74"
+        "score": "75"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -42214,7 +52630,7 @@ export const studentScores = [
       },
       {
         "name": "Quiz 7",
-        "score": "7"
+        "score": "8"
       },
       {
         "name": "MID [20]2",
@@ -42279,6 +52695,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "6",
@@ -42287,7 +52751,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 14,
     "กลางภาคข้อเขียน": 3,
     "ปลายภาค": 13,
-    "เกรด": "3",
+    "เกรด": "3.5",
     "ซ่อมกลางภาค": "ซ่อมแล้ว",
     "id": "43951",
     "name": "นางสาวศิริรัตน์ ชื่นกมล"
@@ -42472,6 +52936,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -42667,6 +53179,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "7",
@@ -42861,6 +53421,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "7",
@@ -43055,6 +53663,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "7",
@@ -43249,6 +53905,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "7",
@@ -43443,6 +54147,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "7",
@@ -43637,6 +54389,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "7",
@@ -43831,6 +54631,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "7",
@@ -44025,6 +54873,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "7",
@@ -44218,6 +55114,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -44413,6 +55357,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "7",
@@ -44606,6 +55598,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -44801,6 +55841,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "7",
@@ -44995,6 +56083,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "7",
@@ -45189,6 +56325,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "7",
@@ -45383,6 +56567,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "7",
@@ -45576,6 +56808,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -45771,6 +57051,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "7",
@@ -45964,6 +57292,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -46159,6 +57535,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "7",
@@ -46353,6 +57777,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "7",
@@ -46547,6 +58019,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "7",
@@ -46741,6 +58261,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "7",
@@ -46935,6 +58503,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "7",
@@ -47128,6 +58744,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -47323,6 +58987,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "7",
@@ -47516,6 +59228,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -47711,6 +59471,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "7",
@@ -47905,6 +59713,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "7",
@@ -48099,6 +59955,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "7",
@@ -48293,6 +60197,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "7",
@@ -48487,6 +60439,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "7",
@@ -48681,6 +60681,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "7",
@@ -48874,6 +60922,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -49069,6 +61165,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "7",
@@ -49263,6 +61407,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "7",
@@ -49457,6 +61649,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "7",
@@ -49651,6 +61891,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "7",
@@ -49845,6 +62133,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "7",
@@ -50039,6 +62375,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "7",
@@ -50232,6 +62616,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -50427,6 +62859,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "8",
@@ -50621,6 +63101,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "8",
@@ -50814,6 +63342,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -51009,6 +63585,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "8",
@@ -51203,6 +63827,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "8",
@@ -51396,6 +64068,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -51591,6 +64311,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "8",
@@ -51785,6 +64553,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "8",
@@ -51979,6 +64795,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "8",
@@ -52172,6 +65036,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -52367,6 +65279,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "8",
@@ -52561,6 +65521,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "8",
@@ -52606,23 +65614,23 @@ export const studentScores = [
       },
       {
         "name": "บท 9 [5]",
-        "score": "4"
+        "score": "5"
       },
       {
         "name": "บท 10 [10]",
-        "score": "9"
+        "score": "10"
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "23"
+        "score": "25"
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "60"
+        "score": "62"
       },
       {
         "name": "รวม [100]",
-        "score": "76"
+        "score": "78"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -52746,15 +65754,63 @@ export const studentScores = [
       },
       {
         "name": "Quiz 9",
-        "score": "7"
+        "score": "10"
       },
       {
         "name": "Quiz 10",
-        "score": "6"
+        "score": "10"
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "8",
@@ -52949,6 +66005,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "8",
@@ -53143,6 +66247,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "8",
@@ -53336,6 +66488,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -53531,6 +66731,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "8",
@@ -53724,6 +66972,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -53919,6 +67215,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "8",
@@ -54113,6 +67457,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "8",
@@ -54307,6 +67699,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "8",
@@ -54501,6 +67941,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "8",
@@ -54695,6 +68183,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "8",
@@ -54889,6 +68425,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "8",
@@ -55082,6 +68666,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -55277,6 +68909,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "8",
@@ -55471,6 +69151,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "8",
@@ -55665,6 +69393,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "8",
@@ -55859,6 +69635,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "8",
@@ -55908,19 +69732,19 @@ export const studentScores = [
       },
       {
         "name": "บท 10 [10]",
-        "score": "9"
+        "score": "10"
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "24"
+        "score": "25"
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "61"
+        "score": "62"
       },
       {
         "name": "รวม [100]",
-        "score": "74"
+        "score": "75"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -56048,11 +69872,59 @@ export const studentScores = [
       },
       {
         "name": "Quiz 10",
-        "score": "7"
+        "score": "10"
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "8",
@@ -56061,7 +69933,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 14,
     "กลางภาคข้อเขียน": 5,
     "ปลายภาค": 13,
-    "เกรด": "3",
+    "เกรด": "3.5",
     "ซ่อมกลางภาค": "ซ่อมแล้ว",
     "id": "42240",
     "name": "นางสาวณัฐสินี มีสุข"
@@ -56247,6 +70119,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "8",
@@ -56440,6 +70360,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -56635,6 +70603,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "8",
@@ -56828,6 +70844,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -57023,6 +71087,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "8",
@@ -57216,6 +71328,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -57411,6 +71571,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "8",
@@ -57605,6 +71813,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "8",
@@ -57799,6 +72055,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "8",
@@ -57992,6 +72296,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -58187,6 +72539,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "9",
@@ -58380,6 +72780,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -58575,6 +73023,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "9",
@@ -58769,6 +73265,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "9",
@@ -58963,6 +73507,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "9",
@@ -59156,6 +73748,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -59351,6 +73991,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "9",
@@ -59545,6 +74233,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "9",
@@ -59739,6 +74475,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "9",
@@ -59933,6 +74717,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "9",
@@ -60127,6 +74959,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "9",
@@ -60321,6 +75201,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "9",
@@ -60515,6 +75443,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "9",
@@ -60708,6 +75684,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -60903,6 +75927,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "9",
@@ -61097,6 +76169,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "9",
@@ -61291,6 +76411,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "9",
@@ -61485,6 +76653,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "9",
@@ -61679,6 +76895,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "9",
@@ -61873,6 +77137,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "9",
@@ -62067,6 +77379,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "9",
@@ -62260,6 +77620,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -62455,6 +77863,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "9",
@@ -62649,6 +78105,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "9",
@@ -62842,6 +78346,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -63037,6 +78589,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "9",
@@ -63231,6 +78831,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "9",
@@ -63424,6 +79072,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -63619,6 +79315,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "9",
@@ -63813,6 +79557,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "9",
@@ -64007,6 +79799,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "9",
@@ -64200,6 +80040,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -64395,6 +80283,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "9",
@@ -64588,6 +80524,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -64783,6 +80767,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "9",
@@ -64977,6 +81009,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "9",
@@ -65171,6 +81251,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "9",
@@ -65364,6 +81492,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -65559,6 +81735,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "9",
@@ -65753,6 +81977,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "10",
@@ -65946,6 +82218,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -66141,6 +82461,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "10",
@@ -66334,6 +82702,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -66529,6 +82945,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "10",
@@ -66723,6 +83187,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "10",
@@ -66916,6 +83428,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -67111,6 +83671,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "10",
@@ -67304,6 +83912,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -67499,6 +84155,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "10",
@@ -67692,6 +84396,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -67887,6 +84639,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "10",
@@ -68080,6 +84880,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -68275,6 +85123,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "10",
@@ -68468,6 +85364,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -68663,6 +85607,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "10",
@@ -68856,6 +85848,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -69051,6 +86091,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "10",
@@ -69245,6 +86333,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "10",
@@ -69274,7 +86410,7 @@ export const studentScores = [
       },
       {
         "name": "บท 7 [10]",
-        "score": "9"
+        "score": "10"
       },
       {
         "name": "กิจกรรม [5]",
@@ -69282,7 +86418,7 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "24"
+        "score": "25"
       },
       {
         "name": "บท 8 [10]",
@@ -69302,11 +86438,11 @@ export const studentScores = [
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "60"
+        "score": "61"
       },
       {
         "name": "รวม [100]",
-        "score": "73"
+        "score": "74"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -69374,7 +86510,7 @@ export const studentScores = [
       },
       {
         "name": "Quiz 7",
-        "score": "7"
+        "score": "8"
       },
       {
         "name": "MID [20]2",
@@ -69439,6 +86575,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "10",
@@ -69633,6 +86817,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "10",
@@ -69826,6 +87058,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -70021,6 +87301,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "10",
@@ -70215,6 +87543,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "10",
@@ -70240,11 +87616,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "9"
+        "score": "10"
       },
       {
         "name": "บท 7 [10]",
-        "score": "9"
+        "score": "10"
       },
       {
         "name": "กิจกรรม [5]",
@@ -70252,7 +87628,7 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "23"
+        "score": "25"
       },
       {
         "name": "บท 8 [10]",
@@ -70264,19 +87640,19 @@ export const studentScores = [
       },
       {
         "name": "บท 10 [10]",
-        "score": "9"
+        "score": "10"
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "24"
+        "score": "25"
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "59"
+        "score": "62"
       },
       {
         "name": "รวม [100]",
-        "score": "76"
+        "score": "79"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -70340,11 +87716,11 @@ export const studentScores = [
       },
       {
         "name": "Quiz 6",
-        "score": "6"
+        "score": "10"
       },
       {
         "name": "Quiz 7",
-        "score": "7"
+        "score": "8"
       },
       {
         "name": "MID [20]2",
@@ -70404,10 +87780,58 @@ export const studentScores = [
       },
       {
         "name": "Quiz 10",
-        "score": "6"
+        "score": "8"
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -70603,6 +88027,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "10",
@@ -70797,6 +88269,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "10",
@@ -70991,6 +88511,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "10",
@@ -71185,6 +88753,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "10",
@@ -71379,6 +88995,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "10",
@@ -71573,6 +89237,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "10",
@@ -71766,6 +89478,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -71961,6 +89721,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "10",
@@ -72155,6 +89963,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "10",
@@ -72349,6 +90205,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "10",
@@ -72543,6 +90447,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "10",
@@ -72737,6 +90689,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "10",
@@ -72930,6 +90930,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -73125,6 +91173,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "10",
@@ -73318,6 +91414,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -73513,6 +91657,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "11",
@@ -73706,6 +91898,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -73901,6 +92141,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "11",
@@ -74094,6 +92382,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -74289,6 +92625,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "11",
@@ -74482,6 +92866,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -74677,6 +93109,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "11",
@@ -74870,6 +93350,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -75065,6 +93593,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "11",
@@ -75258,6 +93834,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -75453,6 +94077,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "11",
@@ -75646,6 +94318,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -75841,6 +94561,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "11",
@@ -76034,6 +94802,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -76229,6 +95045,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "11",
@@ -76422,6 +95286,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -76617,6 +95529,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "11",
@@ -76810,6 +95770,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -77005,6 +96013,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "11",
@@ -77198,6 +96254,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -77393,6 +96497,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "11",
@@ -77586,6 +96738,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -77781,6 +96981,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "11",
@@ -77974,6 +97222,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -78169,6 +97465,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "11",
@@ -78362,6 +97706,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -78557,6 +97949,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "11",
@@ -78750,6 +98190,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -78945,6 +98433,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "11",
@@ -79138,6 +98674,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -79333,6 +98917,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "11",
@@ -79526,6 +99158,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -79721,6 +99401,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "11",
@@ -79914,6 +99642,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -80109,6 +99885,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "11",
@@ -80302,6 +100126,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -80497,6 +100369,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "11",
@@ -80690,6 +100610,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -80885,6 +100853,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "11",
@@ -81079,6 +101095,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "12",
@@ -81272,6 +101336,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -81467,6 +101579,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "12",
@@ -81660,6 +101820,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -81855,6 +102063,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "12",
@@ -82048,6 +102304,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -82243,6 +102547,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "12",
@@ -82436,6 +102788,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -82631,6 +103031,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "12",
@@ -82824,6 +103272,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -83019,6 +103515,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "12",
@@ -83212,6 +103756,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -83407,6 +103999,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "12",
@@ -83601,6 +104241,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "12",
@@ -83794,6 +104482,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -83989,6 +104725,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "12",
@@ -84182,6 +104966,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -84377,6 +105209,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "12",
@@ -84570,6 +105450,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -84765,6 +105693,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "12",
@@ -84958,6 +105934,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -85153,6 +106177,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "12",
@@ -85346,6 +106418,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -85541,6 +106661,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "12",
@@ -85734,6 +106902,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -85929,6 +107145,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "12",
@@ -86122,6 +107386,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -86317,6 +107629,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "12",
@@ -86510,6 +107870,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -86705,6 +108113,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "12",
@@ -86898,6 +108354,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -87093,6 +108597,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "12",
@@ -87286,6 +108838,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -87481,6 +109081,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "12",
@@ -87674,6 +109322,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -87869,6 +109565,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "12",
@@ -88062,6 +109806,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -88257,6 +110049,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "12",
@@ -88451,6 +110291,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "12",
@@ -88644,6 +110532,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -88839,6 +110775,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "13",
@@ -89032,6 +111016,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -89227,6 +111259,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "13",
@@ -89420,6 +111500,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -89615,6 +111743,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "13",
@@ -89808,6 +111984,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -90003,6 +112227,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "13",
@@ -90196,6 +112468,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -90391,6 +112711,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "13",
@@ -90584,6 +112952,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -90779,6 +113195,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "13",
@@ -90972,6 +113436,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -91167,6 +113679,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "13",
@@ -91360,6 +113920,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -91555,6 +114163,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "13",
@@ -91748,6 +114404,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -91943,6 +114647,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "13",
@@ -92136,6 +114888,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -92331,6 +115131,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "13",
@@ -92525,6 +115373,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "13",
@@ -92550,11 +115446,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "0"
+        "score": "2"
       },
       {
         "name": "บท 7 [10]",
-        "score": "0"
+        "score": "2"
       },
       {
         "name": "กิจกรรม [5]",
@@ -92562,31 +115458,31 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "5"
+        "score": "9"
       },
       {
         "name": "บท 8 [10]",
-        "score": "0"
+        "score": "2"
       },
       {
         "name": "บท 9 [5]",
-        "score": "0"
+        "score": "2"
       },
       {
         "name": "บท 10 [10]",
-        "score": "0"
+        "score": "2"
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "0"
+        "score": "6"
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "16"
+        "score": "26"
       },
       {
         "name": "รวม [100]",
-        "score": "29"
+        "score": "39"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -92650,11 +115546,11 @@ export const studentScores = [
       },
       {
         "name": "Quiz 6",
-        "score": "ยังไม่ส่ง"
+        "score": "9"
       },
       {
         "name": "Quiz 7",
-        "score": "ยังไม่ส่ง"
+        "score": "8"
       },
       {
         "name": "MID [20]2",
@@ -92706,18 +115602,66 @@ export const studentScores = [
       },
       {
         "name": "Quiz 8",
-        "score": "ยังไม่ส่ง"
+        "score": "9"
       },
       {
         "name": "Quiz 9",
-        "score": "ยังไม่ส่ง"
+        "score": "10"
       },
       {
         "name": "Quiz 10",
-        "score": "ยังไม่ส่ง"
+        "score": "8"
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -92913,6 +115857,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "13",
@@ -93106,6 +116098,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -93301,6 +116341,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "13",
@@ -93495,6 +116583,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "13",
@@ -93688,6 +116824,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -93883,6 +117067,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "13",
@@ -94076,6 +117308,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -94271,6 +117551,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "13",
@@ -94464,6 +117792,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -94659,6 +118035,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "13",
@@ -94853,6 +118277,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "13",
@@ -95046,6 +118518,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -95241,6 +118761,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "13",
@@ -95434,6 +119002,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -95629,6 +119245,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "13",
@@ -95822,6 +119486,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -96017,6 +119729,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "13",
@@ -96042,11 +119802,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "0"
+        "score": "1"
       },
       {
         "name": "บท 7 [10]",
-        "score": "0"
+        "score": "2"
       },
       {
         "name": "กิจกรรม [5]",
@@ -96054,31 +119814,31 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "5"
+        "score": "8"
       },
       {
         "name": "บท 8 [10]",
-        "score": "0"
+        "score": "1"
       },
       {
         "name": "บท 9 [5]",
-        "score": "0"
+        "score": "1"
       },
       {
         "name": "บท 10 [10]",
-        "score": "0"
+        "score": "1"
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "0"
+        "score": "3"
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "12"
+        "score": "18"
       },
       {
         "name": "รวม [100]",
-        "score": "26"
+        "score": "32"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -96142,11 +119902,11 @@ export const studentScores = [
       },
       {
         "name": "Quiz 6",
-        "score": "ยังไม่ส่ง"
+        "score": "7"
       },
       {
         "name": "Quiz 7",
-        "score": "ยังไม่ส่ง"
+        "score": "8"
       },
       {
         "name": "MID [20]2",
@@ -96198,18 +119958,66 @@ export const studentScores = [
       },
       {
         "name": "Quiz 8",
-        "score": "ยังไม่ส่ง"
+        "score": "7"
       },
       {
         "name": "Quiz 9",
-        "score": "ยังไม่ส่ง"
+        "score": "7"
       },
       {
         "name": "Quiz 10",
-        "score": "ยังไม่ส่ง"
+        "score": "5"
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -96405,6 +120213,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "14",
@@ -96598,6 +120454,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -96793,6 +120697,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "14",
@@ -96987,6 +120939,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "14",
@@ -97181,6 +121181,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "14",
@@ -97375,6 +121423,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "14",
@@ -97568,6 +121664,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -97763,6 +121907,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "14",
@@ -97956,6 +122148,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -98151,6 +122391,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "14",
@@ -98344,6 +122632,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -98539,6 +122875,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "14",
@@ -98732,6 +123116,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -98927,6 +123359,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "14",
@@ -99120,6 +123600,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -99315,6 +123843,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "14",
@@ -99508,6 +124084,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -99703,6 +124327,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "14",
@@ -99896,6 +124568,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -100091,6 +124811,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "14",
@@ -100284,6 +125052,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -100479,6 +125295,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "14",
@@ -100672,6 +125536,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -100867,6 +125779,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "14",
@@ -101060,6 +126020,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -101255,6 +126263,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "14",
@@ -101448,6 +126504,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -101643,6 +126747,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "14",
@@ -101837,6 +126989,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "14",
@@ -102031,6 +127231,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "14",
@@ -102225,6 +127473,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "14",
@@ -102418,6 +127714,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -102613,6 +127957,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "14",
@@ -102807,6 +128199,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "14",
@@ -103000,6 +128440,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -103195,6 +128683,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "14",
@@ -103388,6 +128924,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -103583,6 +129167,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "14",
@@ -103777,6 +129409,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "14",
@@ -103970,6 +129650,54 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
         "score": ""
       }
     ],
@@ -104165,6 +129893,54 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "__EMPTY",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_1",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_2",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_3",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_4",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_5",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_6",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_7",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_8",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_9",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_10",
+        "score": ""
+      },
+      {
+        "name": "__EMPTY_11",
+        "score": ""
       }
     ],
     "room": "14",
