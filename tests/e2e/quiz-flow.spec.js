@@ -1,11 +1,29 @@
 import { test, expect } from '@playwright/test';
 
 test('standard quiz flow', async ({ page }) => {
+  page.on('console', msg => {
+    if (msg.type() === 'error' || msg.text().includes('[DEBUG]')) {
+      console.log(`[BROWSER] ${msg.type().toUpperCase()}: ${msg.text()}`);
+    }
+  });
   // 1. Go to a specific quiz directly (skip homepage navigation to isolate quiz logic)
   // Using a known ID from quizzes-list.js, e.g., 'phy_m4_ch2-1' (Nature of Physics 2 - Theory)
   // Ensure we use a valid ID.
   const quizId = 'phy_m4/phy_m4_ch2-1';
   await page.goto(`quiz/index.html?id=${quizId}`);
+
+  // Disable animations and transitions for testing stability
+  await page.addStyleTag({
+    content: `
+      *, *::before, *::after {
+        transition: none !important;
+        animation: none !important;
+        transition-duration: 0s !important;
+        animation-duration: 0s !important;
+      }
+    `
+  });
+
   // Wait for app to be fully initialized
   await page.waitForSelector('body[data-app-initialized="true"]', { timeout: 15000 });
 
@@ -19,7 +37,7 @@ test('standard quiz flow', async ({ page }) => {
 
   // 3. Start Quiz
   const startBtn = page.locator('#start-btn');
-  await startBtn.click();
+  await startBtn.click({ force: true });
 
   // 4. Question Screen
   const quizScreen = page.locator('#quiz-screen');

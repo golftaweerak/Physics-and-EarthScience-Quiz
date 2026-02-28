@@ -509,8 +509,15 @@ export async function fetchAllQuizData() {
     }
 
     if (!dataModules[scriptPath]) {
-      console.warn(`[DEBUG] fetchAllQuizData: Data module not found for ${scriptPath}`);
-      return [];
+      // Try fallback: find key that ends with the expected filename
+      const expectedSuffix = `${quiz.id}-data.js`;
+      const foundKey = Object.keys(dataModules).find(k => k.endsWith(expectedSuffix) || k.includes(quiz.id));
+      if (foundKey) {
+        scriptPath = foundKey;
+      } else {
+        console.warn(`[DEBUG] fetchAllQuizData: Data module not found for ${scriptPath}`);
+        return [];
+      }
     }
 
     try {

@@ -52,11 +52,27 @@ test.describe('Quiz Power-ups', () => {
     // Navigate directly to the custom quiz with cache busting
     await page.goto(`quiz/index.html?id=custom_test_powerup_quiz&_t=${Date.now()}`);
 
+    // Disable animations and transitions for testing stability
+    await page.addStyleTag({
+      content: `
+        *, *::before, *::after {
+          transition: none !important;
+          animation: none !important;
+          transition-duration: 0s !important;
+          animation-duration: 0s !important;
+        }
+      `
+    });
+
     // Check if start screen title matches
     await expect(page.locator('#start-screen-title')).toHaveText('Powerup Test Quiz');
+    
+    // Wait for the app to finish loading
+    await page.waitForSelector('body[data-app-initialized="true"]', { timeout: 15000 });
 
-    // Start the quiz
-    await page.getByRole('button', { name: 'เริ่มทำแบบทดสอบ' }).click();
+    // Custom quizzes auto-start, so we don't need to click start-btn
+    // Just verify that the quiz screen is visible
+    await expect(page.locator('#quiz-screen')).toBeVisible();
 
     // Wait for the bar to be present in DOM (animation handling)
     await page.locator('#power-up-bar').waitFor({ state: 'attached' });
@@ -82,8 +98,26 @@ test.describe('Quiz Power-ups', () => {
 
   test('should apply 50/50 power-up', async ({ page }) => {
     await page.goto(`quiz/index.html?id=custom_test_powerup_quiz&_t=${Date.now()}`);
+
+    // Disable animations and transitions for testing stability
+    await page.addStyleTag({
+      content: `
+        *, *::before, *::after {
+          transition: none !important;
+          animation: none !important;
+          transition-duration: 0s !important;
+          animation-duration: 0s !important;
+        }
+      `
+    });
+
     await expect(page.locator('#start-screen-title')).toHaveText('Powerup Test Quiz');
-    await page.getByRole('button', { name: 'เริ่มทำแบบทดสอบ' }).click();
+    
+    await page.waitForSelector('body[data-app-initialized="true"]', { timeout: 15000 });
+    
+    // Custom quizzes auto-start, so we don't need to click start-btn
+    // Just verify that the quiz screen is visible
+    await expect(page.locator('#quiz-screen')).toBeVisible();
 
     const btn5050 = page.locator('button[data-id="item_5050"]');
     await btn5050.click();

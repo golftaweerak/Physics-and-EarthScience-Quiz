@@ -9,25 +9,19 @@ test.describe('Summary Dashboard Validation', () => {
     });
 
     // Go to the summary page
-    await page.goto('http://localhost:5173/Physics-and-EarthScience-Quiz/summary.html');
+    await page.goto('http://localhost:5173/Physics-and-EarthScience-Quiz/summary.html?dev=true');
 
     // Wait for page to initialize and animations to finish
     await page.waitForTimeout(2000);
 
     // Verify we are on the landing page Hub correctly
-    const heading = page.locator('h2', { hasText: 'กรุณาเลือกภาคเรียนเพื่อเริ่มต้น' });
+    const heading = page.locator('h3', { hasText: 'เริ่มต้นดูคะแนน' });
     await expect(heading).toBeVisible();
 
-    // Ensure there are two semester cards
-    const term1Btn = page.locator('button[data-select-semester="1/2568"]');
-    const term2Btn = page.locator('button[data-select-semester="2/2568"]');
-
-    await expect(term1Btn).toBeVisible();
-    await expect(term2Btn).toBeVisible();
-
-    // Click Term 1
-    console.log('Clicking Term 1...');
-    await term1Btn.click();
+    // Select Term 1 via Dropdown
+    console.log('Switching to Term 1 via Dropdown...');
+    const selector = page.locator('#semester-selector');
+    await selector.selectOption('1/2568');
 
     // Verify that the table renders (Wait for Room Summary Table)
     const tableHeader = page.locator('h3', { hasText: 'สรุปรายห้องเรียน' });
@@ -35,7 +29,6 @@ test.describe('Summary Dashboard Validation', () => {
 
     // Change to Term 2 via Dropdown
     console.log('Switching to Term 2 via Dropdown...');
-    const selector = page.locator('#semester-selector');
     await selector.selectOption('2/2568');
 
     // Verify the Term 2 simplified table renders

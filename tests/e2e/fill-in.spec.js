@@ -17,16 +17,20 @@ test('verify fill-in question interaction', async ({ page }) => {
     created: Date.now()
   };
 
-  await page.goto('quiz/index.html');
-
-  await page.evaluate((quiz) => {
+  await page.addInitScript((quiz) => {
     localStorage.setItem('customQuizzesList', JSON.stringify([quiz]));
   }, customQuiz);
 
   await page.goto('quiz/index.html?id=custom_test_fillin');
 
+  // Wait for the app to finish loading and initializing
+  await page.waitForSelector('body[data-app-initialized="true"]', { timeout: 15000 });
+
   await expect(page.locator('#start-screen-title')).toHaveText('Fill-in Test');
-  await page.locator('#start-btn').click();
+
+  // Custom quizzes auto-start, so we don't need to click start-btn
+  // Just verify that the quiz screen is visible
+  await expect(page.locator('#quiz-screen')).toBeVisible();
 
   // 1. Verify Input and Submit Button exist
   const input = page.getByPlaceholder('ใส่คำตอบ...');
@@ -53,14 +57,13 @@ test('verify fill-in question interaction', async ({ page }) => {
   await expect(page.locator('#feedback')).toBeHidden();
 
   // 4. Verify Submit Button
-  await input.fill('123');
+  await input.focus();
+  await page.keyboard.type('123');
   // Wait for binding
   await page.waitForTimeout(500);
 
-  // Debug: Listen for console errors
-  // page.on('console', msg => { ... });
-
-  await submitBtn.click({ force: true });
+  await submitBtn.scrollIntoViewIfNeeded();
+  await submitBtn.click();
 
   // 5. Verify Correct Feedback
   await expect(page.locator('#feedback')).toBeVisible({ timeout: 10000 });

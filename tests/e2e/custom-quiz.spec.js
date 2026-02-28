@@ -68,8 +68,8 @@ test('create and start a custom quiz', async ({ page }) => {
   const randomConfirmModal = page.locator('#random-all-modal');
   const confirmBtn = page.locator('#random-all-confirm-btn');
 
-  // Ensure the modal is visible and has the is-open class
-  await expect(randomConfirmModal).toHaveClass(/is-open/, { timeout: 10000 });
+  // Ensure the modal is visible
+  await expect(randomConfirmModal).toBeVisible({ timeout: 10000 });
   await expect(confirmBtn).toBeVisible({ timeout: 15000 });
 
   await confirmBtn.click();

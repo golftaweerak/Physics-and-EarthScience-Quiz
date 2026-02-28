@@ -41,8 +41,11 @@ test('verify scoring and XP attribution', async ({ page }) => {
   // Wait for start screen
   await expect(page.locator('#start-screen-title')).toHaveText('Test Scoring Quiz', { timeout: 15000 });
 
-  // 3. Start Quiz
-  await page.locator('#start-btn').click();
+  // Wait for initialization
+  await page.waitForSelector('body[data-app-initialized="true"]', { timeout: 15000 });
+
+  // 3. Start Quiz (Custom quizzes auto-start)
+  // Just verify that the quiz screen is visible
   await expect(page.locator('#quiz-screen')).toBeVisible();
 
   // 4. Answer Correctly

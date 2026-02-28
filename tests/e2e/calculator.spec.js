@@ -10,7 +10,7 @@ test('verify scientific calculator functionality', async ({ page }) => {
 
   const toggleBtn = page.locator('#calculator-toggle-btn');
   const modal = page.locator('#scientific-calculator-modal');
-  const display = page.locator('#calc-display-rendered'); // Expression area
+  const display = page.locator('#calc-math-field'); // Expression area
   const resultDisplay = page.locator('#calc-result-area'); // Result area (new in Casio update)
   const equalsBtn = page.locator('#btn-equals');
   const modeBtn = page.locator('#calc-mode-indicator'); // Updated ID
@@ -19,6 +19,11 @@ test('verify scientific calculator functionality', async ({ page }) => {
   await expect(toggleBtn).toBeVisible();
   await toggleBtn.click();
   await expect(modal).toBeVisible();
+  
+  // Wait for MathJS and MathLive to initialize
+  await page.waitForFunction(() => window.math !== undefined);
+  await page.waitForFunction(() => customElements.get('math-field') !== undefined);
+  await page.waitForTimeout(500); // Small buffer for DOM to settle
 
   // Helper to click calculator buttons
   const clickBtn = async (val) => {
@@ -38,7 +43,7 @@ test('verify scientific calculator functionality', async ({ page }) => {
 
   // 3. Clear (AC)
   await clickBtn('AC');
-  await expect(display).toHaveText(''); // Expression cleared
+  await expect(display).toHaveJSProperty('value', ''); // Expression cleared
   await expect(resultDisplay).toHaveText(''); // Result cleared
 
   // 4. Scientific - Square Root: sqrt(9) = 3
