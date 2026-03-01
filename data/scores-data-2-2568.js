@@ -1,4 +1,4 @@
-export const lastUpdated = "2026-03-01T03:24:56.194Z";
+export const lastUpdated = "2026-03-01T07:48:27.983Z";
 export const studentScores = [
   {
     "assignments": [
@@ -738,11 +738,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 7 [10]",
-        "score": "1"
+        "score": "9"
       },
       {
         "name": "กิจกรรม [5]",
@@ -750,7 +750,7 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "8"
+        "score": "24"
       },
       {
         "name": "บท 8 [10]",
@@ -770,71 +770,71 @@ export const studentScores = [
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "47"
+        "score": "63"
       },
       {
         "name": "รวม [100]",
-        "score": "65"
+        "score": "81"
       },
       {
         "name": "กิจกรรม 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 6",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 7",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 6",
@@ -963,7 +963,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 22,
     "กลางภาคข้อเขียน": 5,
     "ปลายภาค": 18,
-    "เกรด": "2.5",
+    "เกรด": "4",
     "ซ่อมกลางภาค": "ไม่ต้องซ่อม",
     "id": "42068",
     "name": "นายพรณภัทร์ ตั้งธนากาล"
@@ -1164,7 +1164,7 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_3",
-        "score": "22"
+        "score": "23"
       },
       {
         "name": "__EMPTY_4",
@@ -1176,7 +1176,7 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_6",
-        "score": "3"
+        "score": "2"
       },
       {
         "name": "__EMPTY_7",
@@ -1648,15 +1648,15 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_3",
-        "score": "19"
+        "score": "20"
       },
       {
         "name": "__EMPTY_4",
-        "score": "6"
+        "score": "7"
       },
       {
         "name": "__EMPTY_5",
-        "score": "6"
+        "score": "7"
       },
       {
         "name": "__EMPTY_6",
@@ -1668,7 +1668,7 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_8",
-        "score": "1"
+        "score": "0"
       },
       {
         "name": "__EMPTY_9",
@@ -1676,7 +1676,7 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_10",
-        "score": "3"
+        "score": "1"
       },
       {
         "name": "__EMPTY_11",
@@ -2620,11 +2620,11 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_4",
-        "score": "14"
+        "score": "15"
       },
       {
         "name": "__EMPTY_5",
-        "score": "14"
+        "score": "13"
       },
       {
         "name": "__EMPTY_6",
@@ -3100,19 +3100,19 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_3",
-        "score": "0"
+        "score": "4"
       },
       {
         "name": "__EMPTY_4",
-        "score": "0"
+        "score": "24"
       },
       {
         "name": "__EMPTY_5",
-        "score": "0"
+        "score": "10"
       },
       {
         "name": "__EMPTY_6",
-        "score": "0"
+        "score": "2"
       },
       {
         "name": "__EMPTY_7",
@@ -3124,11 +3124,11 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_9",
-        "score": "1"
+        "score": "0"
       },
       {
         "name": "__EMPTY_10",
-        "score": "39"
+        "score": "0"
       },
       {
         "name": "__EMPTY_11",
@@ -3350,11 +3350,11 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_5",
-        "score": "14"
+        "score": "15"
       },
       {
         "name": "__EMPTY_6",
-        "score": "1"
+        "score": "0"
       },
       {
         "name": "__EMPTY_7",
@@ -4552,15 +4552,15 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_3",
-        "score": "120"
+        "score": "126"
       },
       {
         "name": "__EMPTY_4",
-        "score": "86"
+        "score": "112"
       },
       {
         "name": "__EMPTY_5",
-        "score": "77"
+        "score": "88"
       },
       {
         "name": "__EMPTY_6",
@@ -4572,15 +4572,15 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_8",
-        "score": "6"
+        "score": "5"
       },
       {
         "name": "__EMPTY_9",
-        "score": "8"
+        "score": "7"
       },
       {
         "name": "__EMPTY_10",
-        "score": "202"
+        "score": "161"
       },
       {
         "name": "__EMPTY_11",
@@ -5036,7 +5036,7 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_3",
-        "score": "0.5319548872180451"
+        "score": "0.6127819548872181"
       },
       {
         "name": "__EMPTY_4",
@@ -5278,7 +5278,7 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_3",
-        "score": "0.5714285714285714"
+        "score": "0.6522556390977443"
       },
       {
         "name": "__EMPTY_4",
@@ -6004,7 +6004,7 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_3",
-        "score": "0.7333333333333333"
+        "score": "0.7666666666666667"
       },
       {
         "name": "__EMPTY_4",
@@ -6016,7 +6016,7 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_6",
-        "score": "0.1"
+        "score": "0.06666666666666667"
       },
       {
         "name": "__EMPTY_7",
@@ -6036,7 +6036,7 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_11",
-        "score": "0.9999999999999999"
+        "score": "1"
       }
     ],
     "room": "1",
@@ -6488,15 +6488,15 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_3",
-        "score": "0.5277777777777778"
+        "score": "0.5555555555555556"
       },
       {
         "name": "__EMPTY_4",
-        "score": "0.16666666666666666"
+        "score": "0.19444444444444445"
       },
       {
         "name": "__EMPTY_5",
-        "score": "0.16666666666666666"
+        "score": "0.19444444444444445"
       },
       {
         "name": "__EMPTY_6",
@@ -6508,7 +6508,7 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_8",
-        "score": "0.027777777777777776"
+        "score": "0"
       },
       {
         "name": "__EMPTY_9",
@@ -6516,7 +6516,7 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_10",
-        "score": "0.08333333333333333"
+        "score": "0.027777777777777776"
       },
       {
         "name": "__EMPTY_11",
@@ -7460,11 +7460,11 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_4",
-        "score": "0.35"
+        "score": "0.375"
       },
       {
         "name": "__EMPTY_5",
-        "score": "0.35"
+        "score": "0.325"
       },
       {
         "name": "__EMPTY_6",
@@ -7940,19 +7940,19 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_3",
-        "score": "0"
+        "score": "0.1"
       },
       {
         "name": "__EMPTY_4",
-        "score": "0"
+        "score": "0.6"
       },
       {
         "name": "__EMPTY_5",
-        "score": "0"
+        "score": "0.25"
       },
       {
         "name": "__EMPTY_6",
-        "score": "0"
+        "score": "0.05"
       },
       {
         "name": "__EMPTY_7",
@@ -7964,11 +7964,11 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_9",
-        "score": "0.025"
+        "score": "0"
       },
       {
         "name": "__EMPTY_10",
-        "score": "0.975"
+        "score": "0"
       },
       {
         "name": "__EMPTY_11",
@@ -8190,11 +8190,11 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_5",
-        "score": "0.358974358974359"
+        "score": "0.38461538461538464"
       },
       {
         "name": "__EMPTY_6",
-        "score": "0.02564102564102564"
+        "score": "0"
       },
       {
         "name": "__EMPTY_7",
@@ -9392,15 +9392,15 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_3",
-        "score": "0.22556390977443608"
+        "score": "0.23684210526315788"
       },
       {
         "name": "__EMPTY_4",
-        "score": "0.16165413533834586"
+        "score": "0.21052631578947367"
       },
       {
         "name": "__EMPTY_5",
-        "score": "0.14473684210526316"
+        "score": "0.16541353383458646"
       },
       {
         "name": "__EMPTY_6",
@@ -9412,19 +9412,19 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_8",
-        "score": "0.011278195488721804"
+        "score": "0.009398496240601503"
       },
       {
         "name": "__EMPTY_9",
-        "score": "0.015037593984962405"
+        "score": "0.013157894736842105"
       },
       {
         "name": "__EMPTY_10",
-        "score": "0.37969924812030076"
+        "score": "0.3026315789473684"
       },
       {
         "name": "__EMPTY_11",
-        "score": "0.9999999999999999"
+        "score": "1"
       }
     ],
     "room": "2",
@@ -18646,11 +18646,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 7 [10]",
-        "score": "0"
+        "score": "10"
       },
       {
         "name": "กิจกรรม [5]",
@@ -18658,91 +18658,91 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "7"
+        "score": "25"
       },
       {
         "name": "บท 8 [10]",
-        "score": "0"
+        "score": "10"
       },
       {
         "name": "บท 9 [5]",
-        "score": "0"
+        "score": "5"
       },
       {
         "name": "บท 10 [10]",
-        "score": "0"
+        "score": "10"
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "0"
+        "score": "25"
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "17"
+        "score": "60"
       },
       {
         "name": "รวม [100]",
-        "score": "31"
+        "score": "74"
       },
       {
         "name": "กิจกรรม 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 6",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 7",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 6",
@@ -18750,7 +18750,7 @@ export const studentScores = [
       },
       {
         "name": "Quiz 7",
-        "score": "ยังไม่ส่ง"
+        "score": "8"
       },
       {
         "name": "MID [20]2",
@@ -18758,59 +18758,59 @@ export const studentScores = [
       },
       {
         "name": "ใบงาน 8.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 8",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 9.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 9",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 10",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 8",
-        "score": "ยังไม่ส่ง"
+        "score": "9"
       },
       {
         "name": "Quiz 9",
-        "score": "ยังไม่ส่ง"
+        "score": "10"
       },
       {
         "name": "Quiz 10",
-        "score": "ยังไม่ส่ง"
+        "score": "8"
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
@@ -18871,7 +18871,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 15,
     "กลางภาคข้อเขียน": 5,
     "ปลายภาค": 14,
-    "เกรด": "0",
+    "เกรด": "3",
     "ซ่อมกลางภาค": "ยังไม่ซ่อม",
     "id": "43908",
     "name": "นายธนาธิป นวลสุวรรณ"
@@ -20340,11 +20340,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 7 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "กิจกรรม [5]",
@@ -20352,91 +20352,91 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "9"
+        "score": "25"
       },
       {
         "name": "บท 8 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 9 [5]",
-        "score": "2"
-      },
-      {
-        "name": "บท 10 [10]",
-        "score": "1"
-      },
-      {
-        "name": "หลังกลางภาค [25]",
         "score": "5"
       },
       {
+        "name": "บท 10 [10]",
+        "score": "9"
+      },
+      {
+        "name": "หลังกลางภาค [25]",
+        "score": "24"
+      },
+      {
         "name": "ก่อนปลายภาค [70]",
-        "score": "26"
+        "score": "61"
       },
       {
         "name": "รวม [100]",
-        "score": "42"
+        "score": "77"
       },
       {
         "name": "กิจกรรม 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 6",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 7",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 6",
@@ -20452,47 +20452,47 @@ export const studentScores = [
       },
       {
         "name": "ใบงาน 8.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 8",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 9.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 9",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 10",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 8",
@@ -20565,7 +20565,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 19,
     "กลางภาคข้อเขียน": 4.5,
     "ปลายภาค": 16,
-    "เกรด": "0",
+    "เกรด": "3.5",
     "ซ่อมกลางภาค": "ไม่ต้องซ่อม",
     "id": "41958",
     "name": "นางสาวจรรยาภรณ์ ดอกรัก"
@@ -20824,11 +20824,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "9"
+        "score": "10"
       },
       {
         "name": "บท 7 [10]",
-        "score": "9"
+        "score": "10"
       },
       {
         "name": "กิจกรรม [5]",
@@ -20836,31 +20836,31 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "23"
+        "score": "25"
       },
       {
         "name": "บท 8 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 9 [5]",
-        "score": "1"
+        "score": "5"
       },
       {
         "name": "บท 10 [10]",
-        "score": "1"
+        "score": "10"
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "4"
+        "score": "25"
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "39"
+        "score": "62"
       },
       {
         "name": "รวม [100]",
-        "score": "57"
+        "score": "80"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -20924,11 +20924,11 @@ export const studentScores = [
       },
       {
         "name": "Quiz 6",
-        "score": "7"
+        "score": "8"
       },
       {
         "name": "Quiz 7",
-        "score": "6"
+        "score": "8"
       },
       {
         "name": "MID [20]2",
@@ -20936,47 +20936,47 @@ export const studentScores = [
       },
       {
         "name": "ใบงาน 8.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 8",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 9.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 9",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 10",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 8",
@@ -20984,11 +20984,11 @@ export const studentScores = [
       },
       {
         "name": "Quiz 9",
-        "score": "7"
+        "score": "8"
       },
       {
         "name": "Quiz 10",
-        "score": "3"
+        "score": "10"
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
@@ -21049,7 +21049,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 19,
     "กลางภาคข้อเขียน": 5,
     "ปลายภาค": 18,
-    "เกรด": "1.5",
+    "เกรด": "4",
     "ซ่อมกลางภาค": "ไม่ต้องซ่อม",
     "id": "42080",
     "name": "นางสาวณัฐนรี อมรจุติ"
@@ -22276,11 +22276,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "9"
+        "score": "10"
       },
       {
         "name": "บท 7 [10]",
-        "score": "9"
+        "score": "10"
       },
       {
         "name": "กิจกรรม [5]",
@@ -22288,7 +22288,7 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "23"
+        "score": "25"
       },
       {
         "name": "บท 8 [10]",
@@ -22296,23 +22296,23 @@ export const studentScores = [
       },
       {
         "name": "บท 9 [5]",
-        "score": "4"
+        "score": "5"
       },
       {
         "name": "บท 10 [10]",
-        "score": "9"
+        "score": "10"
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "23"
+        "score": "25"
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "59"
+        "score": "63"
       },
       {
         "name": "รวม [100]",
-        "score": "75"
+        "score": "79"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -22376,11 +22376,11 @@ export const studentScores = [
       },
       {
         "name": "Quiz 6",
-        "score": "7"
+        "score": "9"
       },
       {
         "name": "Quiz 7",
-        "score": "6"
+        "score": "8"
       },
       {
         "name": "MID [20]2",
@@ -22436,11 +22436,11 @@ export const studentScores = [
       },
       {
         "name": "Quiz 9",
-        "score": "6"
+        "score": "8"
       },
       {
         "name": "Quiz 10",
-        "score": "7"
+        "score": "10"
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
@@ -27846,7 +27846,7 @@ export const studentScores = [
       },
       {
         "name": "บท 7 [10]",
-        "score": "8"
+        "score": "9"
       },
       {
         "name": "กิจกรรม [5]",
@@ -27854,7 +27854,7 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "23"
+        "score": "24"
       },
       {
         "name": "บท 8 [10]",
@@ -27874,11 +27874,11 @@ export const studentScores = [
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "60"
+        "score": "61"
       },
       {
         "name": "รวม [100]",
-        "score": "71"
+        "score": "72"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -27946,7 +27946,7 @@ export const studentScores = [
       },
       {
         "name": "Quiz 7",
-        "score": "ยังไม่ส่ง"
+        "score": "7"
       },
       {
         "name": "MID [20]2",
@@ -38974,7 +38974,7 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "9"
+        "score": "10"
       },
       {
         "name": "บท 7 [10]",
@@ -38986,7 +38986,7 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "24"
+        "score": "25"
       },
       {
         "name": "บท 8 [10]",
@@ -38998,19 +38998,19 @@ export const studentScores = [
       },
       {
         "name": "บท 10 [10]",
-        "score": "9"
+        "score": "10"
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "24"
+        "score": "25"
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "60"
+        "score": "62"
       },
       {
         "name": "รวม [100]",
-        "score": "76"
+        "score": "78"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -39074,7 +39074,7 @@ export const studentScores = [
       },
       {
         "name": "Quiz 6",
-        "score": "6"
+        "score": "9"
       },
       {
         "name": "Quiz 7",
@@ -39138,7 +39138,7 @@ export const studentScores = [
       },
       {
         "name": "Quiz 10",
-        "score": "6"
+        "score": "8"
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
@@ -47226,19 +47226,19 @@ export const studentScores = [
       },
       {
         "name": "บท 10 [10]",
-        "score": "9"
+        "score": "10"
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "23"
+        "score": "24"
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "59"
+        "score": "60"
       },
       {
         "name": "รวม [100]",
-        "score": "73"
+        "score": "74"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -47366,7 +47366,7 @@ export const studentScores = [
       },
       {
         "name": "Quiz 10",
-        "score": "7"
+        "score": "8"
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
@@ -51562,7 +51562,7 @@ export const studentScores = [
       },
       {
         "name": "บท 7 [10]",
-        "score": "9"
+        "score": "10"
       },
       {
         "name": "กิจกรรม [5]",
@@ -51570,7 +51570,7 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "24"
+        "score": "25"
       },
       {
         "name": "บท 8 [10]",
@@ -51590,11 +51590,11 @@ export const studentScores = [
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "60"
+        "score": "61"
       },
       {
         "name": "รวม [100]",
-        "score": "75"
+        "score": "76"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -51662,7 +51662,7 @@ export const studentScores = [
       },
       {
         "name": "Quiz 7",
-        "score": "7"
+        "score": "8"
       },
       {
         "name": "MID [20]2",
@@ -55696,19 +55696,19 @@ export const studentScores = [
       },
       {
         "name": "บท 10 [10]",
-        "score": "9"
+        "score": "10"
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "24"
+        "score": "25"
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "61"
+        "score": "62"
       },
       {
         "name": "รวม [100]",
-        "score": "76"
+        "score": "77"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -55836,7 +55836,7 @@ export const studentScores = [
       },
       {
         "name": "Quiz 10",
-        "score": "7"
+        "score": "9"
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
@@ -58248,7 +58248,7 @@ export const studentScores = [
       },
       {
         "name": "Quiz 8",
-        "score": "8"
+        "score": "10"
       },
       {
         "name": "Quiz 9",
@@ -58256,7 +58256,7 @@ export const studentScores = [
       },
       {
         "name": "Quiz 10",
-        "score": "8"
+        "score": "10"
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
@@ -62226,7 +62226,7 @@ export const studentScores = [
       },
       {
         "name": "บท 9 [5]",
-        "score": "4"
+        "score": "5"
       },
       {
         "name": "บท 10 [10]",
@@ -62234,15 +62234,15 @@ export const studentScores = [
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "24"
+        "score": "25"
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "60"
+        "score": "61"
       },
       {
         "name": "รวม [100]",
-        "score": "74"
+        "score": "75"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -62366,7 +62366,7 @@ export const studentScores = [
       },
       {
         "name": "Quiz 9",
-        "score": "7"
+        "score": "8"
       },
       {
         "name": "Quiz 10",
@@ -62431,7 +62431,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 18,
     "กลางภาคข้อเขียน": 4,
     "ปลายภาค": 14,
-    "เกรด": "3",
+    "เกรด": "3.5",
     "ซ่อมกลางภาค": "ซ่อมแล้ว",
     "id": "43963",
     "name": "นางสาวสุพิชญา คำรักษ์"
@@ -72128,11 +72128,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "1"
+        "score": "9"
       },
       {
         "name": "บท 7 [10]",
-        "score": "1"
+        "score": "9"
       },
       {
         "name": "กิจกรรม [5]",
@@ -72140,91 +72140,91 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "7"
+        "score": "23"
       },
       {
         "name": "บท 8 [10]",
-        "score": "1"
+        "score": "9"
       },
       {
         "name": "บท 9 [5]",
-        "score": "1"
+        "score": "4"
       },
       {
         "name": "บท 10 [10]",
-        "score": "1"
+        "score": "9"
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "3"
-      },
-      {
-        "name": "ก่อนปลายภาค [70]",
         "score": "22"
       },
       {
+        "name": "ก่อนปลายภาค [70]",
+        "score": "57"
+      },
+      {
         "name": "รวม [100]",
-        "score": "37"
+        "score": "72"
       },
       {
         "name": "กิจกรรม 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 6",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 7",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 6",
@@ -72240,47 +72240,47 @@ export const studentScores = [
       },
       {
         "name": "ใบงาน 8.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 8",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 9.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 9",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 10",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 8",
@@ -72353,7 +72353,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 20,
     "กลางภาคข้อเขียน": 4,
     "ปลายภาค": 15,
-    "เกรด": "0",
+    "เกรด": "3",
     "ซ่อมกลางภาค": "ไม่ต้องซ่อม",
     "id": "41933",
     "name": "นายชัยสิทธิ์ เรืองน้อย"
@@ -72370,11 +72370,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "1"
+        "score": "9"
       },
       {
         "name": "บท 7 [10]",
-        "score": "1"
+        "score": "9"
       },
       {
         "name": "กิจกรรม [5]",
@@ -72382,91 +72382,91 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "7"
+        "score": "23"
       },
       {
         "name": "บท 8 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 9 [5]",
-        "score": "2"
+        "score": "5"
       },
       {
         "name": "บท 10 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "6"
-      },
-      {
-        "name": "ก่อนปลายภาค [70]",
         "score": "25"
       },
       {
+        "name": "ก่อนปลายภาค [70]",
+        "score": "60"
+      },
+      {
         "name": "รวม [100]",
-        "score": "36"
+        "score": "71"
       },
       {
         "name": "กิจกรรม 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 6",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 7",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 6",
@@ -72482,47 +72482,47 @@ export const studentScores = [
       },
       {
         "name": "ใบงาน 8.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 8",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 9.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 9",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 10",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 8",
@@ -72595,7 +72595,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 15,
     "กลางภาคข้อเขียน": 2,
     "ปลายภาค": 11,
-    "เกรด": "0",
+    "เกรด": "3",
     "ซ่อมกลางภาค": "ซ่อมแล้ว",
     "id": "41946",
     "name": "นายภาวัต นามทิพย์"
@@ -72612,11 +72612,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 7 [10]",
-        "score": "1"
+        "score": "9"
       },
       {
         "name": "กิจกรรม [5]",
@@ -72624,91 +72624,91 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "8"
+        "score": "24"
       },
       {
         "name": "บท 8 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 9 [5]",
-        "score": "2"
+        "score": "5"
       },
       {
         "name": "บท 10 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "6"
-      },
-      {
-        "name": "ก่อนปลายภาค [70]",
         "score": "25"
       },
       {
+        "name": "ก่อนปลายภาค [70]",
+        "score": "60"
+      },
+      {
         "name": "รวม [100]",
-        "score": "36"
+        "score": "71"
       },
       {
         "name": "กิจกรรม 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 6",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 7",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 6",
@@ -72724,47 +72724,47 @@ export const studentScores = [
       },
       {
         "name": "ใบงาน 8.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 8",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 9.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 9",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 10",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 8",
@@ -72837,7 +72837,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 16,
     "กลางภาคข้อเขียน": 5,
     "ปลายภาค": 11,
-    "เกรด": "0",
+    "เกรด": "3",
     "ซ่อมกลางภาค": "ยังไม่ซ่อม",
     "id": "41982",
     "name": "นายธีณภัทรสรณ์ แจ่มนาม"
@@ -72854,11 +72854,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 7 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "กิจกรรม [5]",
@@ -72866,91 +72866,91 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "9"
+        "score": "25"
       },
       {
         "name": "บท 8 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 9 [5]",
-        "score": "2"
-      },
-      {
-        "name": "บท 10 [10]",
-        "score": "1"
-      },
-      {
-        "name": "หลังกลางภาค [25]",
         "score": "5"
       },
       {
+        "name": "บท 10 [10]",
+        "score": "9"
+      },
+      {
+        "name": "หลังกลางภาค [25]",
+        "score": "24"
+      },
+      {
         "name": "ก่อนปลายภาค [70]",
-        "score": "26"
+        "score": "61"
       },
       {
         "name": "รวม [100]",
-        "score": "41"
+        "score": "76"
       },
       {
         "name": "กิจกรรม 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 6",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 7",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 6",
@@ -72966,47 +72966,47 @@ export const studentScores = [
       },
       {
         "name": "ใบงาน 8.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 8",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 9.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 9",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 10",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 8",
@@ -73079,7 +73079,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 17,
     "กลางภาคข้อเขียน": 4.5,
     "ปลายภาค": 15,
-    "เกรด": "0",
+    "เกรด": "3.5",
     "ซ่อมกลางภาค": "ซ่อมแล้ว",
     "id": "41990",
     "name": "นายภูเบศ จันทร์ผ่อง"
@@ -73096,11 +73096,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 7 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "กิจกรรม [5]",
@@ -73108,91 +73108,91 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "9"
+        "score": "25"
       },
       {
         "name": "บท 8 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 9 [5]",
-        "score": "2"
-      },
-      {
-        "name": "บท 10 [10]",
-        "score": "1"
-      },
-      {
-        "name": "หลังกลางภาค [25]",
         "score": "5"
       },
       {
+        "name": "บท 10 [10]",
+        "score": "9"
+      },
+      {
+        "name": "หลังกลางภาค [25]",
+        "score": "24"
+      },
+      {
         "name": "ก่อนปลายภาค [70]",
-        "score": "26"
+        "score": "61"
       },
       {
         "name": "รวม [100]",
-        "score": "40"
+        "score": "75"
       },
       {
         "name": "กิจกรรม 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 6",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 7",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 6",
@@ -73208,47 +73208,47 @@ export const studentScores = [
       },
       {
         "name": "ใบงาน 8.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 8",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 9.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 9",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 10",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 8",
@@ -73321,7 +73321,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 13,
     "กลางภาคข้อเขียน": 4,
     "ปลายภาค": 14,
-    "เกรด": "0",
+    "เกรด": "3.5",
     "ซ่อมกลางภาค": "ซ่อมแล้ว",
     "id": "42022",
     "name": "นายธชาธร ชัยมงคลเลิศ"
@@ -73338,11 +73338,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 7 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "กิจกรรม [5]",
@@ -73350,91 +73350,91 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "9"
+        "score": "25"
       },
       {
         "name": "บท 8 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 9 [5]",
-        "score": "2"
+        "score": "5"
       },
       {
         "name": "บท 10 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "6"
+        "score": "25"
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "27"
+        "score": "62"
       },
       {
         "name": "รวม [100]",
-        "score": "45"
+        "score": "80"
       },
       {
         "name": "กิจกรรม 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 6",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 7",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 6",
@@ -73450,47 +73450,47 @@ export const studentScores = [
       },
       {
         "name": "ใบงาน 8.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 8",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 9.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 9",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 10",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 8",
@@ -73563,7 +73563,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 17,
     "กลางภาคข้อเขียน": 4.5,
     "ปลายภาค": 18,
-    "เกรด": "0",
+    "เกรด": "4",
     "ซ่อมกลางภาค": "ซ่อมแล้ว",
     "id": "42032",
     "name": "นายวรปรัชญ์ จันทะทัง"
@@ -73580,11 +73580,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "1"
+        "score": "9"
       },
       {
         "name": "บท 7 [10]",
-        "score": "1"
+        "score": "9"
       },
       {
         "name": "กิจกรรม [5]",
@@ -73592,91 +73592,91 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "7"
+        "score": "23"
       },
       {
         "name": "บท 8 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 9 [5]",
-        "score": "1"
-      },
-      {
-        "name": "บท 10 [10]",
-        "score": "1"
-      },
-      {
-        "name": "หลังกลางภาค [25]",
         "score": "4"
       },
       {
+        "name": "บท 10 [10]",
+        "score": "9"
+      },
+      {
+        "name": "หลังกลางภาค [25]",
+        "score": "23"
+      },
+      {
         "name": "ก่อนปลายภาค [70]",
-        "score": "26"
+        "score": "61"
       },
       {
         "name": "รวม [100]",
-        "score": "47"
+        "score": "82"
       },
       {
         "name": "กิจกรรม 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 6",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 7",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 6",
@@ -73692,47 +73692,47 @@ export const studentScores = [
       },
       {
         "name": "ใบงาน 8.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 8",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 9.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 9",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 10",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 8",
@@ -73805,7 +73805,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 26,
     "กลางภาคข้อเขียน": 4,
     "ปลายภาค": 21,
-    "เกรด": "0",
+    "เกรด": "4",
     "ซ่อมกลางภาค": "ไม่ต้องซ่อม",
     "id": "42065",
     "name": "นายนราวิชญ์ แก้วชิงดวง"
@@ -73822,11 +73822,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "1"
+        "score": "9"
       },
       {
         "name": "บท 7 [10]",
-        "score": "1"
+        "score": "9"
       },
       {
         "name": "กิจกรรม [5]",
@@ -73834,91 +73834,91 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "7"
+        "score": "23"
       },
       {
         "name": "บท 8 [10]",
-        "score": "0"
+        "score": "8"
       },
       {
         "name": "บท 9 [5]",
-        "score": "2"
+        "score": "5"
       },
       {
         "name": "บท 10 [10]",
-        "score": "0"
+        "score": "8"
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "2"
-      },
-      {
-        "name": "ก่อนปลายภาค [70]",
         "score": "21"
       },
       {
+        "name": "ก่อนปลายภาค [70]",
+        "score": "56"
+      },
+      {
         "name": "รวม [100]",
-        "score": "33"
+        "score": "68"
       },
       {
         "name": "กิจกรรม 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 6",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 7",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 6",
@@ -73934,47 +73934,47 @@ export const studentScores = [
       },
       {
         "name": "ใบงาน 8.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 8",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 9.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 9",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 10",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 8",
@@ -74047,7 +74047,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 13,
     "กลางภาคข้อเขียน": 2,
     "ปลายภาค": 12,
-    "เกรด": "0",
+    "เกรด": "2.5",
     "ซ่อมกลางภาค": "ซ่อมแล้ว",
     "id": "42102",
     "name": "นายบูรพา จิตตวิสุทธิกุล"
@@ -74064,11 +74064,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 7 [10]",
-        "score": "1"
+        "score": "9"
       },
       {
         "name": "กิจกรรม [5]",
@@ -74076,91 +74076,91 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "8"
+        "score": "24"
       },
       {
         "name": "บท 8 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 9 [5]",
-        "score": "2"
-      },
-      {
-        "name": "บท 10 [10]",
-        "score": "1"
-      },
-      {
-        "name": "หลังกลางภาค [25]",
         "score": "5"
       },
       {
+        "name": "บท 10 [10]",
+        "score": "9"
+      },
+      {
+        "name": "หลังกลางภาค [25]",
+        "score": "24"
+      },
+      {
         "name": "ก่อนปลายภาค [70]",
-        "score": "25"
+        "score": "60"
       },
       {
         "name": "รวม [100]",
-        "score": "40"
+        "score": "75"
       },
       {
         "name": "กิจกรรม 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 6",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 7",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 6",
@@ -74176,47 +74176,47 @@ export const studentScores = [
       },
       {
         "name": "ใบงาน 8.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 8",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 9.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 9",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 10",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 8",
@@ -74289,7 +74289,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 16,
     "กลางภาคข้อเขียน": 4,
     "ปลายภาค": 15,
-    "เกรด": "0",
+    "เกรด": "3.5",
     "ซ่อมกลางภาค": "ซ่อมแล้ว",
     "id": "42113",
     "name": "นายศุภณัฐ นุตรักษ์"
@@ -74306,11 +74306,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "0"
+        "score": "8"
       },
       {
         "name": "บท 7 [10]",
-        "score": "1"
+        "score": "9"
       },
       {
         "name": "กิจกรรม [5]",
@@ -74318,91 +74318,91 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "6"
+        "score": "22"
       },
       {
         "name": "บท 8 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 9 [5]",
-        "score": "2"
-      },
-      {
-        "name": "บท 10 [10]",
-        "score": "1"
-      },
-      {
-        "name": "หลังกลางภาค [25]",
         "score": "5"
       },
       {
+        "name": "บท 10 [10]",
+        "score": "9"
+      },
+      {
+        "name": "หลังกลางภาค [25]",
+        "score": "24"
+      },
+      {
         "name": "ก่อนปลายภาค [70]",
-        "score": "23"
+        "score": "58"
       },
       {
         "name": "รวม [100]",
-        "score": "35"
+        "score": "70"
       },
       {
         "name": "กิจกรรม 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 6",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 7",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 6",
@@ -74418,47 +74418,47 @@ export const studentScores = [
       },
       {
         "name": "ใบงาน 8.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 8",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 9.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 9",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 10",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 8",
@@ -74531,7 +74531,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 15,
     "กลางภาคข้อเขียน": 1.5,
     "ปลายภาค": 12,
-    "เกรด": "0",
+    "เกรด": "3",
     "ซ่อมกลางภาค": "ซ่อมแล้ว",
     "id": "42179",
     "name": "นายธนคุณ โกศลนิรัติวงษ์"
@@ -74548,11 +74548,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "1"
+        "score": "9"
       },
       {
         "name": "บท 7 [10]",
-        "score": "1"
+        "score": "9"
       },
       {
         "name": "กิจกรรม [5]",
@@ -74560,91 +74560,91 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "7"
+        "score": "23"
       },
       {
         "name": "บท 8 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 9 [5]",
-        "score": "2"
-      },
-      {
-        "name": "บท 10 [10]",
-        "score": "1"
-      },
-      {
-        "name": "หลังกลางภาค [25]",
         "score": "5"
       },
       {
-        "name": "ก่อนปลายภาค [70]",
+        "name": "บท 10 [10]",
+        "score": "9"
+      },
+      {
+        "name": "หลังกลางภาค [25]",
         "score": "24"
       },
       {
+        "name": "ก่อนปลายภาค [70]",
+        "score": "59"
+      },
+      {
         "name": "รวม [100]",
-        "score": "41"
+        "score": "76"
       },
       {
         "name": "กิจกรรม 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 6",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 7",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 6",
@@ -74660,47 +74660,47 @@ export const studentScores = [
       },
       {
         "name": "ใบงาน 8.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 8",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 9.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 9",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 10",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 8",
@@ -74773,7 +74773,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 11,
     "กลางภาคข้อเขียน": 1.5,
     "ปลายภาค": 17,
-    "เกรด": "0",
+    "เกรด": "3.5",
     "ซ่อมกลางภาค": "ซ่อมแล้ว",
     "id": "42192",
     "name": "นายอิทธิพันธ์ ปรีชาชัยพานิช"
@@ -74790,11 +74790,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 7 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "กิจกรรม [5]",
@@ -74802,91 +74802,91 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "9"
+        "score": "25"
       },
       {
         "name": "บท 8 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 9 [5]",
-        "score": "2"
-      },
-      {
-        "name": "บท 10 [10]",
-        "score": "1"
-      },
-      {
-        "name": "หลังกลางภาค [25]",
         "score": "5"
       },
       {
+        "name": "บท 10 [10]",
+        "score": "9"
+      },
+      {
+        "name": "หลังกลางภาค [25]",
+        "score": "24"
+      },
+      {
         "name": "ก่อนปลายภาค [70]",
-        "score": "26"
+        "score": "61"
       },
       {
         "name": "รวม [100]",
-        "score": "43"
+        "score": "78"
       },
       {
         "name": "กิจกรรม 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 6",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 7",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 6",
@@ -74902,47 +74902,47 @@ export const studentScores = [
       },
       {
         "name": "ใบงาน 8.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 8",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 9.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 9",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 10",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 8",
@@ -75015,7 +75015,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 19,
     "กลางภาคข้อเขียน": 3.5,
     "ปลายภาค": 17,
-    "เกรด": "0",
+    "เกรด": "3.5",
     "ซ่อมกลางภาค": "ซ่อมแล้ว",
     "id": "42226",
     "name": "นายพีรพัฒน์ แจ่มจำรัส"
@@ -75032,11 +75032,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 7 [10]",
-        "score": "1"
+        "score": "9"
       },
       {
         "name": "กิจกรรม [5]",
@@ -75044,91 +75044,91 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "8"
-      },
-      {
-        "name": "บท 8 [10]",
-        "score": "2"
-      },
-      {
-        "name": "บท 9 [5]",
-        "score": "2"
-      },
-      {
-        "name": "บท 10 [10]",
-        "score": "0"
-      },
-      {
-        "name": "หลังกลางภาค [25]",
-        "score": "4"
-      },
-      {
-        "name": "ก่อนปลายภาค [70]",
         "score": "24"
       },
       {
+        "name": "บท 8 [10]",
+        "score": "10"
+      },
+      {
+        "name": "บท 9 [5]",
+        "score": "5"
+      },
+      {
+        "name": "บท 10 [10]",
+        "score": "10"
+      },
+      {
+        "name": "หลังกลางภาค [25]",
+        "score": "25"
+      },
+      {
+        "name": "ก่อนปลายภาค [70]",
+        "score": "61"
+      },
+      {
         "name": "รวม [100]",
-        "score": "41"
+        "score": "78"
       },
       {
         "name": "กิจกรรม 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 6",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 7",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 6",
@@ -75144,47 +75144,47 @@ export const studentScores = [
       },
       {
         "name": "ใบงาน 8.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 8",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 9.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 9",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 10",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 8",
@@ -75196,7 +75196,7 @@ export const studentScores = [
       },
       {
         "name": "Quiz 10",
-        "score": "ยังไม่ส่ง"
+        "score": "8"
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
@@ -75257,7 +75257,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 18,
     "กลางภาคข้อเขียน": 4,
     "ปลายภาค": 17,
-    "เกรด": "0",
+    "เกรด": "3.5",
     "ซ่อมกลางภาค": "ซ่อมแล้ว",
     "id": "42235",
     "name": "นายเอกรินทร์ หมวกผึ้ง"
@@ -75274,11 +75274,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 7 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "กิจกรรม [5]",
@@ -75286,91 +75286,91 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "9"
+        "score": "25"
       },
       {
         "name": "บท 8 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 9 [5]",
-        "score": "2"
+        "score": "5"
       },
       {
         "name": "บท 10 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "6"
+        "score": "25"
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "27"
+        "score": "62"
       },
       {
         "name": "รวม [100]",
-        "score": "40"
+        "score": "75"
       },
       {
         "name": "กิจกรรม 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 6",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 7",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 6",
@@ -75386,47 +75386,47 @@ export const studentScores = [
       },
       {
         "name": "ใบงาน 8.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 8",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 9.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 9",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 10",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 8",
@@ -75499,7 +75499,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 15,
     "กลางภาคข้อเขียน": 3,
     "ปลายภาค": 13,
-    "เกรด": "0",
+    "เกรด": "3.5",
     "ซ่อมกลางภาค": "ซ่อมแล้ว",
     "id": "43976",
     "name": "นายบัญชา สุขอุทัย"
@@ -75516,11 +75516,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 7 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "กิจกรรม [5]",
@@ -75528,91 +75528,91 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "9"
+        "score": "25"
       },
       {
         "name": "บท 8 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 9 [5]",
-        "score": "1"
-      },
-      {
-        "name": "บท 10 [10]",
-        "score": "1"
-      },
-      {
-        "name": "หลังกลางภาค [25]",
         "score": "4"
       },
       {
+        "name": "บท 10 [10]",
+        "score": "9"
+      },
+      {
+        "name": "หลังกลางภาค [25]",
+        "score": "23"
+      },
+      {
         "name": "ก่อนปลายภาค [70]",
-        "score": "26"
+        "score": "61"
       },
       {
         "name": "รวม [100]",
-        "score": "41"
+        "score": "76"
       },
       {
         "name": "กิจกรรม 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 6",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 7",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 6",
@@ -75628,47 +75628,47 @@ export const studentScores = [
       },
       {
         "name": "ใบงาน 8.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 8",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 9.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 9",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 10",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 8",
@@ -75741,7 +75741,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 21,
     "กลางภาคข้อเขียน": 4.5,
     "ปลายภาค": 15,
-    "เกรด": "0",
+    "เกรด": "3.5",
     "ซ่อมกลางภาค": "ไม่ต้องซ่อม",
     "id": "43977",
     "name": "นายรพีภัทร เขียวมะนี"
@@ -75758,11 +75758,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 7 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "กิจกรรม [5]",
@@ -75770,91 +75770,91 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "9"
+        "score": "25"
       },
       {
         "name": "บท 8 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 9 [5]",
-        "score": "2"
-      },
-      {
-        "name": "บท 10 [10]",
-        "score": "1"
-      },
-      {
-        "name": "หลังกลางภาค [25]",
         "score": "5"
       },
       {
+        "name": "บท 10 [10]",
+        "score": "9"
+      },
+      {
+        "name": "หลังกลางภาค [25]",
+        "score": "24"
+      },
+      {
         "name": "ก่อนปลายภาค [70]",
-        "score": "26"
+        "score": "61"
       },
       {
         "name": "รวม [100]",
-        "score": "40"
+        "score": "75"
       },
       {
         "name": "กิจกรรม 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 6",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 7",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 6",
@@ -75870,47 +75870,47 @@ export const studentScores = [
       },
       {
         "name": "ใบงาน 8.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 8",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 9.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 9",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 10",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 8",
@@ -75983,7 +75983,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 19,
     "กลางภาคข้อเขียน": 5,
     "ปลายภาค": 14,
-    "เกรด": "0",
+    "เกรด": "3.5",
     "ซ่อมกลางภาค": "ไม่ต้องซ่อม",
     "id": "43978",
     "name": "นายสิริณัฎฐ์ บุญเกตุ"
@@ -76000,11 +76000,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 7 [10]",
-        "score": "1"
+        "score": "9"
       },
       {
         "name": "กิจกรรม [5]",
@@ -76012,91 +76012,91 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "8"
+        "score": "24"
       },
       {
         "name": "บท 8 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 9 [5]",
-        "score": "2"
+        "score": "5"
       },
       {
         "name": "บท 10 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "6"
+        "score": "25"
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "26"
+        "score": "61"
       },
       {
         "name": "รวม [100]",
-        "score": "44"
+        "score": "79"
       },
       {
         "name": "กิจกรรม 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 6",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 7",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 6",
@@ -76112,47 +76112,47 @@ export const studentScores = [
       },
       {
         "name": "ใบงาน 8.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 8",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 9.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 9",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 10",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 8",
@@ -76225,7 +76225,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 16,
     "กลางภาคข้อเขียน": 5,
     "ปลายภาค": 18,
-    "เกรด": "0",
+    "เกรด": "3.5",
     "ซ่อมกลางภาค": "ซ่อมแล้ว",
     "id": "43979",
     "name": "นายอรรถชัย เนียมหุ่น"
@@ -76242,11 +76242,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 7 [10]",
-        "score": "1"
+        "score": "9"
       },
       {
         "name": "กิจกรรม [5]",
@@ -76254,91 +76254,91 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "8"
-      },
-      {
-        "name": "บท 8 [10]",
-        "score": "2"
-      },
-      {
-        "name": "บท 9 [5]",
-        "score": "1"
-      },
-      {
-        "name": "บท 10 [10]",
-        "score": "1"
-      },
-      {
-        "name": "หลังกลางภาค [25]",
-        "score": "4"
-      },
-      {
-        "name": "ก่อนปลายภาค [70]",
         "score": "24"
       },
       {
+        "name": "บท 8 [10]",
+        "score": "10"
+      },
+      {
+        "name": "บท 9 [5]",
+        "score": "4"
+      },
+      {
+        "name": "บท 10 [10]",
+        "score": "9"
+      },
+      {
+        "name": "หลังกลางภาค [25]",
+        "score": "23"
+      },
+      {
+        "name": "ก่อนปลายภาค [70]",
+        "score": "59"
+      },
+      {
         "name": "รวม [100]",
-        "score": "38"
+        "score": "73"
       },
       {
         "name": "กิจกรรม 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 6",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 7",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 6",
@@ -76354,47 +76354,47 @@ export const studentScores = [
       },
       {
         "name": "ใบงาน 8.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 8",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 9.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 9",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 10",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 8",
@@ -76467,7 +76467,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 15,
     "กลางภาคข้อเขียน": 4.5,
     "ปลายภาค": 14,
-    "เกรด": "0",
+    "เกรด": "3",
     "ซ่อมกลางภาค": "ซ่อมแล้ว",
     "id": "43980",
     "name": "นายอาชชวิน หงษ์ษา"
@@ -76484,11 +76484,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "1"
+        "score": "9"
       },
       {
         "name": "บท 7 [10]",
-        "score": "1"
+        "score": "9"
       },
       {
         "name": "กิจกรรม [5]",
@@ -76496,91 +76496,91 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "7"
-      },
-      {
-        "name": "บท 8 [10]",
-        "score": "1"
-      },
-      {
-        "name": "บท 9 [5]",
-        "score": "1"
-      },
-      {
-        "name": "บท 10 [10]",
-        "score": "2"
-      },
-      {
-        "name": "หลังกลางภาค [25]",
-        "score": "4"
-      },
-      {
-        "name": "ก่อนปลายภาค [70]",
         "score": "23"
       },
       {
+        "name": "บท 8 [10]",
+        "score": "9"
+      },
+      {
+        "name": "บท 9 [5]",
+        "score": "4"
+      },
+      {
+        "name": "บท 10 [10]",
+        "score": "10"
+      },
+      {
+        "name": "หลังกลางภาค [25]",
+        "score": "23"
+      },
+      {
+        "name": "ก่อนปลายภาค [70]",
+        "score": "58"
+      },
+      {
         "name": "รวม [100]",
-        "score": "42"
+        "score": "77"
       },
       {
         "name": "กิจกรรม 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 6",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 7",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 6",
@@ -76596,47 +76596,47 @@ export const studentScores = [
       },
       {
         "name": "ใบงาน 8.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 8",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 9.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 9",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 10",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 8",
@@ -76709,7 +76709,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 17,
     "กลางภาคข้อเขียน": 5,
     "ปลายภาค": 19,
-    "เกรด": "0",
+    "เกรด": "3.5",
     "ซ่อมกลางภาค": "ซ่อมแล้ว",
     "id": "41924",
     "name": "นางสาวไปรยา เฟื่องนภากิจ"
@@ -76726,11 +76726,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 7 [10]",
-        "score": "1"
+        "score": "10"
       },
       {
         "name": "กิจกรรม [5]",
@@ -76738,91 +76738,91 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "8"
+        "score": "25"
       },
       {
         "name": "บท 8 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 9 [5]",
-        "score": "2"
+        "score": "5"
       },
       {
         "name": "บท 10 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "6"
+        "score": "25"
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "26"
+        "score": "62"
       },
       {
         "name": "รวม [100]",
-        "score": "43"
+        "score": "79"
       },
       {
         "name": "กิจกรรม 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 6",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 7",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 6",
@@ -76830,7 +76830,7 @@ export const studentScores = [
       },
       {
         "name": "Quiz 7",
-        "score": "6"
+        "score": "8"
       },
       {
         "name": "MID [20]2",
@@ -76838,47 +76838,47 @@ export const studentScores = [
       },
       {
         "name": "ใบงาน 8.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 8",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 9.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 9",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 10",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 8",
@@ -76951,7 +76951,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 9,
     "กลางภาคข้อเขียน": 4,
     "ปลายภาค": 17,
-    "เกรด": "0",
+    "เกรด": "3.5",
     "ซ่อมกลางภาค": "ซ่อมแล้ว",
     "id": "41962",
     "name": "นางสาวนันทิชา เสียงล้ำ"
@@ -76968,11 +76968,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 7 [10]",
-        "score": "1"
+        "score": "9"
       },
       {
         "name": "กิจกรรม [5]",
@@ -76980,91 +76980,91 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "8"
+        "score": "24"
       },
       {
         "name": "บท 8 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 9 [5]",
-        "score": "2"
+        "score": "5"
       },
       {
         "name": "บท 10 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "6"
+        "score": "25"
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "26"
+        "score": "61"
       },
       {
         "name": "รวม [100]",
-        "score": "41"
+        "score": "76"
       },
       {
         "name": "กิจกรรม 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 6",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 7",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 6",
@@ -77080,47 +77080,47 @@ export const studentScores = [
       },
       {
         "name": "ใบงาน 8.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 8",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 9.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 9",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 10",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 8",
@@ -77193,7 +77193,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 17,
     "กลางภาคข้อเขียน": 4,
     "ปลายภาค": 15,
-    "เกรด": "0",
+    "เกรด": "3.5",
     "ซ่อมกลางภาค": "ซ่อมแล้ว",
     "id": "41971",
     "name": "นางสาวศริญญา สุขวงษ์"
@@ -77210,11 +77210,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "1"
+        "score": "9"
       },
       {
         "name": "บท 7 [10]",
-        "score": "1"
+        "score": "9"
       },
       {
         "name": "กิจกรรม [5]",
@@ -77222,91 +77222,91 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "7"
+        "score": "23"
       },
       {
         "name": "บท 8 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 9 [5]",
-        "score": "2"
+        "score": "5"
       },
       {
         "name": "บท 10 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "6"
-      },
-      {
-        "name": "ก่อนปลายภาค [70]",
         "score": "25"
       },
       {
+        "name": "ก่อนปลายภาค [70]",
+        "score": "60"
+      },
+      {
         "name": "รวม [100]",
-        "score": "40"
+        "score": "75"
       },
       {
         "name": "กิจกรรม 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 6",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 7",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 6",
@@ -77322,47 +77322,47 @@ export const studentScores = [
       },
       {
         "name": "ใบงาน 8.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 8",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 9.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 9",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 10",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 8",
@@ -77435,7 +77435,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 15,
     "กลางภาคข้อเขียน": 4.5,
     "ปลายภาค": 15,
-    "เกรด": "0",
+    "เกรด": "3.5",
     "ซ่อมกลางภาค": "ซ่อมแล้ว",
     "id": "42003",
     "name": "นางสาวทัศพร ขำสวัสดิ์"
@@ -77452,11 +77452,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 7 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "กิจกรรม [5]",
@@ -77464,91 +77464,91 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "9"
+        "score": "25"
       },
       {
         "name": "บท 8 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 9 [5]",
-        "score": "2"
+        "score": "5"
       },
       {
         "name": "บท 10 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "6"
+        "score": "25"
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "23"
+        "score": "58"
       },
       {
         "name": "รวม [100]",
-        "score": "41"
+        "score": "76"
       },
       {
         "name": "กิจกรรม 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 6",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 7",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 6",
@@ -77564,47 +77564,47 @@ export const studentScores = [
       },
       {
         "name": "ใบงาน 8.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 8",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 9.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 9",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 10",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 8",
@@ -77677,7 +77677,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 14,
     "กลางภาคข้อเขียน": 2.5,
     "ปลายภาค": 18,
-    "เกรด": "0",
+    "เกรด": "3.5",
     "ซ่อมกลางภาค": "ยังไม่ซ่อม",
     "id": "42011",
     "name": "นางสาววรัชญา ยิ้มละมัย"
@@ -77694,11 +77694,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 7 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "กิจกรรม [5]",
@@ -77706,91 +77706,91 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "9"
+        "score": "25"
       },
       {
         "name": "บท 8 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 9 [5]",
-        "score": "2"
+        "score": "5"
       },
       {
         "name": "บท 10 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "6"
+        "score": "25"
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "27"
+        "score": "62"
       },
       {
         "name": "รวม [100]",
-        "score": "37"
+        "score": "72"
       },
       {
         "name": "กิจกรรม 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 6",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 7",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 6",
@@ -77806,47 +77806,47 @@ export const studentScores = [
       },
       {
         "name": "ใบงาน 8.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 8",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 9.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 9",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 10",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 8",
@@ -77919,7 +77919,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 12,
     "กลางภาคข้อเขียน": 3.5,
     "ปลายภาค": 10,
-    "เกรด": "0",
+    "เกรด": "3",
     "ซ่อมกลางภาค": "ซ่อมแล้ว",
     "id": "42046",
     "name": "นางสาวธัญญภัสร์ เสือนาค"
@@ -77936,11 +77936,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "0"
+        "score": "8"
       },
       {
         "name": "บท 7 [10]",
-        "score": "1"
+        "score": "9"
       },
       {
         "name": "กิจกรรม [5]",
@@ -77948,91 +77948,91 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "6"
+        "score": "22"
       },
       {
         "name": "บท 8 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 9 [5]",
-        "score": "2"
-      },
-      {
-        "name": "บท 10 [10]",
-        "score": "1"
-      },
-      {
-        "name": "หลังกลางภาค [25]",
         "score": "5"
       },
       {
+        "name": "บท 10 [10]",
+        "score": "9"
+      },
+      {
+        "name": "หลังกลางภาค [25]",
+        "score": "24"
+      },
+      {
         "name": "ก่อนปลายภาค [70]",
-        "score": "23"
+        "score": "58"
       },
       {
         "name": "รวม [100]",
-        "score": "35"
+        "score": "70"
       },
       {
         "name": "กิจกรรม 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 6",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 7",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 6",
@@ -78048,47 +78048,47 @@ export const studentScores = [
       },
       {
         "name": "ใบงาน 8.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 8",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 9.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 9",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 10",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 8",
@@ -78161,7 +78161,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 14,
     "กลางภาคข้อเขียน": 3,
     "ปลายภาค": 12,
-    "เกรด": "0",
+    "เกรด": "3",
     "ซ่อมกลางภาค": "ซ่อมแล้ว",
     "id": "42058",
     "name": "นางสาวสุภัสสร ใจเด็ด"
@@ -78178,11 +78178,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 7 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "กิจกรรม [5]",
@@ -78190,91 +78190,91 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "9"
+        "score": "25"
       },
       {
         "name": "บท 8 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 9 [5]",
-        "score": "2"
-      },
-      {
-        "name": "บท 10 [10]",
-        "score": "1"
-      },
-      {
-        "name": "หลังกลางภาค [25]",
         "score": "5"
       },
       {
+        "name": "บท 10 [10]",
+        "score": "9"
+      },
+      {
+        "name": "หลังกลางภาค [25]",
+        "score": "24"
+      },
+      {
         "name": "ก่อนปลายภาค [70]",
-        "score": "27"
+        "score": "62"
       },
       {
         "name": "รวม [100]",
-        "score": "44"
+        "score": "79"
       },
       {
         "name": "กิจกรรม 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 6",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 7",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 6",
@@ -78290,47 +78290,47 @@ export const studentScores = [
       },
       {
         "name": "ใบงาน 8.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 8",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 9.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 9",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 10",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 8",
@@ -78403,7 +78403,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 20,
     "กลางภาคข้อเขียน": 5,
     "ปลายภาค": 17,
-    "เกรด": "0",
+    "เกรด": "3.5",
     "ซ่อมกลางภาค": "ไม่ต้องซ่อม",
     "id": "42124",
     "name": "นางสาวปุญญิสา เปี่ยมโชคอนันต์"
@@ -78420,11 +78420,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 7 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "กิจกรรม [5]",
@@ -78432,91 +78432,91 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "9"
+        "score": "25"
       },
       {
         "name": "บท 8 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 9 [5]",
-        "score": "2"
+        "score": "5"
       },
       {
         "name": "บท 10 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "6"
+        "score": "25"
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "27"
+        "score": "62"
       },
       {
         "name": "รวม [100]",
-        "score": "41"
+        "score": "76"
       },
       {
         "name": "กิจกรรม 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 6",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 7",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 6",
@@ -78532,47 +78532,47 @@ export const studentScores = [
       },
       {
         "name": "ใบงาน 8.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 8",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 9.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 9",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 10",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 8",
@@ -78645,7 +78645,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 11,
     "กลางภาคข้อเขียน": 5,
     "ปลายภาค": 14,
-    "เกรด": "0",
+    "เกรด": "3.5",
     "ซ่อมกลางภาค": "ซ่อมแล้ว",
     "id": "42130",
     "name": "นางสาวมณฐกาญจน์ กล่ำทอง"
@@ -78662,11 +78662,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 7 [10]",
-        "score": "1"
+        "score": "9"
       },
       {
         "name": "กิจกรรม [5]",
@@ -78674,91 +78674,91 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "8"
+        "score": "24"
       },
       {
         "name": "บท 8 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 9 [5]",
-        "score": "2"
+        "score": "5"
       },
       {
         "name": "บท 10 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "6"
+        "score": "25"
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "26"
+        "score": "61"
       },
       {
         "name": "รวม [100]",
-        "score": "40"
+        "score": "75"
       },
       {
         "name": "กิจกรรม 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 6",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 7",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 6",
@@ -78774,47 +78774,47 @@ export const studentScores = [
       },
       {
         "name": "ใบงาน 8.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 8",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 9.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 9",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 10",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 8",
@@ -78887,7 +78887,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 16,
     "กลางภาคข้อเขียน": 5,
     "ปลายภาค": 14,
-    "เกรด": "0",
+    "เกรด": "3.5",
     "ซ่อมกลางภาค": "ซ่อมแล้ว",
     "id": "42136",
     "name": "นางสาวอธิชา เก้าลิ้ม"
@@ -78904,11 +78904,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "1"
+        "score": "9"
       },
       {
         "name": "บท 7 [10]",
-        "score": "1"
+        "score": "9"
       },
       {
         "name": "กิจกรรม [5]",
@@ -78916,91 +78916,91 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "7"
+        "score": "23"
       },
       {
         "name": "บท 8 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 9 [5]",
-        "score": "2"
+        "score": "5"
       },
       {
         "name": "บท 10 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "6"
-      },
-      {
-        "name": "ก่อนปลายภาค [70]",
         "score": "25"
       },
       {
+        "name": "ก่อนปลายภาค [70]",
+        "score": "60"
+      },
+      {
         "name": "รวม [100]",
-        "score": "47"
+        "score": "82"
       },
       {
         "name": "กิจกรรม 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 6",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 7",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 6",
@@ -79016,47 +79016,47 @@ export const studentScores = [
       },
       {
         "name": "ใบงาน 8.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 8",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 9.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 9",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 10",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 8",
@@ -79129,7 +79129,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 20,
     "กลางภาคข้อเขียน": 3,
     "ปลายภาค": 22,
-    "เกรด": "0",
+    "เกรด": "4",
     "ซ่อมกลางภาค": "ไม่ต้องซ่อม",
     "id": "42201",
     "name": "นางสาวธมนวรรณ จิตรเอื้อ"
@@ -79146,11 +79146,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "1"
+        "score": "10"
       },
       {
         "name": "บท 7 [10]",
-        "score": "1"
+        "score": "9"
       },
       {
         "name": "กิจกรรม [5]",
@@ -79158,99 +79158,99 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "7"
+        "score": "24"
       },
       {
         "name": "บท 8 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 9 [5]",
-        "score": "1"
+        "score": "4"
       },
       {
         "name": "บท 10 [10]",
-        "score": "1"
+        "score": "9"
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "4"
-      },
-      {
-        "name": "ก่อนปลายภาค [70]",
         "score": "23"
       },
       {
+        "name": "ก่อนปลายภาค [70]",
+        "score": "59"
+      },
+      {
         "name": "รวม [100]",
-        "score": "37"
+        "score": "73"
       },
       {
         "name": "กิจกรรม 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 6",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 7",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 6",
-        "score": "6"
+        "score": "9"
       },
       {
         "name": "Quiz 7",
-        "score": "4"
+        "score": "7"
       },
       {
         "name": "MID [20]2",
@@ -79258,59 +79258,59 @@ export const studentScores = [
       },
       {
         "name": "ใบงาน 8.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 8",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 9.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 9",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 10",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 8",
-        "score": "8"
+        "score": "9"
       },
       {
         "name": "Quiz 9",
-        "score": "6"
+        "score": "7"
       },
       {
         "name": "Quiz 10",
-        "score": "6"
+        "score": "7"
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
@@ -79371,7 +79371,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 12,
     "กลางภาคข้อเขียน": 2,
     "ปลายภาค": 14,
-    "เกรด": "0",
+    "เกรด": "3",
     "ซ่อมกลางภาค": "ซ่อมแล้ว",
     "id": "42212",
     "name": "นางสาวอภิชญา แซ่ฉั่ว"
@@ -79388,11 +79388,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 7 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "กิจกรรม [5]",
@@ -79400,91 +79400,91 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "9"
+        "score": "25"
       },
       {
         "name": "บท 8 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 9 [5]",
-        "score": "2"
+        "score": "5"
       },
       {
         "name": "บท 10 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "6"
+        "score": "25"
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "27"
+        "score": "62"
       },
       {
         "name": "รวม [100]",
-        "score": "40"
+        "score": "75"
       },
       {
         "name": "กิจกรรม 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 6",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 7",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 6",
@@ -79500,47 +79500,47 @@ export const studentScores = [
       },
       {
         "name": "ใบงาน 8.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 8",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 9.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 9",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 10",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 8",
@@ -79613,7 +79613,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 15,
     "กลางภาคข้อเขียน": 4.5,
     "ปลายภาค": 13,
-    "เกรด": "0",
+    "เกรด": "3.5",
     "ซ่อมกลางภาค": "ซ่อมแล้ว",
     "id": "42241",
     "name": "นางสาวธิดารัตน์ คำรวย"
@@ -79630,11 +79630,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 7 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "กิจกรรม [5]",
@@ -79642,91 +79642,91 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "9"
+        "score": "25"
       },
       {
         "name": "บท 8 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 9 [5]",
-        "score": "2"
-      },
-      {
-        "name": "บท 10 [10]",
-        "score": "1"
-      },
-      {
-        "name": "หลังกลางภาค [25]",
         "score": "5"
       },
       {
+        "name": "บท 10 [10]",
+        "score": "9"
+      },
+      {
+        "name": "หลังกลางภาค [25]",
+        "score": "24"
+      },
+      {
         "name": "ก่อนปลายภาค [70]",
-        "score": "26"
+        "score": "61"
       },
       {
         "name": "รวม [100]",
-        "score": "41"
+        "score": "76"
       },
       {
         "name": "กิจกรรม 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 6",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 7",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 6",
@@ -79742,47 +79742,47 @@ export const studentScores = [
       },
       {
         "name": "ใบงาน 8.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 8",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 9.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 9",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 10",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 8",
@@ -79855,7 +79855,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 18,
     "กลางภาคข้อเขียน": 4.5,
     "ปลายภาค": 15,
-    "เกรด": "0",
+    "เกรด": "3.5",
     "ซ่อมกลางภาค": "ซ่อมแล้ว",
     "id": "42253",
     "name": "นางสาวสุชานันท์ จันต๊ะเรือง"
@@ -79872,11 +79872,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 7 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "กิจกรรม [5]",
@@ -79884,91 +79884,91 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "9"
+        "score": "25"
       },
       {
         "name": "บท 8 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 9 [5]",
-        "score": "2"
+        "score": "5"
       },
       {
         "name": "บท 10 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "6"
+        "score": "25"
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "29"
+        "score": "64"
       },
       {
         "name": "รวม [100]",
-        "score": "53"
+        "score": "88"
       },
       {
         "name": "กิจกรรม 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 6",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 7",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 6",
@@ -79984,47 +79984,47 @@ export const studentScores = [
       },
       {
         "name": "ใบงาน 8.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 8",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 9.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 9",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 10",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 8",
@@ -80097,7 +80097,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 23,
     "กลางภาคข้อเขียน": 4.5,
     "ปลายภาค": 24,
-    "เกรด": "1",
+    "เกรด": "4",
     "ซ่อมกลางภาค": "ไม่ต้องซ่อม",
     "id": "42277",
     "name": "นางสาวธนภรณ์ โพธิ์คล้าย"
@@ -80114,11 +80114,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "1"
+        "score": "9"
       },
       {
         "name": "บท 7 [10]",
-        "score": "1"
+        "score": "9"
       },
       {
         "name": "กิจกรรม [5]",
@@ -80126,91 +80126,91 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "7"
-      },
-      {
-        "name": "บท 8 [10]",
-        "score": "2"
-      },
-      {
-        "name": "บท 9 [5]",
-        "score": "1"
-      },
-      {
-        "name": "บท 10 [10]",
-        "score": "1"
-      },
-      {
-        "name": "หลังกลางภาค [25]",
-        "score": "4"
-      },
-      {
-        "name": "ก่อนปลายภาค [70]",
         "score": "23"
       },
       {
+        "name": "บท 8 [10]",
+        "score": "10"
+      },
+      {
+        "name": "บท 9 [5]",
+        "score": "4"
+      },
+      {
+        "name": "บท 10 [10]",
+        "score": "9"
+      },
+      {
+        "name": "หลังกลางภาค [25]",
+        "score": "23"
+      },
+      {
+        "name": "ก่อนปลายภาค [70]",
+        "score": "58"
+      },
+      {
         "name": "รวม [100]",
-        "score": "42"
+        "score": "77"
       },
       {
         "name": "กิจกรรม 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 6",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 7",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 6",
@@ -80226,47 +80226,47 @@ export const studentScores = [
       },
       {
         "name": "ใบงาน 8.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 8",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 9.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 9",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 10",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 8",
@@ -80339,7 +80339,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 20,
     "กลางภาคข้อเขียน": 2.5,
     "ปลายภาค": 19,
-    "เกรด": "0",
+    "เกรด": "3.5",
     "ซ่อมกลางภาค": "ซ่อมแล้ว",
     "id": "43981",
     "name": "นางสาวกัญญาวีร์ ทวีศักดิ์"
@@ -80356,11 +80356,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 7 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "กิจกรรม [5]",
@@ -80368,91 +80368,91 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "9"
+        "score": "25"
       },
       {
         "name": "บท 8 [10]",
-        "score": "1"
+        "score": "9"
       },
       {
         "name": "บท 9 [5]",
-        "score": "2"
-      },
-      {
-        "name": "บท 10 [10]",
-        "score": "2"
-      },
-      {
-        "name": "หลังกลางภาค [25]",
         "score": "5"
       },
       {
+        "name": "บท 10 [10]",
+        "score": "10"
+      },
+      {
+        "name": "หลังกลางภาค [25]",
+        "score": "24"
+      },
+      {
         "name": "ก่อนปลายภาค [70]",
-        "score": "26"
+        "score": "61"
       },
       {
         "name": "รวม [100]",
-        "score": "42"
+        "score": "77"
       },
       {
         "name": "กิจกรรม 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 6",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 7",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 6",
@@ -80468,47 +80468,47 @@ export const studentScores = [
       },
       {
         "name": "ใบงาน 8.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 8",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 9.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 9",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 10",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 8",
@@ -80581,7 +80581,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 19,
     "กลางภาคข้อเขียน": 4.5,
     "ปลายภาค": 16,
-    "เกรด": "0",
+    "เกรด": "3.5",
     "ซ่อมกลางภาค": "ไม่ต้องซ่อม",
     "id": "43982",
     "name": "นางสาวกุลนิดา กันล้อม"
@@ -80598,11 +80598,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "1"
+        "score": "9"
       },
       {
         "name": "บท 7 [10]",
-        "score": "1"
+        "score": "9"
       },
       {
         "name": "กิจกรรม [5]",
@@ -80610,91 +80610,91 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "7"
-      },
-      {
-        "name": "บท 8 [10]",
-        "score": "2"
-      },
-      {
-        "name": "บท 9 [5]",
-        "score": "1"
-      },
-      {
-        "name": "บท 10 [10]",
-        "score": "1"
-      },
-      {
-        "name": "หลังกลางภาค [25]",
-        "score": "4"
-      },
-      {
-        "name": "ก่อนปลายภาค [70]",
         "score": "23"
       },
       {
+        "name": "บท 8 [10]",
+        "score": "10"
+      },
+      {
+        "name": "บท 9 [5]",
+        "score": "4"
+      },
+      {
+        "name": "บท 10 [10]",
+        "score": "9"
+      },
+      {
+        "name": "หลังกลางภาค [25]",
+        "score": "23"
+      },
+      {
+        "name": "ก่อนปลายภาค [70]",
+        "score": "58"
+      },
+      {
         "name": "รวม [100]",
-        "score": "36"
+        "score": "71"
       },
       {
         "name": "กิจกรรม 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 6",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 7",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 6",
@@ -80710,47 +80710,47 @@ export const studentScores = [
       },
       {
         "name": "ใบงาน 8.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 8",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 9.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 9",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 10",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 8",
@@ -80823,7 +80823,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 13,
     "กลางภาคข้อเขียน": 5,
     "ปลายภาค": 13,
-    "เกรด": "0",
+    "เกรด": "3",
     "ซ่อมกลางภาค": "ซ่อมแล้ว",
     "id": "43983",
     "name": "นางสาวขวัญเนตร พรมรักษ์"
@@ -80840,11 +80840,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "1"
+        "score": "9"
       },
       {
         "name": "บท 7 [10]",
-        "score": "1"
+        "score": "9"
       },
       {
         "name": "กิจกรรม [5]",
@@ -80852,91 +80852,91 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "7"
+        "score": "23"
       },
       {
         "name": "บท 8 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 9 [5]",
-        "score": "2"
-      },
-      {
-        "name": "บท 10 [10]",
-        "score": "1"
-      },
-      {
-        "name": "หลังกลางภาค [25]",
         "score": "5"
       },
       {
-        "name": "ก่อนปลายภาค [70]",
+        "name": "บท 10 [10]",
+        "score": "9"
+      },
+      {
+        "name": "หลังกลางภาค [25]",
         "score": "24"
       },
       {
+        "name": "ก่อนปลายภาค [70]",
+        "score": "59"
+      },
+      {
         "name": "รวม [100]",
-        "score": "39"
+        "score": "74"
       },
       {
         "name": "กิจกรรม 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 6",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 7",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 6",
@@ -80952,47 +80952,47 @@ export const studentScores = [
       },
       {
         "name": "ใบงาน 8.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 8",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 9.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 9",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 10",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 8",
@@ -81065,7 +81065,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 10,
     "กลางภาคข้อเขียน": 2,
     "ปลายภาค": 15,
-    "เกรด": "0",
+    "เกรด": "3",
     "ซ่อมกลางภาค": "ซ่อมแล้ว",
     "id": "43984",
     "name": "เด็กหญิงณิชนันทน์ ชัยศรี"
@@ -81082,11 +81082,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "1"
+        "score": "9"
       },
       {
         "name": "บท 7 [10]",
-        "score": "1"
+        "score": "9"
       },
       {
         "name": "กิจกรรม [5]",
@@ -81094,91 +81094,91 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "7"
+        "score": "23"
       },
       {
         "name": "บท 8 [10]",
-        "score": "1"
+        "score": "9"
       },
       {
         "name": "บท 9 [5]",
-        "score": "1"
+        "score": "4"
       },
       {
         "name": "บท 10 [10]",
-        "score": "1"
+        "score": "9"
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "3"
-      },
-      {
-        "name": "ก่อนปลายภาค [70]",
         "score": "22"
       },
       {
+        "name": "ก่อนปลายภาค [70]",
+        "score": "57"
+      },
+      {
         "name": "รวม [100]",
-        "score": "33"
+        "score": "68"
       },
       {
         "name": "กิจกรรม 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 6",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 7",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 6",
@@ -81194,47 +81194,47 @@ export const studentScores = [
       },
       {
         "name": "ใบงาน 8.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 8",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 9.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 9",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 10",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 8",
@@ -81307,7 +81307,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 14,
     "กลางภาคข้อเขียน": 3,
     "ปลายภาค": 11,
-    "เกรด": "0",
+    "เกรด": "2.5",
     "ซ่อมกลางภาค": "ซ่อมแล้ว",
     "id": "43985",
     "name": "นางสาวพรณิภา สินเพราะ"
@@ -81324,11 +81324,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "1"
+        "score": "9"
       },
       {
         "name": "บท 7 [10]",
-        "score": "1"
+        "score": "9"
       },
       {
         "name": "กิจกรรม [5]",
@@ -81336,91 +81336,91 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "7"
-      },
-      {
-        "name": "บท 8 [10]",
-        "score": "1"
-      },
-      {
-        "name": "บท 9 [5]",
-        "score": "1"
-      },
-      {
-        "name": "บท 10 [10]",
-        "score": "1"
-      },
-      {
-        "name": "หลังกลางภาค [25]",
-        "score": "3"
-      },
-      {
-        "name": "ก่อนปลายภาค [70]",
         "score": "23"
       },
       {
+        "name": "บท 8 [10]",
+        "score": "9"
+      },
+      {
+        "name": "บท 9 [5]",
+        "score": "4"
+      },
+      {
+        "name": "บท 10 [10]",
+        "score": "9"
+      },
+      {
+        "name": "หลังกลางภาค [25]",
+        "score": "22"
+      },
+      {
+        "name": "ก่อนปลายภาค [70]",
+        "score": "58"
+      },
+      {
         "name": "รวม [100]",
-        "score": "40"
+        "score": "75"
       },
       {
         "name": "กิจกรรม 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 6",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 7",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 6",
@@ -81436,47 +81436,47 @@ export const studentScores = [
       },
       {
         "name": "ใบงาน 8.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 8",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 9.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 9",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 10",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 8",
@@ -81549,7 +81549,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 22,
     "กลางภาคข้อเขียน": 4,
     "ปลายภาค": 17,
-    "เกรด": "0",
+    "เกรด": "3.5",
     "ซ่อมกลางภาค": "ไม่ต้องซ่อม",
     "id": "43986",
     "name": "นางสาววรินทร์รตา อิ่มฤทธา"
@@ -81566,11 +81566,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 7 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "กิจกรรม [5]",
@@ -81578,91 +81578,91 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "9"
-      },
-      {
-        "name": "บท 8 [10]",
-        "score": "2"
-      },
-      {
-        "name": "บท 9 [5]",
-        "score": "1"
-      },
-      {
-        "name": "บท 10 [10]",
-        "score": "1"
-      },
-      {
-        "name": "หลังกลางภาค [25]",
-        "score": "4"
-      },
-      {
-        "name": "ก่อนปลายภาค [70]",
         "score": "25"
       },
       {
+        "name": "บท 8 [10]",
+        "score": "10"
+      },
+      {
+        "name": "บท 9 [5]",
+        "score": "4"
+      },
+      {
+        "name": "บท 10 [10]",
+        "score": "10"
+      },
+      {
+        "name": "หลังกลางภาค [25]",
+        "score": "24"
+      },
+      {
+        "name": "ก่อนปลายภาค [70]",
+        "score": "61"
+      },
+      {
         "name": "รวม [100]",
-        "score": "39"
+        "score": "75"
       },
       {
         "name": "กิจกรรม 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 6",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 7",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 6",
@@ -81678,47 +81678,47 @@ export const studentScores = [
       },
       {
         "name": "ใบงาน 8.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 8",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 9.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 9",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 10",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 8",
@@ -81730,7 +81730,7 @@ export const studentScores = [
       },
       {
         "name": "Quiz 10",
-        "score": "6"
+        "score": "8"
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
@@ -81791,7 +81791,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 17,
     "กลางภาคข้อเขียน": 5,
     "ปลายภาค": 14,
-    "เกรด": "0",
+    "เกรด": "3.5",
     "ซ่อมกลางภาค": "ซ่อมแล้ว",
     "id": "43987",
     "name": "นางสาวอภิญญา คงประเสริฐ"
@@ -82776,11 +82776,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "8"
+        "score": "9"
       },
       {
         "name": "บท 7 [10]",
-        "score": "8"
+        "score": "10"
       },
       {
         "name": "กิจกรรม [5]",
@@ -82788,15 +82788,15 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "21"
+        "score": "24"
       },
       {
         "name": "บท 8 [10]",
-        "score": "9"
+        "score": "10"
       },
       {
         "name": "บท 9 [5]",
-        "score": "4"
+        "score": "5"
       },
       {
         "name": "บท 10 [10]",
@@ -82804,15 +82804,15 @@ export const studentScores = [
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "22"
+        "score": "24"
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "53"
+        "score": "58"
       },
       {
         "name": "รวม [100]",
-        "score": "69"
+        "score": "74"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -82876,11 +82876,11 @@ export const studentScores = [
       },
       {
         "name": "Quiz 6",
-        "score": "ยังไม่ส่ง"
+        "score": "7"
       },
       {
         "name": "Quiz 7",
-        "score": "ยังไม่ส่ง"
+        "score": "8"
       },
       {
         "name": "MID [20]2",
@@ -82932,11 +82932,11 @@ export const studentScores = [
       },
       {
         "name": "Quiz 8",
-        "score": "7"
+        "score": "8"
       },
       {
         "name": "Quiz 9",
-        "score": "7"
+        "score": "9"
       },
       {
         "name": "Quiz 10",
@@ -83001,7 +83001,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 17,
     "กลางภาคข้อเขียน": 2,
     "ปลายภาค": 16,
-    "เกรด": "2.5",
+    "เกรด": "3",
     "ซ่อมกลางภาค": "ยังไม่ซ่อม",
     "id": "42023",
     "name": "นายธนภูมิ โตพงษ์"
@@ -90040,7 +90040,7 @@ export const studentScores = [
       },
       {
         "name": "บท 7 [10]",
-        "score": "9"
+        "score": "10"
       },
       {
         "name": "กิจกรรม [5]",
@@ -90048,7 +90048,7 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "24"
+        "score": "25"
       },
       {
         "name": "บท 8 [10]",
@@ -90068,11 +90068,11 @@ export const studentScores = [
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "61"
+        "score": "62"
       },
       {
         "name": "รวม [100]",
-        "score": "76"
+        "score": "77"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -90140,7 +90140,7 @@ export const studentScores = [
       },
       {
         "name": "Quiz 7",
-        "score": "7"
+        "score": "8"
       },
       {
         "name": "MID [20]2",
