@@ -1,4 +1,4 @@
-export const lastUpdated = "2026-03-02T04:03:05.036Z";
+export const lastUpdated = "2026-03-04T05:24:42.019Z";
 export const studentScores = [
   {
     "assignments": [
@@ -181,6 +181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "34"
+      },
+      {
+        "name": "rank",
+        "score": "66"
       },
       {
         "name": "__EMPTY",
@@ -425,6 +433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "35"
+      },
+      {
+        "name": "rank",
+        "score": "51"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -665,6 +681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "40"
+      },
+      {
+        "name": "rank",
+        "score": "12"
       },
       {
         "name": "__EMPTY",
@@ -909,6 +933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "32"
+      },
+      {
+        "name": "rank",
+        "score": "95"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -1151,6 +1183,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "31"
+      },
+      {
+        "name": "rank",
+        "score": "118"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -1168,7 +1208,7 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_4",
-        "score": "4"
+        "score": "5"
       },
       {
         "name": "__EMPTY_5",
@@ -1176,7 +1216,7 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_6",
-        "score": "1"
+        "score": "0"
       },
       {
         "name": "__EMPTY_7",
@@ -1393,6 +1433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "31"
+      },
+      {
+        "name": "rank",
+        "score": "118"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -1406,15 +1454,15 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_3",
-        "score": "27"
+        "score": "31"
       },
       {
         "name": "__EMPTY_4",
-        "score": "7"
+        "score": "4"
       },
       {
         "name": "__EMPTY_5",
-        "score": "2"
+        "score": "1"
       },
       {
         "name": "__EMPTY_6",
@@ -1633,6 +1681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "33"
+      },
+      {
+        "name": "rank",
+        "score": "81"
       },
       {
         "name": "__EMPTY",
@@ -1877,6 +1933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "30"
+      },
+      {
+        "name": "rank",
+        "score": "143"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -1890,11 +1954,11 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_3",
-        "score": "19"
+        "score": "20"
       },
       {
         "name": "__EMPTY_4",
-        "score": "7"
+        "score": "6"
       },
       {
         "name": "__EMPTY_5",
@@ -2119,6 +2183,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "37"
+      },
+      {
+        "name": "rank",
+        "score": "36"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -2136,11 +2208,11 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_4",
-        "score": "11"
+        "score": "12"
       },
       {
         "name": "__EMPTY_5",
-        "score": "13"
+        "score": "16"
       },
       {
         "name": "__EMPTY_6",
@@ -2148,19 +2220,19 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_7",
-        "score": "4"
+        "score": "3"
       },
       {
         "name": "__EMPTY_8",
-        "score": "1"
+        "score": "0"
       },
       {
         "name": "__EMPTY_9",
-        "score": "1"
+        "score": "0"
       },
       {
         "name": "__EMPTY_10",
-        "score": "2"
+        "score": "1"
       },
       {
         "name": "__EMPTY_11",
@@ -2361,6 +2433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "34"
+      },
+      {
+        "name": "rank",
+        "score": "66"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -2386,7 +2466,7 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_6",
-        "score": "2"
+        "score": "3"
       },
       {
         "name": "__EMPTY_7",
@@ -2398,7 +2478,7 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_9",
-        "score": "2"
+        "score": "1"
       },
       {
         "name": "__EMPTY_10",
@@ -2603,6 +2683,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "39"
+      },
+      {
+        "name": "rank",
+        "score": "18"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -2628,7 +2716,7 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_6",
-        "score": "5"
+        "score": "6"
       },
       {
         "name": "__EMPTY_7",
@@ -2636,7 +2724,7 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_8",
-        "score": "1"
+        "score": "0"
       },
       {
         "name": "__EMPTY_9",
@@ -2845,6 +2933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "37"
+      },
+      {
+        "name": "rank",
+        "score": "36"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -2874,11 +2970,11 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_7",
-        "score": "0"
+        "score": "1"
       },
       {
         "name": "__EMPTY_8",
-        "score": "2"
+        "score": "1"
       },
       {
         "name": "__EMPTY_9",
@@ -3087,6 +3183,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "34"
+      },
+      {
+        "name": "rank",
+        "score": "66"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -3100,11 +3204,11 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_3",
-        "score": "7"
+        "score": "8"
       },
       {
         "name": "__EMPTY_4",
-        "score": "22"
+        "score": "21"
       },
       {
         "name": "__EMPTY_5",
@@ -3329,6 +3433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "39"
+      },
+      {
+        "name": "rank",
+        "score": "18"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -3342,11 +3454,11 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_3",
-        "score": "8"
+        "score": "9"
       },
       {
         "name": "__EMPTY_4",
-        "score": "15"
+        "score": "14"
       },
       {
         "name": "__EMPTY_5",
@@ -3569,6 +3681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "33"
+      },
+      {
+        "name": "rank",
+        "score": "81"
       },
       {
         "name": "__EMPTY",
@@ -3813,6 +3933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "37"
+      },
+      {
+        "name": "rank",
+        "score": "36"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -4053,6 +4181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "32"
+      },
+      {
+        "name": "rank",
+        "score": "95"
       },
       {
         "name": "__EMPTY",
@@ -4297,6 +4433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "29"
+      },
+      {
+        "name": "rank",
+        "score": "170"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -4539,6 +4683,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "40"
+      },
+      {
+        "name": "rank",
+        "score": "12"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -4552,19 +4704,19 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_3",
-        "score": "133"
+        "score": "140"
       },
       {
         "name": "__EMPTY_4",
-        "score": "117"
+        "score": "113"
       },
       {
         "name": "__EMPTY_5",
-        "score": "88"
+        "score": "90"
       },
       {
         "name": "__EMPTY_6",
-        "score": "19"
+        "score": "20"
       },
       {
         "name": "__EMPTY_7",
@@ -4572,15 +4724,15 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_8",
-        "score": "4"
+        "score": "1"
       },
       {
         "name": "__EMPTY_9",
-        "score": "5"
+        "score": "3"
       },
       {
         "name": "__EMPTY_10",
-        "score": "156"
+        "score": "155"
       },
       {
         "name": "__EMPTY_11",
@@ -4779,6 +4931,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "35"
+      },
+      {
+        "name": "rank",
+        "score": "51"
       },
       {
         "name": "__EMPTY",
@@ -5023,6 +5183,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "28"
+      },
+      {
+        "name": "rank",
+        "score": "196"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -5036,7 +5204,7 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_3",
-        "score": "0.6365348399246704"
+        "score": "0.6459510357815442"
       },
       {
         "name": "__EMPTY_4",
@@ -5265,6 +5433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "40"
+      },
+      {
+        "name": "rank",
+        "score": "12"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -5278,7 +5454,7 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_3",
-        "score": "0.672316384180791"
+        "score": "0.6836158192090396"
       },
       {
         "name": "__EMPTY_4",
@@ -5505,6 +5681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "43"
+      },
+      {
+        "name": "rank",
+        "score": "1"
       },
       {
         "name": "__EMPTY",
@@ -5749,6 +5933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "33"
+      },
+      {
+        "name": "rank",
+        "score": "81"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -5991,6 +6183,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "31"
+      },
+      {
+        "name": "rank",
+        "score": "118"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -6008,7 +6208,7 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_4",
-        "score": "0.13333333333333333"
+        "score": "0.16666666666666666"
       },
       {
         "name": "__EMPTY_5",
@@ -6016,7 +6216,7 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_6",
-        "score": "0.03333333333333333"
+        "score": "0"
       },
       {
         "name": "__EMPTY_7",
@@ -6233,6 +6433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "32"
+      },
+      {
+        "name": "rank",
+        "score": "95"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -6246,15 +6454,15 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_3",
-        "score": "0.75"
+        "score": "0.8611111111111112"
       },
       {
         "name": "__EMPTY_4",
-        "score": "0.19444444444444445"
+        "score": "0.1111111111111111"
       },
       {
         "name": "__EMPTY_5",
-        "score": "0.05555555555555555"
+        "score": "0.027777777777777776"
       },
       {
         "name": "__EMPTY_6",
@@ -6473,6 +6681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "38"
+      },
+      {
+        "name": "rank",
+        "score": "27"
       },
       {
         "name": "__EMPTY",
@@ -6717,6 +6933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "36"
+      },
+      {
+        "name": "rank",
+        "score": "43"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -6730,11 +6954,11 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_3",
-        "score": "0.5277777777777778"
+        "score": "0.5555555555555556"
       },
       {
         "name": "__EMPTY_4",
-        "score": "0.19444444444444445"
+        "score": "0.16666666666666666"
       },
       {
         "name": "__EMPTY_5",
@@ -6788,11 +7012,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "8"
+        "score": "10"
       },
       {
         "name": "บท 7 [10]",
-        "score": "8"
+        "score": "10"
       },
       {
         "name": "กิจกรรม [5]",
@@ -6800,31 +7024,31 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "21"
+        "score": "25"
       },
       {
         "name": "บท 8 [10]",
-        "score": "8"
+        "score": "10"
       },
       {
         "name": "บท 9 [5]",
-        "score": "3"
+        "score": "5"
       },
       {
         "name": "บท 10 [10]",
-        "score": "8"
+        "score": "10"
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "19"
+        "score": "25"
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "52"
+        "score": "62"
       },
       {
         "name": "รวม [100]",
-        "score": "68"
+        "score": "78"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -6888,11 +7112,11 @@ export const studentScores = [
       },
       {
         "name": "Quiz 6",
-        "score": "ยังไม่ส่ง"
+        "score": "8"
       },
       {
         "name": "Quiz 7",
-        "score": "ยังไม่ส่ง"
+        "score": "8"
       },
       {
         "name": "MID [20]2",
@@ -6944,19 +7168,27 @@ export const studentScores = [
       },
       {
         "name": "Quiz 8",
-        "score": "ยังไม่ส่ง"
+        "score": "8"
       },
       {
         "name": "Quiz 9",
-        "score": "ยังไม่ส่ง"
+        "score": "8"
       },
       {
         "name": "Quiz 10",
-        "score": "ยังไม่ส่ง"
+        "score": "8"
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "28"
+      },
+      {
+        "name": "rank",
+        "score": "196"
       },
       {
         "name": "__EMPTY",
@@ -6976,11 +7208,11 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_4",
-        "score": "0.275"
+        "score": "0.3"
       },
       {
         "name": "__EMPTY_5",
-        "score": "0.325"
+        "score": "0.4"
       },
       {
         "name": "__EMPTY_6",
@@ -6988,19 +7220,19 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_7",
-        "score": "0.1"
+        "score": "0.075"
       },
       {
         "name": "__EMPTY_8",
-        "score": "0.025"
+        "score": "0"
       },
       {
         "name": "__EMPTY_9",
-        "score": "0.025"
+        "score": "0"
       },
       {
         "name": "__EMPTY_10",
-        "score": "0.05"
+        "score": "0.025"
       },
       {
         "name": "__EMPTY_11",
@@ -7013,7 +7245,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 19,
     "กลางภาคข้อเขียน": 5,
     "ปลายภาค": 16,
-    "เกรด": "2.5",
+    "เกรด": "3.5",
     "ซ่อมกลางภาค": "ไม่ต้องซ่อม",
     "id": "43900",
     "name": "นางสาวณิชา อยู่สวัสดิ์"
@@ -7201,6 +7433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "31"
+      },
+      {
+        "name": "rank",
+        "score": "118"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -7226,7 +7466,7 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_6",
-        "score": "0.05"
+        "score": "0.075"
       },
       {
         "name": "__EMPTY_7",
@@ -7238,7 +7478,7 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_9",
-        "score": "0.05"
+        "score": "0.025"
       },
       {
         "name": "__EMPTY_10",
@@ -7246,7 +7486,7 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_11",
-        "score": "1"
+        "score": "0.9999999999999999"
       }
     ],
     "room": "1",
@@ -7443,6 +7683,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "40"
+      },
+      {
+        "name": "rank",
+        "score": "12"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -7468,7 +7716,7 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_6",
-        "score": "0.125"
+        "score": "0.15"
       },
       {
         "name": "__EMPTY_7",
@@ -7476,7 +7724,7 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_8",
-        "score": "0.025"
+        "score": "0"
       },
       {
         "name": "__EMPTY_9",
@@ -7685,6 +7933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "38"
+      },
+      {
+        "name": "rank",
+        "score": "27"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -7714,11 +7970,11 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_7",
-        "score": "0"
+        "score": "0.025"
       },
       {
         "name": "__EMPTY_8",
-        "score": "0.05"
+        "score": "0.025"
       },
       {
         "name": "__EMPTY_9",
@@ -7927,6 +8183,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "38"
+      },
+      {
+        "name": "rank",
+        "score": "27"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -7940,11 +8204,11 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_3",
-        "score": "0.175"
+        "score": "0.2"
       },
       {
         "name": "__EMPTY_4",
-        "score": "0.55"
+        "score": "0.525"
       },
       {
         "name": "__EMPTY_5",
@@ -8169,6 +8433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "35"
+      },
+      {
+        "name": "rank",
+        "score": "51"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -8182,11 +8454,11 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_3",
-        "score": "0.20512820512820512"
+        "score": "0.23076923076923078"
       },
       {
         "name": "__EMPTY_4",
-        "score": "0.38461538461538464"
+        "score": "0.358974358974359"
       },
       {
         "name": "__EMPTY_5",
@@ -8240,11 +8512,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "9"
+        "score": "10"
       },
       {
         "name": "บท 7 [10]",
-        "score": "9"
+        "score": "10"
       },
       {
         "name": "กิจกรรม [5]",
@@ -8252,7 +8524,7 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "23"
+        "score": "25"
       },
       {
         "name": "บท 8 [10]",
@@ -8272,11 +8544,11 @@ export const studentScores = [
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "61"
+        "score": "63"
       },
       {
         "name": "รวม [100]",
-        "score": "78"
+        "score": "80"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -8340,11 +8612,11 @@ export const studentScores = [
       },
       {
         "name": "Quiz 6",
-        "score": "7"
+        "score": "8"
       },
       {
         "name": "Quiz 7",
-        "score": "7"
+        "score": "8"
       },
       {
         "name": "MID [20]2",
@@ -8411,6 +8683,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "30"
+      },
+      {
+        "name": "rank",
+        "score": "143"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -8465,7 +8745,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 20,
     "กลางภาคข้อเขียน": 5,
     "ปลายภาค": 17,
-    "เกรด": "3.5",
+    "เกรด": "4",
     "ซ่อมกลางภาค": "ไม่ต้องซ่อม",
     "id": "42063",
     "name": "นายธนวรรธน์ นวมนิ่ม"
@@ -8651,6 +8931,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "41"
+      },
+      {
+        "name": "rank",
+        "score": "6"
       },
       {
         "name": "__EMPTY",
@@ -8895,6 +9183,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "34"
+      },
+      {
+        "name": "rank",
+        "score": "66"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -9135,6 +9431,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "32"
+      },
+      {
+        "name": "rank",
+        "score": "95"
       },
       {
         "name": "__EMPTY",
@@ -9379,6 +9683,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "27"
+      },
+      {
+        "name": "rank",
+        "score": "224"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -9392,19 +9704,19 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_3",
-        "score": "0.2504708097928437"
+        "score": "0.263653483992467"
       },
       {
         "name": "__EMPTY_4",
-        "score": "0.22033898305084745"
+        "score": "0.2128060263653484"
       },
       {
         "name": "__EMPTY_5",
-        "score": "0.1657250470809793"
+        "score": "0.1694915254237288"
       },
       {
         "name": "__EMPTY_6",
-        "score": "0.035781544256120526"
+        "score": "0.03766478342749529"
       },
       {
         "name": "__EMPTY_7",
@@ -9412,19 +9724,19 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_8",
-        "score": "0.007532956685499058"
+        "score": "0.0018832391713747645"
       },
       {
         "name": "__EMPTY_9",
-        "score": "0.009416195856873822"
+        "score": "0.005649717514124294"
       },
       {
         "name": "__EMPTY_10",
-        "score": "0.2937853107344633"
+        "score": "0.2919020715630885"
       },
       {
         "name": "__EMPTY_11",
-        "score": "1"
+        "score": "0.9999999999999998"
       }
     ],
     "room": "2",
@@ -9619,6 +9931,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "32"
+      },
+      {
+        "name": "rank",
+        "score": "95"
       },
       {
         "name": "__EMPTY",
@@ -9863,6 +10183,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "41"
+      },
+      {
+        "name": "rank",
+        "score": "6"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -10103,6 +10431,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "35"
+      },
+      {
+        "name": "rank",
+        "score": "51"
       },
       {
         "name": "__EMPTY",
@@ -10347,6 +10683,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "43"
+      },
+      {
+        "name": "rank",
+        "score": "1"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -10587,6 +10931,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "32"
+      },
+      {
+        "name": "rank",
+        "score": "95"
       },
       {
         "name": "__EMPTY",
@@ -10831,6 +11183,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "41"
+      },
+      {
+        "name": "rank",
+        "score": "6"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -11071,6 +11431,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "28"
+      },
+      {
+        "name": "rank",
+        "score": "196"
       },
       {
         "name": "__EMPTY",
@@ -11315,6 +11683,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "32"
+      },
+      {
+        "name": "rank",
+        "score": "95"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -11557,6 +11933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "39"
+      },
+      {
+        "name": "rank",
+        "score": "18"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -11648,7 +12032,7 @@ export const studentScores = [
       },
       {
         "name": "บท 9 [5]",
-        "score": "4"
+        "score": "5"
       },
       {
         "name": "บท 10 [10]",
@@ -11656,15 +12040,15 @@ export const studentScores = [
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "23"
+        "score": "24"
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "61"
+        "score": "62"
       },
       {
         "name": "รวม [100]",
-        "score": "79"
+        "score": "80"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -11788,7 +12172,7 @@ export const studentScores = [
       },
       {
         "name": "Quiz 9",
-        "score": "7"
+        "score": "8"
       },
       {
         "name": "Quiz 10",
@@ -11797,6 +12181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "32"
+      },
+      {
+        "name": "rank",
+        "score": "95"
       },
       {
         "name": "__EMPTY",
@@ -11853,7 +12245,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 25,
     "กลางภาคข้อเขียน": 3.5,
     "ปลายภาค": 18,
-    "เกรด": "3.5",
+    "เกรด": "4",
     "ซ่อมกลางภาค": "ไม่ต้องซ่อม",
     "id": "41927",
     "name": "นางสาวพิชญ์พธู สุกสี"
@@ -11890,7 +12282,7 @@ export const studentScores = [
       },
       {
         "name": "บท 9 [5]",
-        "score": "4"
+        "score": "5"
       },
       {
         "name": "บท 10 [10]",
@@ -11898,15 +12290,15 @@ export const studentScores = [
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "22"
+        "score": "23"
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "59"
+        "score": "60"
       },
       {
         "name": "รวม [100]",
-        "score": "74"
+        "score": "75"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -12030,7 +12422,7 @@ export const studentScores = [
       },
       {
         "name": "Quiz 9",
-        "score": "7"
+        "score": "8"
       },
       {
         "name": "Quiz 10",
@@ -12039,6 +12431,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "27"
+      },
+      {
+        "name": "rank",
+        "score": "224"
       },
       {
         "name": "__EMPTY",
@@ -12095,7 +12495,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 15,
     "กลางภาคข้อเขียน": 5,
     "ปลายภาค": 15,
-    "เกรด": "3",
+    "เกรด": "3.5",
     "ซ่อมกลางภาค": "ซ่อมแล้ว",
     "id": "42047",
     "name": "นางสาวธิญาดา แป้นแหลม"
@@ -12283,6 +12683,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "36"
+      },
+      {
+        "name": "rank",
+        "score": "43"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -12354,11 +12762,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "9"
+        "score": "10"
       },
       {
         "name": "บท 7 [10]",
-        "score": "9"
+        "score": "10"
       },
       {
         "name": "กิจกรรม [5]",
@@ -12366,7 +12774,7 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "23"
+        "score": "25"
       },
       {
         "name": "บท 8 [10]",
@@ -12374,7 +12782,7 @@ export const studentScores = [
       },
       {
         "name": "บท 9 [5]",
-        "score": "4"
+        "score": "5"
       },
       {
         "name": "บท 10 [10]",
@@ -12382,15 +12790,15 @@ export const studentScores = [
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "23"
+        "score": "24"
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "58"
+        "score": "61"
       },
       {
         "name": "รวม [100]",
-        "score": "77"
+        "score": "80"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -12454,11 +12862,11 @@ export const studentScores = [
       },
       {
         "name": "Quiz 6",
-        "score": "7"
+        "score": "8"
       },
       {
         "name": "Quiz 7",
-        "score": "3"
+        "score": "8"
       },
       {
         "name": "MID [20]2",
@@ -12514,7 +12922,7 @@ export const studentScores = [
       },
       {
         "name": "Quiz 9",
-        "score": "7"
+        "score": "8"
       },
       {
         "name": "Quiz 10",
@@ -12523,6 +12931,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "31"
+      },
+      {
+        "name": "rank",
+        "score": "118"
       },
       {
         "name": "__EMPTY",
@@ -12579,7 +12995,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 17,
     "กลางภาคข้อเขียน": 5,
     "ปลายภาค": 19,
-    "เกรด": "3.5",
+    "เกรด": "4",
     "ซ่อมกลางภาค": "ซ่อมแล้ว",
     "id": "42078",
     "name": "นางสาวณพัชญา พนาลัย"
@@ -12765,6 +13181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "43"
+      },
+      {
+        "name": "rank",
+        "score": "1"
       },
       {
         "name": "__EMPTY",
@@ -13009,6 +13433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "39"
+      },
+      {
+        "name": "rank",
+        "score": "18"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -13251,6 +13683,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "29"
+      },
+      {
+        "name": "rank",
+        "score": "170"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -13342,7 +13782,7 @@ export const studentScores = [
       },
       {
         "name": "บท 9 [5]",
-        "score": "4"
+        "score": "5"
       },
       {
         "name": "บท 10 [10]",
@@ -13350,15 +13790,15 @@ export const studentScores = [
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "24"
+        "score": "25"
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "62"
+        "score": "63"
       },
       {
         "name": "รวม [100]",
-        "score": "79"
+        "score": "80"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -13482,7 +13922,7 @@ export const studentScores = [
       },
       {
         "name": "Quiz 9",
-        "score": "7"
+        "score": "8"
       },
       {
         "name": "Quiz 10",
@@ -13491,6 +13931,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "30"
+      },
+      {
+        "name": "rank",
+        "score": "143"
       },
       {
         "name": "__EMPTY",
@@ -13547,7 +13995,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 22,
     "กลางภาคข้อเขียน": 4,
     "ปลายภาค": 17,
-    "เกรด": "3.5",
+    "เกรด": "4",
     "ซ่อมกลางภาค": "ไม่ต้องซ่อม",
     "id": "42091",
     "name": "นางสาวภัทรดา มหัทธนานุภาพ"
@@ -13733,6 +14181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "30"
+      },
+      {
+        "name": "rank",
+        "score": "143"
       },
       {
         "name": "__EMPTY",
@@ -13977,6 +14433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "39"
+      },
+      {
+        "name": "rank",
+        "score": "18"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -14217,6 +14681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "37"
+      },
+      {
+        "name": "rank",
+        "score": "36"
       },
       {
         "name": "__EMPTY",
@@ -14461,6 +14933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "33"
+      },
+      {
+        "name": "rank",
+        "score": "81"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -14701,6 +15181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "39"
+      },
+      {
+        "name": "rank",
+        "score": "18"
       },
       {
         "name": "__EMPTY",
@@ -14945,6 +15433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "32"
+      },
+      {
+        "name": "rank",
+        "score": "95"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -15185,6 +15681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "33"
+      },
+      {
+        "name": "rank",
+        "score": "81"
       },
       {
         "name": "__EMPTY",
@@ -15429,6 +15933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "36"
+      },
+      {
+        "name": "rank",
+        "score": "43"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -15669,6 +16181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "35"
+      },
+      {
+        "name": "rank",
+        "score": "51"
       },
       {
         "name": "__EMPTY",
@@ -15913,6 +16433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "30"
+      },
+      {
+        "name": "rank",
+        "score": "143"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -16153,6 +16681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "34"
+      },
+      {
+        "name": "rank",
+        "score": "66"
       },
       {
         "name": "__EMPTY",
@@ -16397,6 +16933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "27"
+      },
+      {
+        "name": "rank",
+        "score": "224"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -16637,6 +17181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "33"
+      },
+      {
+        "name": "rank",
+        "score": "81"
       },
       {
         "name": "__EMPTY",
@@ -16881,6 +17433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "27"
+      },
+      {
+        "name": "rank",
+        "score": "224"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -17121,6 +17681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "23"
+      },
+      {
+        "name": "rank",
+        "score": "378"
       },
       {
         "name": "__EMPTY",
@@ -17365,6 +17933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "27"
+      },
+      {
+        "name": "rank",
+        "score": "224"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -17605,6 +18181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "26"
+      },
+      {
+        "name": "rank",
+        "score": "267"
       },
       {
         "name": "__EMPTY",
@@ -17849,6 +18433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "30"
+      },
+      {
+        "name": "rank",
+        "score": "143"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -18089,6 +18681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "26"
+      },
+      {
+        "name": "rank",
+        "score": "267"
       },
       {
         "name": "__EMPTY",
@@ -18333,6 +18933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "34"
+      },
+      {
+        "name": "rank",
+        "score": "66"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -18573,6 +19181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "25"
+      },
+      {
+        "name": "rank",
+        "score": "310"
       },
       {
         "name": "__EMPTY",
@@ -18817,6 +19433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "24"
+      },
+      {
+        "name": "rank",
+        "score": "347"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -19057,6 +19681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "35"
+      },
+      {
+        "name": "rank",
+        "score": "51"
       },
       {
         "name": "__EMPTY",
@@ -19301,6 +19933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "18"
+      },
+      {
+        "name": "rank",
+        "score": "483"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -19541,6 +20181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "25"
+      },
+      {
+        "name": "rank",
+        "score": "310"
       },
       {
         "name": "__EMPTY",
@@ -19785,6 +20433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "35"
+      },
+      {
+        "name": "rank",
+        "score": "51"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -20025,6 +20681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "33"
+      },
+      {
+        "name": "rank",
+        "score": "81"
       },
       {
         "name": "__EMPTY",
@@ -20269,6 +20933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "36"
+      },
+      {
+        "name": "rank",
+        "score": "43"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -20509,6 +21181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "28"
+      },
+      {
+        "name": "rank",
+        "score": "196"
       },
       {
         "name": "__EMPTY",
@@ -20753,6 +21433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "35"
+      },
+      {
+        "name": "rank",
+        "score": "51"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -20993,6 +21681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "30"
+      },
+      {
+        "name": "rank",
+        "score": "143"
       },
       {
         "name": "__EMPTY",
@@ -21237,6 +21933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "38"
+      },
+      {
+        "name": "rank",
+        "score": "27"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -21477,6 +22181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "35"
+      },
+      {
+        "name": "rank",
+        "score": "51"
       },
       {
         "name": "__EMPTY",
@@ -21721,6 +22433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "38"
+      },
+      {
+        "name": "rank",
+        "score": "27"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -21961,6 +22681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "34"
+      },
+      {
+        "name": "rank",
+        "score": "66"
       },
       {
         "name": "__EMPTY",
@@ -22205,6 +22933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "28"
+      },
+      {
+        "name": "rank",
+        "score": "196"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -22445,6 +23181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "29"
+      },
+      {
+        "name": "rank",
+        "score": "170"
       },
       {
         "name": "__EMPTY",
@@ -22689,6 +23433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "33"
+      },
+      {
+        "name": "rank",
+        "score": "81"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -22929,6 +23681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "41"
+      },
+      {
+        "name": "rank",
+        "score": "6"
       },
       {
         "name": "__EMPTY",
@@ -23173,6 +23933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "37"
+      },
+      {
+        "name": "rank",
+        "score": "36"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -23413,6 +24181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "31"
+      },
+      {
+        "name": "rank",
+        "score": "118"
       },
       {
         "name": "__EMPTY",
@@ -23657,6 +24433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "37"
+      },
+      {
+        "name": "rank",
+        "score": "36"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -23897,6 +24681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "31"
+      },
+      {
+        "name": "rank",
+        "score": "118"
       },
       {
         "name": "__EMPTY",
@@ -24141,6 +24933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "40"
+      },
+      {
+        "name": "rank",
+        "score": "12"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -24381,6 +25181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "24"
+      },
+      {
+        "name": "rank",
+        "score": "347"
       },
       {
         "name": "__EMPTY",
@@ -24625,6 +25433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "28"
+      },
+      {
+        "name": "rank",
+        "score": "196"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -24712,7 +25528,7 @@ export const studentScores = [
       },
       {
         "name": "บท 8 [10]",
-        "score": "9"
+        "score": "10"
       },
       {
         "name": "บท 9 [5]",
@@ -24720,19 +25536,19 @@ export const studentScores = [
       },
       {
         "name": "บท 10 [10]",
-        "score": "9"
+        "score": "10"
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "23"
+        "score": "25"
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "58"
+        "score": "60"
       },
       {
         "name": "รวม [100]",
-        "score": "78"
+        "score": "80"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -24852,7 +25668,7 @@ export const studentScores = [
       },
       {
         "name": "Quiz 8",
-        "score": "7"
+        "score": "8"
       },
       {
         "name": "Quiz 9",
@@ -24860,11 +25676,19 @@ export const studentScores = [
       },
       {
         "name": "Quiz 10",
-        "score": "7"
+        "score": "8"
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "32"
+      },
+      {
+        "name": "rank",
+        "score": "95"
       },
       {
         "name": "__EMPTY",
@@ -24921,7 +25745,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 20,
     "กลางภาคข้อเขียน": 4.5,
     "ปลายภาค": 20,
-    "เกรด": "3.5",
+    "เกรด": "4",
     "ซ่อมกลางภาค": "ไม่ต้องซ่อม",
     "id": "41909",
     "name": "เด็กชายภพธนภณ ปิ่นแก้ว"
@@ -25107,6 +25931,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "42"
+      },
+      {
+        "name": "rank",
+        "score": "4"
       },
       {
         "name": "__EMPTY",
@@ -25351,6 +26183,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "24"
+      },
+      {
+        "name": "rank",
+        "score": "347"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -25591,6 +26431,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "23"
+      },
+      {
+        "name": "rank",
+        "score": "378"
       },
       {
         "name": "__EMPTY",
@@ -25835,6 +26683,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "29"
+      },
+      {
+        "name": "rank",
+        "score": "170"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -26075,6 +26931,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "25"
+      },
+      {
+        "name": "rank",
+        "score": "310"
       },
       {
         "name": "__EMPTY",
@@ -26319,6 +27183,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "41"
+      },
+      {
+        "name": "rank",
+        "score": "6"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -26559,6 +27431,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "35"
+      },
+      {
+        "name": "rank",
+        "score": "51"
       },
       {
         "name": "__EMPTY",
@@ -26803,6 +27683,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "29"
+      },
+      {
+        "name": "rank",
+        "score": "170"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -27043,6 +27931,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "42"
+      },
+      {
+        "name": "rank",
+        "score": "4"
       },
       {
         "name": "__EMPTY",
@@ -27287,6 +28183,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "28"
+      },
+      {
+        "name": "rank",
+        "score": "196"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -27527,6 +28431,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "31"
+      },
+      {
+        "name": "rank",
+        "score": "118"
       },
       {
         "name": "__EMPTY",
@@ -27771,6 +28683,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "30"
+      },
+      {
+        "name": "rank",
+        "score": "143"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -28011,6 +28931,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "23"
+      },
+      {
+        "name": "rank",
+        "score": "378"
       },
       {
         "name": "__EMPTY",
@@ -28255,6 +29183,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "28"
+      },
+      {
+        "name": "rank",
+        "score": "196"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -28495,6 +29431,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "34"
+      },
+      {
+        "name": "rank",
+        "score": "66"
       },
       {
         "name": "__EMPTY",
@@ -28739,6 +29683,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "25"
+      },
+      {
+        "name": "rank",
+        "score": "310"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -28979,6 +29931,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "39"
+      },
+      {
+        "name": "rank",
+        "score": "18"
       },
       {
         "name": "__EMPTY",
@@ -29223,6 +30183,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "27"
+      },
+      {
+        "name": "rank",
+        "score": "224"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -29463,6 +30431,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "30"
+      },
+      {
+        "name": "rank",
+        "score": "143"
       },
       {
         "name": "__EMPTY",
@@ -29707,6 +30683,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "35"
+      },
+      {
+        "name": "rank",
+        "score": "51"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -29947,6 +30931,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "25"
+      },
+      {
+        "name": "rank",
+        "score": "310"
       },
       {
         "name": "__EMPTY",
@@ -30191,6 +31183,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "34"
+      },
+      {
+        "name": "rank",
+        "score": "66"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -30431,6 +31431,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "33"
+      },
+      {
+        "name": "rank",
+        "score": "81"
       },
       {
         "name": "__EMPTY",
@@ -30675,6 +31683,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "35"
+      },
+      {
+        "name": "rank",
+        "score": "51"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -30915,6 +31931,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "31"
+      },
+      {
+        "name": "rank",
+        "score": "118"
       },
       {
         "name": "__EMPTY",
@@ -31159,6 +32183,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "31"
+      },
+      {
+        "name": "rank",
+        "score": "118"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -31399,6 +32431,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "30"
+      },
+      {
+        "name": "rank",
+        "score": "143"
       },
       {
         "name": "__EMPTY",
@@ -31643,6 +32683,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "33"
+      },
+      {
+        "name": "rank",
+        "score": "81"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -31883,6 +32931,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "25"
+      },
+      {
+        "name": "rank",
+        "score": "310"
       },
       {
         "name": "__EMPTY",
@@ -32127,6 +33183,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "24"
+      },
+      {
+        "name": "rank",
+        "score": "347"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -32367,6 +33431,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "34"
+      },
+      {
+        "name": "rank",
+        "score": "66"
       },
       {
         "name": "__EMPTY",
@@ -32611,6 +33683,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "32"
+      },
+      {
+        "name": "rank",
+        "score": "95"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -32851,6 +33931,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "31"
+      },
+      {
+        "name": "rank",
+        "score": "118"
       },
       {
         "name": "__EMPTY",
@@ -33095,6 +34183,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "22"
+      },
+      {
+        "name": "rank",
+        "score": "421"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -33337,6 +34433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "26"
+      },
+      {
+        "name": "rank",
+        "score": "267"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -33408,11 +34512,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "0"
+        "score": "8"
       },
       {
         "name": "บท 7 [10]",
-        "score": "0"
+        "score": "8"
       },
       {
         "name": "กิจกรรม [5]",
@@ -33420,91 +34524,91 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "5"
+        "score": "21"
       },
       {
         "name": "บท 8 [10]",
-        "score": "0"
+        "score": "8"
       },
       {
         "name": "บท 9 [5]",
-        "score": "0"
+        "score": "3"
       },
       {
         "name": "บท 10 [10]",
-        "score": "0"
+        "score": "8"
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "0"
+        "score": "19"
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "17"
+        "score": "52"
       },
       {
         "name": "รวม [100]",
-        "score": "29"
+        "score": "64"
       },
       {
         "name": "กิจกรรม 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 6",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 7",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 6",
@@ -33520,47 +34624,47 @@ export const studentScores = [
       },
       {
         "name": "ใบงาน 8.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 8",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 9.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 9",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 10.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 10",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 8",
@@ -33577,6 +34681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "24"
+      },
+      {
+        "name": "rank",
+        "score": "347"
       },
       {
         "name": "__EMPTY",
@@ -33633,7 +34745,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 18,
     "กลางภาคข้อเขียน": 5,
     "ปลายภาค": 12,
-    "เกรด": "0",
+    "เกรด": "2",
     "ซ่อมกลางภาค": "ไม่ต้องซ่อม",
     "id": "41898",
     "name": "นายกีรติ วรรณเลิศ"
@@ -33819,6 +34931,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "32"
+      },
+      {
+        "name": "rank",
+        "score": "95"
       },
       {
         "name": "__EMPTY",
@@ -34063,6 +35183,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "20"
+      },
+      {
+        "name": "rank",
+        "score": "463"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -34142,11 +35270,11 @@ export const studentScores = [
       },
       {
         "name": "กิจกรรม [5]",
-        "score": ""
+        "score": "5"
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "20"
+        "score": "25"
       },
       {
         "name": "บท 8 [10]",
@@ -34166,11 +35294,11 @@ export const studentScores = [
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "56"
+        "score": "61"
       },
       {
         "name": "รวม [100]",
-        "score": "67"
+        "score": "72"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -34305,6 +35433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "23"
+      },
+      {
+        "name": "rank",
+        "score": "378"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -34359,7 +35495,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 20,
     "กลางภาคข้อเขียน": 1.5,
     "ปลายภาค": 11,
-    "เกรด": "2.5",
+    "เกรด": "3",
     "ซ่อมกลางภาค": "ซ่อมแล้ว",
     "id": "41984",
     "name": "นายปกป้อง เทศยิ้ม"
@@ -34545,6 +35681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "24"
+      },
+      {
+        "name": "rank",
+        "score": "347"
       },
       {
         "name": "__EMPTY",
@@ -34789,6 +35933,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "27"
+      },
+      {
+        "name": "rank",
+        "score": "224"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -35031,6 +36183,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "27"
+      },
+      {
+        "name": "rank",
+        "score": "224"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -35110,11 +36270,11 @@ export const studentScores = [
       },
       {
         "name": "กิจกรรม [5]",
-        "score": ""
+        "score": "5"
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "20"
+        "score": "25"
       },
       {
         "name": "บท 8 [10]",
@@ -35134,11 +36294,11 @@ export const studentScores = [
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "56"
+        "score": "61"
       },
       {
         "name": "รวม [100]",
-        "score": "67"
+        "score": "72"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -35271,6 +36431,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "23"
+      },
+      {
+        "name": "rank",
+        "score": "378"
       },
       {
         "name": "__EMPTY",
@@ -35327,7 +36495,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 13,
     "กลางภาคข้อเขียน": 4.5,
     "ปลายภาค": 11,
-    "เกรด": "2.5",
+    "เกรด": "3",
     "ซ่อมกลางภาค": "ซ่อมแล้ว",
     "id": "42095",
     "name": "นายไกรวิชญ์ กิติยะ"
@@ -35352,11 +36520,11 @@ export const studentScores = [
       },
       {
         "name": "กิจกรรม [5]",
-        "score": ""
+        "score": "5"
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "18"
+        "score": "23"
       },
       {
         "name": "บท 8 [10]",
@@ -35376,11 +36544,11 @@ export const studentScores = [
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "53"
+        "score": "58"
       },
       {
         "name": "รวม [100]",
-        "score": "63"
+        "score": "68"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -35508,11 +36676,19 @@ export const studentScores = [
       },
       {
         "name": "Quiz 10",
-        "score": "5"
+        "score": "7"
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "22"
+      },
+      {
+        "name": "rank",
+        "score": "421"
       },
       {
         "name": "__EMPTY",
@@ -35569,7 +36745,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 16,
     "กลางภาคข้อเขียน": 4,
     "ปลายภาค": 10,
-    "เกรด": "2",
+    "เกรด": "2.5",
     "ซ่อมกลางภาค": "ซ่อมแล้ว",
     "id": "42108",
     "name": "นายภัทรพัฒน์ คำมูล"
@@ -35755,6 +36931,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "27"
+      },
+      {
+        "name": "rank",
+        "score": "224"
       },
       {
         "name": "__EMPTY",
@@ -35999,6 +37183,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "22"
+      },
+      {
+        "name": "rank",
+        "score": "421"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -36241,6 +37433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "24"
+      },
+      {
+        "name": "rank",
+        "score": "347"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -36320,11 +37520,11 @@ export const studentScores = [
       },
       {
         "name": "กิจกรรม [5]",
-        "score": ""
+        "score": "5"
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "20"
+        "score": "25"
       },
       {
         "name": "บท 8 [10]",
@@ -36344,11 +37544,11 @@ export const studentScores = [
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "56"
+        "score": "61"
       },
       {
         "name": "รวม [100]",
-        "score": "70"
+        "score": "75"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -36483,6 +37683,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "26"
+      },
+      {
+        "name": "rank",
+        "score": "267"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -36537,7 +37745,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 16,
     "กลางภาคข้อเขียน": 5,
     "ปลายภาค": 14,
-    "เกรด": "3",
+    "เกรด": "3.5",
     "ซ่อมกลางภาค": "ซ่อมแล้ว",
     "id": "42230",
     "name": "นายวีรภัทร วุฒิสาร"
@@ -36723,6 +37931,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "28"
+      },
+      {
+        "name": "rank",
+        "score": "196"
       },
       {
         "name": "__EMPTY",
@@ -36967,6 +38183,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "21"
+      },
+      {
+        "name": "rank",
+        "score": "449"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -37207,6 +38431,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "23"
+      },
+      {
+        "name": "rank",
+        "score": "378"
       },
       {
         "name": "__EMPTY",
@@ -37451,6 +38683,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "25"
+      },
+      {
+        "name": "rank",
+        "score": "310"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -37691,6 +38931,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "22"
+      },
+      {
+        "name": "rank",
+        "score": "421"
       },
       {
         "name": "__EMPTY",
@@ -37935,6 +39183,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "25"
+      },
+      {
+        "name": "rank",
+        "score": "310"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -38006,11 +39262,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "0"
+        "score": "8"
       },
       {
         "name": "บท 7 [10]",
-        "score": "0"
+        "score": "7"
       },
       {
         "name": "กิจกรรม [5]",
@@ -38018,7 +39274,7 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "5"
+        "score": "20"
       },
       {
         "name": "บท 8 [10]",
@@ -38038,67 +39294,67 @@ export const studentScores = [
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "35"
+        "score": "50"
       },
       {
         "name": "รวม [100]",
-        "score": "53"
+        "score": "68"
       },
       {
         "name": "กิจกรรม 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 6",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 7",
@@ -38177,6 +39433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "29"
+      },
+      {
+        "name": "rank",
+        "score": "170"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -38231,7 +39495,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 16,
     "กลางภาคข้อเขียน": 5,
     "ปลายภาค": 18,
-    "เกรด": "1",
+    "เกรด": "2.5",
     "ซ่อมกลางภาค": "ยังไม่ซ่อม",
     "id": "41932",
     "name": "นางสาวอลีเซีย แสงมณี"
@@ -38417,6 +39681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "30"
+      },
+      {
+        "name": "rank",
+        "score": "143"
       },
       {
         "name": "__EMPTY",
@@ -38661,6 +39933,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "26"
+      },
+      {
+        "name": "rank",
+        "score": "267"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -38901,6 +40181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "29"
+      },
+      {
+        "name": "rank",
+        "score": "170"
       },
       {
         "name": "__EMPTY",
@@ -39145,6 +40433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "28"
+      },
+      {
+        "name": "rank",
+        "score": "196"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -39216,11 +40512,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 7 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "กิจกรรม [5]",
@@ -39228,7 +40524,7 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "9"
+        "score": "25"
       },
       {
         "name": "บท 8 [10]",
@@ -39248,71 +40544,71 @@ export const studentScores = [
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "46"
+        "score": "62"
       },
       {
         "name": "รวม [100]",
-        "score": "57"
+        "score": "73"
       },
       {
         "name": "กิจกรรม 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 6",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 7",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 6",
@@ -39387,6 +40683,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "23"
+      },
+      {
+        "name": "rank",
+        "score": "378"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -39441,7 +40745,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 12,
     "กลางภาคข้อเขียน": 3.5,
     "ปลายภาค": 11,
-    "เกรด": "1.5",
+    "เกรด": "3",
     "ซ่อมกลางภาค": "ซ่อมแล้ว",
     "id": "42050",
     "name": "นางสาวปรียาภรณ์ วงหาริมาตย์"
@@ -39490,11 +40794,11 @@ export const studentScores = [
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "54"
+        "score": "61"
       },
       {
         "name": "รวม [100]",
-        "score": "64"
+        "score": "71"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -39626,7 +40930,15 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
-        "score": ""
+        "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "22"
+      },
+      {
+        "name": "rank",
+        "score": "421"
       },
       {
         "name": "__EMPTY",
@@ -39679,12 +40991,12 @@ export const studentScores = [
     ],
     "room": "5",
     "ordinal": "26",
-    "กลางภาค": 5,
+    "กลางภาค": 12,
     "กลางภาคข้อกา": 8,
     "กลางภาคข้อเขียน": 2,
     "ปลายภาค": 10,
-    "เกรด": "2",
-    "ซ่อมกลางภาค": "ยังไม่ซ่อม",
+    "เกรด": "3",
+    "ซ่อมกลางภาค": "ซ่อมแล้ว",
     "id": "42117",
     "name": "นางสาวจิราพัชร ก๊วยศิริกุล"
   },
@@ -39869,6 +41181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "23"
+      },
+      {
+        "name": "rank",
+        "score": "378"
       },
       {
         "name": "__EMPTY",
@@ -40113,6 +41433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "22"
+      },
+      {
+        "name": "rank",
+        "score": "421"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -40353,6 +41681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "30"
+      },
+      {
+        "name": "rank",
+        "score": "143"
       },
       {
         "name": "__EMPTY",
@@ -40597,6 +41933,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "24"
+      },
+      {
+        "name": "rank",
+        "score": "347"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -40837,6 +42181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "22"
+      },
+      {
+        "name": "rank",
+        "score": "421"
       },
       {
         "name": "__EMPTY",
@@ -41081,6 +42433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "22"
+      },
+      {
+        "name": "rank",
+        "score": "421"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -41321,6 +42681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "27"
+      },
+      {
+        "name": "rank",
+        "score": "224"
       },
       {
         "name": "__EMPTY",
@@ -41565,6 +42933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "26"
+      },
+      {
+        "name": "rank",
+        "score": "267"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -41805,6 +43181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "25"
+      },
+      {
+        "name": "rank",
+        "score": "310"
       },
       {
         "name": "__EMPTY",
@@ -42049,6 +43433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "22"
+      },
+      {
+        "name": "rank",
+        "score": "421"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -42289,6 +43681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "27"
+      },
+      {
+        "name": "rank",
+        "score": "224"
       },
       {
         "name": "__EMPTY",
@@ -42533,6 +43933,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "27"
+      },
+      {
+        "name": "rank",
+        "score": "224"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -42773,6 +44181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "26"
+      },
+      {
+        "name": "rank",
+        "score": "267"
       },
       {
         "name": "__EMPTY",
@@ -43017,6 +44433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "26"
+      },
+      {
+        "name": "rank",
+        "score": "267"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -43257,6 +44681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "26"
+      },
+      {
+        "name": "rank",
+        "score": "267"
       },
       {
         "name": "__EMPTY",
@@ -43501,6 +44933,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "28"
+      },
+      {
+        "name": "rank",
+        "score": "196"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -43741,6 +45181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "25"
+      },
+      {
+        "name": "rank",
+        "score": "310"
       },
       {
         "name": "__EMPTY",
@@ -43985,6 +45433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "19"
+      },
+      {
+        "name": "rank",
+        "score": "471"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -44225,6 +45681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "23"
+      },
+      {
+        "name": "rank",
+        "score": "378"
       },
       {
         "name": "__EMPTY",
@@ -44469,6 +45933,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "22"
+      },
+      {
+        "name": "rank",
+        "score": "421"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -44709,6 +46181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "23"
+      },
+      {
+        "name": "rank",
+        "score": "378"
       },
       {
         "name": "__EMPTY",
@@ -44953,6 +46433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "19"
+      },
+      {
+        "name": "rank",
+        "score": "471"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -45193,6 +46681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "23"
+      },
+      {
+        "name": "rank",
+        "score": "378"
       },
       {
         "name": "__EMPTY",
@@ -45437,6 +46933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "23"
+      },
+      {
+        "name": "rank",
+        "score": "378"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -45677,6 +47181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "15"
+      },
+      {
+        "name": "rank",
+        "score": "507"
       },
       {
         "name": "__EMPTY",
@@ -45921,6 +47433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "24"
+      },
+      {
+        "name": "rank",
+        "score": "347"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -46161,6 +47681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "15"
+      },
+      {
+        "name": "rank",
+        "score": "507"
       },
       {
         "name": "__EMPTY",
@@ -46405,6 +47933,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "24"
+      },
+      {
+        "name": "rank",
+        "score": "347"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -46645,6 +48181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "33"
+      },
+      {
+        "name": "rank",
+        "score": "81"
       },
       {
         "name": "__EMPTY",
@@ -46889,6 +48433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "30"
+      },
+      {
+        "name": "rank",
+        "score": "143"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -47129,6 +48681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "33"
+      },
+      {
+        "name": "rank",
+        "score": "81"
       },
       {
         "name": "__EMPTY",
@@ -47373,6 +48933,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "26"
+      },
+      {
+        "name": "rank",
+        "score": "267"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -47613,6 +49181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "29"
+      },
+      {
+        "name": "rank",
+        "score": "170"
       },
       {
         "name": "__EMPTY",
@@ -47857,6 +49433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "24"
+      },
+      {
+        "name": "rank",
+        "score": "347"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -48097,6 +49681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "27"
+      },
+      {
+        "name": "rank",
+        "score": "224"
       },
       {
         "name": "__EMPTY",
@@ -48341,6 +49933,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "32"
+      },
+      {
+        "name": "rank",
+        "score": "95"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -48581,6 +50181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "31"
+      },
+      {
+        "name": "rank",
+        "score": "118"
       },
       {
         "name": "__EMPTY",
@@ -48825,6 +50433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "28"
+      },
+      {
+        "name": "rank",
+        "score": "196"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -49065,6 +50681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "23"
+      },
+      {
+        "name": "rank",
+        "score": "378"
       },
       {
         "name": "__EMPTY",
@@ -49309,6 +50933,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "23"
+      },
+      {
+        "name": "rank",
+        "score": "378"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -49551,6 +51183,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "24"
+      },
+      {
+        "name": "rank",
+        "score": "347"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -49622,11 +51262,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "0"
+        "score": "8"
       },
       {
         "name": "บท 7 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "กิจกรรม [5]",
@@ -49634,7 +51274,7 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "7"
+        "score": "23"
       },
       {
         "name": "บท 8 [10]",
@@ -49654,71 +51294,71 @@ export const studentScores = [
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "39"
+        "score": "55"
       },
       {
         "name": "รวม [100]",
-        "score": "52"
+        "score": "68"
       },
       {
         "name": "กิจกรรม 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 6.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 6",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 7.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "กิจกรรม 7.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 7",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "Quiz 6",
@@ -49793,6 +51433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "22"
+      },
+      {
+        "name": "rank",
+        "score": "421"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -49847,7 +51495,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 14,
     "กลางภาคข้อเขียน": 4.5,
     "ปลายภาค": 13,
-    "เกรด": "1",
+    "เกรด": "2.5",
     "ซ่อมกลางภาค": "ยังไม่ซ่อม",
     "id": "42133",
     "name": "นางสาวยลธิดา วันเต็ม"
@@ -50033,6 +51681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "25"
+      },
+      {
+        "name": "rank",
+        "score": "310"
       },
       {
         "name": "__EMPTY",
@@ -50277,6 +51933,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "26"
+      },
+      {
+        "name": "rank",
+        "score": "267"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -50517,6 +52181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "32"
+      },
+      {
+        "name": "rank",
+        "score": "95"
       },
       {
         "name": "__EMPTY",
@@ -50761,6 +52433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "35"
+      },
+      {
+        "name": "rank",
+        "score": "51"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -51001,6 +52681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "28"
+      },
+      {
+        "name": "rank",
+        "score": "196"
       },
       {
         "name": "__EMPTY",
@@ -51245,6 +52933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "30"
+      },
+      {
+        "name": "rank",
+        "score": "143"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -51485,6 +53181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "25"
+      },
+      {
+        "name": "rank",
+        "score": "310"
       },
       {
         "name": "__EMPTY",
@@ -51729,6 +53433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "27"
+      },
+      {
+        "name": "rank",
+        "score": "224"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -51969,6 +53681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "29"
+      },
+      {
+        "name": "rank",
+        "score": "170"
       },
       {
         "name": "__EMPTY",
@@ -52213,6 +53933,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "27"
+      },
+      {
+        "name": "rank",
+        "score": "224"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -52453,6 +54181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "27"
+      },
+      {
+        "name": "rank",
+        "score": "224"
       },
       {
         "name": "__EMPTY",
@@ -52697,6 +54433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "25"
+      },
+      {
+        "name": "rank",
+        "score": "310"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -52937,6 +54681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "27"
+      },
+      {
+        "name": "rank",
+        "score": "224"
       },
       {
         "name": "__EMPTY",
@@ -53181,6 +54933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "29"
+      },
+      {
+        "name": "rank",
+        "score": "170"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -53421,6 +55181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "27"
+      },
+      {
+        "name": "rank",
+        "score": "224"
       },
       {
         "name": "__EMPTY",
@@ -53665,6 +55433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "23"
+      },
+      {
+        "name": "rank",
+        "score": "378"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -53905,6 +55681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "25"
+      },
+      {
+        "name": "rank",
+        "score": "310"
       },
       {
         "name": "__EMPTY",
@@ -54149,6 +55933,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "19"
+      },
+      {
+        "name": "rank",
+        "score": "471"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -54389,6 +56181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "26"
+      },
+      {
+        "name": "rank",
+        "score": "267"
       },
       {
         "name": "__EMPTY",
@@ -54633,6 +56433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "23"
+      },
+      {
+        "name": "rank",
+        "score": "378"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -54873,6 +56681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "26"
+      },
+      {
+        "name": "rank",
+        "score": "267"
       },
       {
         "name": "__EMPTY",
@@ -55117,6 +56933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "30"
+      },
+      {
+        "name": "rank",
+        "score": "143"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -55357,6 +57181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "23"
+      },
+      {
+        "name": "rank",
+        "score": "378"
       },
       {
         "name": "__EMPTY",
@@ -55601,6 +57433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "36"
+      },
+      {
+        "name": "rank",
+        "score": "43"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -55841,6 +57681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "27"
+      },
+      {
+        "name": "rank",
+        "score": "224"
       },
       {
         "name": "__EMPTY",
@@ -56085,6 +57933,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "31"
+      },
+      {
+        "name": "rank",
+        "score": "118"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -56325,6 +58181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "24"
+      },
+      {
+        "name": "rank",
+        "score": "347"
       },
       {
         "name": "__EMPTY",
@@ -56569,6 +58433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "26"
+      },
+      {
+        "name": "rank",
+        "score": "267"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -56809,6 +58681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "21"
+      },
+      {
+        "name": "rank",
+        "score": "449"
       },
       {
         "name": "__EMPTY",
@@ -57053,6 +58933,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "23"
+      },
+      {
+        "name": "rank",
+        "score": "378"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -57295,6 +59183,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "28"
+      },
+      {
+        "name": "rank",
+        "score": "196"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -57398,11 +59294,11 @@ export const studentScores = [
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "47"
+        "score": "54"
       },
       {
         "name": "รวม [100]",
-        "score": "58"
+        "score": "65"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -57534,7 +59430,15 @@ export const studentScores = [
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
-        "score": ""
+        "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "23"
+      },
+      {
+        "name": "rank",
+        "score": "378"
       },
       {
         "name": "__EMPTY",
@@ -57587,12 +59491,12 @@ export const studentScores = [
     ],
     "room": "7",
     "ordinal": "20",
-    "กลางภาค": 5,
+    "กลางภาค": 12,
     "กลางภาคข้อกา": 7,
     "กลางภาคข้อเขียน": 2.5,
     "ปลายภาค": 11,
-    "เกรด": "1.5",
-    "ซ่อมกลางภาค": "ยังไม่ซ่อม",
+    "เกรด": "2.5",
+    "ซ่อมกลางภาค": "ซ่อมแล้ว",
     "id": "44090",
     "name": "นายวศินท์ ขาวถิ่น"
   },
@@ -57777,6 +59681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "23"
+      },
+      {
+        "name": "rank",
+        "score": "378"
       },
       {
         "name": "__EMPTY",
@@ -58021,6 +59933,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "29"
+      },
+      {
+        "name": "rank",
+        "score": "170"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -58261,6 +60181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "29"
+      },
+      {
+        "name": "rank",
+        "score": "170"
       },
       {
         "name": "__EMPTY",
@@ -58505,6 +60433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "25"
+      },
+      {
+        "name": "rank",
+        "score": "310"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -58745,6 +60681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "23"
+      },
+      {
+        "name": "rank",
+        "score": "378"
       },
       {
         "name": "__EMPTY",
@@ -58989,6 +60933,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "28"
+      },
+      {
+        "name": "rank",
+        "score": "196"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -59229,6 +61181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "22"
+      },
+      {
+        "name": "rank",
+        "score": "421"
       },
       {
         "name": "__EMPTY",
@@ -59473,6 +61433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "25"
+      },
+      {
+        "name": "rank",
+        "score": "310"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -59713,6 +61681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "23"
+      },
+      {
+        "name": "rank",
+        "score": "378"
       },
       {
         "name": "__EMPTY",
@@ -59957,6 +61933,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "26"
+      },
+      {
+        "name": "rank",
+        "score": "267"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -60197,6 +62181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "26"
+      },
+      {
+        "name": "rank",
+        "score": "267"
       },
       {
         "name": "__EMPTY",
@@ -60441,6 +62433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "26"
+      },
+      {
+        "name": "rank",
+        "score": "267"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -60681,6 +62681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "29"
+      },
+      {
+        "name": "rank",
+        "score": "170"
       },
       {
         "name": "__EMPTY",
@@ -60925,6 +62933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "32"
+      },
+      {
+        "name": "rank",
+        "score": "95"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -61165,6 +63181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "33"
+      },
+      {
+        "name": "rank",
+        "score": "81"
       },
       {
         "name": "__EMPTY",
@@ -61409,6 +63433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "28"
+      },
+      {
+        "name": "rank",
+        "score": "196"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -61649,6 +63681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "24"
+      },
+      {
+        "name": "rank",
+        "score": "347"
       },
       {
         "name": "__EMPTY",
@@ -61893,6 +63933,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "27"
+      },
+      {
+        "name": "rank",
+        "score": "224"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -62133,6 +64181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "26"
+      },
+      {
+        "name": "rank",
+        "score": "267"
       },
       {
         "name": "__EMPTY",
@@ -62377,6 +64433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "26"
+      },
+      {
+        "name": "rank",
+        "score": "267"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -62617,6 +64681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "26"
+      },
+      {
+        "name": "rank",
+        "score": "267"
       },
       {
         "name": "__EMPTY",
@@ -62861,6 +64933,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "35"
+      },
+      {
+        "name": "rank",
+        "score": "51"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -63101,6 +65181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "23"
+      },
+      {
+        "name": "rank",
+        "score": "378"
       },
       {
         "name": "__EMPTY",
@@ -63345,6 +65433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "29"
+      },
+      {
+        "name": "rank",
+        "score": "170"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -63585,6 +65681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "30"
+      },
+      {
+        "name": "rank",
+        "score": "143"
       },
       {
         "name": "__EMPTY",
@@ -63829,6 +65933,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "30"
+      },
+      {
+        "name": "rank",
+        "score": "143"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -64069,6 +66181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "39"
+      },
+      {
+        "name": "rank",
+        "score": "18"
       },
       {
         "name": "__EMPTY",
@@ -64313,6 +66433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "25"
+      },
+      {
+        "name": "rank",
+        "score": "310"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -64553,6 +66681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "29"
+      },
+      {
+        "name": "rank",
+        "score": "170"
       },
       {
         "name": "__EMPTY",
@@ -64797,6 +66933,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "22"
+      },
+      {
+        "name": "rank",
+        "score": "421"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -65037,6 +67181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "31"
+      },
+      {
+        "name": "rank",
+        "score": "118"
       },
       {
         "name": "__EMPTY",
@@ -65281,6 +67433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "28"
+      },
+      {
+        "name": "rank",
+        "score": "196"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -65521,6 +67681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "26"
+      },
+      {
+        "name": "rank",
+        "score": "267"
       },
       {
         "name": "__EMPTY",
@@ -65765,6 +67933,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "28"
+      },
+      {
+        "name": "rank",
+        "score": "196"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -66005,6 +68181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "31"
+      },
+      {
+        "name": "rank",
+        "score": "118"
       },
       {
         "name": "__EMPTY",
@@ -66249,6 +68433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "27"
+      },
+      {
+        "name": "rank",
+        "score": "224"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -66489,6 +68681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "41"
+      },
+      {
+        "name": "rank",
+        "score": "6"
       },
       {
         "name": "__EMPTY",
@@ -66733,6 +68933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "28"
+      },
+      {
+        "name": "rank",
+        "score": "196"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -66975,6 +69183,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "30"
+      },
+      {
+        "name": "rank",
+        "score": "143"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -67062,11 +69278,11 @@ export const studentScores = [
       },
       {
         "name": "บท 8 [10]",
-        "score": "2"
+        "score": "10"
       },
       {
         "name": "บท 9 [5]",
-        "score": "2"
+        "score": "3"
       },
       {
         "name": "บท 10 [10]",
@@ -67074,15 +69290,15 @@ export const studentScores = [
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "5"
+        "score": "14"
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "40"
+        "score": "49"
       },
       {
         "name": "รวม [100]",
-        "score": "55"
+        "score": "64"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -67158,27 +69374,27 @@ export const studentScores = [
       },
       {
         "name": "ใบงาน 8.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.2",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.3",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 8.4",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 8",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ใบงาน 9.1",
-        "score": ""
+        "score": "ส่งแล้ว"
       },
       {
         "name": "ท้ายบท 9",
@@ -67215,6 +69431,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "27"
+      },
+      {
+        "name": "rank",
+        "score": "224"
       },
       {
         "name": "__EMPTY",
@@ -67271,7 +69495,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 11,
     "กลางภาคข้อเขียน": 3,
     "ปลายภาค": 15,
-    "เกรด": "1.5",
+    "เกรด": "2",
     "ซ่อมกลางภาค": "ซ่อมแล้ว",
     "id": "41961",
     "name": "นางสาวทิพรดา ม่วงทอง"
@@ -67457,6 +69681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "33"
+      },
+      {
+        "name": "rank",
+        "score": "81"
       },
       {
         "name": "__EMPTY",
@@ -67701,6 +69933,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "24"
+      },
+      {
+        "name": "rank",
+        "score": "347"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -67941,6 +70181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "24"
+      },
+      {
+        "name": "rank",
+        "score": "347"
       },
       {
         "name": "__EMPTY",
@@ -68185,6 +70433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "26"
+      },
+      {
+        "name": "rank",
+        "score": "267"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -68425,6 +70681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "25"
+      },
+      {
+        "name": "rank",
+        "score": "310"
       },
       {
         "name": "__EMPTY",
@@ -68669,6 +70933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "34"
+      },
+      {
+        "name": "rank",
+        "score": "66"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -68909,6 +71181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "29"
+      },
+      {
+        "name": "rank",
+        "score": "170"
       },
       {
         "name": "__EMPTY",
@@ -69153,6 +71433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "24"
+      },
+      {
+        "name": "rank",
+        "score": "347"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -69393,6 +71681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "26"
+      },
+      {
+        "name": "rank",
+        "score": "267"
       },
       {
         "name": "__EMPTY",
@@ -69637,6 +71933,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "32"
+      },
+      {
+        "name": "rank",
+        "score": "95"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -69877,6 +72181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "25"
+      },
+      {
+        "name": "rank",
+        "score": "310"
       },
       {
         "name": "__EMPTY",
@@ -70121,6 +72433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "24"
+      },
+      {
+        "name": "rank",
+        "score": "347"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -70361,6 +72681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "38"
+      },
+      {
+        "name": "rank",
+        "score": "27"
       },
       {
         "name": "__EMPTY",
@@ -70605,6 +72933,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "32"
+      },
+      {
+        "name": "rank",
+        "score": "95"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -70845,6 +73181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "28"
+      },
+      {
+        "name": "rank",
+        "score": "196"
       },
       {
         "name": "__EMPTY",
@@ -71089,6 +73433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "29"
+      },
+      {
+        "name": "rank",
+        "score": "170"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -71329,6 +73681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "36"
+      },
+      {
+        "name": "rank",
+        "score": "43"
       },
       {
         "name": "__EMPTY",
@@ -71573,6 +73933,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "30"
+      },
+      {
+        "name": "rank",
+        "score": "143"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -71813,6 +74181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "27"
+      },
+      {
+        "name": "rank",
+        "score": "224"
       },
       {
         "name": "__EMPTY",
@@ -72057,6 +74433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "29"
+      },
+      {
+        "name": "rank",
+        "score": "170"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -72297,6 +74681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "27"
+      },
+      {
+        "name": "rank",
+        "score": "224"
       },
       {
         "name": "__EMPTY",
@@ -72541,6 +74933,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "23"
+      },
+      {
+        "name": "rank",
+        "score": "378"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -72781,6 +75181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "22"
+      },
+      {
+        "name": "rank",
+        "score": "421"
       },
       {
         "name": "__EMPTY",
@@ -73025,6 +75433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "27"
+      },
+      {
+        "name": "rank",
+        "score": "224"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -73265,6 +75681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "26"
+      },
+      {
+        "name": "rank",
+        "score": "267"
       },
       {
         "name": "__EMPTY",
@@ -73509,6 +75933,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "30"
+      },
+      {
+        "name": "rank",
+        "score": "143"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -73749,6 +76181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "36"
+      },
+      {
+        "name": "rank",
+        "score": "43"
       },
       {
         "name": "__EMPTY",
@@ -73993,6 +76433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "24"
+      },
+      {
+        "name": "rank",
+        "score": "347"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -74233,6 +76681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "27"
+      },
+      {
+        "name": "rank",
+        "score": "224"
       },
       {
         "name": "__EMPTY",
@@ -74477,6 +76933,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "24"
+      },
+      {
+        "name": "rank",
+        "score": "347"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -74717,6 +77181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "29"
+      },
+      {
+        "name": "rank",
+        "score": "170"
       },
       {
         "name": "__EMPTY",
@@ -74961,6 +77433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "29"
+      },
+      {
+        "name": "rank",
+        "score": "170"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -75201,6 +77681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "29"
+      },
+      {
+        "name": "rank",
+        "score": "170"
       },
       {
         "name": "__EMPTY",
@@ -75445,6 +77933,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "25"
+      },
+      {
+        "name": "rank",
+        "score": "310"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -75685,6 +78181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "28"
+      },
+      {
+        "name": "rank",
+        "score": "196"
       },
       {
         "name": "__EMPTY",
@@ -75929,6 +78433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "26"
+      },
+      {
+        "name": "rank",
+        "score": "267"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -76169,6 +78681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "30"
+      },
+      {
+        "name": "rank",
+        "score": "143"
       },
       {
         "name": "__EMPTY",
@@ -76413,6 +78933,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "26"
+      },
+      {
+        "name": "rank",
+        "score": "267"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -76653,6 +79181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "31"
+      },
+      {
+        "name": "rank",
+        "score": "118"
       },
       {
         "name": "__EMPTY",
@@ -76897,6 +79433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "29"
+      },
+      {
+        "name": "rank",
+        "score": "170"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -77137,6 +79681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "27"
+      },
+      {
+        "name": "rank",
+        "score": "224"
       },
       {
         "name": "__EMPTY",
@@ -77381,6 +79933,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "27"
+      },
+      {
+        "name": "rank",
+        "score": "224"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -77621,6 +80181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "30"
+      },
+      {
+        "name": "rank",
+        "score": "143"
       },
       {
         "name": "__EMPTY",
@@ -77865,6 +80433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "22"
+      },
+      {
+        "name": "rank",
+        "score": "421"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -78105,6 +80681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "24"
+      },
+      {
+        "name": "rank",
+        "score": "347"
       },
       {
         "name": "__EMPTY",
@@ -78349,6 +80933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "30"
+      },
+      {
+        "name": "rank",
+        "score": "143"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -78589,6 +81181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "26"
+      },
+      {
+        "name": "rank",
+        "score": "267"
       },
       {
         "name": "__EMPTY",
@@ -78833,6 +81433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "26"
+      },
+      {
+        "name": "rank",
+        "score": "267"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -79073,6 +81681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "34"
+      },
+      {
+        "name": "rank",
+        "score": "66"
       },
       {
         "name": "__EMPTY",
@@ -79317,6 +81933,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "26"
+      },
+      {
+        "name": "rank",
+        "score": "267"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -79557,6 +82181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "25"
+      },
+      {
+        "name": "rank",
+        "score": "310"
       },
       {
         "name": "__EMPTY",
@@ -79801,6 +82433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "27"
+      },
+      {
+        "name": "rank",
+        "score": "224"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -80043,6 +82683,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "38"
+      },
+      {
+        "name": "rank",
+        "score": "27"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -80114,11 +82762,11 @@ export const studentScores = [
       },
       {
         "name": "บท 6 [10]",
-        "score": "9"
+        "score": "10"
       },
       {
         "name": "บท 7 [10]",
-        "score": "9"
+        "score": "10"
       },
       {
         "name": "กิจกรรม [5]",
@@ -80126,7 +82774,7 @@ export const studentScores = [
       },
       {
         "name": "ก่อนกลางภาค [25]",
-        "score": "23"
+        "score": "25"
       },
       {
         "name": "บท 8 [10]",
@@ -80138,19 +82786,19 @@ export const studentScores = [
       },
       {
         "name": "บท 10 [10]",
-        "score": "9"
+        "score": "10"
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "23"
+        "score": "24"
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "58"
+        "score": "61"
       },
       {
         "name": "รวม [100]",
-        "score": "77"
+        "score": "80"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -80214,11 +82862,11 @@ export const studentScores = [
       },
       {
         "name": "Quiz 6",
-        "score": "5"
+        "score": "8"
       },
       {
         "name": "Quiz 7",
-        "score": "5"
+        "score": "8"
       },
       {
         "name": "MID [20]2",
@@ -80278,11 +82926,19 @@ export const studentScores = [
       },
       {
         "name": "Quiz 10",
-        "score": "7"
+        "score": "8"
       },
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "31"
+      },
+      {
+        "name": "rank",
+        "score": "118"
       },
       {
         "name": "__EMPTY",
@@ -80339,7 +82995,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 20,
     "กลางภาคข้อเขียน": 2.5,
     "ปลายภาค": 19,
-    "เกรด": "3.5",
+    "เกรด": "4",
     "ซ่อมกลางภาค": "ซ่อมแล้ว",
     "id": "43981",
     "name": "นางสาวกัญญาวีร์ ทวีศักดิ์"
@@ -80525,6 +83181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "28"
+      },
+      {
+        "name": "rank",
+        "score": "196"
       },
       {
         "name": "__EMPTY",
@@ -80769,6 +83433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "25"
+      },
+      {
+        "name": "rank",
+        "score": "310"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -81009,6 +83681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "27"
+      },
+      {
+        "name": "rank",
+        "score": "224"
       },
       {
         "name": "__EMPTY",
@@ -81253,6 +83933,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "23"
+      },
+      {
+        "name": "rank",
+        "score": "378"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -81493,6 +84181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "30"
+      },
+      {
+        "name": "rank",
+        "score": "143"
       },
       {
         "name": "__EMPTY",
@@ -81737,6 +84433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "26"
+      },
+      {
+        "name": "rank",
+        "score": "267"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -81977,6 +84681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "28"
+      },
+      {
+        "name": "rank",
+        "score": "196"
       },
       {
         "name": "__EMPTY",
@@ -82221,6 +84933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "24"
+      },
+      {
+        "name": "rank",
+        "score": "347"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -82461,6 +85181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "24"
+      },
+      {
+        "name": "rank",
+        "score": "347"
       },
       {
         "name": "__EMPTY",
@@ -82705,6 +85433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "31"
+      },
+      {
+        "name": "rank",
+        "score": "118"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -82945,6 +85681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "26"
+      },
+      {
+        "name": "rank",
+        "score": "267"
       },
       {
         "name": "__EMPTY",
@@ -83189,6 +85933,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "24"
+      },
+      {
+        "name": "rank",
+        "score": "347"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -83429,6 +86181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "29"
+      },
+      {
+        "name": "rank",
+        "score": "170"
       },
       {
         "name": "__EMPTY",
@@ -83673,6 +86433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "23"
+      },
+      {
+        "name": "rank",
+        "score": "378"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -83913,6 +86681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "38"
+      },
+      {
+        "name": "rank",
+        "score": "27"
       },
       {
         "name": "__EMPTY",
@@ -84157,6 +86933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "31"
+      },
+      {
+        "name": "rank",
+        "score": "118"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -84397,6 +87181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "31"
+      },
+      {
+        "name": "rank",
+        "score": "118"
       },
       {
         "name": "__EMPTY",
@@ -84641,6 +87433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "25"
+      },
+      {
+        "name": "rank",
+        "score": "310"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -84881,6 +87681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "30"
+      },
+      {
+        "name": "rank",
+        "score": "143"
       },
       {
         "name": "__EMPTY",
@@ -85125,6 +87933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "34"
+      },
+      {
+        "name": "rank",
+        "score": "66"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -85367,6 +88183,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "31"
+      },
+      {
+        "name": "rank",
+        "score": "118"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -85458,7 +88282,7 @@ export const studentScores = [
       },
       {
         "name": "บท 9 [5]",
-        "score": "4"
+        "score": "5"
       },
       {
         "name": "บท 10 [10]",
@@ -85466,15 +88290,15 @@ export const studentScores = [
       },
       {
         "name": "หลังกลางภาค [25]",
-        "score": "23"
+        "score": "24"
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "62"
+        "score": "63"
       },
       {
         "name": "รวม [100]",
-        "score": "79"
+        "score": "80"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -85598,7 +88422,7 @@ export const studentScores = [
       },
       {
         "name": "Quiz 9",
-        "score": "7"
+        "score": "8"
       },
       {
         "name": "Quiz 10",
@@ -85607,6 +88431,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "32"
+      },
+      {
+        "name": "rank",
+        "score": "95"
       },
       {
         "name": "__EMPTY",
@@ -85663,7 +88495,7 @@ export const studentScores = [
     "กลางภาคข้อกา": 26,
     "กลางภาคข้อเขียน": 4,
     "ปลายภาค": 17,
-    "เกรด": "3.5",
+    "เกรด": "4",
     "ซ่อมกลางภาค": "ไม่ต้องซ่อม",
     "id": "43991",
     "name": "นายพีรพัฒน์ ภุมชาติ"
@@ -85849,6 +88681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "13"
+      },
+      {
+        "name": "rank",
+        "score": "521"
       },
       {
         "name": "__EMPTY",
@@ -86093,6 +88933,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "34"
+      },
+      {
+        "name": "rank",
+        "score": "66"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -86333,6 +89181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "22"
+      },
+      {
+        "name": "rank",
+        "score": "421"
       },
       {
         "name": "__EMPTY",
@@ -86577,6 +89433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "25"
+      },
+      {
+        "name": "rank",
+        "score": "310"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -86817,6 +89681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "26"
+      },
+      {
+        "name": "rank",
+        "score": "267"
       },
       {
         "name": "__EMPTY",
@@ -87061,6 +89933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "27"
+      },
+      {
+        "name": "rank",
+        "score": "224"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -87301,6 +90181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "25"
+      },
+      {
+        "name": "rank",
+        "score": "310"
       },
       {
         "name": "__EMPTY",
@@ -87545,6 +90433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "39"
+      },
+      {
+        "name": "rank",
+        "score": "18"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -87785,6 +90681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "29"
+      },
+      {
+        "name": "rank",
+        "score": "170"
       },
       {
         "name": "__EMPTY",
@@ -88029,6 +90933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "32"
+      },
+      {
+        "name": "rank",
+        "score": "95"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -88269,6 +91181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "23"
+      },
+      {
+        "name": "rank",
+        "score": "378"
       },
       {
         "name": "__EMPTY",
@@ -88513,6 +91433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "24"
+      },
+      {
+        "name": "rank",
+        "score": "347"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -88753,6 +91681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "28"
+      },
+      {
+        "name": "rank",
+        "score": "196"
       },
       {
         "name": "__EMPTY",
@@ -88997,6 +91933,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "27"
+      },
+      {
+        "name": "rank",
+        "score": "224"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -89237,6 +92181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "21"
+      },
+      {
+        "name": "rank",
+        "score": "449"
       },
       {
         "name": "__EMPTY",
@@ -89481,6 +92433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "36"
+      },
+      {
+        "name": "rank",
+        "score": "43"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -89721,6 +92681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "21"
+      },
+      {
+        "name": "rank",
+        "score": "449"
       },
       {
         "name": "__EMPTY",
@@ -89965,6 +92933,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "26"
+      },
+      {
+        "name": "rank",
+        "score": "267"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -90205,6 +93181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "27"
+      },
+      {
+        "name": "rank",
+        "score": "224"
       },
       {
         "name": "__EMPTY",
@@ -90449,6 +93433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "25"
+      },
+      {
+        "name": "rank",
+        "score": "310"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -90689,6 +93681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "25"
+      },
+      {
+        "name": "rank",
+        "score": "310"
       },
       {
         "name": "__EMPTY",
@@ -90933,6 +93933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "27"
+      },
+      {
+        "name": "rank",
+        "score": "224"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -91173,6 +94181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "27"
+      },
+      {
+        "name": "rank",
+        "score": "224"
       },
       {
         "name": "__EMPTY",
@@ -91417,6 +94433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "16"
+      },
+      {
+        "name": "rank",
+        "score": "500"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -91657,6 +94681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "21"
+      },
+      {
+        "name": "rank",
+        "score": "449"
       },
       {
         "name": "__EMPTY",
@@ -91901,6 +94933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "0"
+      },
+      {
+        "name": "rank",
+        "score": "526"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -92141,6 +95181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "0"
+      },
+      {
+        "name": "rank",
+        "score": "526"
       },
       {
         "name": "__EMPTY",
@@ -92385,6 +95433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "18"
+      },
+      {
+        "name": "rank",
+        "score": "483"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -92625,6 +95681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "17"
+      },
+      {
+        "name": "rank",
+        "score": "490"
       },
       {
         "name": "__EMPTY",
@@ -92869,6 +95933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "22"
+      },
+      {
+        "name": "rank",
+        "score": "421"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -93109,6 +96181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "14"
+      },
+      {
+        "name": "rank",
+        "score": "514"
       },
       {
         "name": "__EMPTY",
@@ -93353,6 +96433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "20"
+      },
+      {
+        "name": "rank",
+        "score": "463"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -93532,7 +96620,7 @@ export const studentScores = [
       },
       {
         "name": "MID [20]2",
-        "score": ""
+        "score": "ขาดสอบ"
       },
       {
         "name": "ใบงาน 8.1",
@@ -93595,6 +96683,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "0"
+      },
+      {
+        "name": "rank",
+        "score": "526"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -93645,7 +96741,7 @@ export const studentScores = [
     ],
     "room": "11",
     "ordinal": "10",
-    "กลางภาค": "",
+    "กลางภาค": "ขาดสอบ",
     "กลางภาคข้อกา": "",
     "กลางภาคข้อเขียน": "",
     "ปลายภาค": "ขาดสอบ",
@@ -93835,6 +96931,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "0"
+      },
+      {
+        "name": "rank",
+        "score": "526"
       },
       {
         "name": "__EMPTY",
@@ -94079,6 +97183,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "19"
+      },
+      {
+        "name": "rank",
+        "score": "471"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -94319,6 +97431,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "22"
+      },
+      {
+        "name": "rank",
+        "score": "421"
       },
       {
         "name": "__EMPTY",
@@ -94563,6 +97683,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "21"
+      },
+      {
+        "name": "rank",
+        "score": "449"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -94803,6 +97931,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "14"
+      },
+      {
+        "name": "rank",
+        "score": "514"
       },
       {
         "name": "__EMPTY",
@@ -95047,6 +98183,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "13"
+      },
+      {
+        "name": "rank",
+        "score": "521"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -95287,6 +98431,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "13"
+      },
+      {
+        "name": "rank",
+        "score": "521"
       },
       {
         "name": "__EMPTY",
@@ -95531,6 +98683,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "0"
+      },
+      {
+        "name": "rank",
+        "score": "526"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -95771,6 +98931,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "20"
+      },
+      {
+        "name": "rank",
+        "score": "463"
       },
       {
         "name": "__EMPTY",
@@ -96015,6 +99183,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "19"
+      },
+      {
+        "name": "rank",
+        "score": "471"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -96255,6 +99431,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "17"
+      },
+      {
+        "name": "rank",
+        "score": "490"
       },
       {
         "name": "__EMPTY",
@@ -96499,6 +99683,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "20"
+      },
+      {
+        "name": "rank",
+        "score": "463"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -96739,6 +99931,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "27"
+      },
+      {
+        "name": "rank",
+        "score": "224"
       },
       {
         "name": "__EMPTY",
@@ -96983,6 +100183,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "20"
+      },
+      {
+        "name": "rank",
+        "score": "463"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -97223,6 +100431,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "17"
+      },
+      {
+        "name": "rank",
+        "score": "490"
       },
       {
         "name": "__EMPTY",
@@ -97467,6 +100683,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "15"
+      },
+      {
+        "name": "rank",
+        "score": "507"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -97707,6 +100931,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "22"
+      },
+      {
+        "name": "rank",
+        "score": "421"
       },
       {
         "name": "__EMPTY",
@@ -97951,6 +101183,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "24"
+      },
+      {
+        "name": "rank",
+        "score": "347"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -98191,6 +101431,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "17"
+      },
+      {
+        "name": "rank",
+        "score": "490"
       },
       {
         "name": "__EMPTY",
@@ -98435,6 +101683,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "15"
+      },
+      {
+        "name": "rank",
+        "score": "507"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -98675,6 +101931,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "0"
+      },
+      {
+        "name": "rank",
+        "score": "526"
       },
       {
         "name": "__EMPTY",
@@ -98919,6 +102183,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "19"
+      },
+      {
+        "name": "rank",
+        "score": "471"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -99159,6 +102431,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "19"
+      },
+      {
+        "name": "rank",
+        "score": "471"
       },
       {
         "name": "__EMPTY",
@@ -99403,6 +102683,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "23"
+      },
+      {
+        "name": "rank",
+        "score": "378"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -99643,6 +102931,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "21"
+      },
+      {
+        "name": "rank",
+        "score": "449"
       },
       {
         "name": "__EMPTY",
@@ -99887,6 +103183,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "16"
+      },
+      {
+        "name": "rank",
+        "score": "500"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -100127,6 +103431,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "19"
+      },
+      {
+        "name": "rank",
+        "score": "471"
       },
       {
         "name": "__EMPTY",
@@ -100371,6 +103683,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "14"
+      },
+      {
+        "name": "rank",
+        "score": "514"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -100550,7 +103870,7 @@ export const studentScores = [
       },
       {
         "name": "MID [20]2",
-        "score": ""
+        "score": "ขาดสอบ"
       },
       {
         "name": "ใบงาน 8.1",
@@ -100613,6 +103933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "0"
+      },
+      {
+        "name": "rank",
+        "score": "526"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -100663,7 +103991,7 @@ export const studentScores = [
     ],
     "room": "11",
     "ordinal": "39",
-    "กลางภาค": "",
+    "กลางภาค": "ขาดสอบ",
     "กลางภาคข้อกา": "",
     "กลางภาคข้อเขียน": "",
     "ปลายภาค": "ขาดสอบ",
@@ -100853,6 +104181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "14"
+      },
+      {
+        "name": "rank",
+        "score": "514"
       },
       {
         "name": "__EMPTY",
@@ -101097,6 +104433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "23"
+      },
+      {
+        "name": "rank",
+        "score": "378"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -101337,6 +104681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "18"
+      },
+      {
+        "name": "rank",
+        "score": "483"
       },
       {
         "name": "__EMPTY",
@@ -101581,6 +104933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "24"
+      },
+      {
+        "name": "rank",
+        "score": "347"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -101821,6 +105181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "18"
+      },
+      {
+        "name": "rank",
+        "score": "483"
       },
       {
         "name": "__EMPTY",
@@ -102065,6 +105433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "17"
+      },
+      {
+        "name": "rank",
+        "score": "490"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -102305,6 +105681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "28"
+      },
+      {
+        "name": "rank",
+        "score": "196"
       },
       {
         "name": "__EMPTY",
@@ -102549,6 +105933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "14"
+      },
+      {
+        "name": "rank",
+        "score": "514"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -102789,6 +106181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "18"
+      },
+      {
+        "name": "rank",
+        "score": "483"
       },
       {
         "name": "__EMPTY",
@@ -103033,6 +106433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "17"
+      },
+      {
+        "name": "rank",
+        "score": "490"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -103273,6 +106681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "22"
+      },
+      {
+        "name": "rank",
+        "score": "421"
       },
       {
         "name": "__EMPTY",
@@ -103517,6 +106933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "17"
+      },
+      {
+        "name": "rank",
+        "score": "490"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -103757,6 +107181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "22"
+      },
+      {
+        "name": "rank",
+        "score": "421"
       },
       {
         "name": "__EMPTY",
@@ -104001,6 +107433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "18"
+      },
+      {
+        "name": "rank",
+        "score": "483"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -104241,6 +107681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "23"
+      },
+      {
+        "name": "rank",
+        "score": "378"
       },
       {
         "name": "__EMPTY",
@@ -104485,6 +107933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "27"
+      },
+      {
+        "name": "rank",
+        "score": "224"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -104725,6 +108181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "17"
+      },
+      {
+        "name": "rank",
+        "score": "490"
       },
       {
         "name": "__EMPTY",
@@ -104969,6 +108433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "26"
+      },
+      {
+        "name": "rank",
+        "score": "267"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -105209,6 +108681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "22"
+      },
+      {
+        "name": "rank",
+        "score": "421"
       },
       {
         "name": "__EMPTY",
@@ -105453,6 +108933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "12"
+      },
+      {
+        "name": "rank",
+        "score": "525"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -105693,6 +109181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "26"
+      },
+      {
+        "name": "rank",
+        "score": "267"
       },
       {
         "name": "__EMPTY",
@@ -105937,6 +109433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "25"
+      },
+      {
+        "name": "rank",
+        "score": "310"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -106177,6 +109681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "14"
+      },
+      {
+        "name": "rank",
+        "score": "514"
       },
       {
         "name": "__EMPTY",
@@ -106421,6 +109933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "16"
+      },
+      {
+        "name": "rank",
+        "score": "500"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -106661,6 +110181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "15"
+      },
+      {
+        "name": "rank",
+        "score": "507"
       },
       {
         "name": "__EMPTY",
@@ -106905,6 +110433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "21"
+      },
+      {
+        "name": "rank",
+        "score": "449"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -107145,6 +110681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "23"
+      },
+      {
+        "name": "rank",
+        "score": "378"
       },
       {
         "name": "__EMPTY",
@@ -107389,6 +110933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "15"
+      },
+      {
+        "name": "rank",
+        "score": "507"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -107629,6 +111181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "25"
+      },
+      {
+        "name": "rank",
+        "score": "310"
       },
       {
         "name": "__EMPTY",
@@ -107873,6 +111433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "16"
+      },
+      {
+        "name": "rank",
+        "score": "500"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -108113,6 +111681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "19"
+      },
+      {
+        "name": "rank",
+        "score": "471"
       },
       {
         "name": "__EMPTY",
@@ -108357,6 +111933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "14"
+      },
+      {
+        "name": "rank",
+        "score": "514"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -108597,6 +112181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "0"
+      },
+      {
+        "name": "rank",
+        "score": "526"
       },
       {
         "name": "__EMPTY",
@@ -108841,6 +112433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "0"
+      },
+      {
+        "name": "rank",
+        "score": "526"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -109083,6 +112683,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "25"
+      },
+      {
+        "name": "rank",
+        "score": "310"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -109262,7 +112870,7 @@ export const studentScores = [
       },
       {
         "name": "MID [20]2",
-        "score": ""
+        "score": "ขาดสอบ"
       },
       {
         "name": "ใบงาน 8.1",
@@ -109325,6 +112933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "0"
+      },
+      {
+        "name": "rank",
+        "score": "526"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -109375,7 +112991,7 @@ export const studentScores = [
     ],
     "room": "12",
     "ordinal": "35",
-    "กลางภาค": "",
+    "กลางภาค": "ขาดสอบ",
     "กลางภาคข้อกา": "",
     "กลางภาคข้อเขียน": "",
     "ปลายภาค": "ขาดสอบ",
@@ -109565,6 +113181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "20"
+      },
+      {
+        "name": "rank",
+        "score": "463"
       },
       {
         "name": "__EMPTY",
@@ -109809,6 +113433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "16"
+      },
+      {
+        "name": "rank",
+        "score": "500"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -110049,6 +113681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "22"
+      },
+      {
+        "name": "rank",
+        "score": "421"
       },
       {
         "name": "__EMPTY",
@@ -110293,6 +113933,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "22"
+      },
+      {
+        "name": "rank",
+        "score": "421"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -110533,6 +114181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "26"
+      },
+      {
+        "name": "rank",
+        "score": "267"
       },
       {
         "name": "__EMPTY",
@@ -110777,6 +114433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "32"
+      },
+      {
+        "name": "rank",
+        "score": "95"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -111017,6 +114681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "28"
+      },
+      {
+        "name": "rank",
+        "score": "196"
       },
       {
         "name": "__EMPTY",
@@ -111261,6 +114933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "32"
+      },
+      {
+        "name": "rank",
+        "score": "95"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -111501,6 +115181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "30"
+      },
+      {
+        "name": "rank",
+        "score": "143"
       },
       {
         "name": "__EMPTY",
@@ -111745,6 +115433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "29"
+      },
+      {
+        "name": "rank",
+        "score": "170"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -111985,6 +115681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "0"
+      },
+      {
+        "name": "rank",
+        "score": "526"
       },
       {
         "name": "__EMPTY",
@@ -112229,6 +115933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "23"
+      },
+      {
+        "name": "rank",
+        "score": "378"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -112469,6 +116181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "19"
+      },
+      {
+        "name": "rank",
+        "score": "471"
       },
       {
         "name": "__EMPTY",
@@ -112713,6 +116433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "29"
+      },
+      {
+        "name": "rank",
+        "score": "170"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -112953,6 +116681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "13"
+      },
+      {
+        "name": "rank",
+        "score": "521"
       },
       {
         "name": "__EMPTY",
@@ -113197,6 +116933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "25"
+      },
+      {
+        "name": "rank",
+        "score": "310"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -113437,6 +117181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "25"
+      },
+      {
+        "name": "rank",
+        "score": "310"
       },
       {
         "name": "__EMPTY",
@@ -113681,6 +117433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "18"
+      },
+      {
+        "name": "rank",
+        "score": "483"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -113921,6 +117681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "31"
+      },
+      {
+        "name": "rank",
+        "score": "118"
       },
       {
         "name": "__EMPTY",
@@ -114165,6 +117933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "27"
+      },
+      {
+        "name": "rank",
+        "score": "224"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -114405,6 +118181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "34"
+      },
+      {
+        "name": "rank",
+        "score": "66"
       },
       {
         "name": "__EMPTY",
@@ -114649,6 +118433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "21"
+      },
+      {
+        "name": "rank",
+        "score": "449"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -114889,6 +118681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "19"
+      },
+      {
+        "name": "rank",
+        "score": "471"
       },
       {
         "name": "__EMPTY",
@@ -115133,6 +118933,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "25"
+      },
+      {
+        "name": "rank",
+        "score": "310"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -115373,6 +119181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "31"
+      },
+      {
+        "name": "rank",
+        "score": "118"
       },
       {
         "name": "__EMPTY",
@@ -115617,6 +119433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "24"
+      },
+      {
+        "name": "rank",
+        "score": "347"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -115857,6 +119681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "27"
+      },
+      {
+        "name": "rank",
+        "score": "224"
       },
       {
         "name": "__EMPTY",
@@ -116101,6 +119933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "25"
+      },
+      {
+        "name": "rank",
+        "score": "310"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -116341,6 +120181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "24"
+      },
+      {
+        "name": "rank",
+        "score": "347"
       },
       {
         "name": "__EMPTY",
@@ -116585,6 +120433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "26"
+      },
+      {
+        "name": "rank",
+        "score": "267"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -116825,6 +120681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "26"
+      },
+      {
+        "name": "rank",
+        "score": "267"
       },
       {
         "name": "__EMPTY",
@@ -117069,6 +120933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "22"
+      },
+      {
+        "name": "rank",
+        "score": "421"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -117309,6 +121181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "0"
+      },
+      {
+        "name": "rank",
+        "score": "526"
       },
       {
         "name": "__EMPTY",
@@ -117553,6 +121433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "16"
+      },
+      {
+        "name": "rank",
+        "score": "500"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -117793,6 +121681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "20"
+      },
+      {
+        "name": "rank",
+        "score": "463"
       },
       {
         "name": "__EMPTY",
@@ -118037,6 +121933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "28"
+      },
+      {
+        "name": "rank",
+        "score": "196"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -118277,6 +122181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "25"
+      },
+      {
+        "name": "rank",
+        "score": "310"
       },
       {
         "name": "__EMPTY",
@@ -118521,6 +122433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "27"
+      },
+      {
+        "name": "rank",
+        "score": "224"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -118761,6 +122681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "17"
+      },
+      {
+        "name": "rank",
+        "score": "490"
       },
       {
         "name": "__EMPTY",
@@ -119005,6 +122933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "26"
+      },
+      {
+        "name": "rank",
+        "score": "267"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -119245,6 +123181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "26"
+      },
+      {
+        "name": "rank",
+        "score": "267"
       },
       {
         "name": "__EMPTY",
@@ -119489,6 +123433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "20"
+      },
+      {
+        "name": "rank",
+        "score": "463"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -119729,6 +123681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "21"
+      },
+      {
+        "name": "rank",
+        "score": "449"
       },
       {
         "name": "__EMPTY",
@@ -119973,6 +123933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "21"
+      },
+      {
+        "name": "rank",
+        "score": "449"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -120213,6 +124181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "23"
+      },
+      {
+        "name": "rank",
+        "score": "378"
       },
       {
         "name": "__EMPTY",
@@ -120457,6 +124433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "25"
+      },
+      {
+        "name": "rank",
+        "score": "310"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -120697,6 +124681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "26"
+      },
+      {
+        "name": "rank",
+        "score": "267"
       },
       {
         "name": "__EMPTY",
@@ -120941,6 +124933,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "23"
+      },
+      {
+        "name": "rank",
+        "score": "378"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -121181,6 +125181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "21"
+      },
+      {
+        "name": "rank",
+        "score": "449"
       },
       {
         "name": "__EMPTY",
@@ -121425,6 +125433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "23"
+      },
+      {
+        "name": "rank",
+        "score": "378"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -121665,6 +125681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "30"
+      },
+      {
+        "name": "rank",
+        "score": "143"
       },
       {
         "name": "__EMPTY",
@@ -121909,6 +125933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "15"
+      },
+      {
+        "name": "rank",
+        "score": "507"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -122149,6 +126181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "27"
+      },
+      {
+        "name": "rank",
+        "score": "224"
       },
       {
         "name": "__EMPTY",
@@ -122393,6 +126433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "23"
+      },
+      {
+        "name": "rank",
+        "score": "378"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -122633,6 +126681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "40"
+      },
+      {
+        "name": "rank",
+        "score": "12"
       },
       {
         "name": "__EMPTY",
@@ -122877,6 +126933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "38"
+      },
+      {
+        "name": "rank",
+        "score": "27"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -123117,6 +127181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "22"
+      },
+      {
+        "name": "rank",
+        "score": "421"
       },
       {
         "name": "__EMPTY",
@@ -123361,6 +127433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "27"
+      },
+      {
+        "name": "rank",
+        "score": "224"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -123601,6 +127681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "19"
+      },
+      {
+        "name": "rank",
+        "score": "471"
       },
       {
         "name": "__EMPTY",
@@ -123845,6 +127933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "21"
+      },
+      {
+        "name": "rank",
+        "score": "449"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -124085,6 +128181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "25"
+      },
+      {
+        "name": "rank",
+        "score": "310"
       },
       {
         "name": "__EMPTY",
@@ -124329,6 +128433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "23"
+      },
+      {
+        "name": "rank",
+        "score": "378"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -124569,6 +128681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "28"
+      },
+      {
+        "name": "rank",
+        "score": "196"
       },
       {
         "name": "__EMPTY",
@@ -124813,6 +128933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "31"
+      },
+      {
+        "name": "rank",
+        "score": "118"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -125053,6 +129181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "22"
+      },
+      {
+        "name": "rank",
+        "score": "421"
       },
       {
         "name": "__EMPTY",
@@ -125297,6 +129433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "35"
+      },
+      {
+        "name": "rank",
+        "score": "51"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -125537,6 +129681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "27"
+      },
+      {
+        "name": "rank",
+        "score": "224"
       },
       {
         "name": "__EMPTY",
@@ -125781,6 +129933,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "23"
+      },
+      {
+        "name": "rank",
+        "score": "378"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -126021,6 +130181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "31"
+      },
+      {
+        "name": "rank",
+        "score": "118"
       },
       {
         "name": "__EMPTY",
@@ -126265,6 +130433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "24"
+      },
+      {
+        "name": "rank",
+        "score": "347"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -126505,6 +130681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "23"
+      },
+      {
+        "name": "rank",
+        "score": "378"
       },
       {
         "name": "__EMPTY",
@@ -126749,6 +130933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "32"
+      },
+      {
+        "name": "rank",
+        "score": "95"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -126989,6 +131181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "37"
+      },
+      {
+        "name": "rank",
+        "score": "36"
       },
       {
         "name": "__EMPTY",
@@ -127233,6 +131433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "26"
+      },
+      {
+        "name": "rank",
+        "score": "267"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -127473,6 +131681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "24"
+      },
+      {
+        "name": "rank",
+        "score": "347"
       },
       {
         "name": "__EMPTY",
@@ -127717,6 +131933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "16"
+      },
+      {
+        "name": "rank",
+        "score": "500"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -127957,6 +132181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "32"
+      },
+      {
+        "name": "rank",
+        "score": "95"
       },
       {
         "name": "__EMPTY",
@@ -128201,6 +132433,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "21"
+      },
+      {
+        "name": "rank",
+        "score": "449"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -128441,6 +132681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "23"
+      },
+      {
+        "name": "rank",
+        "score": "378"
       },
       {
         "name": "__EMPTY",
@@ -128685,6 +132933,14 @@ export const studentScores = [
         "score": "ซ่อมแล้ว"
       },
       {
+        "name": "mid+final",
+        "score": "26"
+      },
+      {
+        "name": "rank",
+        "score": "267"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -128925,6 +133181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": ""
+      },
+      {
+        "name": "mid+final",
+        "score": "23"
+      },
+      {
+        "name": "rank",
+        "score": "378"
       },
       {
         "name": "__EMPTY",
@@ -129169,6 +133433,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "17"
+      },
+      {
+        "name": "rank",
+        "score": "490"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -129409,6 +133681,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "23"
+      },
+      {
+        "name": "rank",
+        "score": "378"
       },
       {
         "name": "__EMPTY",
@@ -129653,6 +133933,14 @@ export const studentScores = [
         "score": ""
       },
       {
+        "name": "mid+final",
+        "score": "22"
+      },
+      {
+        "name": "rank",
+        "score": "421"
+      },
+      {
         "name": "__EMPTY",
         "score": ""
       },
@@ -129893,6 +134181,14 @@ export const studentScores = [
       {
         "name": "ซ่อมแล้วกลางภาค",
         "score": "ซ่อมแล้ว"
+      },
+      {
+        "name": "mid+final",
+        "score": "23"
+      },
+      {
+        "name": "rank",
+        "score": "378"
       },
       {
         "name": "__EMPTY",
