@@ -398,16 +398,228 @@ def get_output_path(filename):
     root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     return os.path.join(root_dir, 'public', 'assets', 'images', filename)
 
+
+def plot_phy_m4_ch2_2_q3():
+    """
+    Generates the Position-Time graph for phy_m4_ch2-2, question 3.
+    Downward parabola (constant negative acceleration).
+    """
+    fig, ax = plt.subplots(figsize=(6, 4))
+    t = np.linspace(0, 5, 100) # Time from 0 to 5 seconds
+    # Example: s = 10t - 0.5 * 2 * t^2  (u=10, a=-2)
+    s = 10 * t - 0.5 * 2 * t**2
+    
+    ax.plot(t, s, 'b-', linewidth=2)
+    ax.set_title("Position vs. Time (s-t)")
+    ax.set_xlabel("Time (t) [s]")
+    ax.set_ylabel("Position (s) [m]")
+    ax.grid(True, linestyle='--', alpha=0.7)
+    ax.set_xlim(0, 5)
+    ax.set_ylim(-5, 26) # Adjust y-limit to show parabola clearly
+    
+    ax.text(2.5, 20, 'Downward Parabola\n(Constant Negative Acceleration)', horizontalalignment='center', fontsize=10, bbox=dict(facecolor='white', alpha=0.7, edgecolor='none'))
+
+    output_path = get_output_path('phy_m4_ch2_2_q3.png')
+    create_directory_if_not_exists(os.path.dirname(output_path))
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=100)
+    plt.close(fig)
+    print(f"Graph saved to {output_path}")
+
+def plot_phy_m4_ch2_2_q5():
+    """
+    Generates the Acceleration-Time graph for phy_m4_ch2-2, question 5.
+    Constant negative acceleration (free fall).
+    """
+    fig, ax = plt.subplots(figsize=(6, 4))
+    t = np.linspace(0, 5, 100) # Time from 0 to 5 seconds
+    a = -9.8 * np.ones_like(t) # Constant acceleration due to gravity
+    
+    ax.plot(t, a, 'r-', linewidth=2)
+    ax.set_title("Acceleration vs. Time")
+    ax.set_xlabel("Time (t) [s]")
+    ax.set_ylabel("Acceleration (a) [m/s²]")
+    ax.grid(True, linestyle='--', alpha=0.7)
+    ax.set_xlim(0, 5)
+    ax.set_ylim(-12, 0)
+    
+    ax.text(2.5, -9.8, 'a = -g (constant)', horizontalalignment='center', verticalalignment='bottom', fontsize=10, bbox=dict(facecolor='white', alpha=0.7, edgecolor='none'))
+    ax.axhline(0, color='black', linewidth=0.5) # x-axis
+    ax.axvline(0, color='black', linewidth=0.5) # y-axis
+
+    output_path = get_output_path('phy_m4_ch2_2_q5.png')
+    create_directory_if_not_exists(os.path.dirname(output_path))
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=100)
+    plt.close(fig)
+    print(f"Graph saved to {output_path}")
+
+def plot_phy_m4_ch2_2_q17():
+    """
+    Generates two Velocity-Time graphs for phy_m4_ch2-2, question 17.
+    Graph A: Straight line intersecting t-axis at t=5s (changing direction).
+    Graph B: Horizontal line above t-axis (constant positive velocity).
+    """
+    fig, ax = plt.subplots(figsize=(6, 4))
+    t = np.linspace(0, 10, 100) # Time from 0 to 10 seconds
+
+    # Graph A: v starts at 5, goes to -5 at t=10, intersects at t=5
+    # v = 5 - t
+    v_A = 5 - t
+    ax.plot(t, v_A, 'b-', linewidth=2, label='Object A')
+
+    # Graph B: Constant positive velocity, e.g., v = 2
+    v_B = 2 * np.ones_like(t)
+    ax.plot(t, v_B, 'r-', linewidth=2, label='Object B')
+    
+    ax.set_title("Velocity vs. Time")
+    ax.set_xlabel("Time (t) [s]")
+    ax.set_ylabel("Velocity (v) [m/s]")
+    ax.grid(True, linestyle='--', alpha=0.7)
+    ax.set_xlim(0, 10)
+    ax.set_ylim(-6, 6)
+    ax.legend()
+    
+    ax.axhline(0, color='black', linewidth=0.5) # x-axis
+    ax.axvline(0, color='black', linewidth=0.5) # y-axis
+    ax.plot(5, 0, 'ko') # Mark intersection point for A
+
+    output_path = get_output_path('phy_m4_ch2_2_q17.png')
+    create_directory_if_not_exists(os.path.dirname(output_path))
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=100)
+    plt.close(fig)
+    print(f"Graph saved to {output_path}")
+
+def plot_phy_m4_ch2_3_q14():
+    """
+    Generates the v-t graph for phy_m4_ch2-3, question 14.
+    Description: Velocity-Time graph (Trapezoid).
+    Points: (0,0) -> (4,10) -> (8,10) -> (10,0).
+    """
+    fig, ax = plt.subplots(figsize=(6, 4))
+    
+    # Data points for the trapezoid
+    x = [0, 4, 8, 10]
+    y = [0, 10, 10, 0]
+    
+    # Plot the line
+    ax.plot(x, y, 'b-', linewidth=2, label='Velocity')
+    
+    # Fill the area
+    ax.fill_between(x, 0, y, color='cyan', alpha=0.4)
+
+    # Labels and Title
+    ax.set_title("Velocity vs. Time (v-t)")
+    ax.set_xlabel("Time (t) [s]")
+    ax.set_ylabel("Velocity (v) [m/s]")
+    
+    # Grid and Limits
+    ax.grid(True, linestyle='--', alpha=0.7)
+    ax.set_xlim(0, 12)
+    ax.set_ylim(0, 12)
+
+    output_path = get_output_path('phy_m4_ch2_3_q14.png')
+    create_directory_if_not_exists(os.path.dirname(output_path))
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=100)
+    plt.close(fig)
+    print(f"Graph saved to {output_path}")
+
+def plot_phy_m4_ch2_4_q14():
+    """
+    Generates the s-t graph for phy_m4_ch2-4, question 14.
+    Description: Position-Time graph with multiple stages.
+    Points: (0,0) -> (2,20) -> (4,20) -> (6,0).
+    """
+    fig, ax = plt.subplots(figsize=(6, 4))
+    
+    x = [0, 2, 4, 6]
+    y = [0, 20, 20, 0]
+    
+    ax.plot(x, y, 'g-', linewidth=2, marker='o')
+    
+    ax.set_title("Position vs. Time (s-t)")
+    ax.set_xlabel("Time (t) [s]")
+    ax.set_ylabel("Position (s) [m]")
+    
+    ax.grid(True, linestyle='--', alpha=0.7)
+    ax.set_xlim(0, 7)
+    ax.set_ylim(-5, 25)
+
+    output_path = get_output_path('phy_m4_ch2_4_q14.png')
+    create_directory_if_not_exists(os.path.dirname(output_path))
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=100)
+    plt.close(fig)
+    print(f"Graph saved to {output_path}")
+
+def plot_phy_m4_exam_midterm_1_q19():
+    """
+    Generates the v-t graph for phy_m4_exam_midterm-1, question 19.
+    Description: Velocity-Time graph with three stages.
+    Points: (0,0) -> (2,8) -> (10,8) -> (12,4).
+    """
+    fig, ax = plt.subplots(figsize=(6, 4))
+    
+    x = [0, 2, 10, 12]
+    y = [0, 8, 8, 4]
+    
+    ax.plot(x, y, 'b-', linewidth=2, marker='o')
+    
+    # Fill the area under the graph
+    ax.fill_between(x, 0, y, color='lightblue', alpha=0.5)
+    
+    ax.set_title("Velocity vs. Time Graph")
+    ax.set_xlabel("Time (t) [s]")
+    ax.set_ylabel("Velocity (v) [m/s]")
+    
+    ax.grid(True, linestyle='--', alpha=0.7)
+    ax.set_xlim(0, 13)
+    ax.set_ylim(0, 10)
+
+    output_path = get_output_path('phy_m4_exam_midterm_1_q19.png')
+    create_directory_if_not_exists(os.path.dirname(output_path))
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=100)
+    plt.close(fig)
+    print(f"Graph saved to {output_path}")
+
+def plot_phy_m4_exam_midterm_2_q19():
+    """
+    Generates the v-t graph for phy_m4_exam_midterm-2, question 19.
+    Description: Velocity-Time graph with positive and negative areas.
+    Points: (0,10) -> (5,0) -> (10,-10).
+    """
+    fig, ax = plt.subplots(figsize=(6, 4))
+    
+    x = [0, 5, 10]
+    y = [10, 0, -10]
+    
+    ax.plot(x, y, 'g-', linewidth=2, marker='o')
+    
+    # Fill areas
+    ax.fill_between(x, 0, y, where=np.array(y) >= 0, color='lightgreen', alpha=0.5, interpolate=True)
+    ax.fill_between(x, 0, y, where=np.array(y) <= 0, color='salmon', alpha=0.5, interpolate=True)
+    
+    ax.set_title("Velocity vs. Time Graph")
+    ax.set_xlabel("Time (t) [s]")
+    ax.set_ylabel("Velocity (v) [m/s]")
+    
+    ax.grid(True, linestyle='--', alpha=0.7)
+    ax.axhline(0, color='black', linewidth=0.8)
+    ax.set_xlim(0, 11)
+    ax.set_ylim(-12, 12)
+
+    output_path = get_output_path('phy_m4_exam_midterm_2_q19.png')
+    create_directory_if_not_exists(os.path.dirname(output_path))
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=100)
+    plt.close(fig)
+    print(f"Graph saved to {output_path}")
+
 if __name__ == "__main__":
     # Generate graph
-    # plot_phy_m4_ch6_5_q16() 
-    # plot_phy_m4_ch6_2_q18()
-    # plot_phy_m4_ch6_3_q15()
-    # plot_phy_m4_ch6_2_q35()
-    # plot_phy_m4_ch6_4_q30()
-    plot_phy_m5_ch8_5_q6()
-    plot_phy_m5_ch8_5_q9()
-    plot_phy_m5_ch8_5_q12()
-    plot_phy_m5_ch8_5_q21()
-    plot_phy_m5_ch8_5_q24()
+    # ... (other plots)
+    plot_phy_m4_exam_midterm_2_q19()
     print("\nGraph generation complete.")

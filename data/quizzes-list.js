@@ -202,7 +202,7 @@ export const quizList = [
   {
     "id": "phy_m4/phy_m4_final-exam-1",
     "title": "แนวข้อสอบปลายภาค 1 ชุดที่ 1",
-    "amount": 30,
+    "amount": 40,
     "description": "ทบทวนเนื้อหาบทที่ 3 (แรงและกฎการเคลื่อนที่) และบทที่ 4 (สมดุลต่อการเลื่อนที่)",
     "url": "./quiz/index.html?id=phy_m4/phy_m4_final-exam-1",
     "storageKey": "quizState-phy_m4_final-exam-1",
@@ -214,7 +214,7 @@ export const quizList = [
   {
     "id": "phy_m4/phy_m4_final-exam-2",
     "title": "แนวข้อสอบปลายภาค 1 ชุดที่ 2",
-    "amount": 30,
+    "amount": 40,
     "description": "ทบทวนเนื้อหาบทที่ 3 (แรงและกฎการเคลื่อนที่) และบทที่ 4 (สมดุลต่อการเลื่อนที่) โดยเน้นเรื่องแรงโน้มถ่วงและการเปรียบเทียบน้ำหนัก",
     "url": "./quiz/index.html?id=phy_m4/phy_m4_final-exam-2",
     "storageKey": "quizState-phy_m4_final-exam-2",
@@ -280,6 +280,42 @@ export const quizList = [
     "storageKey": "quizState-phy_m4_ch2-1",
     "icon": "./assets/icons/physicsm4.png",
     "altText": "ไอคอนสำหรับ phy_m4_ch2-1",
+    "category": "PhysicsM4",
+    "subCategory": "บทที่ 2: การเคลื่อนที่แนวตรง"
+  },
+  {
+    "id": "phy_m4/phy_m4_ch2-2",
+    "title": "การเคลื่อนที่แนวตรง (ชุดที่ 2)",
+    "amount": 20,
+    "description": "บทที่ 2: การเคลื่อนที่แนวตรง (ชุดที่ 2 - ทฤษฎีและวิเคราะห์)",
+    "url": "./quiz/index.html?id=phy_m4/phy_m4_ch2-2",
+    "storageKey": "quizState-phy_m4_ch2-2",
+    "icon": "./assets/icons/physicsm4.png",
+    "altText": "ไอคอนสำหรับ phy_m4_ch2-2",
+    "category": "PhysicsM4",
+    "subCategory": "บทที่ 2: การเคลื่อนที่แนวตรง"
+  },
+  {
+    "id": "phy_m4/phy_m4_ch2-3",
+    "title": "การเคลื่อนที่แนวตรง (ชุดที่ 3)",
+    "amount": 30,
+    "description": "บทที่ 2: การเคลื่อนที่แนวตรง (ชุดที่ 3 - การคำนวณและวิเคราะห์)",
+    "url": "./quiz/index.html?id=phy_m4/phy_m4_ch2-3",
+    "storageKey": "quizState-phy_m4_ch2-3",
+    "icon": "./assets/icons/physicsm4.png",
+    "altText": "ไอคอนสำหรับ phy_m4_ch2-3",
+    "category": "PhysicsM4",
+    "subCategory": "บทที่ 2: การเคลื่อนที่แนวตรง"
+  },
+  {
+    "id": "phy_m4/phy_m4_ch2-4",
+    "title": "การเคลื่อนที่แนวตรง (ชุดที่ 4)",
+    "amount": 30,
+    "description": "บทที่ 2: การเคลื่อนที่แนวตรง (ชุดที่ 4 - การคำนวณและวิเคราะห์)",
+    "url": "./quiz/index.html?id=phy_m4/phy_m4_ch2-4",
+    "storageKey": "quizState-phy_m4_ch2-4",
+    "icon": "./assets/icons/physicsm4.png",
+    "altText": "ไอคอนสำหรับ phy_m4_ch2-4",
     "category": "PhysicsM4",
     "subCategory": "บทที่ 2: การเคลื่อนที่แนวตรง"
   },
@@ -387,7 +423,7 @@ export const quizList = [
   {
     "id": "phy_m4/phy_m4_ch3-3",
     "title": "แรงและกฎการเคลื่อนที่ (ชุดที่ 3)",
-    "amount": 30,
+    "amount": 20,
     "description": "บทที่ 3: แรงและกฎการเคลื่อนที่ (เน้นการประยุกต์และการคำนวณ)",
     "url": "./quiz/index.html?id=phy_m4/phy_m4_ch3-3",
     "storageKey": "quizState-phy_m4_ch3-3",
@@ -424,7 +460,7 @@ export const quizList = [
     "id": "phy_m4/phy_m4_ch4-2",
     "title": "สมดุลกล: สมดุลต่อการเลื่อนที่ (ชุดที่ 2)",
     "description": "บทที่ 4: สมดุลกล (เน้นสมดุลต่อการเลื่อนที่และเสถียรภาพ)",
-    "amount": 30,
+    "amount": 20,
     "url": "./quiz/index.html?id=phy_m4/phy_m4_ch4-2",
     "storageKey": "quizState-phy_m4_ch4-2",
     "icon": "./assets/icons/equilibrium.png",
@@ -679,7 +715,6 @@ export const quizList = [
   },
   {
     "id": "ess_basic/ess_basic_m6_ch9-3",
-    "id": "ess_basic/ess_basic_m6_ch9-3",
     "title": "การเปลี่ยนแปลงภูมิอากาศ (ชุดที่ 3)",
     "amount": 30,
     "description": "บทที่ 9: การเปลี่ยนแปลงภูมิอากาศ (ชุดที่ 3 - เน้นรายละเอียดเชิงลึกและการประยุกต์ใช้)",
@@ -870,6 +905,28 @@ export const quizList = [
     "subCategory": "ระบบสุริยะ"
   },
   {
+    "id": "ess_basic/ess_basic_m6_ch3-2",
+    "title": "ระบบสุริยะ (ชุดที่ 2)",
+    "amount": 30,
+    "description": "บทที่ 3: ระบบสุริยะ (ชุดที่ 2 - เน้นการวิเคราะห์และเปรียบเทียบ)",
+    "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_ch3-2",
+    "storageKey": "quizState-ess_basic_m6_ch3-2",
+    "icon": "./assets/icons/solar-system.png",
+    "category": "EarthSpaceScienceBasic",
+    "subCategory": "ระบบสุริยะ"
+  },
+  {
+    "id": "ess_basic/ess_basic_m6_ch3-3",
+    "title": "ระบบสุริยะ (ชุดที่ 3)",
+    "amount": 30,
+    "description": "บทที่ 3: ระบบสุริยะ (ชุดที่ 3 - เน้นความรู้ทั่วไปและการประยุกต์)",
+    "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_ch3-3",
+    "storageKey": "quizState-ess_basic_m6_ch3-3",
+    "icon": "./assets/icons/solar-system.png",
+    "category": "EarthSpaceScienceBasic",
+    "subCategory": "ระบบสุริยะ"
+  },
+  {
     "id": "ess_basic/ess_basic_m6_ch4-1",
     "title": "เทคโนโลยีอวกาศ ชุดที่ 1",
     "amount": 30,
@@ -890,6 +947,17 @@ export const quizList = [
     "storageKey": "quizState-ess_basic_m6_ch4-2",
     "icon": "./assets/icons/space-exploration.png",
     "altText": "ไอคอนสำหรับ ess_basic_m6_ch4-2",
+    "category": "EarthSpaceScienceBasic",
+    "subCategory": "เทคโนโลยีอวกาศ"
+  },
+  {
+    "id": "ess_basic/ess_basic_m6_ch4-3",
+    "title": "เทคโนโลยีอวกาศ ชุดที่ 3",
+    "amount": 20,
+    "description": "บทที่ 4: เทคโนโลยีอวกาศ (ชุดที่ 3 - เน้นการประยุกต์ใช้, ยานสำรวจ, และความรู้รอบตัว)",
+    "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_ch4-3",
+    "storageKey": "quizState-ess_basic_m6_ch4-3",
+    "icon": "./assets/icons/space-exploration.png",
     "category": "EarthSpaceScienceBasic",
     "subCategory": "เทคโนโลยีอวกาศ"
   },
@@ -1106,6 +1174,28 @@ export const quizList = [
     "storageKey": "quizState-ess_basic_m6_final2-review-4",
     "icon": "./assets/icons/earth.png",
     "altText": "ไอคอนสำหรับ ess_basic_m6_final2-review-4",
+    "category": "EarthSpaceScienceBasic",
+    "subCategory": "แนวข้อสอบ"
+  },
+  {
+    "id": "ess_basic/ess_basic_m6_mid1-exam-1",
+    "title": "แนวข้อสอบกลางภาค เทอม 1 ชุดที่ 1",
+    "amount": 40,
+    "description": "แนวข้อสอบกลางภาค เทอม 1 ชุดที่ 1 ครอบคลุมเนื้อหาบทที่ 1-3",
+    "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_mid1-exam-1",
+    "storageKey": "quizState-ess_basic_m6_mid1-exam-1",
+    "icon": "./assets/icons/exam.png",
+    "category": "EarthSpaceScienceBasic",
+    "subCategory": "แนวข้อสอบ"
+  },
+  {
+    "id": "ess_basic/ess_basic_m6_mid1-exam-2",
+    "title": "แนวข้อสอบกลางภาค เทอม 1 ชุดที่ 2",
+    "amount": 40,
+    "description": "แนวข้อสอบกลางภาค เทอม 1 ชุดที่ 2 ครอบคลุมเนื้อหาบทที่ 1-3",
+    "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_mid1-exam-2",
+    "storageKey": "quizState-ess_basic_m6_mid1-exam-2",
+    "icon": "./assets/icons/exam.png",
     "category": "EarthSpaceScienceBasic",
     "subCategory": "แนวข้อสอบ"
   },

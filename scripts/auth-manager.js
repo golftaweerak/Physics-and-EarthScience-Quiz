@@ -673,6 +673,7 @@ class AuthManagerInternal {
             console.error("Error saving quiz history item:", e);
         }
     }
+
 }
 
 // Create and export a single, shared instance of the AuthManager.

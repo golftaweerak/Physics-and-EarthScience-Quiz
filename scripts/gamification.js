@@ -82,7 +82,11 @@ export class Gamification {
             this.saveState();
         }
 
-        const today = new Date().toDateString();
+        // ใช้ ISO string (YYYY-MM-DD) ที่อ้างอิงตาม local time เพื่อความเสถียรข้ามเบราว์เซอร์
+        const now = new Date();
+        const offset = now.getTimezoneOffset() * 60000;
+        const today = (new Date(now - offset)).toISOString().split('T')[0];
+        
         if (this.state.lastQuestDate !== today || !this.state.activeQuests || this.state.activeQuests.length === 0) {
             this.state.activeQuests = this.generateDailyQuests();
             this.state.rerolls = 3;
@@ -1274,7 +1278,7 @@ export class Gamification {
             ...q,
             progress: 0,
             completed: false,
-            date: new Date().toDateString()
+            date: new Date().toISOString().split('T')[0]
         }));
     }
 
@@ -1295,7 +1299,7 @@ export class Gamification {
             ...newQuest,
             progress: 0,
             completed: false,
-            date: new Date().toDateString()
+            date: new Date().toISOString().split('T')[0]
         };
         this.state.rerolls--;
         this.saveState();
@@ -1305,7 +1309,9 @@ export class Gamification {
     // ฟังก์ชันอัปเดต Streak (เรียกใช้ใน constructor)
     updateStreak() {
         const today = new Date();
-        const todayStr = today.toDateString();
+        const offset = today.getTimezoneOffset() * 60000;
+        const todayStr = (new Date(today - offset)).toISOString().split('T')[0];
+        
         const lastLoginStr = this.state.lastLogin;
 
         // ถ้าเข้าใช้งานวันนี้ไปแล้ว หรือเป็นผู้ใช้ใหม่
@@ -1355,6 +1361,8 @@ export class Gamification {
     // OPTIMIZATION: Added options parameter to control saving.
     // This prevents redundant saves when called from a larger transaction like submitQuizResult.
     addXP(amount, category = '', options = { shouldSave: true }) {
+        if (amount < 0 || isNaN(amount)) return; // ป้องกันการส่งค่าติดลบ หรือไม่ใช่ตัวเลข
+        
         this.state.xp += amount;
 
         const track = this.identifyTrack(category);
@@ -1415,7 +1423,10 @@ export class Gamification {
         // --- NEW: Anti-Farming & Diminishing Returns System ---
 
         // 1. Limit Custom Quiz XP (Max 5 per day)
-        const todayStr = new Date().toLocaleDateString('th-TH');
+        const dateObj = new Date();
+        const offset = dateObj.getTimezoneOffset() * 60000;
+        const todayStr = (new Date(dateObj - offset)).toISOString().split('T')[0];
+        
         if (!this.state.customQuizDailyCounts) this.state.customQuizDailyCounts = {};
         if (this.state.customQuizDailyCounts.date !== todayStr) {
             this.state.customQuizDailyCounts = { date: todayStr, count: 0 };
@@ -1675,7 +1686,7 @@ export class Gamification {
                     this.state.questHistory.unshift({
                         id: q.id,
                         desc: q.desc,
-                        date: new Date().toLocaleDateString('th-TH'),
+                        date: new Date().toISOString().split('T')[0],
                         xp: q.xp
                     });
                     // เก็บประวัติล่าสุด 50 รายการ
@@ -1753,7 +1764,7 @@ export class Gamification {
                 this.state.questHistory.unshift({
                     id: ach.id,
                     desc: `ปลดล็อกความสำเร็จ: ${ach.title}`,
-                    date: new Date().toLocaleDateString('th-TH'),
+                    date: new Date().toISOString().split('T')[0],
                     xp: 0
                 });
                 if (this.state.questHistory.length > 50) this.state.questHistory.pop();
@@ -1973,4 +1984,3 @@ export class Gamification {
 export function initializeGamification() {
     return new Gamification();
 }
-

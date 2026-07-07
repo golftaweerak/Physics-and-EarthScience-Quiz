@@ -184,11 +184,13 @@ export function calculateOverallSummary(scores) {
         summaryByRoom[room].totalSubmitted += completion.submitted;
 
         // Add logic for term 2 midterm scores
-        const midtermChoice = student['กลางภาคข้อกา'];
-        const midtermWritten = student['กลางภาคข้อเขียน'];
-        if (typeof midtermChoice === 'number' || typeof midtermWritten === 'number') {
-            summaryByRoom[room].totalMidtermScoreTerm2 += ((midtermChoice || 0) + (midtermWritten || 0));
-            summaryByRoom[room].validMidtermScoresCountTerm2++;
+        if (currentSemester === '2/2568') {
+            const midtermChoice = student['กลางภาคข้อกา'];
+            const midtermWritten = student['กลางภาคข้อเขียน'];
+            if (typeof midtermChoice === 'number' || typeof midtermWritten === 'number') {
+                summaryByRoom[room].totalMidtermScoreTerm2 += ((midtermChoice || 0) + (midtermWritten || 0));
+                summaryByRoom[room].validMidtermScoresCountTerm2++;
+            }
         }
 
         // Calculate Pass/Fail specifically for Term 2 passing threshold if applicable
@@ -1017,13 +1019,12 @@ export async function initializeSummaryPage() {
             const semesterSelector = document.getElementById('semester-selector');
             if (semesterSelector) semesterSelector.value = semester;
 
-            if (semester === '1/2568' || semester === '2/2568') {
+            const validSemesters = ['1/2568', '2/2568', '1/2569'];
+            if (validSemesters.includes(semester)) {
                 sessionStorage.setItem(SESSION_KEY, semester);
-                const isT1 = semester === '1/2568';
-                const currentSemester_file = isT1 ? 'scores-data.js' : 'scores-data-2-2568.js';
-
+                const semesterFile = `scores-data-${semester.replace('/', '-')}.js`;
                 const dataModules = getDataModules();
-                const semesterKey = Object.keys(dataModules).find(k => k.endsWith(currentSemester_file));
+                const semesterKey = Object.keys(dataModules).find(k => k.endsWith(semesterFile));
 
                 let loaded = false;
                 try {
@@ -1436,7 +1437,7 @@ function renderStudentTableForRoom(room, studentScores) {
     container.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-/**
+/** 
  * Handles exporting the current room's data to a CSV file.
  * @param {Array<object>} studentScores The full list of student scores.
  */

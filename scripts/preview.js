@@ -867,10 +867,10 @@ export async function initializePreviewPage() {
     // Populate the new category filter dropdown
     populateCategoryFilter();
 
-    // Populate dropdown from quizList with categories
-    if (typeof quizList !== 'undefined' && Array.isArray(quizList)) {
+    // Populate dropdown from quizListCache with categories
+    if (Array.isArray(quizListCache) && quizListCache.length > 0) {
         // Group quizzes by category
-        const groupedQuizzes = quizList.reduce((acc, quiz) => {
+        const groupedQuizzes = quizListCache.reduce((acc, quiz) => {
             const category = quiz.category || 'อื่น ๆ'; // Use a default category if none is specified
             if (!acc[category]) {
                 acc[category] = [];
@@ -943,8 +943,8 @@ svg" fill="none" viewBox="0 0 24 24">
         try {
             // Use the centralized data manager to fetch all questions
             const { allQuestions, scenarios } = await fetchAllQuizData();
-            const quizId = scriptName.replace('-data.js', '');
-            const quizInfo = quizList.find(q => q.id === quizId);
+            const quizId = scriptName.replace('-data.js', '').replace(/\\/g, '/'); // Normalize path separators
+            const quizInfo = quizListCache.find(q => q.id === quizId);
             const quizTitle = quizInfo?.title; // Use optional chaining for safety
 
             if (!quizTitle) {

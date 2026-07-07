@@ -95,8 +95,8 @@ export async function initializeScoreSearch() {
     if (titleCourseDisplay) titleCourseDisplay.textContent = courseCode;
 
     const dataModules = getDataModules();
-    const dataFileName = currentSemester === '2/2568' ? 'scores-data-2-2568.js' : 'scores-data.js';
-    const dataModuleKey = Object.keys(dataModules).find(k => k.endsWith(dataFileName));
+    const semesterFile = `scores-data-${currentSemester.replace('/', '-')}.js`;
+    const dataModuleKey = Object.keys(dataModules).find(k => k.endsWith(semesterFile));
 
     try {
         if (!dataModuleKey) throw new Error(`Data module not found: ${dataFileName}`);
