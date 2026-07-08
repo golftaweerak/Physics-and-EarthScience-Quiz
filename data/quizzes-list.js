@@ -226,7 +226,7 @@ export const quizList = [
   {
     "id": "phy_m4/phy_m4_final-exam-1",
     "title": "แนวข้อสอบปลายภาค 1 ชุดที่ 1",
-    "amount": 40,
+    "amount": 30,
     "description": "ทบทวนเนื้อหาบทที่ 3 (แรงและกฎการเคลื่อนที่) และบทที่ 4 (สมดุลต่อการเลื่อนที่)",
     "url": "./quiz/index.html?id=phy_m4/phy_m4_final-exam-1",
     "storageKey": "quizState-phy_m4_final-exam-1",
@@ -238,7 +238,7 @@ export const quizList = [
   {
     "id": "phy_m4/phy_m4_final-exam-2",
     "title": "แนวข้อสอบปลายภาค 1 ชุดที่ 2",
-    "amount": 40,
+    "amount": 30,
     "description": "ทบทวนเนื้อหาบทที่ 3 (แรงและกฎการเคลื่อนที่) และบทที่ 4 (สมดุลต่อการเลื่อนที่) โดยเน้นเรื่องแรงโน้มถ่วงและการเปรียบเทียบน้ำหนัก",
     "url": "./quiz/index.html?id=phy_m4/phy_m4_final-exam-2",
     "storageKey": "quizState-phy_m4_final-exam-2",
@@ -458,7 +458,7 @@ export const quizList = [
   {
     "id": "phy_m4/phy_m4_ch3-3",
     "title": "แรงและกฎการเคลื่อนที่ (ชุดที่ 3)",
-    "amount": 20,
+    "amount": 30,
     "description": "บทที่ 3: แรงและกฎการเคลื่อนที่ (เน้นการประยุกต์และการคำนวณ)",
     "url": "./quiz/index.html?id=phy_m4/phy_m4_ch3-3",
     "storageKey": "quizState-phy_m4_ch3-3",
@@ -495,7 +495,7 @@ export const quizList = [
     "id": "phy_m4/phy_m4_ch4-2",
     "title": "สมดุลกล: สมดุลต่อการเลื่อนที่ (ชุดที่ 2)",
     "description": "บทที่ 4: สมดุลกล (เน้นสมดุลต่อการเลื่อนที่และเสถียรภาพ)",
-    "amount": 20,
+    "amount": 30,
     "url": "./quiz/index.html?id=phy_m4/phy_m4_ch4-2",
     "storageKey": "quizState-phy_m4_ch4-2",
     "icon": "./assets/icons/equilibrium.png",
@@ -587,7 +587,7 @@ export const quizList = [
   {
     "id": "phy_m5/phy_m5_ch8-4",
     "title": "การเคลื่อนที่แบบฮาร์มอนิกอย่างง่าย (ชุดที่ 4)",
-    "amount": 30,
+    "amount": 40,
     "description": "บทที่ 8: การเคลื่อนที่แบบฮาร์มอนิกอย่างง่าย (เน้นการวิเคราะห์และคำนวณแบบเติมคำ)",
     "url": "./quiz/index.html?id=phy_m5/phy_m5_ch8-4",
     "storageKey": "quizState-phy_m5_ch8-4",
@@ -786,7 +786,7 @@ export const quizList = [
   {
     "id": "ess_basic/ess_basic_m6_ch6-3",
     "title": "การแปรสัณฐานของแผ่นธรณี (ชุดที่ 3)",
-    "amount": 30,
+    "amount": 20,
     "description": "บทที่ 6: การแปรสัณฐานของแผ่นธรณี (ชุดที่ 3, เน้นการวิเคราะห์และเชื่อมโยง)",
     "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_ch6-3",
     "storageKey": "quizState-ess_basic_m6_ch6-3",
@@ -1390,8 +1390,6 @@ export const quizList = [
     "category": "EarthSpaceScienceAdvance",
     "subCategory": "เอกภพและกาแล็กซี"
   },
-
-
   {
     "id": "posn_astro/junior1",
     "title": "ดาราศาสตร์ ม.ต้น ชุด 1",
@@ -1596,7 +1594,6 @@ export const quizList = [
     "altText": "ไอคอนวิทยาศาสตร์โลกและอวกาศ",
     "category": "PosnEarthScience"
   },
-
   {
     "id": "posn_earth/ES4",
     "title": "วิทยาศาสตร์โลกและอวกาศ ชุด 4",
@@ -1757,7 +1754,6 @@ export const quizList = [
     "altText": "ไอคอนวิทยาศาสตร์โลกและอวกาศ",
     "category": "PosnEarthScience"
   },
-
   {
     "id": "posn_astro/juniorC1",
     "title": "ดาราศาสตร์ ม.ต้น ค่าย 1 ชุด 1",
@@ -2218,10 +2214,6 @@ export const quizList = [
     "category": "ChallengePOSN",
     "subCategory": "ดาราศาสตร์ (Astronomy)"
   },
-];
-
-// Explicitly added Astro Review Quizzes
-const astroReviewQuizzes = [
   {
     "id": "posn_astro/Astro1",
     "title": "ทบทวน ดาราศาสตร์ ชุด 1",
@@ -2301,5 +2293,3 @@ const astroReviewQuizzes = [
     "subCategory": "ทบทวนดาราศาสตร์"
   }
 ];
-
-quizList.push(...astroReviewQuizzes);
