@@ -344,6 +344,17 @@ export const quizList = [
     "subCategory": "บทที่ 2: การเคลื่อนที่แนวตรง"
   },
   {
+    "id": "phy_m4/phy_m4_ch2-5",
+    "title": "การเคลื่อนที่แนวตรง (ชุดที่ 5)",
+    "amount": 40,
+    "description": "บทที่ 2: การเคลื่อนที่แนวตรง (ชุดที่ 5 - การประยุกต์และวิเคราะห์กราฟขั้นสูง)",
+    "url": "./quiz/index.html?id=phy_m4/phy_m4_ch2-5",
+    "storageKey": "quizState-phy_m4_ch2-5",
+    "icon": "./assets/icons/physicsm4.png",
+    "category": "PhysicsM4",
+    "subCategory": "บทที่ 2: การเคลื่อนที่แนวตรง"
+  },
+  {
     "id": "phy_m4/phy_m4_ch6-1",
     "title": "โมเมนตัมและการชน (ชุดที่ 1)",
     "amount": 30,

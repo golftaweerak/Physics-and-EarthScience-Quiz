@@ -618,8 +618,39 @@ def plot_phy_m4_exam_midterm_2_q19():
     plt.close(fig)
     print(f"Graph saved to {output_path}")
 
+def plot_phy_m4_ch2_5_q14():
+    """
+    Generates the v-t graph for phy_m4_ch2-5, question 14.
+    Description: Velocity-Time graph with three stages.
+    Points: (0,0) -> (2,8) -> (10,8) -> (12,4).
+    """
+    fig, ax = plt.subplots(figsize=(6, 4))
+    
+    x = [0, 2, 10, 12]
+    y = [0, 8, 8, 4]
+    
+    ax.plot(x, y, 'b-', linewidth=2, marker='o')
+    
+    # Fill the area under the graph
+    ax.fill_between(x, 0, y, color='lightblue', alpha=0.5)
+    
+    ax.set_title("Velocity vs. Time Graph")
+    ax.set_xlabel("Time (t) [s]")
+    ax.set_ylabel("Velocity (v) [m/s]")
+    
+    ax.grid(True, linestyle='--', alpha=0.7)
+    ax.set_xlim(0, 13)
+    ax.set_ylim(0, 10)
+
+    output_path = get_output_path('phy_m4_ch2-5_q14.png')
+    create_directory_if_not_exists(os.path.dirname(output_path))
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=100)
+    plt.close(fig)
+    print(f"Graph saved to {output_path}")
+
 if __name__ == "__main__":
     # Generate graph
     # ... (other plots)
-    plot_phy_m4_exam_midterm_2_q19()
+    plot_phy_m4_ch2_5_q14()
     print("\nGraph generation complete.")
