@@ -152,6 +152,30 @@ export const quizList = [
     "subCategory": "บทที่ 5: งานและพลังงาน"
   },
   {
+    "id": "phy_m4/phy_m4_mid1-exam-1-data.js",
+    "title": "แนวข้อสอบกลางภาค 1 ชุดที่ 1",
+    "amount": 40,
+    "description": "ทบทวนเนื้อหาบทที่ 2 (การเคลื่อนที่แนวตรง)",
+    "url": "./quiz/index.html?id=phy_m4/phy_m4_mid1-exam-1-data.js",
+    "storageKey": "quizState-phy_m4_mid1-exam-1-data.js",
+    "icon": "./assets/icons/physicsm4.png",
+    "altText": "ไอคอนสำหรับ phy_m4_mid1-exam-1-data.js",
+    "category": "PhysicsM4",
+    "subCategory": "แนวข้อสอบ"
+  },
+  {
+    "id": "phy_m4/phy_m4_mid1-exam-2-data.js",
+    "title": "แนวข้อสอบกลางภาค 1 ชุดที่ 2",
+    "amount": 40,
+    "description": "ทบทวนเนื้อหาบทที่ 2 (การเคลื่อนที่แนวตรง)",
+    "url": "./quiz/index.html?id=phy_m4/phy_m4_mid1-exam-2-data.js",
+    "storageKey": "quizState-phy_m4_mid1-exam-2-data.js",
+    "icon": "./assets/icons/physicsm4.png",
+    "altText": "ไอคอนสำหรับ phy_m4_mid1-exam-2-data.js",
+    "category": "PhysicsM4",
+    "subCategory": "แนวข้อสอบ"
+  },
+  {
     "id": "phy_m4/phy_m4_mid2-exam-1",
     "title": "แนวข้อสอบกลางภาค 2 ชุดที่ 1",
     "amount": 40,
