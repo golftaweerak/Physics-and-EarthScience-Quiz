@@ -16,9 +16,10 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
+const isBrowser = typeof window !== 'undefined';
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-const auth = getAuth(app);
+const analytics = isBrowser ? getAnalytics(app) : null;
+const auth = isBrowser ? getAuth(app) : null;
 
 // Initialize Firestore with persistent cache settings (New API)
 
@@ -39,14 +40,16 @@ try {
 // FIX: iOS Safari aggressively suspends WebSockets and IndexedDB when the app is backgrounded.
 // This listener forces Firestore to reconnect its network immediately upon foregrounding,
 // preventing "infinite loading" loops when joining or starting lobbies.
-document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "visible") {
-        console.log("[Firebase] App foregrounded. Forcing network reconnect for iOS compatibility.");
-        if (db) {
-            enableNetwork(db).catch(err => console.error("Error enabling network:", err));
+if (typeof document !== 'undefined') {
+    document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "visible") {
+            console.log("[Firebase] App foregrounded. Forcing network reconnect for iOS compatibility.");
+            if (db) {
+                enableNetwork(db).catch(err => console.error("Error enabling network:", err));
+            }
         }
-    }
-});
+    });
+}
 
 const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({

@@ -89,7 +89,9 @@ function extractDetailsAndSubCategory(content, id) {
  * @returns {{category: string, icon: string}}
  */
 function guessCategoryAndIcon(id) {
-    const lowerId = id.toLowerCase();
+    // If id contains a slash, extract the basename for guessing prefix
+    const basename = id.includes('/') ? id.substring(id.lastIndexOf('/') + 1) : id;
+    const lowerId = basename.toLowerCase();
     // Find the longest matching prefix to handle cases like 'ess_adv_m4' vs 'ess_adv_m'.
     const matchingPrefix = Object.keys(quizPrefixInfo)
         .filter(p => lowerId.startsWith(p))
@@ -130,8 +132,8 @@ async function updateQuizList() {
         const updatedQuizSummaries = [];
 
         for (const filePath of dataFiles) {
-            const file = path.basename(filePath);
-            const id = file.replace('-data.js', '');
+            const relativePath = path.relative(dataDir, filePath).replace(/\\/g, '/');
+            const id = relativePath.replace('-data.js', '');
             const lowerId = id.toLowerCase();
             try {
                 const content = fs.readFileSync(filePath, 'utf8');

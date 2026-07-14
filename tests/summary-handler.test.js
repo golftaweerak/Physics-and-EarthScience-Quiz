@@ -1,5 +1,6 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { calculateOverallSummary, getFirstName } from '../scripts/summary-handler.js';
+import { setCurrentSemester } from '../scripts/data-manager.js';
 
 // Mock student-card-renderer
 vi.mock('../scripts/student-card-renderer.js', () => ({
@@ -92,5 +93,68 @@ describe('calculateOverallSummary', () => {
         expect(room2.studentCount).toBe(2);
         expect(room2.averageScore).toBe('82.50'); // (90+75)/2
         expect(room2.completionPercentage).toBe('100'); // (4 submitted / 4 trackable)
+    });
+});
+
+describe('calculateOverallSummary (Term 2 - 2/2568)', () => {
+    beforeEach(() => {
+        setCurrentSemester('2/2568');
+    });
+
+    afterEach(() => {
+        setCurrentSemester('1/2568'); // Reset to default
+    });
+
+    const mockTerm2Scores = [
+        {
+            id: '001',
+            name: 'A',
+            room: '1',
+            assignments: [
+                { name: 'รวม [100]', score: '80' },
+                { name: 'Quiz 6', score: '8' },
+                { name: 'Quiz 7', score: '8' },
+                { name: 'Quiz 8', score: '9' },
+                { name: 'Quiz 9', score: 'ยังไม่ส่ง' },
+                { name: 'Quiz 10', score: '8' },
+                { name: 'MID [20]2', score: '15' }
+            ]
+        },
+        {
+            id: '002',
+            name: 'B',
+            room: '1',
+            assignments: [
+                { name: 'รวม [100]', score: '40' },
+                { name: 'Quiz 6', score: 'ยังไม่ส่ง' },
+                { name: 'Quiz 7', score: 'ยังไม่ส่ง' },
+                { name: 'Quiz 8', score: 'ยังไม่ส่ง' },
+                { name: 'Quiz 9', score: 'ยังไม่ส่ง' },
+                { name: 'Quiz 10', score: 'ยังไม่ส่ง' },
+                { name: 'MID [20]2', score: '10' } // Failed midterm (< 12)
+            ]
+        }
+    ];
+
+    it('should calculate midterm averages and pass/fail counts correctly for rooms', () => {
+        const summary = calculateOverallSummary(mockTerm2Scores);
+        const room1 = summary.summaryByRoom['1'];
+
+        // Room 1 should have 2 students
+        expect(room1.studentCount).toBe(2);
+        // Average midterm: (15 + 10) / 2 = 12.50
+        expect(room1.averageMidtermTerm2).toBe('12.50');
+        // Pass count (MID >= 12): student A (15) passes. Student B (10) fails.
+        expect(room1.passCountTerm2).toBe(1);
+        expect(room1.failCountTerm2).toBe(1);
+
+        // SD: sqrt(((15-12.5)^2 + (10-12.5)^2)/2) = 2.50
+        expect(room1.midtermSD).toBe('2.50');
+        expect(summary.midtermSD).toBe('2.50');
+
+        // Overall stats
+        expect(summary.midtermPassCount).toBe(1);
+        expect(summary.midtermFailCount).toBe(1);
+        expect(summary.averageMidtermScore).toBe('12.50');
     });
 });

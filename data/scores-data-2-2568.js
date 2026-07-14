@@ -1,4 +1,4 @@
-export const lastUpdated = "2026-03-05T09:18:39.366Z";
+export const lastUpdated = "2026-07-14T04:20:06.587Z";
 export const studentScores = [
   {
     "assignments": [
@@ -1300,7 +1300,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "118"
+        "score": "119"
       },
       {
         "name": "__EMPTY",
@@ -1578,7 +1578,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "118"
+        "score": "119"
       },
       {
         "name": "__EMPTY",
@@ -2134,7 +2134,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "142"
+        "score": "143"
       },
       {
         "name": "__EMPTY",
@@ -3818,11 +3818,11 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_3",
-        "score": "8"
+        "score": "9"
       },
       {
         "name": "__EMPTY_4",
-        "score": "13"
+        "score": "12"
       },
       {
         "name": "__EMPTY_5",
@@ -5208,11 +5208,11 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_3",
-        "score": "139"
+        "score": "140"
       },
       {
         "name": "__EMPTY_4",
-        "score": "112"
+        "score": "111"
       },
       {
         "name": "__EMPTY_5",
@@ -6860,7 +6860,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "118"
+        "score": "119"
       },
       {
         "name": "__EMPTY",
@@ -8250,7 +8250,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "118"
+        "score": "119"
       },
       {
         "name": "__EMPTY",
@@ -9378,11 +9378,11 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_3",
-        "score": "0.20512820512820512"
+        "score": "0.23076923076923078"
       },
       {
         "name": "__EMPTY_4",
-        "score": "0.3333333333333333"
+        "score": "0.3076923076923077"
       },
       {
         "name": "__EMPTY_5",
@@ -9640,7 +9640,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "142"
+        "score": "143"
       },
       {
         "name": "__EMPTY",
@@ -10768,11 +10768,11 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_3",
-        "score": "0.2617702448210923"
+        "score": "0.263653483992467"
       },
       {
         "name": "__EMPTY_4",
-        "score": "0.21092278719397364"
+        "score": "0.20903954802259886"
       },
       {
         "name": "__EMPTY_5",
@@ -10800,7 +10800,7 @@ export const studentScores = [
       },
       {
         "name": "__EMPTY_11",
-        "score": "1"
+        "score": "0.9999999999999998"
       },
       {
         "name": "__EMPTY_12",
@@ -14366,7 +14366,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "118"
+        "score": "119"
       },
       {
         "name": "__EMPTY",
@@ -15478,7 +15478,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "142"
+        "score": "143"
       },
       {
         "name": "__EMPTY",
@@ -15756,7 +15756,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "142"
+        "score": "143"
       },
       {
         "name": "__EMPTY",
@@ -18258,7 +18258,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "142"
+        "score": "143"
       },
       {
         "name": "__EMPTY",
@@ -20482,7 +20482,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "142"
+        "score": "143"
       },
       {
         "name": "__EMPTY",
@@ -24096,7 +24096,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "142"
+        "score": "143"
       },
       {
         "name": "__EMPTY",
@@ -26876,7 +26876,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "118"
+        "score": "119"
       },
       {
         "name": "__EMPTY",
@@ -27432,7 +27432,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "118"
+        "score": "119"
       },
       {
         "name": "__EMPTY",
@@ -31602,7 +31602,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "118"
+        "score": "119"
       },
       {
         "name": "__EMPTY",
@@ -31880,7 +31880,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "142"
+        "score": "143"
       },
       {
         "name": "__EMPTY",
@@ -33826,7 +33826,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "142"
+        "score": "143"
       },
       {
         "name": "__EMPTY",
@@ -35494,7 +35494,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "118"
+        "score": "119"
       },
       {
         "name": "__EMPTY",
@@ -35772,7 +35772,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "118"
+        "score": "119"
       },
       {
         "name": "__EMPTY",
@@ -36050,7 +36050,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "142"
+        "score": "143"
       },
       {
         "name": "__EMPTY",
@@ -37718,7 +37718,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "118"
+        "score": "119"
       },
       {
         "name": "__EMPTY",
@@ -44112,7 +44112,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "142"
+        "score": "143"
       },
       {
         "name": "__EMPTY",
@@ -46336,7 +46336,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "142"
+        "score": "143"
       },
       {
         "name": "__EMPTY",
@@ -53842,7 +53842,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "142"
+        "score": "143"
       },
       {
         "name": "__EMPTY",
@@ -55788,7 +55788,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "118"
+        "score": "119"
       },
       {
         "name": "__EMPTY",
@@ -58846,7 +58846,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "142"
+        "score": "143"
       },
       {
         "name": "__EMPTY",
@@ -63294,7 +63294,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "142"
+        "score": "143"
       },
       {
         "name": "__EMPTY",
@@ -64406,7 +64406,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "118"
+        "score": "119"
       },
       {
         "name": "__EMPTY",
@@ -73024,7 +73024,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "142"
+        "score": "143"
       },
       {
         "name": "__EMPTY",
@@ -73302,7 +73302,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "142"
+        "score": "143"
       },
       {
         "name": "__EMPTY",
@@ -74692,7 +74692,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "118"
+        "score": "119"
       },
       {
         "name": "__EMPTY",
@@ -75804,7 +75804,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "118"
+        "score": "119"
       },
       {
         "name": "__EMPTY",
@@ -76916,7 +76916,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "142"
+        "score": "143"
       },
       {
         "name": "__EMPTY",
@@ -82198,7 +82198,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "142"
+        "score": "143"
       },
       {
         "name": "__EMPTY",
@@ -84422,7 +84422,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "142"
+        "score": "143"
       },
       {
         "name": "__EMPTY",
@@ -87480,7 +87480,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "142"
+        "score": "143"
       },
       {
         "name": "__EMPTY",
@@ -88036,7 +88036,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "118"
+        "score": "119"
       },
       {
         "name": "__EMPTY",
@@ -89148,7 +89148,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "142"
+        "score": "143"
       },
       {
         "name": "__EMPTY",
@@ -89982,7 +89982,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "142"
+        "score": "143"
       },
       {
         "name": "__EMPTY",
@@ -92206,7 +92206,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "118"
+        "score": "119"
       },
       {
         "name": "__EMPTY",
@@ -93596,7 +93596,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "142"
+        "score": "143"
       },
       {
         "name": "__EMPTY",
@@ -94986,7 +94986,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "118"
+        "score": "119"
       },
       {
         "name": "__EMPTY",
@@ -96932,7 +96932,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "118"
+        "score": "119"
       },
       {
         "name": "__EMPTY",
@@ -98044,7 +98044,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "118"
+        "score": "119"
       },
       {
         "name": "__EMPTY",
@@ -100958,11 +100958,11 @@ export const studentScores = [
       },
       {
         "name": "ก่อนปลายภาค [70]",
-        "score": "61"
+        "score": "63"
       },
       {
         "name": "รวม [100]",
-        "score": "79"
+        "score": "81"
       },
       {
         "name": "กิจกรรม 6.1",
@@ -101034,7 +101034,7 @@ export const studentScores = [
       },
       {
         "name": "MID [20]2",
-        "score": "12"
+        "score": "14"
       },
       {
         "name": "ใบงาน 8.1",
@@ -101098,11 +101098,11 @@ export const studentScores = [
       },
       {
         "name": "mid+final",
-        "score": "30"
+        "score": "32"
       },
       {
         "name": "rank",
-        "score": "142"
+        "score": "96"
       },
       {
         "name": "__EMPTY",
@@ -101183,11 +101183,11 @@ export const studentScores = [
     ],
     "room": "10",
     "ordinal": "26",
-    "กลางภาค": 12,
+    "กลางภาค": 14,
     "กลางภาคข้อกา": 22,
-    "กลางภาคข้อเขียน": 1.5,
+    "กลางภาคข้อเขียน": 5,
     "ปลายภาค": 18,
-    "เกรด": "3.5",
+    "เกรด": "4",
     "ซ่อมกลางภาค": "ไม่ต้องซ่อม",
     "id": "42131",
     "name": "นางสาวมัลลิกา ธิมาศ"
@@ -128068,7 +128068,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "142"
+        "score": "143"
       },
       {
         "name": "__EMPTY",
@@ -130848,7 +130848,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "118"
+        "score": "119"
       },
       {
         "name": "__EMPTY",
@@ -132516,7 +132516,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "118"
+        "score": "119"
       },
       {
         "name": "__EMPTY",
@@ -139744,7 +139744,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "142"
+        "score": "143"
       },
       {
         "name": "__EMPTY",
@@ -143358,7 +143358,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "118"
+        "score": "119"
       },
       {
         "name": "__EMPTY",
@@ -144748,7 +144748,7 @@ export const studentScores = [
       },
       {
         "name": "rank",
-        "score": "118"
+        "score": "119"
       },
       {
         "name": "__EMPTY",

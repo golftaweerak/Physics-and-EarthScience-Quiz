@@ -57,7 +57,7 @@ describe('ScientificCalculator Integration Tests', () => {
     vi.restoreAllMocks();
   });
 
-  it.only('should initialize correctly', () => {
+  it('should initialize correctly', () => {
     expect(calculator).toBeDefined();
     expect(calculator.isOpen).toBe(false);
     expect(calculator.isDegreeMode).toBe(true);

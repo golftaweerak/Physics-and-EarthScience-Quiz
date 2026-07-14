@@ -124,7 +124,7 @@ export class ScientificCalculator {
                 <button class="c-btn sm" data-val="pow" data-label="xʸ" data-shift="x√"><i class="font-serif italic">x</i>^■</button>
 
                 <!-- Row 3 -->
-                <button class="c-btn sm" data-val="x"><i class="font-serif italic">x</i></button>
+                <button class="c-btn sm" data-action="calc" data-shift="solve" data-alpha="=" data-label="CALC">CALC<span class="sub-r">=</span><span class="sub-y">SOLVE</span></button>
                 <button class="c-btn sm" data-val="log" data-shift="10^">log</button>
                 <button class="c-btn sm" data-val="ln" data-shift="e^">ln</button>
                 <button class="c-btn sm" data-val="(">(</button>
