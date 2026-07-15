@@ -162,7 +162,7 @@ export function getCategoryDisplayName(categoryKey) {
 
 
 const SEMESTER_STORAGE_KEY = 'current_semester';
-const DEFAULT_SEMESTER = '1/2568';
+const DEFAULT_SEMESTER = '1/2569';
 
 /**
  * Gets the current active semester from localStorage.

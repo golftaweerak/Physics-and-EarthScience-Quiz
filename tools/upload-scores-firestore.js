@@ -459,20 +459,31 @@ async function uploadSemester(semesterKey) {
         const semesterPayload = {};
         for (const key in student) {
             if (!['id', 'name', 'firstName', 'lastName', 'room', 'ordinal', 'assignments'].includes(key)) {
-                semesterPayload[key] = student[key];
+                if (student[key] !== undefined) {
+                    semesterPayload[key] = student[key];
+                }
             }
         }
         student.assignments.forEach(a => {
-            semesterPayload[a.name] = a.score;
+            if (a.score !== undefined) {
+                semesterPayload[a.name] = a.score;
+            }
         });
 
+        // Clean up any undefined values to satisfy Firestore payload constraints
+        for (const k in semesterPayload) {
+            if (semesterPayload[k] === undefined) {
+                delete semesterPayload[k];
+            }
+        }
+
         const docData = {
-            id: student.id,
-            name: student.name,
-            firstName: student.firstName,
-            lastName: student.lastName,
-            room: student.room,
-            ordinal: student.ordinal,
+            id: student.id || null,
+            name: student.name || null,
+            firstName: student.firstName || null,
+            lastName: student.lastName || null,
+            room: student.room || null,
+            ordinal: student.ordinal || null,
             semesters: {
                 [semConfig.semesterKey]: semesterPayload
             }
