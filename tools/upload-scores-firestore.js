@@ -533,13 +533,13 @@ function openRules() {
 
         console.log('🔓 Automatically opening Firestore Rules for write access...');
         const openedRules = originalRules
-            .replace(/match\s*\/student_scores\/\{studentId\}\s*\{\s*allow\s*read\s*:\s*if\s*true\s*;\s*allow\s*write\s*:\s*if\s*false\s*;\s*\}/i, 
-                     `match /student_scores/{studentId} {
+            .replace(/match\s*\/student_scores\/\{studentId\}\s*\{\s*allow\s*read\s*:\s*if\s*true\s*;\s*allow\s*write\s*:\s*if\s*false\s*;\s*\}/i,
+                `match /student_scores/{studentId} {
       allow read: if true;
       allow write: if true;
     }`)
             .replace(/match\s*\/scores_summaries\/\{semesterId\}\s*\{\s*allow\s*read\s*:\s*if\s*true\s*;\s*allow\s*write\s*:\s*if\s*false\s*;\s*\}/i,
-                     `match /scores_summaries/{semesterId} {
+                `match /scores_summaries/{semesterId} {
       allow read: if true;
       allow write: if true;
     }`);

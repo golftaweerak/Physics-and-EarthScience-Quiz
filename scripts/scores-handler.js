@@ -444,50 +444,7 @@ export async function initializeScoreSearch() {
         `;
     }
 
-    /**
-     * Creates the HTML for a single assignment list item, making it a clickable link.
-     * @param {object} assignment - The assignment object.
-     * @returns {string} The HTML string for the list item.
-     */
-    function createAssignmentItemHTML(assignment) {
-        const url = ASSIGNMENT_URL_MAP[assignment.name] || null;
-        const lowerCaseName = assignment.name.toLowerCase();
-        const displayName = ASSIGNMENT_DISPLAY_NAME_MAP[lowerCaseName] || assignment.name;
-        const score = assignment.score;
-        let statusHtml;
 
-        if (isNaN(parseFloat(score))) {
-            // Handle text-based scores like "ส่งแล้ว", "ยังไม่ส่ง"
-            const isSubmitted = score && score.toLowerCase() !== 'ยังไม่ส่ง';
-            const colorClass = isSubmitted
-                ? 'text-green-800 bg-green-100 dark:text-green-200 dark:bg-green-900/50'
-                : 'text-red-800 bg-red-100 dark:text-red-200 dark:bg-red-900/50';
-
-            let displayScore = score || 'ยังไม่ส่ง';
-            if (!isSubmitted && lowerCaseName.includes('quiz')) {
-                displayScore = 'ขาด';
-            }
-            statusHtml = `<span class="px-2 py-1 text-xs font-semibold ${colorClass} rounded-full">${displayScore}</span>`;
-        } else {
-            // Handle numeric scores
-            statusHtml = `<span class="font-mono font-bold text-gray-800 dark:text-gray-200">${score}</span>`;
-        }
-
-        const contentHtml = `
-        <div class="flex-grow min-w-0 pr-4">
-            <span class="text-gray-700 dark:text-gray-300 text-sm font-medium">${displayName}</span>
-            </div>
-        <div class="flex items-center gap-3 flex-shrink-0">
-            ${statusHtml}
-            ${url ? `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400 group-hover:text-blue-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>` : '<div class="w-4 h-4"></div>'}
-        </div>
-    `;
-        if (url) {
-            return `<li class="block"><a href="${url}" target="_blank" rel="noopener noreferrer" class="group flex justify-between items-center py-3 px-4 hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors duration-200">${contentHtml}</a></li>`;
-        } else {
-            return `<li class="flex justify-between items-center py-3 px-4 opacity-75">${contentHtml}</li>`;
-        }
-    }
 
     function displayResult(student) {
         if (defaultMessage) defaultMessage.classList.add('hidden');
@@ -915,6 +872,51 @@ export async function initializeScoreSearch() {
      * @param {Array<object>} assignments - The list of assignment objects for a student.
      * @returns {object} An object with chapter names as keys and arrays of assignments as values.
      */
+}
+
+/**
+ * Creates the HTML for a single assignment list item, making it a clickable link.
+ * @param {object} assignment - The assignment object.
+ * @returns {string} The HTML string for the list item.
+ */
+function createAssignmentItemHTML(assignment) {
+    const url = ASSIGNMENT_URL_MAP[assignment.name] || null;
+    const lowerCaseName = assignment.name.toLowerCase();
+    const displayName = ASSIGNMENT_DISPLAY_NAME_MAP[lowerCaseName] || assignment.name;
+    const score = assignment.score;
+    let statusHtml;
+
+    if (isNaN(parseFloat(score))) {
+        // Handle text-based scores like "ส่งแล้ว", "ยังไม่ส่ง"
+        const isSubmitted = score && score.toLowerCase() !== 'ยังไม่ส่ง';
+        const colorClass = isSubmitted
+            ? 'text-green-800 bg-green-100 dark:text-green-200 dark:bg-green-900/50'
+            : 'text-red-800 bg-red-100 dark:text-red-200 dark:bg-red-900/50';
+
+        let displayScore = score || 'ยังไม่ส่ง';
+        if (!isSubmitted && lowerCaseName.includes('quiz')) {
+            displayScore = 'ขาด';
+        }
+        statusHtml = `<span class="px-2 py-1 text-xs font-semibold ${colorClass} rounded-full">${displayScore}</span>`;
+    } else {
+        // Handle numeric scores
+        statusHtml = `<span class="font-mono font-bold text-gray-800 dark:text-gray-200">${score}</span>`;
+    }
+
+    const contentHtml = `
+    <div class="flex-grow min-w-0 pr-4">
+        <span class="text-gray-700 dark:text-gray-300 text-sm font-medium">${displayName}</span>
+        </div>
+    <div class="flex items-center gap-3 flex-shrink-0">
+        ${statusHtml}
+        ${url ? `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400 group-hover:text-blue-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>` : '<div class="w-4 h-4"></div>'}
+    </div>
+`;
+    if (url) {
+        return `<li class="block"><a href="${url}" target="_blank" rel="noopener noreferrer" class="group flex justify-between items-center py-3 px-4 hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors duration-200">${contentHtml}</a></li>`;
+    } else {
+        return `<li class="flex justify-between items-center py-3 px-4 opacity-75">${contentHtml}</li>`;
+    }
 }
 
 /**
