@@ -3,6 +3,11 @@ import { ModalHandler } from './modal-handler.js';
 import { renderStudentSearchResultCards } from './student-card-renderer.js';
 import { authManager } from './auth-manager.js';
 
+/** รายชื่ออีเมลของคุณครูที่มีสิทธิ์เข้าถึงข้อมูลของนักเรียนทุกคน */
+const TEACHER_EMAILS = [
+    'taweerak.t@promma.ac.th', 'boonyaporn.kha@promma.ac.th', 'praewa.p@promma.ac.th', 'manthana.k@promma.ac.th'
+];
+
 /** A map of assignment names to their corresponding Microsoft Forms URL. */
 const ASSIGNMENT_URL_MAP = {
     'กิจกรรม 1.1': 'https://forms.office.com/r/KFtWGZEb7S',
@@ -184,6 +189,23 @@ export async function initializeScoreSearch() {
         const studentId = card.dataset.studentId;
         if (!studentId) return;
 
+        // Security check: Only allow teacher or the student with matching ID to load detailed score
+        const currentUser = authManager.currentUser;
+        const isTeacher = currentUser && currentUser.email && TEACHER_EMAILS.includes(currentUser.email.trim().toLowerCase());
+
+        let loggedInStudentId = null;
+        if (currentUser && currentUser.email) {
+            const match = currentUser.email.trim().toLowerCase().match(/^(\d{5})@promma\.ac\.th$/);
+            if (match) {
+                loggedInStudentId = match[1];
+            }
+        }
+
+        if (!isTeacher && (!loggedInStudentId || studentId !== loggedInStudentId)) {
+            displayMessage('คุณไม่มีสิทธิ์เข้าถึงข้อมูลคะแนนของนักเรียนคนอื่นเพื่อความเป็นส่วนตัว', 'error');
+            return;
+        }
+
         displayMessage('กำลังโหลดข้อมูล...', 'info');
 
         // Priority 1: Search local studentScores first to avoid unnecessary cloud fetches
@@ -274,14 +296,27 @@ export async function initializeScoreSearch() {
                     // Clear previous result display if any
                     resultContainer.innerHTML = '';
 
-                    // Check if current user is the teacher
+                    // Check if current user is the teacher or a logged-in student
                     const currentUser = authManager.currentUser;
-                    const isTeacher = currentUser && currentUser.email === 'taweerak.t@promma.ac.th';
+                    const isTeacher = currentUser && currentUser.email && TEACHER_EMAILS.includes(currentUser.email.trim().toLowerCase());
+
+                    // Parse student ID from logged-in email if matching 5 digits (e.g. 41234@promma.ac.th)
+                    let loggedInStudentId = null;
+                    if (currentUser && currentUser.email) {
+                        const match = currentUser.email.trim().toLowerCase().match(/^(\d{5})@promma\.ac\.th$/);
+                        if (match) {
+                            loggedInStudentId = match[1];
+                        }
+                    }
 
                     // Options for search results cards
                     const options = {
                         cardType: 'button',
-                        isClickable: isTeacher
+                        isClickable: (student) => {
+                            if (isTeacher) return true;
+                            if (loggedInStudentId && student.id === loggedInStudentId) return true;
+                            return false;
+                        }
                     };
 
                     // Header for room listing
@@ -289,7 +324,7 @@ export async function initializeScoreSearch() {
                     headerHtml.className = 'mb-4 text-left border-b border-gray-200 dark:border-gray-700 pb-2';
                     headerHtml.innerHTML = `
                         <h3 class="text-lg font-bold text-gray-800 dark:text-white font-kanit">รายชื่อนักเรียน ห้อง ม.4/${parsedRoom}</h3>
-                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">พบนักเรียนทั้งหมด ${students.length} คน ${isTeacher ? '(คุณอยู่ในสิทธิ์ครู: สามารถคลิกดูคะแนนรายบุคคลได้)' : '(ไม่อนุญาตให้คลิกดูคะแนนรายบุคคล เพื่อความเป็นส่วนตัว)'}</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">พบนักเรียนทั้งหมด ${students.length} คน ${isTeacher ? '(คุณอยู่ในสิทธิ์ครู: สามารถคลิกดูคะแนนรายบุคคลได้)' : (loggedInStudentId ? '(คุณสามารถคลิกดูคะแนนเฉพาะของตัวคุณเองได้)' : '(ไม่อนุญาตให้คลิกดูคะแนนรายบุคคล เพื่อความเป็นส่วนตัว)')}</p>
                     `;
                     resultContainer.appendChild(headerHtml);
 

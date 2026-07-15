@@ -137,11 +137,12 @@ export function renderStudentSearchResultCards(results, container, options) {
             </div>
         `;
 
+        const cardClickable = typeof isClickable === 'function' ? isClickable(student) : isClickable;
         const baseClasses = "block w-full text-left p-3 bg-white dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700 transition-all duration-200 shadow-sm";
         const clickableClasses = "hover:bg-gray-50 dark:hover:bg-gray-700/50 hover:shadow-md hover:border-blue-400 dark:hover:border-blue-500 cursor-pointer";
-        const commonClasses = `${baseClasses} ${isClickable ? clickableClasses : 'cursor-default'}`;
+        const commonClasses = `${baseClasses} ${cardClickable ? clickableClasses : 'cursor-default'}`;
 
-        if (!isClickable) {
+        if (!cardClickable) {
             return `<div class="${commonClasses}">${cardInnerHtml}</div>`;
         } else if (cardType === 'link') {
             return `<a href="${basePath}scores.html?id=${student.id}&auto=1" class="${commonClasses}">${cardInnerHtml}</a>`;
