@@ -21,11 +21,7 @@ service cloud.firestore {
         allow read, write: if request.auth != null && request.auth.uid == userId;
       }
     }
-    // Student Scores (from the main site)
-    match /student_scores/{studentId} {
-      allow read: if true; // Anyone can read a score if they know the exact ID
-      allow write: if request.auth != null && request.auth.token.email == "taweerak.t@promma.ac.th"; // Only teacher can upload
-    }
+
 
     // Leaderboard
     match /leaderboard/{userId} {
@@ -72,6 +68,18 @@ service cloud.firestore {
         allow read: if request.auth != null;
         allow write: if request.auth != null && request.auth.uid == uid;
       }
+    }
+
+    // Student Scores — read-only (นักเรียนค้นหาด้วยรหัส 5 หลัก)
+    match /student_scores/{studentId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    // Pre-computed summary statistics — read-only (หน้าสรุปสถิติ)
+    match /scores_summaries/{semesterId} {
+      allow read: if true;
+      allow write: if true;
     }
   }
 }

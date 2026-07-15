@@ -54,3 +54,6 @@ xlsx/*.csv
 data/scores-data-*.js
 data/score-overrides.js
 data/edit_log.csv
+
+# ละเว้นไฟล์คู่มือสรุปขั้นตอนที่ไม่ต้องการให้ขึ้น Git
+scores-sync-guide.md

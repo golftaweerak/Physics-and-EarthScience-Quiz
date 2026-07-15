@@ -5,7 +5,7 @@
 
 import { getDataModules } from './quiz-data-loader.js';
 import { db } from './firebase-config.js';
-import { doc, getDoc, collection, getDocs } from "firebase/firestore";
+import { doc, getDoc, collection, getDocs, query, where } from "firebase/firestore";
 
 // Single source of truth for all category metadata.
 export const categoryDetails = {
@@ -222,8 +222,7 @@ export async function getStudentScores() {
           score: assignmentMap[key]
         }));
 
-        // Also ensure "รวม [100]" and "เกรด" are correctly passed or derived if present
-        baseScores.push({
+        const studentObj = {
           id: data.id,
           name: data.name,
           firstName: data.firstName,
@@ -231,7 +230,16 @@ export async function getStudentScores() {
           room: data.room,
           ordinal: data.ordinal,
           assignments: assignmentsArray
+        };
+
+        assignmentsArray.forEach(a => {
+          if (a.score !== null && a.score !== undefined && a.score !== "") {
+            const score = parseFloat(a.score);
+            studentObj[a.name] = isNaN(score) ? a.score : score;
+          }
         });
+
+        baseScores.push(studentObj);
       }
     });
 
@@ -268,7 +276,7 @@ export async function getSingleStudentScoreFromCloud(studentId) {
         score: assignmentMap[key]
       }));
 
-      return {
+      const studentObj = {
         id: data.id,
         name: data.name,
         firstName: data.firstName,
@@ -277,10 +285,36 @@ export async function getSingleStudentScoreFromCloud(studentId) {
         ordinal: data.ordinal,
         assignments: assignmentsArray
       };
+
+      assignmentsArray.forEach(a => {
+        if (a.score !== null && a.score !== undefined && a.score !== "") {
+          const score = parseFloat(a.score);
+          studentObj[a.name] = isNaN(score) ? a.score : score;
+        }
+      });
+
+      return studentObj;
     }
     return null;
   } catch (err) {
     console.error("Error fetching single student score from cloud:", err);
+    return null;
+  }
+}
+
+/**
+ * Retrieves the pre-calculated semester summary from Firestore.
+ * @param {string} semester - The semester key (e.g. '1/2569').
+ * @returns {Promise<object|null>} The summary data or null if not found.
+ */
+export async function getSemesterSummary(semester) {
+  try {
+    const docId = semester.replace('/', '-');
+    const docRef = doc(db, "scores_summaries", docId);
+    const docSnap = await getDoc(docRef);
+    return docSnap.exists() ? docSnap.data() : null;
+  } catch (err) {
+    console.error("Error fetching semester summary from cloud:", err);
     return null;
   }
 }
@@ -714,3 +748,60 @@ export async function calculateStrengthsAndWeaknesses() {
 export function getCurrentCourseCode() {
   return getCurrentSemester() === '2/2568' ? 'ว30162' : 'ว30161';
 }
+
+/**
+ * Retrieves all students' scores in a specific room from Firestore.
+ * @param {string} room - The room number to look up.
+ * @returns {Promise<Array<object>>} Array of student scores.
+ */
+export async function getStudentsByRoomFromCloud(room) {
+  const semester = getCurrentSemester();
+  try {
+    const q = query(collection(db, "student_scores"), where("room", "==", room));
+    const querySnapshot = await getDocs(q);
+    const students = [];
+
+    querySnapshot.forEach(docSnap => {
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        if (data.semesters && data.semesters[semester]) {
+          const assignmentMap = data.semesters[semester];
+          const assignmentsArray = Object.keys(assignmentMap).map(key => ({
+            name: key,
+            score: assignmentMap[key]
+          }));
+
+          const studentObj = {
+            id: data.id,
+            name: data.name,
+            firstName: data.firstName,
+            lastName: data.lastName,
+            room: data.room,
+            ordinal: data.ordinal,
+            assignments: assignmentsArray
+          };
+
+          assignmentsArray.forEach(a => {
+            if (a.score !== null && a.score !== undefined && a.score !== "") {
+              const score = parseFloat(a.score);
+              studentObj[a.name] = isNaN(score) ? a.score : score;
+            }
+          });
+
+          students.push(studentObj);
+        }
+      }
+    });
+
+    // Sort by ordinal number (numeric ascending)
+    return students.sort((a, b) => {
+      const ordA = parseInt(a.ordinal, 10) || 999;
+      const ordB = parseInt(b.ordinal, 10) || 999;
+      return ordA - ordB;
+    });
+  } catch (err) {
+    console.error("Error fetching students by room from cloud:", err);
+    return [];
+  }
+}
+

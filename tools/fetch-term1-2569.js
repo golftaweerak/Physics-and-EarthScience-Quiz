@@ -6,6 +6,7 @@ import fs from 'fs';
 import https from 'https';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { execSync } from 'child_process';
 import { convertTerm1Scores } from './convert-scores.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -67,6 +68,13 @@ const downloadFile = (url, dest, cookies = []) => {
             console.log(`บันทึกไฟล์ไว้ที่: ${dest}`);
             console.log('\n--- ขั้นตอนที่ 2: เริ่มการแปลงข้อมูลเป็นไฟล์ JavaScript ---');
             convertTerm1Scores();
+            console.log('\n--- ขั้นตอนที่ 3: อัปโหลดข้อมูลขึ้น Firestore ---');
+            try {
+                execSync('node tools/upload-scores-firestore.js --semester 1-2569', { stdio: 'inherit' });
+                console.log('✅ อัปโหลดคะแนนขึ้น Firestore สำเร็จ!');
+            } catch (err) {
+                console.error('❌ เกิดข้อผิดพลาดในการอัปโหลดขึ้น Firestore (ตรวจสอบสิทธิ์การเขียนบน Rules):', err);
+            }
         });
     }).on('error', (e) => {
         if (isRedirected) return; // Ignore errors from the redirected request

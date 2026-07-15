@@ -1,7 +1,7 @@
-import { getStudentScores, getCurrentSemester, setCurrentSemester, getCurrentCourseCode, getSingleStudentScoreFromCloud } from './data-manager.js';
-import { renderStudentSearchResultCards } from './student-card-renderer.js';
+import { getCurrentSemester, setCurrentSemester, getCurrentCourseCode, getSingleStudentScoreFromCloud, getSemesterSummary, getStudentsByRoomFromCloud } from './data-manager.js';
 import { ModalHandler } from './modal-handler.js';
-import { getDataModules } from './quiz-data-loader.js';
+import { renderStudentSearchResultCards } from './student-card-renderer.js';
+import { authManager } from './auth-manager.js';
 
 /** A map of assignment names to their corresponding Microsoft Forms URL. */
 const ASSIGNMENT_URL_MAP = {
@@ -86,7 +86,6 @@ export async function initializeScoreSearch() {
     const mainContentContainer = document.querySelector('.max-w-3xl.mx-auto');
     const searchBoxContainer = document.querySelector('#student-id-input')?.closest('.bg-white');
 
-    // Dynamic import for lastUpdated based on semester
     const currentSemester = getCurrentSemester();
     const courseCode = getCurrentCourseCode();
     const courseDisplay = document.getElementById('course-code-display');
@@ -94,19 +93,11 @@ export async function initializeScoreSearch() {
     if (courseDisplay) courseDisplay.textContent = courseCode;
     if (titleCourseDisplay) titleCourseDisplay.textContent = courseCode;
 
-    const dataModules = getDataModules();
-    const semesterFile = `scores-data-${currentSemester.replace('/', '-')}.js`;
-    const dataModuleKey = Object.keys(dataModules).find(k => k.endsWith(semesterFile));
-
+    // Fetch pre-computed summary to display lastUpdated timestamp
     try {
-        if (!dataModuleKey) throw new Error(`Data module not found: ${dataFileName}`);
-        const dataModule = await dataModules[dataModuleKey]();
-        studentScores = dataModule.studentScores || [];
-        originalScoresData = JSON.parse(JSON.stringify(studentScores)); // Deep copy for edit mode comparison
-        const scoresLastUpdated = dataModule.lastUpdated;
-
-        if (mainContentContainer && searchBoxContainer && scoresLastUpdated) {
-            const lastUpdatedDate = new Date(scoresLastUpdated);
+        const summaryData = await getSemesterSummary(currentSemester);
+        if (summaryData && summaryData.lastUpdated && mainContentContainer && searchBoxContainer) {
+            const lastUpdatedDate = new Date(summaryData.lastUpdated);
             const formattedDate = lastUpdatedDate.toLocaleString('th-TH', {
                 year: 'numeric',
                 month: 'long',
@@ -121,18 +112,13 @@ export async function initializeScoreSearch() {
             mainContentContainer.insertBefore(timestampDiv, searchBoxContainer);
         }
     } catch (e) {
-        console.warn("Could not load lastUpdated for semester", currentSemester);
+        console.warn("Could not load lastUpdated for semester", currentSemester, e);
     }
-
-
-
 
     if (!studentIdInput || !searchBtn || !resultContainer || !clearBtn) {
         console.error("Required elements for score search are missing from the DOM.");
         return;
     }
-
-    // (Removed initial massive array load. We will fetch on demand.)
 
     // --- Edit Mode Logic ---
     function enableEditMode() {
@@ -189,14 +175,7 @@ export async function initializeScoreSearch() {
         });
     }
 
-    // Defensive check: Ensure student data is available before enabling search.
-    if (!Array.isArray(studentScores) || studentScores.length === 0) {
-        console.error("Student scores data is missing or empty.");
-        studentIdInput.disabled = true;
-        searchBtn.disabled = true;
-        displayMessage('ไม่สามารถโหลดข้อมูลคะแนนได้ในขณะนี้', 'error');
-        return;
-    }
+
 
     resultContainer.addEventListener('click', async (event) => {
         const card = event.target.closest('.student-card-btn');
@@ -230,10 +209,37 @@ export async function initializeScoreSearch() {
         }
     });
 
+    function parseRoomQuery(queryVal) {
+        const q = queryVal.trim().toLowerCase();
+        // Case 1: "ห้อง 1" or "ห้อง1"
+        const roomMatch = q.match(/^ห้อง\s*(\d{1,2})$/);
+        if (roomMatch) {
+            return roomMatch[1];
+        }
+        // Case 2: "4/1" or "4/12"
+        const slashMatch = q.match(/\/(\d{1,2})$/);
+        if (slashMatch) {
+            return slashMatch[1];
+        }
+        // Case 3: Just a 1 or 2 digit number
+        if (/^\d{1,2}$/.test(q)) {
+            return q;
+        }
+        return null;
+    }
+
     const searchScores = async () => {
-        const query = studentIdInput.value.trim();
-        if (query.length === 0) {
-            displayMessage('กรุณากรอกรหัสนักเรียนเพื่อค้นหา', 'error');
+        const queryVal = studentIdInput.value.trim();
+        if (queryVal.length === 0) {
+            displayMessage('กรุณากรอกรหัสนักเรียนหรือห้องเรียนเพื่อค้นหา', 'error');
+            return;
+        }
+
+        const isStudentId = /^\d{5}$/.test(queryVal);
+        const parsedRoom = parseRoomQuery(queryVal);
+
+        if (!isStudentId && !parsedRoom) {
+            displayMessage('กรุณากรอกรหัสนักเรียน 5 หลัก หรือเลขห้องเรียนให้ถูกต้อง (เช่น 42472, ห้อง 1, 4/1, 1)', 'error');
             return;
         }
 
@@ -248,57 +254,55 @@ export async function initializeScoreSearch() {
         `;
 
         try {
-            const lowerCaseQuery = query.toLowerCase();
-
-            // Priority 1: Search local studentScores (from the loaded data file)
-            // This is the fastest and most reliable source for now.
-            const localStudent = studentScores.find(s => s.id === query);
-            if (localStudent) {
-                displayResult(localStudent);
-                return;
-            }
-
-            // Priority 2: Try Firestore as fallback for exact ID
-            let exactStudent = null;
-            try {
-                exactStudent = await getSingleStudentScoreFromCloud(query);
-            } catch (cloudError) {
-                console.warn("Cloud ID lookup failed, using local data only:", cloudError);
-            }
-
-            if (exactStudent) {
-                displayResult(exactStudent);
-                return;
-            }
-
-            // Priority 3: Room or Name match in local scores
-            const allScores = studentScores.length > 0 ? studentScores : [];
-
-            // Exact Room match
-            const roomMatches = allScores.filter(s => s.room && s.room.toLowerCase() === lowerCaseQuery);
-            if (roomMatches.length > 0) {
-                const results = roomMatches.sort((a, b) => {
-                    const ordinalA = parseInt(a.ordinal, 10) || 999;
-                    const ordinalB = parseInt(b.ordinal, 10) || 999;
-                    return ordinalA - ordinalB;
-                });
-                renderStudentSearchResultCards(results, resultContainer, { cardType: 'button' });
-                return;
-            }
-
-            // Partial Name match.
-            const nameMatches = allScores.filter(s => s.name && s.name.toLowerCase().includes(lowerCaseQuery));
-            if (nameMatches.length > 1) {
-                const results = nameMatches.sort((a, b) => a.id.localeCompare(b.id));
-                renderStudentSearchResultCards(results, resultContainer, { cardType: 'button' });
-            } else if (nameMatches.length === 1) {
-                displayResult(nameMatches[0]);
+            if (isStudentId) {
+                // Fetch directly from Firestore doc using 5-digit ID
+                const student = await getSingleStudentScoreFromCloud(queryVal);
+                if (student) {
+                    studentScores = [student];
+                    originalScoresData = JSON.parse(JSON.stringify(studentScores));
+                    displayResult(student);
+                } else {
+                    displayMessage('ไม่พบข้อมูลนักเรียนนี้ในระบบ', 'error');
+                }
             } else {
-                displayMessage(`ไม่พบข้อมูลสำหรับ "${query}"`, 'error');
+                // Search by room
+                const students = await getStudentsByRoomFromCloud(parsedRoom);
+                if (students && students.length > 0) {
+                    studentScores = students;
+                    originalScoresData = JSON.parse(JSON.stringify(studentScores));
+
+                    // Clear previous result display if any
+                    resultContainer.innerHTML = '';
+
+                    // Check if current user is the teacher
+                    const currentUser = authManager.currentUser;
+                    const isTeacher = currentUser && currentUser.email === 'taweerak.t@promma.ac.th';
+
+                    // Options for search results cards
+                    const options = {
+                        cardType: 'button',
+                        isClickable: isTeacher
+                    };
+
+                    // Header for room listing
+                    const headerHtml = document.createElement('div');
+                    headerHtml.className = 'mb-4 text-left border-b border-gray-200 dark:border-gray-700 pb-2';
+                    headerHtml.innerHTML = `
+                        <h3 class="text-lg font-bold text-gray-800 dark:text-white font-kanit">รายชื่อนักเรียน ห้อง ม.4/${parsedRoom}</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">พบนักเรียนทั้งหมด ${students.length} คน ${isTeacher ? '(คุณอยู่ในสิทธิ์ครู: สามารถคลิกดูคะแนนรายบุคคลได้)' : '(ไม่อนุญาตให้คลิกดูคะแนนรายบุคคล เพื่อความเป็นส่วนตัว)'}</p>
+                    `;
+                    resultContainer.appendChild(headerHtml);
+
+                    const cardsContainer = document.createElement('div');
+                    resultContainer.appendChild(cardsContainer);
+                    renderStudentSearchResultCards(students, cardsContainer, options);
+                } else {
+                    displayMessage(`ไม่พบข้อมูลนักเรียนสำหรับห้อง ม.4/${parsedRoom} ในภาคเรียนนี้`, 'error');
+                }
             }
         } catch (error) {
             console.error("Search failed:", error);
-            displayMessage('เกิดข้อผิดพลาดในการดึงข้อมูล กรุณาลองใหม่', 'error');
+            displayMessage('เกิดข้อผิดพลาดในการดึงข้อมูลจากเซิร์ฟเวอร์ กรุณาลองใหม่', 'error');
         } finally {
             searchBtn.disabled = false;
             searchBtn.innerHTML = originalBtnHtml;
@@ -453,29 +457,29 @@ export async function initializeScoreSearch() {
     function displayResult(student) {
         if (defaultMessage) defaultMessage.classList.add('hidden');
 
-        // Promote final exam score from assignments to a top-level property if it doesn't exist.
-        // This ensures it's available for the summary table rendering logic below.
-        if (!student.hasOwnProperty('ปลายภาค [30]') && student.assignments) {
-            const finalAssignment = student.assignments.find(a => a.name === 'ปลายภาค [30]');
-            if (finalAssignment && finalAssignment.score !== null && finalAssignment.score !== undefined) {
-                const score = parseFloat(finalAssignment.score);
-                // Use the raw score (can be text like "ขาดสอบ") if it's not a valid number
-                student['ปลายภาค [30]'] = isNaN(score) ? finalAssignment.score : score;
+        // Promote all assignment scores to root properties of the student object unconditionally.
+        // This ensures they are available for hasOwnProperty checks and rendering across all semesters.
+        if (student.assignments) {
+            student.assignments.forEach(a => {
+                if (!student.hasOwnProperty(a.name) && a.score !== null && a.score !== undefined && a.score !== "") {
+                    const score = parseFloat(a.score);
+                    student[a.name] = isNaN(score) ? a.score : score;
+                }
+            });
+        }
+
+        // Map root properties that have different names in Term 2
+        const isTerm2 = getCurrentSemester() === '2/2568';
+        if (isTerm2) {
+            if (student.hasOwnProperty('กลางภาค') && !student.hasOwnProperty('กลางภาค [20]')) {
+                student['กลางภาค [20]'] = student['กลางภาค'];
+            }
+            if (student.hasOwnProperty('ปลายภาค') && !student.hasOwnProperty('ปลายภาค [30]')) {
+                student['ปลายภาค [30]'] = student['ปลายภาค'];
             }
         }
 
-        // Term-specific adjustments
-        const isTerm2 = getCurrentSemester() === '2/2568';
-
-        const summaryOrder = isTerm2 ? [
-            'ก่อนกลางภาค [25]',
-            'กลางภาค [20]',
-            'หลังกลางภาค [25]',
-            'ก่อนปลายภาค [70]',
-            'ปลายภาค [30]',
-            'รวม [100]',
-            'เกรด'
-        ] : [
+        const summaryOrder = [
             'ก่อนกลางภาค [25]',
             'กลางภาค [20]',
             'หลังกลางภาค [25]',
@@ -484,26 +488,6 @@ export async function initializeScoreSearch() {
             'รวม [100]',
             'เกรด'
         ];
-        if (isTerm2) {
-            // Map root properties that have different names in Term 2
-            if (student.hasOwnProperty('กลางภาค') && !student.hasOwnProperty('กลางภาค [20]')) {
-                student['กลางภาค [20]'] = student['กลางภาค'];
-            }
-            if (student.hasOwnProperty('ปลายภาค') && !student.hasOwnProperty('ปลายภาค [30]')) {
-                student['ปลายภาค [30]'] = student['ปลายภาค'];
-            }
-
-            // In Term 2, summary scores and breakdown items are often inside the 'assignments' array instead of top-level
-            if (student.assignments) {
-                student.assignments.forEach(a => {
-                    // Promote if it has a value, isn't already promoted, and isn't an empty string
-                    if (!student.hasOwnProperty(a.name) && a.score !== null && a.score !== undefined && a.score !== "") {
-                        const score = parseFloat(a.score);
-                        student[a.name] = isNaN(score) ? a.score : score;
-                    }
-                });
-            }
-        }
 
 
         const breakdownMap = isTerm2 ? {
@@ -562,7 +546,22 @@ export async function initializeScoreSearch() {
                     }
                 }
                 else if (isTotal) valueClass += ' text-xl text-green-600 dark:text-green-400';
-                else if (isMidterm || isFinal) valueClass += ' text-lg text-gray-900 dark:text-white';
+                else if (isMidterm) {
+                    const numericVal = parseFloat(value);
+                    if (!isNaN(numericVal)) {
+                        valueClass += numericVal >= 12 ? ' text-lg text-green-600 dark:text-green-400' : ' text-lg text-red-600 dark:text-red-400';
+                    } else {
+                        valueClass += ' text-lg text-gray-900 dark:text-white';
+                    }
+                }
+                else if (isFinal) {
+                    const numericVal = parseFloat(value);
+                    if (!isNaN(numericVal)) {
+                        valueClass += numericVal >= 18 ? ' text-lg text-green-600 dark:text-green-400' : ' text-lg text-red-600 dark:text-red-400';
+                    } else {
+                        valueClass += ' text-lg text-gray-900 dark:text-white';
+                    }
+                }
                 else valueClass += ' text-gray-900 dark:text-white';
 
                 let valueDisplay;
@@ -582,8 +581,10 @@ export async function initializeScoreSearch() {
                 if (key === 'กลางภาค [20]' && retestData && retestData.trim() !== '-') {
                     const retestStatus = retestData.trim();
                     const isPositiveStatus = retestStatus.includes('ไม่ต้อง') || retestStatus.includes('ซ่อมแล้ว');
-                    const statusColor = isPositiveStatus ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400';
-                    retestStatusHtml = `<div class="text-xs font-normal ${statusColor} pt-1">สถานะการสอบซ่อม: ${retestStatus}</div>`;
+                    const badgeColor = isPositiveStatus
+                        ? 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300 border-green-200 dark:border-green-800'
+                        : 'bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300 border-red-200 dark:border-red-800';
+                    retestStatusHtml = `<div class="pt-1.5"><span class="inline-block px-2.5 py-0.5 text-xs font-semibold rounded-full border ${badgeColor}">ซ่อมมั้ย?: ${retestStatus}</span></div>`;
                 }
 
                 let mainRowHtml = `
@@ -654,8 +655,13 @@ export async function initializeScoreSearch() {
         </div>
     `;
 
-        // 2.5 Build Quiz Shortcut Cards Section
+        // 2.5 Build Quiz Shortcut Cards Section (sorted numerically by Quiz number)
         const quizAssignments = trackableAssignments.filter(a => a.name.toLowerCase().includes('quiz'));
+        quizAssignments.sort((a, b) => {
+            const numA = parseInt(a.name.match(/\d+/)?.[0] || 0, 10);
+            const numB = parseInt(b.name.match(/\d+/)?.[0] || 0, 10);
+            return numA - numB;
+        });
         let quizCardsSection = '';
         if (quizAssignments.length > 0) {
             const quizCardsHtml = quizAssignments.map(quiz => {
