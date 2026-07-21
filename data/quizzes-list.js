@@ -1320,6 +1320,42 @@ export const quizList = [
     "subCategory": "ดาวฤกษ์"
   },
   {
+    "id": "ess_adv/ess_adv_m6_ch14-2",
+    "title": "ดาวฤกษ์ (ชุดที่ 2 - คำนวณ)",
+    "amount": 30,
+    "description": "บทที่ 14: ดาวฤกษ์ (ชุดที่ 2 - เน้นการคำนวณ)",
+    "url": "./quiz/index.html?id=ess_adv/ess_adv_m6_ch14-2",
+    "storageKey": "quizState-ess_adv_m6_ch14-2",
+    "icon": "./assets/icons/star.png",
+    "altText": "ไอคอนสำหรับ ess_adv_m6_ch14-2",
+    "category": "EarthSpaceScienceAdvance",
+    "subCategory": "ดาวฤกษ์"
+  },
+  {
+    "id": "ess_adv/ess_adv_m6_ch14-3",
+    "title": "ดาวฤกษ์ (ชุดที่ 3 - คำนวณและวิเคราะห์เชิงลึก)",
+    "amount": 30,
+    "description": "บทที่ 14: ดาวฤกษ์ (ชุดที่ 3 - เน้นการคำนวณและวิเคราะห์เชิงลึก)",
+    "url": "./quiz/index.html?id=ess_adv/ess_adv_m6_ch14-3",
+    "storageKey": "quizState-ess_adv_m6_ch14-3",
+    "icon": "./assets/icons/star.png",
+    "altText": "ไอคอนสำหรับ ess_adv_m6_ch14-3",
+    "category": "EarthSpaceScienceAdvance",
+    "subCategory": "ดาวฤกษ์"
+  },
+  {
+    "id": "ess_adv/ess_adv_m6_ch14-4",
+    "title": "ดาวฤกษ์ (ชุดที่ 4 - เน้นคำนวณ)",
+    "amount": 30,
+    "description": "บทที่ 14: ดาวฤกษ์ (ชุดที่ 4 - เน้นคำนวณและประยุกต์)",
+    "url": "./quiz/index.html?id=ess_adv/ess_adv_m6_ch14-4",
+    "storageKey": "quizState-ess_adv_m6_ch14-4",
+    "icon": "./assets/icons/star.png",
+    "altText": "ไอคอนสำหรับ ess_adv_m6_ch14-4",
+    "category": "EarthSpaceScienceAdvance",
+    "subCategory": "ดาวฤกษ์"
+  },
+  {
     "id": "ess_adv/ess_adv_m6_ch16-1",
     "title": "ทรงกลมฟ้า (ชุดที่ 1)",
     "amount": 30,

@@ -78,9 +78,11 @@ async function createAndSaveCustomQuiz(quizData) {
         customTime: quizData.customTime || null,
         category: quizData.category || 'Custom', // Default to 'Custom' category
         categoryDisplay: quizData.categoryDisplay || 'แบบทดสอบที่สร้างเอง',
+        isRemedial: quizData.isRemedial || false,
+        passingScore: quizData.passingScore || null,
         storageKey: `quizState-${customId}`,
-        icon: './assets/icons/dices.png', // Default icon for custom quizzes
-        altText: 'ไอคอนแบบทดสอบที่สร้างเอง'
+        icon: quizData.isRemedial ? './assets/icons/target.png' : './assets/icons/dices.png', // Default icon for custom quizzes
+        altText: quizData.isRemedial ? 'ไอคอนสอบซ่อม' : 'ไอคอนแบบทดสอบที่สร้างเอง'
     };
 
     let savedQuizzes = await getSavedCustomQuizzes();
@@ -158,6 +160,7 @@ export function initializeCustomQuizHandler() {
     let onConfirmAction = null;
     let isBadgeDismissed = false;
     let hasShownSuccess = false;
+    let isRemedialMode = false;
 
     // Apply the modern scrollbar class to the modal bodies.
     try {
@@ -538,8 +541,21 @@ export function initializeCustomQuizHandler() {
         const disabled = totalCount === 0;
 
         const escapeAttr = (str) => String(str).replace(/"/g, '&quot;');
-
         const displayTopic = isLearningOutcome ? specificTopic : specificTopic.replace(/^\d+\.\s/, '').trim();
+
+        if (isRemedialMode) {
+            const remedialDisabled = calcCount === 0;
+            return `
+                <label class="specific-topic-control flex items-center justify-between py-2.5 px-4 border-t border-gray-200 dark:border-gray-700/50 hover:bg-gray-100/60 dark:hover:bg-gray-700/40 cursor-pointer transition-colors ${remedialDisabled ? 'opacity-40 pointer-events-none' : ''}">
+                    <div class="flex items-center gap-3 flex-grow min-w-0 pr-2">
+                        <input type="checkbox" data-subject="${escapeAttr(subjectKey)}" data-chapter="${escapeAttr(chapterTitle)}" data-specific="${escapeAttr(specificTopic)}" class="remedial-topic-checkbox h-4 w-4 text-amber-600 rounded border-gray-300 dark:border-gray-600 focus:ring-amber-500 flex-shrink-0 cursor-pointer" ${remedialDisabled ? 'disabled' : ''}>
+                        <span class="font-medium text-gray-700 dark:text-gray-200 text-sm truncate">${displayTopic}</span>
+                    </div>
+                    <span class="text-xs font-semibold px-2 py-0.5 rounded-full ${calcCount > 0 ? 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300' : 'bg-gray-100 text-gray-400 dark:bg-gray-800 dark:text-gray-500'} flex-shrink-0">
+                        ข้อเขียน ${calcCount} ข้อ
+                    </span>
+                </label>`;
+        }
 
         return `
             <div class="specific-topic-control py-3 px-4 border-t border-gray-200 dark:border-gray-700/50 ${disabled ? 'opacity-50' : ''}">
@@ -578,13 +594,23 @@ export function initializeCustomQuizHandler() {
 
     function updateTotalCount() {
         const totalCountDisplay = document.getElementById("total-question-count");
+        const badgeConditionEl = document.getElementById("custom-quiz-badge-condition");
+
+        if (isRemedialMode) {
+            const checkedTopics = document.querySelectorAll('#custom-quiz-category-selection input.remedial-topic-checkbox:checked');
+            const checkedChapters = document.querySelectorAll('#custom-quiz-category-selection input.remedial-chapter-checkbox:checked');
+            const hasSelection = checkedTopics.length > 0 || checkedChapters.length > 0;
+            if (totalCountDisplay) totalCountDisplay.textContent = hasSelection ? "5" : "0";
+            if (badgeConditionEl) badgeConditionEl.classList.add('hidden');
+            return;
+        }
+
         let total = 0;
         document.querySelectorAll('#custom-quiz-category-selection input[type="number"][data-type]').forEach(input => {
             total += parseInt(input.value, 10) || 0;
         });
         if (totalCountDisplay) totalCountDisplay.textContent = total;
 
-        const badgeConditionEl = document.getElementById("custom-quiz-badge-condition");
         if (badgeConditionEl) {
             if (isBadgeDismissed) {
                 badgeConditionEl.classList.add('hidden');
@@ -990,8 +1016,36 @@ export function initializeCustomQuizHandler() {
             }
         });
 
-        // Add listeners for timer mode radio buttons to show/hide custom time inputs
+        // Add listeners for timer mode radio buttons and Remedial checkboxes
         container.addEventListener('change', (e) => {
+            const target = e.target;
+
+            if (target.matches('.remedial-chapter-checkbox')) {
+                const isChecked = target.checked;
+                const chapterAccordionToggle = target.closest('.chapter-accordion-toggle');
+                const topicsContainer = chapterAccordionToggle?.nextElementSibling;
+                if (topicsContainer) {
+                    topicsContainer.querySelectorAll('.remedial-topic-checkbox:not(:disabled)').forEach(cb => {
+                        cb.checked = isChecked;
+                    });
+                }
+                debouncedUpdateTotalCount();
+            }
+
+            if (target.matches('.remedial-topic-checkbox')) {
+                const topicsContainer = target.closest('.specific-topics-container');
+                const chapterAccordionToggle = topicsContainer?.previousElementSibling;
+                if (chapterAccordionToggle) {
+                    const chapterCb = chapterAccordionToggle.querySelector('.remedial-chapter-checkbox');
+                    const allTopics = Array.from(topicsContainer.querySelectorAll('.remedial-topic-checkbox:not(:disabled)'));
+                    const checkedTopics = allTopics.filter(cb => cb.checked);
+                    if (chapterCb) {
+                        chapterCb.checked = allTopics.length > 0 && checkedTopics.length === allTopics.length;
+                    }
+                }
+                debouncedUpdateTotalCount();
+            }
+
             if (e.target.name === 'custom-timer-mode') {
                 const overallTimeInputContainer = document.getElementById('overall-time-input-container');
                 const perQuestionTimeInputContainer = document.getElementById('per-question-time-input-container');
@@ -1009,8 +1063,10 @@ export function initializeCustomQuizHandler() {
 
     /**
      * Fetches data and builds the UI for the quiz creation modal.
+     * @param {HTMLElement} triggerElement
+     * @param {boolean} isRemedial
      */
-    async function buildAndShowCreationModal(triggerElement) {
+    async function buildAndShowCreationModal(triggerElement, isRemedial = false) {
         const originalText = triggerElement.innerHTML;
         triggerElement.innerHTML = `
             <svg class="animate-spin h-5 w-5 mr-3" width="20" height="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -1021,6 +1077,29 @@ export function initializeCustomQuizHandler() {
         triggerElement.disabled = true;
         isBadgeDismissed = false; // Reset badge state
         hasShownSuccess = false; // Reset success state
+        isRemedialMode = isRemedial;
+
+        // Adjust UI for Remedial Mode vs Normal Mode
+        const modalTitleEl = document.getElementById("custom-quiz-modal-title");
+        const modalDescEl = modalTitleEl?.nextElementSibling;
+        const startBtn = document.getElementById("custom-quiz-start-btn");
+        const remedialStartBtn = document.getElementById("remedial-quiz-start-btn");
+        const timerFieldset = document.querySelector("#custom-quiz-modal fieldset");
+
+        if (isRemedial) {
+            if (modalTitleEl) modalTitleEl.textContent = "โหมดสอบซ่อม (Remedial Mode)";
+            if (modalDescEl) modalDescEl.textContent = "เลือกบทเรียนที่ต้องการสอบซ่อม ระบบจะสุ่มคำถามข้อเขียน 5 ข้อ (เกณฑ์ผ่าน 3/5 ข้อ ในเวลา 10 นาที)";
+            if (startBtn) startBtn.classList.add("hidden");
+            if (remedialStartBtn) remedialStartBtn.classList.remove("hidden");
+            if (timerFieldset) timerFieldset.classList.add("hidden");
+        } else {
+            if (modalTitleEl) modalTitleEl.textContent = "สร้างแบบทดสอบเอง";
+            if (modalDescEl) modalDescEl.textContent = "เลือกหมวดหมู่, จำนวนข้อ และรูปแบบการจับเวลาที่คุณต้องการ";
+            if (startBtn) startBtn.classList.remove("hidden");
+            if (remedialStartBtn) remedialStartBtn.classList.add("hidden");
+            if (timerFieldset) timerFieldset.classList.remove("hidden");
+        }
+
         customQuizHubModal.close();
         customQuizModal.open(triggerElement); // Open modal immediately to show loading inside
 
@@ -1050,7 +1129,7 @@ export function initializeCustomQuizHandler() {
                 }
 
                 const subjectKey = q.sourceQuizCategory || q.category || 'Uncategorized';
-                const questionType = q.type === 'fill-in-number' || q.choiceType === 'calculation' ? 'calculation' : 'theory';
+                const questionType = q.type === 'fill-in-number' || q.type === 'fill-in' || q.choiceType === 'calculation' ? 'calculation' : 'theory';
 
                 if (!groupedQuestions[subjectKey]) groupedQuestions[subjectKey] = {};
                 if (!groupedQuestions[subjectKey][mainKey]) groupedQuestions[subjectKey][mainKey] = {};
@@ -1061,8 +1140,6 @@ export function initializeCustomQuizHandler() {
                     }
 
                     const group = groupedQuestions[subjectKey][mainKey][topic][questionType];
-                    // Efficiently avoid EXACT duplicates if they appear in allQuestions
-                    // We use question text as the key for now, as in the original code.
                     const isDuplicate = group.length > 0 && group.some(existing => existing.question === q.question);
                     if (!isDuplicate) {
                         group.push(q);
@@ -1071,26 +1148,19 @@ export function initializeCustomQuizHandler() {
             }
 
             // --- FIX: Move "บทที่ 8" (Final Exam) from M.4 to M.5 ---
-            // Because some M.4 Final Exams contain M.5 content (Chapter 8), users requested this content be moved to M.5
             if (groupedQuestions['PhysicsM4']) {
                 const m4Root = groupedQuestions['PhysicsM4'];
                 if (!groupedQuestions['PhysicsM5']) groupedQuestions['PhysicsM5'] = {};
                 const m5Root = groupedQuestions['PhysicsM5'];
 
                 Object.keys(m4Root).forEach(chapterKey => {
-                    // Check if the chapter key starts with "บทที่ 8" (Chapter 8)
-                    // Or if it explicitly mentions "Final" or "ปลายภาค" and contains Chapter 8 content text
                     if (chapterKey.startsWith('บทที่ 8') || chapterKey.includes('ปลายภาค')) {
-                        console.log(`[FIX] Moving "${chapterKey}" from PhysicsM4 to PhysicsM5`);
-
-                        // Move logic: merge if exists, else assign
                         if (!m5Root[chapterKey]) {
                             m5Root[chapterKey] = m4Root[chapterKey];
                         } else {
                             const target = m5Root[chapterKey];
                             const source = m4Root[chapterKey];
 
-                            // Merge topics within the chapter
                             Object.keys(source).forEach(topic => {
                                 if (!target[topic]) {
                                     target[topic] = source[topic];
@@ -1100,14 +1170,10 @@ export function initializeCustomQuizHandler() {
                                 }
                             });
                         }
-
-                        // Remove from M.4
                         delete m4Root[chapterKey];
                     }
                 });
             }
-
-            console.log(`[DEBUG] buildAndShowCreationModal: groupedQuestions built for ${Object.keys(groupedQuestions).length} subjects`);
 
             let categoryHTML = '';
             const sortedSubjects = Object.keys(allCategoryDetails).sort((a, b) => (allCategoryDetails[a].order || 99) - (allCategoryDetails[b].order || 99));
@@ -1127,12 +1193,10 @@ export function initializeCustomQuizHandler() {
                     const syllabus = getSyllabusForCategory(subjectKey);
                     const subjectDetails = allCategoryDetails[subjectKey];
 
-                    // Check: Must have subject details AND (syllabus OR data)
                     if (!subjectDetails || (!syllabus && !groupedQuestions[subjectKey])) {
                         return;
                     }
 
-                    // Determine if this subject uses learning outcomes or specific topics
                     const isBasicSubject = subjectKey.includes('Basic') || subjectKey.startsWith('Physics');
                     const topicKey = isBasicSubject ? 'learningOutcomes' : 'specificTopics';
 
@@ -1140,7 +1204,6 @@ export function initializeCustomQuizHandler() {
                     if (syllabus) {
                         chapters = syllabus.units ? syllabus.units.flatMap(u => u.chapters) : (syllabus.chapters || []);
                     } else if (groupedQuestions[subjectKey]) {
-                        // Fallback: Generate chapters from data if no syllabus exists
                         chapters = Object.keys(groupedQuestions[subjectKey])
                             .sort((a, b) => a.localeCompare(b, 'th'))
                             .map(title => ({ title }));
@@ -1149,14 +1212,13 @@ export function initializeCustomQuizHandler() {
                     let chapterAccordionsHTML = '';
                     let subjectTotalCount = 0;
                     const handledChapters = new Set();
+                    const escapeAttr = (str) => String(str).replace(/"/g, '&quot;');
 
                     // 1. Process chapters from syllabus
                     chapters.forEach(chapter => {
                         handledChapters.add(chapter.title);
-                        // Clone topics from syllabus to avoid mutation and allow adding extras
                         let topics = [...(chapter[topicKey] || [])].sort((a, b) => a.localeCompare(b, 'th'));
 
-                        // Check for topics in data that are NOT in syllabus (e.g. "Uncategorized")
                         const chapterData = groupedQuestions[subjectKey]?.[chapter.title];
                         if (chapterData) {
                             const knownTopics = new Set(topics);
@@ -1168,10 +1230,12 @@ export function initializeCustomQuizHandler() {
                         }
 
                         let chapterTotalCount = 0;
+                        let chapterTotalCalc = 0;
                         const topicControlsHTML = topics.map(topic => {
                             const counts = groupedQuestions[subjectKey]?.[chapter.title]?.[topic] || { theory: [], calculation: [] };
                             const topicTotal = counts.theory.length + counts.calculation.length;
                             chapterTotalCount += topicTotal;
+                            chapterTotalCalc += counts.calculation.length;
 
                             return createSpecificTopicControlHTML(subjectKey, chapter.title, topic, {
                                 theory: counts.theory.length,
@@ -1183,33 +1247,54 @@ export function initializeCustomQuizHandler() {
                         subjectTotalCount += chapterTotalCount;
 
                         if (topicControlsHTML) {
-                            chapterAccordionsHTML += `
-                                <div class="bg-gray-50 dark:bg-gray-800/30 rounded-lg mx-2 mb-2 border border-gray-200 dark:border-gray-700/50 overflow-hidden">
-                                    <div class="chapter-accordion-toggle flex justify-between items-center cursor-pointer p-3 hover:bg-gray-100 dark:hover:bg-gray-700/40 transition-colors">
-                                        <h4 class="text-base font-bold text-gray-800 dark:text-gray-200 font-kanit truncate pr-2">
-                                            ${chapter.title || 'บทเรียน'} 
-                                            <span class="text-sm font-normal text-gray-500 dark:text-gray-400">(${chapterTotalCount} ข้อ)</span>
-                                        </h4>
-                                        <svg class="chevron-icon h-5 w-5 text-gray-500 dark:text-gray-400 transition-transform duration-300 flex-shrink-0 ml-2" width="20" height="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
-                                    </div>
-                                    <div class="specific-topics-container grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-in-out">
-                                        <div class="overflow-hidden">${topicControlsHTML}</div>
-                                    </div>
-                                </div>`;
+                            if (isRemedialMode) {
+                                chapterAccordionsHTML += `
+                                    <div class="bg-gray-50 dark:bg-gray-800/30 rounded-lg mx-2 mb-2 border border-gray-200 dark:border-gray-700/50 overflow-hidden">
+                                        <div class="chapter-accordion-toggle flex justify-between items-center p-3 hover:bg-gray-100 dark:hover:bg-gray-700/40 transition-colors">
+                                            <div class="flex items-center gap-3 min-w-0 flex-grow cursor-pointer" data-chapter-header>
+                                                <input type="checkbox" data-subject="${escapeAttr(subjectKey)}" data-chapter="${escapeAttr(chapter.title)}" class="remedial-chapter-checkbox h-5 w-5 text-amber-600 rounded border-gray-300 dark:border-gray-600 focus:ring-amber-500 cursor-pointer flex-shrink-0" ${chapterTotalCalc === 0 ? 'disabled' : ''}>
+                                                <h4 class="text-base font-bold text-gray-800 dark:text-gray-200 font-kanit truncate pr-2">
+                                                    ${chapter.title || 'บทเรียน'} 
+                                                    <span class="text-sm font-normal text-amber-600 dark:text-amber-400 font-sans">(${chapterTotalCalc} ข้อเขียน)</span>
+                                                </h4>
+                                            </div>
+                                            <svg class="chevron-icon h-5 w-5 text-gray-500 dark:text-gray-400 transition-transform duration-300 flex-shrink-0 ml-2 cursor-pointer" width="20" height="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                                        </div>
+                                        <div class="specific-topics-container grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-in-out">
+                                            <div class="overflow-hidden">${topicControlsHTML}</div>
+                                        </div>
+                                    </div>`;
+                            } else {
+                                chapterAccordionsHTML += `
+                                    <div class="bg-gray-50 dark:bg-gray-800/30 rounded-lg mx-2 mb-2 border border-gray-200 dark:border-gray-700/50 overflow-hidden">
+                                        <div class="chapter-accordion-toggle flex justify-between items-center cursor-pointer p-3 hover:bg-gray-100 dark:hover:bg-gray-700/40 transition-colors">
+                                            <h4 class="text-base font-bold text-gray-800 dark:text-gray-200 font-kanit truncate pr-2">
+                                                ${chapter.title || 'บทเรียน'} 
+                                                <span class="text-sm font-normal text-gray-500 dark:text-gray-400">(${chapterTotalCount} ข้อ)</span>
+                                            </h4>
+                                            <svg class="chevron-icon h-5 w-5 text-gray-500 dark:text-gray-400 transition-transform duration-300 flex-shrink-0 ml-2" width="20" height="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                                        </div>
+                                        <div class="specific-topics-container grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-in-out">
+                                            <div class="overflow-hidden">${topicControlsHTML}</div>
+                                        </div>
+                                    </div>`;
+                            }
                         }
                     });
 
-                    // 2. Process any EXTRA chapters found in data but not in syllabus
+                    // 2. Process extra chapters
                     const extraChapters = groupedQuestions[subjectKey] ? Object.keys(groupedQuestions[subjectKey]).filter(t => !handledChapters.has(t)) : [];
                     extraChapters.forEach(chapterTitle => {
                         const chapterData = groupedQuestions[subjectKey][chapterTitle];
                         const topics = Object.keys(chapterData).sort((a, b) => a.localeCompare(b, 'th'));
 
                         let chapterTotalCount = 0;
+                        let chapterTotalCalc = 0;
                         const topicControlsHTML = topics.map(topic => {
                             const counts = chapterData[topic];
                             const topicTotal = counts.theory.length + counts.calculation.length;
                             chapterTotalCount += topicTotal;
+                            chapterTotalCalc += counts.calculation.length;
 
                             return createSpecificTopicControlHTML(subjectKey, chapterTitle, topic, {
                                 theory: counts.theory.length,
@@ -1221,19 +1306,38 @@ export function initializeCustomQuizHandler() {
                         subjectTotalCount += chapterTotalCount;
 
                         if (topicControlsHTML) {
-                            chapterAccordionsHTML += `
-                                <div class="bg-gray-50 dark:bg-gray-800/30 rounded-lg mx-2 mb-2 border border-gray-200 dark:border-gray-700/50 overflow-hidden">
-                                    <div class="chapter-accordion-toggle flex justify-between items-center cursor-pointer p-3 hover:bg-gray-100 dark:hover:bg-gray-700/40 transition-colors">
-                                        <h4 class="text-base font-bold text-gray-800 dark:text-gray-200 font-kanit truncate pr-2">
-                                            ${chapterTitle} 
-                                            <span class="text-sm font-normal text-gray-500 dark:text-gray-400">(${chapterTotalCount} ข้อ)</span>
-                                        </h4>
-                                        <svg class="chevron-icon h-5 w-5 text-gray-500 dark:text-gray-400 transition-transform duration-300 flex-shrink-0 ml-2" width="20" height="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
-                                    </div>
-                                    <div class="specific-topics-container grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-in-out">
-                                        <div class="overflow-hidden">${topicControlsHTML}</div>
-                                    </div>
-                                </div>`;
+                            if (isRemedialMode) {
+                                chapterAccordionsHTML += `
+                                    <div class="bg-gray-50 dark:bg-gray-800/30 rounded-lg mx-2 mb-2 border border-gray-200 dark:border-gray-700/50 overflow-hidden">
+                                        <div class="chapter-accordion-toggle flex justify-between items-center p-3 hover:bg-gray-100 dark:hover:bg-gray-700/40 transition-colors">
+                                            <div class="flex items-center gap-3 min-w-0 flex-grow cursor-pointer" data-chapter-header>
+                                                <input type="checkbox" data-subject="${escapeAttr(subjectKey)}" data-chapter="${escapeAttr(chapterTitle)}" class="remedial-chapter-checkbox h-5 w-5 text-amber-600 rounded border-gray-300 dark:border-gray-600 focus:ring-amber-500 cursor-pointer flex-shrink-0" ${chapterTotalCalc === 0 ? 'disabled' : ''}>
+                                                <h4 class="text-base font-bold text-gray-800 dark:text-gray-200 font-kanit truncate pr-2">
+                                                    ${chapterTitle} 
+                                                    <span class="text-sm font-normal text-amber-600 dark:text-amber-400 font-sans">(${chapterTotalCalc} ข้อเขียน)</span>
+                                                </h4>
+                                            </div>
+                                            <svg class="chevron-icon h-5 w-5 text-gray-500 dark:text-gray-400 transition-transform duration-300 flex-shrink-0 ml-2 cursor-pointer" width="20" height="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                                        </div>
+                                        <div class="specific-topics-container grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-in-out">
+                                            <div class="overflow-hidden">${topicControlsHTML}</div>
+                                        </div>
+                                    </div>`;
+                            } else {
+                                chapterAccordionsHTML += `
+                                    <div class="bg-gray-50 dark:bg-gray-800/30 rounded-lg mx-2 mb-2 border border-gray-200 dark:border-gray-700/50 overflow-hidden">
+                                        <div class="chapter-accordion-toggle flex justify-between items-center cursor-pointer p-3 hover:bg-gray-100 dark:hover:bg-gray-700/40 transition-colors">
+                                            <h4 class="text-base font-bold text-gray-800 dark:text-gray-200 font-kanit truncate pr-2">
+                                                ${chapterTitle} 
+                                                <span class="text-sm font-normal text-gray-500 dark:text-gray-400">(${chapterTotalCount} ข้อ)</span>
+                                            </h4>
+                                            <svg class="chevron-icon h-5 w-5 text-gray-500 dark:text-gray-400 transition-transform duration-300 flex-shrink-0 ml-2" width="20" height="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                                        </div>
+                                        <div class="specific-topics-container grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-in-out">
+                                            <div class="overflow-hidden">${topicControlsHTML}</div>
+                                        </div>
+                                    </div>`;
+                            }
                         }
                     });
 
@@ -1682,6 +1786,101 @@ export function initializeCustomQuizHandler() {
                 btnContent?.classList.remove('hidden');
                 btnLoader?.classList.add('hidden');
             }
+        }
+    }
+
+    async function handleStartRemedialQuiz() {
+        const remedialStartBtn = document.getElementById('remedial-quiz-start-btn');
+        if (remedialStartBtn) remedialStartBtn.disabled = true;
+
+        try {
+            // Gather checked topics and chapters
+            const checkedTopics = Array.from(document.querySelectorAll('#custom-quiz-category-selection input.remedial-topic-checkbox:checked'));
+            const checkedChapters = Array.from(document.querySelectorAll('#custom-quiz-category-selection input.remedial-chapter-checkbox:checked'));
+
+            if (checkedTopics.length === 0 && checkedChapters.length === 0) {
+                showToast("ไม่พบการเลือกบทเรียน", "กรุณาติ๊กเลือกบทเรียนหรือจุดประสงค์ที่ต้องการสอบซ่อมอย่างน้อย 1 รายการ", "⚠️", "warning");
+                if (remedialStartBtn) remedialStartBtn.disabled = false;
+                return;
+            }
+
+            if (!quizDataCache) {
+                console.error("Quiz data has not been loaded.");
+                if (remedialStartBtn) remedialStartBtn.disabled = false;
+                return;
+            }
+
+            const { allQuestions, scenarios } = quizDataCache;
+
+            const selectedChapterKeys = new Set(checkedChapters.map(cb => `${cb.dataset.subject}___${cb.dataset.chapter}`));
+            const selectedTopicKeys = new Set(checkedTopics.map(cb => `${cb.dataset.subject}___${cb.dataset.chapter}___${cb.dataset.specific}`));
+
+            // Collect all fill-in / calculation questions for the selected chapters/topics
+            const fillInPool = allQuestions.filter(q => {
+                if (!q.subCategory) return false;
+                const isFillIn = q.type === 'fill-in-number' || q.type === 'fill-in' || q.choiceType === 'calculation';
+                if (!isFillIn) return false;
+
+                const subject = q.sourceQuizCategory || 'Uncategorized';
+                const mainCat = (typeof q.subCategory === 'object') ? q.subCategory.main : q.subCategory;
+                const chapterKey = `${subject}___${mainCat}`;
+
+                if (selectedChapterKeys.has(chapterKey)) return true;
+
+                if (typeof q.subCategory === 'object' && q.subCategory.specific) {
+                    const specifics = Array.isArray(q.subCategory.specific) ? q.subCategory.specific : [q.subCategory.specific];
+                    return specifics.some(sp => selectedTopicKeys.has(`${subject}___${mainCat}___${sp}`));
+                }
+
+                return false;
+            });
+
+            if (fillInPool.length < 5) {
+                showToast(
+                    "ข้อสอบข้อเขียนไม่เพียงพอ",
+                    `ในบทเรียนที่เลือกมีข้อสอบข้อเขียนเพียง ${fillInPool.length} ข้อ (ต้องการอย่างน้อย 5 ข้อ) กรุณาเลือกบทเรียนเพิ่มเติม`,
+                    "⚠️",
+                    "error"
+                );
+                if (remedialStartBtn) remedialStartBtn.disabled = false;
+                return;
+            }
+
+            // Shuffle and pick 5 questions
+            const shuffled = [...fillInPool].sort(() => 0.5 - Math.random());
+            const chosen5 = shuffled.slice(0, 5);
+
+            // Reconstruct scenario text if needed
+            const reconstructed = chosen5.map(q => {
+                if (q.scenarioId && scenarios && scenarios.has(q.scenarioId)) {
+                    const scenario = scenarios.get(q.scenarioId);
+                    const description = (scenario.description || '').replace(/\n/g, '<br>');
+                    return {
+                        ...q,
+                        question: `<div class="p-4 mb-4 bg-gray-100 dark:bg-gray-800 border-l-4 border-amber-500 rounded-r-lg"><p class="font-bold text-lg">${scenario.title}</p><div class="mt-2 text-gray-700 dark:text-gray-300">${description}</div></div>${q.question}`,
+                    };
+                }
+                return q;
+            });
+
+            const remedialQuiz = await createAndSaveCustomQuiz({
+                title: `สอบซ่อม (${new Date().toLocaleDateString('th-TH')})`,
+                questions: reconstructed,
+                description: `โหมดสอบซ่อม: สุ่มข้อเขียน 5 ข้อ (จับเวลารวม 10 นาที | ผ่านเกณฑ์ 3/5 ข้อ)`,
+                timerMode: 'overall',
+                customTime: 600, // 10 minutes
+                category: 'Custom',
+                categoryDisplay: 'แบบทดสอบสอบซ่อม',
+                isRemedial: true,
+                passingScore: 3
+            });
+
+            customQuizModal.close();
+            window.location.href = `./quiz/index.html?id=${remedialQuiz.customId}`;
+        } catch (error) {
+            console.error("Error starting remedial quiz:", error);
+            showToast("เกิดข้อผิดพลาด", "ไม่สามารถเริ่มสอบซ่อมได้: " + error.message, "❌", "error");
+            if (remedialStartBtn) remedialStartBtn.disabled = false;
         }
     }
 
@@ -2149,7 +2348,22 @@ export function initializeCustomQuizHandler() {
         if (target.closest('#open-create-quiz-modal-btn')) {
             console.log('[DEBUG] custom-quiz-handler: openCreateQuizModalBtn clicked');
             if (typeof customQuizHubModal !== 'undefined') customQuizHubModal.close();
-            buildAndShowCreationModal(target.closest('#open-create-quiz-modal-btn'));
+            buildAndShowCreationModal(target.closest('#open-create-quiz-modal-btn'), false);
+            return;
+        }
+
+        // 2.1 Open Remedial Generator Modal Button (Inside Hub)
+        if (target.closest('#open-remedial-quiz-modal-btn')) {
+            console.log('[DEBUG] custom-quiz-handler: openRemedialQuizModalBtn clicked');
+            if (typeof customQuizHubModal !== 'undefined') customQuizHubModal.close();
+            buildAndShowCreationModal(target.closest('#open-remedial-quiz-modal-btn'), true);
+            return;
+        }
+
+        // 2.2 Remedial Start Quiz Button
+        if (target.closest('#remedial-quiz-start-btn')) {
+            console.log('[DEBUG] custom-quiz-handler: remedialQuizStartBtn clicked');
+            handleStartRemedialQuiz();
             return;
         }
 

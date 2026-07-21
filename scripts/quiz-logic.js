@@ -269,6 +269,7 @@ export function init(quizData, storageKey, quizTitle, customTime, action, isChal
   initializeSound();
   // NEW: Set quiz metadata
   state.isCustomQuiz = storageKey.startsWith('quizState-custom_');
+  state.isRemedial = storageKey.includes('remedial_') || (quizTitle && quizTitle.includes('สอบซ่อม'));
   state.questionCount = quizData.length;
 
   // --- NEW: Parse Challenge Params ---
@@ -1885,11 +1886,13 @@ function showResults(isViewOnly = false) {
         isCustomQuiz: state.isCustomQuiz
       };
 
-      const result = game.submitQuizResult(xpEarned, percentage, totalQuestions, state.isCustomQuiz, topicXPs, questStats);
-      levelResult = { overall: result.overall, physics: result.physics, earth: result.earth };
-      newBadges = result.newBadges || [];
-      newAchievements = result.newAchievements || [];
-      completedQuests = result.completedQuests || [];
+      if (!state.isRemedial) {
+        const result = game.submitQuizResult(xpEarned, percentage, totalQuestions, state.isCustomQuiz, topicXPs, questStats);
+        levelResult = { overall: result.overall, physics: result.physics, earth: result.earth };
+        newBadges = result.newBadges || [];
+        newAchievements = result.newAchievements || [];
+        completedQuests = result.completedQuests || [];
+      }
 
       // Play Sounds for Gamification
       if (state.isSoundEnabled && levelResult) {
@@ -2233,6 +2236,23 @@ function buildResultsLayout(resultInfo, stats) {
         <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">จากชุดข้อสอบ: <span class="font-semibold">${state.quizTitle}</span></p>
         <p class="mt-2 text-lg text-gray-600 dark:text-gray-300">${resultInfo.message}</p>
     `;
+
+  if (state.isRemedial || (state.quizTitle && state.quizTitle.includes('สอบซ่อม'))) {
+    const isPassed = stats.correctAnswers >= 3;
+    const badgeBanner = document.createElement("div");
+    badgeBanner.className = `w-full max-w-xl p-4 rounded-xl text-center shadow-lg font-bold text-lg mb-2 flex items-center justify-center gap-3 ${
+      isPassed 
+        ? "bg-green-100 dark:bg-green-900/60 text-green-800 dark:text-green-200 border-2 border-green-500" 
+        : "bg-red-100 dark:bg-red-900/60 text-red-800 dark:text-red-200 border-2 border-red-500"
+    }`;
+    badgeBanner.innerHTML = isPassed
+      ? `<svg class="w-8 h-8 text-green-600 dark:text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+         <span>ผ่านการสอบซ่อม! (ทำถูกต้อง ${stats.correctAnswers}/5 ข้อ)</span>`
+      : `<svg class="w-8 h-8 text-red-600 dark:text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+         <span>ยังไม่ผ่านการสอบซ่อม (ทำได้ ${stats.correctAnswers}/5 ข้อ - ต้องการอย่างน้อย 3 ข้อ)</span>`;
+    layoutContainer.appendChild(badgeBanner);
+  }
+
   layoutContainer.appendChild(messageContainer);
 
   // --- 2. Data Container (for Circle + Stats) ---
