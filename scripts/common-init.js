@@ -114,8 +114,8 @@ export async function initializeCommonComponents() {
     initializeDropdown('user-hub-btn', 'user-hub-dropdown');
     console.log("🔄 common-init: Dropdowns initialized. Calling initializeMenu...");
 
-    await initializeMenu();
-    console.log("🔄 common-init: Menu initialized. Calling initializeAuthUI...");
+    initializeMenu(); // Initialize menu in the background to prevent blocking main UI loading
+    console.log("🔄 common-init: Menu initialization started in background. Calling initializeAuthUI...");
 
     initializeDevTools(); // Initialize dev tools access on all pages
     initializeAuthUI(); // Initialize authentication UI globally

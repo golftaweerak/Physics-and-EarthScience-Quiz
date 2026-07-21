@@ -106,6 +106,19 @@ async function createAndSaveCustomQuiz(quizData) {
  */
 export function initializeCustomQuizHandler() {
     console.log('[DEBUG] custom-quiz-handler: initializeCustomQuizHandler called');
+    
+    // Pre-fetch all quiz data asynchronously in the background so that 
+    // the "Create Custom Quiz" modal opens instantly when the user clicks the button.
+    if (typeof requestIdleCallback === 'function') {
+        requestIdleCallback(() => {
+            fetchAllQuizData().catch(err => console.warn("Background prefetch failed:", err));
+        });
+    } else {
+        setTimeout(() => {
+            fetchAllQuizData().catch(err => console.warn("Background prefetch failed:", err));
+        }, 1500);
+    }
+
     // ... (existing code) ...
     let quizDataCache = null; // Cache for fetched quiz data
 

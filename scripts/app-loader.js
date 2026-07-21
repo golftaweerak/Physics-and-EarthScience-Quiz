@@ -1,8 +1,6 @@
 import { loadComponent } from './component-loader.js';
 import { initializeCommonComponents } from './common-init.js';
-import { Gamification } from './gamification.js';
 import { initializeDarkMode } from './dark-mode.js';
-import { challengeManager } from './challenge-manager.js';
 import { SiteConfig } from './site-config.js';
 
 let isAnchorScrollInitialized = false;
@@ -114,14 +112,16 @@ async function main() {
         console.log("🚀 App Loader: Initializing UI...");
         await initializeCommonComponents();
 
-        // Initialize Gamification LATE
+        // Initialize Gamification LATE (Dynamic Import)
         console.log("🚀 App Loader: Initializing Gamification...");
+        const { Gamification } = await import('./gamification.js');
         new Gamification();
 
         console.log("✅ App Loader: UI Initialized.");
 
-        // 4. Initialize Challenge Manager
+        // 4. Initialize Challenge Manager (Dynamic Import)
         try {
+            const { challengeManager } = await import('./challenge-manager.js');
             challengeManager.init();
         } catch (err) {
             console.error("🚀 App Loader: Challenge Manager init failed:", err);

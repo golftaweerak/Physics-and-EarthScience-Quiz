@@ -33,9 +33,44 @@ async function main() {
 
         // Custom loader to fix paths BEFORE injection to prevent 404s in the quiz subdirectory
         const loadComponentWithFix = async (selector, path) => {
+            const cacheKey = `component_cache_${path}`;
+            try {
+                const cachedHtml = sessionStorage.getItem(cacheKey);
+                if (cachedHtml) {
+                    const element = document.querySelector(selector);
+                    if (element) {
+                        let html = cachedHtml;
+                        // Replace ./assets/ with ../assets/ to fix 404s
+                        html = html.replace(/src="\.\/assets\//g, 'src="../assets/');
+                        // Replace other ./ links with ../ to fix navigation
+                        html = html.replace(/href="\.\//g, 'href="../');
+                        element.innerHTML = html;
+                        // Re-execute scripts
+                        Array.from(element.querySelectorAll('script')).forEach(oldScript => {
+                            const newScript = document.createElement('script');
+                            Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+                            newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+                            oldScript.parentNode.replaceChild(newScript, oldScript);
+                        });
+                        console.log(`⚡ ComponentLoader (Quiz): Loaded ${path} from cache`);
+                        return;
+                    }
+                }
+            } catch (e) {
+                console.warn(`⚠️ ComponentLoader (Quiz): sessionStorage access failed:`, e);
+            }
+
             try {
                 const response = await fetch(path);
-                let html = await response.text();
+                const originalHtml = await response.text();
+
+                try {
+                    sessionStorage.setItem(cacheKey, originalHtml);
+                } catch (e) {
+                    console.warn(`⚠️ ComponentLoader (Quiz): Failed to save cache:`, e);
+                }
+
+                let html = originalHtml;
                 // Replace ./assets/ with ../assets/ to fix 404s
                 html = html.replace(/src="\.\/assets\//g, 'src="../assets/');
                 // Replace other ./ links with ../ to fix navigation
@@ -97,19 +132,19 @@ async function main() {
         const { initializeQuiz } = await quizLoaderPromise;
         await initializeQuiz();
 
-        // --- Initialize Scientific Calculator ---
-        try {
-            const { ScientificCalculator } = await import('./calculator.js');
-
-            // Clean up existing instance if it exists to prevent duplicate event listeners
-            if (window.scientificCalculator && typeof window.scientificCalculator.destroy === 'function') {
-                window.scientificCalculator.destroy();
+        // --- Initialize Scientific Calculator (Deferred to background to speed up startup) ---
+        setTimeout(async () => {
+            try {
+                const { ScientificCalculator } = await import('./calculator.js');
+                if (window.scientificCalculator && typeof window.scientificCalculator.destroy === 'function') {
+                    window.scientificCalculator.destroy();
+                }
+                window.scientificCalculator = new ScientificCalculator();
+                console.log("⚡ Scientific Calculator loaded in background.");
+            } catch (calcError) {
+                console.error("Failed to initialize calculator:", calcError);
             }
-
-            window.scientificCalculator = new ScientificCalculator();
-        } catch (calcError) {
-            console.error("Failed to initialize calculator:", calcError);
-        }
+        }, 100);
 
         document.body.dataset.appInitialized = 'true';
         console.log("🚀 Quiz Page fully initialized");

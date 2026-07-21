@@ -13,6 +13,19 @@ export async function loadComponent(selector, filePath) {
         return;
     }
 
+    // Check sessionStorage cache to speed up subsequent loads
+    const cacheKey = `component_cache_${filePath}`;
+    try {
+        const cachedHtml = sessionStorage.getItem(cacheKey);
+        if (cachedHtml) {
+            element.innerHTML = cachedHtml;
+            console.log(`⚡ ComponentLoader: Loaded ${filePath} from cache`);
+            return;
+        }
+    } catch (e) {
+        console.warn(`⚠️ ComponentLoader: sessionStorage access failed:`, e);
+    }
+
     try {
         const controller = new AbortController();
         const timeoutDuration = 1500; // Reduced to 1.5 seconds for debugging
@@ -36,6 +49,13 @@ export async function loadComponent(selector, filePath) {
         const html = await response.text();
         element.innerHTML = html;
         console.log(`✅ ComponentLoader: Successfully loaded ${filePath}`);
+
+        // Cache the loaded HTML in sessionStorage
+        try {
+            sessionStorage.setItem(cacheKey, html);
+        } catch (e) {
+            console.warn(`⚠️ ComponentLoader: Failed to save ${filePath} to cache:`, e);
+        }
     } catch (error) {
         console.error(`❌ ComponentLoader: Error loading ${filePath}:`, error);
         // Provide user-facing feedback directly in the placeholder
