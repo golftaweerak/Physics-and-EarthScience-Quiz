@@ -107,12 +107,15 @@ export async function initializeMenu() {
         let customQuizzesList = [];
         let quizList = [];
         try {
-            [customQuizzesList, quizList] = await Promise.race([Promise.all([customQuizzesPromise, quizListPromise]), timeoutPromise]);
-            if (!quizList) quizList = []; // Fallback if timed out
+            const result = await Promise.race([Promise.all([customQuizzesPromise, quizListPromise]), timeoutPromise]);
+            if (Array.isArray(result) && result.length === 2) {
+                [customQuizzesList, quizList] = result;
+            }
         } catch (e) {
-            customQuizzesList = [];
-            quizList = [];
+            console.warn("Failed to load quizzes for menu:", e);
         }
+        if (!Array.isArray(customQuizzesList)) customQuizzesList = [];
+        if (!Array.isArray(quizList)) quizList = [];
 
         const allQuizzes = [...quizList, ...customQuizzesList];
         const quizzesWithProgress = allQuizzes.map(quiz => {
