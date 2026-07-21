@@ -400,7 +400,7 @@ function updateNextButtonAppearance(action) {
     buttonIcon = config.icons.submit;
     buttonTitle = 'ส่งคำตอบ';
     elements.nextBtn.classList.add(...submitClasses);
-  } else if (isLastQuestion && isAnswered) {
+  } else if ((isLastQuestion || (state.isRemedial && state.score >= 3)) && isAnswered) {
     buttonText = 'ดูผลสรุป';
     buttonIcon = config.icons.submit;
     buttonTitle = 'ดูผลสรุป';
@@ -1599,7 +1599,7 @@ function handleNextButtonClick() {
   // If we reach here, the question has been answered.
   const isLastQuestion = state.currentQuestionIndex === state.shuffledQuestions.length - 1;
 
-  if (isLastQuestion) {
+  if (isLastQuestion || (state.isRemedial && state.score >= 3)) {
     showResults();
   } else {
     showNextQuestion();

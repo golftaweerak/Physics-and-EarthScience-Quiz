@@ -85,17 +85,26 @@ async function createAndSaveCustomQuiz(quizData) {
         altText: quizData.isRemedial ? 'ไอคอนสอบซ่อม' : 'ไอคอนแบบทดสอบที่สร้างเอง'
     };
 
-    let savedQuizzes = await getSavedCustomQuizzes();
+    // Read local quizzes list synchronously to avoid network sync blocking when starting
+    let savedQuizzes = [];
+    try {
+        const savedQuizzesJSON = localStorage.getItem("customQuizzesList");
+        if (savedQuizzesJSON) {
+            const parsed = JSON.parse(savedQuizzesJSON);
+            savedQuizzes = Array.isArray(parsed) ? parsed : [];
+        }
+    } catch (e) {
+        console.warn("Could not read local custom quizzes list:", e);
+    }
+
     savedQuizzes.push(newCustomQuiz);
     localStorage.setItem("customQuizzesList", JSON.stringify(savedQuizzes));
 
-    // Sync to cloud if logged in
+    // Sync to cloud in the background if logged in (non-blocking)
     if (authManager.currentUser) {
-        try {
-            await authManager.saveCustomQuiz(newCustomQuiz);
-        } catch (error) {
-            console.warn("Could not sync new custom quiz to Firestore. It will be available on this device only.", error);
-        }
+        authManager.saveCustomQuiz(newCustomQuiz).catch(error => {
+            console.warn("Could not sync new custom quiz to Firestore in background. It will be synced later.", error);
+        });
     }
 
     return newCustomQuiz;
