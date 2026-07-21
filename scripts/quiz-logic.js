@@ -1647,6 +1647,9 @@ function showResults(isViewOnly = false) {
   // Sync state.score just in case it's used elsewhere
   state.score = correctAnswers;
 
+  // Sync final scores to the multiplayer lobby
+  updateLobbyScore();
+
   // --- REVISED Time Calculation ---
   // This new logic accurately tracks time spent, even across browser sessions.
   let timeTakenInSeconds;
@@ -3348,6 +3351,7 @@ function handleTimeUp() {
 
     // Common actions for any per-question timeout
     saveQuizState();
+    updateLobbyScore();
     elements.nextBtn.classList.remove("hidden");
     updateNextButtonAppearance('next');
   } else if (state.timerMode === "overall") {

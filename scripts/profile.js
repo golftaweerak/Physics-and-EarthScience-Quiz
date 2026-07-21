@@ -2445,20 +2445,11 @@ function hexToRgb(hex) {
  * @param {HTMLElement} startElement - The starting element (usually the icon in the modal).
  */
 function animateItemToBag(icon, startElement) {
-    // 1. Determine Target (Shop button or User Hub)
-    const shopBtn = document.getElementById('goto-shop-btn');
+    // 1. Determine Target (Shop tab button or User Hub)
+    const shopTabBtn = document.querySelector('[data-tab-target="shop"]');
     const userHubBtn = document.getElementById('user-hub-btn');
 
-    // Prefer the shop button if it's visible in the viewport
-    let target = userHubBtn;
-    if (shopBtn) {
-        const rect = shopBtn.getBoundingClientRect();
-        if (rect.top >= 0 && rect.left >= 0 &&
-            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-            rect.right <= (window.innerWidth || document.documentElement.clientWidth)) {
-            target = shopBtn;
-        }
-    }
+    let target = shopTabBtn || userHubBtn;
 
     if (!startElement || !target) return;
 

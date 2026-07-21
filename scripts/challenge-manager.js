@@ -6,6 +6,7 @@ import { ModalHandler } from './modal-handler.js';
 import { categoryDetails } from './data-manager.js';
 import { getSavedCustomQuizzes } from './custom-quiz-handler.js';
 import { escapeHtml } from './utils.js';
+import { getLevelBorderClass, getAvatarFrameClass } from './gamification.js';
 
 export class ChallengeManager {
   constructor() {
@@ -586,6 +587,15 @@ export class ChallengeManager {
     }
   }
 
+  getUserLevel() {
+    try {
+      const data = JSON.parse(localStorage.getItem('app_gamification_data') || '{}');
+      return data.level || 1;
+    } catch (e) {
+      return 1;
+    }
+  }
+
   async createLobby(mode = 'challenge', quizId = 'random', quizTitle = 'แบบทดสอบสุ่ม', quizDesc = '', quizTotal = null, timerMode = 'none', customTime = null, lives = 1) {
     // FIX: Wait for auth to be fully initialized to prevent false negatives
     const user = await authManager.waitForAuthReady();
@@ -629,6 +639,7 @@ export class ChallengeManager {
         uid: user.uid,
         name: user.displayName || 'Player',
         avatar: this.getUserAvatar(),
+        level: this.getUserLevel(),
         ready: true,
         score: 0,
         progress: 0
@@ -761,7 +772,15 @@ export class ChallengeManager {
         }
 
         if (!isAlreadyJoined) {
-          const playerData = { uid: user.uid, name: user.displayName || 'Player', avatar: this.getUserAvatar(), ready: true, score: 0, progress: 0 };
+          const playerData = { 
+            uid: user.uid, 
+            name: user.displayName || 'Player', 
+            avatar: this.getUserAvatar(), 
+            level: this.getUserLevel(),
+            ready: true, 
+            score: 0, 
+            progress: 0 
+          };
           transaction.update(lobbyRef, { players: arrayUnion(playerData) });
         }
       });
@@ -1521,17 +1540,26 @@ export class ChallengeManager {
           row.dataset.uid = p.uid;
           row.className = `flex items-center gap-3 p-3 ${isMe ? 'bg-blue-50 border-blue-200 dark:bg-blue-900/20 dark:border-blue-800' : 'bg-gray-50 dark:bg-gray-700/50 border-gray-100 dark:border-gray-600'} rounded-xl border anim-fade-in relative overflow-hidden transition-all duration-300`;
 
-          const avatarSrc = p.avatar && (p.avatar.includes('/') || p.avatar.includes('.'))
+          const level = p.level || 1;
+          const levelBorderClass = getLevelBorderClass(level);
+          const avatarFrameClass = getAvatarFrameClass(p.avatar || '🧑‍🎓', 'small');
+
+          const isImage = p.avatar && (p.avatar.includes('/') || p.avatar.includes('.'));
+          const avatarContent = isImage
             ? `<img src="${escapeHtml(p.avatar)}" class="w-full h-full rounded-full object-cover">`
-            : escapeHtml(p.avatar || '🧑‍🎓');
+            : `<span class="text-xl leading-none flex items-center justify-center h-full w-full select-none">${escapeHtml(p.avatar || '🧑‍🎓')}</span>`;
 
           row.innerHTML = `
                 <div class="progress-bar absolute bottom-0 left-0 h-1 bg-green-500 transition-all duration-500" style="width: ${percent}%"></div>
                 
                 <div class="rank-display font-bold text-gray-400 w-6 text-center">${data.status === 'started' && data.mode !== 'coop' ? index + 1 : ''}</div>
                 
-                <div class="relative text-3xl bg-white dark:bg-gray-800 rounded-full w-10 h-10 flex items-center justify-center shadow-sm flex-shrink-0 animate-wiggle" style="animation-delay: ${index * 0.2}s">
-                    ${avatarSrc}
+                <div class="relative w-10 h-10 flex-shrink-0 animate-wiggle" style="animation-delay: ${index * 0.2}s">
+                    <div class="w-full h-full rounded-full p-0.5 ${levelBorderClass} shadow-sm">
+                        <div class="w-full h-full rounded-full bg-white dark:bg-gray-800 flex items-center justify-center overflow-hidden ${avatarFrameClass}">
+                            ${avatarContent}
+                        </div>
+                    </div>
                     <span class="online-dot absolute bottom-0 right-0 block h-3 w-3 rounded-full ring-2 ring-white dark:ring-gray-800 shadow-sm ${onlineClass}" title="Online"></span>
                 </div>
                 

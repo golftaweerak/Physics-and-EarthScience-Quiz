@@ -560,10 +560,13 @@
     </div>
     <div id="shop-details-modal"
         class="modal hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75">
-        <div class="modal-container bg-white dark:bg-gray-800 rounded-2xl w-full max-w-sm p-6 text-center">
-            <div id="shop-modal-icon" class="text-6xl mb-4"></div>
-            <h3 id="shop-modal-title" class="text-2xl font-bold mb-2"></h3>
-            <p id="shop-modal-desc" class="text-gray-500 mb-6"></p><button id="shop-modal-buy-btn"
+        <div class="modal-container bg-white dark:bg-gray-800 rounded-2xl w-full max-w-sm p-6 text-center flex flex-col items-center">
+            <div id="shop-modal-icon" class="text-6xl mb-3"></div>
+            <span id="shop-modal-type" class="text-xs font-bold text-blue-500 tracking-wider uppercase mb-1"></span>
+            <h3 id="shop-modal-title" class="text-2xl font-bold mb-2 font-kanit"></h3>
+            <p id="shop-modal-desc" class="text-sm text-gray-500 dark:text-gray-400 mb-4"></p>
+            <div id="shop-modal-status" class="mb-4 text-sm font-medium hidden"></div>
+            <button id="shop-modal-buy-btn"
                 class="w-full py-3 bg-blue-600 text-white rounded-xl font-bold">ยืนยันการแลก</button>
         </div>
     </div>
