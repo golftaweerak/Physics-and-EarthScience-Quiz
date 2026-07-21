@@ -22,6 +22,7 @@ export class ScientificCalculator {
     this.isShift = false;
     this.isAlpha = false;
     this.isStore = false; // STO mode
+    this.isHyperbolic = false; // HYP mode
 
     // Variables storage
     this.variables = { A: 0, B: 0, C: 0, D: 0, E: 0, F: 0, x: 0, y: 0, M: 0 };
@@ -80,10 +81,11 @@ export class ScientificCalculator {
             <div class="p-4 pb-2 bg-[#1a202c]">
                 <div class="bg-[#9cb098] border-[3px] border-[#3a4449] rounded shadow-[inset_0_3px_8px_rgba(0,0,0,0.6)] p-2 min-h-[96px] flex flex-col justify-between relative overflow-hidden" style="box-shadow: inset 0 0 20px rgba(0,0,0,0.25); background-image: repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(0,0,0,0.04) 1px, rgba(0,0,0,0.04) 2px), repeating-linear-gradient(90deg, transparent, transparent 1px, rgba(0,0,0,0.04) 1px, rgba(0,0,0,0.04) 2px);">
                    <!-- Status Indicators -->
-                   <div class="flex gap-2 text-[10px] font-bold tracking-tight h-3 text-[rgba(17,24,39,0.85)]" style="text-shadow: 1px 1px 0 rgba(0,0,0,0.1);">
+                   <div class="flex gap-2 text-[10px] font-bold tracking-tight h-3 text-[rgba(17,24,39,0.85)]" style="text-shadow: 1px 1px 0 rgba(0,0,0,0.15);">
                         <span id="ind-shift" class="hidden">S</span>
                         <span id="ind-alpha" class="hidden">A</span>
                         <span id="ind-sto" class="hidden">STO</span>
+                        <span id="ind-hyp" class="hidden">HYP</span>
                         <span id="ind-mode">D</span>
                    </div>
                    
@@ -98,23 +100,23 @@ export class ScientificCalculator {
             <!-- Keypad -->
             <div class="bg-[#1a202c] p-3 pt-2 grid grid-cols-5 gap-2 text-white pb-5">
                 <!-- Row 1: Function Keys -->
-                <button class="c-btn shift" id="btn-shift" data-action="shift">SHIFT</button>
-                <button class="c-btn alpha" id="btn-alpha" data-action="alpha">ALPHA</button>
-                <div class="col-span-2 grid grid-cols-3 grid-rows-2 gap-[2px] bg-[#28313e] rounded-full p-[2px] shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)] border border-[#111827]" id="calc-d-pad">
+                <button class="c-btn shift self-center" id="btn-shift" data-action="shift">SHIFT</button>
+                <button class="c-btn alpha self-center" id="btn-alpha" data-action="alpha">ALPHA</button>
+                <div class="col-span-2 grid grid-cols-3 grid-rows-2 gap-[2px] bg-[#28313e] rounded-full p-[2px] shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)] border border-[#111827] h-[72px]" id="calc-d-pad">
                     <div class="col-start-2 row-start-1">
-                        <button class="w-full h-full bg-gray-600 hover:bg-gray-500 rounded-t-[14px] flex items-center justify-center text-[8px] text-white shadow-sm border border-[#1a202c] active:bg-gray-400 nav transition-colors" data-val="UP">▲</button>
+                        <button class="w-full h-full bg-gray-600 hover:bg-gray-500 rounded-t-full flex items-center justify-center text-[13px] text-white shadow-sm border border-[#1a202c] active:bg-gray-400 nav transition-colors" data-val="UP">▲</button>
                     </div>
                     <div class="col-start-1 row-start-2">
-                        <button class="w-full h-full bg-gray-600 hover:bg-gray-500 rounded-l-[14px] flex items-center justify-center text-[8px] text-white shadow-sm border border-[#1a202c] active:bg-gray-400 nav transition-colors" data-val="LEFT">◄</button>
+                        <button class="w-full h-full bg-gray-600 hover:bg-gray-500 rounded-l-full flex items-center justify-center text-[13px] text-white shadow-sm border border-[#1a202c] active:bg-gray-400 nav transition-colors" data-val="LEFT">◄</button>
                     </div>
                     <div class="col-start-2 row-start-2">
-                        <button class="w-full h-full bg-gray-600 hover:bg-gray-500 rounded-b-[14px] flex items-center justify-center text-[8px] text-white shadow-sm border border-[#1a202c] active:bg-gray-400 nav transition-colors" data-val="DOWN">▼</button>
+                        <button class="w-full h-full bg-gray-600 hover:bg-gray-500 rounded-b-full flex items-center justify-center text-[13px] text-white shadow-sm border border-[#1a202c] active:bg-gray-400 nav transition-colors" data-val="DOWN">▼</button>
                     </div>
                     <div class="col-start-3 row-start-2">
-                        <button class="w-full h-full bg-gray-600 hover:bg-gray-500 rounded-r-[14px] flex items-center justify-center text-[8px] text-white shadow-sm border border-[#1a202c] active:bg-gray-400 nav transition-colors" data-val="RIGHT">►</button>
+                        <button class="w-full h-full bg-gray-600 hover:bg-gray-500 rounded-r-full flex items-center justify-center text-[13px] text-white shadow-sm border border-[#1a202c] active:bg-gray-400 nav transition-colors" data-val="RIGHT">►</button>
                     </div>
                 </div>
-                <button class="c-btn on" data-action="on">ON</button>
+                <button class="c-btn on self-center" data-action="on">ON</button>
 
                 <!-- Row 2 -->
                 <button class="c-btn sm" data-val="int" data-shift="diff" data-label="∫">∫</button>
@@ -127,8 +129,8 @@ export class ScientificCalculator {
                 <button class="c-btn sm" data-action="calc" data-shift="solve" data-alpha="=" data-label="CALC">CALC<span class="sub-r">=</span><span class="sub-y">SOLVE</span></button>
                 <button class="c-btn sm" data-val="log" data-shift="10^">log</button>
                 <button class="c-btn sm" data-val="ln" data-shift="e^">ln</button>
-                <button class="c-btn sm" data-val="(">(</button>
-                <button class="c-btn sm" data-val=")" data-alpha="x">)<span class="sub-r">x</span><span class="sub-y">,</span></button>
+                <button class="c-btn sm" data-val="(" data-shift="log_n"><span class="sub-y">log<sub>■</sub></span>(</button>
+                <button class="c-btn sm" data-val=")" data-shift="," data-alpha="x">)<span class="sub-r">x</span><span class="sub-y">,</span></button>
 
                 <!-- Row 4 -->
                 <button class="c-btn sm" data-val="neg" data-alpha="A">(-)</button>
@@ -142,7 +144,7 @@ export class ScientificCalculator {
                 <button class="c-btn sm" data-action="sto">STO</button>
                 <button class="c-btn sm" data-action="eng" data-shift="←">ENG</button>
                 <button class="c-btn sm" data-val="sd" data-alpha="y">S⇔D<span class="sub-r">y</span></button>
-                <button class="c-btn sm" data-val="m+" data-alpha="m+">M+<span class="sub-r">M</span></button>
+                <button class="c-btn sm" data-val="m+" data-alpha="M">M+<span class="sub-r">M</span></button>
 
                 <!-- Row 6 -->
                 <button class="c-btn num" data-val="7">7</button>
@@ -280,6 +282,7 @@ export class ScientificCalculator {
             pointer-events: none; 
             white-space: nowrap; 
             text-shadow: 0 1px 1px rgba(0,0,0,1);
+            display: none; /* Hidden by default */
         }
         .c-btn .sub-r { 
             position: absolute; 
@@ -290,6 +293,15 @@ export class ScientificCalculator {
             font-weight: 700; 
             pointer-events: none; 
             text-shadow: 0 1px 1px rgba(0,0,0,1);
+            display: none; /* Hidden by default */
+        }
+
+        /* Dynamic Visibility based on calculator state */
+        #scientific-calculator-modal.show-shift .sub-y {
+            display: inline-block;
+        }
+        #scientific-calculator-modal.show-alpha .sub-r {
+            display: inline-block;
         }
 
         .scrollbar-hide::-webkit-scrollbar { display: none; }
@@ -334,6 +346,7 @@ export class ScientificCalculator {
     this.indShift = modal.querySelector('#ind-shift');
     this.indAlpha = modal.querySelector('#ind-alpha');
     this.indSto = modal.querySelector('#ind-sto');
+    this.indHyp = modal.querySelector('#ind-hyp');
     this.indMode = modal.querySelector('#ind-mode');
     this.headerMode = modal.querySelector('#calc-mode-indicator');
   }
@@ -450,10 +463,16 @@ export class ScientificCalculator {
     this.updateButtonLabels();
   }
 
+  toggleHyperbolic() {
+    this.isHyperbolic = !this.isHyperbolic;
+    this.updateIndicators();
+  }
+
   resetModifiers() {
     this.isShift = false;
     this.isAlpha = false;
     this.isStore = false;
+    this.isHyperbolic = false;
     this.updateIndicators();
     this.updateButtonLabels();
   }
@@ -462,6 +481,17 @@ export class ScientificCalculator {
     this.indShift.style.display = this.isShift ? 'inline-block' : 'none';
     this.indAlpha.style.display = this.isAlpha ? 'inline-block' : 'none';
     this.indSto.style.display = this.isStore ? 'inline-block' : 'none';
+    if (this.indHyp) {
+      this.indHyp.style.display = this.isHyperbolic ? 'inline-block' : 'none';
+    }
+
+    if (this.container) {
+      if (this.isShift) this.container.classList.add('show-shift');
+      else this.container.classList.remove('show-shift');
+
+      if (this.isAlpha) this.container.classList.add('show-alpha');
+      else this.container.classList.remove('show-alpha');
+    }
   }
 
   updateButtonLabels() {
@@ -740,13 +770,31 @@ export class ScientificCalculator {
         else this.insert('\\ln\\left(#0\\right)');
         break;
       case 'sin':
-        this.insert(this.isShift ? '\\arcsin\\left(#0\\right)' : '\\sin\\left(#0\\right)');
+        if (this.isHyperbolic) {
+          this.insert(this.isShift ? '\\text{asinh}\\left(#0\\right)' : '\\sinh\\left(#0\\right)');
+        } else {
+          this.insert(this.isShift ? '\\arcsin\\left(#0\\right)' : '\\sin\\left(#0\\right)');
+        }
         break;
       case 'cos':
-        this.insert(this.isShift ? '\\arccos\\left(#0\\right)' : '\\cos\\left(#0\\right)');
+        if (this.isHyperbolic) {
+          this.insert(this.isShift ? '\\text{acosh}\\left(#0\\right)' : '\\cosh\\left(#0\\right)');
+        } else {
+          this.insert(this.isShift ? '\\arccos\\left(#0\\right)' : '\\cos\\left(#0\\right)');
+        }
         break;
       case 'tan':
-        this.insert(this.isShift ? '\\arctan\\left(#0\\right)' : '\\tan\\left(#0\\right)');
+        if (this.isHyperbolic) {
+          this.insert(this.isShift ? '\\text{atanh}\\left(#0\\right)' : '\\tanh\\left(#0\\right)');
+        } else {
+          this.insert(this.isShift ? '\\arctan\\left(#0\\right)' : '\\tan\\left(#0\\right)');
+        }
+        break;
+      case 'hyp':
+        this.toggleHyperbolic();
+        break;
+      case 'm+':
+        this.mPlus();
         break;
       case 'int':
         if (this.isShift) this.insert('\\frac{d}{dx}\\left(#0\\right)');
@@ -764,7 +812,8 @@ export class ScientificCalculator {
         else this.insert('\\times 10^{#0}');
         break;
       case '(':
-        this.insert('(');
+        if (this.isShift) this.insert('\\log_{#0}\\left(#0\\right)');
+        else this.insert('(');
         break;
       case ')':
         if (this.isShift) this.insert(',');
@@ -837,6 +886,27 @@ export class ScientificCalculator {
     if (this.indMode) this.indMode.textContent = this.isDegreeMode ? 'D' : 'R';
   }
 
+  mPlus() {
+    try {
+      const latexExpr = this.mf ? (this.mf.value || this.mf.innerText || '') : this.rawExpression;
+      if (latexExpr && latexExpr.trim() !== '') {
+        this.calculate();
+      }
+      if (this.currentResult !== null) {
+        const val = Number(this.currentResult);
+        if (!isNaN(val)) {
+          this.variables.M = (this.variables.M || 0) + val;
+          this.showNotification(`M+ (M = ${math.format(this.variables.M, { precision: 6 })})`);
+        }
+      } else {
+        this.showNotification("M = 0");
+      }
+    } catch (e) {
+      console.error("Error in M+:", e);
+      this.showNotification("Memory Error");
+    }
+  }
+
   prepareExpression(latex) {
     if (!latex) return '';
 
@@ -891,10 +961,23 @@ export class ScientificCalculator {
     expr = expr.replace(/√/g, 'sqrt');
 
     // Logs
+    expr = expr.replace(/\\log_\{([^}]+)\}\\left\(([^)]+)\\right\)/g, 'log($2, $1)');
+    expr = expr.replace(/\\log_\{([^}]+)\}\(([^)]+)\)/g, 'log($2, $1)');
     expr = expr.replace(/\\log_\{10\}\\left\(([^)]+)\\right\)/g, 'log10($1)');
     expr = expr.replace(/\\log_\{10\}\(([^)]+)\)/g, 'log10($1)');
     expr = expr.replace(/\\ln\\left\(([^)]+)\\right\)/g, 'log($1)');
     expr = expr.replace(/\\ln\(([^)]+)\)/g, 'log($1)');
+
+    // Hyperbolic Trig normalization
+    expr = expr.replace(/\\text\{asinh\}/g, 'asinh');
+    expr = expr.replace(/\\text\{acosh\}/g, 'acosh');
+    expr = expr.replace(/\\text\{atanh\}/g, 'atanh');
+    expr = expr.replace(/\\asinh/g, 'asinh');
+    expr = expr.replace(/\\acosh/g, 'acosh');
+    expr = expr.replace(/\\atanh/g, 'atanh');
+    expr = expr.replace(/\\sinh/g, 'sinh');
+    expr = expr.replace(/\\cosh/g, 'cosh');
+    expr = expr.replace(/\\tanh/g, 'tanh');
 
     // Degree conversion for Trig
     // We now handle unit conversion in the evaluate scope, so we just normalize names here.
