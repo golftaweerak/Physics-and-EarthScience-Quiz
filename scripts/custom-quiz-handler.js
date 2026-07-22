@@ -63,6 +63,33 @@ function debounce(func, wait) {
 }
 
 /**
+ * Safely saves the custom quizzes list to localStorage while managing quota and pruning old remedial quizzes.
+ * @param {Array} savedQuizzes 
+ */
+function safeSaveCustomQuizzesList(savedQuizzes) {
+    // Keep max 3 remedial quizzes to avoid bloating localStorage
+    const remedialQuizzes = savedQuizzes.filter(q => q.isRemedial);
+    if (remedialQuizzes.length > 3) {
+        const remedialToKeep = new Set(remedialQuizzes.slice(-3).map(q => q.customId));
+        savedQuizzes = savedQuizzes.filter(q => !q.isRemedial || remedialToKeep.has(q.customId));
+    }
+
+    try {
+        localStorage.setItem("customQuizzesList", JSON.stringify(savedQuizzes));
+    } catch (e) {
+        console.warn("localStorage quota hit when saving custom quizzes list, pruning old entries...", e);
+        try {
+            const pruned = savedQuizzes.slice(-5);
+            localStorage.setItem("customQuizzesList", JSON.stringify(pruned));
+            return pruned;
+        } catch (err2) {
+            console.error("Failed to save custom quizzes to localStorage even after pruning:", err2);
+        }
+    }
+    return savedQuizzes;
+}
+
+/**
  * Creates a custom quiz object and saves it to localStorage.
  * @param {object} quizData - Object containing quiz properties like title, questions, timerMode, customTime, category.
  * @returns {object} The newly created custom quiz object.
@@ -81,8 +108,8 @@ async function createAndSaveCustomQuiz(quizData) {
         isRemedial: quizData.isRemedial || false,
         passingScore: quizData.passingScore || null,
         storageKey: `quizState-${customId}`,
-        icon: quizData.isRemedial ? './assets/icons/target.png' : './assets/icons/dices.png', // Default icon for custom quizzes
-        altText: quizData.isRemedial ? 'ไอคอนสอบซ่อม' : 'ไอคอนแบบทดสอบที่สร้างเอง'
+        icon: quizData.icon || (quizData.isRemedial ? './assets/icons/exam-time.png' : './assets/icons/dices.png'), // Default icon for custom/remedial quizzes
+        altText: quizData.altText || (quizData.isRemedial ? 'ไอคอนสอบซ่อม' : 'ไอคอนแบบทดสอบที่สร้างเอง')
     };
 
     // Read local quizzes list synchronously to avoid network sync blocking when starting
@@ -98,7 +125,7 @@ async function createAndSaveCustomQuiz(quizData) {
     }
 
     savedQuizzes.push(newCustomQuiz);
-    localStorage.setItem("customQuizzesList", JSON.stringify(savedQuizzes));
+    safeSaveCustomQuizzesList(savedQuizzes);
 
     // Sync to cloud in the background if logged in (non-blocking)
     if (authManager.currentUser) {
@@ -1132,70 +1159,77 @@ export function initializeCustomQuizHandler() {
             const { allQuestions } = quizDataCache;
 
             // Group questions by subject, chapter, and specific topic, and count types
-            // NEW: Optimized grouping logic ($O(N)$ instead of $O(N^2)$ for duplicate checks)
-            const groupedQuestions = {};
+            // OPTIMIZED: Cache grouped structure and use Set for O(1) duplicate checks
+            if (!quizDataCache._grouped) {
+                const grouped = {};
+                const seenKeys = new Set();
 
-            for (const q of allQuestions) {
-                if (!q.subCategory) continue;
+                for (const q of allQuestions) {
+                    if (!q || !q.subCategory) continue;
 
-                let mainKey = 'Uncategorized';
-                let topics = ['General'];
+                    let mainKey = 'Uncategorized';
+                    let topics = ['General'];
 
-                if (typeof q.subCategory === 'string') {
-                    mainKey = q.subCategory;
-                } else if (q.subCategory.main) {
-                    mainKey = q.subCategory.main;
-                    if (q.subCategory.specific) {
-                        topics = Array.isArray(q.subCategory.specific) ? q.subCategory.specific : [q.subCategory.specific];
-                    }
-                }
-
-                const subjectKey = q.sourceQuizCategory || q.category || 'Uncategorized';
-                const questionType = q.type === 'fill-in-number' || q.type === 'fill-in' || q.choiceType === 'calculation' ? 'calculation' : 'theory';
-
-                if (!groupedQuestions[subjectKey]) groupedQuestions[subjectKey] = {};
-                if (!groupedQuestions[subjectKey][mainKey]) groupedQuestions[subjectKey][mainKey] = {};
-
-                for (const topic of topics) {
-                    if (!groupedQuestions[subjectKey][mainKey][topic]) {
-                        groupedQuestions[subjectKey][mainKey][topic] = { theory: [], calculation: [] };
-                    }
-
-                    const group = groupedQuestions[subjectKey][mainKey][topic][questionType];
-                    const isDuplicate = group.length > 0 && group.some(existing => existing.question === q.question);
-                    if (!isDuplicate) {
-                        group.push(q);
-                    }
-                }
-            }
-
-            // --- FIX: Move "บทที่ 8" (Final Exam) from M.4 to M.5 ---
-            if (groupedQuestions['PhysicsM4']) {
-                const m4Root = groupedQuestions['PhysicsM4'];
-                if (!groupedQuestions['PhysicsM5']) groupedQuestions['PhysicsM5'] = {};
-                const m5Root = groupedQuestions['PhysicsM5'];
-
-                Object.keys(m4Root).forEach(chapterKey => {
-                    if (chapterKey.startsWith('บทที่ 8') || chapterKey.includes('ปลายภาค')) {
-                        if (!m5Root[chapterKey]) {
-                            m5Root[chapterKey] = m4Root[chapterKey];
-                        } else {
-                            const target = m5Root[chapterKey];
-                            const source = m4Root[chapterKey];
-
-                            Object.keys(source).forEach(topic => {
-                                if (!target[topic]) {
-                                    target[topic] = source[topic];
-                                } else {
-                                    target[topic].theory.push(...source[topic].theory);
-                                    target[topic].calculation.push(...source[topic].calculation);
-                                }
-                            });
+                    if (typeof q.subCategory === 'string') {
+                        mainKey = q.subCategory;
+                    } else if (q.subCategory.main) {
+                        mainKey = q.subCategory.main;
+                        if (q.subCategory.specific) {
+                            topics = Array.isArray(q.subCategory.specific) ? q.subCategory.specific : [q.subCategory.specific];
                         }
-                        delete m4Root[chapterKey];
                     }
-                });
+
+                    const subjectKey = q.sourceQuizCategory || q.category || 'Uncategorized';
+                    const questionType = q.type === 'fill-in-number' || q.type === 'fill-in' || q.choiceType === 'calculation' ? 'calculation' : 'theory';
+
+                    if (!grouped[subjectKey]) grouped[subjectKey] = {};
+                    if (!grouped[subjectKey][mainKey]) grouped[subjectKey][mainKey] = {};
+
+                    for (const topic of topics) {
+                        if (!grouped[subjectKey][mainKey][topic]) {
+                            grouped[subjectKey][mainKey][topic] = { theory: [], calculation: [] };
+                        }
+
+                        const dedupKey = `${subjectKey}___${mainKey}___${topic}___${questionType}___${q.question}`;
+                        if (!seenKeys.has(dedupKey)) {
+                            seenKeys.add(dedupKey);
+                            grouped[subjectKey][mainKey][topic][questionType].push(q);
+                        }
+                    }
+                }
+
+                // --- FIX: Move "บทที่ 8" (Final Exam) from M.4 to M.5 ---
+                if (grouped['PhysicsM4']) {
+                    const m4Root = grouped['PhysicsM4'];
+                    if (!grouped['PhysicsM5']) grouped['PhysicsM5'] = {};
+                    const m5Root = grouped['PhysicsM5'];
+
+                    Object.keys(m4Root).forEach(chapterKey => {
+                        if (chapterKey.startsWith('บทที่ 8') || chapterKey.includes('ปลายภาค')) {
+                            if (!m5Root[chapterKey]) {
+                                m5Root[chapterKey] = m4Root[chapterKey];
+                            } else {
+                                const target = m5Root[chapterKey];
+                                const source = m4Root[chapterKey];
+
+                                Object.keys(source).forEach(topic => {
+                                    if (!target[topic]) {
+                                        target[topic] = source[topic];
+                                    } else {
+                                        target[topic].theory.push(...source[topic].theory);
+                                        target[topic].calculation.push(...source[topic].calculation);
+                                    }
+                                });
+                            }
+                            delete m4Root[chapterKey];
+                        }
+                    });
+                }
+
+                quizDataCache._grouped = grouped;
             }
+
+            const groupedQuestions = quizDataCache._grouped;
 
             let categoryHTML = '';
             const sortedSubjects = Object.keys(allCategoryDetails).sort((a, b) => (allCategoryDetails[a].order || 99) - (allCategoryDetails[b].order || 99));
@@ -1816,18 +1850,21 @@ export function initializeCustomQuizHandler() {
         if (remedialStartBtn) remedialStartBtn.disabled = true;
 
         try {
+            // Ensure quizDataCache is loaded
+            if (!quizDataCache) {
+                quizDataCache = await fetchAllQuizData();
+            }
+
+            if (!quizDataCache || !quizDataCache.allQuestions) {
+                throw new Error("ไม่สามารถโหลดข้อมูลคลังข้อสอบได้ กรุณาลองใหม่อีกครั้ง");
+            }
+
             // Gather checked topics and chapters
             const checkedTopics = Array.from(document.querySelectorAll('#custom-quiz-category-selection input.remedial-topic-checkbox:checked'));
             const checkedChapters = Array.from(document.querySelectorAll('#custom-quiz-category-selection input.remedial-chapter-checkbox:checked'));
 
             if (checkedTopics.length === 0 && checkedChapters.length === 0) {
                 showToast("ไม่พบการเลือกบทเรียน", "กรุณาติ๊กเลือกบทเรียนหรือจุดประสงค์ที่ต้องการสอบซ่อมอย่างน้อย 1 รายการ", "⚠️", "warning");
-                if (remedialStartBtn) remedialStartBtn.disabled = false;
-                return;
-            }
-
-            if (!quizDataCache) {
-                console.error("Quiz data has not been loaded.");
                 if (remedialStartBtn) remedialStartBtn.disabled = false;
                 return;
             }
@@ -1839,12 +1876,12 @@ export function initializeCustomQuizHandler() {
 
             // Collect all fill-in / calculation questions for the selected chapters/topics
             const fillInPool = allQuestions.filter(q => {
-                if (!q.subCategory) return false;
+                if (!q || !q.subCategory) return false;
                 const isFillIn = q.type === 'fill-in-number' || q.type === 'fill-in' || q.choiceType === 'calculation';
                 if (!isFillIn) return false;
 
-                const subject = q.sourceQuizCategory || 'Uncategorized';
-                const mainCat = (typeof q.subCategory === 'object') ? q.subCategory.main : q.subCategory;
+                const subject = q.sourceQuizCategory || q.category || 'Uncategorized';
+                const mainCat = (typeof q.subCategory === 'object') ? (q.subCategory.main || '') : q.subCategory;
                 const chapterKey = `${subject}___${mainCat}`;
 
                 if (selectedChapterKeys.has(chapterKey)) return true;
@@ -1874,13 +1911,15 @@ export function initializeCustomQuizHandler() {
 
             // Reconstruct scenario text if needed
             const reconstructed = chosen5.map(q => {
-                if (q.scenarioId && scenarios && scenarios.has(q.scenarioId)) {
+                if (q.scenarioId && scenarios && typeof scenarios.has === 'function' && scenarios.has(q.scenarioId)) {
                     const scenario = scenarios.get(q.scenarioId);
-                    const description = (scenario.description || '').replace(/\n/g, '<br>');
-                    return {
-                        ...q,
-                        question: `<div class="p-4 mb-4 bg-gray-100 dark:bg-gray-800 border-l-4 border-amber-500 rounded-r-lg"><p class="font-bold text-lg">${scenario.title}</p><div class="mt-2 text-gray-700 dark:text-gray-300">${description}</div></div>${q.question}`,
-                    };
+                    if (scenario) {
+                        const description = (scenario.description || '').replace(/\n/g, '<br>');
+                        return {
+                            ...q,
+                            question: `<div class="p-4 mb-4 bg-gray-100 dark:bg-gray-800 border-l-4 border-amber-500 rounded-r-lg"><p class="font-bold text-lg">${scenario.title || ''}</p><div class="mt-2 text-gray-700 dark:text-gray-300">${description}</div></div>${q.question}`,
+                        };
+                    }
                 }
                 return q;
             });

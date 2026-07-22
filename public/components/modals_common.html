@@ -76,17 +76,24 @@
         <p id="completed-modal-description" class="text-sm text-gray-600 dark:text-gray-400 mt-2">
             คุณต้องการเริ่มทำแบบทดสอบใหม่อีกครั้ง หรือดูผลคะแนนครั้งก่อน?
         </p>
-        <div class="mt-6 flex flex-col sm:flex-row justify-center gap-4">
+        <div class="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
             <button id="completed-view-results-btn"
-                class="w-full sm:w-auto order-1 sm:order-1 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-all duration-200 font-bold btn-press-anim">
+                class="w-full sm:w-auto px-4 py-2.5 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-all duration-200 font-bold btn-press-anim flex-1">
                 ดูผลคะแนน
             </button>
             <button id="completed-start-over-btn"
-                class="w-full sm:w-auto order-2 sm:order-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all duration-200 font-bold btn-press-anim">
+                class="w-full sm:w-auto px-4 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all duration-200 font-bold btn-press-anim flex-1">
                 เริ่มใหม่
             </button>
+            <a href="./index.html" id="completed-home-btn"
+                class="w-full sm:w-auto px-4 py-2.5 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-all duration-200 font-bold btn-press-anim flex-1 flex items-center justify-center gap-1.5 no-underline">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+                <span>หน้าแรก</span>
+            </a>
             <button id="completed-cancel-btn" data-modal-close
-                class="w-full sm:w-auto order-3 sm:order-3 mt-2 sm:mt-0 px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-all duration-200 font-bold btn-press-anim">
+                class="w-full sm:w-auto px-4 py-2.5 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-all duration-200 font-bold btn-press-anim flex-1">
                 ยกเลิก
             </button>
         </div>
