@@ -176,8 +176,9 @@ export async function initializeQuiz() {
                 keywords = group.keywords || [];
                 topicLabel = group.label || topicKey;
             } else {
-                // Fallback: Use the key itself as a keyword
-                keywords = [topicKey];
+                // Fallback: Use the key itself as a keyword plus cleaned chapter name
+                const cleanTitle = topicKey.replace(/^บทที่\s*\d+\s*/i, '').trim();
+                keywords = Array.from(new Set([topicKey, cleanTitle].filter(Boolean)));
             }
 
             // 2. Fetch All Data
@@ -187,9 +188,9 @@ export async function initializeQuiz() {
             // 3. Filter Questions
             // Logic similar to what might be used in a search, but stricter or broader as needed
             const filteredQuestions = allQuestions.filter(q => {
-                if (!q.searchableText) return false;
+                if (!q || !q.searchableText) return false;
                 // Check if ANY keyword matches
-                return keywords.some(k => q.searchableText.includes(k.toLowerCase()));
+                return keywords.some(k => k && q.searchableText.includes(k.toLowerCase()));
             });
 
             console.log(`[Smart Focus] Topic: "${topicLabel}" (${topicKey})`);

@@ -2185,7 +2185,7 @@ async function renderRadarChart(game, allProgress = null, mode = 'overall') {
         });
 
         // --- NEW: Mastery Tiers & Smart Focus ---
-        updateMasteryTiers(dataPoints, track);
+        updateMasteryTiers(stats, track);
         updateSmartFocus(stats, track);
 
         return true;
@@ -2198,32 +2198,44 @@ async function renderRadarChart(game, allProgress = null, mode = 'overall') {
 }
 
 /**
- * Calculates and updates the Mastery Rank UI based on average proficiency.
+ * Calculates and updates the Mastery Rank UI based on total accuracy and question counts.
  */
-function updateMasteryTiers(dataPoints, track) {
-    const avg = dataPoints.length > 0 ? dataPoints.reduce((a, b) => a + b, 0) / dataPoints.length : 0;
+function updateMasteryTiers(stats, track) {
     const iconEl = document.getElementById('mastery-rank-icon');
     const nameEl = document.getElementById('mastery-rank-name');
     const subEl = document.getElementById('mastery-rank-subtitle');
 
     if (!iconEl || !nameEl) return;
 
-    let tier = { name: "Newbie", icon: "🌱", color: "text-gray-400" };
+    const statList = stats ? Object.values(stats) : [];
+    const totalCorrect = statList.reduce((sum, s) => sum + (s.correct || 0), 0);
+    const totalAnswered = statList.reduce((sum, s) => sum + (s.total || 0), 0);
 
-    if (track === 'highschool') {
-        if (avg >= 85) tier = { name: "Master Physicist", icon: "⚛️", color: "text-purple-500" };
-        else if (avg >= 70) tier = { name: "Expert Learner", icon: "🧠", color: "text-blue-500" };
-        else if (avg >= 50) tier = { name: "Apprentice", icon: "📐", color: "text-green-500" };
+    const avg = totalAnswered > 0 ? (totalCorrect / totalAnswered) * 100 : 0;
+
+    let tier = { name: "Newbie (ผู้เริ่มต้น)", icon: "🌱", color: "text-gray-700 dark:text-gray-300" };
+
+    if (totalAnswered === 0) {
+        tier = { name: "Newbie (ผู้เริ่มต้น)", icon: "🌱", color: "text-gray-700 dark:text-gray-300" };
+        if (subEl) subEl.textContent = "ทำโจทย์เพื่อปลดล็อกยศ";
     } else {
-        if (avg >= 85) tier = { name: "Olympian", icon: "🥇", color: "text-yellow-500" };
-        else if (avg >= 70) tier = { name: "Bronze Medalist", icon: "🥉", color: "text-orange-500" };
-        else if (avg >= 50) tier = { name: "Qualifier", icon: "📝", color: "text-blue-500" };
+        if (track === 'highschool') {
+            if (avg >= 85 && totalAnswered >= 10) tier = { name: "Master Physicist (เซียนสายวิทย์)", icon: "⚛️", color: "text-purple-700 dark:text-purple-300" };
+            else if (avg >= 70) tier = { name: "Expert Learner (ผู้เชี่ยวชาญ)", icon: "🧠", color: "text-blue-700 dark:text-blue-300" };
+            else if (avg >= 50) tier = { name: "Apprentice (นักเรียนฝึกหัด)", icon: "📐", color: "text-emerald-700 dark:text-emerald-300" };
+            else tier = { name: "Learner (ผู้กำลังเรียนรู้)", icon: "📖", color: "text-amber-700 dark:text-amber-300" };
+        } else {
+            if (avg >= 85 && totalAnswered >= 10) tier = { name: "Olympian (ผู้แทน สอวน.)", icon: "🥇", color: "text-yellow-600 dark:text-yellow-300" };
+            else if (avg >= 70) tier = { name: "Bronze Medalist (รอบชิงชนะเลิศ)", icon: "🥉", color: "text-orange-700 dark:text-orange-300" };
+            else if (avg >= 50) tier = { name: "Qualifier (ผู้ผ่านการคัดเลือก)", icon: "📝", color: "text-blue-700 dark:text-blue-300" };
+            else tier = { name: "Challenger (ผู้ท้าชิง สอวน.)", icon: "🏹", color: "text-amber-700 dark:text-amber-300" };
+        }
+        if (subEl) subEl.textContent = `ความแม่นยำรวม: ${avg.toFixed(1)}% (${totalCorrect}/${totalAnswered} ข้อ)`;
     }
 
     iconEl.textContent = tier.icon;
     nameEl.textContent = tier.name;
     nameEl.className = `text-lg font-black leading-tight ${tier.color}`;
-    if (subEl) subEl.textContent = `Avg. Accuracy: ${avg.toFixed(1)}%`;
 }
 
 /**
@@ -2243,18 +2255,14 @@ function updateSmartFocus(stats, track) {
 
     items.sort((a, b) => (a[1].correct / a[1].total) - (b[1].correct / b[1].total));
     const weakest = items[0];
-    weakestEl.textContent = weakest[1].label;
+    const acc = ((weakest[1].correct / weakest[1].total) * 100).toFixed(0);
+    weakestEl.textContent = `${weakest[1].label} (แม่นยำ ${acc}%)`;
     focusBtn.classList.remove('opacity-50', 'pointer-events-none');
 
     focusBtn.onclick = () => {
-        // Logic to redirect to a quiz or search for this topic
-        // Use weakest[0] which is the key (e.g., 'Mechanics'), not the label
         const topicKey = weakest[0];
-
         showToast('Smart Focus', `กำลังเตรียมตะลุยโจทย์: ${weakest[1].label}`, '🔥');
         setTimeout(() => {
-            // Changed to mode=smart_focus to distinguish from generic custom quizzes
-            // Point to the quiz directory correctly
             window.location.href = `quiz/index.html?mode=smart_focus&topic=${encodeURIComponent(topicKey)}`;
         }, 1000);
     };
