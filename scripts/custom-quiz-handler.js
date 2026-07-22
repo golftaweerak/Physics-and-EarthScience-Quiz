@@ -1231,7 +1231,28 @@ export function initializeCustomQuizHandler() {
 
             const groupedQuestions = quizDataCache._grouped;
 
-            let categoryHTML = '';
+            const htmlCacheKey = isRemedial ? '_remedialHTML' : '_normalHTML';
+
+            if (categorySelectionContainer) {
+                categorySelectionContainer.innerHTML = '';
+                categorySelectionContainer.className = "space-y-4";
+            }
+
+            if (quizDataCache[htmlCacheKey]) {
+                if (categorySelectionContainer) {
+                    categorySelectionContainer.innerHTML = quizDataCache[htmlCacheKey];
+                    // Fast reset for all inputs
+                    categorySelectionContainer.querySelectorAll('input').forEach(input => {
+                        if (input.type === 'checkbox') input.checked = false;
+                        else if (input.type === 'number') input.value = 0;
+                    });
+                }
+                updateTotalCount();
+                triggerElement.innerHTML = originalText;
+                triggerElement.disabled = false;
+                return;
+            }
+
             const sortedSubjects = Object.keys(allCategoryDetails).sort((a, b) => (allCategoryDetails[a].order || 99) - (allCategoryDetails[b].order || 99));
 
             const highSchoolKeys = ['PhysicsM4', 'PhysicsM5', 'PhysicsM6', 'EarthSpaceScienceBasic', 'EarthSpaceScienceAdvance'];
@@ -1404,7 +1425,7 @@ export function initializeCustomQuizHandler() {
                                 <div class="subject-accordion-toggle p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors" role="button" aria-expanded="false">
                                     <div class="flex justify-between items-center">
                                         <div class="flex items-center gap-3 min-w-0">
-                                            <img src="${subjectDetails.icon}" class="h-8 w-8 flex-shrink-0" alt="${subjectDetails.displayName} icon">
+                                            <img src="${subjectDetails.icon}" loading="lazy" decoding="async" class="h-8 w-8 flex-shrink-0" alt="${subjectDetails.displayName} icon">
                                             <div class="flex flex-col">
                                                 <span class="font-bold text-lg text-gray-800 dark:text-gray-100 truncate">${subjectDetails.displayName}</span>
                                                 <span class="text-xs text-gray-500 dark:text-gray-400 font-medium">รวม ${subjectTotalCount} ข้อ</span>
@@ -1456,24 +1477,15 @@ export function initializeCustomQuizHandler() {
                 `;
             };
 
+            const hsHTML = generateSubjectGroupHTML(highSchoolSubjects, "มัธยมศึกษาตอนปลาย (High School)", true);
+            const posnHTML = generateSubjectGroupHTML(posnSubjects, "สอวน. (POSN)", false);
+            const fullHTML = hsHTML + posnHTML;
+
+            quizDataCache[htmlCacheKey] = fullHTML;
+
             if (categorySelectionContainer) {
-                categorySelectionContainer.innerHTML = ''; // Clear container
-                categorySelectionContainer.className = "space-y-4";
+                categorySelectionContainer.innerHTML = fullHTML;
             }
-
-            const appendChunk = (html) => {
-                if (categorySelectionContainer && html) {
-                    categorySelectionContainer.insertAdjacentHTML('beforeend', html);
-                }
-            };
-
-            // High School defaults to OPEN, POSN defaults to CLOSED
-            appendChunk(generateSubjectGroupHTML(highSchoolSubjects, "มัธยมศึกษาตอนปลาย (High School)", true));
-
-            // Allow UI to breathe before rendering the next heavy block
-            await new Promise(r => setTimeout(r, 20));
-
-            appendChunk(generateSubjectGroupHTML(posnSubjects, "สอวน. (POSN)", false));
 
             // Helper to calculate available questions for a group
             const getAvailableCount = (groupType) => {

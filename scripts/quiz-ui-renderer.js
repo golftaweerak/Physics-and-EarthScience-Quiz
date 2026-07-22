@@ -200,7 +200,11 @@ export class QuizUIRenderer {
   }
 
   renderMath(element) {
-    if (window.renderMathInElement) {
+    if (window.renderMathInElement && element) {
+      const html = element.innerHTML || '';
+      if (!html.includes('\\(') && !html.includes('$$') && !html.includes('$') && !html.includes('\\[')) {
+        return;
+      }
       window.renderMathInElement(element, {
         delimiters: [
           { left: '$$', right: '$$', display: true },
