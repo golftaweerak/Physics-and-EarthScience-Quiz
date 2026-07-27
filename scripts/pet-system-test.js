@@ -1,6 +1,4 @@
 import { PixelPetRenderer } from './pixel-pet-renderer.js';
-// เราจะคัดลอกค่าคงที่และ Logic ที่จำเป็นมาจาก gamification.js
-// เพื่อให้หน้าทดสอบนี้ทำงานได้ด้วยตัวเองและไม่ขึ้นกับส่วนอื่นๆ ที่ซับซ้อน
 
 // --- ส่วนที่คัดลอกมาจาก gamification.js ---
 const PET_TYPES = {
@@ -48,14 +46,15 @@ const petState = {
         localStorage.setItem('pet_test_state_v2', JSON.stringify(this.data));
     },
     reset() {
+        const typeInfo = PET_TYPES[this.data.type];
         this.data.xp = 0;
         this.data.level = 1;
         this.data.stageIndex = 0;
+        if (typeInfo) this.data.name = typeInfo.name;
         this.save();
     }
 };
 
-// --- ฟังก์ชัน Logic ที่ปรับปรุงมาจาก gamification.js ---
 function levelUpPet() {
     let newLevelData = null;
     for (const levelData of PET_LEVELS) {
@@ -73,7 +72,7 @@ function levelUpPet() {
         petState.save();
 
         // Simulate Branching at Level 4
-        if (petState.data.level === 4) {
+        if (petState.data.level >= 4 && petState.data.stageIndex === 2) {
             const baseType = petState.data.type.split('_')[0];
             if (['dog', 'cat', 'dragon'].includes(baseType)) {
                 // Randomly evolve for testing purposes
@@ -82,6 +81,7 @@ function levelUpPet() {
                 if (PET_TYPES[newType]) {
                     console.log(`[TEST] Evolving to ${newType}`);
                     petState.data.type = newType;
+                    petState.data.name = PET_TYPES[newType].name;
                 }
             }
         }
@@ -101,10 +101,15 @@ function getPetInfo() {
     const xpNeededForNextLevel = nextLevelData ? (nextLevelData.xp - currentLevelData.xp) : 0;
     const progressPercent = xpNeededForNextLevel > 0 ? (xpForThisLevel / xpNeededForNextLevel) * 100 : 100;
 
+    let stageText = '🐣 ร่างไข่ (Egg)';
+    if (petState.data.stageIndex === 1) stageText = '🍼 วัยเด็ก (Baby)';
+    else if (petState.data.stageIndex === 2) stageText = `👑 ร่างสมบูรณ์ (${petData.name})`;
+
     return {
         ...petState.data,
         spriteName: petData.stages[petState.data.stageIndex],
         icon: petData.icon,
+        stageText: stageText,
         progressPercent: Math.min(100, progressPercent),
         currentLevelBaseXP: currentLevelData.xp,
         nextLevelXP: nextLevelData ? nextLevelData.xp : petState.data.xp
@@ -116,23 +121,30 @@ document.addEventListener('DOMContentLoaded', () => {
     petState.load();
 
     const renderer = new PixelPetRenderer('gamification-pet-canvas');
-    const legacyRenderer = new PixelPetRenderer('pet-canvas'); // For the old display
+    const legacyRenderer = new PixelPetRenderer('pet-canvas');
 
     const petSelect = document.getElementById('pet-select');
     const addXpBtn = document.getElementById('add-xp-btn');
+    const evolveBtn = document.getElementById('evolve-btn');
     const resetBtn = document.getElementById('reset-pet-btn');
     const feedBtn = document.getElementById('feed-pet-btn');
 
-    // UI Elements for New Profile Card
+    const nameInput = document.getElementById('pet-name-input');
+    const saveNameBtn = document.getElementById('save-name-btn');
+    const speechInput = document.getElementById('speech-input');
+    const sayBtn = document.getElementById('say-btn');
+
+    // UI Elements for Profile Card
     const petNameEl = document.getElementById('gamification-pet-name');
     const petLevelEl = document.getElementById('gamification-pet-level');
     const petXpBarEl = document.getElementById('gamification-pet-xp-bar');
     const petCurrentXpEl = document.getElementById('gamification-pet-current-xp');
     const petNextXpEl = document.getElementById('gamification-pet-next-xp');
 
-    // Legacy UI elements
+    // Main Sandbox UI elements
     const legacyNameEl = document.getElementById('pet-display-name');
-    const legacyLevelEl = document.getElementById('pet-display-level');
+    const legacyLevelBadgeEl = document.getElementById('pet-display-level-badge');
+    const stageBadgeEl = document.getElementById('pet-stage-badge');
     const legacyXpEl = document.getElementById('pet-display-xp');
     const legacyNextXpEl = document.getElementById('pet-display-next-xp');
     const legacyXpBarEl = document.getElementById('pet-display-xp-bar');
@@ -145,23 +157,33 @@ document.addEventListener('DOMContentLoaded', () => {
         renderer.setPet(petInfo.type, petInfo.stageIndex);
         legacyRenderer.setPet(petInfo.type, petInfo.stageIndex);
 
-        // Update New Profile Card UI
+        // Update Name Input
+        if (nameInput && document.activeElement !== nameInput) {
+            nameInput.value = petInfo.name;
+        }
+
+        // Update Profile Card UI
         petNameEl.textContent = petInfo.name;
         petLevelEl.textContent = `Lv.${petInfo.level}`;
-        petCurrentXpEl.textContent = petInfo.xp.toLocaleString();
-        petNextXpEl.textContent = petInfo.nextLevelXP.toLocaleString();
+        petCurrentXpEl.textContent = `${petInfo.xp.toLocaleString()} XP`;
+        petNextXpEl.textContent = `${petInfo.nextLevelXP.toLocaleString()} XP`;
         petXpBarEl.style.width = `${petInfo.progressPercent}%`;
 
-        // Update Legacy UI
-        legacyNameEl.textContent = petInfo.name;
-        legacyLevelEl.textContent = petInfo.level;
+        // Update Main Sandbox UI
+        legacyNameEl.textContent = `${petInfo.icon} ${petInfo.name}`;
+        if (legacyLevelBadgeEl) legacyLevelBadgeEl.textContent = `Lv.${petInfo.level}`;
+        if (stageBadgeEl) stageBadgeEl.textContent = petInfo.stageText;
         legacyXpEl.textContent = petInfo.xp.toLocaleString();
         legacyNextXpEl.textContent = petInfo.nextLevelXP.toLocaleString();
-        const legacyProgress = petInfo.nextLevelXP > petInfo.currentLevelBaseXP ? ((petInfo.xp - petInfo.currentLevelBaseXP) / (petInfo.nextLevelXP - petInfo.currentLevelBaseXP)) * 100 : 100;
+
+        const legacyProgress = petInfo.nextLevelXP > petInfo.currentLevelBaseXP 
+            ? ((petInfo.xp - petInfo.currentLevelBaseXP) / (petInfo.nextLevelXP - petInfo.currentLevelBaseXP)) * 100 
+            : 100;
         legacyXpBarEl.style.width = `${Math.min(100, legacyProgress)}%`;
     }
 
     function populatePetSelector() {
+        petSelect.innerHTML = '';
         Object.values(PET_TYPES).forEach(petType => {
             const option = document.createElement('option');
             option.value = petType.id;
@@ -173,11 +195,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Event Listeners ---
     addXpBtn.addEventListener('click', () => {
-        petState.data.xp += 150; // Add 150 XP for testing
+        petState.data.xp += 150;
         if (levelUpPet()) {
             renderer.playAnimation('happy', 1200);
             legacyRenderer.playAnimation('happy', 1200);
         }
+        petState.save();
+        renderAll();
+    });
+
+    evolveBtn?.addEventListener('click', () => {
+        petState.data.xp = 3000; // Jump to Level 4 threshold
+        levelUpPet();
+        renderer.playAnimation('happy', 1500);
+        legacyRenderer.playAnimation('happy', 1500);
         petState.save();
         renderAll();
     });
@@ -193,14 +224,36 @@ document.addEventListener('DOMContentLoaded', () => {
         const newType = e.target.value;
         if (petState.data.type !== newType) {
             petState.data.type = newType;
+            const typeData = PET_TYPES[newType];
+            if (typeData) petState.data.name = typeData.name;
             petState.reset();
             renderAll();
+        }
+    });
+
+    saveNameBtn?.addEventListener('click', () => {
+        const newName = nameInput.value.trim();
+        if (newName) {
+            petState.data.name = newName;
+            petState.save();
+            renderAll();
+            renderer.playAnimation('happy', 800);
+            legacyRenderer.playAnimation('happy', 800);
         }
     });
 
     feedBtn?.addEventListener('click', () => {
         renderer.playAnimation('eat', 2000);
         legacyRenderer.playAnimation('eat', 2000);
+    });
+
+    sayBtn?.addEventListener('click', () => {
+        const msg = speechInput.value.trim() || '❤️';
+        renderer.speechBubble = { text: msg, timer: 120 };
+        legacyRenderer.speechBubble = { text: msg, timer: 120 };
+        renderer.playAnimation('happy', 1000);
+        legacyRenderer.playAnimation('happy', 1000);
+        speechInput.value = '';
     });
 
     document.getElementById('gamification-pet-canvas')?.addEventListener('click', () => {

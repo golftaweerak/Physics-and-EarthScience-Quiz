@@ -15,24 +15,31 @@ export const SimulationLoader = {
     let internalPath = '';
 
     // Mapping IDs to relative paths from this file
-    if (simId === 'm4-ch2') internalPath = './simulations/physics/m4/ch2_combined_motion.js';
-    if (simId === 'm4-ch2-v') internalPath = './simulations/physics/m4/ch2_combined_motion.js';
-    if (simId === 'm4-ch7') internalPath = './simulations/physics/m4/ch7_projectile.js';
+    if (simId === 'm4-ch2' || simId === 'm4-ch2-v') {
+      internalPath = './simulations/physics/m4/ch2_combined_motion.js';
+    } else if (simId === 'm4-ch7') {
+      internalPath = './simulations/physics/m4/ch7_projectile.js';
+    }
 
     if (!internalPath) {
-      throw new Error(`Simulation ID "${simId}" not mapped to a file.`);
+      throw new Error(`ไม่พบรหัส Simulation "${simId}" ในระบบ`);
     }
 
     const loader = this.modules[internalPath];
     if (!loader) {
-      throw new Error(`Simulation file not found at ${internalPath}`);
+      throw new Error(`Simulation "${simId}" อยู่ระหว่างการพัฒนา (ยังไม่พร้อมใช้งาน)`);
     }
 
-    const mod = await loader();
-    if (!mod.SimulationModule) {
-      throw new Error(`Module at ${internalPath} does not export "SimulationModule"`);
+    try {
+      const mod = await loader();
+      if (!mod.SimulationModule) {
+        throw new Error(`Module at ${internalPath} does not export "SimulationModule"`);
+      }
+      return mod.SimulationModule;
+    } catch (err) {
+      console.error(`Failed to load module for ${simId}:`, err);
+      throw new Error(`ไม่สามารถโหลดไฟล์ Simulation ได้ (${err.message})`);
     }
-
-    return mod.SimulationModule;
   }
 };
+

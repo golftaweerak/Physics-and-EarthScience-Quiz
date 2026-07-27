@@ -18,7 +18,9 @@ const filesToUpdate = [
     'summary.html',
     'preview.html',
     'edit-scores.html',
-    'about.html'
+    'about.html',
+    'simulations.html',
+    'simulation-viewer.html'
 ];
 
 // 3. วนลูปอัปเดตทีละไฟล์
