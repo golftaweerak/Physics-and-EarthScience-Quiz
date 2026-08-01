@@ -149,8 +149,10 @@ export async function initializeQuiz() {
             lives = lobbyConfig.lives || 1;
         }
 
-        // Pass finalTimerMode to init
-        initQuizApp(customQuizData.questions, customQuizData.storageKey, customQuizData.title, finalCustomTime, action, false, lives, finalTimerMode);
+        const isChallenge = !!seedParam || !!lobbyId;
+
+        // Pass finalTimerMode and isChallenge to init
+        initQuizApp(customQuizData.questions, customQuizData.storageKey, customQuizData.title, finalCustomTime, action, isChallenge, lives, finalTimerMode);
         return;
     }
 

@@ -3,7 +3,7 @@ import { shuffleArray } from './utils.js';
 import { Gamification, SHOP_ITEMS, PROFICIENCY_GROUPS } from './gamification.js';
 import { showToast } from './toast.js';
 import { db } from './firebase-config.js';
-import { doc, updateDoc, onSnapshot, serverTimestamp } from "firebase/firestore";
+import { doc, updateDoc, onSnapshot, serverTimestamp, runTransaction } from "firebase/firestore";
 import { authManager } from './auth-manager.js';
 
 // state: Stores all dynamic data of the quiz
@@ -279,6 +279,7 @@ export function init(quizData, storageKey, quizTitle, customTime, action, isChal
 
   if (state.isChallenge && state.lobbyId) {
     setupMultiplayerUI();
+    setTimeout(() => updateLobbyScore(), 500);
   }
 
   // NEW: Appy Dynamic Theme
@@ -3002,27 +3003,17 @@ function updatePlayersListUI(players) {
 }
 
 async function updateLobbyScore() {
-  if (!state.isChallenge || !state.lobbyId || !authManager.currentUser) return;
-  const myUid = authManager.currentUser.uid;
+  if (!state.isChallenge || !state.lobbyId) return;
+  const user = authManager.currentUser;
+  if (!user) {
+    // Retry once auth is ready
+    setTimeout(() => updateLobbyScore(), 1000);
+    return;
+  }
+  const myUid = user.uid;
 
   try {
     const lobbyRef = doc(db, 'lobbies', state.lobbyId);
-    // Note: This matches the structure in ChallengeManager
-    const updateData = {};
-
-    // FETCH LATEST DATA FIRST TO UPDATE ARRAY (Simpler than transaction for this specific UI sync)
-    // In a real optimized system, we'd use a transaction, but for progress sync during quiz, 
-    // we'll update based on the last known players list.
-    const urlParams = new URLSearchParams(window.location.search);
-
-    // We already have state.lobbyUnsubscribe which updates playerPresences in CM, 
-    // but here we just need to update OUR entry in the players array.
-    // However, quiz-logic doesn't have the full players list in state, it gets it from the listener.
-    // So we'll use a transaction to be safe.
-
-    // BUT updateDoc is simpler for a single field update if Firestore provided array-level targeting. 
-    // Since it doesn't, we'll fetch and update.
-    const { runTransaction } = await import("firebase/firestore");
 
     const transactionPromise = runTransaction(db, async (transaction) => {
       const lobbySnap = await transaction.get(lobbyRef);
@@ -3030,25 +3021,41 @@ async function updateLobbyScore() {
 
       const data = lobbySnap.data();
       const players = data.players || [];
+      let playerFound = false;
+
       const updatedPlayers = players.map(p => {
         if (p.uid === myUid) {
+          playerFound = true;
           return {
             ...p,
-            score: state.score,
-            progress: state.currentQuestionIndex + 1,
-            eliminated: state.isEliminated
+            score: state.score || 0,
+            progress: (state.currentQuestionIndex || 0) + 1,
+            eliminated: !!state.isEliminated
           };
         }
         return p;
       });
 
+      if (!playerFound) {
+        updatedPlayers.push({
+          uid: myUid,
+          name: user.displayName || 'Player',
+          avatar: user.photoURL || '🧑‍🎓',
+          level: 1,
+          ready: true,
+          score: state.score || 0,
+          progress: (state.currentQuestionIndex || 0) + 1,
+          eliminated: !!state.isEliminated
+        });
+      }
+
       transaction.update(lobbyRef, { players: updatedPlayers });
 
       // Check for winner in Time Attack
-      if (state.mode === 'time-attack' && state.score >= 10 && !data.winnerName) {
+      if (state.mode === 'time-attack' && (state.score || 0) >= 10 && !data.winnerName) {
         transaction.update(lobbyRef, {
           status: 'finished',
-          winnerName: authManager.currentUser.displayName || 'Anonymous'
+          winnerName: user.displayName || 'Anonymous'
         });
       }
     });
