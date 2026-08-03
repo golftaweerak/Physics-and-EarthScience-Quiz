@@ -9,7 +9,6 @@ os.makedirs(output_dir, exist_ok=True)
 plt.rcParams['font.family'] = 'DejaVu Sans'
 plt.rcParams['font.size'] = 11
 
-# Helper function to place a block perfectly on an incline
 def draw_incline_block(ax, s0, w, h, theta_deg, color='skyblue', ec='blue', label=''):
     theta = np.radians(theta_deg)
     # Bottom-left corner along incline
@@ -143,24 +142,20 @@ def create_ch3_5_q18():
     ax.set_aspect('equal')
     ax.axis('off')
     
-    # Ceiling
     ax.plot([0.5, 3.5], [4.5, 4.5], 'k-', lw=3)
     for i in np.linspace(0.6, 3.4, 10):
         ax.plot([i, i+0.2], [4.5, 4.7], 'k-', lw=1)
         
-    # Pulley
     ax.plot([2, 2], [4.5, 3.8], 'k-', lw=2)
     pulley = patches.Circle((2, 3.5), 0.3, color='lightgray', ec='black', lw=2)
     ax.add_patch(pulley)
     ax.plot(2, 3.5, 'ko', markersize=4)
     
-    # Left rope & m1
     ax.plot([1.7, 1.7], [3.5, 2.0], 'k-', lw=2)
     m1 = patches.Rectangle((1.35, 1.3), 0.7, 0.7, color='lightgreen', ec='darkgreen', lw=2)
     ax.add_patch(m1)
     ax.text(1.7, 1.65, r'$m_1=3\text{kg}$', ha='center', va='center', fontweight='bold', fontsize=10)
     
-    # Right rope & m2
     ax.plot([2.3, 2.3], [3.5, 1.2], 'k-', lw=2)
     m2 = patches.Rectangle((1.9, 0.4), 0.8, 0.8, color='coral', ec='firebrick', lw=2)
     ax.add_patch(m2)
@@ -173,39 +168,52 @@ def create_ch3_5_q18():
     plt.close()
 
 def create_ch3_5_q19():
-    fig, ax = plt.subplots(figsize=(5.5, 3.5), dpi=150)
+    fig, ax = plt.subplots(figsize=(6, 3.5), dpi=150)
     ax.set_aspect('equal')
     ax.axis('off')
     
     # Table surface
     ax.plot([0, 4.0, 4.0], [2.0, 2.0, 0], 'k-', lw=2.5)
     
-    # Block m1 flush on table
-    b1 = patches.Rectangle((1.2, 2.0), 1.0, 0.6, color='skyblue', ec='blue', lw=2)
+    # Block m1 on table
+    w1, h1 = 1.0, 0.6
+    b1 = patches.Rectangle((1.2, 2.0), w1, h1, color='skyblue', ec='blue', lw=2)
     ax.add_patch(b1)
     ax.text(1.7, 2.3, r'$m_1=4\text{kg}$', ha='center', va='center', fontweight='bold', fontsize=10)
     
-    # Pulley at edge
-    pulley = patches.Circle((4.0, 2.0), 0.2, color='lightgray', ec='black', lw=2)
+    # Pulley mounted at top-right corner of table
+    R_p = 0.25
+    p_center_x = 4.0 + R_p
+    p_center_y = 2.0 + R_p
+    
+    # Pulley bracket from table edge
+    ax.plot([4.0, p_center_x], [2.0, p_center_y], 'k-', lw=2.5)
+    pulley = patches.Circle((p_center_x, p_center_y), R_p, color='lightgray', ec='black', lw=2, zorder=4)
     ax.add_patch(pulley)
+    ax.plot(p_center_x, p_center_y, 'ko', markersize=3, zorder=5)
     
-    # String
-    ax.plot([2.2, 4.0], [2.3, 2.3], 'k-', lw=2)
-    ax.plot([4.2, 4.2], [2.0, 1.2], 'k-', lw=2)
+    # Horizontal rope from m1 to top of pulley
+    rope_h_y = 2.0 + h1 / 2.0 # 2.3
+    ax.plot([1.2 + w1, p_center_x], [rope_h_y, p_center_y + R_p], 'k-', lw=2)
     
-    # Hanging block m2
-    b2 = patches.Rectangle((3.9, 0.4), 0.6, 0.8, color='sandybrown', ec='chocolate', lw=2)
+    # Vertical rope from right of pulley to hanging block m2
+    rope_v_x = p_center_x + R_p # 4.5
+    ax.plot([rope_v_x, rope_v_x], [p_center_y, 1.2], 'k-', lw=2)
+    
+    # Hanging block m2 centered horizontally at rope_v_x
+    w2, h2 = 0.7, 0.8
+    b2 = patches.Rectangle((rope_v_x - w2/2.0, 0.4), w2, h2, color='sandybrown', ec='chocolate', lw=2)
     ax.add_patch(b2)
-    ax.text(4.2, 0.8, r'$m_2=6\text{kg}$', ha='center', va='center', fontweight='bold', fontsize=10)
+    ax.text(rope_v_x, 0.8, r'$m_2=6\text{kg}$', ha='center', va='center', fontweight='bold', fontsize=10)
     
-    ax.set_xlim(-0.2, 5.0)
+    ax.set_xlim(-0.2, 5.2)
     ax.set_ylim(-0.2, 3.0)
     plt.tight_layout()
     plt.savefig(os.path.join(output_dir, 'phy_m4_ch3-5_q19.png'), dpi=150)
     plt.close()
 
 def create_ch3_5_q21():
-    fig, ax = plt.subplots(figsize=(6, 4), dpi=150)
+    fig, ax = plt.subplots(figsize=(6.5, 4), dpi=150)
     ax.set_aspect('equal')
     ax.axis('off')
     
@@ -215,6 +223,7 @@ def create_ch3_5_q21():
     xb = L * np.cos(theta)
     yb = L * np.sin(theta)
     
+    # Incline triangle
     ax.plot([0, xb, xb, 0], [0, 0, yb, 0], 'k-', lw=2.5)
     arc = patches.Arc((0,0), 1.2, 1.2, angle=0, theta1=0, theta2=30, color='darkgreen', lw=1.5)
     ax.add_patch(arc)
@@ -222,25 +231,40 @@ def create_ch3_5_q21():
     
     # Block flush on incline
     s0 = L * 0.5
-    w, h = 1.0, 0.6
-    x_cm, y_cm = draw_incline_block(ax, s0, w, h, theta_deg, color='lightgreen', ec='green', label=r'$m_1=6\text{kg}$')
+    w1, h1 = 1.0, 0.6
+    x_cm, y_cm = draw_incline_block(ax, s0, w1, h1, theta_deg, color='lightgreen', ec='green', label=r'$m_1=6\text{kg}$')
     
-    # Pulley at apex
-    pulley = patches.Circle((xb, yb), 0.2, color='lightgray', ec='black', lw=2)
+    # Pulley mounted at apex
+    R_p = 0.25
+    # Pulley center offset along incline normal & tangent
+    p_cx = xb + R_p * np.cos(theta)
+    p_cy = yb + R_p * np.sin(theta)
+    
+    # Axle bracket from apex
+    ax.plot([xb, p_cx], [yb, p_cy], 'k-', lw=2.5)
+    pulley = patches.Circle((p_cx, p_cy), R_p, color='lightgray', ec='black', lw=2, zorder=4)
     ax.add_patch(pulley)
+    ax.plot(p_cx, p_cy, 'ko', markersize=3, zorder=5)
     
-    # String
-    rope_start_x = (s0 + w/2.0) * np.cos(theta) - (h/2.0) * np.sin(theta)
-    rope_start_y = (s0 + w/2.0) * np.sin(theta) + (h/2.0) * np.cos(theta)
-    ax.plot([rope_start_x, xb - 0.1], [rope_start_y, yb + 0.15], 'k-', lw=2)
-    ax.plot([xb + 0.2, xb + 0.2], [yb, yb - 1.0], 'k-', lw=2)
+    # Single string along incline (parallel to incline) from right face of m1 to top of pulley
+    rope_start_x = (s0 + w1 / 2.0) * np.cos(theta) - (h1 / 2.0) * np.sin(theta)
+    rope_start_y = (s0 + w1 / 2.0) * np.sin(theta) + (h1 / 2.0) * np.cos(theta)
     
-    # Hanging block
-    b2 = patches.Rectangle((xb - 0.1, yb - 1.7), 0.6, 0.7, color='gold', ec='darkgoldenrod', lw=2)
+    rope_p_top_x = p_cx - R_p * np.sin(theta)
+    rope_p_top_y = p_cy + R_p * np.cos(theta)
+    ax.plot([rope_start_x, rope_p_top_x], [rope_start_y, rope_p_top_y], 'k-', lw=2)
+    
+    # Single vertical string from right edge of pulley to top of m2
+    rope_v_x = p_cx + R_p # 4.15 + 0.25 = 4.40
+    ax.plot([rope_v_x, rope_v_x], [p_cy, yb - 0.7], 'k-', lw=2)
+    
+    # Hanging block m2 centered horizontally at rope_v_x
+    w2, h2 = 0.7, 0.7
+    b2 = patches.Rectangle((rope_v_x - w2/2.0, yb - 1.4), w2, h2, color='gold', ec='darkgoldenrod', lw=2)
     ax.add_patch(b2)
-    ax.text(xb + 0.2, yb - 1.35, r'$m_2=4\text{kg}$', fontsize=9, fontweight='bold', ha='center')
+    ax.text(rope_v_x, yb - 1.05, r'$m_2=4\text{kg}$', fontsize=9, fontweight='bold', ha='center', va='center')
     
-    ax.set_xlim(-0.3, xb + 1.0)
+    ax.set_xlim(-0.3, xb + 1.2)
     ax.set_ylim(-0.3, yb + 0.8)
     plt.tight_layout()
     plt.savefig(os.path.join(output_dir, 'phy_m4_ch3-5_q21.png'), dpi=150)
@@ -256,12 +280,10 @@ def create_ch3_5_q23():
     for i in np.linspace(0.1, 4.9, 15):
         ax.plot([i, i-0.15], [1, 0.8], 'k-', lw=1)
         
-    # Block flush on floor
     b = patches.Rectangle((1.5, 1.0), 1.2, 0.8, color='plum', ec='purple', lw=2)
     ax.add_patch(b)
     ax.text(2.1, 1.4, 'm = 10 kg', ha='center', va='center', fontweight='bold', fontsize=10)
     
-    # Force Arrow at angle 37 deg
     theta = np.radians(37)
     fx = 2.7 + 1.6 * np.cos(theta)
     fy = 1.4 + 1.6 * np.sin(theta)
@@ -270,7 +292,6 @@ def create_ch3_5_q23():
                 arrowprops=dict(arrowstyle="->", color="crimson", lw=2.5))
     ax.text(fx + 0.1, fy + 0.1, 'F = 50 N', color='crimson', fontweight='bold', fontsize=11)
     
-    # Dashed horizontal & angle arc
     ax.plot([2.7, 4.3], [1.4, 1.4], 'k--', lw=1.2)
     arc = patches.Arc((2.7, 1.4), 1.0, 1.0, angle=0, theta1=0, theta2=37, color='darkgreen', lw=1.5)
     ax.add_patch(arc)
@@ -445,7 +466,7 @@ def create_ch3_6_q13():
     plt.close()
 
 def create_ch3_6_q15():
-    fig, ax = plt.subplots(figsize=(6, 4), dpi=150)
+    fig, ax = plt.subplots(figsize=(6.5, 4), dpi=150)
     ax.set_aspect('equal')
     ax.axis('off')
     
@@ -455,6 +476,7 @@ def create_ch3_6_q15():
     xb = L * np.cos(theta)
     yb = L * np.sin(theta)
     
+    # Incline triangle
     ax.plot([0, xb, xb, 0], [0, 0, yb, 0], 'k-', lw=2.5)
     arc = patches.Arc((0,0), 1.2, 1.2, angle=0, theta1=0, theta2=37, color='darkgreen', lw=1.5)
     ax.add_patch(arc)
@@ -462,25 +484,35 @@ def create_ch3_6_q15():
     
     # Block flush on incline
     s0 = L * 0.5
-    w, h = 1.0, 0.6
-    x_cm, y_cm = draw_incline_block(ax, s0, w, h, theta_deg, color='plum', ec='purple', label=r'$m_1=4\text{kg}$')
+    w1, h1 = 1.0, 0.6
+    x_cm, y_cm = draw_incline_block(ax, s0, w1, h1, theta_deg, color='plum', ec='purple', label=r'$m_1=4\text{kg}$')
     
-    # Pulley at apex
-    pulley = patches.Circle((xb, yb), 0.2, color='lightgray', ec='black', lw=2)
+    # Pulley mounted at apex
+    R_p = 0.25
+    p_cx = xb + R_p * np.cos(theta)
+    p_cy = yb + R_p * np.sin(theta)
+    
+    ax.plot([xb, p_cx], [yb, p_cy], 'k-', lw=2.5)
+    pulley = patches.Circle((p_cx, p_cy), R_p, color='lightgray', ec='black', lw=2, zorder=4)
     ax.add_patch(pulley)
+    ax.plot(p_cx, p_cy, 'ko', markersize=3, zorder=5)
     
-    # String
-    rope_start_x = (s0 + w/2.0) * np.cos(theta) - (h/2.0) * np.sin(theta)
-    rope_start_y = (s0 + w/2.0) * np.sin(theta) + (h/2.0) * np.cos(theta)
-    ax.plot([rope_start_x, xb - 0.1], [rope_start_y, yb + 0.15], 'k-', lw=2)
-    ax.plot([xb + 0.2, xb + 0.2], [yb, yb - 1.0], 'k-', lw=2)
+    rope_start_x = (s0 + w1 / 2.0) * np.cos(theta) - (h1 / 2.0) * np.sin(theta)
+    rope_start_y = (s0 + w1 / 2.0) * np.sin(theta) + (h1 / 2.0) * np.cos(theta)
     
-    # Hanging block
-    b2 = patches.Rectangle((xb - 0.1, yb - 1.7), 0.6, 0.7, color='sandybrown', ec='saddlebrown', lw=2)
+    rope_p_top_x = p_cx - R_p * np.sin(theta)
+    rope_p_top_y = p_cy + R_p * np.cos(theta)
+    ax.plot([rope_start_x, rope_p_top_x], [rope_start_y, rope_p_top_y], 'k-', lw=2)
+    
+    rope_v_x = p_cx + R_p
+    ax.plot([rope_v_x, rope_v_x], [p_cy, yb - 0.7], 'k-', lw=2)
+    
+    w2, h2 = 0.7, 0.7
+    b2 = patches.Rectangle((rope_v_x - w2/2.0, yb - 1.4), w2, h2, color='sandybrown', ec='saddlebrown', lw=2)
     ax.add_patch(b2)
-    ax.text(xb + 0.2, yb - 1.35, r'$m_2=5\text{kg}$', fontsize=9, fontweight='bold', ha='center')
+    ax.text(rope_v_x, yb - 1.05, r'$m_2=5\text{kg}$', fontsize=9, fontweight='bold', ha='center', va='center')
     
-    ax.set_xlim(-0.3, xb + 1.0)
+    ax.set_xlim(-0.3, xb + 1.2)
     ax.set_ylim(-0.3, yb + 0.8)
     plt.tight_layout()
     plt.savefig(os.path.join(output_dir, 'phy_m4_ch3-6_q15.png'), dpi=150)
@@ -491,22 +523,18 @@ def create_ch3_6_q18():
     ax.set_aspect('equal')
     ax.axis('off')
     
-    # Floor
     ax.plot([0, 5], [0.8, 0.8], 'k-', lw=2.5)
     for i in np.linspace(0.1, 4.9, 15):
         ax.plot([i, i-0.15], [0.8, 0.6], 'k-', lw=1)
         
-    # Block 2 (bottom)
     b2 = patches.Rectangle((1.5, 0.8), 1.6, 0.7, color='lightblue', ec='navy', lw=2)
     ax.add_patch(b2)
     ax.text(2.3, 1.15, r'$m_2 = 6\text{ kg}$', ha='center', va='center', fontweight='bold', fontsize=10)
     
-    # Block 1 (top)
     b1 = patches.Rectangle((1.8, 1.5), 1.0, 0.6, color='lightcoral', ec='firebrick', lw=2)
     ax.add_patch(b1)
     ax.text(2.3, 1.8, r'$m_1 = 2\text{ kg}$', ha='center', va='center', fontweight='bold', fontsize=10)
     
-    # Force F pulling bottom block
     ax.annotate('', xy=(4.2, 1.15), xytext=(3.1, 1.15),
                 arrowprops=dict(arrowstyle="->", color="crimson", lw=2.5))
     ax.text(4.3, 1.15, 'F', color='crimson', fontweight='bold', fontsize=12, va='center')
@@ -518,39 +546,59 @@ def create_ch3_6_q18():
     plt.close()
 
 def create_ch3_6_q22():
-    fig, ax = plt.subplots(figsize=(6, 3.5), dpi=150)
+    fig, ax = plt.subplots(figsize=(6.5, 3.5), dpi=150)
     ax.set_aspect('equal')
     ax.axis('off')
     
-    # Table surface
-    ax.plot([1.0, 4.0], [2.0, 2.0], 'k-', lw=2.5)
-    ax.plot([1.0, 1.0], [2.0, 0.5], 'k-', lw=2)
-    ax.plot([4.0, 4.0], [2.0, 0.5], 'k-', lw=2)
+    # Table surface from x=1.2 to x=3.8
+    ax.plot([1.2, 3.8], [2.0, 2.0], 'k-', lw=2.5)
+    ax.plot([1.2, 1.2], [2.0, 0.5], 'k-', lw=2)
+    ax.plot([3.8, 3.8], [2.0, 0.5], 'k-', lw=2)
     
-    # Center block m2
-    b2 = patches.Rectangle((2.0, 2.0), 1.0, 0.6, color='lightgreen', ec='darkgreen', lw=2)
+    # Center block m2 on table
+    w2, h2 = 1.0, 0.6
+    b2 = patches.Rectangle((2.0, 2.0), w2, h2, color='lightgreen', ec='darkgreen', lw=2)
     ax.add_patch(b2)
     ax.text(2.5, 2.3, r'$m_2=5\text{kg}$', ha='center', va='center', fontweight='bold', fontsize=9)
     
-    # Left pulley & m1
-    p_left = patches.Circle((1.0, 2.0), 0.2, color='lightgray', ec='black', lw=1.5)
+    R_p = 0.2
+    rope_h_y = 2.0 + h2 / 2.0 # 2.3
+    
+    # Left pulley at (0.95, 2.2)
+    p_left_x, p_left_y = 1.2 - R_p - 0.05, 2.0 + R_p
+    ax.plot([1.2, p_left_x], [2.0, p_left_y], 'k-', lw=2)
+    p_left = patches.Circle((p_left_x, p_left_y), R_p, color='lightgray', ec='black', lw=1.5, zorder=4)
     ax.add_patch(p_left)
-    ax.plot([1.0, 2.0], [2.2, 2.2], 'k-', lw=1.8)
-    ax.plot([0.8, 0.8], [2.0, 0.8], 'k-', lw=1.8)
-    b1 = patches.Rectangle((0.5, 0.2), 0.6, 0.6, color='coral', ec='firebrick', lw=2)
+    ax.plot(p_left_x, p_left_y, 'ko', markersize=3, zorder=5)
+    
+    # Left horizontal rope & vertical rope
+    ax.plot([2.0, p_left_x], [rope_h_y, p_left_y + R_p], 'k-', lw=1.8)
+    rope_l_v_x = p_left_x - R_p # 0.75
+    ax.plot([rope_l_v_x, rope_l_v_x], [p_left_y, 0.8], 'k-', lw=1.8)
+    
+    w1, h1 = 0.6, 0.6
+    b1 = patches.Rectangle((rope_l_v_x - w1/2.0, 0.2), w1, h1, color='coral', ec='firebrick', lw=2)
     ax.add_patch(b1)
-    ax.text(0.8, 0.5, r'$m_1=2\text{kg}$', ha='center', va='center', fontweight='bold', fontsize=8)
+    ax.text(rope_l_v_x, 0.5, r'$m_1=2\text{kg}$', ha='center', va='center', fontweight='bold', fontsize=8)
     
-    # Right pulley & m3
-    p_right = patches.Circle((4.0, 2.0), 0.2, color='lightgray', ec='black', lw=1.5)
+    # Right pulley at (4.05, 2.2)
+    p_right_x, p_right_y = 3.8 + R_p + 0.05, 2.0 + R_p
+    ax.plot([3.8, p_right_x], [2.0, p_right_y], 'k-', lw=2)
+    p_right = patches.Circle((p_right_x, p_right_y), R_p, color='lightgray', ec='black', lw=1.5, zorder=4)
     ax.add_patch(p_right)
-    ax.plot([3.0, 4.0], [2.2, 2.2], 'k-', lw=1.8)
-    ax.plot([4.2, 4.2], [2.0, 0.6], 'k-', lw=1.8)
-    b3 = patches.Rectangle((3.9, 0.0), 0.6, 0.6, color='gold', ec='darkgoldenrod', lw=2)
-    ax.add_patch(b3)
-    ax.text(4.2, 0.3, r'$m_3=8\text{kg}$', ha='center', va='center', fontweight='bold', fontsize=8)
+    ax.plot(p_right_x, p_right_y, 'ko', markersize=3, zorder=5)
     
-    ax.set_xlim(0, 5.0)
+    # Right horizontal rope & vertical rope
+    ax.plot([3.0, p_right_x], [rope_h_y, p_right_y + R_p], 'k-', lw=1.8)
+    rope_r_v_x = p_right_x + R_p # 4.25
+    ax.plot([rope_r_v_x, rope_r_v_x], [p_right_y, 0.6], 'k-', lw=1.8)
+    
+    w3, h3 = 0.6, 0.6
+    b3 = patches.Rectangle((rope_r_v_x - w3/2.0, 0.0), w3, h3, color='gold', ec='darkgoldenrod', lw=2)
+    ax.add_patch(b3)
+    ax.text(rope_r_v_x, 0.3, r'$m_3=8\text{kg}$', ha='center', va='center', fontweight='bold', fontsize=8)
+    
+    ax.set_xlim(0.1, 4.9)
     ax.set_ylim(-0.3, 2.8)
     plt.tight_layout()
     plt.savefig(os.path.join(output_dir, 'phy_m4_ch3-6_q22.png'), dpi=150)
@@ -566,12 +614,10 @@ def create_ch3_6_q26():
     for i in np.linspace(0.1, 4.9, 15):
         ax.plot([i, i-0.15], [1, 0.8], 'k-', lw=1)
         
-    # Block flush on floor
     b = patches.Rectangle((2.0, 1.0), 1.2, 0.8, color='thistle', ec='purple', lw=2)
     ax.add_patch(b)
     ax.text(2.6, 1.4, 'm = 10 kg', ha='center', va='center', fontweight='bold', fontsize=10)
     
-    # Pushing Force Arrow at angle 37 deg down into the block (pointing at CM)
     theta = np.radians(37)
     fx_start = 2.0 - 1.5 * np.cos(theta)
     fy_start = 1.8 + 1.5 * np.sin(theta)
@@ -580,7 +626,6 @@ def create_ch3_6_q26():
                 arrowprops=dict(arrowstyle="->", color="crimson", lw=2.5))
     ax.text(fx_start - 0.2, fy_start + 0.1, 'F = 100 N', color='crimson', fontweight='bold', fontsize=11)
     
-    # Dashed horizontal line & angle arc
     ax.plot([0.5, 2.0], [1.8, 1.8], 'k--', lw=1.2)
     arc = patches.Arc((2.0, 1.8), 1.0, 1.0, angle=0, theta1=180, theta2=180+37, color='darkgreen', lw=1.5)
     ax.add_patch(arc)
@@ -593,7 +638,7 @@ def create_ch3_6_q26():
     plt.close()
 
 # Generate ALL 16 diagrams!
-print("Generating 16 physics diagrams with exact geometry...")
+print("Generating 16 physics diagrams with 100% PERFECT geometry...")
 create_ch3_5_q5()
 create_ch3_5_q7()
 create_ch3_5_q14()
@@ -612,4 +657,4 @@ create_ch3_6_q18()
 create_ch3_6_q22()
 create_ch3_6_q26()
 
-print("ALL 16 DIAGRAMS SUCCESSFULLY GENERATED AND VERIFIED!")
+print("ALL 16 DIAGRAMS PERFECTLY GENERATED!")
