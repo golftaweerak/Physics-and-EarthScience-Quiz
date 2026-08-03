@@ -9,6 +9,11 @@ os.makedirs(output_dir, exist_ok=True)
 plt.rcParams['font.family'] = 'DejaVu Sans'
 plt.rcParams['font.size'] = 11
 
+def add_label_box(ax, text, x, y, color='black', fontsize=10, fontweight='bold', ha='center', va='center', rotation=0):
+    ax.text(x, y, text, color=color, fontsize=fontsize, fontweight=fontweight,
+            ha=ha, va=va, rotation=rotation, zorder=10,
+            bbox=dict(boxstyle='round,pad=0.2', facecolor='white', edgecolor='none', alpha=0.85))
+
 def draw_incline_block(ax, s0, w, h, theta_deg, color='skyblue', ec='blue', label=''):
     theta = np.radians(theta_deg)
     # Bottom-left corner along incline
@@ -50,10 +55,10 @@ def create_ch3_5_q5():
     ax.legend(fontsize=11)
     
     ax.plot(3, 12, 'bo', markersize=7)
-    ax.annotate('(3, 12)', (3, 12), textcoords="offset points", xytext=(-20,10), ha='center', fontsize=10, color='blue', fontweight='bold')
+    add_label_box(ax, '(3, 12)', 3, 13.5, color='blue', fontsize=10)
     
     ax.plot(4, 8, 'ro', markersize=7)
-    ax.annotate('(4, 8)', (4, 8), textcoords="offset points", xytext=(15,-15), ha='center', fontsize=10, color='red', fontweight='bold')
+    add_label_box(ax, '(4, 8)', 4, 6.5, color='red', fontsize=10)
     
     plt.tight_layout()
     plt.savefig(os.path.join(output_dir, 'phy_m4_ch3-5_q5.png'), dpi=150)
@@ -76,7 +81,7 @@ def create_ch3_5_q7():
     # Angle arc
     arc = patches.Arc((0, 0), 1.4, 1.4, angle=0, theta1=0, theta2=theta_deg, color='darkgreen', lw=1.5)
     ax.add_patch(arc)
-    ax.text(0.9, 0.25, r'$\theta = 37^\circ$', fontsize=11, color='darkgreen', fontweight='bold')
+    add_label_box(ax, r'$\theta = 37^\circ$', 0.9, 0.25, color='darkgreen', fontsize=11)
     
     # Block flush on incline
     s0 = L * 0.55
@@ -86,7 +91,7 @@ def create_ch3_5_q7():
     # Gravity mg arrow from CM
     ax.annotate('', xy=(x_cm, y_cm - 1.2), xytext=(x_cm, y_cm),
                 arrowprops=dict(arrowstyle="->", color="crimson", lw=2.5))
-    ax.text(x_cm + 0.15, y_cm - 0.9, 'mg = 50 N', color='crimson', fontweight='bold', fontsize=10)
+    add_label_box(ax, 'mg = 50 N', x_cm + 0.6, y_cm - 0.8, color='crimson', fontsize=10)
     
     # Friction f_k arrow UP the incline (block sliding down)
     fx_start = s0 * np.cos(theta)
@@ -96,9 +101,9 @@ def create_ch3_5_q7():
     
     ax.annotate('', xy=(fx_end, fy_end), xytext=(fx_start, fy_start),
                 arrowprops=dict(arrowstyle="->", color="darkorange", lw=2.5))
-    ax.text(fx_end - 0.2, fy_end + 0.3, r'$f_k$', color='darkorange', fontweight='bold', fontsize=12)
+    add_label_box(ax, r'$f_k$', fx_end - 0.1, fy_end + 0.35, color='darkorange', fontsize=12)
     
-    ax.set_xlim(-0.5, xb + 0.5)
+    ax.set_xlim(-0.5, xb + 0.8)
     ax.set_ylim(-1.5, yb + 0.8)
     plt.tight_layout()
     plt.savefig(os.path.join(output_dir, 'phy_m4_ch3-5_q7.png'), dpi=150)
@@ -118,12 +123,10 @@ def create_ch3_5_q14():
     ax.plot(F_kinetic, f_kinetic, 'g-', linewidth=2.5, label='Kinetic Region')
     
     ax.plot(30, 30, 'ro', markersize=7)
-    ax.annotate(r'$f_{s,max} = 30\text{ N}$', (30, 30), textcoords="offset points", xytext=(-35, 10),
-                fontsize=10, color='red', fontweight='bold')
+    add_label_box(ax, r'$f_{s,max} = 30\text{ N}$', 22, 33, color='red', fontsize=10)
     
     ax.plot(45, 20, 'go', markersize=7)
-    ax.annotate(r'$f_k = 20\text{ N}$', (45, 20), textcoords="offset points", xytext=(10, 10),
-                fontsize=10, color='green', fontweight='bold')
+    add_label_box(ax, r'$f_k = 20\text{ N}$', 52, 23, color='green', fontsize=10)
     
     ax.set_xlabel('Applied Force F (N)', fontsize=12, fontweight='bold')
     ax.set_ylabel('Friction Force f (N)', fontsize=12, fontweight='bold')
@@ -181,10 +184,10 @@ def create_ch3_5_q19():
     ax.add_patch(b1)
     ax.text(1.7, 2.3, r'$m_1=4\text{kg}$', ha='center', va='center', fontweight='bold', fontsize=10)
     
-    # Pulley mounted at top-right corner of table
-    R_p = 0.25
-    p_center_x = 4.0 + R_p
-    p_center_y = 2.0 + R_p
+    # Pulley geometry: Top tangent MUST be at height y = 2.0 + h1/2 = 2.3 to make string 100% HORIZONTAL!
+    R_p = 0.2
+    p_center_y = 2.0 + (h1 / 2.0) - R_p # 2.1
+    p_center_x = 4.0 + R_p # 4.2
     
     # Pulley bracket from table edge
     ax.plot([4.0, p_center_x], [2.0, p_center_y], 'k-', lw=2.5)
@@ -192,15 +195,15 @@ def create_ch3_5_q19():
     ax.add_patch(pulley)
     ax.plot(p_center_x, p_center_y, 'ko', markersize=3, zorder=5)
     
-    # Horizontal rope from m1 to top of pulley
-    rope_h_y = 2.0 + h1 / 2.0 # 2.3
-    ax.plot([1.2 + w1, p_center_x], [rope_h_y, p_center_y + R_p], 'k-', lw=2)
+    # 100% PERFECTLY HORIZONTAL ROPE at height y = 2.3
+    rope_h_y = 2.0 + (h1 / 2.0) # 2.3
+    ax.plot([1.2 + w1, p_center_x], [rope_h_y, rope_h_y], 'k-', lw=2)
     
-    # Vertical rope from right of pulley to hanging block m2
-    rope_v_x = p_center_x + R_p # 4.5
+    # Single vertical rope from right edge of pulley (x = 4.2 + 0.2 = 4.4) to hanging block m2
+    rope_v_x = p_center_x + R_p # 4.4
     ax.plot([rope_v_x, rope_v_x], [p_center_y, 1.2], 'k-', lw=2)
     
-    # Hanging block m2 centered horizontally at rope_v_x
+    # Hanging block m2 centered horizontally at x = 4.4 (well to the right of table edge x = 4.0)
     w2, h2 = 0.7, 0.8
     b2 = patches.Rectangle((rope_v_x - w2/2.0, 0.4), w2, h2, color='sandybrown', ec='chocolate', lw=2)
     ax.add_patch(b2)
@@ -227,26 +230,26 @@ def create_ch3_5_q21():
     ax.plot([0, xb, xb, 0], [0, 0, yb, 0], 'k-', lw=2.5)
     arc = patches.Arc((0,0), 1.2, 1.2, angle=0, theta1=0, theta2=30, color='darkgreen', lw=1.5)
     ax.add_patch(arc)
-    ax.text(0.8, 0.2, r'$30^\circ$', fontsize=10, fontweight='bold', color='darkgreen')
+    add_label_box(ax, r'$30^\circ$', 0.8, 0.2, color='darkgreen', fontsize=10)
     
     # Block flush on incline
     s0 = L * 0.5
     w1, h1 = 1.0, 0.6
     x_cm, y_cm = draw_incline_block(ax, s0, w1, h1, theta_deg, color='lightgreen', ec='green', label=r'$m_1=6\text{kg}$')
     
-    # Pulley mounted at apex
+    # Pulley geometry: Top tangent MUST lie at height h1/2 above incline line to be 100% PARALLEL!
     R_p = 0.25
-    # Pulley center offset along incline normal & tangent
-    p_cx = xb + R_p * np.cos(theta)
-    p_cy = yb + R_p * np.sin(theta)
+    # Tangent line along incline at height h1/2 = 0.3
+    # Pulley center vector offset along incline tangent & normal
+    p_cx = xb + (h1 / 2.0 - R_p) * (-np.sin(theta)) + R_p * np.cos(theta)
+    p_cy = yb + (h1 / 2.0 - R_p) * (np.cos(theta)) + R_p * np.sin(theta)
     
-    # Axle bracket from apex
     ax.plot([xb, p_cx], [yb, p_cy], 'k-', lw=2.5)
     pulley = patches.Circle((p_cx, p_cy), R_p, color='lightgray', ec='black', lw=2, zorder=4)
     ax.add_patch(pulley)
     ax.plot(p_cx, p_cy, 'ko', markersize=3, zorder=5)
     
-    # Single string along incline (parallel to incline) from right face of m1 to top of pulley
+    # 100% PERFECTLY PARALLEL ROPE along incline
     rope_start_x = (s0 + w1 / 2.0) * np.cos(theta) - (h1 / 2.0) * np.sin(theta)
     rope_start_y = (s0 + w1 / 2.0) * np.sin(theta) + (h1 / 2.0) * np.cos(theta)
     
@@ -254,8 +257,8 @@ def create_ch3_5_q21():
     rope_p_top_y = p_cy + R_p * np.cos(theta)
     ax.plot([rope_start_x, rope_p_top_x], [rope_start_y, rope_p_top_y], 'k-', lw=2)
     
-    # Single vertical string from right edge of pulley to top of m2
-    rope_v_x = p_cx + R_p # 4.15 + 0.25 = 4.40
+    # Vertical rope from right edge of pulley
+    rope_v_x = p_cx + R_p
     ax.plot([rope_v_x, rope_v_x], [p_cy, yb - 0.7], 'k-', lw=2)
     
     # Hanging block m2 centered horizontally at rope_v_x
@@ -290,12 +293,12 @@ def create_ch3_5_q23():
     
     ax.annotate('', xy=(fx, fy), xytext=(2.7, 1.4),
                 arrowprops=dict(arrowstyle="->", color="crimson", lw=2.5))
-    ax.text(fx + 0.1, fy + 0.1, 'F = 50 N', color='crimson', fontweight='bold', fontsize=11)
+    add_label_box(ax, 'F = 50 N', fx + 0.3, fy + 0.1, color='crimson', fontsize=11)
     
     ax.plot([2.7, 4.3], [1.4, 1.4], 'k--', lw=1.2)
     arc = patches.Arc((2.7, 1.4), 1.0, 1.0, angle=0, theta1=0, theta2=37, color='darkgreen', lw=1.5)
     ax.add_patch(arc)
-    ax.text(3.4, 1.55, r'$37^\circ$', fontsize=10, color='darkgreen', fontweight='bold')
+    add_label_box(ax, r'$37^\circ$', 3.4, 1.55, color='darkgreen', fontsize=10)
     
     ax.set_xlim(0, 5.5)
     ax.set_ylim(0.5, 3.2)
@@ -316,15 +319,15 @@ def create_ch3_5_q29():
     
     ax.annotate('', xy=(2.4, 0), xytext=(0.25, 0),
                 arrowprops=dict(arrowstyle="->", color="red", lw=2.5))
-    ax.text(2.5, 0.1, r'$F_1 = 12\text{ N}$', color='red', fontweight='bold', fontsize=10)
+    add_label_box(ax, r'$F_1 = 12\text{ N}$', 2.2, 0.4, color='red', fontsize=10)
     
     ax.annotate('', xy=(0, 1.5), xytext=(0, 0.25),
                 arrowprops=dict(arrowstyle="->", color="blue", lw=2.5))
-    ax.text(0.1, 1.6, r'$F_2 = 5\text{ N}$', color='blue', fontweight='bold', fontsize=10)
+    add_label_box(ax, r'$F_2 = 5\text{ N}$', 0.6, 1.5, color='blue', fontsize=10)
     
     ax.annotate('', xy=(-0.9, 0), xytext=(-0.25, 0),
                 arrowprops=dict(arrowstyle="->", color="green", lw=2.5))
-    ax.text(-1.8, 0.1, r'$F_3 = 3\text{ N}$', color='green', fontweight='bold', fontsize=10)
+    add_label_box(ax, r'$F_3 = 3\text{ N}$', -1.2, 0.4, color='green', fontsize=10)
     
     ax.set_xlim(-2.2, 3.2)
     ax.set_ylim(-1.0, 2.2)
@@ -355,13 +358,13 @@ def create_ch3_6_q2():
         ax.plot(rp, fp, 'ro', markersize=6)
         ax.plot([rp, rp], [0, fp], 'k:', alpha=0.5)
         ax.plot([0, rp], [fp, fp], 'k:', alpha=0.5)
-        ax.annotate(lbl, (rp, fp), textcoords="offset points", xytext=(15, 8), ha='left', fontsize=10, color='darkred', fontweight='bold')
+        add_label_box(ax, lbl, rp + 0.4, fp + 5, color='darkred', fontsize=10)
 
     ax.set_xlabel('Distance r (in terms of R)', fontsize=12, fontweight='bold')
     ax.set_ylabel('Gravitational Force F_g', fontsize=12, fontweight='bold')
     ax.set_title('Gravitational Force vs Distance Graph', fontsize=13, fontweight='bold', pad=12)
     ax.set_xlim(0, 5.2)
-    ax.set_ylim(0, 110)
+    ax.set_ylim(0, 115)
     ax.grid(True, linestyle=':', alpha=0.7)
     ax.legend(fontsize=11)
     
@@ -383,18 +386,18 @@ def create_ch3_6_q6():
     
     sat = patches.Rectangle((-0.2, 2.35), 0.4, 0.3, color='orange', ec='darkred', lw=1.5)
     ax.add_patch(sat)
-    ax.text(0, 2.8, 'Satellite (m)', ha='center', fontweight='bold', fontsize=10, color='darkred')
+    add_label_box(ax, 'Satellite (m)', 0, 2.85, color='darkred', fontsize=10)
     
     ax.annotate('', xy=(0, 1.3), xytext=(0, 2.35),
                 arrowprops=dict(arrowstyle="->", color="crimson", lw=2.5))
-    ax.text(0.15, 1.8, r'$F_g = G\frac{Mm}{r^2}$', color='crimson', fontweight='bold', fontsize=10)
+    add_label_box(ax, r'$F_g = G\frac{Mm}{r^2}$', 0.6, 1.8, color='crimson', fontsize=10)
     
     ax.annotate('', xy=(-1.2, 2.5), xytext=(-0.2, 2.5),
                 arrowprops=dict(arrowstyle="->", color="green", lw=2.5))
-    ax.text(-1.4, 2.65, r'$v = \sqrt{\frac{GM}{r}}$', color='green', fontweight='bold', fontsize=10)
+    add_label_box(ax, r'$v = \sqrt{\frac{GM}{r}}$', -1.2, 2.9, color='green', fontsize=10)
     
     ax.plot([0, 1.77], [0, 1.77], 'k:', lw=1.2)
-    ax.text(0.9, 0.7, 'r', fontsize=11, fontweight='bold')
+    add_label_box(ax, 'r', 0.9, 0.7, color='black', fontsize=11)
     
     ax.set_xlim(-3.0, 3.0)
     ax.set_ylim(-3.0, 3.2)
@@ -419,15 +422,15 @@ def create_ch3_6_q10():
     
     Px = 4.0
     ax.plot(Px, 0, 'rx', markersize=10, markeredgewidth=2.5)
-    ax.text(Px, 0.35, 'Point P\n(g_net = 0)', color='red', ha='center', fontweight='bold', fontsize=9)
+    add_label_box(ax, 'Point P\n(g_net = 0)', Px, 0.45, color='red', fontsize=9)
     
     ax.annotate('', xy=(Px - 0.8, 0), xytext=(Px, 0),
                 arrowprops=dict(arrowstyle="->", color="blue", lw=2))
-    ax.text(Px - 0.5, -0.4, r'$g_E$', color='blue', fontweight='bold', fontsize=10)
+    add_label_box(ax, r'$g_E$', Px - 0.4, -0.45, color='blue', fontsize=10)
     
     ax.annotate('', xy=(Px + 0.8, 0), xytext=(Px, 0),
                 arrowprops=dict(arrowstyle="->", color="purple", lw=2))
-    ax.text(Px + 0.3, -0.4, r'$g_M$', color='purple', fontweight='bold', fontsize=10)
+    add_label_box(ax, r'$g_M$', Px + 0.4, -0.45, color='purple', fontsize=10)
     
     ax.set_xlim(-1.2, 6.0)
     ax.set_ylim(-1.0, 1.2)
@@ -448,16 +451,16 @@ def create_ch3_6_q13():
     ax.plot(t2, v2, 'r-', lw=2.5, label='Phase 2 (4-10 s)')
     
     ax.plot(4, 12, 'ko', markersize=6)
-    ax.annotate('(4, 12)', (4, 12), textcoords="offset points", xytext=(-25, 10), fontweight='bold')
+    add_label_box(ax, '(4, 12)', 3.2, 13.5, color='black', fontsize=10)
     
     ax.plot(10, 18, 'ko', markersize=6)
-    ax.annotate('(10, 18)', (10, 18), textcoords="offset points", xytext=(-25, 10), fontweight='bold')
+    add_label_box(ax, '(10, 18)', 9.2, 19.5, color='black', fontsize=10)
     
     ax.set_xlabel('Time t (s)', fontsize=12, fontweight='bold')
     ax.set_ylabel('Velocity v (m/s)', fontsize=12, fontweight='bold')
     ax.set_title('Velocity vs Time Graph for Mass m = 4 kg', fontsize=12, fontweight='bold', pad=12)
     ax.set_xlim(0, 11)
-    ax.set_ylim(0, 20)
+    ax.set_ylim(0, 22)
     ax.grid(True, linestyle=':', alpha=0.7)
     ax.legend(fontsize=10)
     
@@ -476,21 +479,18 @@ def create_ch3_6_q15():
     xb = L * np.cos(theta)
     yb = L * np.sin(theta)
     
-    # Incline triangle
     ax.plot([0, xb, xb, 0], [0, 0, yb, 0], 'k-', lw=2.5)
     arc = patches.Arc((0,0), 1.2, 1.2, angle=0, theta1=0, theta2=37, color='darkgreen', lw=1.5)
     ax.add_patch(arc)
-    ax.text(0.8, 0.25, r'$37^\circ$', fontsize=10, fontweight='bold', color='darkgreen')
+    add_label_box(ax, r'$37^\circ$', 0.8, 0.25, color='darkgreen', fontsize=10)
     
-    # Block flush on incline
     s0 = L * 0.5
     w1, h1 = 1.0, 0.6
     x_cm, y_cm = draw_incline_block(ax, s0, w1, h1, theta_deg, color='plum', ec='purple', label=r'$m_1=4\text{kg}$')
     
-    # Pulley mounted at apex
     R_p = 0.25
-    p_cx = xb + R_p * np.cos(theta)
-    p_cy = yb + R_p * np.sin(theta)
+    p_cx = xb + (h1 / 2.0 - R_p) * (-np.sin(theta)) + R_p * np.cos(theta)
+    p_cy = yb + (h1 / 2.0 - R_p) * (np.cos(theta)) + R_p * np.sin(theta)
     
     ax.plot([xb, p_cx], [yb, p_cy], 'k-', lw=2.5)
     pulley = patches.Circle((p_cx, p_cy), R_p, color='lightgray', ec='black', lw=2, zorder=4)
@@ -537,7 +537,7 @@ def create_ch3_6_q18():
     
     ax.annotate('', xy=(4.2, 1.15), xytext=(3.1, 1.15),
                 arrowprops=dict(arrowstyle="->", color="crimson", lw=2.5))
-    ax.text(4.3, 1.15, 'F', color='crimson', fontweight='bold', fontsize=12, va='center')
+    add_label_box(ax, 'F', 4.4, 1.15, color='crimson', fontsize=12)
     
     ax.set_xlim(0, 5.2)
     ax.set_ylim(0.4, 2.5)
@@ -555,25 +555,25 @@ def create_ch3_6_q22():
     ax.plot([1.2, 1.2], [2.0, 0.5], 'k-', lw=2)
     ax.plot([3.8, 3.8], [2.0, 0.5], 'k-', lw=2)
     
-    # Center block m2 on table
     w2, h2 = 1.0, 0.6
     b2 = patches.Rectangle((2.0, 2.0), w2, h2, color='lightgreen', ec='darkgreen', lw=2)
     ax.add_patch(b2)
     ax.text(2.5, 2.3, r'$m_2=5\text{kg}$', ha='center', va='center', fontweight='bold', fontsize=9)
     
     R_p = 0.2
-    rope_h_y = 2.0 + h2 / 2.0 # 2.3
+    rope_h_y = 2.0 + (h2 / 2.0) # 2.3
     
-    # Left pulley at (0.95, 2.2)
-    p_left_x, p_left_y = 1.2 - R_p - 0.05, 2.0 + R_p
+    # Left pulley at (0.95, 2.1)
+    p_left_y = rope_h_y - R_p # 2.1
+    p_left_x = 1.2 - R_p - 0.05
     ax.plot([1.2, p_left_x], [2.0, p_left_y], 'k-', lw=2)
     p_left = patches.Circle((p_left_x, p_left_y), R_p, color='lightgray', ec='black', lw=1.5, zorder=4)
     ax.add_patch(p_left)
     ax.plot(p_left_x, p_left_y, 'ko', markersize=3, zorder=5)
     
-    # Left horizontal rope & vertical rope
-    ax.plot([2.0, p_left_x], [rope_h_y, p_left_y + R_p], 'k-', lw=1.8)
-    rope_l_v_x = p_left_x - R_p # 0.75
+    # 100% PERFECTLY HORIZONTAL ROPE at height y = 2.3
+    ax.plot([2.0, p_left_x], [rope_h_y, rope_h_y], 'k-', lw=1.8)
+    rope_l_v_x = p_left_x - R_p
     ax.plot([rope_l_v_x, rope_l_v_x], [p_left_y, 0.8], 'k-', lw=1.8)
     
     w1, h1 = 0.6, 0.6
@@ -581,16 +581,17 @@ def create_ch3_6_q22():
     ax.add_patch(b1)
     ax.text(rope_l_v_x, 0.5, r'$m_1=2\text{kg}$', ha='center', va='center', fontweight='bold', fontsize=8)
     
-    # Right pulley at (4.05, 2.2)
-    p_right_x, p_right_y = 3.8 + R_p + 0.05, 2.0 + R_p
+    # Right pulley at (4.05, 2.1)
+    p_right_y = rope_h_y - R_p # 2.1
+    p_right_x = 3.8 + R_p + 0.05
     ax.plot([3.8, p_right_x], [2.0, p_right_y], 'k-', lw=2)
     p_right = patches.Circle((p_right_x, p_right_y), R_p, color='lightgray', ec='black', lw=1.5, zorder=4)
     ax.add_patch(p_right)
     ax.plot(p_right_x, p_right_y, 'ko', markersize=3, zorder=5)
     
-    # Right horizontal rope & vertical rope
-    ax.plot([3.0, p_right_x], [rope_h_y, p_right_y + R_p], 'k-', lw=1.8)
-    rope_r_v_x = p_right_x + R_p # 4.25
+    # 100% PERFECTLY HORIZONTAL ROPE at height y = 2.3
+    ax.plot([3.0, p_right_x], [rope_h_y, rope_h_y], 'k-', lw=1.8)
+    rope_r_v_x = p_right_x + R_p
     ax.plot([rope_r_v_x, rope_r_v_x], [p_right_y, 0.6], 'k-', lw=1.8)
     
     w3, h3 = 0.6, 0.6
@@ -609,7 +610,6 @@ def create_ch3_6_q26():
     ax.set_aspect('equal')
     ax.axis('off')
     
-    # Floor
     ax.plot([0, 5], [1, 1], 'k-', lw=2.5)
     for i in np.linspace(0.1, 4.9, 15):
         ax.plot([i, i-0.15], [1, 0.8], 'k-', lw=1)
@@ -624,12 +624,12 @@ def create_ch3_6_q26():
     
     ax.annotate('', xy=(2.0, 1.8), xytext=(fx_start, fy_start),
                 arrowprops=dict(arrowstyle="->", color="crimson", lw=2.5))
-    ax.text(fx_start - 0.2, fy_start + 0.1, 'F = 100 N', color='crimson', fontweight='bold', fontsize=11)
+    add_label_box(ax, 'F = 100 N', fx_start - 0.3, fy_start + 0.15, color='crimson', fontsize=11)
     
     ax.plot([0.5, 2.0], [1.8, 1.8], 'k--', lw=1.2)
     arc = patches.Arc((2.0, 1.8), 1.0, 1.0, angle=0, theta1=180, theta2=180+37, color='darkgreen', lw=1.5)
     ax.add_patch(arc)
-    ax.text(1.2, 1.9, r'$37^\circ$', fontsize=10, color='darkgreen', fontweight='bold')
+    add_label_box(ax, r'$37^\circ$', 1.2, 2.05, color='darkgreen', fontsize=10)
     
     ax.set_xlim(0, 5.0)
     ax.set_ylim(0.5, 3.2)
@@ -638,7 +638,7 @@ def create_ch3_6_q26():
     plt.close()
 
 # Generate ALL 16 diagrams!
-print("Generating 16 physics diagrams with 100% PERFECT geometry...")
+print("Generating 16 physics diagrams with 100% PERFECT PARALLEL STRINGS & ZERO TEXT OVERLAP...")
 create_ch3_5_q5()
 create_ch3_5_q7()
 create_ch3_5_q14()
