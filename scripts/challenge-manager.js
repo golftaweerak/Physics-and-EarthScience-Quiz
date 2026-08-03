@@ -574,7 +574,16 @@ export class ChallengeManager {
     }
   }
 
-  generateRoomId() {
+  async generateRoomId() {
+    for (let attempts = 0; attempts < 5; attempts++) {
+      const code = Math.floor(100000 + Math.random() * 900000).toString();
+      try {
+        const snap = await getDoc(doc(db, 'lobbies', code));
+        if (!snap.exists()) return code;
+      } catch (e) {
+        return code;
+      }
+    }
     return Math.floor(100000 + Math.random() * 900000).toString();
   }
 
@@ -609,7 +618,7 @@ export class ChallengeManager {
       await this.leaveLobby();
     }
 
-    const lobbyId = this.generateRoomId();
+    const lobbyId = await this.generateRoomId();
     this.currentLobbyId = lobbyId;
     sessionStorage.setItem('reconnect_lobby_id', lobbyId);
     this.isHost = true;
@@ -631,13 +640,14 @@ export class ChallengeManager {
 
     const lobbyData = {
       hostId: user.uid,
-      hostName: user.displayName || 'Host',
+      hostName: user.displayName || 'ผู้ท้าชิง',
       status: 'waiting',
       mode: mode,
+      maxPlayers: 10,
       createdAt: serverTimestamp(),
       players: [{
         uid: user.uid,
-        name: user.displayName || 'Player',
+        name: user.displayName || 'ผู้ท้าชิง',
         avatar: this.getUserAvatar(),
         level: this.getUserLevel(),
         ready: true,
@@ -765,6 +775,11 @@ export class ChallengeManager {
 
         const players = data.players || [];
         const isAlreadyJoined = players.some(p => p.uid === user.uid);
+        const maxPlayers = data.maxPlayers || 10;
+
+        if (players.length >= maxPlayers && !isAlreadyJoined) {
+          throw new Error("Lobby is full");
+        }
 
         // Allow rejoining if the game has started, but prevent new players from joining a started game.
         if (data.status !== 'waiting' && !isAlreadyJoined) {
@@ -774,7 +789,7 @@ export class ChallengeManager {
         if (!isAlreadyJoined) {
           const playerData = { 
             uid: user.uid, 
-            name: user.displayName || 'Player', 
+            name: user.displayName || 'ผู้ท้าชิง', 
             avatar: this.getUserAvatar(), 
             level: this.getUserLevel(),
             ready: true, 
@@ -832,6 +847,10 @@ export class ChallengeManager {
       if (error.message === "Lobby not found") {
         title = 'ไม่พบห้อง';
         message = 'รหัสห้องไม่ถูกต้อง หรือห้องถูกปิดไปแล้ว';
+      } else if (error.message === "Lobby is full") {
+        title = 'ห้องเต็มแล้ว';
+        message = 'ห้องนี้มีผู้เล่นครบจำนวนแล้ว (สูงสุด 10 คน)';
+        icon = '👥';
       } else if (error.message === "Game has already started") {
         title = 'เข้าห้องไม่ได้';
         message = 'การแข่งขันได้เริ่มไปแล้ว ไม่สามารถเข้าร่วมกลางคันได้';
