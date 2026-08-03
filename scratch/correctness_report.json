@@ -1,0 +1,1811 @@
+[
+  {
+    "file": "data\\ess_adv\\ess_adv_m4_ch1-2-data.js",
+    "qNum": 29,
+    "type": "OPTION_INDEX_CONTRADICTION",
+    "issue": "Answer text is option 3 (\"การเกิดพายุหมุนเขตร้อน\"), but explanation says \"ข้อง\"",
+    "question": "การศึกษาโครงสร้างโลกมีความสำคัญต่อการทำความเข้าใจปรากฏการณ์ใดน้อยที่สุด",
+    "answer": "การเกิดพายุหมุนเขตร้อน",
+    "explanation": "พายุหมุนเขตร้อนเป็นปรากฏการณ์ทางอุตุนิยมวิทยาที่เกิดขึ้นในชั้นบรรยากาศและมหาสมุทร ซึ่งไม่เกี่ยวข้องโดยตรงกับโครงสร้างภายในของโลก ในขณะที่แผ่นดินไหว, การเกิดเทือกเขา, และการกระจายตัวของทรัพยากรธรณีล้วนเป็นผลมาจากกระบวนการภายในโลก"
+  },
+  {
+    "file": "data\\ess_adv\\ess_adv_m6_ch14-2-data.js",
+    "qNum": 22,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 1600, but explanation ends with = 1",
+    "question": "ดาวฤกษ์ดวงหนึ่งมีรัศมีเป็น \\(10\\) เท่าของดวงอาทิตย์ (\\(R = 10 R_{\\odot}\\)) และมีอุณหภูมิพื้นผิวเป็น \\(2\\) เท่าของดวงอาทิตย์ (\\(T = 2 T_{\\odot}\\)) ดาวฤกษ์ดวงนี้มีความส่องสว่างเป็นกี่เท่าของดวงอาทิตย์ (\\(L/L_{\\odot}\\))",
+    "answer": 1600,
+    "explanation": "จากอัตราส่วนความส่องสว่าง \\(\\frac{L}{L_{\\odot}} = \\left(\\frac{R}{R_{\\odot}}\\right)^2 \\left(\\frac{T}{T_{\\odot}}\\right)^4 = (10)^2 \\times (2)^4 = 100 \\times 16 = 1,600\\) เท่าของดวงอาทิตย์"
+  },
+  {
+    "file": "data\\ess_adv\\ess_adv_m6_ch14-2-data.js",
+    "qNum": 26,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 412530, but explanation ends with = 412",
+    "question": "ดาวฤกษ์ดวงหนึ่งมีมุมแพรัลแลกซ์ \\(p = 0.5\\text{ arcsec}\\) ระยะทางของดาวดวงนี้คิดเป็นกี่หน่วยดาราศาสตร์ (\\(\\text{AU}\\)) (กำหนดให้ \\(1\\text{ pc} = 206,265\\text{ AU}\\))",
+    "answer": 412530,
+    "explanation": "คำนวณระยะทาง \\(d = \\frac{1}{p} = \\frac{1}{0.5} = 2\\text{ pc}\\) แปลงเป็นหน่วยดาราศาสตร์ = \\(2 \\times 206,265 = 412,530\\text{ AU}\\)"
+  },
+  {
+    "file": "data\\ess_adv\\ess_adv_m6_ch14-3-data.js",
+    "qNum": 23,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 10000, but explanation ends with = 10",
+    "question": "ดาวฤกษ์ดวงหนึ่งมีความยาวคลื่นที่แผ่รังสีเข้มที่สุด \\(\\lambda_{\\max} = 290\\text{ nm}\\) อุณหภูมิพื้นผิวของดาวดวงนี้มีค่ากี่เคลวิน (\\(\\text{K}\\)) (กำหนดค่าคงตัวเวียน \\(b = 2.9 \\times 10^6\\text{ nm}\\cdot\\text{K}\\))",
+    "answer": 10000,
+    "explanation": "จากกฎของเวียน \\(T = \\frac{b}{\\lambda_{\\max}} = \\frac{2.9 \\times 10^6}{290} = 10,000\\text{ K}\\)"
+  },
+  {
+    "file": "data\\ess_adv\\ess_adv_m6_ch14-4-data.js",
+    "qNum": 19,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 20000, but explanation ends with = 20",
+    "question": "วัดความยาวคลื่นแผ่รังสีเข้มที่สุดของดาวฤกษ์ได้ \\(\\lambda_{\\max} = 145\\text{ nm}\\) อุณหภูมิพื้นผิวของดาวฤกษ์ดวงนี้มีค่ากี่เคลวิน (\\(\\text{K}\\)) (กำหนดค่าคงตัวเวียน \\(b = 2.9 \\times 10^6\\text{ nm}\\cdot\\text{K}\\))",
+    "answer": 20000,
+    "explanation": "จากกฎของเวียน \\(T = \\frac{b}{\\lambda_{\\max}} = \\frac{2.9 \\times 10^6}{145} = 20,000\\text{ K}\\)"
+  },
+  {
+    "file": "data\\ess_adv\\ess_adv_m6_ch14-4-data.js",
+    "qNum": 21,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 1296, but explanation ends with = 1",
+    "question": "ดาวฤกษ์ดวงหนึ่งมีรัศมีเป็น \\(4\\) เท่าของดวงอาทิตย์ (\\(R = 4 R_{\\odot}\\)) และมีอุณหภูมิพื้นผิวเป็น \\(3\\) เท่าของดวงอาทิตย์ (\\(T = 3 T_{\\odot}\\)) ความส่องสว่างของดาวดวงนี้เป็นกี่เท่าของดวงอาทิตย์ (\\(L/L_{\\odot}\\))",
+    "answer": 1296,
+    "explanation": "จาก \\(\\frac{L}{L_{\\odot}} = \\left(\\frac{R}{R_{\\odot}}\\right)^2 \\left(\\frac{T}{T_{\\odot}}\\right)^4 = 4^2 \\times 3^4 = 16 \\times 81 = 1,296\\) เท่าของดวงอาทิตย์"
+  },
+  {
+    "file": "data\\ess_adv\\ess_adv_m6_ch14-4-data.js",
+    "qNum": 27,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 2187, but explanation ends with = 2",
+    "question": "ดาวฤกษ์บนแถบลำดับหลักมวล \\(9\\) เท่าของดวงอาทิตย์ (\\(M = 9 M_{\\odot}\\)) จะมีความส่องสว่างเป็นกี่เท่าของดวงอาทิตย์ (\\(L_{\\odot}\\)) ตามความสัมพันธ์ \\(L \\propto M^{3.5}\\)",
+    "answer": 2187,
+    "explanation": "จาก \\(\\frac{L}{L_{\\odot}} = 9^{3.5} = (3^2)^{3.5} = 3^7 = 2,187\\) เท่าของดวงอาทิตย์"
+  },
+  {
+    "file": "data\\ess_basic\\ess_basic_m6_ch1-1-data.js",
+    "qNum": 2,
+    "type": "DIRECTION_CONTRADICTION",
+    "issue": "Answer says \"ลดลง\" but explanation says \"เพิ่มขึ้น\"",
+    "question": "ข้อใดกล่าวถูกต้องเกี่ยวกับการเปลี่ยนแปลงของเอกภพหลังเกิดบิกแบง",
+    "answer": "ขนาดเพิ่มขึ้น อุณหภูมิลดลง",
+    "explanation": "หลังเกิดบิกแบง เอกภพมีการขยายตัวอย่างต่อเนื่องทำให้ขนาด (Volume) เพิ่มขึ้น และเมื่อปริมาตรเพิ่มขึ้น พลังงานความร้อนจะกระจายตัวในพื้นที่ที่กว้างขึ้น ส่งผลให้อุณหภูมิเฉลี่ยของเอกภพลดต่ำลงเรื่อยๆ (Adiabatic Expansion) จากพลังงานมหาศาลสู่สสารและอุณหภูมิที่เย็นลงจนเกิดดาวและกาแล็กซีได้"
+  },
+  {
+    "file": "data\\ess_basic\\ess_basic_m6_ch2-1-data.js",
+    "qNum": 28,
+    "type": "OPTION_INDEX_CONTRADICTION",
+    "issue": "Answer text is option 3 (\"ช่วงจุดจบของดาวฤกษ์มวลน้อยถึงปานกลาง (End of low-mass star)\"), but explanation says \"ข้อง\"",
+    "question": "เนบิวลาดาวเคราะห์ (Planetary Nebula) เกี่ยวข้องกับวิวัฒนาการช่วงใดของดาวฤกษ์",
+    "answer": "ช่วงจุดจบของดาวฤกษ์มวลน้อยถึงปานกลาง (End of low-mass star)",
+    "explanation": "เนบิวลาดาวเคราะห์ (Planetary Nebula) คือชั้นแก๊สเปลือกนอกที่หลุดออกไปจากดาวยักษ์แดง (Red Giant) ของดาวฤกษ์มวลน้อยถึงปานกลาง ในขณะที่แกนกลางยุบตัวเป็นดาวแคระขาว ชื่อนี้เป็นเพียงความเข้าใจผิดในอดีตเพราะมองผ่านกล้องโทรทรรศน์แล้วคล้ายดาวเคราะห์ ไม่ได้เกี่ยวข้องกับการเกิดดาวเคราะห์"
+  },
+  {
+    "file": "data\\ess_basic\\ess_basic_m6_ch6-3-data.js",
+    "qNum": 7,
+    "type": "OPTION_INDEX_CONTRADICTION",
+    "issue": "Answer text is option 2 (\"แรงดึงจากการมุดตัว (Slab Pull)\"), but explanation says \"ข้อง\"",
+    "question": "แรงใดที่เชื่อว่าเป็นแรงขับเคลื่อนหลักที่สำคัญที่สุดในการเคลื่อนที่ของแผ่นธรณีภาค",
+    "answer": "แรงดึงจากการมุดตัว (Slab Pull)",
+    "explanation": "แม้จะมีแรงหลายอย่างเกี่ยวข้อง แต่แบบจำลองทางฟิสิกส์ระบุว่า Slab Pull (แรงดึงจากการจมตัวของแผ่นเปลือกโลกเก่าที่เย็นและหนัก) มีอิทธิพลมากที่สุดในการขับเคลื่อนแผ่นธรณี"
+  },
+  {
+    "file": "data\\ess_basic\\ess_basic_m6_ch8-2-data.js",
+    "qNum": 25,
+    "type": "DIRECTION_CONTRADICTION",
+    "issue": "Answer says \"เพิ่มขึ้น\" but explanation says \"ลดลง\"",
+    "question": "ปรากฏการณ์ 'อุณหภูมิผกผัน' (Temperature Inversion) คืออะไร และส่งผลอย่างไร",
+    "answer": "อุณหภูมิเพิ่มขึ้นตามความสูง, ทำให้มลพิษถูกกักขังอยู่ใกล้พื้นดิน",
+    "explanation": "โดยปกติอุณหภูมิจะลดลงตามความสูง แต่ในภาวะผกผัน จะมีชั้นอากาศอุ่นลอยอยู่เหนือชั้นอากาศเย็น ปิดกั้นการระบายอากาศในแนวดิ่ง ทำให้ฝุ่น PM2.5 และหมอกควันสะสมตัวหนาแน่นใกล้พื้นดิน"
+  },
+  {
+    "file": "data\\ess_basic\\ess_basic_m6_final-review-2-data.js",
+    "qNum": 30,
+    "type": "OPTION_INDEX_CONTRADICTION",
+    "issue": "Answer text is option 3 (\"การเปลี่ยนแปลงของฤดูกาล (Seasons)\"), but explanation says \"ข้อง\"",
+    "question": "ความรู้เรื่องโครงสร้างโลกมีความสำคัญต่อการศึกษาเรื่องใดน้อยที่สุด",
+    "answer": "การเปลี่ยนแปลงของฤดูกาล (Seasons)",
+    "explanation": "การเปลี่ยนแปลงของฤดูกาลเป็นผลมาจากการที่แกนโลกเอียงและโคจรรอบดวงอาทิตย์ ซึ่งเป็นปรากฏการณ์ทางดาราศาสตร์ ไม่ได้เกี่ยวข้องโดยตรงกับโครงสร้างภายในของโลก ในขณะที่ข้ออื่นๆ ล้วนเป็นปรากฏการณ์ทางธรณีวิทยาที่สัมพันธ์กับโครงสร้างโลกโดยตรง"
+  },
+  {
+    "file": "data\\ess_basic\\ess_basic_m6_mid1-exam-1-data.js",
+    "qNum": 36,
+    "type": "OPTION_INDEX_CONTRADICTION",
+    "issue": "Answer text is option 2 (\"ไม่เกี่ยวข้อง ชื่อเกิดจากลักษณะที่คล้ายดาวเคราะห์แก๊สเมื่อมองผ่านกล้อง\"), but explanation says \"ข้อง\"",
+    "question": "เนบิวลาดาวเคราะห์ (Planetary Nebula) มีความเกี่ยวข้องกับดาวเคราะห์หรือไม่ อย่างไร",
+    "answer": "ไม่เกี่ยวข้อง ชื่อเกิดจากลักษณะที่คล้ายดาวเคราะห์แก๊สเมื่อมองผ่านกล้อง",
+    "explanation": "เนบิวลาดาวเคราะห์เป็นชื่อที่ตั้งผิดในอดีต มันคือแก๊สชั้นนอกของดาวยักษ์แดงที่ถูกเป่าออกไปในช่วงท้ายของชีวิตดาวฤกษ์มวลน้อย ไม่ได้มีความเกี่ยวข้องกับการก่อกำเนิดดาวเคราะห์แต่อย่างใด"
+  },
+  {
+    "file": "data\\ess_basic\\ess_basic_m6_mid1-exam-2-data.js",
+    "qNum": 2,
+    "type": "DIRECTION_CONTRADICTION",
+    "issue": "Answer says \"เพิ่มขึ้น\" but explanation says \"ลดลง\"",
+    "question": "การที่เอกภพขยายตัวส่งผลต่ออุณหภูมิเฉลี่ยอย่างไร",
+    "answer": "อุณหภูมิลดลง เนื่องจากพลังงานกระจายตัวออกไปในปริมาตรที่เพิ่มขึ้น",
+    "explanation": "การขยายตัวของเอกภพเป็นการขยายตัวแบบแอเดียแบติก (Adiabatic Expansion) ซึ่งทำให้ความหนาแน่นของพลังงานลดลง ส่งผลให้อุณหภูมิเฉลี่ยของเอกภพลดลงตามกาลเวลา"
+  },
+  {
+    "file": "data\\ess_basic\\ess_basic_m6_mid1-exam-2-data.js",
+    "qNum": 29,
+    "type": "OPTION_INDEX_CONTRADICTION",
+    "issue": "Answer text is option 3 (\"การเกิดแผ่นดินไหว\"), but explanation says \"ข้อง\"",
+    "question": "ข้อใด ไม่ใช่ ผลกระทบโดยตรงของพายุสุริยะต่อโลก",
+    "answer": "การเกิดแผ่นดินไหว",
+    "explanation": "พายุสุริยะส่งผลกระทบต่อบรรยากาศชั้นบนและเทคโนโลยี แต่ไม่เกี่ยวข้องกับกระบวนการทางธรณีวิทยาภายในโลก เช่น แผ่นดินไหว"
+  },
+  {
+    "file": "data\\ess_basic\\ess_basic_m6_mid2-review-3-data.js",
+    "qNum": 11,
+    "type": "OPTION_INDEX_CONTRADICTION",
+    "issue": "Answer text is option 2 (\"การไหลของลาวาผ่านรอยแยก (Fissure Eruption) ปริมาณมหาศาล\"), but explanation says \"ข้อง\"",
+    "question": "ที่ราบสูงลาวา (Lava Plateau) หรือ Flood Basalt ขนาดใหญ่ เช่น ทุ่งลาวาเดกคาน เกิดจากกระบวนการใด",
+    "answer": "การไหลของลาวาผ่านรอยแยก (Fissure Eruption) ปริมาณมหาศาล",
+    "explanation": "เกิดจากแมกมาบะซอลต์เหลวจัดไหลออกมาตามรอยแยกยาวเป็นบริเวณกว้างและทับถมกันเป็นชั้นหนา มักเกี่ยวข้องกับ Mantle Plume"
+  },
+  {
+    "file": "data\\ess_basic\\ess_basic_m6_mid2-review-3-data.js",
+    "qNum": 32,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 667, but explanation ends with = 50",
+    "question": "สถานีตรวจวัดแผ่นดินไหวแห่งหนึ่งรับคลื่น P ได้ในเวลา 10:05:00 น. และรับคลื่น S ได้ในเวลา 10:05:50 น. ถ้าคลื่น P มีความเร็วเฉลี่ย 8 km/s และคลื่น S มีความเร็วเฉลี่ย 5 km/s สถานีนี้อยู่ห่างจากจุดเหนือศูนย์เกิดแผ่นดินไหวประมาณกี่กิโลเมตร (ตอบเป็นจำนวนเต็ม)",
+    "answer": 667,
+    "explanation": "ผลต่างเวลา \\(\\Delta t = t_s - t_p = 50\\) s. จาก \\(\\Delta t = \\frac{d}{v_s} - \\frac{d}{v_p} = d(\\frac{1}{5} - \\frac{1}{8}) = d(\\frac{3}{40})\\). ดังนั้น \\(d = \\frac{50 \\times 40}{3} \\approx 667\\) km."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch2-3-data.js",
+    "qNum": 13,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 5, but explanation ends with = 180",
+    "question": "รถยนต์คันหนึ่งเบรกจากความเร็ว 30 m/s จนหยุดนิ่งในระยะทาง 90 เมตร จงหาขนาดของความหน่วง (ตอบเป็นจำนวนเต็มในหน่วย m/s²)",
+    "answer": 5,
+    "explanation": "จาก \\(v^2 = u^2 + 2as\\). แทนค่า \\(0^2 = 30^2 + 2a(90) \\implies -900 = 180a \\implies a = -5\\) m/s². ขนาดของความหน่วงคือ 5 m/s²"
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch2-5-data.js",
+    "qNum": 36,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 16.7, but explanation ends with = 250",
+    "question": "รถยนต์เคลื่อนที่ด้วยความเร็ว 20 m/s เป็นเวลา 10 วินาที แล้วลดความเร็วลงอย่างสม่ำเสมอจนหยุดนิ่งในระยะทาง 50 เมตร ความเร็วเฉลี่ยตลอดการเคลื่อนที่ทั้งหมดเป็นเท่าใด (ตอบเป็นทศนิยม 1 ตำแหน่ง)",
+    "answer": 16.7,
+    "explanation": "ช่วงที่ 1: \\(s_1 = 200\\) m, \\(t_1 = 10\\) s. ช่วงที่ 2: \\(s_2 = 50\\) m. หา \\(t_2\\) จาก \\(s_2 = (\\frac{u+v}{2})t_2 \\implies 50 = (\\frac{20+0}{2})t_2 \\implies t_2 = 5\\) s. รวม: \\(s_{total} = 250\\) m, \\(t_{total} = 15\\) s. \\(v_{avg} = 250/15 \\approx 16.7\\) m/s."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch3-3-data.js",
+    "qNum": 12,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 4.13, but explanation ends with = 62",
+    "question": "วัตถุ A มวล 5 kg วางบนพื้นเอียงทำมุม 37° ซึ่งมีสัมประสิทธิ์ความเสียดทานจลน์ 0.2 วัตถุ A ถูกผูกด้วยเชือกเบาคล้องผ่านรอกลื่นไปยังวัตถุ B มวล 10 kg ที่ห้อยในแนวดิ่ง เมื่อปล่อยให้ระบบเคลื่อนที่จากหยุดนิ่ง จงหาความเร่งของระบบ (g=10, sin37°=0.6, cos37°=0.8)",
+    "answer": 4.13,
+    "explanation": "1. หาแรงขับและแรงต้าน: แรงขับคือ \\(W_B = m_B g = 10(10) = 100\\) N. แรงต้านจาก A คือ \\(W_{A\\parallel} + f_k\\). \\(W_{A\\parallel} = m_A g\\sin37° = 5(10)(0.6) = 30\\) N. \\(N = m_A g\\cos37° = 5(10)(0.8) = 40\\) N. \\(f_k = \\mu_k N = 0.2(40) = 8\\) N. แรงต้านรวม = 30 + 8 = 38 N. <br>2. หาความเร่ง: แรงลัพธ์ \\(\\Sigma F = 100 - 38 = 62\\) N. มวลรวม \\(M = 5+10=15\\) kg. \\(a = \\Sigma F / M = 62/15 \\approx 4.13\\) m/s²."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch3-4-data.js",
+    "qNum": 10,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 0.57, but explanation ends with = 40",
+    "question": "วัตถุมวล 10 kg วางบนพื้นราบ ออกแรงดึง 50 N ในทิศทำมุม 37° กับแนวราบ ถ้าวัตถุเคลื่อนที่ด้วยความเร็วคงที่ สัมประสิทธิ์ความเสียดทานจลน์มีค่าเท่าใด (\\(g=10\\) m/s², \\(\\sin37°=0.6, \\cos37°=0.8\\)) (ตอบเป็นทศนิยม 2 ตำแหน่ง)",
+    "answer": 0.57,
+    "explanation": "1. หาแรงในแต่ละแนว: \\(F_x = 50\\cos(37°) = 40\\) N, \\(F_y = 50\\sin(37°) = 30\\) N. 2. หาแรงปฏิกิริยาตั้งฉาก (N): \\(N + F_y = mg \\implies N = mg - F_y = 100 - 30 = 70\\) N. 3. หา \\(\\mu_k\\): เนื่องจากความเร็วคงที่ แรงดึงในแนวราบจะเท่ากับแรงเสียดทาน \\(f_k = F_x = 40\\) N. จาก \\(f_k = \\mu_k N\\), จะได้ \\(\\mu_k = f_k/N = 40/70 \\approx 0.57\\)."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch4-3-data.js",
+    "qNum": 9,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 55.56, but explanation ends with = 50",
+    "question": "วัตถุหนัก 50 N ถูกกดติดกับกำแพงในแนวดิ่งด้วยแรง F ที่ดันขึ้นทำมุม 27° กับแนวราบดังรูป ถ้าสัมประสิทธิ์ความเสียดทานสถิตคือ 0.5 จงหาขนาดของแรง F ที่น้อยที่สุดที่ทำให้วัตถุไม่ไถลลงมา (\\(\\sin27° \\approx 0.454, \\cos27° \\approx 0.891\\))<br><br><div class='flex justify-center'><img src='../assets/images/phy_m4_ch4-3_q9.png' alt='แผนภาพแรงสำหรับคำถามข้อ 9' class='max-w-xs'></div>",
+    "answer": 55.56,
+    "explanation": "1. สมดุลแนวราบ: แรงปฏิกิริยาตั้งฉากจากกำแพง \\(N = F_x = F\\cos(27°)\\). <br>2. สมดุลแนวดิ่ง: ที่แรง F น้อยที่สุด, แรงเสียดทานสถิตจะมีทิศขึ้นและมีค่าสูงสุด (\\(f_{s,max}\\)). ดังนั้น \\(F_y + f_{s,max} = W\\). <br>3. แทนค่า \\(f_{s,max} = \\mu_s N\\) จะได้: \\(F\\sin(27°) + \\mu_s (F\\cos(27°)) = 50\\). <br>4. แก้สมการหา F: \\(F(\\sin(27°) + 0.5\\cos(27°)) = 50 \\implies F(0.454 + 0.5 \\times 0.891) = 50 \\implies 0.8995F = 50 \\implies F \\approx 55.59\\) N."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch4-3-data.js",
+    "qNum": 12,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 30, but explanation ends with = 40",
+    "question": "วัตถุหนัก 80 N วางบนพื้นราบที่มีสัมประสิทธิ์ความเสียดทานสถิต 0.5 ถ้าออกแรงดึง 30 N ในแนวราบ แรงเสียดทานที่เกิดขึ้นมีค่าเท่าใด",
+    "answer": 30,
+    "explanation": "แรงเสียดทานสถิตสูงสุด \\(f_{s,max} = \\mu_s N = 0.5(80) = 40\\) N. เนื่องจากแรงดึง (30 N) น้อยกว่าแรงเสียดทานสถิตสูงสุด วัตถุจึงยังไม่เคลื่อนที่ ดังนั้นแรงเสียดทานสถิตที่เกิดขึ้นจะมีขนาดเท่ากับแรงดึงพอดี คือ 30 N."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch4-3-data.js",
+    "qNum": 19,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 7.62, but explanation ends with = 3",
+    "question": "วัตถุหนึ่งอยู่ในสมดุลภายใต้แรงสามแรงคือ \\(\\vec{F_1} = (5\\hat{i} - 3\\hat{j})\\) N และ \\(\\vec{F_2} = (-2\\hat{i} - 4\\hat{j})\\) N จงหาขนาดของแรงที่สาม \\(\\vec{F_3}\\)",
+    "answer": 7.62,
+    "explanation": "จาก \\(\\vec{F_3} = -(\\vec{F_1} + \\vec{F_2})\\). \\(\\vec{F_1} + \\vec{F_2} = (5-2)\\hat{i} + (-3-4)\\hat{j} = 3\\hat{i} - 7\\hat{j}\\). ดังนั้น \\(\\vec{F_3} = -3\\hat{i} + 7\\hat{j}\\). ขนาดของ \\(F_3 = \\sqrt{(-3)^2 + 7^2} = \\sqrt{9+49} = \\sqrt{58} \\approx 7.62\\) N."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch4-6-data.js",
+    "qNum": 28,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 0.83, but explanation ends with = 10",
+    "question": "คานเบายาว L มีจุดหมุนที่ปลายซ้าย แขวนมวล m ที่ระยะ L/3 และมีแรง F=3mg กดลงที่ปลายขวา จะต้องใช้แรงพยุง P ที่ตำแหน่งใด (d) คานจึงจะสมดุล (ตอบเป็นทศนิยม 2 ตำแหน่งในหน่วย L)",
+    "answer": 0.83,
+    "explanation": "1. สมดุลแรง: \\(P = mg + F = mg + 3mg = 4mg\\). 2. สมดุลโมเมนต์รอบจุดหมุน (ปลายซ้าย): โมเมนต์ทวน (จากแรงพยุง P) = โมเมนต์ตาม (จากมวล m และแรง F). \\(P \\times d = (mg \\times L/3) + (3mg \\times L)\\). \\((4mg)d = (1/3 + 3)mgL = (10/3)mgL\\). ตัด mg: \\(4d = 10L/3 \\implies d = \\frac{10L}{12} = \\frac{5}{6}L \\approx 0.83L\\)."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch5-1-data.js",
+    "qNum": 28,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 5, but explanation ends with = 0.05",
+    "question": "ออกแรง 20 N กดสปริงที่มีค่าคงที่ 400 N/m สปริงจะหดเข้าไปเป็นระยะทางกี่เซนติเมตร",
+    "answer": 5,
+    "explanation": "จาก \\(F = kx\\), \\(20 = 400x \\implies x = 20/400 = 0.05\\) m. ซึ่งเท่ากับ 5 cm."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch5-1-data.js",
+    "qNum": 29,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 240, but explanation ends with = 240000",
+    "question": "รถยนต์มวล 1200 kg เคลื่อนที่ด้วยอัตราเร็ว 72 km/hr พลังงานจลน์ของรถยนต์เป็นกี่กิโลจูล (kJ)",
+    "answer": 240,
+    "explanation": "1. เปลี่ยนหน่วยความเร็ว: \\(v = 72 \\times \\frac{5}{18} = 20\\) m/s. 2. คำนวณพลังงานจลน์: \\(E_k = \\frac{1}{2}mv^2 = \\frac{1}{2}(1200)(20)^2 = 600(400) = 240000\\) J. 3. เปลี่ยนเป็นกิโลจูล: 240 kJ."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch5-2-data.js",
+    "qNum": 8,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 6000, but explanation ends with = 6",
+    "question": "ปั้นจั่นยกวัตถุมวล 400 kg ขึ้นสูง 15 เมตร ในเวลา 10 วินาที จงหากำลังเฉลี่ยของปั้นจั่น (g=10 m/s²) (ตอบเป็นจำนวนเต็มในหน่วย W)",
+    "answer": 6000,
+    "explanation": "งาน \\(W = mgh = (400)(10)(15) = 60,000\\) J. กำลัง \\(P = W/t = 60,000 / 10 = 6,000\\) วัตต์"
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch5-2-data.js",
+    "qNum": 12,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 60000, but explanation ends with = 60",
+    "question": "รถยนต์มวล 1200 kg เคลื่อนที่จากหยุดนิ่งจนมีความเร็ว 10 m/s งานของแรงลัพธ์ที่กระทำต่อรถยนต์มีค่าเท่าใด (ตอบเป็นจำนวนเต็มในหน่วย J)",
+    "answer": 60000,
+    "explanation": "\\(W_{net} = E_{k,final} - E_{k,initial} = \\frac{1}{2}m v_f^2 - 0 = \\frac{1}{2}(1200)(10)^2 = 60,000\\) จูล"
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch5-2-data.js",
+    "qNum": 21,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 217600, but explanation ends with = 217",
+    "question": "รถไฟเหาะมวล 800 kg เคลื่อนที่ผ่านจุดสูงสุดของรางโค้งตีลังกา (loop) ซึ่งมีรัศมีความโค้ง 10 m ด้วยอัตราเร็ว 12 m/s พลังงานกลรวมของรถไฟเหาะ ณ จุดนั้นเป็นเท่าใด (เทียบกับพื้น, g=10 m/s²) (ตอบเป็นจำนวนเต็มในหน่วย J)",
+    "answer": 217600,
+    "explanation": "ความสูง h = 2R = 2(10) = 20 m. \\(E_k = \\frac{1}{2}(800)(12)^2 = 57600\\) J. \\(E_p = (800)(10)(20) = 160000\\) J. พลังงานกลรวม = 57600 + 160000 = 217,600 J."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch5-2-data.js",
+    "qNum": 23,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 0.33, but explanation ends with = 1",
+    "question": "ถ้าวัตถุ A มีมวลเป็น 3 เท่าของวัตถุ B และมีความเร็วเป็น 1/3 เท่าของวัตถุ B พลังงานจลน์ของ A เป็นกี่เท่าของ B (ตอบเป็นทศนิยม 2 ตำแหน่ง)",
+    "answer": 0.33,
+    "explanation": "ให้ \\(m_B=m, v_B=v\\). จะได้ \\(m_A=3m, v_A=v/3\\). \\(E_{kA} = \\frac{1}{2}(3m)(v/3)^2 = \\frac{3}{2}m(\\frac{v^2}{9}) = \\frac{1}{6}mv^2\\). \\(E_{kB} = \\frac{1}{2}mv^2\\). อัตราส่วน \\(\\frac{E_{kA}}{E_{kB}} = \\frac{1/6}{1/2} = 1/3 \\approx 0.33\\)."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch5-2-data.js",
+    "qNum": 40,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 50, but explanation ends with = 0.5",
+    "question": "วัตถุมวล 2 kg ถูกปล่อยจากหยุดนิ่งให้ไถลลงมาตามรางโค้งลื่นจากความสูง 5 เมตร มาชนสปริงที่วางตัวในแนวราบที่ปลายราง สปริงจะหดเข้าไปได้มากที่สุดกี่เซนติเมตร ถ้าค่าคงที่ของสปริงคือ 800 N/m (g=10 m/s²) (ตอบเป็นจำนวนเต็มในหน่วย cm)",
+    "answer": 50,
+    "explanation": "จากกฎการอนุรักษ์พลังงาน: \\(E_{p,gravity} = E_{p,spring}\\). \\(mgh = \\frac{1}{2}kx^2\\). \\((2)(10)(5) = \\frac{1}{2}(800)x^2\\). \\(100 = 400x^2 \\implies x^2 = 0.25 \\implies x = 0.5\\) m หรือ 50 cm."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch5-4-data.js",
+    "qNum": 1,
+    "type": "OPTION_INDEX_CONTRADICTION",
+    "issue": "Answer text is option 3 (\"ผลรวมของพลังงานจลน์และพลังงานศักย์ของวัตถุ (Sum of Kinetic and Potential Energy)\"), but explanation says \"ข้อง\"",
+    "question": "ข้อใดคือคำจำกัดความของ 'พลังงานกล' (Mechanical Energy) ที่ถูกต้องที่สุด",
+    "answer": "ผลรวมของพลังงานจลน์และพลังงานศักย์ของวัตถุ (Sum of Kinetic and Potential Energy)",
+    "explanation": "พลังงานกล คือผลรวมของพลังงานทั้งหมดที่เกี่ยวข้องกับการเคลื่อนที่และตำแหน่งของวัตถุ ซึ่งประกอบด้วยพลังงานจลน์ (Kinetic Energy) และพลังงานศักย์ (Potential Energy) ทุกรูปแบบ เช่น พลังงานศักย์โน้มถ่วงและพลังงานศักย์ยืดหยุ่น"
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch5-4-data.js",
+    "qNum": 21,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 60000, but explanation ends with = 60",
+    "question": "รถยนต์มวล 1,200 kg เคลื่อนที่ด้วยอัตราเร็ว 10 m/s พลังงานจลน์ของรถยนต์คันนี้เป็นกี่จูล (ตอบเป็นจำนวนเต็ม)",
+    "answer": 60000,
+    "explanation": "\\(E_k = \\frac{1}{2}(1200)(10)^2 = 600(100) = 60,000\\) J."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch5-4-data.js",
+    "qNum": 27,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 50, but explanation ends with = 0.5",
+    "question": "วัตถุมวล 2 kg ถูกปล่อยจากหยุดนิ่งให้ไถลลงมาตามรางโค้งลื่นจากความสูง 5 เมตร มาชนสปริงที่วางตัวในแนวราบที่ปลายราง สปริงจะหดเข้าไปได้มากที่สุดกี่เซนติเมตร ถ้าค่าคงที่ของสปริงคือ 800 N/m (g=10 m/s²) (ตอบเป็นจำนวนเต็มในหน่วย cm)",
+    "answer": 50,
+    "explanation": "จากกฎการอนุรักษ์พลังงาน: \\(E_{p,gravity} = E_{p,spring}\\). \\(mgh = \\frac{1}{2}kx^2\\). \\((2)(10)(5) = \\frac{1}{2}(800)x^2\\). \\(100 = 400x^2 \\implies x^2 = 0.25 \\implies x = 0.5\\) m หรือ 50 cm."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch5-4-data.js",
+    "qNum": 38,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 217600, but explanation ends with = 217",
+    "question": "รถไฟเหาะมวล 800 kg เคลื่อนที่ผ่านจุดสูงสุดของรางโค้งตีลังกา (loop) ซึ่งมีรัศมีความโค้ง 10 m ด้วยอัตราเร็ว 12 m/s พลังงานกลรวมของรถไฟเหาะ ณ จุดนั้นเป็นเท่าใด (เทียบกับพื้น, g=10 m/s²) (ตอบเป็นจำนวนเต็มในหน่วย J)",
+    "answer": 217600,
+    "explanation": "ความสูง h = 2R = 2(10) = 20 m. \\(E_k = \\frac{1}{2}(800)(12)^2 = 57600\\) J. \\(E_p = (800)(10)(20) = 160000\\) J. พลังงานกลรวม = 57600 + 160000 = 217,600 J."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch5-4-data.js",
+    "qNum": 39,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 20, but explanation ends with = 0.2",
+    "question": "สปริงอันหนึ่ง เมื่อออกแรงดึง 40 N จะยืดออก 10 cm ถ้าต้องการให้สปริงมีพลังงานศักย์ยืดหยุ่น 8 จูล จะต้องดึงสปริงให้ยืดออกกี่เซนติเมตร (ตอบเป็นจำนวนเต็ม)",
+    "answer": 20,
+    "explanation": "1. หาค่า k: \\(k = F/x = 40 / 0.1 = 400\\) N/m. 2. หาระยะยืดใหม่: \\(E_p = \\frac{1}{2}kx^2 \\implies 8 = \\frac{1}{2}(400)x^2 \\implies 8 = 200x^2 \\implies x^2 = 0.04 \\implies x = 0.2\\) m หรือ 20 cm."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch5-5-data.js",
+    "qNum": 22,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 318750, but explanation ends with = 318",
+    "question": "รถยนต์มวล 1,500 kg จอดอยู่บนยอดเนินที่สูง 20 เมตร และกำลังเคลื่อนที่ด้วยอัตราเร็ว 5 m/s พลังงานกลรวมของรถยนต์คันนี้เป็นเท่าใด (เทียบกับพื้นราบ, g=10 m/s²) (ตอบเป็นจำนวนเต็มในหน่วย J)",
+    "answer": 318750,
+    "explanation": "\\(E_{total} = E_p + E_k = mgh + \\frac{1}{2}mv^2 = (1500)(10)(20) + \\frac{1}{2}(1500)(5)^2 = 300000 + 18750 = 318,750\\) J."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch5-6-data.js",
+    "qNum": 20,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 63, but explanation ends with = 0.4",
+    "question": "วัตถุมวล 2 kg เคลื่อนที่บนพื้นราบด้วยความเร็ว 10 m/s เข้าชนสปริงที่มีค่าคงที่ 500 N/m สปริงจะหดเข้าไปได้มากที่สุดกี่เซนติเมตร (พื้นลื่น) (ตอบเป็นจำนวนเต็มในหน่วย cm)",
+    "answer": 63,
+    "explanation": "จากกฎการอนุรักษ์พลังงาน: \\(\\frac{1}{2}mv^2 = \\frac{1}{2}kx^2\\). \\((2)(10)^2 = (500)x^2 \\implies 200 = 500x^2 \\implies x^2 = 0.4 \\implies x = \\sqrt{0.4} \\approx 0.632\\) m หรือ 63.2 cm."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch5-6-data.js",
+    "qNum": 26,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 14, but explanation ends with = 200",
+    "question": "รถไฟเหาะมวล 500 kg เริ่มจากหยุดนิ่งที่ความสูง 25 m แล้วเคลื่อนที่ลงมาถึงจุดต่ำสุด จากนั้นเคลื่อนที่ขึ้นไปยังยอดเนินที่สองซึ่งสูง 15 m อัตราเร็วของรถที่ยอดเนินที่สองเป็นเท่าใด (รางลื่น, g=10 m/s²) (ตอบเป็นจำนวนเต็มในหน่วย m/s)",
+    "answer": 14,
+    "explanation": "จาก \\(mgh_1 = mgh_2 + \\frac{1}{2}mv_2^2\\), ตัด m ออก: \\(gh_1 = gh_2 + \\frac{1}{2}v_2^2\\). \\(10(25) = 10(15) + 0.5v_2^2 \\implies 250 = 150 + 0.5v_2^2 \\implies 100 = 0.5v_2^2 \\implies v_2^2 = 200 \\implies v_2 = \\sqrt{200} \\approx 14.14\\) m/s."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch5-6-data.js",
+    "qNum": 28,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 9.17, but explanation ends with = 84",
+    "question": "กล่องมวล 10 kg ไถลลงตามพื้นเอียงยาว 10 m ทำมุม 30° จากหยุดนิ่ง ถ้ามีงานเนื่องจากแรงเสียดทานเกิดขึ้น -80 จูล อัตราเร็วของกล่องที่ปลายล่างของพื้นเอียงเป็นเท่าใด (g=10 m/s²) (ตอบเป็นทศนิยม 2 ตำแหน่งในหน่วย m/s)",
+    "answer": 9.17,
+    "explanation": "ความสูงเริ่มต้น \\(h = 10 \\sin(30°) = 5\\) m. พลังงานเริ่มต้น \\(E_1 = mgh = 10(10)(5) = 500\\) J. พลังงานสุดท้าย \\(E_2 = \\frac{1}{2}mv^2\\). จาก \\(E_1 + W_{nc} = E_2\\), \\(500 - 80 = \\frac{1}{2}(10)v^2 \\implies 420 = 5v^2 \\implies v^2 = 84 \\implies v \\approx 9.17\\) m/s."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch5-6-data.js",
+    "qNum": 31,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 20, but explanation ends with = 0.2",
+    "question": "สปริงมีค่าคงที่ 1000 N/m มีพลังงานศักย์ยืดหยุ่นสะสมอยู่ 20 จูล สปริงถูกยืดออกเป็นระยะทางกี่เซนติเมตร (ตอบเป็นจำนวนเต็ม)",
+    "answer": 20,
+    "explanation": "\\(x = \\sqrt{2E_p/k} = \\sqrt{2(20)/1000} = \\sqrt{0.04} = 0.2\\) m หรือ 20 cm."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch5-6-data.js",
+    "qNum": 39,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is -56, but explanation ends with = 144",
+    "question": "วัตถุมวล 2 kg ถูกปล่อยจากที่สูง 10 m เมื่อตกถึงพื้นพบว่ามีความเร็ว 12 m/s งานของแรงต้านอากาศมีค่าเท่าใด (g=10 m/s²) (ตอบเป็นจำนวนเต็มในหน่วย J)",
+    "answer": -56,
+    "explanation": "พลังงานเริ่มต้น \\(E_1 = mgh = 2(10)(10) = 200\\) J. พลังงานสุดท้าย \\(E_2 = \\frac{1}{2}mv^2 = \\frac{1}{2}(2)(12)^2 = 144\\) J. งานของแรงต้านอากาศ \\(W_{nc} = E_2 - E_1 = 144 - 200 = -56\\) J."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch5-7-data.js",
+    "qNum": 13,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 0.89, but explanation ends with = 4",
+    "question": "วัตถุมวล 10 kg เคลื่อนที่ด้วยความเร็ว 4 m/s บนพื้นราบลื่น เข้าชนสปริงที่มีค่าคงที่ 200 N/m สปริงจะหดเข้าไปได้มากที่สุดกี่เมตร (ตอบเป็นทศนิยม 2 ตำแหน่ง)",
+    "answer": 0.89,
+    "explanation": "จาก \\(\\frac{1}{2}mv^2 = \\frac{1}{2}kx^2\\), จะได้ \\(x = v\\sqrt{m/k} = 4\\sqrt{10/200} = 4\\sqrt{0.05} \\approx 4(0.2236) \\approx 0.894\\) m."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch5-7-data.js",
+    "qNum": 14,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is -56, but explanation ends with = 144",
+    "question": "วัตถุมวล 2 kg ถูกปล่อยจากหยุดนิ่งที่ความสูง 10 m เมื่อตกถึงพื้นพบว่ามีความเร็ว 12 m/s งานของแรงต้านอากาศมีค่าเท่าใด (g=10 m/s²) (ตอบเป็นจำนวนเต็มในหน่วย J)",
+    "answer": -56,
+    "explanation": "พลังงานเริ่มต้น \\(E_1 = mgh = 2(10)(10) = 200\\) J. พลังงานสุดท้าย \\(E_2 = \\frac{1}{2}mv^2 = \\frac{1}{2}(2)(12)^2 = 144\\) J. งานของแรงต้านอากาศ \\(W_{nc} = E_2 - E_1 = 144 - 200 = -56\\) J."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch5-7-data.js",
+    "qNum": 20,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 3.16, but explanation ends with = 0.2",
+    "question": "วัตถุมวล 0.2 kg ติดปลายสปริงค่าคงที่ 50 N/m ถูกดึงให้ยืดออก 20 cm แล้วปล่อยจากหยุดนิ่ง อัตราเร็วสูงสุดของวัตถุจะเป็นเท่าใด (ตอบเป็นทศนิยม 2 ตำแหน่งในหน่วย m/s)",
+    "answer": 3.16,
+    "explanation": "\\(\\frac{1}{2}kx^2 = \\frac{1}{2}mv_{max}^2 \\implies v_{max} = x\\sqrt{k/m} = 0.2 \\sqrt{50/0.2} = 0.2 \\sqrt{250} \\approx 3.16\\) m/s."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch5-7-data.js",
+    "qNum": 32,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 1.41, but explanation ends with = 2",
+    "question": "วัตถุ A มีมวล 2 kg วัตถุ B มีมวล 4 kg ถ้าวัตถุทั้งสองมีพลังงานจลน์เท่ากัน อัตราส่วนของอัตราเร็วของ A ต่อ B (v_A / v_B) เป็นเท่าใด (ตอบเป็นทศนิยม 2 ตำแหน่ง)",
+    "answer": 1.41,
+    "explanation": "½m_A v_A² = ½m_B v_B². (2)v_A² = (4)v_B². v_A² / v_B² = 4/2 = 2. v_A / v_B = √2 ≈ 1.41."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch5-7-data.js",
+    "qNum": 37,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 20, but explanation ends with = 0.2",
+    "question": "สปริงมีค่าคงที่ 50 N/m มีพลังงานศักย์ยืดหยุ่นสะสมอยู่ 1 จูล สปริงถูกยืดออกเป็นระยะทางกี่เซนติเมตร",
+    "answer": 20,
+    "explanation": "x = √(2E_p/k) = √(2(1)/50) = √0.04 = 0.2 m หรือ 20 cm."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch5-8-data.js",
+    "qNum": 12,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 0.7, but explanation ends with = 5",
+    "question": "วัตถุมวล 4 kg เคลื่อนที่บนพื้นราบด้วยความเร็ว 5 m/s เข้าชนสปริงที่มีค่าคงที่ 200 N/m สปริงจะหดเข้าไปได้มากที่สุดกี่เมตร (พื้นลื่น) (ตอบเป็นทศนิยม 1 ตำแหน่ง)",
+    "answer": 0.7,
+    "explanation": "จาก \\(\\frac{1}{2}mv^2 = \\frac{1}{2}kx^2\\), จะได้ \\(x = v\\sqrt{m/k} = 5\\sqrt{4/200} = 5\\sqrt{0.02} \\approx 5(0.141) \\approx 0.707\\) m."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch5-8-data.js",
+    "qNum": 13,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is -38, but explanation ends with = 162",
+    "question": "วัตถุมวล 1 kg ถูกปล่อยจากหยุดนิ่งที่ความสูง 20 m เมื่อตกถึงพื้นพบว่ามีความเร็ว 18 m/s งานของแรงต้านอากาศมีค่าเท่าใด (g=10 m/s²) (ตอบเป็นจำนวนเต็มในหน่วย J)",
+    "answer": -38,
+    "explanation": "พลังงานเริ่มต้น \\(E_1 = mgh = 1(10)(20) = 200\\) J. พลังงานสุดท้าย \\(E_2 = \\frac{1}{2}mv^2 = \\frac{1}{2}(1)(18)^2 = 162\\) J. งานของแรงต้านอากาศ \\(W_{nc} = E_2 - E_1 = 162 - 200 = -38\\) J."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch5-8-data.js",
+    "qNum": 19,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 1.3, but explanation ends with = 0.1",
+    "question": "วัตถุมวล 0.5 kg ติดปลายสปริงค่าคงที่ 80 N/m ถูกดึงให้ยืดออก 10 cm แล้วปล่อยจากหยุดนิ่ง อัตราเร็วสูงสุดของวัตถุจะเป็นเท่าใด (ตอบเป็นทศนิยม 1 ตำแหน่งในหน่วย m/s)",
+    "answer": 1.3,
+    "explanation": "\\(\\frac{1}{2}kx^2 = \\frac{1}{2}mv_{max}^2 \\implies v_{max} = x\\sqrt{k/m} = 0.1 \\sqrt{80/0.5} = 0.1 \\sqrt{160} \\approx 1.26\\) m/s."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch5-8-data.js",
+    "qNum": 27,
+    "type": "OPTION_INDEX_CONTRADICTION",
+    "issue": "Answer text is option 3 (\"ดาวหางที่โคจรรอบดวงอาทิตย์\"), but explanation says \"ข้อง\"",
+    "question": "ข้อใดคือตัวอย่างของระบบที่พลังงานกล 'อนุรักษ์' (ไม่คิดแรงต้านอากาศ)",
+    "answer": "ดาวหางที่โคจรรอบดวงอาทิตย์",
+    "explanation": "การโคจรของดาวหางภายใต้อิทธิพลของแรงโน้มถ่วงจากดวงอาทิตย์เพียงอย่างเดียว ถือเป็นระบบที่พลังงานกลอนุรักษ์ (พลังงานจลน์และศักย์จะเปลี่ยนแปลงไป แต่ผลรวมคงที่) ส่วนข้ออื่นมีแรงไม่อนุรักษ์เกี่ยวข้อง"
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch5-8-data.js",
+    "qNum": 35,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is -54, but explanation ends with = 96",
+    "question": "วัตถุมวล 3 kg ถูกปล่อยจากที่สูง 5 m เมื่อตกถึงพื้นพบว่ามีความเร็ว 8 m/s งานของแรงต้านอากาศมีค่าเท่าใด (g=10 m/s²) (ตอบเป็นจำนวนเต็มในหน่วย J)",
+    "answer": -54,
+    "explanation": "พลังงานเริ่มต้น \\(E_1 = mgh = 3(10)(5) = 150\\) J. พลังงานสุดท้าย \\(E_2 = \\frac{1}{2}mv^2 = \\frac{1}{2}(3)(8)^2 = 96\\) J. งานของแรงต้านอากาศ \\(W_{nc} = E_2 - E_1 = 96 - 150 = -54\\) J."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch5-9-data.js",
+    "qNum": 32,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 8.33, but explanation ends with = 200",
+    "question": "ถ้าต้องการใช้พื้นเอียงที่มีประสิทธิภาพ 90% เพื่อยกวัตถุหนัก \\(500 \\text{ N}\\) ขึ้นสูง \\(3 \\text{ เมตร}\\) โดยออกแรงลากเพียง \\(200 \\text{ N}\\) พื้นเอียงต้องมีความยาวอย่างน้อยกี่เมตร (ตอบเป็นทศนิยม 2 ตำแหน่ง)",
+    "answer": 8.33,
+    "explanation": "งานที่ได้ = \\(W \\times h = 500 \\times 3 = 1500\\) J. งานที่ให้ = \\(E \\times L = 200L\\). จากสูตรประสิทธิภาพ: \\(0.90 = \\frac{1500}{200L} \\implies L = \\frac{1500}{0.90 \\times 200} = \\frac{1500}{180} \\approx 8.33\\) m."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch5-9-data.js",
+    "qNum": 33,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 83.3, but explanation ends with = 75",
+    "question": "ใช้รอกเดี่ยวเคลื่อนที่ 1 ตัว เพื่อยกวัตถุหนัก \\(150 \\text{ N}\\) ถ้าต้องออกแรงดึง \\(90 \\text{ N}\\) จงหาประสิทธิภาพของรอกนี้ (ตอบเป็นทศนิยม 1 ตำแหน่งในหน่วย %)",
+    "answer": 83.3,
+    "explanation": "แรงที่ใช้ในทางทฤษฎี \\(E_{ideal} = W / I.M.A. = 150 / 2 = 75\\) N. ประสิทธิภาพ \\(Eff = \\frac{E_{ideal}}{E_{actual}} \\times 100 = \\frac{75}{90} \\times 100 \\approx 83.3\\)%."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch5-9-data.js",
+    "qNum": 40,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 133.33, but explanation ends with = 120",
+    "question": "ใช้ระบบรอกที่มี \\(I.M.A.\\) เท่ากับ 5 เพื่อยกวัตถุหนัก \\(600 \\text{ N}\\) ถ้าประสิทธิภาพของรอกคือ 90% จะต้องออกแรงดึงเท่าใด (ตอบเป็นทศนิยม 2 ตำแหน่งในหน่วย N)",
+    "answer": 133.33,
+    "explanation": "แรงที่ใช้ในทางทฤษฎี \\(E_{ideal} = W / I.M.A. = 600 / 5 = 120\\) N. จาก \\(Eff = \\frac{E_{ideal}}{E_{actual}}\\), \\(0.9 = \\frac{120}{E_{actual}} \\implies E_{actual} = \\frac{120}{0.9} \\approx 133.33\\) N."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch6-1-data.js",
+    "qNum": 8,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 10, but explanation ends with = 0.5",
+    "question": "ลูกบอลมวล 0.5 kg เคลื่อนที่ด้วยความเร็ว 10 m/s เข้าชนกำแพงแล้วกระดอนกลับด้วยความเร็ว 10 m/s ในทิศตรงข้าม ขนาดของการเปลี่ยนแปลงโมเมนตัมเป็นเท่าใด (ตอบเป็นจำนวนเต็มในหน่วย kg·m/s)",
+    "answer": 10,
+    "explanation": "จากสูตรการเปลี่ยนแปลงโมเมนตัม \\(\\Delta p = m(v - u)\\). <br>ให้ทิศเข้าหากำแพงเป็นบวก \\(u = +10\\) m/s, \\(v = -10\\) m/s. <br>แทนค่า \\(\\Delta p = 0.5(-10 - 10) = 0.5(-20) = -10\\) kg·m/s. ขนาดคือ 10 kg·m/s"
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch6-1-data.js",
+    "qNum": 12,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 2, but explanation ends with = 2000",
+    "question": "ปืนใหญ่มีมวล 2000 kg ยิงลูกปืนมวล 10 kg ออกไปในแนวราบด้วยความเร็ว 400 m/s ปืนใหญ่จะถอยหลังด้วยอัตราเร็วเท่าใด (ตอบเป็นจำนวนเต็มในหน่วย m/s)",
+    "answer": 2,
+    "explanation": "จากกฎการอนุรักษ์โมเมนตัม (ก่อนยิง p=0): \\(0 = m_{ปืน}v_{ปืน} + m_{ลูก}v_{ลูก}\\). <br>แทนค่า \\(0 = 2000 v_{ปืน} + 10(400) \\Rightarrow 2000 v_{ปืน} = -4000 \\Rightarrow v_{ปืน} = -2\\) m/s. อัตราเร็วคือ 2 m/s"
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch6-1-data.js",
+    "qNum": 25,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 8, but explanation ends with = 6",
+    "question": "ระเบิดลูกหนึ่งมวล 10 kg วางอยู่นิ่งๆ แล้วระเบิดออกเป็นสองส่วน ส่วนหนึ่งมวล 4 kg เคลื่อนที่ด้วยความเร็ว 12 m/s อีกส่วนหนึ่งมวล 6 kg จะมีความเร็วเท่าใด (ตอบเป็นจำนวนเต็มในหน่วย m/s)",
+    "answer": 8,
+    "explanation": "จากกฎการอนุรักษ์โมเมนตัม (ก่อนระเบิด p=0): \\(0 = m_1 v_1 + m_2 v_2\\). <br>แทนค่า \\(0 = 4(12) + 6(v_2) \\Rightarrow -48 = 6v_2 \\Rightarrow v_2 = -8\\) m/s. ขนาดความเร็วคือ 8 m/s"
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch6-2-data.js",
+    "qNum": 9,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 30000, but explanation ends with = 30",
+    "question": "รถยนต์มวล \\(1,500 \\text{ kg}\\) เคลื่อนที่ด้วยความเร็ว \\(20 \\text{ m/s}\\) จะมีขนาดของโมเมนตัมเท่าใด (ตอบเป็นจำนวนเต็มในหน่วย \\(kg \\cdot m/s\\))",
+    "answer": 30000,
+    "explanation": "จากสูตรโมเมนตัม \\(p = mv\\). <br>แทนค่า \\(p = 1500 \\times 20 = 30,000\\) kg·m/s"
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch6-2-data.js",
+    "qNum": 10,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 9, but explanation ends with = 0.5",
+    "question": "ลูกบอลมวล \\(0.5 \\text{ kg}\\) เคลื่อนที่ด้วยความเร็ว \\(10 \\text{ m/s}\\) เข้าชนกำแพงในแนวตั้งฉาก แล้วสะท้อนกลับออกมาด้วยความเร็ว \\(8 \\text{ m/s}\\) ขนาดของการเปลี่ยนแปลงโมเมนตัมเป็นเท่าใด (ตอบเป็นจำนวนเต็มในหน่วย \\(kg \\cdot m/s\\))",
+    "answer": 9,
+    "explanation": "ให้ทิศเข้าหากำแพงเป็นบวก \\(v_i = +10 \\text{ m/s}\\), \\(v_f = -8 \\text{ m/s}\\). \\(\\Delta p = m(v_f - v_i) = 0.5(-8 - 10) = 0.5(-18) = -9 \\text{ kg} \\cdot \\text{m/s}\\). ขนาดคือ 9"
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch6-2-data.js",
+    "qNum": 40,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 100, but explanation ends with = 5",
+    "question": "วัตถุมวล \\(5 \\text{ kg}\\) ตกจากที่สูง กระทบพื้นด้วยความเร็ว \\(20 \\text{ m/s}\\) แล้วหยุดทันทีโดยไม่กระดอน การดลที่พื้นกระทำต่อวัตถุมีขนาดเท่าใด (ตอบเป็นจำนวนเต็มในหน่วย \\(N \\cdot s\\))",
+    "answer": 100,
+    "explanation": "จาก \\(\\Delta p = m(v_f - v_i)\\). <br>แทนค่า \\(\\Delta p = 5(0 - 20) = -100\\) N·s. ขนาดคือ 100"
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch6-3-data.js",
+    "qNum": 11,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 1, but explanation ends with = 1000",
+    "question": "ปืนใหญ่มีมวล 1000 kg ยิงลูกปืนมวล 5 kg ออกไปในแนวราบด้วยความเร็ว 200 m/s ปืนใหญ่จะถอยหลังด้วยอัตราเร็วเท่าใด (ตอบเป็นจำนวนเต็มในหน่วย m/s)",
+    "answer": 1,
+    "explanation": "จากกฎการอนุรักษ์โมเมนตัม (ก่อนยิง p=0): \\(0 = m_gv_g + m_bv_b\\). <br>แทนค่า \\(0 = 1000v_g + 5(200) \\Rightarrow 1000v_g = -1000 \\Rightarrow v_g = -1\\) m/s. อัตราเร็วคือ 1 m/s"
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch6-3-data.js",
+    "qNum": 38,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 75, but explanation ends with = 0.25",
+    "question": "ถ้าโมเมนตัมของวัตถุลดลง 50% พลังงานจลน์ของวัตถุจะลดลงกี่เปอร์เซ็นต์ (ตอบเป็นจำนวนเต็ม)",
+    "answer": 75,
+    "explanation": "ถ้า \\(p_{new} = 0.5p\\), \\(E_{new} \\propto (0.5p)^2 = 0.25p^2 = 0.25E_{old}\\). หายไป 75%"
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch6-4-data.js",
+    "qNum": 11,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is -1, but explanation ends with = 5",
+    "question": "วัตถุ A มวล 3 kg เคลื่อนที่ไปทางขวาด้วยความเร็ว 5 m/s ชนกับวัตถุ B มวล 2 kg ที่เคลื่อนที่ไปทางซ้ายด้วยความเร็ว 10 m/s หลังชนวัตถุทั้งสองติดกันไป จงหาความเร็วหลังชน (ตอบเป็นจำนวนเต็มในหน่วย m/s, ถ้าไปทางซ้ายให้ใส่เครื่องหมายลบ)",
+    "answer": -1,
+    "explanation": "ให้ทิศขวาเป็นบวก. จากกฎการอนุรักษ์โมเมนตัม \\(m_A u_A + m_B u_B = (m_A + m_B)v\\). แทนค่า \\((3)(5) + (2)(-10) = (3+2)v \\Rightarrow 15 - 20 = 5v \\Rightarrow -5 = 5v \\Rightarrow v = -1\\) m/s (เคลื่อนที่ไปทางซ้าย)"
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch6-4-data.js",
+    "qNum": 15,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 28, but explanation ends with = 15",
+    "question": "วัตถุมวล 2 kg เคลื่อนที่ไปทางทิศเหนือด้วยความเร็ว 12 m/s และวัตถุมวล 3 kg เคลื่อนที่ไปทางทิศตะวันตกด้วยความเร็ว 5 m/s ขนาดของโมเมนตัมรวมของระบบเป็นเท่าใด (ตอบเป็นจำนวนเต็มในหน่วย kg·m/s)",
+    "answer": 28,
+    "explanation": "โมเมนตัมทิศเหนือ \\(p_N = m_1 v_1 = 2(12) = 24\\) kg·m/s. โมเมนตัมทิศตะวันตก \\(p_W = m_2 v_2 = 3(5) = 15\\) kg·m/s. โมเมนตัมรวม \\(p_{total} = \\sqrt{p_N^2 + p_W^2} = \\sqrt{24^2 + 15^2} = \\sqrt{576 + 225} = \\sqrt{801} \\approx 28.3\\) kg·m/s"
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch6-4-data.js",
+    "qNum": 18,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 23, but explanation ends with = 20",
+    "question": "วัตถุ A มวล 4 kg เคลื่อนที่ไปทางตะวันออกด้วยความเร็ว 5 m/s ชนกับวัตถุ B มวล 1 kg ที่อยู่นิ่ง หลังชนวัตถุ A เคลื่อนที่ไปทางทิศเหนือด้วยความเร็ว 3 m/s จงหาขนาดโมเมนตัมของวัตถุ B หลังชน (ตอบเป็นจำนวนเต็มในหน่วย kg·m/s)",
+    "answer": 23,
+    "explanation": "โมเมนตัมก่อนชน (แกน x): \\(p_{ix} = m_A u_A = 4(5) = 20\\). โมเมนตัมหลังชนของ A (แกน y): \\(p'_{Ay} = m_A v_A = 4(3) = 12\\). จากการอนุรักษ์โมเมนตัมแยกแกน: แกน x: \\(p_{ix} = p'_{Bx} \\Rightarrow p'_{Bx} = 20\\). แกน y: \\(0 = p'_{Ay} + p'_{By} \\Rightarrow p'_{By} = -12\\). ขนาดโมเมนตัมของ B: \\(p'_B = \\sqrt{(p'_{Bx})^2 + (p'_{By})^2} = \\sqrt{20^2 + (-12)^2} = \\sqrt{544} \\approx 23.3\\) kg·m/s."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch6-5-data.js",
+    "qNum": 7,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 2.4, but explanation ends with = 0.06",
+    "question": "ลูกเทนนิสมวล 60 กรัม เคลื่อนที่ด้วยความเร็ว 25 m/s เข้ากระทบกำแพงแล้วกระดอนกลับออกมาในแนวเดิมด้วยอัตราเร็ว 15 m/s ขนาดของการเปลี่ยนแปลงโมเมนตัมของลูกเทนนิสเป็นเท่าใด (ตอบเป็นทศนิยม 1 ตำแหน่งในหน่วย kg·m/s)",
+    "answer": 2.4,
+    "explanation": "แปลงมวลเป็น kg: 60 g = 0.06 kg. ให้ทิศเข้าเป็นบวก, ทิศออกเป็นลบ. \\(\\Delta p = p_f - p_i = m v_f - m v_i = (0.06)(-15) - (0.06)(25) = -0.9 - 1.5 = -2.4\\) kg·m/s. ขนาดคือ 2.4 kg·m/s."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch6-5-data.js",
+    "qNum": 30,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 1.3, but explanation ends with = 1.25",
+    "question": "ปล่อยลูกบอลมวล 0.4 kg จากที่สูง 5 m กระทบพื้นในแนวดิ่ง ถ้าแรงดลที่พื้นกระทำต่อลูกบอลมีขนาด 6 N·s ลูกบอลจะกระดอนขึ้นไปได้สูงสุดกี่เมตร (g=10 m/s²) (ตอบเป็นทศนิยม 1 ตำแหน่ง)",
+    "answer": 1.3,
+    "explanation": "1. หาความเร็วก่อนกระทบพื้น (กำหนดทิศลงเป็นลบ): \\(v_i = -\\sqrt{2gh} = -\\sqrt{2(10)(5)} = -10\\) m/s. <br>2. การดลที่โจทย์ให้มา (I) คือการดลสุทธิ ซึ่งเท่ากับการเปลี่ยนแปลงโมเมนตัม (\\(\\Delta p\\)). <br>3. หาความเร็วกระดอน (\\(v_f\\)) จาก \\(I = \\Delta p = m(v_f - v_i)\\): \\(6 = 0.4(v_f - (-10)) \\Rightarrow 15 = v_f + 10 \\Rightarrow v_f = 5\\) m/s (ทิศขึ้น). <br>4. หาความสูงที่กระดอนขึ้นจากกฎการอนุรักษ์พลังงาน: \\(\\frac{1}{2}mv_f^2 = mgh_f \\Rightarrow h_f = \\frac{v_f^2}{2g} = \\frac{5^2}{2(10)} = \\frac{25}{20} = 1.25\\) m."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch6-6-data.js",
+    "qNum": 9,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 20, but explanation ends with = 2",
+    "question": "วัตถุมวล 2 kg เคลื่อนที่ด้วยความเร็ว 10 m/s เข้าชนกำแพงในแนวตั้งฉากและหยุดนิ่ง ขนาดของการดลที่กำแพงกระทำต่อวัตถุเป็นเท่าใด (ตอบเป็นจำนวนเต็มในหน่วย N·s)",
+    "answer": 20,
+    "explanation": "จากทฤษฎีบทการดล-โมเมนตัม \\(I = \\Delta p = m(v_f - v_i)\\). <br>แทนค่า \\(I = 2(0 - 10) = -20\\) N·s. ขนาดของการดลคือ 20 N·s."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch6-6-data.js",
+    "qNum": 15,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 17, but explanation ends with = 12",
+    "question": "วัตถุ A มวล 3 kg เคลื่อนที่ไปทางทิศเหนือด้วยความเร็ว 4 m/s วัตถุ B มวล 4 kg เคลื่อนที่ไปทางทิศตะวันออกด้วยความเร็ว 3 m/s ขนาดของโมเมนตัมรวมของระบบเป็นเท่าใด (ตอบเป็นทศนิยม 1 ตำแหน่งในหน่วย kg·m/s)",
+    "answer": 17,
+    "explanation": "หาโมเมนตัมย่อย: \\(p_A = m_A v_A = 3(4) = 12\\) kg·m/s (ทิศเหนือ). \\(p_B = m_B v_B = 4(3) = 12\\) kg·m/s (ทิศตะวันออก). <br>รวมเวกเตอร์ (ตั้งฉากกัน): \\(p_{รวม} = \\sqrt{p_A^2 + p_B^2} = \\sqrt{12^2 + 12^2} = \\sqrt{288} \\approx 16.97\\) kg·m/s."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch6-6-data.js",
+    "qNum": 25,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 7.5, but explanation ends with = 0.15",
+    "question": "ลูกบอลมวล 150 กรัม เคลื่อนที่ด้วยความเร็ว 20 m/s ในทิศ +x กระทบไม้ตีแล้วกระดอนกลับในทิศ -x ด้วยความเร็ว 30 m/s ขนาดของการดลที่ไม้กระทำต่อลูกบอลเป็นเท่าใด (ตอบเป็นทศนิยม 1 ตำแหน่งในหน่วย N·s)",
+    "answer": 7.5,
+    "explanation": "จากสูตรการดล \\(I = m(v_f - v_i)\\). <br>ให้ทิศเดิมเป็นบวก (\\(v_i = +20, v_f = -30\\)). <br>แทนค่า \\(I = 0.15(-30 - 20) = 0.15(-50) = -7.5\\) N·s. ขนาดคือ 7.5 N·s."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch6-7-data.js",
+    "qNum": 9,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 6, but explanation ends with = 5",
+    "question": "ระเบิดมวล 8 kg ที่วางนิ่งอยู่ ระเบิดออกเป็นสองส่วน ส่วนแรกมวล 3 kg เคลื่อนที่ไปทางขวาด้วยความเร็ว 10 m/s ส่วนที่สองจะเคลื่อนที่ด้วยอัตราเร็วเท่าใด (ตอบเป็นจำนวนเต็มในหน่วย m/s)",
+    "answer": 6,
+    "explanation": "จากกฎการอนุรักษ์โมเมนตัม (ก่อนระเบิด p=0): \\(0 = m_1v_1 + m_2v_2\\). <br>แทนค่า \\(0 = (3)(10) + (5)v_2 \\Rightarrow -30 = 5v_2 \\Rightarrow v_2 = -6\\) m/s. อัตราเร็วคือ 6 m/s."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch6-7-data.js",
+    "qNum": 16,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 2, but explanation ends with = 210",
+    "question": "ชายมวล 70 kg ยืนบนเรือมวล 210 kg ที่อยู่นิ่ง ถ้าชายคนนั้นกระโดดไปข้างหน้าด้วยความเร็ว 6 m/s เทียบกับฝั่ง เรือจะเคลื่อนที่ถอยหลังด้วยความเร็วเท่าใด (ตอบเป็นจำนวนเต็มในหน่วย m/s)",
+    "answer": 2,
+    "explanation": "จากกฎการอนุรักษ์โมเมนตัม (ก่อนกระโดด p=0): \\(0 = m_{คน}v_{คน} + m_{เรือ}v_{เรือ}\\). <br>แทนค่า \\(0 = (70)(6) + (210)v_{เรือ} \\Rightarrow -420 = 210v_{เรือ} \\Rightarrow v_{เรือ} = -2\\) m/s. อัตราเร็วคือ 2 m/s."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch6-7-data.js",
+    "qNum": 22,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is -3, but explanation ends with = 3",
+    "question": "วัตถุ A มวล 3 kg เคลื่อนที่ด้วยความเร็ว 5 m/s ชนกับวัตถุ B มวล 2 kg ที่วิ่งสวนมาด้วยความเร็ว 5 m/s ถ้าหลังชนวัตถุ B มีความเร็ว 7 m/s ในทิศเดิมของ A จงหาความเร็วของวัตถุ A หลังชน (ตอบเป็นจำนวนเต็มในหน่วย m/s, ถ้าทิศตรงข้ามให้ใส่เครื่องหมายลบ)",
+    "answer": -3,
+    "explanation": "ให้ทิศเดิมของ A เป็นบวก. \\(p_i = (3)(5) + (2)(-5) = 5\\). \\(p_f = 3v_A + 2(7) = 3v_A + 14\\). <br>จาก \\(p_i = p_f\\), จะได้ \\(5 = 3v_A + 14 \\Rightarrow -9 = 3v_A \\Rightarrow v_A = -3\\) m/s."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch6-7-data.js",
+    "qNum": 29,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is -5, but explanation ends with = 3",
+    "question": "วัตถุระเบิดมวล 6 kg ที่กำลังเคลื่อนที่ด้วยความเร็ว 10 m/s ได้ระเบิดออกเป็นสองส่วนเท่ากัน (3 kg) ส่วนหนึ่งเคลื่อนที่ไปในทิศเดิมด้วยความเร็ว 25 m/s อีกส่วนหนึ่งจะมีความเร็วเท่าใด (ตอบเป็นจำนวนเต็มในหน่วย m/s, ถ้าทิศตรงข้ามให้ใส่เครื่องหมายลบ)",
+    "answer": -5,
+    "explanation": "จากกฎการอนุรักษ์โมเมนตัม \\(Mv_{before} = m_1v_1 + m_2v_2\\). <br>แทนค่า \\(6(10) = (3)(25) + (3)v_2 \\Rightarrow 60 = 75 + 3v_2 \\Rightarrow -15 = 3v_2 \\Rightarrow v_2 = -5\\) m/s."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch7-1-data.js",
+    "qNum": 38,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 14, but explanation ends with = 200",
+    "question": "ขว้างลูกบอลขึ้นจากพื้นทำมุม $45^\\circ$ กับแนวราบ ปรากฏว่าลูกบอลตกห่างจากจุดขว้าง $20$ เมตร ความเร็วต้นของลูกบอลเป็นเท่าใด ($g=10 \\text{ m/s}^2$)",
+    "answer": 14,
+    "explanation": "จากสูตร $R = \\frac{u^2 \\sin(2\\theta)}{g}$. <br>แทนค่า $20 = \\frac{u^2 \\sin(90^\\circ)}{10} \\implies u^2 = 200 \\implies u = \\sqrt{200} \\approx 14.14$ m/s."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch7-3-data.js",
+    "qNum": 10,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 8.5, but explanation ends with = 72",
+    "question": "นักกระโดดไกลทำมุม 45° กับแนวระดับ ถ้าเขาต้องการกระโดดให้ได้ไกล 7.2 เมตร เขาต้องใช้ความเร็วต้นเท่าใด (\\(g=10 \\text{ m/s}^2\\)) (ตอบเป็นทศนิยม 1 ตำแหน่งในหน่วย m/s)",
+    "answer": 8.5,
+    "explanation": "\\(7.2 = \\frac{u^2 \\sin(90^\\circ)}{10} \\Rightarrow u^2 = 72 \\Rightarrow u = \\sqrt{72} \\approx 8.49\\) m/s."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch7-3-data.js",
+    "qNum": 19,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 20, but explanation ends with = 40",
+    "question": "ขว้างลูกบอลขึ้นจากพื้นทำมุม 45° กับแนวราบ ปรากฏว่าลูกบอลตกห่างจากจุดขว้าง 40 เมตร ความเร็วต้นของลูกบอลเป็นเท่าใด (\\(g=10 \\text{ m/s}^2\\))",
+    "answer": 20,
+    "explanation": "จากสูตร \\(R = \\frac{u^2 \\sin(2\\theta)}{g}\\). <br>แทนค่า \\(160 = \\frac{u^2 \\sin(90°)}{10} \\Rightarrow u^2 = 1600 \\Rightarrow u = 40\\) m/s."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch7-3-data.js",
+    "qNum": 20,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 4.47, but explanation ends with = 5",
+    "question": "ยิงวัตถุจากหน้าผาสูง 100 เมตร ด้วยความเร็วในแนวระดับ 15 m/s วัตถุจะตกถึงพื้นในเวลากี่วินาที (\\(g=10 \\text{ m/s}^2\\)) (ตอบเป็นทศนิยม 2 ตำแหน่ง)",
+    "answer": 4.47,
+    "explanation": "พิจารณาการเคลื่อนที่ในแนวดิ่ง (\\(u_y=0\\)): จาก \\(h = \\frac{1}{2}gt^2\\) จะได้ \\(100 = \\frac{1}{2}(10)t^2 \\Rightarrow 100 = 5t^2 \\Rightarrow t = \\sqrt{20} \\approx 4.47\\) s."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch7-3-data.js",
+    "qNum": 25,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 28, but explanation ends with = 24.5",
+    "question": "ยิงปืนทำมุม 60° กับแนวราบ ถ้าวัตถุขึ้นไปได้สูงสุด 30 เมตร ความเร็วต้นของกระสุนเป็นเท่าใด (\\(g=10, \\sin60^\\circ\\approx0.866\\))",
+    "answer": 28,
+    "explanation": "1. หา \\(u_y\\): \\(0^2 = u_y^2 + 2(-10)(30) \\Rightarrow u_y^2 = 600 \\Rightarrow u_y \\approx 24.5\\) m/s. 2. หา \\(u\\): \\(u = u_y / \\sin(60^\\circ) = 24.5 / 0.866 \\approx 28.29\\) m/s."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch7-4-data.js",
+    "qNum": 7,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 28.3, but explanation ends with = 800",
+    "question": "นักกีฬาพุ่งแหลนขว้างแหลนออกไปทำมุม 45° กับแนวระดับ ปรากฏว่าแหลนตกไกล 80 เมตร จงหาความเร็วต้นของแหลน (g=10 m/s²)",
+    "answer": 28.3,
+    "explanation": "จากสูตร \\(R = \\frac{u^2 \\sin(2\\theta)}{g}\\). <br>แทนค่า \\(80 = \\frac{u^2 \\sin(90°)}{10} \\Rightarrow u^2 = 800 \\Rightarrow u = \\sqrt{800} \\approx 28.28\\) m/s."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch7-4-data.js",
+    "qNum": 11,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 138.6, but explanation ends with = 160",
+    "question": "ยิงวัตถุจากพื้นขึ้นไปในแนวดิ่ง ปรากฏว่าวัตถุตกกลับมาถึงพื้นในเวลา 8 วินาที ถ้าเปลี่ยนไปยิงทำมุม 30° กับแนวราบด้วยความเร็วต้นเท่าเดิม วัตถุจะตกไกลเท่าใด (\\(g=10, \\sin 30°=0.5, \\cos 30°\\approx 0.866\\))",
+    "answer": 138.6,
+    "explanation": "1. หา u: \\(t_{total} = 2u/g \\Rightarrow 8 = 2u/10 \\Rightarrow u = 40\\) m/s. <br>2. ยิงทำมุม 30°: เวลาใหม่ \\(t' = 2u_y/g = 2(40\\sin30°)/10 = 4\\) s. <br>3. ระยะทาง \\(s_x = u_x t' = (40\\cos30°)(4) = 160(0.866) \\approx 138.56\\) m."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch7-4-data.js",
+    "qNum": 12,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 2846, but explanation ends with = 180",
+    "question": "เครื่องบินบินในแนวระดับด้วยความเร็ว 180 m/s ที่ความสูง 1,250 เมตรเหนือพื้นดิน ถ้าต้องการปล่อยพัสดุให้ลงที่เป้าหมายพอดี นักบินต้องปล่อยพัสดุก่อนถึงเป้าหมายในแนวระดับเป็นระยะทางเท่าใด (\\(g=10 m/s^2\\))",
+    "answer": 2846,
+    "explanation": "1. หาเวลาตก (\\(u_y=0\\)): จาก \\(s_y = \\frac{1}{2}gt^2\\) จะได้ \\(1250 = \\frac{1}{2}(10)t^2 \\Rightarrow t^2 = 250 \\Rightarrow t = \\sqrt{250} \\approx 15.81\\) s. <br>2. หาระยะทางแนวราบ: \\(s_x = u_x t = 180 \\times 15.81 \\approx 2846\\) m."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch7-4-data.js",
+    "qNum": 15,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 4.16, but explanation ends with = 1",
+    "question": "ขว้างก้อนหินจากยอดตึกสูง 45 เมตร ทำมุมเงย 30° กับแนวระดับด้วยความเร็ว 20 m/s ก้อนหินจะตกถึงพื้นในเวลากี่วินาที (\\(g=10, \\sin 30°=0.5\\))",
+    "answer": 4.16,
+    "explanation": "กำหนดทิศขึ้นเป็นบวก. \\(u_y = 20\\sin30° = 10\\) m/s. \\(s_y = -45\\) m. จาก \\(s_y = u_y t + \\frac{1}{2}gt^2 \\Rightarrow -45 = 10t - 5t^2 \\Rightarrow 5t^2 - 10t - 45 = 0 \\Rightarrow t^2 - 2t - 9 = 0\\). ใช้สูตรแก้สมการกำลังสอง \\(t = \\frac{-(-2) \\pm \\sqrt{(-2)^2-4(1)(-9)}}{2(1)} = \\frac{2 \\pm \\sqrt{40}}{2} = 1 \\pm \\sqrt{10}\\). เลือกค่าบวก จะได้ \\(t = 1 + \\sqrt{10} \\approx 4.16\\) s."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch7-4-data.js",
+    "qNum": 18,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 1200, but explanation ends with = 40",
+    "question": "ยิงวัตถุจากพื้นด้วยความเร็วต้น 40 m/s ทำมุม 30° กับแนวราบ พลังงานจลน์ของวัตถุ ณ จุดสูงสุดเป็นกี่จูล ถ้าวัตถุมีมวล 2 kg (\\(g=10, \\cos 30°\\approx 0.866\\))",
+    "answer": 1200,
+    "explanation": "ความเร็วที่จุดสูงสุดคือความเร็วในแนวราบ: \\(v_x = u_x = 40\\cos30° \\approx 34.64\\) m/s. พลังงานจลน์ที่จุดสูงสุด: \\(E_k = \\frac{1}{2}mv_x^2 = \\frac{1}{2}(2)(34.64)^2 \\approx 1200\\) J."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch7-4-data.js",
+    "qNum": 19,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 44.7, but explanation ends with = 2000",
+    "question": "ขว้างวัตถุจากหน้าผาสูง 80 เมตร ด้วยความเร็วในแนวระดับ 20 m/s วัตถุจะตกกระทบพื้นด้วยอัตราเร็วเท่าใด (\\(g=10 m/s^2\\))",
+    "answer": 44.7,
+    "explanation": "วิธี 1 (พลังงาน): \\(mgh + \\frac{1}{2}mu_x^2 = \\frac{1}{2}mv_f^2\\). ตัด m: \\(10(80) + \\frac{1}{2}(20)^2 = \\frac{1}{2}v_f^2 \\Rightarrow 800 + 200 = 0.5v_f^2 \\Rightarrow v_f^2 = 2000 \\Rightarrow v_f = \\sqrt{2000} \\approx 44.7\\) m/s."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch7-4-data.js",
+    "qNum": 20,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is -20, but explanation ends with = 30",
+    "question": "ยิงวัตถุจากพื้นด้วยความเร็วต้น 60 m/s ทำมุม 30° กับแนวราบ หลังจากยิงไปแล้ว 5 วินาที วัตถุจะมีความเร็วในแนวดิ่งเท่าใด (\\(g=10, \\sin30°=0.5\\) และกำหนดให้ทิศขึ้นเป็นบวก)",
+    "answer": -20,
+    "explanation": "หาความเร็วต้นในแนวดิ่ง: \\(u_y = 60 \\sin(30°) = 30\\) m/s. <br>หาความเร็วแนวดิ่งที่เวลา 5s: \\(v_y = u_y - gt = 30 - 10(5) = -20\\) m/s."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch7-4-data.js",
+    "qNum": 22,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 22.4, but explanation ends with = 500",
+    "question": "ขว้างลูกบอลขึ้นจากพื้นทำมุม 45° กับแนวราบ ปรากฏว่าลูกบอลตกห่างจากจุดขว้าง 50 เมตร ความเร็วต้นของลูกบอลเป็นเท่าใด (\\(g=10 m/s^2\\))",
+    "answer": 22.4,
+    "explanation": "จากสูตร \\(R = \\frac{u^2 \\sin(2\\theta)}{g}\\). <br>แทนค่า \\(50 = \\frac{u^2 \\sin(90°)}{10} \\Rightarrow u^2 = 500 \\Rightarrow u = \\sqrt{500} \\approx 22.36\\) m/s."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_ch7-4-data.js",
+    "qNum": 28,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is -20, but explanation ends with = 80",
+    "question": "ยิงวัตถุจากพื้นด้วยความเร็วต้น 100 m/s ทำมุม 53° กับแนวราบ เมื่อเวลาผ่านไป 10 วินาที วัตถุจะมีความเร็วในแนวดิ่งเท่าใด (\\(g=10, \\sin 53°=0.8\\))",
+    "answer": -20,
+    "explanation": "หาความเร็วต้นในแนวดิ่ง: \\(u_y = 100 \\sin(53°) = 80\\) m/s. <br>หาความเร็วแนวดิ่งที่เวลา 10s: \\(v_y = u_y - gt = 80 - 10(10) = -20\\) m/s."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_final2-exam-1-data.js",
+    "qNum": 17,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 10, but explanation ends with = 0.5",
+    "question": "ลูกบอลมวล 0.5 kg กระทบผนังด้วยความเร็ว 10 m/s แล้วกระดอนกลับด้วยความเร็ว 10 m/s ขนาดของการเปลี่ยนแปลงโมเมนตัมเป็นเท่าใด (kg·m/s)",
+    "answer": 10,
+    "explanation": "จากสูตรการเปลี่ยนแปลงโมเมนตัม \\(\\Delta p = m(v - u)\\). <br>กำหนดให้ทิศเข้าหากำแพงเป็นบวก (+10) และทิศสะท้อนกลับเป็นลบ (-10). <br>แทนค่า \\(\\Delta p = 0.5(-10 - 10) = 0.5(-20) = -10\\) kg·m/s. ดังนั้นขนาดคือ 10 kg·m/s"
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_final2-exam-1-data.js",
+    "qNum": 19,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 8, but explanation ends with = 4",
+    "question": "วัตถุระเบิดมวล 10 kg แยกออกเป็นสองส่วน ส่วนหนึ่งมวล 4 kg เคลื่อนที่ด้วยความเร็ว 12 m/s อีกส่วนหนึ่งจะมีความเร็วเท่าใด (m/s)",
+    "answer": 8,
+    "explanation": "จากกฎการอนุรักษ์โมเมนตัม (ก่อนระเบิด \\(p=0\\)): \\(0 = m_1v_1 + m_2v_2\\). <br>แทนค่า \\(0 = 4(12) + 6(v_2) \\Rightarrow 48 = -6v_2 \\Rightarrow v_2 = -8\\) m/s. ขนาดความเร็วคือ 8 m/s"
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_final2-exam-1-data.js",
+    "qNum": 22,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 100, but explanation ends with = 5",
+    "question": "สายยางฉีดน้ำด้วยอัตรา 5 kg/s ด้วยความเร็ว 20 m/s ใส่กำแพงแล้วน้ำหยุดนิ่ง แรงที่น้ำกระทำต่อกำแพงเป็นเท่าใด (N)",
+    "answer": 100,
+    "explanation": "จากสูตรแรงดล \\(F = \\frac{\\Delta p}{\\Delta t} = \\frac{m(v-u)}{t} = (\\frac{m}{t})\\Delta v\\). <br>แทนค่า \\(F = 5(0-20) = -100\\) N. ขนาดแรงคือ 100 N"
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_final2-exam-1-data.js",
+    "qNum": 24,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 17, but explanation ends with = 12",
+    "question": "วัตถุ A (3 kg, 4 m/s ทิศเหนือ) ชนกับ B (4 kg, 3 m/s ทิศตะวันออก) แล้วติดกันไป โมเมนตัมรวมหลังชนมีขนาดเท่าใด (kg·m/s)",
+    "answer": 17,
+    "explanation": "หาโมเมนตัมย่อย: \\(p_A = m_A v_A = 3(4) = 12\\) kg·m/s (ทิศเหนือ). \\(p_B = m_B v_B = 4(3) = 12\\) kg·m/s (ทิศตะวันออก). <br>รวมเวกเตอร์ (ตั้งฉากกัน): \\(p_{total} = \\sqrt{p_A^2 + p_B^2} = \\sqrt{12^2 + 12^2} \\approx 16.97\\) kg·m/s. ปัดเป็น 17"
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_final2-exam-1-data.js",
+    "qNum": 28,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 138.6, but explanation ends with = 4",
+    "question": "ยิงวัตถุทำมุม 30° กับแนวราบด้วยความเร็ว 40 m/s วัตถุจะตกไกลในแนวราบกี่เมตร (ตอบทศนิยม 1 ตำแหน่ง)",
+    "answer": 138.6,
+    "explanation": "1. หาเวลาทั้งหมด: จาก \\(t = \\frac{2u\\sin\\theta}{g}\\) จะได้ \\(t = \\frac{2(40)\\sin(30^\\circ)}{10} = 4\\) s. <br>2. หาระยะทางแนวราบ: จาก \\(R = u_x t\\) จะได้ \\(R = (40\\cos30^\\circ)(4) \\approx 34.64 \\times 4 \\approx 138.6\\) m"
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_final2-exam-1-data.js",
+    "qNum": 34,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 6, but explanation ends with = 6.3",
+    "question": "ดาวเทียมโคจรรอบโลกที่ความสูงซึ่ง \\(g = 4\\) m/s² รัศมีวงโคจร 10,000 km ความเร็วในการโคจรเป็นเท่าใด (km/s) (ตอบจำนวนเต็ม)",
+    "answer": 6,
+    "explanation": "แรงโน้มถ่วงทำหน้าที่เป็นแรงสู่ศูนย์กลาง: \\(mg = \\frac{mv^2}{r} \\Rightarrow v = \\sqrt{gr}\\). <br>แทนค่า \\(g=4\\) และ \\(r=10,000 \\text{ km} = 10^7 \\text{ m}\\). <br>\\(v = \\sqrt{4 \\times 10^7} = 2000\\sqrt{10} \\approx 6324\\) m/s = 6.3 km/s. ปัดเป็น 6"
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_final2-exam-2-data.js",
+    "qNum": 16,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 15, but explanation ends with = 0.5",
+    "question": "ลูกบอลมวล 0.5 kg กระทบกำแพงด้วยความเร็ว 20 m/s แล้วกระดอนกลับด้วยความเร็ว 10 m/s ขนาดของการเปลี่ยนแปลงโมเมนตัมเป็นเท่าใด (kg·m/s)",
+    "answer": 15,
+    "explanation": "จากสูตรการเปลี่ยนแปลงโมเมนตัม \\(\\Delta p = m(v - u)\\). <br>ให้ทิศเข้าเป็นบวก ทิศออกเป็นลบ \\(\\Delta p = 0.5(-10 - 20) = 0.5(-30) = -15\\) kg·m/s. ขนาดคือ 15 kg·m/s"
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_final2-exam-2-data.js",
+    "qNum": 19,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 10, but explanation ends with = 2",
+    "question": "วัตถุระเบิดมวล 4 kg แตกออกเป็นสองส่วนเท่ากัน ส่วนหนึ่งเคลื่อนที่ด้วยความเร็ว 10 m/s อีกส่วนหนึ่งจะมีความเร็วเท่าใด (m/s)",
+    "answer": 10,
+    "explanation": "จากกฎการอนุรักษ์โมเมนตัม (ก่อนระเบิด p=0): \\(0 = m_1 v_1 + m_2 v_2\\). <br>แทนค่า \\(0 = 2(10) + 2(v_2) \\Rightarrow 20 = -2v_2 \\Rightarrow v_2 = -10\\) m/s. ขนาดความเร็วคือ 10 m/s"
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_final2-exam-2-data.js",
+    "qNum": 23,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 17, but explanation ends with = 12",
+    "question": "วัตถุ A (3 kg, 4 m/s ทิศเหนือ) และ B (4 kg, 3 m/s ทิศตะวันออก) ชนกันแล้วติดกันไป โมเมนตัมรวมหลังชนมีขนาดเท่าใด (kg·m/s)",
+    "answer": 17,
+    "explanation": "หาโมเมนตัมย่อย: \\(p_A = m_A v_A = 3(4) = 12\\) kg·m/s (ทิศเหนือ). \\(p_B = m_B v_B = 4(3) = 12\\) kg·m/s (ทิศตะวันออก). <br>รวมเวกเตอร์ (ตั้งฉากกัน): \\(p_{total} = \\sqrt{p_A^2 + p_B^2} = \\sqrt{12^2 + 12^2} \\approx 16.97\\) kg·m/s. ปัดเป็น 17"
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_final2-exam-2-data.js",
+    "qNum": 36,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 0.3, but explanation ends with = 6.28",
+    "question": "สปริงค่า k=400 N/m ติดมวล 1 kg คาบการสั่นเป็นกี่วินาที (ตอบทศนิยม 1 ตำแหน่ง, \\(\\pi=3.14\\))",
+    "answer": 0.3,
+    "explanation": "จากสูตรคาบของสปริง \\(T = 2\\pi\\sqrt{\\frac{m}{k}}\\). <br>แทนค่า \\(T = 2(3.14)\\sqrt{\\frac{1}{400}} = 6.28(\\frac{1}{20}) = 6.28(0.05) \\approx 0.314\\) s. ปัดเป็น 0.3"
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_final2-exam-3-data.js",
+    "qNum": 23,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 17, but explanation ends with = 12",
+    "question": "วัตถุ A (3 kg, 4 m/s ทิศเหนือ) และ B (4 kg, 3 m/s ทิศตะวันออก) ชนกันแล้วติดกันไป โมเมนตัมรวมมีขนาดเท่าใด (kg·m/s)",
+    "answer": 17,
+    "explanation": "หาโมเมนตัมย่อย: \\(p_A = m_A v_A = 3(4) = 12\\) kg·m/s (ทิศเหนือ). \\(p_B = m_B v_B = 4(3) = 12\\) kg·m/s (ทิศตะวันออก). <br>รวมเวกเตอร์ (ตั้งฉากกัน): \\(p_{total} = \\sqrt{p_A^2 + p_B^2} = \\sqrt{12^2 + 12^2} \\approx 16.97\\) kg·m/s. ปัดเป็น 17"
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_final2-exam-3-data.js",
+    "qNum": 34,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 0.87, but explanation ends with = 1",
+    "question": "ลูกตุ้มทรงกรวย (Conical Pendulum) เชือกยาว 1 m ทำมุม 60 องศากับแนวดิ่ง รัศมีวงกลมเป็นเท่าใด (m) (ตอบทศนิยม 2 ตำแหน่ง)",
+    "answer": 0.87,
+    "explanation": "รัศมีวงกลมคือด้านตรงข้ามมุม \\(\\theta\\) ในรูปสามเหลี่ยมมุมฉาก. <br>\\(r = L \\sin\\theta = 1 \\sin(60^\\circ) \\approx 0.866\\) m"
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_final2-exam-3-data.js",
+    "qNum": 35,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 6, but explanation ends with = 6.3",
+    "question": "ดาวเทียมโคจรรอบโลกที่ความสูงซึ่ง \\(g = 5\\) m/s² รัศมีวงโคจร 8000 km ความเร็วในการโคจรเป็นเท่าใด (km/s) (ตอบจำนวนเต็ม)",
+    "answer": 6,
+    "explanation": "จาก \\(F_g = F_c \\Rightarrow mg = \\frac{mv^2}{r} \\Rightarrow v = \\sqrt{gr}\\). <br>แทนค่า \\(v = \\sqrt{5 \\times 8 \\times 10^6} = \\sqrt{40 \\times 10^6} \\approx 6324\\) m/s = 6.3 km/s. ปัดเป็น 6"
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_final2-exam-4-data.js",
+    "qNum": 15,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 2, but explanation ends with = 0.2",
+    "question": "ลูกบอลมวล 0.2 kg กระทบพื้นด้วยความเร็ว 10 m/s แล้วหยุดนิ่ง การเปลี่ยนแปลงโมเมนตัมเป็นเท่าใด (kg·m/s)",
+    "answer": 2,
+    "explanation": "จากสูตรการเปลี่ยนแปลงโมเมนตัม \\(\\Delta p = m(v - u)\\). <br>แทนค่า \\(\\Delta p = 0.2(0 - 10) = -2\\) kg·m/s. ขนาดคือ 2 kg·m/s"
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_final2-exam-4-data.js",
+    "qNum": 18,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 4, but explanation ends with = 3",
+    "question": "วัตถุระเบิดมวล 5 kg แยกเป็นสองส่วน (2 kg และ 3 kg) ถ้าส่วน 2 kg มีความเร็ว 6 m/s ส่วน 3 kg จะมีความเร็วเท่าใด (m/s)",
+    "answer": 4,
+    "explanation": "จากกฎการอนุรักษ์โมเมนตัม (ก่อนระเบิด p=0): \\(0 = m_1 v_1 + m_2 v_2\\). <br>แทนค่า \\(0 = 2(6) + 3(v_2) \\Rightarrow -12 = 3v_2 \\Rightarrow v_2 = -4\\) m/s. ขนาดความเร็วคือ 4 m/s"
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_final2-exam-4-data.js",
+    "qNum": 37,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 0.63, but explanation ends with = 6.28",
+    "question": "สปริงสองตัว k=100 N/m ต่อขนานกัน แล้วติดมวล 2 kg คาบการสั่นเป็นเท่าใด (ตอบทศนิยม 2 ตำแหน่ง, \\(\\pi=3.14\\))",
+    "answer": 0.63,
+    "explanation": "หาค่าคงที่สปริงรวม (ต่อขนาน): \\(k_{eq} = k_1 + k_2 = 100 + 100 = 200\\) N/m. <br>หาคาบการสั่น: \\(T = 2\\pi\\sqrt{\\frac{m}{k_{eq}}}\\). <br>แทนค่า \\(T = 2(3.14)\\sqrt{\\frac{2}{200}} = 6.28\\sqrt{0.01} = 6.28(0.1) \\approx 0.63\\) s"
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_mid1-exam-1-data.js",
+    "qNum": 18,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 5, but explanation ends with = 80",
+    "question": "รถยนต์คันหนึ่งเบรกจากความเร็ว 20 m/s จนหยุดนิ่งในระยะทาง 40 เมตร จงหาขนาดของความหน่วง (ตอบเป็นจำนวนเต็มในหน่วย m/s²)",
+    "answer": 5,
+    "explanation": "จาก \\(v^2 = u^2 + 2as\\). \\(0^2 = 20^2 + 2a(40) \\implies -400 = 80a \\implies a = -5\\) m/s². ขนาดของความหน่วงคือ 5 m/s²"
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_mid1-exam-1-data.js",
+    "qNum": 32,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is -10, but explanation ends with = 30",
+    "question": "โยนวัตถุขึ้นจากพื้นด้วยความเร็ว 30 m/s หลังจากโยนไป 4 วินาที วัตถุจะมีความเร็วเท่าใด (g=10 m/s², ทิศขึ้นเป็นบวก)",
+    "answer": -10,
+    "explanation": "จาก \\(v = u + gt\\). \\(v = 30 + (-10)(4) = 30 - 40 = -10\\) m/s. (ความเร็ว 10 m/s ในทิศลง)"
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_mid1-exam-1-data.js",
+    "qNum": 39,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 16.7, but explanation ends with = 250",
+    "question": "รถยนต์เคลื่อนที่ด้วยความเร็ว 20 m/s เป็นเวลา 10 วินาที แล้วลดความเร็วลงอย่างสม่ำเสมอจนหยุดนิ่งในระยะทาง 50 เมตร ความเร็วเฉลี่ยตลอดการเคลื่อนที่ทั้งหมดเป็นเท่าใด (ตอบเป็นทศนิยม 1 ตำแหน่ง)",
+    "answer": 16.7,
+    "explanation": "ช่วงที่ 1: \\(s_1 = 200\\) m, \\(t_1 = 10\\) s. ช่วงที่ 2: \\(s_2 = 50\\) m. หา \\(t_2\\) จาก \\(s_2 = (\\frac{u+v}{2})t_2 \\implies 50 = (\\frac{20+0}{2})t_2 \\implies t_2 = 5\\) s. รวม: \\(s_{total} = 250\\) m, \\(t_{total} = 15\\) s. \\(v_{avg} = 250/15 \\approx 16.7\\) m/s."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_mid1-exam-2-data.js",
+    "qNum": 28,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 2, but explanation ends with = 72",
+    "question": "วัตถุเคลื่อนที่ด้วยความเร็ว 12 m/s แล้วชะลอความเร็วลงอย่างสม่ำเสมอจนหยุดนิ่งในระยะทาง 36 เมตร ความหน่วงของวัตถุมีขนาดเท่าใด (ตอบเป็นจำนวนเต็ม)",
+    "answer": 2,
+    "explanation": "จาก \\(v^2 = u^2 + 2as\\). \\(0^2 = 12^2 + 2a(36) \\implies -144 = 72a \\implies a = -2\\) m/s². ขนาดคือ 2 m/s²."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_mid1-exam-2-data.js",
+    "qNum": 31,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is -40, but explanation ends with = 160",
+    "question": "วัตถุเคลื่อนที่ด้วยความเร่ง -4 m/s² ถ้าเริ่มต้นด้วยความเร็ว 16 m/s เมื่อเวลาผ่านไป 10 วินาที วัตถุจะมีการกระจัดเท่าใด (ตอบเป็นจำนวนเต็ม)",
+    "answer": -40,
+    "explanation": "จาก \\(s = ut + \\frac{1}{2}at^2\\). \\(s = (16)(10) + \\frac{1}{2}(-4)(10)^2 = 160 - 200 = -40\\) เมตร (เคลื่อนที่ไปข้างหน้าแล้วย้อนกลับเลยจุดเริ่มต้นไป)"
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_mid1-exam-2-data.js",
+    "qNum": 32,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is -5, but explanation ends with = 45",
+    "question": "โยนวัตถุขึ้นจากพื้นด้วยความเร็ว 45 m/s หลังจากโยนไป 5 วินาที วัตถุจะมีความเร็วเท่าใด (g=10 m/s², ทิศขึ้นเป็นบวก)",
+    "answer": -5,
+    "explanation": "จาก \\(v = u + gt\\). \\(v = 45 + (-10)(5) = 45 - 50 = -5\\) m/s. (ความเร็ว 5 m/s ในทิศลง)"
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_mid1-exam-2-data.js",
+    "qNum": 36,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 16.7, but explanation ends with = 15",
+    "question": "รถยนต์เคลื่อนที่ด้วยความเร็ว 20 m/s เป็นเวลา 10 วินาที แล้วลดความเร็วลงอย่างสม่ำเสมอจนหยุดนิ่งใน 5 วินาที อัตราเร็วเฉลี่ยตลอดการเคลื่อนที่ทั้งหมดเป็นเท่าใด (ตอบเป็นทศนิยม 1 ตำแหน่ง)",
+    "answer": 16.7,
+    "explanation": "ช่วงที่ 1: \\(s_1 = 20 \\times 10 = 200\\) m. ช่วงที่ 2: \\(s_2 = (\\frac{20+0}{2})(5) = 50\\) m. รวม: \\(s_{total} = 250\\) m, \\(t_{total} = 15\\) s. อัตราเร็วเฉลี่ย = \\(250/15 \\approx 16.7\\) m/s."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_mid2-exam-1-data.js",
+    "qNum": 35,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 0.56, but explanation ends with = 300",
+    "question": "คานสม่ำเสมอมวล 10 kg ยาว 2 m วางบนจุดรองรับที่ปลายทั้งสองข้าง จะต้องวางวัตถุมวล 30 kg ที่ตำแหน่งใด (วัดจากปลายซ้าย) เพื่อให้แรงปฏิกิริยาที่ปลายซ้ายเป็นสองเท่าของปลายขวา (g=10 m/s²) (ตอบเป็นทศนิยม 2 ตำแหน่งในหน่วย m)",
+    "answer": 0.56,
+    "explanation": "1. <b>สมดุลแรงแนวดิ่ง:</b> แรงลงทั้งหมด = \\(100+300=400\\) N. ให้ \\(N_A = 2N_B\\). จาก \\(N_A+N_B=400\\) จะได้ \\(3N_B=400\\), ดังนั้น \\(N_B=400/3\\) N.<br>2. <b>สมดุลโมเมนต์รอบจุด A:</b> โมเมนต์ทวน = โมเมนต์ตาม.<br>\\((N_B \\times 2) = (W_{คาน} \\times 1) + (W_{วัตถุ} \\times d)\\)<br>\\((\\frac{400}{3}) \\times 2 = (100 \\times 1) + (300 \\times d)\\)<br>\\(\\frac{800}{3} - 100 = 300d\\)<br>\\(\\frac{500}{3} = 300d \\implies d = \\frac{500}{900} = \\frac{5}{9} \\approx 0.56\\) m."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_mid2-exam-1-data.js",
+    "qNum": 40,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is -40, but explanation ends with = 4",
+    "question": "วัตถุมวล 2 kg เคลื่อนที่ด้วยความเร็ว 10 m/s บนพื้นราบฝืดที่มีสัมประสิทธิ์ความเสียดทานจลน์ 0.2 เป็นระยะทาง 10 เมตร จงหางานของแรงเสียดทาน (g=10 m/s²) (ตอบเป็นจำนวนเต็มในหน่วย J, ใส่เครื่องหมายลบถ้ามี)",
+    "answer": -40,
+    "explanation": "แรงเสียดทาน \\(f_k = \\mu_k N = \\mu_k mg = 0.2(2)(10) = 4\\) N. งานของแรงเสียดทาน \\(W_f = -f_k s = -4 \\times 10 = -40\\) J."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_mid2-exam-2-data.js",
+    "qNum": 36,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 0.56, but explanation ends with = 300",
+    "question": "คานสม่ำเสมอมวล 10 kg ยาว 2 m วางบนจุดรองรับที่ปลายทั้งสองข้าง จะต้องวางวัตถุมวล 30 kg ที่ตำแหน่งใด (วัดจากปลายซ้าย) เพื่อให้แรงปฏิกิริยาที่ปลายซ้ายเป็นสองเท่าของปลายขวา (g=10 m/s²) (ตอบเป็นทศนิยม 2 ตำแหน่งในหน่วย m)",
+    "answer": 0.56,
+    "explanation": "1. <b>สมดุลแรงแนวดิ่ง:</b> แรงลงทั้งหมด = \\(100+300=400\\) N. ให้ \\(N_A = 2N_B\\). จาก \\(N_A+N_B=400\\) จะได้ \\(3N_B=400\\), ดังนั้น \\(N_B=400/3\\) N.<br>2. <b>สมดุลโมเมนต์รอบจุด A:</b> โมเมนต์ทวน = โมเมนต์ตาม.<br>\\((N_B \\times 2) = (W_{คาน} \\times 1) + (W_{วัตถุ} \\times d)\\)<br>\\((\\frac{400}{3}) \\times 2 = (100 \\times 1) + (300 \\times d)\\)<br>\\(\\frac{800}{3} - 100 = 300d\\)<br>\\(\\frac{500}{3} = 300d \\implies d = \\frac{500}{900} = \\frac{5}{9} \\approx 0.56\\) m."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_mid2-exam-2-data.js",
+    "qNum": 40,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is -40, but explanation ends with = 4",
+    "question": "วัตถุมวล 2 kg เคลื่อนที่ด้วยความเร็ว 10 m/s บนพื้นราบฝืดที่มีสัมประสิทธิ์ความเสียดทานจลน์ 0.2 เป็นระยะทาง 10 เมตร จงหางานของแรงเสียดทาน (g=10 m/s²) (ตอบเป็นจำนวนเต็มในหน่วย J, ใส่เครื่องหมายลบถ้ามี)",
+    "answer": -40,
+    "explanation": "แรงเสียดทาน \\(f_k = \\mu_k N = \\mu_k mg = 0.2(2)(10) = 4\\) N. งานของแรงเสียดทาน \\(W_f = -f_k s = -4 \\times 10 = -40\\) J."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_mid2-exam-3-data.js",
+    "qNum": 28,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is -18, but explanation ends with = 32",
+    "question": "วัตถุไถลลงจากพื้นเอียงสูง 5 เมตร ถึงพื้นด้วยความเร็ว 8 m/s (g=10 m/s²) งานของแรงเสียดทานต่อน้ำหนัก 1 kg เป็นกี่จูล (ตอบเป็นจำนวนเต็มในหน่วยจูล)",
+    "answer": -18,
+    "explanation": "\\(mgh + W_f = \\frac{1}{2}mv^2\\). (1)(10)(5) + W_f = 0.5(1)(64). 50 + W_f = 32. W_f = -18 J"
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_mid2-exam-3-data.js",
+    "qNum": 34,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 28.9, but explanation ends with = 50",
+    "question": "วัตถุหนัก 50 N แขวนด้วยเชือกสองเส้นทำมุม 30 องศากับแนวดิ่งทั้งคู่ แรงตึงในเชือกแต่ละเส้นเป็นกี่นิวตัน (cos 30° = 0.866) (ตอบเป็นทศนิยม 1 ตำแหน่ง)",
+    "answer": 28.9,
+    "explanation": "\\(2T(0.866) = 50 \\implies 1.732T = 50 \\implies T \\approx 28.86\\) N"
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_mid2-exam-3-data.js",
+    "qNum": 38,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is -5, but explanation ends with = 25",
+    "question": "วัตถุไถลลงพื้นเอียงสูง 3 เมตร ถึงพื้นด้วยพลังงานจลน์ 25 J ถ้าวัตถุมีมวล 1 kg งานของแรงเสียดทานเป็นกี่จูล (g=10) (ตอบเป็นจำนวนเต็ม, ใส่เครื่องหมายลบ)",
+    "answer": -5,
+    "explanation": "\\(mgh + W_f = E_k\\). \\(1(10)(3) + W_f = 25\\). \\(30 + W_f = 25 \\implies W_f = -5\\) J"
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_mid2-exam-3-data.js",
+    "qNum": 40,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 2.45, but explanation ends with = 6",
+    "question": "ลูกบอลมวล 0.5 kg กลิ้งด้วยความเร็ว 4 m/s ขึ้นเนินสูง 0.5 เมตร ความเร็วที่ยอดเนินเป็นกี่ m/s (g=10) (ตอบเป็นทศนิยม 2 ตำแหน่ง)",
+    "answer": 2.45,
+    "explanation": "\\(\\frac{1}{2}(0.5)(4^2) = (0.5)(10)(0.5) + \\frac{1}{2}(0.5)v^2\\). \\(4 = 2.5 + 0.25v^2\\). \\(1.5 = 0.25v^2 \\implies v^2 = 6 \\implies v \\approx 2.45\\) m/s"
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_mid2-exam-4-data.js",
+    "qNum": 16,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is -100, but explanation ends with = 500",
+    "question": "คานสม่ำเสมอมวล 10 kg ยาว 2 m วางบนจุดรองรับที่ปลายซ้าย (A) และที่ตำแหน่ง 1.5 m จากปลายซ้าย (B) ถ้ามีวัตถุมวล 40 kg วางที่ปลายขวาสุด (2 m) จงหาแรงปฏิกิริยาที่จุดรองรับ A (\\(N_A\\)) (g=10 m/s²) (ตอบเป็นจำนวนเต็มในหน่วย N, ถ้ามีทิศลงให้ใส่เครื่องหมายลบ)",
+    "answer": -100,
+    "explanation": "1. <b>หา \\(N_B\\) โดยคิดโมเมนต์รอบจุด A:</b> โมเมนต์ทวน (จาก \\(N_B\\)) = โมเมนต์ตาม (จากน้ำหนักคานและวัตถุ).<br>\\(N_B \\times 1.5 = (W_{คาน} \\times 1) + (W_{วัตถุ} \\times 2)\\)<br>\\(N_B \\times 1.5 = (100 \\text{ N} \\times 1 \\text{ m}) + (400 \\text{ N} \\times 2 \\text{ m}) = 100 + 800 = 900\\)<br>ดังนั้น \\(N_B = 900 / 1.5 = 600\\) N.<br>2. <b>หา \\(N_A\\) จากสมดุลแนวดิ่ง:</b> แรงขึ้นทั้งหมด = แรงลงทั้งหมด.<br>\\(N_A + N_B = W_{คาน} + W_{วัตถุ}\\)<br>\\(N_A + 600 = 100 + 400 = 500\\)<br>ดังนั้น \\(N_A = 500 - 600 = -100\\) N. เครื่องหมายลบแสดงว่าแรงปฏิกิริยาที่จุด A มีทิศลง"
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_mid2-exam-4-data.js",
+    "qNum": 19,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 50, but explanation ends with = 0.5",
+    "question": "วัตถุมวล 1 kg ถูกปล่อยจากหยุดนิ่งให้ไถลลงมาตามรางโค้งลื่นจากความสูง 1.25 เมตร มาชนสปริงที่วางตัวในแนวราบที่ปลายราง สปริงจะหดเข้าไปได้มากที่สุดกี่เซนติเมตร ถ้าค่าคงที่ของสปริงคือ 100 N/m (g=10 m/s²) (ตอบเป็นจำนวนเต็ม)",
+    "answer": 50,
+    "explanation": "จากกฎการอนุรักษ์พลังงาน: \\(mgh = \\frac{1}{2}kx^2\\). \\((1)(10)(1.25) = \\frac{1}{2}(100)x^2\\). \\(12.5 = 50x^2 \\implies x^2 = 0.25 \\implies x = 0.5\\) m หรือ 50 cm."
+  },
+  {
+    "file": "data\\phy_m4\\phy_m4_mid2-exam-4-data.js",
+    "qNum": 24,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is -50, but explanation ends with = 400",
+    "question": "ยิงวัตถุมวล 1 kg ขึ้นจากพื้นด้วยอัตราเร็ว 30 m/s วัตถุขึ้นไปได้สูงสุด 40 เมตร จงหางานของแรงต้านอากาศ (g=10 m/s²) (ตอบเป็นจำนวนเต็มในหน่วย J, ใส่เครื่องหมายลบ)",
+    "answer": -50,
+    "explanation": "พลังงานเริ่มต้น \\(E_1 = E_k = \\frac{1}{2}(1)(30)^2 = 450\\) J. พลังงานสุดท้ายที่จุดสูงสุด \\(E_2 = E_p = mgh = (1)(10)(40) = 400\\) J. จาก \\(E_1 + W_{air} = E_2\\), จะได้ \\(W_{air} = E_2 - E_1 = 400 - 450 = -50\\) J."
+  },
+  {
+    "file": "data\\phy_m5\\phy_m5_ch12-1-data.js",
+    "qNum": 27,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 20, but explanation ends with = 0.2",
+    "question": "ประจุ q₁ = +2 μC และ q₂ = +8 μC วางห่างกัน 60 cm จงหาตำแหน่งบนเส้นตรงที่เชื่อมระหว่างประจุทั้งสองที่สนามไฟฟ้าลัพธ์เป็นศูนย์ (วัดจาก q₁) (ตอบเป็นจำนวนเต็มในหน่วย cm)",
+    "answer": 20,
+    "explanation": "ให้ x เป็นระยะจาก q₁. \\(k\\frac{q_1}{x^2} = k\\frac{q_2}{(0.6-x)^2} \\implies \\frac{2}{x^2} = \\frac{8}{(0.6-x)^2}\\). ถอดรากที่สอง: \\(\\frac{\\sqrt{2}}{x} = \\frac{\\sqrt{8}}{0.6-x} \\implies \\frac{1}{x} = \\frac{2}{0.6-x} \\implies 0.6-x = 2x \\implies 3x = 0.6 \\implies x = 0.2\\) m หรือ 20 cm."
+  },
+  {
+    "file": "data\\phy_m5\\phy_m5_ch12-1-data.js",
+    "qNum": 28,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 0.0000018, but explanation ends with = 1.8",
+    "question": "พลังงานศักย์ไฟฟ้าของระบบที่ประกอบด้วยประจุ +5 nC และ +4 nC ซึ่งวางห่างกัน 10 cm เป็นเท่าใด (ตอบในรูปแบบเลขยกกำลัง เช่น 1.23e-4 ในหน่วย J)",
+    "answer": 0.0000018,
+    "explanation": "\\(U = (9\\times10^9) \\frac{(5\\times10^{-9})(4\\times10^{-9})}{0.1} = (9\\times10^9) \\frac{20\\times10^{-18}}{0.1} = 1800 \\times 10^{-9} = 1.8 \\times 10^{-6}\\) J."
+  },
+  {
+    "file": "data\\phy_m5\\phy_m5_ch12-1-data.js",
+    "qNum": 29,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 0.03, but explanation ends with = 18",
+    "question": "ที่มุมของสี่เหลี่ยมจัตุรัสยาวด้านละ 1 เมตร มีประจุ +1μC, +2μC, +3μC, และ +4μC วางอยู่ตามลำดับ จงหาขนาดของแรงลัพธ์ที่กระทำต่อประจุ +2μC (ตอบเป็นทศนิยม 2 ตำแหน่งในหน่วย N)",
+    "answer": 0.03,
+    "explanation": "แรงจาก +1μC: \\(F_1 = k(1)(2)/1^2 = 18 \\times 10^{-3}\\) N (ทิศ +y). แรงจาก +3μC: \\(F_3 = k(3)(2)/1^2 = 54 \\times 10^{-3}\\) N (ทิศ -x). แรงจาก +4μC: \\(F_4 = k(4)(2)/(\\sqrt{2})^2 = 36 \\times 10^{-3}\\) N (ทำมุม -45°). แตกแรง F4: \\(F_{4x} = -25.4 \\times 10^{-3}\\), \\(F_{4y} = -25.4 \\times 10^{-3}\\). รวมแรง: \\(F_x = -54-25.4 = -79.4\\), \\(F_y = 18-25.4 = -7.4\\). ขนาดแรงลัพธ์ \\(F = \\sqrt{(-79.4)^2 + (-7.4)^2} \\times 10^{-3} \\approx 80 \\times 10^{-3}\\) N. (คำตอบที่ถูกต้องจากการคำนวณละเอียดคือ 0.031 N)"
+  },
+  {
+    "file": "data\\phy_m5\\phy_m5_ch12-1-data.js",
+    "qNum": 31,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 20000, but explanation ends with = 20",
+    "question": "ลูกพิทมวล 0.01 kg มีประจุ +5 μC ลอยนิ่งอยู่ในสนามไฟฟ้าสม่ำเสมอในแนวดิ่ง จงหาขนาดของสนามไฟฟ้า (g=10 m/s²) (ตอบเป็นจำนวนเต็มในหน่วย N/C)",
+    "answer": 20000,
+    "explanation": "จากสมดุล \\(F_e = mg \\implies qE = mg\\). \\(E = mg/q = (0.01)(10) / (5 \\times 10^{-6}) = 0.1 / (5 \\times 10^{-6}) = 20,000\\) N/C."
+  },
+  {
+    "file": "data\\phy_m5\\phy_m5_ch12-1-data.js",
+    "qNum": 35,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 600000, but explanation ends with = 6",
+    "question": "ประจุ q₁=+4μC และ q₂=-2μC วางที่มุมของสามเหลี่ยมด้านเท่าที่ยาวด้านละ 3 cm จงหาศักย์ไฟฟ้าที่มุมที่สาม (ตอบเป็นจำนวนเต็มในหน่วย V)",
+    "answer": 600000,
+    "explanation": "\\(V = k(q_1/r + q_2/r) = (9\\times10^9)/0.03 \\times (4-2)\\times10^{-6} = 3\\times10^{11} \\times 2\\times10^{-6} = 6 \\times 10^5\\) V หรือ 600,000 V."
+  },
+  {
+    "file": "data\\phy_m5\\phy_m5_ch12-1-data.js",
+    "qNum": 36,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 1.6e-17, but explanation ends with = 1.6",
+    "question": "อิเล็กตรอนตัวหนึ่ง (ประจุ -1.6x10⁻¹⁹ C) ถูกเร่งจากหยุดนิ่งผ่านความต่างศักย์ 100 V จะมีพลังงานจลน์สุดท้ายเท่าใด (ตอบในรูปแบบเลขยกกำลัง เช่น 1.23e-4 ในหน่วย J)",
+    "answer": 1.6e-17,
+    "explanation": "\\(\\Delta E_k = -q\\Delta V = -(-1.6\\times10^{-19})(100) = 1.6 \\times 10^{-17}\\) J."
+  },
+  {
+    "file": "data\\phy_m5\\phy_m5_ch12-1-data.js",
+    "qNum": 37,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 0.33, but explanation ends with = 2",
+    "question": "ประจุ +Q และ +4Q วางห่างกันเป็นระยะ d จงหาตำแหน่งบนเส้นตรงที่เชื่อมระหว่างประจุที่สนามไฟฟ้าเป็นศูนย์ (ตอบเป็นทศนิยม 2 ตำแหน่งในหน่วยของ d โดยวัดจากประจุ +Q)",
+    "answer": 0.33,
+    "explanation": "ให้ x เป็นระยะจาก +Q. \\(kQ/x^2 = k(4Q)/(d-x)^2 \\implies 1/x = 2/(d-x) \\implies d-x = 2x \\implies 3x=d \\implies x = d/3 \\approx 0.33d\\)."
+  },
+  {
+    "file": "data\\phy_m5\\phy_m5_ch12-1-data.js",
+    "qNum": 38,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 3182, but explanation ends with = 10",
+    "question": "ที่มุมของสี่เหลี่ยมจัตุรัสยาวด้านละ 20 cm มีประจุ +10, +20, +30, +40 nC ตามลำดับ จงหาศักย์ไฟฟ้าที่จุดตัดของเส้นทแยงมุม (ตอบเป็นจำนวนเต็มในหน่วย V)",
+    "answer": 3182,
+    "explanation": "ระยะทางจากมุมถึงจุดกึ่งกลาง \\(r = \\sqrt{10^2+10^2} = 10\\sqrt{2}\\) cm ≈ 0.1414 m. \\(V = (k/r) \\Sigma q = (9\\times10^9/0.1414)(10+20+30+40)\\times10^{-9} \\approx 6.36\\times10^{10} \\times 100\\times10^{-9} \\approx 6360\\) V. (คำนวณใหม่) \\(V = (k/r)(q_1+q_2+q_3+q_4) = (9\\times10^9/0.1414)(100\\times10^{-9}) \\approx 6365\\) V. (คำตอบที่ถูกต้องจากการคำนวณละเอียดคือ 3182 V)"
+  },
+  {
+    "file": "data\\phy_m5\\phy_m5_ch12-1-data.js",
+    "qNum": 40,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is -0.42, but explanation ends with = 9",
+    "question": "ต้องใช้งานเท่าใดในการนำประจุ +2μC, +3μC, และ -4μC จากระยะอนันต์มาวางที่มุมของสามเหลี่ยมด้านเท่าที่ยาวด้านละ 10 cm (ตอบเป็นทศนิยม 2 ตำแหน่งในหน่วย J)",
+    "answer": -0.42,
+    "explanation": "\\(U = U_{12} + U_{13} + U_{23} = k/r (q_1q_2 + q_1q_3 + q_2q_3)\\). \\(U = (9\\times10^9/0.1)((2)(3) + (2)(-4) + (3)(-4)) \\times 10^{-12} = 9\\times10^{10} (6 - 8 - 12) \\times 10^{-12} = 9\\times10^{10} (-14) \\times 10^{-12} = -1.26\\) J. (คำตอบที่ถูกต้องจากการคำนวณละเอียดคือ -0.42 J)"
+  },
+  {
+    "file": "data\\phy_m5\\phy_m5_ch12-2-data.js",
+    "qNum": 7,
+    "type": "OPTION_INDEX_CONTRADICTION",
+    "issue": "Answer text is option 4 (\"ทั้งข้อ ก และ ค ถูกต้อง\"), but explanation says \"ข้อค\"",
+    "question": "เมื่อวางประจุบวกในสนามไฟฟ้าไม่สม่ำเสมอ ประจุจะเคลื่อนที่ไปในทิศทางใด",
+    "answer": "ทั้งข้อ ก และ ค ถูกต้อง",
+    "explanation": "ประจุบวกจะถูกแรงกระทำในทิศเดียวกับสนามไฟฟ้าเสมอ และตามนิยาม ทิศของสนามไฟฟ้าจะชี้จากบริเวณที่มีศักย์ไฟฟ้าสูงไปยังบริเวณที่มีศักย์ไฟฟ้าต่ำเสมอ ดังนั้นทั้งสองข้อความจึงถูกต้อง"
+  },
+  {
+    "file": "data\\phy_m5\\phy_m5_ch12-2-data.js",
+    "qNum": 17,
+    "type": "OPTION_INDEX_CONTRADICTION",
+    "issue": "Answer text is option 1 (\"สเกลาร์ทั้งคู่\"), but explanation says \"ข้อง\"",
+    "question": "พลังงานศักย์ไฟฟ้าและศักย์ไฟฟ้าเป็นปริมาณชนิดใด",
+    "answer": "สเกลาร์ทั้งคู่",
+    "explanation": "ทั้งพลังงานศักย์ไฟฟ้าและศักย์ไฟฟ้าเป็นปริมาณสเกลาร์ เพราะเกี่ยวข้องกับพลังงานและไม่มีทิศทางที่ชัดเจนแบบเวกเตอร์"
+  },
+  {
+    "file": "data\\phy_m5\\phy_m5_ch12-2-data.js",
+    "qNum": 22,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 108000, but explanation ends with = 10800",
+    "question": "จงหาสนามไฟฟ้า ณ จุดกึ่งกลางระหว่างประจุ +16 nC และ +4 nC ซึ่งวางห่างกัน 20 cm (k = 9x10⁹ Nm²/C²) (ตอบเป็นจำนวนเต็มในหน่วย N/C)",
+    "answer": 108000,
+    "explanation": "จุดกึ่งกลางอยู่ห่างจากแต่ละประจุ 10 cm (0.1 m). \\(E_1 = k\\frac{16 \\times 10^{-9}}{(0.1)^2} = 14400\\) N/C (ทิศไปขวา). \\(E_2 = k\\frac{4 \\times 10^{-9}}{(0.1)^2} = 3600\\) N/C (ทิศไปซ้าย). สนามลัพธ์ \\(E_{net} = E_1 - E_2 = 14400 - 3600 = 10800\\) N/C."
+  },
+  {
+    "file": "data\\phy_m5\\phy_m5_ch12-2-data.js",
+    "qNum": 23,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 47900000000, but explanation ends with = 8",
+    "question": "โปรตอน (ประจุ +1.6x10⁻¹⁹ C) อยู่ในสนามไฟฟ้าสม่ำเสมอ 500 N/C จะมีความเร่งเท่าใด (มวลโปรตอน ≈ 1.67x10⁻²⁷ kg) (ตอบในรูปแบบเลขยกกำลัง เช่น 1.23e4 ในหน่วย m/s²)",
+    "answer": 47900000000,
+    "explanation": "\\(F = qE = (1.6\\times10^{-19})(500) = 8\\times10^{-17}\\) N. \\(a = F/m = (8\\times10^{-17}) / (1.67\\times10^{-27}) \\approx 4.79 \\times 10^{10}\\) m/s²."
+  },
+  {
+    "file": "data\\phy_m5\\phy_m5_ch12-2-data.js",
+    "qNum": 26,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is -1.53, but explanation ends with = 9",
+    "question": "ประจุ +3μC, -4μC, และ +5μC วางที่มุมของสามเหลี่ยมด้านเท่าที่ยาวด้านละ 10 cm จงหาพลังงานศักย์ไฟฟ้ารวมของระบบนี้ (ตอบเป็นทศนิยม 2 ตำแหน่งในหน่วย J)",
+    "answer": -1.53,
+    "explanation": "\\(U = k/r (q_1q_2 + q_1q_3 + q_2q_3)\\). \\(U = (9\\times10^9/0.1)((3)(-4) + (3)(5) + (-4)(5)) \\times 10^{-12} = 9\\times10^{10} (-12 + 15 - 20) \\times 10^{-12} = 9\\times10^{10} (-17) \\times 10^{-12} = -1.53\\) J."
+  },
+  {
+    "file": "data\\phy_m5\\phy_m5_ch12-2-data.js",
+    "qNum": 32,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 8400000, but explanation ends with = 3.2",
+    "question": "อิเล็กตรอนถูกปล่อยจากหยุดนิ่งในสนามไฟฟ้าสม่ำเสมอ 2000 N/C เป็นระยะทาง 10 cm จะมีความเร็วสุดท้ายเท่าใด (qₑ=-1.6x10⁻¹⁹ C, mₑ=9.1x10⁻³¹ kg) (ตอบในรูปแบบเลขยกกำลัง เช่น 1.23e4 ในหน่วย m/s)",
+    "answer": 8400000,
+    "explanation": "\\(W = qEd = (1.6\\times10^{-19})(2000)(0.1) = 3.2\\times10^{-17}\\) J. \\(W = \\frac{1}{2}mv^2 \\implies v = \\sqrt{2W/m} = \\sqrt{2(3.2\\times10^{-17})/(9.1\\times10^{-31})} \\approx 8.4 \\times 10^6\\) m/s."
+  },
+  {
+    "file": "data\\phy_m5\\phy_m5_ch12-2-data.js",
+    "qNum": 33,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 1.79, but explanation ends with = 1.35",
+    "question": "ประจุ +1μC, +2μC, และ +3μC วางที่มุมของสามเหลี่ยมด้านเท่าที่ยาวด้านละ 20 cm จงหาขนาดของแรงลัพธ์ที่กระทำต่อประจุ +3μC (ตอบเป็นทศนิยม 2 ตำแหน่งในหน่วย N)",
+    "answer": 1.79,
+    "explanation": "\\(F_{13} = k\\frac{(1\\mu C)(3\\mu C)}{(0.2)^2} = 0.675\\) N. \\(F_{23} = k\\frac{(2\\mu C)(3\\mu C)}{(0.2)^2} = 1.35\\) N. ใช้กฎของโคไซน์: \\(F_R = \\sqrt{F_{13}^2 + F_{23}^2 + 2F_{13}F_{23}\\cos(60°)} = \\sqrt{0.675^2 + 1.35^2 + 2(0.675)(1.35)(0.5)} \\approx 1.79\\) N."
+  },
+  {
+    "file": "data\\phy_m5\\phy_m5_ch12-2-data.js",
+    "qNum": 38,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is -28, but explanation ends with = 2",
+    "question": "ถ้าศักย์ไฟฟ้าในบริเวณหนึ่งอธิบายด้วยสมการ V(x) = 5x² - 2x + 10 สนามไฟฟ้าที่ตำแหน่ง x = 3 m มีค่าเท่าใด (ตอบเป็นจำนวนเต็มในหน่วย V/m)",
+    "answer": -28,
+    "explanation": "สนามไฟฟ้าหาได้จากการหาอนุพันธ์ของศักย์ไฟฟ้าเทียบกับระยะทางแล้วใส่เครื่องหมายลบ: \\(E = -dV/dx = -(10x - 2) = 2 - 10x\\). ที่ x = 3, \\(E = 2 - 10(3) = -28\\) V/m."
+  },
+  {
+    "file": "data\\phy_m5\\phy_m5_ch12-3-data.js",
+    "qNum": 35,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is -3.2e-18, but explanation ends with = 20",
+    "question": "จุด $A$ มีศักย์ไฟฟ้า $-5 \\, \\text{V}$ จุด $B$ มีศักย์ไฟฟ้า $+15 \\, \\text{V}$ ถ้าอิเล็กตรอน ($q = -1.6 \\times 10^{-19} \\, \\text{C}$) เคลื่อนที่จาก $A$ ไป $B$ พลังงานศักย์ไฟฟ้าจะเปลี่ยนแปลงไปเท่าใด (ตอบในรูปแบบเลขยกกำลัง เช่น -3.2e-18 ในหน่วย $\\text{J}$)",
+    "answer": -3.2e-18,
+    "explanation": "$\\Delta V = 15 - (-5) = 20 \\, \\text{V}$. $\\Delta U = (-1.6 \\times 10^{-19})(20) = -32 \\times 10^{-19} = -3.2 \\times 10^{-18} \\, \\text{J}$"
+  },
+  {
+    "file": "data\\phy_m5\\phy_m5_ch13-1-data.js",
+    "qNum": 15,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 0.27, but explanation ends with = 60",
+    "question": "หลอดไฟขนาด $60 \\, \\text{W}$ ต่อกับไฟบ้าน $220 \\, \\text{V}$ ขณะใช้งานจะมีกระแสไฟฟ้าไหลผ่านประมาณกี่แอมแปร์ (ตอบเป็นทศนิยม 2 ตำแหน่ง)",
+    "answer": 0.27,
+    "explanation": "$I = 60 / 220 \\approx 0.2727... \\approx 0.27 \\text{ A}$"
+  },
+  {
+    "file": "data\\phy_m5\\phy_m5_ch13-2-data.js",
+    "qNum": 12,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 1, but explanation ends with = 220",
+    "question": "หลอดไฟ A ($60 \\text{ W}, 220 \\text{ V}$) และหลอดไฟ B ($100 \\text{ W}, 220 \\text{ V}$) นำมาต่ออนุกรมกันแล้วต่อกับแหล่งจ่าย $220 \\text{ V}$ หลอดใดจะสว่างกว่า (ตอบ 1 สำหรับ A, 2 สำหรับ B)",
+    "answer": 1,
+    "explanation": "$R = V^2/P$. $R_A = 220^2/60$, $R_B = 220^2/100$. ดังนั้น $R_A > R_B$. เมื่อต่ออนุกรม $I$ เท่ากัน $P=I^2R$ ดังนั้น $P_A > P_B$ หลอด A สว่างกว่า"
+  },
+  {
+    "file": "data\\phy_m5\\phy_m5_ch13-2-data.js",
+    "qNum": 16,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 6, but explanation ends with = 18",
+    "question": "ตัวต้านทาน 2 ตัว เมื่อต่ออนุกรมกันได้ความต้านทานรวม $9 \\, \\Omega$ เมื่อต่อขนานกันได้ความต้านทานรวม $2 \\, \\Omega$ จงหาค่าความต้านทานของตัวที่มาก (ตอบเป็นจำนวนเต็มในหน่วย $\\Omega$)",
+    "answer": 6,
+    "explanation": "$R_1+R_2=9$. $R_1R_2/9 = 2 \\Rightarrow R_1R_2 = 18$. สองจำนวนที่บวกกันได้ 9 คูณกันได้ 18 คือ 3 และ 6. ตัวมากคือ 6"
+  },
+  {
+    "file": "data\\phy_m5\\phy_m5_ch13-2-data.js",
+    "qNum": 30,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 9980, but explanation ends with = 9",
+    "question": "กัลวานอมิเตอร์แบบขดลวดเคลื่อนที่ มีความต้านทาน $20 \\, \\Omega$ เข็มเบนเต็มสเกลเมื่อมีกระแส $10 \\, \\text{mA}$ หากต้องการวัดแรงดันไฟฟ้า $100 \\, \\text{V}$ ต้องต่อตัวต้านทานอนุกรมเพิ่มกี่โอห์ม (ตอบเป็นจำนวนเต็ม)",
+    "answer": 9980,
+    "explanation": "$R_{total} = V/I_g = 100 / 0.01 = 10,000 \\, \\Omega$. $R_m = 10,000 - 20 = 9,980 \\, \\Omega$"
+  },
+  {
+    "file": "data\\phy_m5\\phy_m5_ch8-1-data.js",
+    "qNum": 26,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 3.14, but explanation ends with = 10",
+    "question": "วัตถุเคลื่อนที่แบบ SHM มีแอมพลิจูด 10 cm และความถี่ 5 Hz ความเร็วสูงสุดของวัตถุเป็นเท่าใด (\\(\\pi \\approx 3.14\\)) (ตอบเป็นทศนิยม 2 ตำแหน่งในหน่วย m/s)",
+    "answer": 3.14,
+    "explanation": "หาความถี่เชิงมุม: \\(\\omega = 2\\pi f = 2\\pi(5) = 10\\pi\\) rad/s. หาความเร็วสูงสุด: \\(v_{max} = \\omega A = (10\\pi)(0.1) = \\pi \\approx 3.14\\) m/s."
+  },
+  {
+    "file": "data\\phy_m5\\phy_m5_ch8-2-data.js",
+    "qNum": 15,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is -20, but explanation ends with = 20",
+    "question": "วัตถุเคลื่อนที่แบบ SHM มีสมการการกระจัด \\(x = 10 \\sin(2t)\\) (หน่วย cm) จงหาความเร็วของวัตถุเมื่อเวลา \\(t = \\pi/2\\) วินาที (ตอบเป็นจำนวนเต็มในหน่วย cm/s)",
+    "answer": -20,
+    "explanation": "ความเร็วคืออนุพันธ์ของการกระจัด: \\(v = \\frac{dx}{dt} = 10(2)\\cos(2t) = 20\\cos(2t)\\). แทนค่า \\(t = \\pi/2\\) จะได้ \\(v = 20\\cos(\\pi) = 20(-1) = -20\\) cm/s"
+  },
+  {
+    "file": "data\\phy_m5\\phy_m5_ch8-2-data.js",
+    "qNum": 16,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 3.8, but explanation ends with = 3.14",
+    "question": "ลูกตุ้มอย่างง่ายยาว 1.6 เมตร แกว่งบนดาวเคราะห์ดวงหนึ่งที่มีความเร่งโน้มถ่วง 4 m/s² คาบการแกว่งจะเป็นกี่วินาที (ตอบเป็นทศนิยม 1 ตำแหน่ง โดยให้ \\(\\pi \\approx 3\\))",
+    "answer": 3.8,
+    "explanation": "จากสูตร \\(T = 2\\pi\\sqrt{L/g}\\). แทนค่า \\(T = 2(3)\\sqrt{1.6/4} = 6\\sqrt{0.4} \\approx 6(0.632) \\approx 3.79\\) s. (ถ้าใช้ \\(\\pi=3.14\\) จะได้ \\(3.97\\) s). ตอบประมาณ 3.8 s"
+  },
+  {
+    "file": "data\\phy_m5\\phy_m5_ch8-3-data.js",
+    "qNum": 13,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 2, but explanation ends with = 6.32",
+    "question": "ลูกตุ้มยาว 1 เมตร แกว่งบนโลก (g=10) จะมีคาบการแกว่งกี่วินาที (ตอบเป็นทศนิยม 2 ตำแหน่ง โดยให้ \\(\\pi \\approx 3.16\\))",
+    "answer": 2,
+    "explanation": "จากสูตร \\(T = 2\\pi\\sqrt{L/g}\\). แทนค่า \\(T = 2(3.16)\\sqrt{1/10} = 6.32(0.316) \\approx 1.997 \\approx 2.00\\) s (หรือใช้ \\(\\pi^2 \\approx g\\) จะได้ \\(T \\approx 2\\) s พอดี)"
+  },
+  {
+    "file": "data\\phy_m5\\phy_m5_ch8-3-data.js",
+    "qNum": 16,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 0.33, but explanation ends with = 1",
+    "question": "วัตถุเคลื่อนที่แบบ SHM ด้วยคาบ 4 วินาที เวลาที่น้อยที่สุดที่วัตถุใช้ในการเคลื่อนที่จากตำแหน่งสมดุลไปถึงตำแหน่งที่มีการกระจัดเป็นครึ่งหนึ่งของแอมพลิจูดคือเท่าใด (ตอบเป็นทศนิยม 2 ตำแหน่ง)",
+    "answer": 0.33,
+    "explanation": "จากสมการ \\(x = A\\sin(\\frac{2\\pi}{T}t)\\). แทนค่า \\(x=A/2\\) และ \\(T=4\\) จะได้ \\(A/2 = A\\sin(\\frac{2\\pi}{4}t) \\Rightarrow 0.5 = \\sin(\\frac{\\pi}{2}t)\\). มุมคือ \\(\\pi/6\\). ดังนั้น \\(\\frac{\\pi}{2}t = \\frac{\\pi}{6} \\Rightarrow t = 1/3 \\approx 0.33\\) s"
+  },
+  {
+    "file": "data\\phy_m5\\phy_m5_ch8-3-data.js",
+    "qNum": 23,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 3.16, but explanation ends with = 0.5",
+    "question": "ลูกตุ้มนาฬิกาแกว่งทำมุมกว้าง 60 องศา (แอมพลิจูดเชิงมุม) ความเร็วที่จุดต่ำสุดจะเป็นกี่ m/s ถ้าเชือกยาว 1 m (g=10) (ตอบเป็นทศนิยม 2 ตำแหน่ง)",
+    "answer": 3.16,
+    "explanation": "หาความสูง h จาก \\(h = L(1-\\cos\\theta) = 1(1-\\cos60) = 1(0.5) = 0.5\\) m. หาความเร็วจาก \\(v = \\sqrt{2gh}\\). แทนค่า \\(v = \\sqrt{2(10)(0.5)} = \\sqrt{10} \\approx 3.16\\) m/s"
+  },
+  {
+    "file": "data\\phy_m5\\phy_m5_ch8-3-data.js",
+    "qNum": 29,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 1, but explanation ends with = 2",
+    "question": "ลูกตุ้มนาฬิกาแกว่งด้วยแอมพลิจูดเล็กๆ ถ้าเพิ่มแอมพลิจูดเป็น 2 เท่า (ยังคงเล็กอยู่) คาบการแกว่งจะเปลี่ยนไปกี่เท่า (ตอบเป็นจำนวนเต็ม)",
+    "answer": 1,
+    "explanation": "คาบ \\(T = 2\\pi\\sqrt{L/g}\\) ไม่ขึ้นกับแอมพลิจูด (สำหรับมุมเล็กๆ) ดังนั้นคาบเท่าเดิม (1 เท่า)"
+  },
+  {
+    "file": "data\\phy_m5\\phy_m5_ch8-4-data.js",
+    "qNum": 14,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 0.89, but explanation ends with = 2",
+    "question": "สปริงตัวหนึ่งยืดออก 0.2 เมตร เมื่อแขวนมวล 1 kg ถ้าดึงมวลลงมาอีกเล็กน้อยแล้วปล่อย คาบการสั่นจะเป็นเท่าใด (ตอบเป็นทศนิยม 2 ตำแหน่ง โดยให้ \\(\\pi \\approx 3.14, g=10\\))",
+    "answer": 0.89,
+    "explanation": "\\(k = mg/x = (1)(10)/0.2 = 50\\) N/m. \\(T = 2\\pi\\sqrt{1/50} = 2(3.14)\\sqrt{0.02} \\approx 6.28(0.1414) \\approx 0.89\\) s"
+  },
+  {
+    "file": "data\\phy_m5\\phy_m5_ch8-4-data.js",
+    "qNum": 15,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 2.8, but explanation ends with = 6",
+    "question": "ลูกตุ้มยาว 0.9 เมตร แกว่งบนดาวเคราะห์ที่มีความเร่งโน้มถ่วง 4 m/s² คาบการแกว่งจะเป็นกี่วินาที (ตอบเป็นทศนิยม 1 ตำแหน่ง โดยให้ \\(\\pi \\approx 3\\))",
+    "answer": 2.8,
+    "explanation": "จากสูตร \\(T = 2\\pi\\sqrt{L/g}\\). แทนค่า \\(T = 2(3)\\sqrt{0.9/4} = 6\\sqrt{0.225} \\approx 6(0.474) \\approx 2.84\\) s. ตอบ 2.8 s"
+  },
+  {
+    "file": "data\\phy_m5\\phy_m5_ch8-4-data.js",
+    "qNum": 29,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 30, but explanation ends with = 10",
+    "question": "วัตถุสั่น 300 รอบใน 1 นาที ความถี่เชิงมุมเป็นเท่าใด (ตอบเป็นจำนวนเต็มในหน่วย rad/s โดยให้ \\(\\pi \\approx 3\\))",
+    "answer": 30,
+    "explanation": "หาความถี่ \\(f = 300/60 = 5\\) Hz. หาความถี่เชิงมุม \\(\\omega = 2\\pi f\\). แทนค่า \\(\\omega = 2\\pi(5) = 10\\pi \\approx 30\\) rad/s"
+  },
+  {
+    "file": "data\\phy_m5\\phy_m5_ch8-5-data.js",
+    "qNum": 20,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 3.18, but explanation ends with = 10",
+    "question": "จากกราฟความเร็ว-เวลา ถ้าความเร็วสูงสุดคือ 10 m/s และคาบคือ 2 วินาที การกระจัดสูงสุด (แอมพลิจูด) เป็นกี่เมตร (ตอบเป็นทศนิยม 2 ตำแหน่ง โดยให้ \\(\\pi \\approx 3.14\\))",
+    "answer": 3.18,
+    "explanation": "\\(10 = (2\\pi/2)A = \\pi A \\Rightarrow A = 10/3.14 \\approx 3.18\\) m"
+  },
+  {
+    "file": "data\\phy_m5\\phy_m5_final-exam-1-data.js",
+    "qNum": 46,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 23.6, but explanation ends with = 0.4",
+    "question": "เครื่องบินรบลำหนึ่งบินในแนวระดับด้วยอัตราเร็ว 2.5 มัค ผ่านเหนือผู้สังเกต เมื่อผู้สังเกตได้ยินเสียงคลื่นกระแทก เขาจะต้องเงยหน้าทำมุมเท่าใดจากพื้นดินจึงจะเห็นเครื่องบินพอดี",
+    "answer": 23.6,
+    "explanation": "มุมที่ต้องเงยหน้าขึ้นจากพื้นดิน (\\(\\alpha\\)) สัมพันธ์กับเลขมัค (M) ด้วยสมการ \\(\\sin\\alpha = 1/M\\). \\(\\sin\\alpha = 1/2.5 = 0.4\\). ดังนั้น \\(\\alpha = \\arcsin(0.4) \\approx 23.6\\) องศา."
+  },
+  {
+    "file": "data\\phy_m5\\phy_m5_final-exam-1-data.js",
+    "qNum": 47,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 1000000, but explanation ends with = 10",
+    "question": "ห้องแสดงดนตรีมีระดับเสียงพื้นหลัง (Background noise) 40 dB เมื่อวงดนตรีเริ่มบรรเลง ระดับเสียงเพิ่มเป็น 100 dB จงหาว่าความเข้มเสียงจากวงดนตรีเป็นกี่เท่าของความเข้มเสียงพื้นหลัง (ตอบเป็นจำนวนเต็ม)",
+    "answer": 1000000,
+    "explanation": "\\(I_{bg} = I_0 10^4\\). \\(I_{total} = I_0 10^{10}\\). \\(I_{band} = I_{total} - I_{bg} \\approx I_{total}\\). อัตราส่วนคือ \\(I_{band}/I_{bg} \\approx I_{total}/I_{bg} = 10^{10}/10^4 = 10^6\\) หรือ 1,000,000 เท่า."
+  },
+  {
+    "file": "data\\phy_m5\\phy_m5_final-exam-2-data.js",
+    "qNum": 19,
+    "type": "OPTION_INDEX_CONTRADICTION",
+    "issue": "Answer text is option 3 (\"การใช้เครื่องตรวจจับความเร็วของรถยนต์ด้วยคลื่นเรดาร์\"), but explanation says \"ข้อ ก\"",
+    "question": "ข้อใดเป็นการประยุกต์ใช้หลักการของเสียงที่แตกต่างจากข้ออื่น",
+    "answer": "การใช้เครื่องตรวจจับความเร็วของรถยนต์ด้วยคลื่นเรดาร์",
+    "explanation": "ข้อ ก, ข, และ ง ล้วนเป็นหลักการของคลื่นเสียงโดยตรง (การสั่นพ้อง/พลังงาน, การสะท้อน, การดูดกลืน/กระจาย) แต่ข้อ ค ใช้หลักการของคลื่นแม่เหล็กไฟฟ้า (คลื่นเรดาร์) แม้จะใช้ปรากฏการณ์ดอปเพลอร์เหมือนกัน แต่เป็นคนละชนิดของคลื่น"
+  },
+  {
+    "file": "data\\phy_m5\\phy_m5_final-exam-2-data.js",
+    "qNum": 37,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is -0.87, but explanation ends with = 340",
+    "question": "ท่อออร์แกนปลายเปิดสองข้างยาว 60 cm ถูกเทียบเสียงที่อุณหภูมิ 20 °C หากนำไปเล่นในห้องแอร์ที่มีอุณหภูมิ 15 °C ความถี่มูลฐานของท่อจะเปลี่ยนไปกี่เปอร์เซ็นต์ (ให้ \\(v=331+0.6t\\), ตอบเป็นค่าลบหากลดลง)",
+    "answer": -0.87,
+    "explanation": "v₁ (ที่ 20°C) = 331+0.6(20) = 343 m/s. v₂ (ที่ 15°C) = 331+0.6(15) = 340 m/s. f ∝ v. %เปลี่ยน = ((v₂-v₁)/v₁) * 100 = ((340-343)/343) * 100 = -0.87%"
+  },
+  {
+    "file": "data\\phy_m5\\phy_m5_final-exam-2-data.js",
+    "qNum": 39,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 7, but explanation ends with = 8",
+    "question": "ที่ทำงานแห่งหนึ่งมีระดับเสียงจากการทำงานปกติ 82 dB ตามกฎหมายความปลอดภัย พนักงานจะทำงานในที่ที่มีระดับเสียง 91 dB ได้ไม่เกิน 2 ชั่วโมง อยากทราบว่าโรงงานนี้สามารถเพิ่มเครื่องจักรที่ให้เสียงเหมือนเดิมได้อีกกี่เครื่อง จึงจะทำให้ระดับเสียงเกิน 91 dB พอดี (กำหนด \\(\\log(2) \\approx 0.3\\))",
+    "answer": 7,
+    "explanation": "Δβ = 91-82 = 9 dB. 9 = 10 log(I₂/I₁). log(I₂/I₁) = 0.9. I₂/I₁ = 10^0.9 = 10^(3*0.3) ≈ (10^0.3)³ ≈ 2³ = 8. ดังนั้นความเข้มเสียงเพิ่มเป็น 8 เท่า หมายถึงมีเครื่องจักรทั้งหมด 8 เครื่อง จึงเพิ่มได้อีก 7 เครื่อง."
+  },
+  {
+    "file": "data\\phy_m5\\phy_m5_final-exam-2-data.js",
+    "qNum": 42,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 13.88, but explanation ends with = 1360",
+    "question": "รถไฟขบวนหนึ่งเคลื่อนที่ด้วยอัตราเร็วคงที่ เมื่อวิ่งผ่านผู้สังเกตที่หยุดนิ่ง ความถี่เสียงหวูดที่ผู้สังเกตได้ยินเปลี่ยนจาก 510 Hz ไปเป็น 470 Hz จงหาอัตราเร็วของรถไฟ",
+    "answer": 13.88,
+    "explanation": "เข้าหา: \\(510 = f_s(340/(340-v_s))\\). ออกจาก: \\(470 = f_s(340/(340+v_s))\\). นำสมการมาหารกัน: \\(510/470 = (340+v_s)/(340-v_s)\\). แก้สมการหา \\(v_s\\) จะได้ \\(4 \\times 340 = 98 \\times v_s \\implies v_s = 1360 / 98 \\approx 13.88\\) m/s."
+  },
+  {
+    "file": "data\\phy_m5\\phy_m5_final-exam-2-data.js",
+    "qNum": 44,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 0.005, but explanation ends with = 10",
+    "question": "จงคำนวณหากำลังของแหล่งกำเนิดเสียงที่น้อยที่สุด ที่จะทำให้เกิดระดับความเข้มเสียง 60 dB ณ ตำแหน่งที่ห่างออกไป 20 เมตร",
+    "answer": 0.005,
+    "explanation": "1. หา I: 60 = 10log(I/10⁻¹²). I = 10⁻⁶ W/m². 2. หา P: P = I * 4πr² = 10⁻⁶ * 4π(20)² = 10⁻⁶ * 1600π ≈ 0.005 W."
+  },
+  {
+    "file": "data\\phy_m5\\phy_m5_final-exam-2-data.js",
+    "qNum": 45,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 2, but explanation ends with = 1.08",
+    "question": "หลอดเรโซแนนซ์ยาว 1 เมตร ใช้ส้อมเสียงความถี่ 400 Hz ในการทดลองที่อุณหภูมิ 25 °C จงหาว่าจะเกิดการสั่นพ้องได้ทั้งหมดกี่ครั้ง (\\(v=331+0.6t\\))",
+    "answer": 2,
+    "explanation": "v = 331+0.6(25) = 346 m/s. λ = v/f = 346/400 = 0.865 m. ตำแหน่งสั่นพ้อง L = n(λ/4) โดย n=1,3,5,... และ L ต้องน้อยกว่า 1 m. <br>n=1: L = 1(0.865/4) = 0.216 m (เกิด). <br>n=3: L = 3(0.865/4) = 0.649 m (เกิด). <br>n=5: L = 5(0.865/4) = 1.08 m (ไม่เกิด เพราะยาวกว่าท่อ). <br>ดังนั้นเกิดการสั่นพ้องได้ 2 ครั้ง."
+  },
+  {
+    "file": "data\\phy_m5\\phy_m5_final-exam-2-data.js",
+    "qNum": 47,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 23.6, but explanation ends with = 0.4",
+    "question": "เครื่องบินรบลำหนึ่งบินในแนวระดับด้วยอัตราเร็ว 2.5 มัค ผ่านเหนือผู้สังเกต เมื่อผู้สังเกตได้ยินเสียงคลื่นกระแทก เขาจะต้องเงยหน้าทำมุมเท่าใดจากพื้นดินจึงจะเห็นเครื่องบินพอดี",
+    "answer": 23.6,
+    "explanation": "มุมที่ต้องเงยหน้าขึ้นจากพื้นดิน (\\(\\alpha\\)) สัมพันธ์กับเลขมัค (M) ด้วยสมการ \\(\\sin\\alpha = 1/M\\). \\(\\sin\\alpha = 1/2.5 = 0.4\\). ดังนั้น \\(\\alpha = \\arcsin(0.4) \\approx 23.6\\) องศา."
+  },
+  {
+    "file": "data\\phy_m5\\phy_m5_final-exam-2-data.js",
+    "qNum": 49,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 1306.4, but explanation ends with = 1200",
+    "question": "รถพยาบาลคันหนึ่งเคลื่อนที่บนถนนตรงด้วยอัตราเร็ว 30 m/s และเปิดไซเรนความถี่ 1200 Hz ชายคนหนึ่งยืนอยู่ห่างจากถนน 50 m จงหาความถี่ของเสียงที่ชายคนนั้นได้ยิน ณ ขณะที่รถพยาบาลอยู่ห่างจากเขาเป็นระยะทาง 130 m และกำลังเคลื่อนที่เข้าหาจุดที่ใกล้ที่สุดบนถนน (\\(v_{เสียง}=340\\) m/s, ตอบทศนิยม 1 ตำแหน่ง)",
+    "answer": 1306.4,
+    "explanation": "ระยะทางแนวราบ x = \\(\\sqrt{130^2-50^2} = 120\\) m. มุม \\(\\theta\\) ที่แนวสายตาทำกับแนวการเคลื่อนที่: \\(\\cos(\\theta) = x/130 = 120/130\\). ความเร็วของแหล่งกำเนิดในแนวสายตา \\(v_{s,rad} = v_s \\cos(\\theta) = 30 \\times (120/130) \\approx 27.69\\) m/s. ความถี่ที่ได้ยิน \\(f_o = f_s(\\frac{v}{v-v_{s,rad}}) = 1200(\\frac{340}{340-27.69}) \\approx 1306.4\\) Hz."
+  },
+  {
+    "file": "data\\phy_m5\\phy_m5_final-exam-2-data.js",
+    "qNum": 50,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 224.7, but explanation ends with = 408",
+    "question": "เวทีคอนเสิร์ต A และ B ตั้งอยู่ห่างกัน 500 เมตร บนแนวเส้นตรงเดียวกัน เวที A ใช้เครื่องเสียงกำลัง 20 กิโลวัตต์ และเวที B ใช้เครื่องเสียงกำลัง 30 กิโลวัตต์ ผู้ฟังคนหนึ่งยืนอยู่บนเส้นตรงระหว่างเวทีทั้งสอง เขาจะต้องยืนห่างจากเวที A เป็นระยะทางเท่าใด จึงจะได้ยินเสียงจากทั้งสองเวทีมีความเข้มเสียงเท่ากัน",
+    "answer": 224.7,
+    "explanation": "ให้ x เป็นระยะห่างจาก A. I_A = I_B => P_A/x² = P_B/(500-x)². 20/x² = 30/(500-x)². 2/3 = (x/(500-x))². sqrt(2/3) = x/(500-x). 0.816(500-x) = x. 408 - 0.816x = x. 1.816x = 408. x ≈ 224.7 m."
+  },
+  {
+    "file": "data\\posn_astro\\junior1-data.js",
+    "qNum": 61,
+    "type": "OPTION_INDEX_CONTRADICTION",
+    "issue": "Answer text is option 1 (\"การเกิดแผ่นดินไหว\"), but explanation says \"ข้อง\"",
+    "question": "ข้อใดไม่ใช่ผลกระทบโดยตรงจากพายุสุริยะ (Solar Storm) ที่มีต่อโลก",
+    "answer": "การเกิดแผ่นดินไหว",
+    "explanation": "พายุสุริยะส่งผลกระทบต่อสนามแม่เหล็กและบรรยากาศชั้นบนของโลก ทำให้เกิดออโรราและรบกวนระบบไฟฟ้าและสื่อสาร แต่ไม่มีความเกี่ยวข้องกับการเกิดแผ่นดินไหวซึ่งเป็นกระบวนการทางธรณีวิทยา"
+  },
+  {
+    "file": "data\\posn_astro\\junior2-data.js",
+    "qNum": 67,
+    "type": "OPTION_INDEX_CONTRADICTION",
+    "issue": "Answer text is option 2 (\"800 N\"), but explanation says \"ข้อ 1\"",
+    "question": "นักกระโดดร่มมวล 80 kg กางร่มแล้วตกลงมาด้วยความเร็วคงที่ แรงต้านอากาศที่กระทำต่อร่มมีขนาดเท่าใด ($g \\approx 10$ m/s²)",
+    "answer": "800 N",
+    "explanation": "การตกลงมาด้วยความเร็วคงที่หมายความว่าความเร่งเป็นศูนย์ ดังนั้นแรงลัพธ์เป็นศูนย์ (ตามกฎข้อ 1 ของนิวตัน) แสดงว่าแรงต้านอากาศที่ชี้ขึ้น มีขนาดเท่ากับแรงโน้มถ่วง (น้ำหนัก) ที่ชี้ลงพอดี. น้ำหนัก = \\(mg = 80 \\times 10 = 800\\) N"
+  },
+  {
+    "file": "data\\posn_astro\\junior2568-data.js",
+    "qNum": 31,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 8.72, but explanation ends with = 18",
+    "question": "มีแรงสองแรงที่ตั้งฉากกันกระทำกับวัตถุมวล 10.0 kg ทำให้วัตถุเคลื่อนที่ด้วยความเร่ง 2.00 m/s² หากแรงหนึ่งมีขนาด 18.0 N แล้วอีกแรงหนึ่งมีขนาดเท่าใด (ตอบเป็นทศนิยม 2 ตำแหน่ง)",
+    "answer": 8.72,
+    "explanation": "แรงลัพธ์ \\(F = ma = 10(2) = 20\\) N. เนื่องจากแรงตั้งฉากกัน \\(F^2 = F_1^2 + F_2^2\\) ดังนั้น \\(20^2 = 18^2 + F_2^2 \\implies F_2 = \\sqrt{400-324} = \\sqrt{76} \\approx 8.72\\) N"
+  },
+  {
+    "file": "data\\posn_astro\\junior2568-data.js",
+    "qNum": 33,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 20.71, but explanation ends with = 1450",
+    "question": "กาแล็กซีหนึ่งมีความเร็วถอยห่าง 1,450 km/s จงหาระยะทางระหว่างกาแล็กซีกับผู้สังเกตในหน่วยเมกะพาร์เซก (Mpc) กำหนด \\(H_0 = 70.0\\ \\text{km/s/Mpc}\\) (ตอบเป็นทศนิยม 2 ตำแหน่ง)",
+    "answer": 20.71,
+    "explanation": "\\(d = v / H_0 = 1450 / 70 \\approx 20.71\\) Mpc"
+  },
+  {
+    "file": "data\\posn_astro\\junior2568-data.js",
+    "qNum": 37,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 91.63, but explanation ends with = 15",
+    "question": "ดาราจักร M81 มีเส้นผ่านศูนย์กลางเชิงมุม 21.0 ลิปดา และอยู่ห่าง 15.0 ล้านปีแสง มีเส้นผ่านศูนย์กลางจริง \\(B \\times 10^3\\) ปีแสง จงหาค่า B (ตอบเป็นทศนิยม 2 ตำแหน่ง)",
+    "answer": 91.63,
+    "explanation": "\\(\\text{ขนาดจริง} = \\text{ระยะทาง} \\times \\text{มุม(เรเดียน)}\\). \\(21'\\) ลิปดา \\(= 21/60^\\circ = 0.35^\\circ\\). \\(\\text{เรเดียน} = 0.35 \\times \\pi / 180 \\approx 0.006108\\). \\(\\text{ขนาด} = 15 \\times 10^6 \\times 0.006108 \\approx 91,620\\) ปีแสง. \\(B \\approx 91.63\\)"
+  },
+  {
+    "file": "data\\posn_astro\\junior2568-data.js",
+    "qNum": 39,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 0.47, but explanation ends with = 40702",
+    "question": "ยานอวกาศโคจรรอบโลกที่ความสูง 100 km ใช้เวลา 24 ชั่วโมงพอดี (รัศมีโลก 6,378 km) จงหาอัตราเร็วของยานในหน่วย km/s (ตอบเป็นทศนิยม 2 ตำแหน่ง)",
+    "answer": 0.47,
+    "explanation": "รัศมีโคจร \\(R = 6378 + 100 = 6478\\) km. เส้นรอบวง \\(= 2\\pi R \\approx 40,702\\) km. เวลา \\(24\\) ชม \\(= 86400\\) วินาที. \\(v = 40702 / 86400 \\approx 0.47\\) km/s"
+  },
+  {
+    "file": "data\\posn_astro\\junior5-data.js",
+    "qNum": 4,
+    "type": "OPTION_INDEX_CONTRADICTION",
+    "issue": "Answer text is option 3 (\"เป็น 'สารบ่งชี้ทางชีวภาพ' ที่อาจเกิดขึ้นจากจุลินทรีย์ เนื่องจากบนโลกฟอสฟีนส่วนใหญ่เกิดจากสิ่งมีชีวิต\"), but explanation says \"ข้อง\"",
+    "question": "การค้นพบโมเลกุลฟอสฟีน (Phosphine) ในชั้นบรรยากาศของดาวศุกร์มีความสำคัญอย่างไรในแง่ของการค้นหาสิ่งมีชีวิตนอกโลก (Astrobiology)?",
+    "answer": "เป็น 'สารบ่งชี้ทางชีวภาพ' ที่อาจเกิดขึ้นจากจุลินทรีย์ เนื่องจากบนโลกฟอสฟีนส่วนใหญ่เกิดจากสิ่งมีชีวิต",
+    "explanation": "แม้ยังไม่เป็นข้อสรุป แต่การพบฟอสฟีนซึ่งเป็นแก๊สที่บนโลกมักเกี่ยวข้องกับกระบวนการทางชีวภาพ ได้จุดประกายการถกเถียงและการวิจัยเพิ่มเติมว่าอาจมีจุลินทรีย์ลอยอยู่ในชั้นบรรยากาศของดาวศุกร์"
+  },
+  {
+    "file": "data\\posn_astro\\juniorC1-data.js",
+    "qNum": 14,
+    "type": "OPTION_INDEX_CONTRADICTION",
+    "issue": "Answer text is option 3 (\"การเกิดน้ำเกิด-น้ำตาย\"), but explanation says \"ข้อง\"",
+    "question": "ปรากฏการณ์ใดที่ไม่ได้เกิดจากการเอียงของแกนโลก?",
+    "answer": "การเกิดน้ำเกิด-น้ำตาย",
+    "explanation": "น้ำเกิด-น้ำตายเป็นผลมาจากแรงไทดัลของดวงจันทร์และดวงอาทิตย์ที่เสริมหรือหักล้างกัน ขึ้นอยู่กับการเรียงตัวของโลก ดวงจันทร์ และดวงอาทิตย์ (ช่วงเดือนเพ็ญ/เดือนดับ และช่วงข้างขึ้น/ข้างแรม) ไม่ได้เกี่ยวข้องกับการเอียงของแกนโลกโดยตรง"
+  },
+  {
+    "file": "data\\posn_astro\\senior2568-data.js",
+    "qNum": 31,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 20.71, but explanation ends with = 1450",
+    "question": "กาแล็กซีหนึ่งมีความเร็วถอยห่าง 1,450 km/s จงหาระยะห่างในหน่วยเมกะพาร์เซก (Mpc) กำหนด \\(H_0 = 70.0\\) km/s/Mpc (ตอบเป็นทศนิยม 2 ตำแหน่ง)",
+    "answer": 20.71,
+    "explanation": "จากกฎของฮับเบิล \\(v = H_0 d\\), จะได้ \\(d = v / H_0 = 1450 / 70 \\approx 20.71\\) Mpc."
+  },
+  {
+    "file": "data\\posn_astro\\senior2568-data.js",
+    "qNum": 36,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 91.63, but explanation ends with = 0.35",
+    "question": "ดาราจักร M81 มีเส้นผ่านศูนย์กลางเชิงมุม 21.0 ลิปดา และอยู่ห่าง 15.0 ล้านปีแสง มีเส้นผ่านศูนย์กลางเชิงเส้น \\(B \\times 10^3\\) ปีแสง จงหาค่า \\(B\\) (ตอบเป็นทศนิยม 2 ตำแหน่ง)",
+    "answer": 91.63,
+    "explanation": "ขนาดจริง \\(D = d \\times \\theta\\) (เมื่อ \\(\\theta\\) เป็นเรเดียน). แปลงมุม: \\(21' = (21/60)^\\circ = 0.35^\\circ\\). แปลงเป็นเรเดียน: \\(\\theta = 0.35 \\times \\frac{\\pi}{180} \\approx 0.006108\\) rad. ขนาดจริง \\(= (15 \\times 10^6 \\text{ ปีแสง}) \\times 0.006108 \\approx 91,620\\) ปีแสง. เขียนในรูป \\(B \\times 10^3\\) จะได้ \\(91.62 \\times 10^3\\) ปีแสง. ดังนั้น \\(B \\approx 91.62\\)."
+  },
+  {
+    "file": "data\\posn_astro\\senior2568-data.js",
+    "qNum": 39,
+    "type": "NUMERICAL_MISMATCH",
+    "issue": "Answer is 5.93, but explanation ends with = 1.818",
+    "question": "ดาวบาร์นาร์ดมีมุมพารัลแลกซ์ 0.550 พิลิปดา ห่างจากโลกกี่ปีแสง (\\(1\\) pc \\(= 3.262\\) ปีแสง) (ตอบเป็นทศนิยม 2 ตำแหน่ง)",
+    "answer": 5.93,
+    "explanation": "\\(d (\\text{pc}) = 1 / 0.550 \\approx 1.818\\) pc. \\(d (\\text{ly}) = 1.818 \\times 3.262 \\approx 5.93\\) ปีแสง."
+  },
+  {
+    "file": "data\\posn_astro\\senior4-data.js",
+    "qNum": 75,
+    "type": "OPTION_INDEX_CONTRADICTION",
+    "issue": "Answer text is option 3 (\"ไม่ใช่, เพราะกฎของเคปเลอร์อธิบายการโคจร ไม่ได้อธิบายรูปร่าง\"), but explanation says \"ข้อง\"",
+    "question": "ดาวเคราะห์แคระ 'เฮาเมอา' (Haumea) มีรูปร่างเป็นทรงรีคล้ายลูกรักบี้ ซึ่งเชื่อว่าเป็นผลมาจากการหมุนรอบตัวเองที่เร็วมาก นี่เป็นการละเมิดกฎข้อใดของเคปเลอร์หรือไม่",
+    "answer": "ไม่ใช่, เพราะกฎของเคปเลอร์อธิบายการโคจร ไม่ได้อธิบายรูปร่าง",
+    "explanation": "กฎของเคปเลอร์เป็นกฎเชิงประจักษ์ที่อธิบายการเคลื่อนที่ของวัตถุหนึ่งภายใต้แรงโน้มถ่วงของอีกวัตถุหนึ่ง โดยประมาณว่าวัตถุเหล่านั้นเป็นจุดมวล (Point mass) กฎเหล่านี้ไม่ได้เกี่ยวข้องกับรูปร่างทางกายภาพของวัตถุ ซึ่งถูกกำหนดโดยสมดุลระหว่างแรงโน้มถ่วงภายในกับแรงหนีศูนย์กลางจากการหมุน"
+  },
+  {
+    "file": "data\\posn_astro\\senior5-data.js",
+    "qNum": 42,
+    "type": "OPTION_INDEX_CONTRADICTION",
+    "issue": "Answer text is option 1 (\"x = 1 หรือ x = 3\"), but explanation says \"ตอบค\"",
+    "question": "แก้สมการเพื่อหาค่า x: $2x^2 - 8x + 6 = 0$",
+    "answer": "x = 1 หรือ x = 3",
+    "explanation": "หารสมการทั้งหมดด้วย 2 จะได้: $x^2 - 4x + 3 = 0$.<br>แยกตัวประกอบ: $(x - 1)(x - 3) = 0$.<br>ดังนั้น คำตอบคือ x = 1 หรือ x = 3."
+  },
+  {
+    "file": "data\\posn_astro\\senior7-data.js",
+    "qNum": 26,
+    "type": "OPTION_INDEX_CONTRADICTION",
+    "issue": "Answer text is option 1 (\"เพราะหากเอกภพเป็นอนันต์และหยุดนิ่ง ทุกแนวสายตาควรจะสิ้นสุดที่พื้นผิวของดาวฤกษ์ ทำให้ท้องฟ้าสว่างไสว\"), but explanation says \"ตอบข\"",
+    "question": "ทำไมปฏิทรรศน์ของโอลเบอร์ส (Olbers' Paradox) ที่ว่า 'ทำไมท้องฟ้ายามค่ำคืนจึงมืด' จึงเป็นหลักฐานโต้แย้งแนวคิดเอกภพที่หยุดนิ่งและเป็นอนันต์?",
+    "answer": "เพราะหากเอกภพเป็นอนันต์และหยุดนิ่ง ทุกแนวสายตาควรจะสิ้นสุดที่พื้นผิวของดาวฤกษ์ ทำให้ท้องฟ้าสว่างไสว",
+    "explanation": "ปฏิทรรศน์นี้ชี้ให้เห็นความขัดแย้งของแนวคิดเอกภพแบบเก่า คำตอบของปฏิทรรศน์นี้ในปัจจุบันคือ เอกภพมีอายุจำกัด (ประมาณ 13.8 พันล้านปี) และกำลังขยายตัว ทำให้แสงจากกาแล็กซีที่ไกลมากๆ ยังมาไม่ถึงเรา และแสงที่มาถึงก็เกิดการเลื่อนทางแดงจนพลังงานลดลง"
+  },
+  {
+    "file": "data\\posn_astro\\senior7-data.js",
+    "qNum": 50,
+    "type": "OPTION_INDEX_CONTRADICTION",
+    "issue": "Answer text is option 2 (\"เพราะมีความสัมพันธ์ระหว่างมวลของโป่งกลางกาแล็กซีกับมวลของหลุมดำ ซึ่งบ่งชี้ว่าทั้งสองวิวัฒนาการมาพร้อมกัน\"), but explanation says \"ข้อง\"",
+    "question": "เพราะเหตุใดหลุมดำมวลยวดยิ่ง (Supermassive Black Holes) ที่ใจกลางกาแล็กซีจึงมักพบในกาแล็กซีขนาดใหญ่ แต่ไม่พบในกาแล็กซีแคระ?",
+    "answer": "เพราะมีความสัมพันธ์ระหว่างมวลของโป่งกลางกาแล็กซีกับมวลของหลุมดำ ซึ่งบ่งชี้ว่าทั้งสองวิวัฒนาการมาพร้อมกัน",
+    "explanation": "ความสัมพันธ์ M-sigma (M-σ relation) แสดงให้เห็นว่ามวลของหลุมดำมวลยวดยิ่งมีความสัมพันธ์อย่างใกล้ชิดกับความเร็วของดาวในโป่งกลางกาแล็กซี (bulge) สิ่งนี้ชี้ให้เห็นว่าการเติบโตของหลุมดำและกาแล็กซีแม่น่าจะเกี่ยวข้องกันอย่างลึกซึ้ง อาจผ่านกระบวนการป้อนกลับ (feedback) จากควาซาร์"
+  },
+  {
+    "file": "data\\posn_astro\\seniorC2-data.js",
+    "qNum": 16,
+    "type": "OPTION_INDEX_CONTRADICTION",
+    "issue": "Answer text is option 3 (\"A บอกถึงอัตราเฉือน ของการหมุน, B บอกถึงความหมุนวน หรือการหมุนแบบวัตถุแข็งเกร็ง\"), but explanation says \"ข้อง\"",
+    "question": "Oort's constants (A และ B) ที่ใช้อธิบายการหมุนของกาแล็กซีทางช้างเผือกในบริเวณใกล้เคียงดวงอาทิตย์ บอกอะไรเราเกี่ยวกับจลนศาสตร์ของกาแล็กซี?",
+    "answer": "A บอกถึงอัตราเฉือน ของการหมุน, B บอกถึงความหมุนวน หรือการหมุนแบบวัตถุแข็งเกร็ง",
+    "explanation": "ค่าคงที่ของออร์ตเป็นวิธีที่สะดวกในการอธิบายสนามความเร็วของดาวฤกษ์ในจานกาแล็กซีใกล้กับดวงอาทิตย์ ค่า A แสดงถึงการหมุนที่แตกต่างกัน (Differential Rotation) ซึ่งทำให้เกิดการเฉือน ส่วนค่า B เกี่ยวข้องกับการหมุนวนของสนามความเร็ว ซึ่งสามารถใช้คำนวณหาความเร็วเชิงมุมของการโคจรรอบศูนย์กลางกาแล็กซีได้ ($omega_0 = A - B$)"
+  },
+  {
+    "file": "data\\posn_earth\\ES1-data.js",
+    "qNum": 108,
+    "type": "OPTION_INDEX_CONTRADICTION",
+    "issue": "Answer text is option 2 (\"เพื่อศึกษาแสงยุคแรกเริ่มและแหล่งกำเนิดดาวที่ถูกบดบังโดยฝุ่น\"), but explanation says \"ข้อค\"",
+    "question": "กล้องโทรทรรศน์อวกาศเจมส์ เวบบ์ ถูกออกแบบมาให้รับคลื่นในช่วงอินฟราเรดเป็นหลัก เพราะเหตุใด",
+    "answer": "เพื่อศึกษาแสงยุคแรกเริ่มและแหล่งกำเนิดดาวที่ถูกบดบังโดยฝุ่น",
+    "explanation": "เหตุผลหลัก 2 ข้อคือ: 1) แสงจากกาแล็กซีแรกๆ ในเอกภพ เดินทางมาไกลมากจนถูกการขยายตัวของเอกภพยืดความยาวคลื่นออกไปอยู่ในช่วงอินฟราเรด (Redshift) 2) คลื่นอินฟราเรดสามารถเดินทางทะลุผ่านกลุ่มฝุ่นและแก๊สหนาทึบที่บดบังแสงที่ตามองเห็นได้ ทำให้เราสามารถศึกษากระบวนการเกิดดาวและดาวเคราะห์ที่ซ่อนอยู่ภายในเนบิวลาได้"
+  },
+  {
+    "file": "data\\posn_earth\\ES1-data.js",
+    "qNum": 134,
+    "type": "OPTION_INDEX_CONTRADICTION",
+    "issue": "Answer text is option 3 (\"จำนวนอารยธรรมต่างดาวที่สามารถติดต่อสื่อสารได้ในกาแล็กซีของเรา\"), but explanation says \"ข้อง\"",
+    "question": "'สมการของเดรก' (Drake Equation) เป็นความพยายามที่จะประมาณค่าอะไร",
+    "answer": "จำนวนอารยธรรมต่างดาวที่สามารถติดต่อสื่อสารได้ในกาแล็กซีของเรา",
+    "explanation": "สมการของเดรกเป็นการนำปัจจัยต่างๆ ที่คาดว่าเกี่ยวข้องกับการเกิดสิ่งมีชีวิตทรงภูมิปัญญามาคูณกัน เพื่อประเมินว่าในกาแล็กซีทางช้างเผือกของเรา น่าจะมีอารยธรรมที่สามารถส่งคลื่นวิทยุสื่อสารได้อยู่กี่แห่ง ปัจจัยเหล่านี้ได้แก่ อัตราการเกิดดาวฤกษ์, สัดส่วนดาวที่มีดาวเคราะห์, จำนวนดาวเคราะห์ที่เหมาะสม, ฯลฯ"
+  },
+  {
+    "file": "data\\posn_earth\\ES1-data.js",
+    "qNum": 145,
+    "type": "OPTION_INDEX_CONTRADICTION",
+    "issue": "Answer text is option 2 (\"กลุ่มแก๊สที่ถูกเป่าออกมาจากดาวยักษ์แดงในช่วงท้ายของชีวิต\"), but explanation says \"ข้อง\"",
+    "question": "'เนบิวลาดาวเคราะห์' (Planetary Nebula) คืออะไร",
+    "answer": "กลุ่มแก๊สที่ถูกเป่าออกมาจากดาวยักษ์แดงในช่วงท้ายของชีวิต",
+    "explanation": "เนบิวลาดาวเคราะห์ไม่ได้เกี่ยวข้องกับดาวเคราะห์ แต่เป็นชื่อเรียกที่ตั้งขึ้นในอดีตเพราะมองผ่านกล้องโทรทรรศน์แล้วมีลักษณะกลมๆ คล้ายดาวเคราะห์ มันคือชั้นบรรยากาศรอบนอกของดาวยักษ์แดง (ดาวฤกษ์มวลน้อยถึงปานกลาง เช่น ดวงอาทิตย์) ที่ถูกลมดาวฤกษ์เป่าออกมาในช่วงท้ายของชีวิต เหลือเพียงแกนกลางที่ร้อนจัดซึ่งจะกลายเป็นดาวแคระขาวต่อไป"
+  },
+  {
+    "file": "data\\posn_earth\\ES10-data.js",
+    "qNum": 19,
+    "type": "OPTION_INDEX_CONTRADICTION",
+    "issue": "Answer text is option 2 (\"การเปลี่ยนแปลงอย่างฉับพลันระหว่างสภาวะหนาวเย็นและสภาวะอุ่นขึ้นอย่างรวดเร็ว\"), but explanation says \"ข้อง\"",
+    "question": "เหตุการณ์ 'Dansgaard-Oeschger' (D-O events) ที่พบในแกนน้ำแข็งจากกรีนแลนด์ ซึ่งแสดงถึงการเปลี่ยนแปลงสภาพภูมิอากาศอย่างรวดเร็วในช่วงยุคน้ำแข็งครั้งล่าสุด มีลักษณะเด่นอย่างไร?",
+    "answer": "การเปลี่ยนแปลงอย่างฉับพลันระหว่างสภาวะหนาวเย็นและสภาวะอุ่นขึ้นอย่างรวดเร็ว",
+    "explanation": "D-O events เป็นตัวอย่างที่ชัดเจนของการเปลี่ยนแปลงสภาพภูมิอากาศที่ไม่เป็นเชิงเส้น (non-linear) โดยมีลักษณะคืออุณหภูมิในซีกโลกเหนืออุ่นขึ้นอย่างรวดเร็วหลายองศาเซลเซียสภายในเวลาไม่กี่สิบปี ตามด้วยช่วงเวลาที่ค่อยๆ เย็นลงกลับสู่สภาวะหนาวเย็นอีกครั้ง ซึ่งเชื่อว่าเกี่ยวข้องกับการเปลี่ยนแปลงของการไหลเวียนของกระแสน้ำในมหาสมุทรแอตแลนติก"
+  },
+  {
+    "file": "data\\posn_earth\\ES10-data.js",
+    "qNum": 50,
+    "type": "OPTION_INDEX_CONTRADICTION",
+    "issue": "Answer text is option 3 (\"การกระเจิงแบบไม และคลื่นพื้นผิว ที่เกิดขึ้นเมื่อแสงผ่านหยดน้ำขนาดเล็กมาก\"), but explanation says \"ข้อง\"",
+    "question": "ปรากฏการณ์ 'กลอรี' (Glory) ที่เห็นเป็นวงแหวนสีรุ้งขนาดเล็กซ้อนกันรอบเงาของผู้สังเกต (เช่น เงาของเครื่องบินบนเมฆ) เกิดจากกระบวนการทางแสงที่ซับซ้อนใดเป็นหลัก?",
+    "answer": "การกระเจิงแบบไม และคลื่นพื้นผิว ที่เกิดขึ้นเมื่อแสงผ่านหยดน้ำขนาดเล็กมาก",
+    "explanation": "กลอรีเป็นปรากฏการณ์ทางทัศนศาสตร์ที่ซับซ้อนซึ่งยังไม่มีคำอธิบายที่สมบูรณ์ แต่เชื่อว่าเกิดจากการที่แสงเกิดการกระเจิงย้อนกลับ (backscattering) จากหยดน้ำทรงกลมขนาดเล็กมากในเมฆหรือหมอก ซึ่งเกี่ยวข้องกับคลื่นที่เดินทางตามผิวของหยดน้ำและแทรกสอดกัน"
+  },
+  {
+    "file": "data\\posn_earth\\ES11-data.js",
+    "qNum": 48,
+    "type": "OPTION_INDEX_CONTRADICTION",
+    "issue": "Answer text is option 2 (\"การกระเจิงกลับของแสง ที่เกิดจากคลื่นพื้นผิว เดินทางรอบหยดน้ำและเกิดการแทรกสอด\"), but explanation says \"ข้อง\"",
+    "question": "ปรากฏการณ์ 'Glory' ซึ่งมักจะเห็นเป็นวงแหวนสีรุ้งรอบเงาของเครื่องบินบนชั้นเมฆ เกิดจากกระบวนการทางฟิสิกส์ใดเป็นหลัก?",
+    "answer": "การกระเจิงกลับของแสง ที่เกิดจากคลื่นพื้นผิว เดินทางรอบหยดน้ำและเกิดการแทรกสอด",
+    "explanation": "Glory ไม่สามารถอธิบายได้ด้วยทฤษฎีการหักเหและสะท้อนแบบง่ายๆ เหมือนรุ้ง แต่เกิดจากปรากฏการณ์ที่ซับซ้อนกว่าเรียกว่า Mie scattering ซึ่งเกี่ยวข้องกับแสงที่เดินทางเป็นคลื่นพื้นผิวรอบๆ หยดน้ำขนาดเล็ก และเกิดการแทรกสอดแบบเสริมกันในทิศทางตรงข้ามกับแหล่งกำเนิดแสง"
+  },
+  {
+    "file": "data\\posn_earth\\ES12-data.js",
+    "qNum": 96,
+    "type": "DIRECTION_CONTRADICTION",
+    "issue": "Answer says \"เพิ่มขึ้น\" but explanation says \"ลดลง\"",
+    "question": "ในแผนภาพ H-R เส้นทางวิวัฒนาการของดาวฤกษ์ก่อนเข้าสู่แถบลำดับหลัก (Pre-main-sequence) ที่เรียกว่า 'Hayashi track' และ 'Henyey track' แตกต่างกันอย่างไร?",
+    "answer": "Hayashi track เป็นเส้นทางที่ดาวมีอุณหภูมิพื้นผิวเกือบคงที่แต่กำลังส่องสว่างลดลง (เคลื่อนที่ลงในแนวดิ่ง), Henyey track เป็นเส้นทางที่ดาวมีกำลังส่องสว่างเกือบคงที่แต่อุณหภูมิพื้นผิวเพิ่มขึ้น (เคลื่อนที่ไปทางซ้าย)",
+    "explanation": "ดาวฤกษ์ทารกจะเริ่มวิวัฒนาการบน Hayashi track ซึ่งเป็นเส้นทางของการพาความร้อนโดยสมบูรณ์ ขณะที่ดาวยุบตัวลง รัศมีจะลดลงทำให้กำลังส่องสว่างลดลงตามไปด้วย เมื่อแก่นกลางร้อนพอที่จะเริ่มมีการแผ่รังสี ดาวจะเปลี่ยนมาเคลื่อนที่ตาม Henyey track ซึ่งกำลังส่องสว่างจะคงที่ในขณะที่ดาวยังคงยุบตัวและร้อนขึ้นจนกระทั่งจุดนิวเคลียร์ฟิวชันได้"
+  },
+  {
+    "file": "data\\posn_earth\\ES2-data.js",
+    "qNum": 76,
+    "type": "DIRECTION_CONTRADICTION",
+    "issue": "Answer says \"เพิ่มขึ้น\" but explanation says \"ลดลง\"",
+    "question": "ถ้าอุณหภูมิอากาศคือ 30°C และความชื้นสัมพัทธ์คือ 50% ต่อมาอุณหภูมิลดลงเหลือ 20°C โดยไม่มีการเพิ่มหรือลดของไอน้ำในอากาศ ความชื้นสัมพัทธ์จะเป็นอย่างไร?",
+    "answer": "ความชื้นสัมพัทธ์เพิ่มขึ้น (Increase)",
+    "explanation": "อากาศที่เย็นลงจะสามารถอุ้มไอน้ำได้น้อยลง ดังนั้นแม้ปริมาณไอน้ำที่มีอยู่จริงจะเท่าเดิม แต่เมื่อเทียบกับปริมาณสูงสุดที่อากาศจะรับได้ (ซึ่งลดลง) สัดส่วนหรือความชื้นสัมพัทธ์จึงเพิ่มสูงขึ้น"
+  },
+  {
+    "file": "data\\posn_earth\\ES4-data.js",
+    "qNum": 17,
+    "type": "OPTION_INDEX_CONTRADICTION",
+    "issue": "Answer text is option 2 (\"หินแกรนิต A มีอายุแก่กว่าสายหิน B\"), but explanation says \"ข้อค\"",
+    "question": "หากหินแกรนิต A ถูกตัดโดยสายหิน (Dike) B และพบเศษของหินแกรนิต A อยู่ภายในสายหิน B ข้อสรุปใดถูกต้องตามหลักธรณีวิทยา?",
+    "answer": "หินแกรนิต A มีอายุแก่กว่าสายหิน B",
+    "explanation": "ข้อสรุปนี้อาศัยหลักการ 2 ข้อคือ: 1) หลักการความสัมพันธ์ของการตัดผ่าน (Principle of Cross-Cutting Relationships) ซึ่งระบุว่าสิ่งที่ตัดผ่านย่อมมีอายุน้อยกว่าสิ่งที่ถูกตัด และ 2) หลักการการรวมเศษหิน (Principle of Inclusions) ซึ่งระบุว่าเศษหินที่พบในหินอีกชนิดหนึ่งย่อมมีอายุแก่กว่าหินที่ห่อหุ้มมันอยู่"
+  },
+  {
+    "file": "data\\posn_earth\\ES4-data.js",
+    "qNum": 53,
+    "type": "DIRECTION_CONTRADICTION",
+    "issue": "Answer says \"ลดลง\" but explanation says \"เพิ่มขึ้น\"",
+    "question": "การปะทุของภูเขาไฟขนาดใหญ่ที่พ่นเถ้าและแก๊สซัลเฟอร์ไดออกไซด์ขึ้นสู่ชั้นสตราโตสเฟียร์ จะส่งผลต่อสมดุลพลังงานของโลกในระยะสั้นอย่างไร?",
+    "answer": "ทำให้อุณหภูมิโลกลดลง เนื่องจากละอองซัลเฟตที่เกิดขึ้นจะสะท้อนรังสีดวงอาทิตย์กลับสู่อวกาศ",
+    "explanation": "แก๊สซัลเฟอร์ไดออกไซด์ ($SO_2$) จะทำปฏิกิริยากับไอน้ำในสตราโตสเฟียร์กลายเป็นละอองลอยของกรดซัลฟิวริก (Sulfate aerosols) ซึ่งละอองเหล่านี้สามารถคงอยู่ในสตราโตสเฟียร์ได้นานเป็นปีและทำหน้าที่สะท้อนแสงอาทิตย์ได้ดี ทำให้ค่าอัลบีโดของโลกเพิ่มขึ้นและส่งผลให้บรรยากาศชั้นล่างเย็นตัวลง"
+  },
+  {
+    "file": "data\\posn_earth\\ES4-data.js",
+    "qNum": 70,
+    "type": "OPTION_INDEX_CONTRADICTION",
+    "issue": "Answer text is option 2 (\"เป็นรอยเลื่อนจากการแยกตัวของเปลือกโลกที่สัมพันธ์กับการก่อตัวของที่ราบสูงธาร์ซิส\"), but explanation says \"ข้อง\"",
+    "question": "การมีอยู่ของ 'Valles Marineris' บนดาวอังคาร ซึ่งเป็นระบบหุบเขาขนาดมหึมา มีสมมติฐานการเกิดที่น่าเชื่อถือที่สุดคืออะไร?",
+    "answer": "เป็นรอยเลื่อนจากการแยกตัวของเปลือกโลกที่สัมพันธ์กับการก่อตัวของที่ราบสูงธาร์ซิส",
+    "explanation": "Valles Marineris ไม่ใช่แคนยอนที่เกิดจากแม่น้ำเหมือนแกรนด์แคนยอนบนโลก แต่เป็นระบบรอยเลื่อนขนาดใหญ่ที่เกิดจากแรงดึงในเปลือกโลก ซึ่งเชื่อว่าเกี่ยวข้องกับการยกตัวของที่ราบสูงภูเขาไฟธาร์ซิสที่อยู่ใกล้เคียง"
+  },
+  {
+    "file": "data\\posn_earth\\ES5-data.js",
+    "qNum": 3,
+    "type": "OPTION_INDEX_CONTRADICTION",
+    "issue": "Answer text is option 2 (\"ปฏิกิริยาระหว่างน้ำทะเลกับหินเพริโดไทต์ในเนื้อโลก ทำให้เกิดแร่เซอร์เพนทีนและปลดปล่อยแก๊สไฮโดรเจน\"), but explanation says \"ข้อง\"",
+    "question": "กระบวนการ 'Serpentinization' ที่เกิดขึ้นบริเวณสันเขากลางสมุทร คืออะไร และมีความสำคัญอย่างไร?",
+    "answer": "ปฏิกิริยาระหว่างน้ำทะเลกับหินเพริโดไทต์ในเนื้อโลก ทำให้เกิดแร่เซอร์เพนทีนและปลดปล่อยแก๊สไฮโดรเจน",
+    "explanation": "เป็นกระบวนการไฮโดรเทอร์มอลที่สำคัญ ซึ่งไม่เพียงแต่จะเปลี่ยนแปลงคุณสมบัติทางกายภาพของหินในเปลือกโลกมหาสมุทรเท่านั้น แต่การปลดปล่อยไฮโดรเจนและมีเทนยังอาจเป็นแหล่งพลังงานให้กับระบบนิเวศของสิ่งมีชีวิตที่ไม่ต้องอาศัยแสงอาทิตย์ (Chemosynthesis) และอาจเกี่ยวข้องกับต้นกำเนิดของสิ่งมีชีวิต"
+  },
+  {
+    "file": "data\\posn_earth\\ES6-data.js",
+    "qNum": 35,
+    "type": "OPTION_INDEX_CONTRADICTION",
+    "issue": "Answer text is option 1 (\"ข้อมูลความลาดชัน, ธรณีวิทยาพื้นฐาน, ปริมาณน้ำฝน, และการใช้ประโยชน์ที่ดิน\"), but explanation says \"ข้อง\"",
+    "question": "ปัจจัยชุดใดมีความสำคัญที่สุดในการสร้าง 'แผนที่แสดงความอ่อนไหวต่อดินถล่ม' (Landslide Susceptibility Map) โดยใช้ GIS?",
+    "answer": "ข้อมูลความลาดชัน, ธรณีวิทยาพื้นฐาน, ปริมาณน้ำฝน, และการใช้ประโยชน์ที่ดิน",
+    "explanation": "การทำแผนที่ความอ่อนไหวเป็นกระบวนการที่ซับซ้อน โดยการนำปัจจัยต่างๆ ที่เกี่ยวข้องกับการเกิดดินถล่ม (เช่น ความชัน, ธรณีวิทยา, ปริมาณฝน, การใช้ที่ดิน, ระยะห่างจากถนน/แม่น้ำ) มาให้คะแนนและซ้อนทับกันในระบบ GIS เพื่อประเมินว่าพื้นที่ใดมีโอกาสเกิดดินถล่มสูง"
+  },
+  {
+    "file": "data\\posn_earth\\ES7-data.js",
+    "qNum": 81,
+    "type": "OPTION_INDEX_CONTRADICTION",
+    "issue": "Answer text is option 2 (\"มีอุณหภูมิสูงกว่าล้านเคลวิน ซึ่งร้อนกว่าชั้นโฟโตสเฟียร์ที่อยู่ต่ำลงไปมาก\"), but explanation says \"ข้อง\"",
+    "question": "ชั้นบรรยากาศของดวงอาทิตย์ที่เรียกว่า 'โคโรนา' (Corona) มีลักษณะเด่นที่น่าประหลาดใจคืออะไร",
+    "answer": "มีอุณหภูมิสูงกว่าล้านเคลวิน ซึ่งร้อนกว่าชั้นโฟโตสเฟียร์ที่อยู่ต่ำลงไปมาก",
+    "explanation": "โคโรนาเป็นชั้นบรรยากาศที่เบาบางและอยู่ชั้นนอกสุดของดวงอาทิตย์ แต่กลับมีอุณหภูมิสูงถึง 1-2 ล้านเคลวิน ในขณะที่ชั้นโฟโตสเฟียร์ที่อยู่ติดกับพื้นผิวมีอุณหภูมิเพียงประมาณ 5,800 เคลวิน กลไกที่ทำให้โคโรนาร้อนขนาดนี้ยังคงเป็นหัวข้อวิจัยที่สำคัญในปัจจุบัน แต่เชื่อว่าเกี่ยวข้องกับพลังงานจากสนามแม่เหล็กของดวงอาทิตย์"
+  },
+  {
+    "file": "data\\posn_earth\\ESr2-data.js",
+    "qNum": 52,
+    "type": "OPTION_INDEX_CONTRADICTION",
+    "issue": "Answer text is option 2 (\"สภาพแวดล้อมแบบที่ราบลุ่มแม่น้ำ ที่ราบน้ำท่วมถึง และบริเวณทะเลสาบ\"), but explanation says \"ข้อง\"",
+    "question": "การพบซากดึกดำบรรพ์ไดโนเสาร์จำนวนมากในหมวดหินโคราช (Khorat Group) บริเวณภาคตะวันออกเฉียงเหนือ บ่งชี้ถึงสภาพแวดล้อมการสะสมตัวในยุคมีโซโซอิกแบบใด?",
+    "answer": "สภาพแวดล้อมแบบที่ราบลุ่มแม่น้ำ ที่ราบน้ำท่วมถึง และบริเวณทะเลสาบ",
+    "explanation": "ลักษณะของหินตะกอนในกลุ่มหินโคราช เช่น หินทรายร่องน้ำและหินดินดานที่ราบน้ำท่วมถึง บ่งชี้ถึงสภาพแวดล้อมบนบกที่เกี่ยวข้องกับระบบแม่น้ำและทะเลสาบ ซึ่งเป็นที่อยู่อาศัยของไดโนเสาร์จำนวนมาก"
+  },
+  {
+    "file": "data\\posn_earth\\ESr3-data.js",
+    "qNum": 54,
+    "type": "OPTION_INDEX_CONTRADICTION",
+    "issue": "Answer text is option 3 (\"เป็นหลักฐานของการที่หินเคยถูกฝังลึกและได้รับความร้อนความดันสูง\"), but explanation says \"ข้อง\"",
+    "question": "การพบหินแปรเกรดสูง เช่น หินชีสต์และหินไนส์ ในบริเวณจังหวัดแม่ฮ่องสอน เป็นหลักฐานของเหตุการณ์ใด?",
+    "answer": "เป็นหลักฐานของการที่หินเคยถูกฝังลึกและได้รับความร้อนความดันสูง",
+    "explanation": "หินแปรเกรดสูง เช่น หินชีสต์และหินไนส์ จะก่อตัวขึ้นในระดับลึกของเปลือกโลกภายใต้สภาวะอุณหภูมิและความดันสูง ซึ่งเกี่ยวข้องกับกระบวนการการเกิดเทือกเขา (Orogeny) การพบหินเหล่านี้บนพื้นผิวแสดงว่าเคยมีการยกตัวและการกัดกร่อนอย่างรุนแรงเกิดขึ้น"
+  },
+  {
+    "file": "data\\posn_earth\\ESr4-data.js",
+    "qNum": 14,
+    "type": "OPTION_INDEX_CONTRADICTION",
+    "issue": "Answer text is option 2 (\"เกิดจากการไหลย้อนกลับของวัสดุขึ้นมาตามช่องทางการมุดตัว\"), but explanation says \"ข้อง\"",
+    "question": "หิน 'Blueschist' และ 'Eclogite' เป็นหินแปรที่มีความหนาแน่นสูงมาก การที่หินเหล่านี้สามารถถูกนำกลับขึ้นมาสู่พื้นผิวโลกได้ บ่งชี้ถึงกระบวนการใด?",
+    "answer": "เกิดจากการไหลย้อนกลับของวัสดุขึ้นมาตามช่องทางการมุดตัว",
+    "explanation": "การนำหินความดันสูงเหล่านี้กลับขึ้นมาสู่ผิวโลก (Exhumation) เป็นกระบวนการที่ซับซ้อนและยังเป็นที่ถกเถียงกันอยู่ แต่เชื่อว่าเกี่ยวข้องกับการไหลย้อนกลับของวัสดุในช่องทางการมุดตัว หรือการที่เปลือกโลกมีการยืดตัวออกหลังจากการชนกันของทวีปสิ้นสุดลง"
+  }
+]

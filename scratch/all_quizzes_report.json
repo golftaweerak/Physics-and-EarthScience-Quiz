@@ -1,0 +1,2662 @@
+{
+  "data\\ess_adv\\ess_adv_m4_ch1-1-data.js": [
+    {
+      "qNum": 15,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=15, max=52 (15, 52, 34, 23)"
+    },
+    {
+      "qNum": 20,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=22, max=64 (22, 26, 64, 33)"
+    },
+    {
+      "qNum": 24,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=26, max=67 (31, 26, 67, 43)"
+    },
+    {
+      "qNum": 27,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=21, max=61 (21, 61, 31, 23)"
+    }
+  ],
+  "data\\ess_adv\\ess_adv_m4_ch1-2-data.js": [
+    {
+      "qNum": 9,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=13, max=52 (22, 52, 13, 22)"
+    },
+    {
+      "qNum": 11,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=12, max=38 (35, 26, 38, 12)"
+    },
+    {
+      "qNum": 22,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=18, max=53 (53, 18, 20, 27)"
+    },
+    {
+      "qNum": 23,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=20, max=52 (20, 52, 38, 42)"
+    }
+  ],
+  "data\\ess_adv\\ess_adv_m4_ch1-3-data.js": [
+    {
+      "qNum": 8,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=12, max=52 (17, 12, 52, 19)"
+    },
+    {
+      "qNum": 15,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=23, max=60 (39, 60, 23, 27)"
+    },
+    {
+      "qNum": 16,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=21, max=72 (36, 72, 24, 21)"
+    },
+    {
+      "qNum": 20,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=20, max=53 (22, 53, 20, 22)"
+    },
+    {
+      "qNum": 22,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=14, max=43 (26, 14, 43, 17)"
+    }
+  ],
+  "data\\ess_adv\\ess_adv_m4_ch3-1-data.js": [
+    {
+      "qNum": 14,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=23, max=60 (23, 33, 60, 37)"
+    },
+    {
+      "qNum": 17,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=17, max=52 (52, 20, 29, 17)"
+    },
+    {
+      "qNum": 20,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=19, max=75 (19, 51, 75, 48)"
+    }
+  ],
+  "data\\ess_adv\\ess_adv_m6_ch14-1-data.js": [
+    {
+      "qNum": 7,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=10, max=42 (16, 42, 15, 10)"
+    },
+    {
+      "qNum": 17,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=17, max=43 (27, 43, 17, 37)"
+    },
+    {
+      "qNum": 19,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=6, max=36 (35, 36, 6, 22)"
+    }
+  ],
+  "data\\ess_adv\\ess_adv_m6_ch14-2-data.js": [
+    {
+      "qNum": 6,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=27, max=86 (27, 86, 42, 49)"
+    },
+    {
+      "qNum": 7,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=29, max=76 (54, 76, 43, 29)"
+    }
+  ],
+  "data\\ess_adv\\ess_adv_m6_ch14-3-data.js": [
+    {
+      "qNum": 7,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=38, max=120 (120, 49, 56, 38)"
+    },
+    {
+      "qNum": 9,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=45, max=113 (113, 45, 63, 50)"
+    }
+  ],
+  "data\\ess_adv\\ess_adv_m6_ch14-4-data.js": [
+    {
+      "qNum": 10,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=39, max=105 (105, 43, 39, 49)"
+    }
+  ],
+  "data\\ess_adv\\ess_adv_m6_ch15-1-data.js": [
+    {
+      "qNum": 9,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=17, max=78 (19, 54, 78, 17)"
+    },
+    {
+      "qNum": 14,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=21, max=59 (21, 59, 27, 22)"
+    },
+    {
+      "qNum": 20,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=26, max=80 (30, 35, 80, 26)"
+    },
+    {
+      "qNum": 25,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=17, max=67 (25, 67, 17, 23)"
+    }
+  ],
+  "data\\ess_adv\\ess_adv_m6_ch16-1-data.js": [
+    {
+      "qNum": 9,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=15, max=41 (15, 41, 19, 19)"
+    },
+    {
+      "qNum": 13,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=18, max=48 (44, 48, 18, 32)"
+    },
+    {
+      "qNum": 21,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=8, max=63 (8, 16, 63, 34)"
+    },
+    {
+      "qNum": 22,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=18, max=55 (39, 55, 55, 18)"
+    }
+  ],
+  "data\\ess_adv\\ess_adv_m6_ch17-1-data.js": [
+    {
+      "qNum": 1,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=31, max=162 (65, 162, 31, 65)"
+    },
+    {
+      "qNum": 19,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=23, max=64 (23, 29, 64, 26)"
+    },
+    {
+      "qNum": 21,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=18, max=46 (34, 46, 21, 18)"
+    }
+  ],
+  "data\\ess_adv\\ess_adv_m6_ch18-1-data.js": [
+    {
+      "qNum": 21,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=19, max=71 (20, 71, 25, 19)"
+    },
+    {
+      "qNum": 22,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=24, max=73 (40, 73, 32, 24)"
+    },
+    {
+      "qNum": 23,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=23, max=78 (23, 78, 40, 26)"
+    },
+    {
+      "qNum": 24,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=18, max=47 (47, 24, 27, 18)"
+    },
+    {
+      "qNum": 25,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=17, max=64 (17, 19, 64, 22)"
+    },
+    {
+      "qNum": 29,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=16, max=63 (40, 63, 26, 16)"
+    },
+    {
+      "qNum": 30,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=22, max=57 (26, 22, 57, 31)"
+    }
+  ],
+  "data\\ess_adv\\ess_adv_m6_ch18-2-data.js": [
+    {
+      "qNum": 8,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=14, max=42 (14, 16, 40, 42)"
+    },
+    {
+      "qNum": 17,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=30, max=88 (30, 44, 88, 45)"
+    },
+    {
+      "qNum": 19,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=21, max=64 (21, 64, 26, 26)"
+    },
+    {
+      "qNum": 20,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=39, max=101 (48, 101, 50, 39)"
+    },
+    {
+      "qNum": 21,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=18, max=76 (32, 18, 76, 24)"
+    },
+    {
+      "qNum": 22,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=33, max=87 (33, 87, 39, 37)"
+    },
+    {
+      "qNum": 24,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=29, max=88 (29, 88, 61, 47)"
+    },
+    {
+      "qNum": 25,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=7, max=44 (14, 44, 7, 16)"
+    },
+    {
+      "qNum": 28,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=18, max=72 (24, 18, 72, 27)"
+    }
+  ],
+  "data\\ess_basic\\ess_basic_m6_ch1-2-data.js": [
+    {
+      "qNum": 16,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=11, max=43 (24, 18, 43, 11)"
+    },
+    {
+      "qNum": 30,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=11, max=39 (20, 20, 39, 11)"
+    }
+  ],
+  "data\\ess_basic\\ess_basic_m6_ch10-3-data.js": [
+    {
+      "qNum": 9,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=17, max=46 (17, 46, 24, 34)"
+    },
+    {
+      "qNum": 22,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=34, max=93 (37, 93, 34, 35)"
+    },
+    {
+      "qNum": 24,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=26, max=72 (72, 35, 29, 26)"
+    }
+  ],
+  "data\\ess_basic\\ess_basic_m6_ch3-3-data.js": [
+    {
+      "qNum": 29,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=14, max=46 (46, 37, 14, 20)"
+    }
+  ],
+  "data\\ess_basic\\ess_basic_m6_ch4-2-data.js": [
+    {
+      "qNum": 25,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=11, max=43 (11, 18, 43, 34)"
+    },
+    {
+      "qNum": 39,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=17, max=57 (19, 57, 44, 17)"
+    }
+  ],
+  "data\\ess_basic\\ess_basic_m6_ch4-3-data.js": [
+    {
+      "qNum": 6,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=10, max=39 (28, 10, 39, 18)"
+    },
+    {
+      "qNum": 16,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=15, max=54 (21, 15, 54, 24)"
+    },
+    {
+      "qNum": 19,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=13, max=47 (27, 25, 13, 47)"
+    }
+  ],
+  "data\\ess_basic\\ess_basic_m6_ch5-1-data.js": [
+    {
+      "qNum": 7,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=27, max=68 (33, 27, 68, 54)"
+    },
+    {
+      "qNum": 28,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=36, max=98 (36, 98, 98, 42)"
+    }
+  ],
+  "data\\ess_basic\\ess_basic_m6_ch5-2-data.js": [
+    {
+      "qNum": 26,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=31, max=78 (35, 46, 78, 31)"
+    },
+    {
+      "qNum": 29,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=26, max=71 (37, 71, 26, 41)"
+    }
+  ],
+  "data\\ess_basic\\ess_basic_m6_ch6-1-data.js": [
+    {
+      "qNum": 12,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=35, max=126 (35, 126, 73, 72)"
+    },
+    {
+      "qNum": 13,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=17, max=47 (47, 36, 44, 17)"
+    },
+    {
+      "qNum": 23,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=20, max=51 (20, 51, 22, 30)"
+    },
+    {
+      "qNum": 26,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=17, max=47 (47, 36, 44, 17)"
+    }
+  ],
+  "data\\ess_basic\\ess_basic_m6_ch6-2-data.js": [
+    {
+      "qNum": 5,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=17, max=47 (47, 36, 44, 17)"
+    },
+    {
+      "qNum": 19,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=35, max=104 (35, 104, 49, 48)"
+    },
+    {
+      "qNum": 29,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=24, max=69 (35, 69, 41, 24)"
+    }
+  ],
+  "data\\ess_basic\\ess_basic_m6_ch6-3-data.js": [
+    {
+      "qNum": 3,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=17, max=54 (47, 36, 54, 17)"
+    },
+    {
+      "qNum": 11,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=26, max=86 (26, 86, 72, 81)"
+    },
+    {
+      "qNum": 20,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=23, max=76 (23, 76, 39, 41)"
+    }
+  ],
+  "data\\ess_basic\\ess_basic_m6_ch6-5-data.js": [
+    {
+      "qNum": 10,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=17, max=44 (36, 43, 44, 17)"
+    }
+  ],
+  "data\\ess_basic\\ess_basic_m6_ch9-1-data.js": [
+    {
+      "qNum": 23,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=9, max=44 (44, 31, 36, 9)"
+    }
+  ],
+  "data\\ess_basic\\ess_basic_m6_ch9-3-data.js": [
+    {
+      "qNum": 22,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=23, max=61 (61, 23, 41, 34)"
+    }
+  ],
+  "data\\ess_basic\\ess_basic_m6_final2-review-2-data.js": [
+    {
+      "qNum": 56,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=9, max=65 (9, 64, 10, 65)"
+    }
+  ],
+  "data\\ess_basic\\ess_basic_m6_final2-review-4-data.js": [
+    {
+      "qNum": 23,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=16, max=47 (32, 29, 47, 16)"
+    }
+  ],
+  "data\\ess_basic\\ess_basic_m6_mid1-exam-2-data.js": [
+    {
+      "qNum": 32,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=21, max=56 (21, 56, 56, 55)"
+    },
+    {
+      "qNum": 38,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=34, max=113 (71, 113, 34, 98)"
+    }
+  ],
+  "data\\ess_basic\\ess_basic_m6_mid2-review-4-data.js": [
+    {
+      "qNum": 6,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=19, max=65 (42, 35, 65, 19)"
+    },
+    {
+      "qNum": 12,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=20, max=65 (29, 35, 65, 20)"
+    },
+    {
+      "qNum": 40,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=21, max=91 (49, 91, 21, 49)"
+    }
+  ],
+  "data\\phy_m4\\phy_m4_ch2-2-data.js": [
+    {
+      "qNum": 4,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=17, max=44 (44, 36, 28, 17)"
+    },
+    {
+      "qNum": 10,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=8, max=51 (8, 30, 48, 51)"
+    },
+    {
+      "qNum": 14,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=12, max=40 (31, 40, 20, 12)"
+    }
+  ],
+  "data\\phy_m4\\phy_m4_ch2-5-data.js": [
+    {
+      "qNum": 3,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=35, max=93 (57, 93, 46, 35)"
+    },
+    {
+      "qNum": 9,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=9, max=42 (37, 42, 41, 9)"
+    }
+  ],
+  "data\\phy_m4\\phy_m4_ch3-1-data.js": [
+    {
+      "qNum": 18,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=32, max=99 (44, 43, 99, 32)"
+    },
+    {
+      "qNum": 20,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=15, max=43 (15, 18, 43, 20)"
+    },
+    {
+      "qNum": 37,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=7, max=51 (13, 10, 51, 7)"
+    }
+  ],
+  "data\\phy_m4\\phy_m4_ch3-2-data.js": [
+    {
+      "qNum": 21,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=21, max=53 (21, 43, 53, 31)"
+    },
+    {
+      "qNum": 34,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=20, max=53 (30, 53, 24, 20)"
+    },
+    {
+      "qNum": 37,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=14, max=93 (20, 93, 14, 33)"
+    },
+    {
+      "qNum": 38,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=15, max=48 (22, 15, 48, 23)"
+    }
+  ],
+  "data\\phy_m4\\phy_m4_ch4-1-data.js": [
+    {
+      "qNum": 21,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=15, max=59 (34, 59, 16, 15)"
+    }
+  ],
+  "data\\phy_m4\\phy_m4_ch4-2-data.js": [
+    {
+      "qNum": 8,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=8, max=36 (33, 36, 33, 8)"
+    },
+    {
+      "qNum": 15,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=18, max=52 (18, 24, 52, 27)"
+    },
+    {
+      "qNum": 25,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=20, max=51 (23, 20, 51, 27)"
+    }
+  ],
+  "data\\phy_m4\\phy_m4_ch5-5-data.js": [
+    {
+      "qNum": 5,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=16, max=44 (16, 19, 44, 31)"
+    }
+  ],
+  "data\\phy_m4\\phy_m4_ch5-6-data.js": [
+    {
+      "qNum": 1,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=34, max=90 (45, 34, 90, 43)"
+    }
+  ],
+  "data\\phy_m4\\phy_m4_ch5-7-data.js": [
+    {
+      "qNum": 2,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=17, max=66 (17, 59, 66, 51)"
+    },
+    {
+      "qNum": 3,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=11, max=37 (37, 29, 24, 11)"
+    },
+    {
+      "qNum": 40,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=20, max=54 (31, 54, 54, 20)"
+    }
+  ],
+  "data\\phy_m4\\phy_m4_ch5-8-data.js": [
+    {
+      "qNum": 8,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=12, max=41 (17, 12, 32, 41)"
+    }
+  ],
+  "data\\phy_m4\\phy_m4_ch6-1-data.js": [
+    {
+      "qNum": 21,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=22, max=78 (22, 45, 78, 36)"
+    },
+    {
+      "qNum": 24,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=17, max=44 (44, 22, 19, 17)"
+    },
+    {
+      "qNum": 27,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=20, max=51 (29, 51, 20, 21)"
+    }
+  ],
+  "data\\phy_m4\\phy_m4_ch6-2-data.js": [
+    {
+      "qNum": 7,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=19, max=50 (25, 19, 50, 36)"
+    }
+  ],
+  "data\\phy_m4\\phy_m4_ch6-3-data.js": [
+    {
+      "qNum": 20,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=12, max=42 (12, 27, 42, 19)"
+    }
+  ],
+  "data\\phy_m4\\phy_m4_ch6-6-data.js": [
+    {
+      "qNum": 26,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=12, max=51 (19, 12, 51, 41)"
+    }
+  ],
+  "data\\phy_m4\\phy_m4_ch6-7-data.js": [
+    {
+      "qNum": 18,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=8, max=36 (8, 36, 36, 13)"
+    },
+    {
+      "qNum": 19,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=8, max=35 (8, 34, 35, 25)"
+    }
+  ],
+  "data\\phy_m4\\phy_m4_ch7-1-data.js": [
+    {
+      "qNum": 2,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=17, max=58 (17, 58, 58, 29)"
+    }
+  ],
+  "data\\phy_m4\\phy_m4_ch7-2-data.js": [
+    {
+      "qNum": 8,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=13, max=59 (14, 13, 59, 14)"
+    }
+  ],
+  "data\\phy_m4\\phy_m4_final-exam-1-data.js": [
+    {
+      "qNum": 1,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=16, max=53 (16, 35, 53, 27)"
+    },
+    {
+      "qNum": 7,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=14, max=66 (14, 66, 32, 29)"
+    },
+    {
+      "qNum": 20,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=10, max=59 (15, 15, 59, 10)"
+    }
+  ],
+  "data\\phy_m4\\phy_m4_final-exam-2-data.js": [
+    {
+      "qNum": 17,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=21, max=65 (21, 65, 65, 38)"
+    },
+    {
+      "qNum": 19,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=15, max=48 (17, 22, 48, 15)"
+    }
+  ],
+  "data\\phy_m4\\phy_m4_final2-exam-1-data.js": [
+    {
+      "qNum": 12,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=13, max=45 (13, 45, 29, 21)"
+    }
+  ],
+  "data\\phy_m4\\phy_m4_mid2-exam-1-data.js": [
+    {
+      "qNum": 21,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=16, max=55 (21, 16, 55, 16)"
+    }
+  ],
+  "data\\phy_m5\\phy_m5_ch10-1-data.js": [
+    {
+      "qNum": 19,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=13, max=51 (13, 51, 29, 26)"
+    }
+  ],
+  "data\\phy_m5\\phy_m5_ch12-1-data.js": [
+    {
+      "qNum": 5,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=13, max=48 (38, 38, 13, 48)"
+    },
+    {
+      "qNum": 7,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=13, max=40 (40, 40, 32, 13)"
+    },
+    {
+      "qNum": 15,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=24, max=70 (33, 70, 40, 24)"
+    },
+    {
+      "qNum": 20,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=15, max=54 (20, 54, 21, 15)"
+    }
+  ],
+  "data\\phy_m5\\phy_m5_ch12-2-data.js": [
+    {
+      "qNum": 12,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=20, max=57 (57, 31, 29, 20)"
+    },
+    {
+      "qNum": 14,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=15, max=44 (15, 41, 44, 39)"
+    }
+  ],
+  "data\\phy_m5\\phy_m5_ch12-3-data.js": [
+    {
+      "qNum": 3,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=4, max=35 (4, 8, 9, 35)"
+    },
+    {
+      "qNum": 10,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=13, max=52 (25, 13, 52, 26)"
+    },
+    {
+      "qNum": 15,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=5, max=31 (5, 20, 31, 18)"
+    },
+    {
+      "qNum": 17,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=18, max=46 (46, 18, 26, 42)"
+    }
+  ],
+  "data\\phy_m5\\phy_m5_ch8-1-data.js": [
+    {
+      "qNum": 1,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=15, max=46 (15, 15, 46, 19)"
+    },
+    {
+      "qNum": 2,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=12, max=42 (12, 34, 27, 42)"
+    },
+    {
+      "qNum": 29,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=15, max=46 (15, 16, 46, 15)"
+    }
+  ],
+  "data\\phy_m5\\phy_m5_final-exam-1-data.js": [
+    {
+      "qNum": 12,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=7, max=40 (7, 7, 7, 40)"
+    }
+  ],
+  "data\\phy_m6\\phy_m6_ch18-1-data.js": [
+    {
+      "qNum": 23,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=24, max=68 (68, 26, 24, 24)"
+    }
+  ],
+  "data\\posn_astro\\adv_astro1-data.js": [
+    {
+      "qNum": 3,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=19, max=50 (19, 21, 50, 30)"
+    },
+    {
+      "qNum": 4,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=26, max=66 (26, 66, 44, 36)"
+    },
+    {
+      "qNum": 18,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=19, max=54 (37, 19, 33, 54)"
+    },
+    {
+      "qNum": 21,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=23, max=61 (61, 61, 23, 48)"
+    },
+    {
+      "qNum": 24,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=24, max=70 (69, 42, 70, 24)"
+    },
+    {
+      "qNum": 30,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=17, max=67 (67, 43, 33, 17)"
+    }
+  ],
+  "data\\posn_astro\\adv_astro10-data.js": [
+    {
+      "qNum": 2,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=35, max=135 (67, 93, 35, 135)"
+    },
+    {
+      "qNum": 17,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=29, max=74 (74, 42, 74, 29)"
+    }
+  ],
+  "data\\posn_astro\\adv_astro2-data.js": [
+    {
+      "qNum": 3,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=14, max=45 (45, 23, 14, 37)"
+    },
+    {
+      "qNum": 4,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=19, max=55 (52, 55, 28, 19)"
+    },
+    {
+      "qNum": 9,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=11, max=44 (11, 20, 35, 44)"
+    },
+    {
+      "qNum": 10,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=24, max=61 (24, 61, 40, 53)"
+    },
+    {
+      "qNum": 16,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=17, max=44 (17, 32, 44, 30)"
+    }
+  ],
+  "data\\posn_astro\\adv_astro3-data.js": [
+    {
+      "qNum": 1,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=14, max=63 (23, 14, 63, 22)"
+    },
+    {
+      "qNum": 6,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=12, max=40 (40, 32, 12, 17)"
+    },
+    {
+      "qNum": 19,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=20, max=58 (56, 58, 56, 20)"
+    },
+    {
+      "qNum": 32,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=20, max=54 (54, 41, 53, 20)"
+    }
+  ],
+  "data\\posn_astro\\adv_astro4-data.js": [
+    {
+      "qNum": 8,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=17, max=57 (57, 49, 51, 17)"
+    },
+    {
+      "qNum": 30,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=35, max=108 (67, 77, 35, 108)"
+    },
+    {
+      "qNum": 33,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=38, max=105 (57, 48, 105, 38)"
+    }
+  ],
+  "data\\posn_astro\\adv_astro5-data.js": [
+    {
+      "qNum": 13,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=15, max=49 (27, 49, 16, 15)"
+    },
+    {
+      "qNum": 18,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=17, max=45 (17, 39, 44, 45)"
+    },
+    {
+      "qNum": 27,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=40, max=114 (40, 111, 114, 77)"
+    }
+  ],
+  "data\\posn_astro\\adv_astro6-data.js": [
+    {
+      "qNum": 3,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=31, max=79 (58, 66, 79, 31)"
+    },
+    {
+      "qNum": 4,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=16, max=81 (81, 43, 64, 16)"
+    },
+    {
+      "qNum": 7,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=34, max=93 (68, 73, 93, 34)"
+    },
+    {
+      "qNum": 14,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=19, max=105 (105, 20, 35, 19)"
+    },
+    {
+      "qNum": 18,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=30, max=89 (41, 89, 68, 30)"
+    },
+    {
+      "qNum": 24,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=33, max=114 (99, 114, 95, 33)"
+    },
+    {
+      "qNum": 29,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=31, max=82 (71, 82, 31, 38)"
+    }
+  ],
+  "data\\posn_astro\\adv_astro7-data.js": [
+    {
+      "qNum": 1,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=23, max=67 (23, 67, 41, 57)"
+    },
+    {
+      "qNum": 16,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=27, max=75 (36, 75, 39, 27)"
+    },
+    {
+      "qNum": 21,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=29, max=88 (31, 31, 29, 88)"
+    },
+    {
+      "qNum": 25,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=35, max=93 (35, 36, 93, 68)"
+    },
+    {
+      "qNum": 34,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=38, max=127 (55, 127, 38, 49)"
+    }
+  ],
+  "data\\posn_astro\\adv_astro8-data.js": [
+    {
+      "qNum": 30,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=24, max=114 (76, 114, 82, 24)"
+    },
+    {
+      "qNum": 33,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=20, max=54 (50, 36, 54, 20)"
+    },
+    {
+      "qNum": 36,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=18, max=81 (35, 44, 81, 18)"
+    },
+    {
+      "qNum": 37,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=16, max=51 (51, 44, 16, 27)"
+    }
+  ],
+  "data\\posn_astro\\adv_astro9-data.js": [
+    {
+      "qNum": 1,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=28, max=75 (50, 58, 75, 28)"
+    },
+    {
+      "qNum": 5,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=20, max=62 (57, 62, 53, 20)"
+    },
+    {
+      "qNum": 6,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=23, max=67 (42, 23, 67, 39)"
+    },
+    {
+      "qNum": 22,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=17, max=46 (29, 33, 17, 46)"
+    },
+    {
+      "qNum": 24,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=23, max=72 (31, 72, 30, 23)"
+    }
+  ],
+  "data\\posn_astro\\Astro1-data.js": [
+    {
+      "qNum": 11,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=17, max=44 (17, 44, 24, 40)"
+    },
+    {
+      "qNum": 35,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=13, max=39 (13, 39, 27, 26)"
+    },
+    {
+      "qNum": 43,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=18, max=48 (18, 44, 48, 34)"
+    }
+  ],
+  "data\\posn_astro\\Astro2-data.js": [
+    {
+      "qNum": 5,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=14, max=45 (14, 44, 45, 28)"
+    }
+  ],
+  "data\\posn_astro\\Astro5-data.js": [
+    {
+      "qNum": 12,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=18, max=68 (51, 59, 18, 68)"
+    },
+    {
+      "qNum": 24,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=18, max=49 (20, 18, 25, 49)"
+    },
+    {
+      "qNum": 28,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=11, max=39 (28, 11, 39, 21)"
+    },
+    {
+      "qNum": 33,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=8, max=39 (10, 8, 19, 39)"
+    }
+  ],
+  "data\\posn_astro\\Astro6-data.js": [
+    {
+      "qNum": 22,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=25, max=66 (29, 66, 25, 34)"
+    },
+    {
+      "qNum": 49,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=18, max=54 (18, 33, 54, 20)"
+    }
+  ],
+  "data\\posn_astro\\junior1-data.js": [
+    {
+      "qNum": 27,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=15, max=42 (15, 16, 33, 42)"
+    },
+    {
+      "qNum": 109,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=17, max=48 (32, 35, 48, 17)"
+    }
+  ],
+  "data\\posn_astro\\junior2-data.js": [
+    {
+      "qNum": 38,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=23, max=75 (43, 39, 75, 23)"
+    },
+    {
+      "qNum": 68,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=18, max=67 (37, 67, 22, 18)"
+    },
+    {
+      "qNum": 72,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=25, max=66 (25, 66, 35, 27)"
+    },
+    {
+      "qNum": 74,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=17, max=75 (25, 75, 42, 17)"
+    },
+    {
+      "qNum": 75,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=25, max=67 (25, 67, 31, 35)"
+    },
+    {
+      "qNum": 80,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=16, max=96 (42, 96, 41, 16)"
+    },
+    {
+      "qNum": 83,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=15, max=52 (21, 26, 52, 15)"
+    },
+    {
+      "qNum": 90,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=16, max=47 (25, 47, 27, 16)"
+    },
+    {
+      "qNum": 95,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=18, max=71 (18, 71, 24, 31)"
+    },
+    {
+      "qNum": 105,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=40, max=103 (40, 41, 103, 47)"
+    },
+    {
+      "qNum": 107,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=16, max=64 (16, 64, 24, 27)"
+    },
+    {
+      "qNum": 108,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=26, max=73 (38, 73, 26, 50)"
+    },
+    {
+      "qNum": 115,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=16, max=68 (43, 68, 16, 19)"
+    },
+    {
+      "qNum": 118,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=16, max=54 (20, 54, 16, 29)"
+    },
+    {
+      "qNum": 119,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=12, max=78 (12, 78, 28, 22)"
+    },
+    {
+      "qNum": 120,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=17, max=48 (27, 48, 22, 17)"
+    }
+  ],
+  "data\\posn_astro\\junior4-data.js": [
+    {
+      "qNum": 10,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=30, max=77 (30, 77, 40, 37)"
+    },
+    {
+      "qNum": 11,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=35, max=145 (35, 63, 145, 44)"
+    },
+    {
+      "qNum": 12,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=24, max=116 (24, 31, 116, 33)"
+    },
+    {
+      "qNum": 23,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=11, max=39 (28, 11, 39, 18)"
+    },
+    {
+      "qNum": 25,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=47, max=130 (78, 52, 130, 47)"
+    },
+    {
+      "qNum": 29,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=49, max=209 (49, 59, 209, 55)"
+    },
+    {
+      "qNum": 35,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=28, max=105 (31, 35, 105, 28)"
+    },
+    {
+      "qNum": 38,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=26, max=141 (26, 41, 47, 141)"
+    },
+    {
+      "qNum": 44,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=19, max=116 (27, 19, 20, 116)"
+    },
+    {
+      "qNum": 47,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=36, max=113 (51, 61, 113, 36)"
+    },
+    {
+      "qNum": 48,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=31, max=114 (31, 114, 32, 46)"
+    },
+    {
+      "qNum": 50,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=19, max=58 (19, 37, 29, 58)"
+    },
+    {
+      "qNum": 51,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=23, max=61 (24, 23, 61, 53)"
+    },
+    {
+      "qNum": 52,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=34, max=117 (34, 117, 45, 62)"
+    },
+    {
+      "qNum": 56,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=36, max=108 (36, 108, 42, 48)"
+    },
+    {
+      "qNum": 57,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=26, max=134 (32, 45, 134, 26)"
+    },
+    {
+      "qNum": 58,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=40, max=119 (44, 44, 119, 40)"
+    },
+    {
+      "qNum": 60,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=42, max=142 (42, 49, 142, 45)"
+    },
+    {
+      "qNum": 70,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=36, max=104 (44, 104, 36, 42)"
+    },
+    {
+      "qNum": 71,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=18, max=76 (28, 18, 76, 42)"
+    },
+    {
+      "qNum": 72,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=13, max=114 (36, 114, 22, 13)"
+    },
+    {
+      "qNum": 73,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=19, max=116 (22, 19, 116, 22)"
+    },
+    {
+      "qNum": 74,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=15, max=155 (40, 155, 15, 47)"
+    },
+    {
+      "qNum": 75,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=9, max=47 (22, 16, 47, 9)"
+    },
+    {
+      "qNum": 76,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=36, max=146 (36, 146, 51, 44)"
+    },
+    {
+      "qNum": 77,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=26, max=121 (26, 121, 32, 26)"
+    },
+    {
+      "qNum": 78,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=25, max=112 (30, 112, 43, 25)"
+    },
+    {
+      "qNum": 86,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=28, max=71 (28, 68, 71, 51)"
+    }
+  ],
+  "data\\posn_astro\\junior5-data.js": [
+    {
+      "qNum": 5,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=44, max=116 (44, 75, 116, 74)"
+    },
+    {
+      "qNum": 7,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=29, max=87 (30, 40, 87, 29)"
+    },
+    {
+      "qNum": 8,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=25, max=118 (45, 25, 118, 47)"
+    },
+    {
+      "qNum": 13,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=51, max=139 (51, 68, 139, 63)"
+    },
+    {
+      "qNum": 15,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=37, max=113 (38, 113, 37, 54)"
+    },
+    {
+      "qNum": 20,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=42, max=111 (61, 50, 42, 111)"
+    },
+    {
+      "qNum": 31,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=43, max=114 (43, 114, 60, 44)"
+    },
+    {
+      "qNum": 32,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=26, max=93 (26, 34, 58, 93)"
+    },
+    {
+      "qNum": 39,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=27, max=154 (27, 154, 44, 41)"
+    },
+    {
+      "qNum": 40,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=37, max=96 (37, 57, 96, 62)"
+    },
+    {
+      "qNum": 43,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=39, max=112 (39, 112, 46, 50)"
+    },
+    {
+      "qNum": 50,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=37, max=95 (37, 95, 58, 74)"
+    },
+    {
+      "qNum": 51,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=40, max=119 (52, 40, 119, 49)"
+    },
+    {
+      "qNum": 58,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=17, max=74 (26, 74, 17, 37)"
+    },
+    {
+      "qNum": 64,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=27, max=89 (45, 89, 35, 27)"
+    },
+    {
+      "qNum": 65,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=35, max=114 (64, 114, 35, 55)"
+    },
+    {
+      "qNum": 67,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=51, max=128 (63, 128, 54, 51)"
+    },
+    {
+      "qNum": 69,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=41, max=128 (41, 70, 128, 61)"
+    },
+    {
+      "qNum": 72,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=20, max=100 (20, 28, 100, 44)"
+    },
+    {
+      "qNum": 75,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=40, max=115 (45, 115, 45, 40)"
+    },
+    {
+      "qNum": 77,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=50, max=176 (50, 176, 68, 53)"
+    },
+    {
+      "qNum": 79,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=18, max=95 (21, 20, 95, 18)"
+    },
+    {
+      "qNum": 80,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=23, max=78 (23, 78, 29, 24)"
+    },
+    {
+      "qNum": 83,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=30, max=121 (31, 121, 30, 32)"
+    },
+    {
+      "qNum": 86,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=35, max=109 (35, 109, 47, 41)"
+    },
+    {
+      "qNum": 87,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=13, max=60 (13, 60, 27, 37)"
+    },
+    {
+      "qNum": 90,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=12, max=45 (20, 12, 45, 15)"
+    },
+    {
+      "qNum": 92,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=41, max=124 (62, 124, 41, 41)"
+    },
+    {
+      "qNum": 94,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=35, max=164 (42, 164, 35, 52)"
+    },
+    {
+      "qNum": 95,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=12, max=50 (12, 50, 26, 26)"
+    },
+    {
+      "qNum": 98,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=26, max=99 (52, 99, 51, 26)"
+    },
+    {
+      "qNum": 100,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=37, max=111 (42, 44, 111, 37)"
+    }
+  ],
+  "data\\posn_astro\\junior6-data.js": [
+    {
+      "qNum": 2,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=26, max=81 (26, 61, 81, 58)"
+    },
+    {
+      "qNum": 19,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=21, max=56 (21, 56, 27, 22)"
+    },
+    {
+      "qNum": 20,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=18, max=50 (50, 18, 47, 27)"
+    },
+    {
+      "qNum": 21,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=32, max=108 (32, 108, 42, 36)"
+    },
+    {
+      "qNum": 24,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=25, max=110 (25, 40, 110, 40)"
+    },
+    {
+      "qNum": 29,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=13, max=76 (13, 76, 24, 24)"
+    },
+    {
+      "qNum": 32,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=18, max=79 (18, 79, 18, 41)"
+    },
+    {
+      "qNum": 36,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=12, max=81 (81, 43, 40, 12)"
+    },
+    {
+      "qNum": 40,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=15, max=81 (15, 81, 23, 36)"
+    },
+    {
+      "qNum": 46,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=30, max=81 (33, 36, 81, 30)"
+    },
+    {
+      "qNum": 48,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=22, max=118 (43, 22, 118, 23)"
+    },
+    {
+      "qNum": 49,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=23, max=104 (30, 104, 36, 23)"
+    },
+    {
+      "qNum": 52,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=19, max=82 (82, 40, 50, 19)"
+    },
+    {
+      "qNum": 53,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=15, max=51 (51, 51, 15, 18)"
+    },
+    {
+      "qNum": 54,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=30, max=83 (83, 48, 30, 39)"
+    },
+    {
+      "qNum": 55,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=14, max=47 (14, 30, 47, 32)"
+    },
+    {
+      "qNum": 57,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=32, max=96 (32, 96, 32, 35)"
+    },
+    {
+      "qNum": 61,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=43, max=150 (49, 150, 46, 43)"
+    },
+    {
+      "qNum": 62,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=12, max=93 (42, 93, 45, 12)"
+    },
+    {
+      "qNum": 64,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=29, max=81 (29, 81, 46, 33)"
+    },
+    {
+      "qNum": 65,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=25, max=102 (102, 25, 41, 29)"
+    },
+    {
+      "qNum": 69,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=11, max=57 (12, 57, 16, 11)"
+    },
+    {
+      "qNum": 70,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=20, max=100 (20, 30, 100, 29)"
+    },
+    {
+      "qNum": 71,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=16, max=62 (16, 62, 32, 34)"
+    },
+    {
+      "qNum": 72,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=18, max=75 (43, 75, 18, 33)"
+    },
+    {
+      "qNum": 76,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=34, max=104 (40, 48, 104, 34)"
+    },
+    {
+      "qNum": 78,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=28, max=75 (28, 34, 75, 30)"
+    },
+    {
+      "qNum": 79,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=15, max=96 (39, 96, 40, 15)"
+    },
+    {
+      "qNum": 81,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=27, max=124 (30, 124, 27, 39)"
+    },
+    {
+      "qNum": 82,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=16, max=95 (16, 95, 37, 41)"
+    },
+    {
+      "qNum": 83,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=11, max=62 (32, 62, 22, 11)"
+    },
+    {
+      "qNum": 85,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=10, max=37 (28, 10, 37, 18)"
+    },
+    {
+      "qNum": 87,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=28, max=72 (28, 38, 72, 29)"
+    },
+    {
+      "qNum": 92,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=21, max=56 (21, 56, 31, 24)"
+    },
+    {
+      "qNum": 93,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=19, max=108 (19, 108, 72, 51)"
+    },
+    {
+      "qNum": 95,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=22, max=75 (22, 24, 75, 45)"
+    },
+    {
+      "qNum": 98,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=7, max=48 (8, 16, 48, 7)"
+    },
+    {
+      "qNum": 99,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=32, max=97 (32, 97, 55, 81)"
+    }
+  ],
+  "data\\posn_astro\\junior7-data.js": [
+    {
+      "qNum": 6,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=12, max=54 (12, 54, 26, 26)"
+    },
+    {
+      "qNum": 46,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=31, max=93 (31, 41, 93, 56)"
+    },
+    {
+      "qNum": 48,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=28, max=81 (28, 81, 46, 42)"
+    },
+    {
+      "qNum": 52,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=27, max=68 (28, 28, 68, 27)"
+    },
+    {
+      "qNum": 61,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=23, max=63 (39, 53, 63, 23)"
+    },
+    {
+      "qNum": 62,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=19, max=69 (31, 69, 28, 19)"
+    },
+    {
+      "qNum": 80,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=33, max=86 (33, 86, 41, 50)"
+    },
+    {
+      "qNum": 87,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=33, max=83 (44, 83, 33, 47)"
+    },
+    {
+      "qNum": 90,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=30, max=91 (30, 91, 38, 36)"
+    },
+    {
+      "qNum": 95,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=27, max=74 (31, 27, 74, 41)"
+    }
+  ],
+  "data\\posn_astro\\senior1-data.js": [
+    {
+      "qNum": 23,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=15, max=43 (43, 22, 26, 15)"
+    },
+    {
+      "qNum": 56,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=19, max=51 (33, 51, 47, 19)"
+    },
+    {
+      "qNum": 94,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=18, max=48 (18, 19, 39, 48)"
+    }
+  ],
+  "data\\posn_astro\\senior2-data.js": [
+    {
+      "qNum": 23,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=15, max=46 (15, 46, 32, 15)"
+    },
+    {
+      "qNum": 77,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=23, max=76 (39, 76, 23, 31)"
+    },
+    {
+      "qNum": 85,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=20, max=66 (20, 66, 39, 25)"
+    },
+    {
+      "qNum": 91,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=5, max=32 (5, 5, 7, 32)"
+    },
+    {
+      "qNum": 95,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=38, max=115 (38, 115, 39, 42)"
+    },
+    {
+      "qNum": 108,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=13, max=53 (19, 53, 21, 13)"
+    }
+  ],
+  "data\\posn_astro\\senior2568-data.js": [
+    {
+      "qNum": 18,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=21, max=58 (28, 21, 40, 58)"
+    }
+  ],
+  "data\\posn_astro\\senior4-data.js": [
+    {
+      "qNum": 10,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=20, max=53 (39, 20, 53, 34)"
+    },
+    {
+      "qNum": 44,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=17, max=44 (17, 42, 44, 22)"
+    },
+    {
+      "qNum": 56,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=18, max=49 (18, 43, 49, 26)"
+    },
+    {
+      "qNum": 70,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=15, max=45 (27, 45, 21, 15)"
+    }
+  ],
+  "data\\posn_astro\\senior5-data.js": [
+    {
+      "qNum": 21,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=10, max=54 (22, 39, 54, 10)"
+    },
+    {
+      "qNum": 32,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=14, max=45 (36, 45, 29, 14)"
+    },
+    {
+      "qNum": 47,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=14, max=93 (35, 30, 93, 14)"
+    },
+    {
+      "qNum": 52,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=21, max=61 (21, 61, 54, 53)"
+    },
+    {
+      "qNum": 55,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=22, max=70 (22, 70, 29, 37)"
+    },
+    {
+      "qNum": 58,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=15, max=48 (15, 28, 48, 39)"
+    },
+    {
+      "qNum": 59,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=20, max=67 (20, 67, 30, 36)"
+    },
+    {
+      "qNum": 60,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=33, max=127 (34, 127, 34, 33)"
+    },
+    {
+      "qNum": 62,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=47, max=175 (50, 48, 175, 47)"
+    },
+    {
+      "qNum": 63,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=27, max=125 (31, 27, 125, 30)"
+    },
+    {
+      "qNum": 64,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=21, max=67 (33, 67, 21, 35)"
+    },
+    {
+      "qNum": 70,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=23, max=63 (36, 63, 42, 23)"
+    },
+    {
+      "qNum": 73,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=22, max=84 (36, 84, 22, 22)"
+    },
+    {
+      "qNum": 74,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=9, max=85 (25, 85, 16, 9)"
+    },
+    {
+      "qNum": 81,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=5, max=45 (8, 5, 45, 18)"
+    },
+    {
+      "qNum": 85,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=11, max=97 (30, 97, 32, 11)"
+    },
+    {
+      "qNum": 91,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=19, max=62 (47, 62, 34, 19)"
+    },
+    {
+      "qNum": 96,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=17, max=90 (90, 19, 17, 31)"
+    }
+  ],
+  "data\\posn_astro\\senior6-data.js": [
+    {
+      "qNum": 14,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=25, max=68 (25, 68, 43, 66)"
+    },
+    {
+      "qNum": 23,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=16, max=44 (16, 44, 25, 18)"
+    },
+    {
+      "qNum": 33,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=14, max=56 (14, 50, 25, 56)"
+    },
+    {
+      "qNum": 49,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=17, max=45 (45, 28, 18, 17)"
+    },
+    {
+      "qNum": 63,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=30, max=79 (79, 43, 30, 36)"
+    },
+    {
+      "qNum": 71,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=48, max=139 (48, 69, 139, 52)"
+    },
+    {
+      "qNum": 82,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=44, max=114 (44, 58, 114, 49)"
+    }
+  ],
+  "data\\posn_astro\\seniorC1-data.js": [
+    {
+      "qNum": 17,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=37, max=110 (37, 63, 110, 62)"
+    },
+    {
+      "qNum": 18,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=38, max=103 (38, 103, 103, 40)"
+    }
+  ],
+  "data\\posn_astro\\seniorC2-data.js": [
+    {
+      "qNum": 11,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=42, max=115 (47, 42, 115, 66)"
+    }
+  ],
+  "data\\posn_earth\\adv_geology1-data.js": [
+    {
+      "qNum": 18,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=24, max=69 (24, 50, 69, 59)"
+    },
+    {
+      "qNum": 20,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=22, max=62 (41, 31, 62, 22)"
+    }
+  ],
+  "data\\posn_earth\\adv_geology2-data.js": [
+    {
+      "qNum": 6,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=23, max=59 (59, 43, 23, 47)"
+    },
+    {
+      "qNum": 8,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=20, max=54 (54, 33, 36, 20)"
+    }
+  ],
+  "data\\posn_earth\\adv_geology5-data.js": [
+    {
+      "qNum": 2,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=15, max=54 (15, 54, 41, 31)"
+    },
+    {
+      "qNum": 3,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=14, max=60 (14, 16, 60, 35)"
+    }
+  ],
+  "data\\posn_earth\\adv_geology6-data.js": [
+    {
+      "qNum": 1,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=15, max=53 (15, 37, 53, 38)"
+    },
+    {
+      "qNum": 10,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=26, max=82 (45, 26, 82, 56)"
+    },
+    {
+      "qNum": 12,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=31, max=87 (72, 87, 83, 31)"
+    },
+    {
+      "qNum": 14,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=19, max=52 (29, 19, 43, 52)"
+    },
+    {
+      "qNum": 20,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=27, max=70 (27, 70, 45, 45)"
+    }
+  ],
+  "data\\posn_earth\\adv_meteorology1-data.js": [
+    {
+      "qNum": 11,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=11, max=88 (11, 88, 20, 35)"
+    },
+    {
+      "qNum": 14,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=31, max=78 (78, 31, 31, 31)"
+    },
+    {
+      "qNum": 16,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=35, max=94 (35, 60, 80, 94)"
+    },
+    {
+      "qNum": 18,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=53, max=139 (53, 89, 139, 61)"
+    },
+    {
+      "qNum": 20,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=28, max=94 (28, 94, 88, 77)"
+    }
+  ],
+  "data\\posn_earth\\adv_meteorology2-data.js": [
+    {
+      "qNum": 1,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=31, max=83 (83, 31, 51, 45)"
+    },
+    {
+      "qNum": 7,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=27, max=82 (61, 82, 63, 27)"
+    },
+    {
+      "qNum": 10,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=20, max=54 (43, 21, 54, 20)"
+    }
+  ],
+  "data\\posn_earth\\adv_meteorology3-data.js": [
+    {
+      "qNum": 15,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=38, max=104 (38, 67, 53, 104)"
+    }
+  ],
+  "data\\posn_earth\\adv_meteorology4-data.js": [
+    {
+      "qNum": 10,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=29, max=86 (50, 58, 29, 86)"
+    },
+    {
+      "qNum": 11,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=27, max=74 (74, 27, 38, 68)"
+    },
+    {
+      "qNum": 16,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=35, max=97 (92, 97, 35, 35)"
+    }
+  ],
+  "data\\posn_earth\\adv_oceanography1-data.js": [
+    {
+      "qNum": 4,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=5, max=35 (23, 24, 35, 5)"
+    },
+    {
+      "qNum": 15,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=21, max=67 (21, 67, 64, 33)"
+    },
+    {
+      "qNum": 22,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=25, max=65 (65, 25, 26, 52)"
+    },
+    {
+      "qNum": 39,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=24, max=71 (39, 71, 70, 24)"
+    }
+  ],
+  "data\\posn_earth\\adv_oceanography2-data.js": [
+    {
+      "qNum": 1,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=18, max=46 (18, 46, 37, 20)"
+    },
+    {
+      "qNum": 2,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=28, max=73 (73, 28, 53, 70)"
+    },
+    {
+      "qNum": 13,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=31, max=83 (83, 36, 75, 31)"
+    },
+    {
+      "qNum": 19,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=28, max=86 (28, 86, 50, 51)"
+    }
+  ],
+  "data\\posn_earth\\adv_oceanography4-data.js": [
+    {
+      "qNum": 3,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=12, max=38 (22, 13, 12, 38)"
+    },
+    {
+      "qNum": 11,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=29, max=106 (106, 31, 29, 40)"
+    },
+    {
+      "qNum": 14,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=28, max=73 (28, 65, 73, 52)"
+    }
+  ],
+  "data\\posn_earth\\adv_oceanography6-data.js": [
+    {
+      "qNum": 3,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=28, max=89 (43, 28, 89, 49)"
+    },
+    {
+      "qNum": 5,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=24, max=86 (58, 24, 83, 86)"
+    },
+    {
+      "qNum": 13,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=20, max=59 (20, 30, 59, 24)"
+    }
+  ],
+  "data\\posn_earth\\ES1-data.js": [
+    {
+      "qNum": 81,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=5, max=54 (6, 5, 54, 14)"
+    },
+    {
+      "qNum": 83,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=27, max=78 (27, 78, 37, 42)"
+    },
+    {
+      "qNum": 86,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=23, max=117 (49, 40, 117, 23)"
+    },
+    {
+      "qNum": 87,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=21, max=95 (66, 95, 21, 28)"
+    },
+    {
+      "qNum": 89,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=20, max=80 (20, 80, 22, 27)"
+    },
+    {
+      "qNum": 91,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=19, max=69 (69, 38, 23, 19)"
+    },
+    {
+      "qNum": 94,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=18, max=97 (82, 97, 65, 18)"
+    },
+    {
+      "qNum": 98,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=11, max=48 (43, 48, 19, 11)"
+    },
+    {
+      "qNum": 99,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=23, max=91 (41, 91, 28, 23)"
+    },
+    {
+      "qNum": 100,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=15, max=44 (26, 44, 15, 23)"
+    },
+    {
+      "qNum": 105,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=18, max=47 (18, 26, 23, 47)"
+    },
+    {
+      "qNum": 106,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=17, max=49 (49, 17, 48, 26)"
+    },
+    {
+      "qNum": 111,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=11, max=39 (11, 39, 39, 23)"
+    },
+    {
+      "qNum": 113,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=25, max=118 (118, 32, 36, 25)"
+    },
+    {
+      "qNum": 115,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=22, max=75 (22, 75, 33, 50)"
+    },
+    {
+      "qNum": 118,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=17, max=67 (41, 67, 28, 17)"
+    },
+    {
+      "qNum": 121,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=19, max=54 (54, 50, 42, 19)"
+    },
+    {
+      "qNum": 122,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=19, max=59 (28, 59, 25, 19)"
+    },
+    {
+      "qNum": 123,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=9, max=43 (9, 43, 10, 32)"
+    },
+    {
+      "qNum": 130,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=17, max=89 (17, 89, 21, 21)"
+    },
+    {
+      "qNum": 132,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=18, max=51 (18, 25, 51, 23)"
+    },
+    {
+      "qNum": 133,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=20, max=53 (34, 28, 53, 20)"
+    },
+    {
+      "qNum": 134,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=12, max=61 (29, 12, 61, 20)"
+    },
+    {
+      "qNum": 135,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=12, max=91 (34, 33, 91, 12)"
+    },
+    {
+      "qNum": 139,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=12, max=42 (12, 19, 42, 19)"
+    },
+    {
+      "qNum": 140,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=24, max=78 (78, 34, 24, 34)"
+    },
+    {
+      "qNum": 142,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=20, max=63 (63, 26, 20, 50)"
+    },
+    {
+      "qNum": 144,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=16, max=69 (19, 16, 69, 23)"
+    },
+    {
+      "qNum": 146,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=11, max=47 (11, 47, 12, 14)"
+    }
+  ],
+  "data\\posn_earth\\ES10-data.js": [
+    {
+      "qNum": 71,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=16, max=43 (40, 16, 43, 42)"
+    }
+  ],
+  "data\\posn_earth\\ES11-data.js": [
+    {
+      "qNum": 55,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=16, max=50 (28, 50, 28, 16)"
+    }
+  ],
+  "data\\posn_earth\\ES12-data.js": [
+    {
+      "qNum": 73,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=28, max=75 (28, 75, 58, 39)"
+    },
+    {
+      "qNum": 79,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=11, max=44 (39, 44, 21, 11)"
+    },
+    {
+      "qNum": 96,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=61, max=210 (79, 210, 61, 61)"
+    },
+    {
+      "qNum": 97,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=33, max=83 (48, 83, 50, 33)"
+    }
+  ],
+  "data\\posn_earth\\ES4-data.js": [
+    {
+      "qNum": 22,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=33, max=118 (33, 118, 46, 51)"
+    },
+    {
+      "qNum": 26,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=23, max=66 (28, 66, 32, 23)"
+    },
+    {
+      "qNum": 34,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=22, max=63 (35, 22, 63, 37)"
+    },
+    {
+      "qNum": 38,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=10, max=43 (43, 42, 10, 12)"
+    },
+    {
+      "qNum": 40,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=21, max=63 (63, 28, 38, 21)"
+    },
+    {
+      "qNum": 42,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=17, max=57 (31, 57, 17, 23)"
+    },
+    {
+      "qNum": 51,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=15, max=42 (18, 18, 15, 42)"
+    },
+    {
+      "qNum": 59,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=27, max=72 (28, 72, 34, 27)"
+    },
+    {
+      "qNum": 68,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=17, max=52 (43, 17, 52, 31)"
+    },
+    {
+      "qNum": 76,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=40, max=104 (52, 104, 69, 40)"
+    },
+    {
+      "qNum": 93,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=20, max=86 (21, 20, 86, 23)"
+    },
+    {
+      "qNum": 95,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=29, max=75 (42, 75, 36, 29)"
+    },
+    {
+      "qNum": 98,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=43, max=117 (43, 117, 59, 60)"
+    }
+  ],
+  "data\\posn_earth\\ES5-data.js": [
+    {
+      "qNum": 38,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=29, max=94 (57, 57, 94, 29)"
+    },
+    {
+      "qNum": 53,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=21, max=65 (65, 58, 43, 21)"
+    },
+    {
+      "qNum": 63,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=22, max=62 (22, 24, 62, 59)"
+    },
+    {
+      "qNum": 64,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=47, max=130 (47, 73, 130, 62)"
+    },
+    {
+      "qNum": 68,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=19, max=155 (59, 155, 59, 19)"
+    },
+    {
+      "qNum": 73,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=18, max=82 (38, 18, 82, 31)"
+    },
+    {
+      "qNum": 84,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=26, max=74 (26, 42, 74, 34)"
+    },
+    {
+      "qNum": 86,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=32, max=85 (32, 85, 46, 34)"
+    },
+    {
+      "qNum": 87,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=29, max=77 (35, 32, 77, 29)"
+    },
+    {
+      "qNum": 88,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=27, max=84 (27, 84, 39, 36)"
+    },
+    {
+      "qNum": 89,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=29, max=104 (53, 104, 75, 29)"
+    },
+    {
+      "qNum": 90,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=20, max=89 (20, 89, 31, 32)"
+    },
+    {
+      "qNum": 92,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=20, max=76 (20, 42, 76, 22)"
+    },
+    {
+      "qNum": 94,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=42, max=112 (45, 112, 45, 42)"
+    },
+    {
+      "qNum": 95,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=21, max=67 (29, 21, 67, 25)"
+    },
+    {
+      "qNum": 97,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=20, max=96 (33, 96, 24, 20)"
+    },
+    {
+      "qNum": 98,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=32, max=147 (42, 147, 32, 43)"
+    },
+    {
+      "qNum": 99,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=23, max=90 (23, 36, 90, 24)"
+    },
+    {
+      "qNum": 100,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=27, max=123 (32, 123, 52, 27)"
+    }
+  ],
+  "data\\posn_earth\\ES6-data.js": [
+    {
+      "qNum": 57,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=20, max=55 (20, 23, 47, 55)"
+    },
+    {
+      "qNum": 93,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=31, max=144 (40, 144, 44, 31)"
+    }
+  ],
+  "data\\posn_earth\\ES7-data.js": [
+    {
+      "qNum": 49,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=33, max=91 (33, 42, 63, 91)"
+    },
+    {
+      "qNum": 120,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=18, max=46 (19, 18, 46, 41)"
+    }
+  ],
+  "data\\posn_earth\\ESr3-data.js": [
+    {
+      "qNum": 6,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=10, max=42 (10, 42, 10, 13)"
+    }
+  ],
+  "data\\posn_earth\\ESr4-data.js": [
+    {
+      "qNum": 24,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=16, max=42 (20, 42, 37, 16)"
+    }
+  ],
+  "data\\posn_earth\\ESr5-data.js": [
+    {
+      "qNum": 4,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=19, max=49 (23, 49, 19, 28)"
+    },
+    {
+      "qNum": 10,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=17, max=43 (33, 43, 17, 31)"
+    },
+    {
+      "qNum": 18,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=36, max=96 (36, 47, 96, 44)"
+    },
+    {
+      "qNum": 24,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=18, max=49 (39, 44, 49, 18)"
+    },
+    {
+      "qNum": 26,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=22, max=62 (25, 62, 22, 34)"
+    },
+    {
+      "qNum": 31,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=13, max=64 (18, 64, 21, 13)"
+    },
+    {
+      "qNum": 39,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=18, max=72 (33, 72, 39, 18)"
+    },
+    {
+      "qNum": 45,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=25, max=65 (25, 65, 39, 28)"
+    },
+    {
+      "qNum": 54,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=26, max=67 (26, 67, 49, 40)"
+    }
+  ],
+  "data\\posn_earth\\ESr6-data.js": [
+    {
+      "qNum": 5,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=16, max=59 (16, 29, 59, 43)"
+    },
+    {
+      "qNum": 30,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=29, max=84 (29, 48, 84, 53)"
+    },
+    {
+      "qNum": 36,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=16, max=90 (44, 90, 67, 16)"
+    },
+    {
+      "qNum": 37,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=16, max=60 (60, 36, 54, 16)"
+    },
+    {
+      "qNum": 38,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=16, max=78 (52, 78, 72, 16)"
+    },
+    {
+      "qNum": 41,
+      "type": "LENGTH_DISPARITY",
+      "msg": "Length disparity: min=20, max=65 (65, 28, 32, 20)"
+    }
+  ]
+}
