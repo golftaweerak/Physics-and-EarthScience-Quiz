@@ -481,6 +481,30 @@ export const quizList = [
     "subCategory": "บทที่ 3: แรงและกฎการเคลื่อนที่"
   },
   {
+    "id": "phy_m4/phy_m4_ch3-5",
+    "title": "แรงและกฎการเคลื่อนที่ (ชุดที่ 5)",
+    "amount": 30,
+    "description": "บทที่ 3: แรงและกฎการเคลื่อนที่ (เน้นกฎนิวตันและการประยุกต์ พร้อมทฤษฎี วิเคราะห์ และรูปประกอบ)",
+    "url": "./quiz/index.html?id=phy_m4/phy_m4_ch3-5",
+    "storageKey": "quizState-phy_m4_ch3-5",
+    "icon": "./assets/icons/friction.png",
+    "altText": "ไอคอนสำหรับ phy_m4_ch3-5",
+    "category": "PhysicsM4",
+    "subCategory": "บทที่ 3: แรงและกฎการเคลื่อนที่"
+  },
+  {
+    "id": "phy_m4/phy_m4_ch3-6",
+    "title": "แรงและกฎการเคลื่อนที่ (ชุดที่ 6)",
+    "amount": 30,
+    "description": "บทที่ 3: แรงและกฎการเคลื่อนที่ (เน้นกฎความโน้มถ่วงสากล สนามโน้มถ่วง กฎนิวตันและการประยุกต์)",
+    "url": "./quiz/index.html?id=phy_m4/phy_m4_ch3-6",
+    "storageKey": "quizState-phy_m4_ch3-6",
+    "icon": "./assets/icons/friction.png",
+    "altText": "ไอคอนสำหรับ phy_m4_ch3-6",
+    "category": "PhysicsM4",
+    "subCategory": "บทที่ 3: แรงและกฎการเคลื่อนที่"
+  },
+  {
     "id": "phy_m4/phy_m4_ch4-1",
     "title": "สมดุลกล: สมดุลต่อการเลื่อนที่ (ชุดที่ 1)",
     "amount": 30,
