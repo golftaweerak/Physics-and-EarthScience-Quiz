@@ -1,23 +1,58 @@
-
-# Playwright
+# Dependencies
 /node_modules/
+node_modules/
+
+# Test & Playwright Output
 /test-results/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
-/csv/
-/xlsx/
-node_modules
 
-# Build output
+# Build Output & Caches
 dist/
 build/
+.cache/
+.vite/
+.parcel-cache/
 
-# Environment variables
+# Student Personal Data & Scores (ข้อมูลส่วนตัวและคะแนนนักเรียน)
+/csv/
+/xlsx/
+*.csv
+*.xlsx
+*.xls
+~$*.xlsx
+~$*.csv
+data/scores*
+data/score*
+data/edit_log*
+
+# Credentials & Environment Variables (ความปลอดภัยและ Keys)
 .env
-.env.local
-.env.*.local
+.env.*
+!.env.example
+*serviceAccount*.json
+*firebase-adminsdk*.json
+google-services.json
+GoogleService-Info.plist
+*.pem
+*.key
+
+# Temporary Directories & Scratch Files (ไฟล์ทำงานชั่วคราว)
+/scratch/
+/temp_remote_sync/
+read-headers-temp.js
+scores-sync-guide.md
+tempCodeRunnerFile.js
+
+# Python Cache (สคริปต์ใน tools/)
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+venv/
+.venv/
 
 # Logs
 npm-debug.log*
@@ -27,11 +62,11 @@ test_output*
 *.log
 *.txt
 
-# OS metadata
+# OS & Editor Metadata
 .DS_Store
 Thumbs.db
-
-# Editor directories
+ehthumbs.db
+Desktop.ini
 .idea/
 .vscode/
 *.suo
@@ -39,21 +74,3 @@ Thumbs.db
 *.njsproj
 *.sln
 *.sw?
-
-# Temporary files
-tempCodeRunnerFile.js
-# Student score files (Client-side static data)
-data/scores-data-*.js
-data/score-overrides.js
-data/edit_log.csv  
-
-# ละเว้นไฟล์ Excel ต้นฉบับ
-xlsx/*.xlsx
-xlsx/*.csv
-# ละเว้นไฟล์ JavaScript คะแนนที่แปลงผลแล้ว
-data/scores-data-*.js
-data/score-overrides.js
-data/edit_log.csv
-
-# ละเว้นไฟล์คู่มือสรุปขั้นตอนที่ไม่ต้องการให้ขึ้น Git
-scores-sync-guide.md
