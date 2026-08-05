@@ -789,10 +789,10 @@ export const quizItems = [
     "options": [
       "1/2 เท่า",
       "เท่ากัน",
-      "\\ เท่า",
+      "\\(\\sqrt{2}\\) เท่า",
       "2 เท่า"
     ],
-    "answer": "\\ เท่า",
+    "answer": "\\(\\sqrt{2}\\) เท่า",
     "explanation": "ความเร็วหลุดพ้น \\(v_{esc} = \\sqrt{2GM/R}\\). เมื่อ M เท่ากัน จะได้ว่า \\(v_{esc} \\propto 1/\\sqrt{R}\\).<br>\\(\\frac{v_{esc,A}}{v_{esc,B}} = \\sqrt{\\frac{R_B}{R_A}} = \\sqrt{\\frac{R_B}{0.5R_B}} = \\sqrt{2}\\).",
     "subCategory": {
       "main": "POSN_Astronomy",

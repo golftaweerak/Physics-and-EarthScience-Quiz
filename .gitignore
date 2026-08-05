@@ -45,6 +45,7 @@ GoogleService-Info.plist
 read-headers-temp.js
 scores-sync-guide.md
 tempCodeRunnerFile.js
+QUIZ_DATA_GUIDE.md
 
 # Python Cache (สคริปต์ใน tools/)
 __pycache__/

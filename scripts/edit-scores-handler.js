@@ -122,6 +122,95 @@ export async function initializeScoreEditor() {
     }
 
     /**
+     * Initializes the student search functionality.
+     * @param {Array<object>} studentScores - The array of all student score objects.
+     */
+    function initializeStudentSearch(studentScores) {
+        const searchInput = document.getElementById('student-search-input');
+        const searchBtn = document.getElementById('student-search-btn');
+        const clearBtn = document.getElementById('student-search-clear-btn');
+        const resultsContainer = document.getElementById('student-search-results');
+
+        if (!searchInput || !resultsContainer || !searchBtn || !clearBtn) {
+            console.error('Student search elements not found for teacher hub.');
+            return;
+        }
+
+        resultsContainer.innerHTML = `<p class="text-center text-gray-500 dark:text-gray-400 py-4">ค้นหานักเรียนเพื่อดูคะแนนรายบุคคล</p>`;
+
+        const performSearch = () => {
+            const query = searchInput.value.trim().toLowerCase();
+
+            if (query.length === 0) {
+                resultsContainer.innerHTML = `<p class="text-center text-gray-500 dark:text-gray-400 py-4">กรุณาพิมพ์คำค้นหา</p>`;
+                return;
+            }
+
+            // Priority 1: Exact ID match.
+            const idMatch = studentScores.find(s => s.id.toLowerCase() === query);
+            if (idMatch) {
+                displayStudentDetails(idMatch, resultsContainer);
+                return;
+            }
+
+            // Priority 2: Exact Room match.
+            const roomMatches = studentScores.filter(s => s.room && s.room.toLowerCase() === query);
+            if (roomMatches.length > 0) {
+                const results = roomMatches.sort((a, b) => (parseInt(a.ordinal, 10) || 999) - (parseInt(b.ordinal, 10) || 999));
+                renderStudentSearchResultCards(results, resultsContainer, { cardType: 'button' });
+                return;
+            }
+
+            // Priority 3: Partial Name match.
+            const nameMatches = studentScores.filter(student => student.name && student.name.toLowerCase().includes(query));
+            if (nameMatches.length > 1) {
+                const results = nameMatches.sort((a, b) => a.id.localeCompare(b.id));
+                renderStudentSearchResultCards(results, resultsContainer, { cardType: 'button' });
+            } else if (nameMatches.length === 1) {
+                displayStudentDetails(nameMatches[0], resultsContainer);
+            } else {
+                // No results found, render the "not found" message.
+                renderStudentSearchResultCards([], resultsContainer, { cardType: 'button' });
+            }
+        };
+
+        resultsContainer.addEventListener('click', (event) => {
+            const card = event.target.closest('.student-card-btn');
+            if (!card) return;
+
+            const studentId = card.dataset.studentId;
+            if (!studentId) return;
+
+            const student = studentScores.find(s => s.id === studentId);
+            if (student) {
+                displayStudentDetails(student, resultsContainer);
+            }
+        });
+
+        clearBtn.addEventListener('click', () => {
+            searchInput.value = '';
+            resultsContainer.innerHTML = `<p class="text-center text-gray-500 dark:text-gray-400 py-4">ค้นหานักเรียนเพื่อดูคะแนนรายบุคคล</p>`;
+            clearBtn.classList.add('hidden');
+            searchInput.focus();
+        });
+
+        searchInput.addEventListener('input', () => {
+            clearBtn.classList.toggle('hidden', searchInput.value.length === 0);
+        });
+
+        clearBtn.classList.toggle('hidden', searchInput.value.length === 0);
+
+        searchBtn.addEventListener('click', performSearch);
+
+        searchInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                performSearch();
+            }
+        });
+    }
+
+    /**
      * Enables the main editor UI, fetches data, and sets up event listeners.
      */
     async function enableEditor() {
@@ -507,96 +596,6 @@ export async function initializeScoreEditor() {
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-        }
-
-        /**
-         * Initializes the student search functionality.
-         * @param {Array<object>} studentScores - The array of all student score objects.
-         */
-        function initializeStudentSearch(studentScores) {
-            const searchInput = document.getElementById('student-search-input');
-            const searchBtn = document.getElementById('student-search-btn');
-            const clearBtn = document.getElementById('student-search-clear-btn');
-            const resultsContainer = document.getElementById('student-search-results');
-
-            if (!searchInput || !resultsContainer || !searchBtn || !clearBtn) {
-                console.error('Student search elements not found for teacher hub.');
-                return;
-            }
-
-            resultsContainer.innerHTML = `<p class="text-center text-gray-500 dark:text-gray-400 py-4">ค้นหานักเรียนเพื่อดูคะแนนรายบุคคล</p>`;
-
-            const performSearch = () => {
-                const query = searchInput.value.trim().toLowerCase();
-
-                if (query.length === 0) {
-                    resultsContainer.innerHTML = `<p class="text-center text-gray-500 dark:text-gray-400 py-4">กรุณาพิมพ์คำค้นหา</p>`;
-                    return;
-                }
-
-                // Priority 1: Exact ID match.
-                const idMatch = studentScores.find(s => s.id.toLowerCase() === query);
-                if (idMatch) {
-                    displayStudentDetails(idMatch, resultsContainer);
-                    return;
-                }
-
-                // Priority 2: Exact Room match.
-                const roomMatches = studentScores.filter(s => s.room && s.room.toLowerCase() === query);
-                if (roomMatches.length > 0) {
-                    const results = roomMatches.sort((a, b) => (parseInt(a.ordinal, 10) || 999) - (parseInt(b.ordinal, 10) || 999));
-                    renderStudentSearchResultCards(results, resultsContainer, { cardType: 'button' });
-                    return;
-                }
-
-                // Priority 3: Partial Name match.
-                const nameMatches = studentScores.filter(student => student.name && student.name.toLowerCase().includes(query));
-                if (nameMatches.length > 1) {
-                    const results = nameMatches.sort((a, b) => a.id.localeCompare(b.id));
-                    renderStudentSearchResultCards(results, resultsContainer, { cardType: 'button' });
-                } else if (nameMatches.length === 1) {
-                    displayStudentDetails(nameMatches[0], resultsContainer);
-                } else {
-                    // No results found, render the "not found" message.
-                    renderStudentSearchResultCards([], resultsContainer, { cardType: 'button' });
-                }
-            };
-
-            resultsContainer.addEventListener('click', (event) => {
-                const card = event.target.closest('.student-card-btn');
-                if (!card) return;
-
-                const studentId = card.dataset.studentId;
-                if (!studentId) return;
-
-                const student = studentScores.find(s => s.id === studentId);
-                if (student) {
-                    displayStudentDetails(student, resultsContainer);
-                }
-
-            });
-
-            clearBtn.addEventListener('click', () => {
-                searchInput.value = '';
-                resultsContainer.innerHTML = `<p class="text-center text-gray-500 dark:text-gray-400 py-4">ค้นหานักเรียนเพื่อดูคะแนนรายบุคคล</p>`;
-                clearBtn.classList.add('hidden');
-                searchInput.focus();
-            });
-
-            searchInput.addEventListener('input', () => {
-                clearBtn.classList.toggle('hidden', searchInput.value.length === 0);
-            });
-
-            clearBtn.classList.toggle('hidden', searchInput.value.length === 0);
-
-            searchBtn.addEventListener('click', performSearch);
-
-            searchInput.addEventListener('keydown', (event) => {
-                if (event.key === 'Enter') {
-                    event.preventDefault();
-                    performSearch();
-                }
-            });
         }
 
         // --- Student Detail Display Logic (Adapted from scores-handler.js) ---

@@ -867,6 +867,98 @@ export async function initializePreviewPage() {
     // Populate the new category filter dropdown
     populateCategoryFilter();
 
+    // Helper function to calculate a numeric sort key based on chapter, set, and exam type
+    function getQuizSortKey(quiz) {
+        const id = (quiz.id || '').toLowerCase();
+        const title = (quiz.title || '').toLowerCase();
+        const subCat = (quiz.subCategory || '').toLowerCase();
+
+        // 1. Chapter matching in ID (e.g. phy_m4_ch2-3, ess_basic_m6_ch10-2, ess_adv_m6_ch14-5)
+        let chMatch = id.match(/ch(\d+)[-_]?(\d+)?/);
+        if (chMatch) {
+            const mainCh = parseInt(chMatch[1], 10);
+            const subCh = chMatch[2] ? parseInt(chMatch[2], 10) : 0;
+            return mainCh * 100 + subCh;
+        }
+
+        // 2. Midterm exams
+        if (id.includes('mid') || title.includes('กลางภาค')) {
+            let mMatch = id.match(/mid(\d+)?[-_]?exam[-_]?(\d+)?/) || id.match(/mid(\d+)/);
+            let num = mMatch && mMatch[1] ? parseInt(mMatch[1], 10) : 1;
+            let sub = mMatch && mMatch[2] ? parseInt(mMatch[2], 10) : 1;
+            return 8000 + num * 10 + sub;
+        }
+
+        // 3. Final exams
+        if (id.includes('final') || title.includes('ปลายภาค')) {
+            let fMatch = id.match(/final(\d+)?[-_]?exam[-_]?(\d+)?/) || id.match(/final(\d+)/);
+            let num = fMatch && fMatch[1] ? parseInt(fMatch[1], 10) : 1;
+            let sub = fMatch && fMatch[2] ? parseInt(fMatch[2], 10) : 1;
+            return 9000 + num * 10 + sub;
+        }
+
+        // 4. Review quizzes
+        if (id.includes('review') || title.includes('ทบทวน')) {
+            let setMatch = title.match(/ชุดที่\s*(\d+)/) || id.match(/(\d+)/);
+            let setNum = setMatch ? parseInt(setMatch[1], 10) : 0;
+            return 9500 + setNum;
+        }
+
+        // 5. Trailing digits matching for numbered sets (e.g. adv_astro10, senior3, ES12, ESr5)
+        let numMatch = id.match(/([a-z_]+?)(\d+)/i);
+        if (numMatch) {
+            const prefix = numMatch[1];
+            const num = parseInt(numMatch[2], 10);
+            let typeWeight = 5000;
+            if (prefix.includes('junior')) typeWeight = 1000;
+            else if (prefix.includes('senior')) typeWeight = 2000;
+            else if (prefix.includes('esr')) typeWeight = 3000;
+            else if (prefix.includes('es')) typeWeight = 4000;
+            else if (prefix.includes('adv_astro')) typeWeight = 6000;
+            else if (prefix.includes('adv_geo')) typeWeight = 6500;
+            else if (prefix.includes('adv_ocean')) typeWeight = 7000;
+            else if (prefix.includes('adv_meteo')) typeWeight = 7500;
+
+            return typeWeight + num;
+        }
+
+        // 6. SubCategory matching "บทที่ X"
+        let subCatMatch = subCat.match(/บทที่\s*(\d+)/);
+        if (subCatMatch) {
+            let setMatch = title.match(/ชุดที่\s*(\d+)/);
+            let setNum = setMatch ? parseInt(setMatch[1], 10) : 0;
+            return parseInt(subCatMatch[1], 10) * 100 + setNum;
+        }
+
+        return 9999;
+    }
+
+    // Helper to format option display text with chapter badges for easy scanning
+    function formatQuizOptionTitle(quiz) {
+        let prefix = '';
+        const id = (quiz.id || '').toLowerCase();
+        const title = quiz.title || '';
+        const subCat = quiz.subCategory || '';
+
+        if (subCat.includes('บทที่')) {
+            const match = subCat.match(/(บทที่\s*\d+)/);
+            if (match) {
+                prefix = `[${match[1]}] `;
+            }
+        } else if (id.includes('mid') || title.includes('กลางภาค')) {
+            prefix = '[กลางภาค] ';
+        } else if (id.includes('final') || title.includes('ปลายภาค')) {
+            prefix = '[ปลายภาค] ';
+        } else if (id.includes('review') || title.includes('ทบทวน')) {
+            prefix = '[ทบทวน] ';
+        }
+
+        if (prefix && !title.startsWith('[') && !title.startsWith(prefix.trim())) {
+            return `${prefix}${title}`;
+        }
+        return title;
+    }
+
     // Populate dropdown from quizListCache with categories
     if (Array.isArray(quizListCache) && quizListCache.length > 0) {
         // Group quizzes by category
@@ -879,10 +971,9 @@ export async function initializePreviewPage() {
             return acc;
         }, {});
 
-        // Sort quizzes within each group using natural sort for proper numbering
+        // Sort quizzes within each group by chapter number & curriculum order
         Object.keys(groupedQuizzes).forEach(categoryKey => {
-            // 'numeric: true' enables natural sorting (e.g., "2" before "10")
-            groupedQuizzes[categoryKey].sort((a, b) => a.title.localeCompare(b.title, 'th', { numeric: true, sensitivity: 'base' }));
+            groupedQuizzes[categoryKey].sort((a, b) => getQuizSortKey(a) - getQuizSortKey(b));
         });
 
         // Create optgroups and options, ensuring a consistent order that matches main.js
@@ -897,6 +988,17 @@ export async function initializePreviewPage() {
             return orderA - orderB;
         });
 
+        const suggestionsDatalist = document.getElementById('quiz-suggestions-list');
+        if (suggestionsDatalist) {
+            suggestionsDatalist.innerHTML = '';
+            // Create suggestions for each quiz sorted by chapter
+            quizListCache.forEach(quiz => {
+                const opt = document.createElement('option');
+                opt.value = formatQuizOptionTitle(quiz);
+                suggestionsDatalist.appendChild(opt);
+            });
+        }
+
         sortedCategoryKeys.forEach(categoryKey => {
             const optgroup = document.createElement('optgroup');
             // Use the display title from the imported allCategoryDetails, or the key itself as a fallback
@@ -905,7 +1007,7 @@ export async function initializePreviewPage() {
             groupedQuizzes[categoryKey].forEach(quiz => {
                 const option = document.createElement('option');
                 option.value = `${quiz.id}-data.js`;
-                option.textContent = quiz.title;
+                option.textContent = formatQuizOptionTitle(quiz);
                 optgroup.appendChild(option);
             });
 
@@ -975,6 +1077,49 @@ svg" fill="none" viewBox="0 0 24 24">
         }
     }
 
+    // --- Quiz Search Input & Auto-Suggest Event Listener ---
+    const quizSearchInput = document.getElementById('quiz-search-input');
+    if (quizSearchInput) {
+        quizSearchInput.addEventListener('input', (e) => {
+            const query = e.target.value.trim().toLowerCase();
+
+            // Check for match with any quiz title, formatted title, or id
+            const matchedQuiz = quizListCache.find(q => {
+                const formatted = formatQuizOptionTitle(q).toLowerCase();
+                const title = (q.title || '').toLowerCase();
+                const id = (q.id || '').toLowerCase();
+                return query.length >= 3 && (formatted === query || title === query || id === query || `${id}-data.js` === query);
+            });
+
+            if (matchedQuiz) {
+                const targetScript = `${matchedQuiz.id}-data.js`;
+                quizSelector.value = targetScript;
+                if (categorySelector) categorySelector.value = '';
+                const url = new URL(window.location);
+                url.searchParams.set('script', targetScript);
+                window.history.pushState({}, '', url);
+                loadAndRenderQuiz(targetScript);
+            } else if (query.length > 0) {
+                // Filter the select dropdown options in real-time
+                const selectOptions = quizSelector.querySelectorAll('option');
+                selectOptions.forEach(opt => {
+                    if (!opt.value) return; // keep default placeholder
+                    const text = opt.textContent.toLowerCase();
+                    const val = opt.value.toLowerCase();
+                    if (text.includes(query) || val.includes(query)) {
+                        opt.style.display = '';
+                    } else {
+                        opt.style.display = 'none';
+                    }
+                });
+            } else {
+                // Reset options visibility if query cleared
+                const selectOptions = quizSelector.querySelectorAll('option');
+                selectOptions.forEach(opt => opt.style.display = '');
+            }
+        });
+    }
+
     // --- New Event Listener & Initial Load Logic ---
     let debounceTimer;
     searchInput.addEventListener('input', () => {
@@ -996,6 +1141,7 @@ svg" fill="none" viewBox="0 0 24 24">
             if (quizSelector.value) {
                 quizSelector.value = ''; // Clear the specific quiz selection
             }
+            if (quizSearchInput) quizSearchInput.value = '';
             // We don't need to clear the search input, they can be combined.
             handleGlobalSearch(); // Trigger a new global search with the category filter
         });
@@ -1006,6 +1152,10 @@ svg" fill="none" viewBox="0 0 24 24">
         const url = new URL(window.location);
         if (selectedScript) {
             if (categorySelector) categorySelector.value = ''; // Reset category dropdown
+            const quizInfo = quizListCache.find(q => `${q.id}-data.js` === selectedScript);
+            if (quizInfo && quizSearchInput) {
+                quizSearchInput.value = formatQuizOptionTitle(quizInfo);
+            }
             url.searchParams.set('script', selectedScript);
             window.history.pushState({}, '', url);
             loadAndRenderQuiz(selectedScript);
@@ -1014,6 +1164,7 @@ svg" fill="none" viewBox="0 0 24 24">
             window.history.pushState({}, '', url);
             currentQuizData = [];
             searchInput.value = '';
+            if (quizSearchInput) quizSearchInput.value = '';
             handleGlobalSearch();
         }
     });
