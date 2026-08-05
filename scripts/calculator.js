@@ -58,13 +58,13 @@ export class ScientificCalculator {
     const modal = document.createElement('div');
     modal.id = 'scientific-calculator-modal';
     // Style: Premium Modern Dark
-    modal.className = 'fixed hidden z-[1000] bg-[#1a202c] rounded-2xl shadow-2xl border border-gray-700 w-80 sm:w-96 overflow-hidden font-sans transition-all duration-300 transform scale-95 opacity-0 select-none';
+    modal.className = 'fixed hidden z-[1000] bg-[#1a202c] rounded-2xl shadow-2xl border border-gray-700 w-80 sm:w-96 max-w-[calc(100vw-16px)] overflow-hidden font-sans transition-all duration-300 transform scale-95 opacity-0 select-none';
     modal.style.bottom = '20px';
     modal.style.right = '20px';
 
     modal.innerHTML = `
             <!-- Header -->
-            <div class="bg-gradient-to-r from-gray-800 to-gray-900 p-3 flex items-center justify-between cursor-move border-b border-gray-700 shadow-md" id="calc-header">
+            <div class="bg-gradient-to-r from-gray-800 to-gray-900 p-3 flex items-center justify-between cursor-move border-b border-gray-700 shadow-md touch-none" id="calc-header">
                 <div class="flex items-center gap-2">
                     <div class="w-2 h-2 rounded-full bg-teal-400 shadow-[0_0_8px_rgba(45,212,191,0.6)]"></div>
                     <span class="text-xs text-gray-300 font-bold tracking-[0.15em] uppercase">Scientific</span>
@@ -90,7 +90,7 @@ export class ScientificCalculator {
                    </div>
                    
                    <!-- Expression (MathLive) -->
-                   <math-field id="calc-math-field" class="block w-full h-full pt-3" style="background: transparent; border: none; font-size: 1.6rem; color: #111827; box-shadow: none; outline: none; --contains-highlight-background: transparent; --selection-background-color: rgba(0,0,0,0.1); text-shadow: 1px 1px 0 rgba(0,0,0,0.15);"></math-field>
+                   <math-field id="calc-math-field" inputmode="none" class="block w-full h-full pt-3" style="background: transparent; border: none; font-size: 1.6rem; color: #111827; box-shadow: none; outline: none; --contains-highlight-background: transparent; --selection-background-color: rgba(0,0,0,0.1); text-shadow: 1px 1px 0 rgba(0,0,0,0.15);"></math-field>
                    
                    <!-- Result -->
                    <div id="calc-result-area" class="text-right text-[28px] font-bold text-[#111827] h-10 overflow-hidden tracking-normal" style="font-family: 'Times New Roman', serif; text-shadow: 1px 1px 0 rgba(0,0,0,0.15);"></div>
@@ -185,6 +185,20 @@ export class ScientificCalculator {
         #scientific-calculator-modal {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            touch-action: none;
+        }
+
+        #calc-header {
+            touch-action: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .c-btn, .nav {
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-user-select: none;
+            user-select: none;
         }
 
         .c-btn {
@@ -204,7 +218,7 @@ export class ScientificCalculator {
             border: 1px solid rgba(255,255,255,0.05);
             padding-top: 2px;
         }
-        .c-btn:active { 
+        .c-btn:active, .nav:active { 
             transform: translateY(2px); 
             box-shadow: 0 1px 0 rgba(0,0,0,0.3); 
         }
@@ -377,9 +391,8 @@ export class ScientificCalculator {
 
     // Buttons
     this.container.querySelectorAll('.c-btn, .nav').forEach(btn => {
-      // Prevent focus loss from math field
+      // Prevent focus loss from math field on mouse click without blocking touch click
       btn.addEventListener('mousedown', (e) => e.preventDefault());
-      btn.addEventListener('touchstart', (e) => e.preventDefault(), { passive: false });
 
       btn.addEventListener('click', (e) => {
         // Haptic Feedback
@@ -417,12 +430,21 @@ export class ScientificCalculator {
     this.boundDragStart = (e) => this.startDragging(e);
     this.boundDrag = (e) => this.drag(e);
     this.boundDragEnd = () => this.stopDragging();
+    this.boundTouchMove = (e) => {
+      if (this.isDragging && e.touches && e.touches.length > 0) {
+        if (e.cancelable) e.preventDefault();
+        this.drag(e.touches[0]);
+      }
+    };
 
     header.addEventListener('mousedown', (e) => this.startDragging(e));
     window.addEventListener('mousemove', this.boundDrag);
     window.addEventListener('mouseup', this.boundDragEnd);
-    header.addEventListener('touchstart', (e) => this.startDragging(e.touches[0]));
-    window.addEventListener('touchmove', (e) => this.drag(e.touches[0]));
+    header.addEventListener('touchstart', (e) => {
+      if (e.target.closest('#calc-close') || e.target.closest('#calc-mode-indicator')) return;
+      this.startDragging(e.touches[0]);
+    }, { passive: true });
+    window.addEventListener('touchmove', this.boundTouchMove, { passive: false });
     window.addEventListener('touchend', this.boundDragEnd);
 
     // Keyboard

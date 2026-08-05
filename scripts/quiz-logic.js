@@ -903,7 +903,7 @@ function showQuestion() {
     const inputHtml = `
         <div class="mt-4">
             <label for="fill-in-answer" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">กรุณาพิมพ์คำตอบของคุณ:</label>
-            <input type="text" id="fill-in-answer" class="w-full p-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="ใส่คำตอบ...">
+            <input type="text" id="fill-in-answer" enterkeyhint="send" class="w-full p-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="ใส่คำตอบ...">
         </div>
       `;
     elements.options.innerHTML = inputHtml;
@@ -916,7 +916,7 @@ function showQuestion() {
     const unitDisplay = currentQuestion.unit ? `<span class="ml-2 text-gray-600 dark:text-gray-400">${currentQuestion.unit}</span>` : '';
     const inputHtml = `
         <div class="mt-4 flex items-center">
-            <input type="number" id="fill-in-number-answer" step="any" class="w-full p-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="${placeholderText}">
+            <input type="number" id="fill-in-number-answer" step="any" enterkeyhint="send" class="w-full p-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="${placeholderText}">
             ${unitDisplay}
         </div>
       `;
@@ -3404,7 +3404,39 @@ function bindEventListeners() {
     elements.nextBtn.addEventListener("click", handleNextButtonClick);
   }
 
-  // Keep other listeners as they are.
+  // Global Keyboard Listener for Enter key
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Enter") return;
+
+    // 1. Handle Start Screen
+    if (state.activeScreen === elements.startScreen) {
+      if (elements.startBtn && !elements.startBtn.classList.contains("hidden") && !elements.startBtn.disabled) {
+        e.preventDefault();
+        startQuiz();
+      }
+      return;
+    }
+
+    // 2. Handle Quiz Screen
+    if (state.activeScreen === elements.quizScreen) {
+      // Don't intercept if Scientific Calculator modal is open
+      const calcModal = document.getElementById("scientific-calculator-modal");
+      if (calcModal && calcModal.classList.contains("visible")) return;
+
+      // Don't intercept if any modal is open
+      if (document.querySelector(".modal:not(.hidden)")) return;
+
+      // If Next/Submit button is visible and enabled
+      if (elements.nextBtn && !elements.nextBtn.classList.contains("hidden") && !elements.nextBtn.disabled) {
+        e.preventDefault();
+        if (document.activeElement && typeof document.activeElement.blur === "function") {
+          document.activeElement.blur();
+        }
+        handleNextButtonClick();
+      }
+    }
+  });
+
   // Keep other listeners as they are.
   if (elements.startBtn) {
     elements.startBtn.addEventListener("click", startQuiz);

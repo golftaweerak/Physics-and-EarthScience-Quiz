@@ -1380,6 +1380,18 @@ export const quizList = [
     "subCategory": "ดาวฤกษ์"
   },
   {
+    "id": "ess_adv/ess_adv_m6_ch14-5",
+    "title": "ดาวฤกษ์ (ชุดที่ 5 - วิวัฒนาการและแผนภาพ H-R)",
+    "amount": 30,
+    "description": "บทที่ 14: ดาวฤกษ์ (ชุดที่ 5 - เน้นวิวัฒนาการของดาวฤกษ์และการอ่านแปลความหมายแผนภาพ H-R)",
+    "url": "./quiz/index.html?id=ess_adv/ess_adv_m6_ch14-5",
+    "storageKey": "quizState-ess_adv_m6_ch14-5",
+    "icon": "./assets/icons/star.png",
+    "altText": "ไอคอนสำหรับ ess_adv_m6_ch14-5",
+    "category": "EarthSpaceScienceAdvance",
+    "subCategory": "ดาวฤกษ์"
+  },
+  {
     "id": "ess_adv/ess_adv_m6_ch16-1",
     "title": "ทรงกลมฟ้า (ชุดที่ 1)",
     "amount": 30,

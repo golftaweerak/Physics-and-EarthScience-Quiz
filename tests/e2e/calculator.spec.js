@@ -31,8 +31,8 @@ test('verify scientific calculator functionality', async ({ page }) => {
 
   // Helper to click calculator buttons
   const clickBtn = async (val) => {
-    // Support data-val, data-action, and nav classes
-    const btn = page.locator(`.c-btn[data-val="${val}"], .c-btn[data-action="${val}"], .nav[data-val="${val}"]`);
+    // Support data-val, data-action, data-alpha, data-shift, and nav classes
+    const btn = page.locator(`.c-btn[data-val="${val}"], .c-btn[data-action="${val}"], .c-btn[data-alpha="${val}"], .c-btn[data-shift="${val}"], .nav[data-val="${val}"]`);
     await btn.first().click({ force: true });
   };
 
@@ -151,7 +151,8 @@ test('verify scientific calculator functionality', async ({ page }) => {
   await clickBtn('AC');
   await clickBtn('shift');
   await clickBtn('int'); // derivative(
-  await clickBtn('x');
+  await clickBtn('alpha');
+  await clickBtn(')'); // x variable (ALPHA + ')')
   await clickBtn('sqr'); // ^2
   await clickBtn('shift');
   await clickBtn(')'); // ,
