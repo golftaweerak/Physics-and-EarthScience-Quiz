@@ -26,6 +26,7 @@ build/
 ~$*.csv
 data/scores*
 data/score*
+data/scores-data*.js
 data/edit_log*
 
 # Credentials & Environment Variables (ความปลอดภัยและ Keys)
