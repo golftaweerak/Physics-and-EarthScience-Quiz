@@ -1,3 +1,4 @@
+
 export const quizList = [
   {
     "id": "phy_m4/phy_m4_ch7-1",
@@ -717,7 +718,7 @@ export const quizList = [
   {
     "id": "phy_m5/phy_m5_ch12-3",
     "title": "ไฟฟ้าสถิต (ชุดที่ 3)",
-    "amount": 40,
+    "amount": 42,
     "description": "บทที่ 12: ไฟฟ้าสถิต (เน้นตัวเก็บประจุและการประยุกต์)",
     "url": "./quiz/index.html?id=phy_m5/phy_m5_ch12-3",
     "storageKey": "quizState-phy_m5_ch12-3",
@@ -1143,7 +1144,7 @@ export const quizList = [
   {
     "id": "ess_basic/ess_basic_m6_final2-review-3",
     "title": "แนวข้อสอบปลายภาค เทอม 2 ชุดที่ 3",
-    "amount": 60,
+    "amount": 51,
     "description": "แนวข้อสอบปลายภาค เทอม 2 ชุดที่ 3 (เน้นการวิเคราะห์สถานการณ์ใหม่)",
     "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_final2-review-3",
     "storageKey": "quizState-ess_basic_m6_final2-review-3",
@@ -1163,6 +1164,18 @@ export const quizList = [
     "altText": "ไอคอนสำหรับ ess_basic_m6_final2-review-4",
     "category": "EarthSpaceScienceBasic",
     "subCategory": "แนวข้อสอบ"
+  },
+  {
+    "id": "ess_basic/ess_basic_m6_ch4-4",
+    "title": "บทที่ 4: เทคโนโลยีอวกาศและการประยุกต์ใช้ (การวิเคราะห์เชิงลึกและการแก้ปัญหา)",
+    "amount": 30,
+    "description": "บทที่ 4: เทคโนโลยีอวกาศและการประยุกต์ใช้ (การวิเคราะห์เชิงลึกและการแก้ปัญหา)",
+    "url": "./quiz/index.html?id=ess_basic/ess_basic_m6_ch4-4",
+    "storageKey": "quizState-ess_basic/ess_basic_m6_ch4-4",
+    "icon": "./assets/icons/earth.png",
+    "altText": "ไอคอนสำหรับ ess_basic/ess_basic_m6_ch4-4",
+    "category": "EarthSpaceScienceBasic",
+    "subCategory": "เทคโนโลยีอวกาศ"
   },
   {
     "id": "ess_basic/ess_basic_m6_ch3-1",
