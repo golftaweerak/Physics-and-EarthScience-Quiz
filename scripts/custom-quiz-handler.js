@@ -142,7 +142,7 @@ async function createAndSaveCustomQuiz(quizData) {
  */
 export function initializeCustomQuizHandler() {
     console.log('[DEBUG] custom-quiz-handler: initializeCustomQuizHandler called');
-    
+
     // Pre-fetch all quiz data asynchronously in the background so that 
     // the "Create Custom Quiz" modal opens instantly when the user clicks the button.
     if (typeof requestIdleCallback === 'function') {
@@ -1136,7 +1136,7 @@ export function initializeCustomQuizHandler() {
         const timerFieldset = document.querySelector("#custom-quiz-modal fieldset");
 
         if (isRemedial) {
-            if (modalTitleEl) modalTitleEl.textContent = "โหมดสอบซ่อม (Remedial Mode)";
+            if (modalTitleEl) modalTitleEl.textContent = "สอบซ่อม (Remedial Mode)";
             if (modalDescEl) modalDescEl.textContent = "เลือกบทเรียนที่ต้องการสอบซ่อม ระบบจะสุ่มคำถามข้อเขียน 5 ข้อ (เกณฑ์ผ่าน 3/5 ข้อ ในเวลา 10 นาที)";
             if (startBtn) startBtn.classList.add("hidden");
             if (remedialStartBtn) remedialStartBtn.classList.remove("hidden");
