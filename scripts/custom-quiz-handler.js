@@ -1481,11 +1481,11 @@ export function initializeCustomQuizHandler() {
             const posnHTML = generateSubjectGroupHTML(posnSubjects, "สอวน. (POSN)", false);
             const fullHTML = hsHTML + posnHTML;
 
-            quizDataCache[htmlCacheKey] = fullHTML;
-
-            if (categorySelectionContainer) {
-                categorySelectionContainer.innerHTML = fullHTML;
-            }
+            const appendChunk = (html) => {
+                if (categorySelectionContainer && html) {
+                    categorySelectionContainer.insertAdjacentHTML('beforeend', html);
+                }
+            };
 
             // Helper to calculate available questions for a group
             const getAvailableCount = (groupType) => {
@@ -1674,8 +1674,13 @@ export function initializeCustomQuizHandler() {
                 </div>
             `;
 
-            appendChunk(randomControlsHTML);
-            updateTotalCount();
+            const completeHTML = fullHTML + randomControlsHTML;
+            quizDataCache[htmlCacheKey] = completeHTML;
+
+            if (categorySelectionContainer) {
+                categorySelectionContainer.innerHTML = completeHTML;
+            }
+
         } catch (error) {
             console.error("Failed to fetch data for custom quiz creation:", error);
             // Optionally, show an error message to the user
