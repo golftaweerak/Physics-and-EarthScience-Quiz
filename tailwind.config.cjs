@@ -12,7 +12,7 @@ module.exports = {
   safelist: [
     {
       // ครอบคลุมสีและ Utility ที่ใช้ใน main.js และ data files
-      pattern: /(bg|text|border|ring|shadow)-(blue|green|red|yellow|gray|indigo|teal|purple|orange|rose|amber|slate|sky)-(\d+)(\/(10|20|30|40|50|60|70|80|90))?/,
+      pattern: /(bg|text|border|ring|shadow)-(blue|green|emerald|red|yellow|gray|indigo|teal|purple|orange|rose|amber|slate|sky)-(\d+)(\/(10|20|30|40|50|60|70|80|90))?/,
       variants: ['hover', 'dark', 'dark:hover', 'group-hover', 'dark:group-hover'],
     }
   ],

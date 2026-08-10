@@ -2236,6 +2236,25 @@ function updateMasteryTiers(stats, track) {
     iconEl.textContent = tier.icon;
     nameEl.textContent = tier.name;
     nameEl.className = `text-lg font-black leading-tight ${tier.color}`;
+
+    // ALSO update RPG Stats Sheet cards dynamically with real stats!
+    const accStatEl = document.getElementById('rpg-stat-acc');
+    const strStatEl = document.getElementById('rpg-stat-str');
+    const spdStatEl = document.getElementById('rpg-stat-spd');
+    const intStatEl = document.getElementById('rpg-stat-int');
+
+    if (accStatEl) {
+        accStatEl.textContent = totalAnswered > 0 ? `${avg.toFixed(1)}%` : '0%';
+    }
+    if (strStatEl && window.quizAppInstance?.state) {
+        strStatEl.textContent = `${window.quizAppInstance.state.streakDays || 0} วัน`;
+    }
+    if (intStatEl) {
+        if (totalAnswered === 0) intStatEl.textContent = "เริ่มต้น";
+        else if (avg >= 80) intStatEl.textContent = "ระดับสูง";
+        else if (avg >= 60) intStatEl.textContent = "ระดับท้าทาย";
+        else intStatEl.textContent = "ปานกลาง";
+    }
 }
 
 /**
