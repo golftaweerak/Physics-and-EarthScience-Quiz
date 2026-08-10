@@ -316,6 +316,15 @@ function createQuestionElement(item, displayIndex, keyword) {
             choicesContainer.appendChild(choiceWrapper);
         });
         questionDiv.appendChild(choicesContainer);
+    } else if (item.type === 'fill-in-number' || item.answer !== undefined) {
+        const answerContainer = document.createElement('div');
+        answerContainer.className = 'mt-3 text-gray-700 dark:text-gray-300 font-semibold';
+        if (showAnswers) {
+            answerContainer.innerHTML = `<span class="inline-block px-3 py-1 bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-300 rounded-lg border border-green-300 dark:border-green-700">คำตอบ: <span class="font-bold">${item.answer}</span> ${item.unit || ''}</span>`;
+        } else {
+            answerContainer.innerHTML = `<span class="text-sm text-gray-500 italic">(ข้อสอบแบบเติมคำตอบ${item.unit ? ' หน่วย: ' + item.unit : ''})</span>`;
+        }
+        questionDiv.appendChild(answerContainer);
     }
     // Add explanation section
     if (showAnswers && explanationHtml) {

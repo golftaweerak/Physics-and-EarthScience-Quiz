@@ -19,7 +19,7 @@ export const quizItems = [
   {
     "number": 2,
     "type": "question",
-    "question": "พิจารณาแผนภาพ H-R ด้านล่างนี้ ตำแหน่งของดาวฤกษ์ในแถบหลัก (Main Sequence) มีลักษณะการกระจายตัวอย่างไรบนแผนภาพ <div class=\"mt-4 overflow-x-auto rounded-lg\"><img src=\"../assets/images/hr_diagram.png\" alt=\"Hertzsprung-Russell Diagram\" class=\"w-full max-w-md mx-auto h-auto rounded-lg shadow-md\"><p class=\"text-xs text-center mt-1 text-slate-500 dark:text-slate-400\">แผนภาพเฮิรตซ์ปรุง-รัสเซลล์ (H-R Diagram)</p></div>",
+    "question": "พิจารณาแผนภาพ H-R ด้านล่างนี้ ตำแหน่งของดาวฤกษ์ในแถบหลัก (Main Sequence) มีลักษณะการกระจายตัวอย่างไรบนแผนภาพ <div class=\"mt-4 overflow-x-auto rounded-lg\"><img src=\"../assets/images/hr_diagram.png\" alt=\"Hertzsprung-Russell Diagram\" class=\"w-full max-w-md mx-auto h-auto rounded-lg shadow-md\"><p class=\"text-xs text-center mt-1 text-gray-800 dark:text-gray-200\">แผนภาพเฮิรตซ์ปรุง-รัสเซลล์ (H-R Diagram)</p></div>",
     "options": [
       "วางตัวพาดเป็นแนวเฉียงจากมุมบนซ้าย (อุณหภูมิผิวสูง มีความส่องสว่างมาก) ลงมายังมุมล่างขวา (อุณหภูมิผิวน้อย มีความส่องสว่างต่ำ)",
       "กระจุกตัวอยู่เฉพาะบริเวณมุมบนขวา (อุณหภูมิผิวต่ำ แต่มีความส่องสว่างสูงมาก) ในรูปกลุ่มดาวยักษ์แดง",
@@ -308,7 +308,7 @@ export const quizItems = [
   {
     "number": 19,
     "type": "question",
-    "question": "พิจารณาตำแหน่งบนแผนภาพ H-R กลุ่มดาวแคระขาว (White Dwarfs) ตั้งอยู่ ณ บริเวณใด และมีสมบัติทางกายภาพอย่างไร <div class=\"mt-4 overflow-x-auto rounded-lg\"><img src=\"../assets/images/hr_diagram.png\" alt=\"Hertzsprung-Russell Diagram\" class=\"w-full max-w-md mx-auto h-auto rounded-lg shadow-md\"><p class=\"text-xs text-center mt-1 text-slate-500 dark:text-slate-400\">แผนภาพเฮิรตซ์ปรุง-รัสเซลล์ (H-R Diagram)</p></div>",
+    "question": "พิจารณาตำแหน่งบนแผนภาพ H-R กลุ่มดาวแคระขาว (White Dwarfs) ตั้งอยู่ ณ บริเวณใด และมีสมบัติทางกายภาพอย่างไร <div class=\"mt-4 overflow-x-auto rounded-lg\"><img src=\"../assets/images/hr_diagram.png\" alt=\"Hertzsprung-Russell Diagram\" class=\"w-full max-w-md mx-auto h-auto rounded-lg shadow-md\"><p class=\"text-xs text-center mt-1 text-gray-800 dark:text-gray-200\">แผนภาพเฮิรตซ์ปรุง-รัสเซลล์ (H-R Diagram)</p></div>",
     "options": [
       "ตั้งอยู่บริเวณล่างซ้าย มีอุณหภูมิผิวสูงมากแต่มีความส่องสว่างต่ำมาก เนื่องจากมีขนาดรัศมีเล็กมากใกล้เคียงกับโลก",
       "ตั้งอยู่บริเวณบนขวา มีอุณหภูมิผิวต่ำแต่มีความส่องสว่างสูงมาก เนื่องจากมีขนาดรัศมีใหญ่มากขยายออกหลายร้อยเท่า",
