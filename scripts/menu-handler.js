@@ -135,8 +135,8 @@ export async function initializeMenu() {
 
         // --- Get ALL custom quizzes, regardless of recency ---
         const customQuizzes = quizzesWithProgress.filter(q => q.customId && !recentQuizIds.has(q.customId));
-        // --- Get standard quizzes that are NOT recent ---
-        const standardQuizzes = quizzesWithProgress.filter(q => q.id && !recentQuizIds.has(q.id));
+        // --- Get standard quizzes that are NOT recent and NOT remedial-only ---
+        const standardQuizzes = quizzesWithProgress.filter(q => q.id && !recentQuizIds.has(q.id) && !q.isRemedialOnly);
 
         // --- Group Standard Quizzes by Category ---
         const groupedByCategory = standardQuizzes.reduce((acc, quiz) => {

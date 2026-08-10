@@ -65,7 +65,7 @@ def create_ch3_5_q5():
     plt.close()
 
 def create_ch3_5_q7():
-    fig, ax = plt.subplots(figsize=(6, 4.5), dpi=150)
+    fig, ax = plt.subplots(figsize=(5.5, 3.5), dpi=150)
     ax.set_aspect('equal')
     ax.axis('off')
     
@@ -81,30 +81,16 @@ def create_ch3_5_q7():
     # Angle arc
     arc = patches.Arc((0, 0), 1.4, 1.4, angle=0, theta1=0, theta2=theta_deg, color='darkgreen', lw=1.5)
     ax.add_patch(arc)
-    add_label_box(ax, r'$\theta = 37^\circ$', 0.9, 0.25, color='darkgreen', fontsize=11)
+    add_label_box(ax, r'$37^\circ$', 0.9, 0.25, color='darkgreen', fontsize=11)
+    add_label_box(ax, r'$\mu_k = 0.25$', 2.5, 0.45, color='darkgreen', fontsize=9.5)
     
     # Block flush on incline
     s0 = L * 0.55
     w, h = 1.0, 0.6
-    x_cm, y_cm = draw_incline_block(ax, s0, w, h, theta_deg, color='skyblue', ec='blue', label='m = 5 kg')
+    draw_incline_block(ax, s0, w, h, theta_deg, color='skyblue', ec='blue', label='m = 5 kg')
     
-    # Gravity mg arrow from CM
-    ax.annotate('', xy=(x_cm, y_cm - 1.2), xytext=(x_cm, y_cm),
-                arrowprops=dict(arrowstyle="->", color="crimson", lw=2.5))
-    add_label_box(ax, 'mg = 50 N', x_cm + 0.6, y_cm - 0.8, color='crimson', fontsize=10)
-    
-    # Friction f_k arrow UP the incline (block sliding down)
-    fx_start = s0 * np.cos(theta)
-    fy_start = s0 * np.sin(theta)
-    fx_end = (s0 + 1.1) * np.cos(theta)
-    fy_end = (s0 + 1.1) * np.sin(theta)
-    
-    ax.annotate('', xy=(fx_end, fy_end), xytext=(fx_start, fy_start),
-                arrowprops=dict(arrowstyle="->", color="darkorange", lw=2.5))
-    add_label_box(ax, r'$f_k$', fx_end - 0.1, fy_end + 0.35, color='darkorange', fontsize=12)
-    
-    ax.set_xlim(-0.5, xb + 0.8)
-    ax.set_ylim(-1.5, yb + 0.8)
+    ax.set_xlim(-0.3, xb + 0.5)
+    ax.set_ylim(-0.3, yb + 0.8)
     plt.tight_layout()
     plt.savefig(os.path.join(output_dir, 'phy_m4_ch3-5_q7.png'), dpi=150)
     plt.close()
@@ -637,8 +623,181 @@ def create_ch3_6_q26():
     plt.savefig(os.path.join(output_dir, 'phy_m4_ch3-6_q26.png'), dpi=150)
     plt.close()
 
-# Generate ALL 16 diagrams!
-print("Generating 16 physics diagrams with 100% PERFECT PARALLEL STRINGS & ZERO TEXT OVERLAP...")
+# ==========================================
+# DIAGRAMS FOR phy_m4_ch3-1
+# ==========================================
+
+def create_ch3_1_scenario1():
+    fig, ax = plt.subplots(figsize=(5.0, 4.0), dpi=150)
+    ax.set_aspect('equal')
+    ax.axis('off')
+    
+    # Origin and block
+    x0, y0 = 1.0, 1.0
+    w, h = 1.0, 0.8
+    block = patches.Rectangle((x0 - w/2, y0 - h/2), w, h, color='skyblue', ec='blue', lw=2, zorder=3)
+    ax.add_patch(block)
+    ax.text(x0, y0, 'm', ha='center', va='center', fontweight='bold', fontsize=12, zorder=4)
+    
+    # F1 (East / Right)
+    ax.annotate('', xy=(x0 + 2.5, y0), xytext=(x0 + w/2, y0),
+                arrowprops=dict(arrowstyle="->", color="dodgerblue", lw=2.5))
+    add_label_box(ax, r'$F_1 = 8\text{ N}$ (East)', x0 + 1.6, y0 - 0.35, color='dodgerblue', fontsize=10)
+    
+    # F2 (North / Up)
+    ax.annotate('', xy=(x0, y0 + 2.0), xytext=(x0, y0 + h/2),
+                arrowprops=dict(arrowstyle="->", color="crimson", lw=2.5))
+    add_label_box(ax, r'$F_2 = 6\text{ N}$ (North)', x0 - 0.95, y0 + 1.2, color='crimson', fontsize=10)
+    
+    ax.set_xlim(-0.3, 4.0)
+    ax.set_ylim(-0.2, 3.4)
+    plt.tight_layout()
+    plt.savefig(os.path.join(output_dir, 'phy_m4_ch3-1_scenario1.png'), dpi=150)
+    plt.close()
+
+def create_ch3_1_scenario2():
+    fig, ax = plt.subplots(figsize=(5.5, 3.2), dpi=150)
+    ax.set_aspect('equal')
+    ax.axis('off')
+    
+    # Ground
+    ax.plot([0, 5.2], [1, 1], 'k-', lw=2.5)
+    for i in np.linspace(0.1, 5.1, 17):
+        ax.plot([i, i - 0.15], [1, 0.8], 'k-', lw=1)
+    add_label_box(ax, r'$\mu_k = 0.2$', 0.8, 0.45, color='darkgreen', fontsize=10)
+        
+    # Box 10 kg
+    bw, bh = 1.4, 0.9
+    bx, by = 1.8, 1.0
+    rect = patches.Rectangle((bx, by), bw, bh, facecolor='#FFE0B2', ec='#E65100', lw=2, zorder=3)
+    ax.add_patch(rect)
+    cx, cy = bx + bw/2.0, by + bh/2.0
+    ax.text(cx, cy, 'm = 10 kg', ha='center', va='center', fontweight='bold', fontsize=11, zorder=4)
+    
+    # Pull Force F = 50 N to the right
+    ax.annotate('', xy=(bx + bw + 1.6, cy), xytext=(bx + bw, cy),
+                arrowprops=dict(arrowstyle="->", color="crimson", lw=2.5))
+    add_label_box(ax, r'$F = 50\text{ N}$', bx + bw + 0.9, cy + 0.35, color='crimson', fontsize=10)
+    
+    ax.set_xlim(-0.1, 5.4)
+    ax.set_ylim(0.2, 2.5)
+    plt.tight_layout()
+    plt.savefig(os.path.join(output_dir, 'phy_m4_ch3-1_scenario2.png'), dpi=150)
+    plt.close()
+
+def create_ch3_1_scenario3():
+    fig, ax = plt.subplots(figsize=(5.0, 4.8), dpi=150)
+    ax.set_aspect('equal')
+    ax.axis('off')
+    
+    # Elevator frame
+    ex, ey, ew, eh = 1.0, 0.5, 2.5, 3.5
+    elev = patches.Rectangle((ex, ey), ew, eh, facecolor='#ECEFF1', ec='#37474F', lw=2.5, zorder=1)
+    ax.add_patch(elev)
+    
+    # Elevator cable
+    ax.plot([ex + ew/2, ex + ew/2], [ey + eh, ey + eh + 0.8], 'k-', lw=3)
+    
+    # Scale on floor
+    sw, sh = 1.4, 0.25
+    sx, sy = ex + (ew - sw)/2, ey + 0.2
+    scale = patches.Rectangle((sx, sy), sw, sh, facecolor='#B0BEC5', ec='#263238', lw=1.5, zorder=2)
+    ax.add_patch(scale)
+    ax.text(sx + sw/2, sy + sh/2, 'Scale', ha='center', va='center', fontweight='bold', fontsize=8, color='#1A237E', zorder=3)
+    
+    # Person / Box on scale
+    pw, ph = 0.9, 1.2
+    px, py = ex + (ew - pw)/2, sy + sh
+    person = patches.Rectangle((px, py), pw, ph, facecolor='#90CAF9', ec='#1565C0', lw=2, zorder=3)
+    ax.add_patch(person)
+    pcx, pcy = px + pw/2, py + ph/2
+    ax.text(pcx, pcy, 'm = 70 kg', ha='center', va='center', fontweight='bold', fontsize=10, zorder=4)
+    
+    # Motion / Acceleration Arrow
+    ax.annotate('', xy=(ex + ew + 0.5, ey + eh - 0.5), xytext=(ex + ew + 0.5, ey + 1.0),
+                arrowprops=dict(arrowstyle="->", color="darkgreen", lw=2.5))
+    add_label_box(ax, r'$a = 2\text{ m/s}^2$ (Up)', ex + ew + 0.9, ey + 2.0, color='darkgreen', fontsize=10)
+    
+    ax.set_xlim(0.2, 5.0)
+    ax.set_ylim(0.1, 5.0)
+    plt.tight_layout()
+    plt.savefig(os.path.join(output_dir, 'phy_m4_ch3-1_scenario3.png'), dpi=150)
+    plt.close()
+
+# ==========================================
+# DIAGRAMS FOR phy_m4_ch3-re1
+# ==========================================
+
+def create_ch3_re1_scenario3():
+    fig, ax = plt.subplots(figsize=(5.5, 3.2), dpi=150)
+    ax.set_aspect('equal')
+    ax.axis('off')
+    
+    # Ground
+    ax.plot([0, 5.2], [1, 1], 'k-', lw=2.5)
+    for i in np.linspace(0.1, 5.1, 17):
+        ax.plot([i, i - 0.15], [1, 0.8], 'k-', lw=1)
+    add_label_box(ax, r'$\mu_s = 0.6, \mu_k = 0.4$', 0.9, 0.45, color='darkgreen', fontsize=9.5)
+        
+    # Box 20 kg
+    bw, bh = 1.5, 0.95
+    bx, by = 1.8, 1.0
+    rect = patches.Rectangle((bx, by), bw, bh, facecolor='#C8E6C9', ec='#2E7D32', lw=2, zorder=3)
+    ax.add_patch(rect)
+    cx, cy = bx + bw/2.0, by + bh/2.0
+    ax.text(cx, cy, 'm = 20 kg', ha='center', va='center', fontweight='bold', fontsize=11, zorder=4)
+    
+    # Pull force F
+    ax.annotate('', xy=(bx + bw + 1.5, cy), xytext=(bx + bw, cy),
+                arrowprops=dict(arrowstyle="->", color="crimson", lw=2.5))
+    add_label_box(ax, r'$F = 150\text{ N}$', bx + bw + 0.85, cy + 0.35, color='crimson', fontsize=10)
+    
+    ax.set_xlim(-0.1, 5.4)
+    ax.set_ylim(0.2, 2.5)
+    plt.tight_layout()
+    plt.savefig(os.path.join(output_dir, 'phy_m4_ch3-re1_scenario3.png'), dpi=150)
+    plt.close()
+
+def create_ch3_re1_scenario4():
+    fig, ax = plt.subplots(figsize=(5.5, 3.5), dpi=150)
+    ax.set_aspect('equal')
+    ax.axis('off')
+    
+    theta_deg = 30
+    theta = np.radians(theta_deg)
+    L = 5.2
+    xb = L * np.cos(theta)
+    yb = L * np.sin(theta)
+    
+    # Incline triangle
+    ax.plot([0, xb, xb, 0], [0, 0, yb, 0], 'k-', lw=2.5)
+    
+    # Angle arc
+    arc = patches.Arc((0, 0), 1.5, 1.5, angle=0, theta1=0, theta2=theta_deg, color='purple', lw=1.5)
+    ax.add_patch(arc)
+    add_label_box(ax, r'$30^\circ$', 1.0, 0.28, color='purple', fontsize=10)
+    add_label_box(ax, r'$\mu_k = 0.3$', 2.6, 0.45, color='darkgreen', fontsize=9.5)
+    
+    # Block flush on incline
+    s0 = L * 0.55
+    w, h = 1.1, 0.7
+    x_cm, y_cm = draw_incline_block(ax, s0, w, h, theta_deg, color='skyblue', ec='blue', label='m = 5 kg')
+    
+    ax.set_xlim(-0.3, xb + 0.5)
+    ax.set_ylim(-0.3, yb + 0.8)
+    plt.tight_layout()
+    plt.savefig(os.path.join(output_dir, 'phy_m4_ch3-re1_scenario4.png'), dpi=150)
+    plt.close()
+
+# Generate ALL diagrams!
+print("Generating physics diagrams with 100% PERFECT PARALLEL STRINGS & ZERO TEXT OVERLAP...")
+create_ch3_1_scenario1()
+create_ch3_1_scenario2()
+create_ch3_1_scenario3()
+
+create_ch3_re1_scenario3()
+create_ch3_re1_scenario4()
+
 create_ch3_5_q5()
 create_ch3_5_q7()
 create_ch3_5_q14()
@@ -657,4 +816,4 @@ create_ch3_6_q18()
 create_ch3_6_q22()
 create_ch3_6_q26()
 
-print("ALL 16 DIAGRAMS PERFECTLY GENERATED!")
+print("ALL DIAGRAMS PERFECTLY GENERATED!")

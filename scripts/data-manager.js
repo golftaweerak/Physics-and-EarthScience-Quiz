@@ -519,6 +519,7 @@ export async function fetchAllQuizData() {
   const validQuizList = Array.isArray(quizList) ? quizList.filter((quiz) => quiz) : [];
   // Use import.meta.glob to allow Vite to bundle these files
   const dataModules = import.meta.glob('../data/**/*.js');
+  const processedScriptPaths = new Set();
 
   const promises = validQuizList.map(async (quiz) => {
     // Fix for missing path prefixes:
@@ -553,6 +554,8 @@ export async function fetchAllQuizData() {
         return [];
       }
     }
+
+    processedScriptPaths.add(scriptPath);
 
     try {
       const module = await dataModules[scriptPath]();
@@ -594,9 +597,58 @@ export async function fetchAllQuizData() {
     }
   });
 
+  // Also auto-discover any unlisted quiz data files in data/ directory (e.g. phy_m4_ch3-re1-data.js)
+  const unlistedPromises = Object.keys(dataModules).map(async (key) => {
+    if (processedScriptPaths.has(key)) return [];
+    if (key.includes('quizzes-list') || key.includes('sub-category-data') || key.includes('syllabus')) return [];
+    if (!key.endsWith('-data.js')) return [];
+
+    let inferredCategory = 'Uncategorized';
+    if (key.includes('/phy_m4/') || key.includes('phy_m4_')) inferredCategory = 'PhysicsM4';
+    else if (key.includes('/phy_m5/') || key.includes('phy_m5_')) inferredCategory = 'PhysicsM5';
+    else if (key.includes('/phy_m6/') || key.includes('phy_m6_')) inferredCategory = 'PhysicsM6';
+    else if (key.includes('/ess_basic/') || key.includes('ess_basic_')) inferredCategory = 'EarthSpaceScienceBasic';
+    else if (key.includes('/ess_adv/') || key.includes('ess_adv_')) inferredCategory = 'EarthSpaceScienceAdvance';
+    else if (key.includes('/posn_astro/') || key.includes('posn_astro_')) inferredCategory = 'POSNAstronomy';
+    else if (key.includes('/posn_earth/') || key.includes('posn_earth_')) inferredCategory = 'POSNEarthScience';
+
+    try {
+      const module = await dataModules[key]();
+      const data = module.quizItems || module.quizScenarios || module.quizData || [];
+      if (!Array.isArray(data)) return [];
+
+      return data.flatMap((item) => {
+        if (!item) return [];
+
+        if (item.type === "scenario" && Array.isArray(item.questions)) {
+          const scenarioId = `unlisted_${key}_${item.title.replace(/\s/g, "_")}`;
+          if (!scenariosCache.has(scenarioId)) {
+            scenariosCache.set(scenarioId, { title: item.title, description: item.description });
+          }
+          return item.questions.filter(q => q).map(q => ({
+            ...q,
+            subCategory: q.subCategory || item.subCategory || inferredCategory,
+            sourceQuizCategory: inferredCategory,
+            sourceQuizTitle: key,
+            scenarioId: scenarioId,
+          }));
+        }
+        return {
+          ...item,
+          subCategory: item.subCategory || inferredCategory,
+          sourceQuizCategory: inferredCategory,
+          sourceQuizTitle: key,
+        };
+      });
+    } catch (error) {
+      console.warn(`Could not load unlisted quiz data from ${key}:`, error);
+      return [];
+    }
+  });
+
   // Wrap Promise.all in a try-catch to handle any re-thrown errors from the map.
   try {
-    const results = await Promise.all(promises);
+    const results = await Promise.all([...promises, ...unlistedPromises]);
     allQuestionsCache = results.flat();
     console.log(`[DEBUG] fetchAllQuizData: allQuestionsCache total: ${allQuestionsCache.length}`);
   } catch (error) {

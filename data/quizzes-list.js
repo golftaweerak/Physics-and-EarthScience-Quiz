@@ -355,6 +355,19 @@ export const quizList = [
     "subCategory": "แนวข้อสอบ"
   },
   {
+    "id": "phy_m4/phy_m4_ch3-re1",
+    "title": "สอบซ่อมครั้งที่ 1 (บทที่ 3: แรงและกฎการเคลื่อนที่)",
+    "amount": 60,
+    "description": "บทที่ 3: แรงและกฎการเคลื่อนที่ (สอบซ่อมครั้งที่ 1 - มวลก้อนเดียวและแรงเสียดทาน)",
+    "url": "./quiz/index.html?id=phy_m4/phy_m4_ch3-re1",
+    "storageKey": "quizState-phy_m4_ch3-re1",
+    "icon": "./assets/icons/exam-time.png",
+    "altText": "ไอคอนสำหรับ phy_m4_ch3-re1",
+    "category": "PhysicsM4",
+    "subCategory": "บทที่ 3: แรงและกฎการเคลื่อนที่",
+    "isRemedialOnly": true
+  },
+  {
     "id": "phy_m4/phy_m4_ch6-1",
     "title": "โมเมนตัมและการชน (ชุดที่ 1)",
     "amount": 30,
