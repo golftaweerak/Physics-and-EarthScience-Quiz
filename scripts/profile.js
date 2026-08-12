@@ -233,6 +233,9 @@ async function renderAnalysisTab(game) {
 }
 
 async function renderHistoryTab(game) {
+    renderBadges(game);
+    renderAchievements(game);
+
     const customQuizzes = await getSavedCustomQuizzes();
     const allStats = await getAllStats(customQuizzes);
 
