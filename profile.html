@@ -167,10 +167,15 @@
         
         <!-- Profile Header (Neat & Glassmorphic) -->
         <div class="max-w-5xl mx-auto glass-card rounded-2xl shadow-xl overflow-hidden mb-8 relative">
-            <!-- Cover Banner with Mesh Gradient -->
-            <div class="h-36 sm:h-40 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 relative overflow-hidden">
+            <!-- Cover Banner with Mesh Gradient & Quick Badges Badge -->
+            <div class="h-36 sm:h-40 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 relative overflow-hidden flex items-start justify-between p-4 sm:p-6">
                 <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(255,255,255,0.25),_transparent_75%)]"></div>
                 <div class="absolute -bottom-8 -right-8 w-40 h-40 bg-white/10 rounded-full blur-lg pointer-events-none"></div>
+                
+                <!-- Top Right Quick Badges Widget -->
+                <div class="relative z-10 ml-auto flex items-center gap-2">
+                    <div id="recent-badges" class="flex gap-1.5 flex-wrap justify-end"></div>
+                </div>
             </div>
 
             <!-- Profile Info Body -->
@@ -331,9 +336,6 @@
                                         class="text-xs font-black text-blue-600 dark:text-blue-400 bg-white dark:bg-gray-800 px-2.5 py-0.5 rounded-full border border-blue-200 dark:border-blue-700">...</span>
                                 </div>
                             </div>
-                        </div>
-
-                        <div id="recent-badges" class="flex gap-2 flex-wrap justify-end"></div>
                     </div>
 
                     <div class="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-8 pt-6 mt-6 border-t border-gray-200/60 dark:border-gray-700/60">
