@@ -459,29 +459,48 @@ function renderWeeklyBossCard(game) {
     const isDefeated = boss.currentHp <= 0;
 
     container.innerHTML = `
-        <div class="p-4 rounded-xl bg-gradient-to-r from-purple-900/20 via-indigo-900/20 to-slate-900/20 border border-purple-500/30 shadow-md">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-2">
-                <div class="flex items-center gap-2">
-                    <span class="text-3xl p-1.5 bg-purple-500/10 rounded-lg">${boss.icon}</span>
+        <div class="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-purple-950/40 via-indigo-950/40 to-slate-900/60 border-2 border-purple-500/40 shadow-xl relative overflow-hidden group">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
+                <div class="flex items-center gap-3">
+                    <span class="text-4xl p-2 rounded-xl bg-purple-900/50 border border-purple-500/30 shadow-inner shrink-0">${boss.icon}</span>
                     <div>
-                        <h4 class="font-bold text-sm text-gray-800 dark:text-gray-100 font-kanit">⚔️ บอสประจำสัปดาห์: ${escapeHtml(boss.name)}</h4>
-                        <p class="text-[11px] text-purple-600 dark:text-purple-400">ตอบถูก 1 ข้อ = โจมตี 5 HP | รางวัลพิชิต: +${boss.bonusXp} XP</p>
+                        <div class="flex items-center gap-2">
+                            <h4 class="font-extrabold text-base sm:text-lg text-gray-900 dark:text-white font-kanit tracking-wide">⚔️ บอสประจำสัปดาห์: ${escapeHtml(boss.name)}</h4>
+                            <button id="boss-info-btn" class="w-6 h-6 rounded-full bg-purple-500/20 hover:bg-purple-500/40 text-purple-600 dark:text-purple-300 border border-purple-400/40 flex items-center justify-center text-xs font-bold font-mono transition-transform hover:scale-110 cursor-pointer" title="ดูรายละเอียดกติกาบอส">
+                                ℹ️
+                            </button>
+                        </div>
+                        <p class="text-xs text-purple-700 dark:text-purple-300 mt-0.5">ตอบถูก 1 ข้อ = โจมตี 5 HP | รางวัลพิชิต: <span class="text-yellow-600 dark:text-yellow-400 font-extrabold">+${boss.bonusXp} XP</span></p>
                     </div>
                 </div>
-                <div class="flex items-center gap-2">
-                    <span class="text-xs font-mono font-bold px-2.5 py-1 rounded-full ${isDefeated ? 'bg-green-500/20 text-green-400 border border-green-500/30' : 'bg-red-500/20 text-red-400 border border-red-500/30'}">
+                
+                <div class="flex items-center gap-2.5 shrink-0 self-end sm:self-center">
+                    <span class="text-xs font-mono font-bold px-3 py-1.5 rounded-full ${isDefeated ? 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/40' : 'bg-red-500/20 text-red-700 dark:text-red-300 border border-red-500/40 shadow-xs'}">
                         ${isDefeated ? 'พิชิตแล้ว 🏆' : `${boss.currentHp} / ${boss.maxHp} HP`}
                     </span>
-                    <a href="./quiz/index.html?mode=random&category=${boss.category || 'all'}" class="inline-flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-red-600 to-amber-600 hover:from-red-700 hover:to-amber-700 text-white text-xs font-bold font-kanit rounded-lg shadow transition transform hover:scale-105">
+                    <a href="./quiz/index.html?mode=random&category=${boss.category || 'all'}" class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-red-600 via-rose-600 to-amber-600 hover:from-red-700 hover:to-amber-700 text-white text-xs sm:text-sm font-extrabold font-kanit rounded-xl shadow-lg shadow-red-500/30 transition transform hover:scale-105 active:scale-95 border border-red-300/30 tracking-wide animate-pulse hover:animate-none">
                         ⚔️ ลุยบอสตัวนี้!
                     </a>
                 </div>
             </div>
-            <div class="w-full bg-gray-200 dark:bg-gray-700/60 rounded-full h-3 overflow-hidden mt-1">
-                <div class="h-3 bg-gradient-to-r from-red-500 via-orange-500 to-amber-500 transition-all duration-500 rounded-full" style="width: ${hpPercent}%"></div>
+
+            <div class="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-3.5 border border-purple-500/20 p-0.5 shadow-inner">
+                <div class="h-full bg-gradient-to-r from-red-500 via-orange-500 to-amber-400 transition-all duration-500 rounded-full shadow-xs" style="width: ${hpPercent}%"></div>
             </div>
         </div>
     `;
+
+    const infoBtn = container.querySelector('#boss-info-btn');
+    if (infoBtn) {
+        infoBtn.addEventListener('click', () => {
+            showToast(
+                `⚔️ กติกาบอสประจำสัปดาห์: ${boss.name}`,
+                `1. สุ่มโจทย์สาย ${boss.category.toUpperCase()} มาให้ท้าทาย\n2. ตอบถูก 1 ข้อ ลด 5 HP บอส\n3. โค่นบอสล้ม รับเพิ่ม +${boss.bonusXp} XP ฟรี!`,
+                'ℹ️',
+                'gold'
+            );
+        });
+    }
 }
 
 function renderSkillTreeSection(game) {

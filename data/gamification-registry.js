@@ -301,9 +301,9 @@ export const XP_THRESHOLDS = [
 ];
 
 export const WEEKLY_BOSSES = [
-  { id: 'geo_titan', name: 'มหาบอสธรณีพิบัติภัย (Geo-Titan)', icon: '🌋', maxHp: 500, category: 'earth', bonusXp: 500, badgeId: 'boss_slayer_geo' },
-  { id: 'quantum_overlord', name: 'จอมเวทย์กลศาสตร์ควอนตัม (Quantum-Overlord)', icon: '⚛️', maxHp: 600, category: 'physics', bonusXp: 600, badgeId: 'boss_slayer_quantum' },
-  { id: 'astro_behemoth', name: 'อสูรร้ายแห่งหลุมดำ (Astro-Behemoth)', icon: '🌌', maxHp: 550, category: 'astronomy', bonusXp: 550, badgeId: 'boss_slayer_astro' }
+  { id: 'geo_titan', name: 'Geo-Titan', icon: '🌋', maxHp: 500, category: 'earth', bonusXp: 500, badgeId: 'boss_slayer_geo' },
+  { id: 'quantum_overlord', name: 'Quantum-Overlord', icon: '⚛️', maxHp: 600, category: 'physics', bonusXp: 600, badgeId: 'boss_slayer_quantum' },
+  { id: 'astro_behemoth', name: 'Astro-Behemoth', icon: '🌌', maxHp: 550, category: 'astronomy', bonusXp: 550, badgeId: 'boss_slayer_astro' }
 ];
 
 export const MYSTERY_CHEST_REWARDS = [
