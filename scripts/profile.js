@@ -575,85 +575,78 @@ function openSkillTreeInfoModal() {
     const modal = document.createElement('div');
     modal.id = 'skill-tree-info-modal';
     modal.className = `fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in ${isDark ? 'dark' : ''}`;
-    
-    // Explicit theme colors to prevent fallback glitches
+
     const cardBg = isDark 
-        ? 'bg-slate-900 text-slate-100 border-purple-500/70 shadow-2xl shadow-purple-950/60' 
-        : 'bg-white text-slate-900 border-purple-200 shadow-2xl';
-    
-    const closeBtnBg = isDark 
-        ? 'bg-slate-800 text-slate-200 hover:bg-slate-700' 
-        : 'bg-slate-100 text-slate-600 hover:bg-slate-200';
-    
-    const item1Bg = isDark 
-        ? 'bg-slate-800/90 border-purple-500/60 text-slate-100' 
-        : 'bg-purple-50/90 border-purple-200 text-slate-800';
-    const item1Title = isDark ? 'text-purple-300' : 'text-purple-900';
-    const item1Tag = isDark 
-        ? 'bg-purple-950 text-purple-200 border-purple-500/60' 
-        : 'bg-purple-200/80 text-purple-900 border-purple-300';
+        ? 'bg-slate-900 text-slate-100 border-purple-500/50 shadow-2xl' 
+        : 'bg-white text-slate-800 border-purple-200 shadow-2xl';
 
-    const item2Bg = isDark 
-        ? 'bg-slate-800/90 border-indigo-500/60 text-slate-100' 
-        : 'bg-indigo-50/90 border-indigo-200 text-slate-800';
-    const item2Title = isDark ? 'text-indigo-300' : 'text-indigo-900';
-    const item2Highlight = isDark ? 'text-indigo-300 font-extrabold' : 'text-indigo-700 font-extrabold';
-
-    const item3Bg = isDark 
-        ? 'bg-slate-800/90 border-amber-500/60 text-slate-100' 
-        : 'bg-amber-50/90 border-amber-200 text-slate-800';
-    const item3Title = isDark ? 'text-amber-300' : 'text-amber-900';
+    const titleColor = isDark ? 'text-white' : 'text-slate-900';
+    const subtitleColor = isDark ? 'text-purple-300' : 'text-purple-600';
+    const bodyTextColor = isDark ? 'text-slate-300' : 'text-slate-600';
+    const closeBtnBg = isDark ? 'bg-slate-800 text-slate-300 hover:bg-slate-700' : 'bg-slate-100 text-slate-600 hover:bg-slate-200';
 
     modal.innerHTML = `
-        <div class="${cardBg} rounded-3xl max-w-md w-full p-6 border relative overflow-hidden font-sarabun">
-            <!-- Header Accent Line -->
-            <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-500"></div>
+        <div class="${cardBg} rounded-3xl max-w-md w-full p-6 sm:p-7 border relative overflow-hidden font-sarabun">
+            <!-- Top Gradient Accent -->
+            <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-purple-500 via-indigo-500 to-blue-500"></div>
 
-            <button id="close-skill-info-modal" class="absolute top-4 right-4 w-8 h-8 rounded-full ${closeBtnBg} flex items-center justify-center transition font-bold cursor-pointer">
+            <button id="close-skill-info-modal" class="absolute top-5 right-5 w-8 h-8 rounded-full ${closeBtnBg} flex items-center justify-center transition font-bold cursor-pointer">
                 ✕
             </button>
 
-            <div class="flex items-center gap-3 mb-5">
-                <span class="text-3xl p-2.5 ${isDark ? 'bg-purple-950/90 border-purple-500/60' : 'bg-purple-100 border-purple-300'} rounded-2xl border shrink-0">🌳</span>
+            <!-- Header -->
+            <div class="flex items-center gap-3 mb-6">
+                <span class="text-3xl shrink-0">🌳</span>
                 <div>
-                    <h3 class="font-extrabold text-lg ${isDark ? 'text-white' : 'text-slate-900'} font-kanit leading-tight">คู่มือระบบต้นไม้ทักษะ (Skill Tree)</h3>
-                    <p class="text-xs ${isDark ? 'text-purple-300' : 'text-purple-600'} font-bold mt-0.5">การหา SP และการอัปเดตทักษะติดตัว</p>
+                    <h3 class="font-extrabold text-xl ${titleColor} font-kanit leading-tight">คู่มือ Perks</h3>
+                    <p class="text-xs ${subtitleColor} font-bold mt-0.5">การสะสม SP และการเพิ่มระดับความสามารถติดตัว</p>
                 </div>
             </div>
 
-            <div class="space-y-3.5 text-xs sm:text-sm font-medium leading-relaxed">
-                <!-- SP Source Card -->
-                <div class="p-3.5 ${item1Bg} rounded-2xl border shadow-xs">
-                    <h4 class="font-extrabold ${item1Title} font-kanit mb-1 flex items-center gap-1.5 text-xs sm:text-sm">
-                        <span>🌟</span> แต้มทักษะ (SP) หาจากไหน?
-                    </h4>
-                    <p class="text-xs ${isDark ? 'text-slate-200' : 'text-slate-700'}">
-                        รับทันที <span class="font-black ${item1Tag} px-1.5 py-0.5 rounded border">+1 SP ทุกครั้งที่เลเวลอัป 1 เลเวล (Level Up)</span> และสามารถรับ +1 SP ฟรี จากเควสประจำ 2 สัปดาห์!
-                    </p>
+            <!-- Content List (Spacious & Clean, No heavy nested borders) -->
+            <div class="space-y-5 my-6 text-xs sm:text-sm">
+                <!-- Item 1: SP Source -->
+                <div class="flex items-start gap-3.5">
+                    <div class="w-9 h-9 rounded-2xl ${isDark ? 'bg-purple-950/80 text-purple-300 border border-purple-700/50' : 'bg-purple-100 text-purple-700'} flex items-center justify-center font-bold text-base shrink-0 shadow-xs">
+                        🌟
+                    </div>
+                    <div>
+                        <h4 class="font-extrabold ${titleColor} font-kanit text-sm mb-1">แต้ม SP หาจากไหน?</h4>
+                        <p class="${bodyTextColor} leading-relaxed">
+                            รับทันที <span class="${isDark ? 'text-purple-300 font-bold' : 'text-purple-700 font-bold'}">+1 SP ทุกครั้งที่เลเวลอัป</span> และสามารถรับ <span class="${isDark ? 'text-amber-300 font-bold' : 'text-amber-600 font-bold'}">+1 SP ฟรี</span> จากเควสประจำ 2 สัปดาห์!
+                        </p>
+                    </div>
                 </div>
 
-                <!-- Progression Card -->
-                <div class="p-3.5 ${item2Bg} rounded-2xl border shadow-xs">
-                    <h4 class="font-extrabold ${item2Title} font-kanit mb-1 flex items-center gap-1.5 text-xs sm:text-sm">
-                        <span>📈</span> การอัปทักษะเป็นลำดับขั้น (Multi-Level)
-                    </h4>
-                    <p class="text-xs ${isDark ? 'text-slate-200' : 'text-slate-700'}">
-                        แต่ละทักษะสามารถอัปเกรดได้หลายขั้น เช่น <span class="${item2Highlight}">Level 1 (โบนัส +10%) ➔ Level 2 (+20%) ➔ Level 3 (+30%)</span> โดยใช้ 1 SP ต่อการอัปเกรด 1 ขั้น
-                    </p>
+                <!-- Item 2: Multi-Level -->
+                <div class="flex items-start gap-3.5">
+                    <div class="w-9 h-9 rounded-2xl ${isDark ? 'bg-indigo-950/80 text-indigo-300 border border-indigo-700/50' : 'bg-indigo-100 text-indigo-700'} flex items-center justify-center font-bold text-base shrink-0 shadow-xs">
+                        📈
+                    </div>
+                    <div>
+                        <h4 class="font-extrabold ${titleColor} font-kanit text-sm mb-1">การอัปทักษะเป็นลำดับขั้น</h4>
+                        <p class="${bodyTextColor} leading-relaxed">
+                            อัปเกรดได้หลายระดับ เช่น <span class="${isDark ? 'text-indigo-300 font-bold' : 'text-indigo-700 font-bold'}">Lv.1 (+10%) ➔ Lv.2 (+20%) ➔ Lv.3 (+30%)</span> โดยใช้ 1 SP ต่อ 1 ระดับขั้น
+                        </p>
+                    </div>
                 </div>
 
-                <!-- Passive Perks Card -->
-                <div class="p-3.5 ${item3Bg} rounded-2xl border shadow-xs">
-                    <h4 class="font-extrabold ${item3Title} font-kanit mb-1 flex items-center gap-1.5 text-xs sm:text-sm">
-                        <span>⚡</span> ผลของทักษะติดตัว (Passive Effects)
-                    </h4>
-                    <p class="text-xs ${isDark ? 'text-slate-200' : 'text-slate-700'}">
-                        ทักษะที่ปลดล็อกแล้วจะทำงานถาวรในทุกการทำแบบทดสอบ ช่วยเพิ่ม XP โบนัส Combo และรับส่วนลดซื้อไอเทมในร้านค้า
-                    </p>
+                <!-- Item 3: Passive Effects -->
+                <div class="flex items-start gap-3.5">
+                    <div class="w-9 h-9 rounded-2xl ${isDark ? 'bg-amber-950/80 text-amber-300 border border-amber-700/50' : 'bg-amber-100 text-amber-700'} flex items-center justify-center font-bold text-base shrink-0 shadow-xs">
+                        ⚡
+                    </div>
+                    <div>
+                        <h4 class="font-extrabold ${titleColor} font-kanit text-sm mb-1">ผลของทักษะติดตัว (Passive Perks)</h4>
+                        <p class="${bodyTextColor} leading-relaxed">
+                            ทักษะที่อัปเกรดแล้วจะมีผลทำงานถาวร ช่วยเพิ่ม XP ควิซ, เพิ่มโบนัส Combo และลดราคาไอเทมในร้านค้า
+                        </p>
+                    </div>
                 </div>
             </div>
 
-            <button id="confirm-close-skill-info" class="w-full mt-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-extrabold font-kanit text-sm rounded-xl shadow-md transition active:scale-95 cursor-pointer">
+            <!-- Action Button -->
+            <button id="confirm-close-skill-info" class="w-full mt-4 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-extrabold font-kanit text-sm rounded-2xl shadow-lg transition active:scale-95 cursor-pointer">
                 เข้าใจแล้ว!
             </button>
         </div>
@@ -742,9 +735,9 @@ function renderSkillTreeSection(game) {
                 <span class="text-2xl p-2 bg-purple-100 dark:bg-purple-950/70 rounded-2xl shrink-0">🌳</span>
                 <div>
                     <div class="flex items-center gap-2">
-                        <h3 class="font-extrabold text-lg text-gray-900 dark:text-white font-kanit">ต้นไม้ทักษะ (Skill Tree Perks)</h3>
+                        <h3 class="font-extrabold text-lg text-gray-900 dark:text-white font-kanit">Perks</h3>
                         <!-- Info Button -->
-                        <button id="skill-tree-info-btn" type="button" title="คู่มือต้นไม้ทักษะ" class="w-5 h-5 rounded-full border border-purple-400/60 bg-purple-500/10 text-purple-600 dark:text-purple-300 font-serif font-bold text-xs flex items-center justify-center hover:bg-purple-600 hover:text-white transition shadow-xs cursor-pointer">
+                        <button id="skill-tree-info-btn" type="button" title="คู่มือ Perks" class="w-5 h-5 rounded-full border border-purple-400/60 bg-purple-500/10 text-purple-600 dark:text-purple-300 font-serif font-bold text-xs flex items-center justify-center hover:bg-purple-600 hover:text-white transition shadow-xs cursor-pointer">
                             i
                         </button>
                     </div>
