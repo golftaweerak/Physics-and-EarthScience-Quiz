@@ -459,32 +459,42 @@ function renderWeeklyBossCard(game) {
     const isDefeated = boss.currentHp <= 0;
 
     container.innerHTML = `
-        <div class="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-purple-950/40 via-indigo-950/40 to-slate-900/60 border-2 border-purple-500/40 shadow-xl relative overflow-hidden group">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
+        <div class="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-purple-950/40 via-indigo-950/40 to-slate-900/60 border-2 border-purple-500/40 shadow-xl relative overflow-hidden group">
+            <!-- Absolute Top-Right Info Icon (i) Button -->
+            <button id="boss-info-btn" class="absolute top-3.5 right-3.5 w-7 h-7 rounded-full bg-purple-500/20 hover:bg-purple-500/40 text-purple-600 dark:text-purple-300 border border-purple-400/40 flex items-center justify-center text-xs font-bold font-mono transition-transform hover:scale-110 active:scale-95 shadow-sm cursor-pointer z-10" title="รายละเอียดกติกาบอส">
+                ℹ️
+            </button>
+
+            <!-- Main Info & CTA Layout -->
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-3 relative z-10 pr-8">
+                <!-- Boss Icon & Details -->
                 <div class="flex items-center gap-3">
                     <span class="text-4xl p-2 rounded-xl bg-purple-900/50 border border-purple-500/30 shadow-inner shrink-0">${boss.icon}</span>
-                    <div>
-                        <div class="flex items-center gap-2">
-                            <h4 class="font-extrabold text-base sm:text-lg text-gray-900 dark:text-white font-kanit tracking-wide">⚔️ บอสประจำสัปดาห์: ${escapeHtml(boss.name)}</h4>
-                            <button id="boss-info-btn" class="w-6 h-6 rounded-full bg-purple-500/20 hover:bg-purple-500/40 text-purple-600 dark:text-purple-300 border border-purple-400/40 flex items-center justify-center text-xs font-bold font-mono transition-transform hover:scale-110 cursor-pointer" title="ดูรายละเอียดกติกาบอส">
-                                ℹ️
-                            </button>
-                        </div>
-                        <p class="text-xs text-purple-700 dark:text-purple-300 mt-0.5">ตอบถูก 1 ข้อ = โจมตี 5 HP | รางวัลพิชิต: <span class="text-yellow-600 dark:text-yellow-400 font-extrabold">+${boss.bonusXp} XP</span></p>
+                    <div class="min-w-0">
+                        <h4 class="font-extrabold text-base sm:text-lg text-gray-900 dark:text-white font-kanit tracking-wide leading-snug">
+                            ⚔️ บอสประจำสัปดาห์: <span class="text-purple-600 dark:text-purple-300">${escapeHtml(boss.name)}</span>
+                        </h4>
+                        <p class="text-xs text-gray-600 dark:text-purple-300/80 mt-1">
+                            ตอบถูก 1 ข้อ = โจมตี 5 HP | รางวัลพิชิต: <span class="text-yellow-600 dark:text-yellow-400 font-extrabold">+${boss.bonusXp} XP</span>
+                        </p>
                     </div>
                 </div>
                 
-                <div class="flex items-center gap-2.5 shrink-0 self-end sm:self-center">
-                    <span class="text-xs font-mono font-bold px-3 py-1.5 rounded-full ${isDefeated ? 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/40' : 'bg-red-500/20 text-red-700 dark:text-red-300 border border-red-500/40 shadow-xs'}">
-                        ${isDefeated ? 'พิชิตแล้ว 🏆' : `${boss.currentHp} / ${boss.maxHp} HP`}
+                <!-- Separate HP Pill and Challenge CTA Button -->
+                <div class="flex flex-col sm:items-end gap-2 shrink-0">
+                    <!-- HP Status Pill -->
+                    <span class="text-xs font-mono font-bold px-3 py-1 rounded-full inline-self-start sm:inline-self-auto ${isDefeated ? 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/40' : 'bg-red-500/20 text-red-700 dark:text-red-300 border border-red-500/40 shadow-xs'}">
+                        ${isDefeated ? 'พิชิตแล้ว 🏆' : `HP: ${boss.currentHp} / ${boss.maxHp}`}
                     </span>
-                    <a href="./quiz/index.html?mode=random&category=${boss.category || 'all'}" class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-red-600 via-rose-600 to-amber-600 hover:from-red-700 hover:to-amber-700 text-white text-xs sm:text-sm font-extrabold font-kanit rounded-xl shadow-lg shadow-red-500/30 transition transform hover:scale-105 active:scale-95 border border-red-300/30 tracking-wide animate-pulse hover:animate-none">
+                    <!-- Prominent Challenge Button -->
+                    <a href="./quiz/index.html?mode=random&category=${boss.category || 'all'}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2 bg-gradient-to-r from-red-600 via-rose-600 to-amber-600 hover:from-red-700 hover:to-amber-700 text-white text-xs sm:text-sm font-extrabold font-kanit rounded-xl shadow-lg shadow-red-500/30 transition transform hover:scale-105 active:scale-95 border border-red-300/30 tracking-wide animate-pulse hover:animate-none">
                         ⚔️ ลุยบอสตัวนี้!
                     </a>
                 </div>
             </div>
 
-            <div class="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-3.5 border border-purple-500/20 p-0.5 shadow-inner">
+            <!-- Health Bar -->
+            <div class="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-3.5 border border-purple-500/20 p-0.5 shadow-inner mt-1">
                 <div class="h-full bg-gradient-to-r from-red-500 via-orange-500 to-amber-400 transition-all duration-500 rounded-full shadow-xs" style="width: ${hpPercent}%"></div>
             </div>
         </div>
