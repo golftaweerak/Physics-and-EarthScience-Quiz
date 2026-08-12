@@ -1487,7 +1487,7 @@ function selectAnswer(e) {
 
     // --- FEATURE 1 & 2: Boss Damage & In-Quiz Combo Fever Mode ---
     state.inQuizCombo = (state.inQuizCombo || 0) + 1;
-    state.game.dealDamageToBoss(10); // Deal 10 damage to Weekly Boss per correct answer
+    state.game.dealDamageToBoss(5); // Deal 5 damage to Weekly Boss per correct answer
 
     if (state.inQuizCombo === 3) {
       showToast('Combo x1.2! ⚡', 'ตอบถูก 3 ข้อติด! (โบนัส XP +20%)', '🔥', 'gold');
