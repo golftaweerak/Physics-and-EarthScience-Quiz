@@ -639,59 +639,114 @@ function renderSkillTreeSection(game) {
     const container = document.getElementById('skill-tree-container');
     if (!container) return;
 
-    const perkItemsHtml = (SKILL_TREE_PERKS || []).map(perk => {
-        const isUnlocked = game.hasPerk(perk.id);
-        const reqUnlocked = !perk.reqPerk || game.hasPerk(perk.reqPerk);
-        const canAfford = availableSP >= perk.costSP && reqUnlocked;
+    // Bi-Weekly Quest progress
+    const biWeeklyProgress = game.getBiWeeklyQuestProgress();
+    const { quest, currentCount, targetCount, isCompleted, isClaimed } = biWeeklyProgress;
+    const progressPercent = Math.min(100, Math.round((currentCount / targetCount) * 100));
 
-        let statusBadgeHtml = '';
-        if (isUnlocked) {
-            statusBadgeHtml = `<span class="text-[10px] font-bold text-green-700 dark:text-green-300 bg-green-100 dark:bg-green-950/80 px-2 py-0.5 rounded-full border border-green-300/40">เปิดใช้งานแล้ว ✓</span>`;
-        } else if (!reqUnlocked) {
-            statusBadgeHtml = `<span class="text-[10px] font-bold text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-amber-950/80 px-2 py-0.5 rounded-full border border-amber-300/40">🔒 ต้องปลดล็อก "${escapeHtml(perk.reqName)}" ก่อน</span>`;
+    const perkItemsHtml = (SKILL_TREE_PERKS || []).map(perk => {
+        const currentLevel = game.getPerkLevel(perk.id);
+        const maxLevel = perk.maxLevel || 1;
+        const isMaxLevel = currentLevel >= maxLevel;
+
+        const nextLevelDef = perk.levels ? perk.levels.find(l => l.level === currentLevel + 1) : null;
+        const currentLevelDef = perk.levels ? perk.levels.find(l => l.level === currentLevel) : null;
+        const costSP = nextLevelDef ? nextLevelDef.costSP : 1;
+        const canAfford = availableSP >= costSP && !isMaxLevel;
+
+        // Level Pips HTML
+        const pipsHtml = Array.from({ length: maxLevel }, (_, i) => {
+            const isActive = i < currentLevel;
+            return `<div class="w-2.5 h-2.5 rounded-full ${isActive ? 'bg-purple-500 shadow-xs' : 'bg-gray-300 dark:bg-gray-700'}" title="Level ${i + 1}"></div>`;
+        }).join('');
+
+        let currentDescText = '';
+        if (currentLevel === 0) {
+            currentDescText = nextLevelDef ? nextLevelDef.desc : 'ยังไม่เคยอัปเกรด';
         } else {
-            statusBadgeHtml = `<span class="text-[10px] font-bold text-purple-700 dark:text-purple-300 bg-purple-100 dark:bg-purple-950/80 px-2 py-0.5 rounded-full border border-purple-300/40">Tier ${perk.tier || 1} • ใช้ ${perk.costSP} SP</span>`;
+            currentDescText = currentLevelDef ? currentLevelDef.desc : '';
+        }
+
+        let nextPreviewText = '';
+        if (!isMaxLevel && currentLevel > 0 && nextLevelDef) {
+            nextPreviewText = ` <span class="text-purple-600 dark:text-purple-400 font-bold">(ขั้นถัดไป: ${nextLevelDef.desc})</span>`;
         }
 
         return `
-            <div class="p-3.5 rounded-xl border ${isUnlocked ? 'bg-purple-50/80 dark:bg-purple-900/30 border-purple-300 dark:border-purple-700' : reqUnlocked ? 'bg-white dark:bg-gray-800/80 border-gray-200 dark:border-gray-700 shadow-xs' : 'bg-gray-100/60 dark:bg-gray-900/40 border-gray-200/60 dark:border-gray-800 opacity-85'} flex items-center justify-between gap-3 transition-all">
-                <div class="flex items-center gap-3 min-w-0">
-                    <span class="text-2xl p-2 rounded-xl ${isUnlocked ? 'bg-purple-200 dark:bg-purple-900/60' : 'bg-gray-100 dark:bg-gray-700'} shadow-xs shrink-0">${perk.icon}</span>
-                    <div class="min-w-0">
-                        <div class="flex items-center gap-2 flex-wrap mb-0.5">
-                            <p class="font-extrabold text-sm text-gray-900 dark:text-gray-100 font-kanit truncate">${escapeHtml(perk.name)}</p>
-                            ${statusBadgeHtml}
+            <div class="p-4 rounded-2xl ${currentLevel > 0 ? 'bg-purple-50/90 dark:bg-purple-950/40 border border-purple-300 dark:border-purple-800/80 shadow-xs' : 'bg-white dark:bg-gray-800/90 border border-gray-200/90 dark:border-gray-700 shadow-xs'} flex flex-col justify-between gap-3.5 transition-all">
+                <div class="flex items-start justify-between gap-3">
+                    <div class="flex items-start gap-3 min-w-0">
+                        <span class="text-3xl p-2.5 rounded-2xl ${currentLevel > 0 ? 'bg-purple-200/80 dark:bg-purple-900/60' : 'bg-gray-100 dark:bg-gray-700/80'} shrink-0 shadow-inner">${perk.icon}</span>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2 flex-wrap mb-1">
+                                <h4 class="font-extrabold text-sm sm:text-base text-gray-900 dark:text-white font-kanit">${escapeHtml(perk.name)}</h4>
+                                <span class="px-2 py-0.5 rounded-full ${isMaxLevel ? 'bg-green-100 dark:bg-green-950/80 text-green-700 dark:text-green-300 border border-green-300/40' : currentLevel > 0 ? 'bg-purple-100 dark:bg-purple-900/60 text-purple-700 dark:text-purple-300 border border-purple-300/40' : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400'} text-[11px] font-bold font-mono">
+                                    Lv. ${currentLevel} / ${maxLevel}
+                                </span>
+                            </div>
+                            <p class="text-xs text-gray-600 dark:text-gray-300 font-medium leading-relaxed">
+                                ${escapeHtml(currentDescText)}${nextPreviewText}
+                            </p>
                         </div>
-                        <p class="text-xs text-gray-500 dark:text-gray-400">${escapeHtml(perk.desc)}</p>
                     </div>
                 </div>
-                <button data-perk-id="${perk.id}" ${isUnlocked || !canAfford ? 'disabled' : ''} class="unlock-perk-btn shrink-0 px-3.5 py-2 rounded-xl text-xs font-extrabold font-kanit transition-all ${isUnlocked ? 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 border border-green-300/40 cursor-default' : canAfford ? 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white cursor-pointer shadow-md hover:scale-105 active:scale-95' : 'bg-gray-200 dark:bg-gray-700 text-gray-400 cursor-not-allowed'}">
-                    ${isUnlocked ? 'ปลดล็อกแล้ว ✓' : !reqUnlocked ? '🔒 ล็อกอยู่' : `ใช้ ${perk.costSP} SP`}
-                </button>
+
+                <div class="flex items-center justify-between gap-2 pt-2.5 border-t border-gray-200/80 dark:border-gray-700/60">
+                    <div class="flex items-center gap-1.5" title="ระดับขั้นทักษะ">
+                        ${pipsHtml}
+                    </div>
+                    <button data-perk-id="${perk.id}" ${isMaxLevel || !canAfford ? 'disabled' : ''} class="unlock-perk-btn px-4 py-1.5 rounded-xl text-xs font-black font-kanit transition-all shrink-0 ${isMaxLevel ? 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 border border-green-300/40 cursor-default' : canAfford ? 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white cursor-pointer shadow-md hover:scale-105 active:scale-95' : 'bg-gray-200 dark:bg-gray-700 text-gray-400 cursor-not-allowed'}">
+                        ${isMaxLevel ? 'สูงสุดแล้ว ✓' : `อัปเกรด (ใช้ ${costSP} SP)`}
+                    </button>
+                </div>
             </div>
         `;
     }).join('');
 
     container.innerHTML = `
-        <div class="flex items-center justify-between mb-4">
-            <div class="flex items-center gap-2.5">
-                <span class="text-2xl p-1.5 bg-purple-100 dark:bg-purple-950/60 rounded-xl shrink-0">🌳</span>
+        <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+            <div class="flex items-center gap-3">
+                <span class="text-2xl p-2 bg-purple-100 dark:bg-purple-950/70 rounded-2xl shrink-0">🌳</span>
                 <div>
                     <div class="flex items-center gap-2">
                         <h3 class="font-extrabold text-lg text-gray-900 dark:text-white font-kanit">ต้นไม้ทักษะ (Skill Tree Perks)</h3>
-                        <!-- Information i Button -->
+                        <!-- Info Button -->
                         <button id="skill-tree-info-btn" type="button" title="คู่มือต้นไม้ทักษะ" class="w-5 h-5 rounded-full border border-purple-400/60 bg-purple-500/10 text-purple-600 dark:text-purple-300 font-serif font-bold text-xs flex items-center justify-center hover:bg-purple-600 hover:text-white transition shadow-xs cursor-pointer">
                             i
                         </button>
                     </div>
-                    <p class="text-xs text-gray-500 dark:text-gray-400">ปลดล็อกทักษะขั้นต้น (Tier 1) เพื่อเข้าสู่ทักษะขั้นสูง (Tier 2)</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 font-medium">สะสม SP เพื่อพัฒนาความสามารถติดตัวถาวรของผู้เรียน</p>
                 </div>
             </div>
-            <span class="px-3.5 py-1.5 rounded-full bg-purple-100 dark:bg-purple-950/80 text-purple-700 dark:text-purple-300 text-xs font-black font-mono border border-purple-300 dark:border-purple-700 shrink-0 shadow-xs">
+            <span class="px-4 py-1.5 rounded-full bg-purple-100 dark:bg-purple-950/80 text-purple-700 dark:text-purple-300 text-xs sm:text-sm font-black font-mono border border-purple-300 dark:border-purple-700 shadow-xs">
                 มี ${availableSP} SP
             </span>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5 mt-4">
+
+        <!-- Bi-Weekly Quest Banner -->
+        <div class="mb-5 p-4 rounded-2xl bg-gradient-to-r from-amber-500/10 via-purple-500/10 to-indigo-500/10 border border-amber-300/80 dark:border-amber-600/40 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div class="min-w-0 flex-1">
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="text-lg">🎯</span>
+                    <h4 class="font-extrabold text-sm text-gray-900 dark:text-white font-kanit">${escapeHtml(quest.title)}</h4>
+                    <span class="px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950/80 text-amber-700 dark:text-amber-300 text-[10px] font-bold border border-amber-300/40">ภารกิจ 2 สัปดาห์</span>
+                </div>
+                <p class="text-xs text-gray-600 dark:text-gray-300 mb-2">${escapeHtml(quest.desc)}</p>
+                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 overflow-hidden max-w-md">
+                    <div class="bg-gradient-to-r from-amber-500 to-purple-600 h-full rounded-full transition-all duration-500" style="width: ${progressPercent}%"></div>
+                </div>
+                <div class="flex items-center justify-between text-[11px] font-mono font-bold text-gray-500 dark:text-gray-400 mt-1 max-w-md">
+                    <span>ความคืบหน้า: ${currentCount} / ${targetCount} ข้อ</span>
+                    <span>รางวัล: +1 SP 🎁 +100 XP</span>
+                </div>
+            </div>
+            <button id="claim-biweekly-btn" ${!isCompleted || isClaimed ? 'disabled' : ''} class="px-4 py-2 rounded-xl text-xs font-black font-kanit transition-all shrink-0 ${isClaimed ? 'bg-gray-200 dark:bg-gray-700 text-gray-400 cursor-default' : isCompleted ? 'bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white cursor-pointer shadow-lg animate-bounce' : 'bg-amber-100 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 border border-amber-300/40 cursor-not-allowed'}">
+                ${isClaimed ? 'รับแล้ว ✓' : isCompleted ? '🎁 รับ 1 SP ฟรี!' : `${currentCount}/${targetCount} ข้อ`}
+            </button>
+        </div>
+
+        <!-- Perks Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             ${perkItemsHtml}
         </div>
     `;
@@ -701,15 +756,26 @@ function renderSkillTreeSection(game) {
         infoBtn.onclick = () => openSkillTreeInfoModal();
     }
 
+    const claimBiWeeklyBtn = container.querySelector('#claim-biweekly-btn');
+    if (claimBiWeeklyBtn && isCompleted && !isClaimed) {
+        claimBiWeeklyBtn.onclick = () => {
+            const res = game.claimBiWeeklyQuestReward();
+            if (res.success) {
+                showToast('รับรางวัลสำเร็จ! 🎁', `ได้รับ +1 SP และ +${res.rewardXP} XP ถาวร!`, '✨', 'gold');
+                renderUserInfo(game);
+            }
+        };
+    }
+
     container.querySelectorAll('.unlock-perk-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             const perkId = e.currentTarget.dataset.perkId;
             const res = game.allocateSkillPoint(perkId);
             if (res.success) {
-                showToast('ปลดล็อกทักษะสำเร็จ! 🌳', `ทักษะ: "${res.perk.name}" เปิดใช้งานแล้ว`, '✨', 'gold');
+                showToast('อัปเกรดทักษะสำเร็จ! 🌳', `ทักษะ "${res.perk.name}" เป็นระดับ ${res.newLevel} แล้ว!`, '✨', 'gold');
                 renderUserInfo(game);
             } else {
-                showToast('ไม่สามารถปลดล็อกได้', res.message, '⚠️', 'error');
+                showToast('ไม่สามารถอัปเกรดได้', res.message, '⚠️', 'error');
             }
         });
     });

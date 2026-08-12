@@ -317,11 +317,56 @@ export const MYSTERY_CHEST_REWARDS = [
 ];
 
 export const SKILL_TREE_PERKS = [
-  // Tier 1 Perks (ทักษะขั้นต้น - ปลดล็อกได้ทันที)
-  { id: 'theory_scholar', tier: 1, name: 'นักทฤษฎีรอบรู้', desc: 'ได้รับ XP เพิ่มขึ้น 15% สำหรับโจทย์หมวดทฤษฎี', icon: '📖', costSP: 1, reqPerk: null },
-  { id: 'fever_boost', tier: 1, name: 'สายเลือดฟีเวอร์', desc: 'เพิ่มตัวคูณ Combo Fever Mode จาก x2.0 เป็น x2.5', icon: '🔥', costSP: 1, reqPerk: null },
-
-  // Tier 2 Perks (ทักษะขั้นสูง - ต้องปลดล็อกทักษะขั้นต้นก่อน!)
-  { id: 'calc_master', tier: 2, name: 'จอมคำนวณแม่นยำ', desc: 'ได้รับ XP เพิ่มขึ้น 20% สำหรับโจทย์คำนวณตัวเลข', icon: '🔢', costSP: 2, reqPerk: 'theory_scholar', reqName: 'นักทฤษฎีรอบรู้' },
-  { id: 'discount_shop', tier: 2, name: 'นักต่อรองราคา', desc: 'ลดราคาซื้อไอเทมในร้านค้าลง 20%', icon: '🏷️', costSP: 2, reqPerk: 'fever_boost', reqName: 'สายเลือดฟีเวอร์' }
+  {
+    id: 'theory_scholar',
+    name: 'นักทฤษฎีรอบรู้',
+    icon: '📖',
+    maxLevel: 3,
+    levels: [
+      { level: 1, desc: 'ได้รับ XP หมวดทฤษฎีเพิ่มขึ้น +10%', bonusPercent: 10, costSP: 1 },
+      { level: 2, desc: 'ได้รับ XP หมวดทฤษฎีเพิ่มขึ้น +20%', bonusPercent: 20, costSP: 1 },
+      { level: 3, desc: 'ได้รับ XP หมวดทฤษฎีเพิ่มขึ้น +30% (ขั้นสูงสุด)', bonusPercent: 30, costSP: 1 }
+    ]
+  },
+  {
+    id: 'calc_master',
+    name: 'จอมคำนวณแม่นยำ',
+    icon: '🔢',
+    maxLevel: 3,
+    levels: [
+      { level: 1, desc: 'ได้รับ XP หมวดคำนวณเพิ่มขึ้น +10%', bonusPercent: 10, costSP: 1 },
+      { level: 2, desc: 'ได้รับ XP หมวดคำนวณเพิ่มขึ้น +20%', bonusPercent: 20, costSP: 1 },
+      { level: 3, desc: 'ได้รับ XP หมวดคำนวณเพิ่มขึ้น +30% (ขั้นสูงสุด)', bonusPercent: 30, costSP: 1 }
+    ]
+  },
+  {
+    id: 'fever_boost',
+    name: 'สายเลือดฟีเวอร์',
+    icon: '🔥',
+    maxLevel: 2,
+    levels: [
+      { level: 1, desc: 'เพิ่มตัวคูณ Combo Fever เป็น x2.2', multiplier: 2.2, costSP: 1 },
+      { level: 2, desc: 'เพิ่มตัวคูณ Combo Fever เป็น x2.5 (ขั้นสูงสุด)', multiplier: 2.5, costSP: 1 }
+    ]
+  },
+  {
+    id: 'discount_shop',
+    name: 'นักต่อรองราคา',
+    icon: '🏷️',
+    maxLevel: 2,
+    levels: [
+      { level: 1, desc: 'ลดราคาซื้อไอเทมในร้านค้าลง 10%', discountPercent: 10, costSP: 1 },
+      { level: 2, desc: 'ลดราคาซื้อไอเทมในร้านค้าลง 20% (ขั้นสูงสุด)', discountPercent: 20, costSP: 1 }
+    ]
+  }
 ];
+
+export const BI_WEEKLY_QUEST = {
+  id: 'biweekly_question_challenge_50',
+  title: '🎯 เควสประจำ 2 สัปดาห์: พิชิตโจทย์ 50 ข้อ',
+  desc: 'ทำแบบทดสอบสะสมให้ครบ 50 ข้อภายใน 2 สัปดาห์นี้ เพื่อรับ 1 SP ฟรี!',
+  targetCount: 50,
+  rewardSP: 1,
+  rewardXP: 100,
+  durationDays: 14
+};

@@ -13,10 +13,11 @@ import {
     THEME_DEFINITIONS,
     WEEKLY_BOSSES,
     MYSTERY_CHEST_REWARDS,
-    SKILL_TREE_PERKS
+    SKILL_TREE_PERKS,
+    BI_WEEKLY_QUEST
 } from '../data/gamification-registry.js';
 import { quizList } from '../data/quizzes-list.js'; // Import quizList for metadata lookup
-export { BADGES, DAILY_QUESTS, ACHIEVEMENTS, SHOP_ITEMS, XP_THRESHOLDS, THEME_DEFINITIONS, WEEKLY_BOSSES, MYSTERY_CHEST_REWARDS, SKILL_TREE_PERKS };
+export { BADGES, DAILY_QUESTS, ACHIEVEMENTS, SHOP_ITEMS, XP_THRESHOLDS, THEME_DEFINITIONS, WEEKLY_BOSSES, MYSTERY_CHEST_REWARDS, SKILL_TREE_PERKS, BI_WEEKLY_QUEST };
 
 // ชื่อยศสำหรับแต่ละสาย (Titles)
 // ผู้เล่นจะได้รับฉายาตามเลเวลที่ทำได้ในแต่ละสาย (Overall, Physics, Earth Science)
@@ -2138,38 +2139,88 @@ export class Gamification {
     // --- FEATURE 4: SKILL TREE & PERKS ---
     getAvailableSkillPoints() {
         const overallLevel = this.getCurrentLevel().level;
-        const totalEarnedSP = Math.max(0, overallLevel - 1);
+        const levelSP = Math.max(0, overallLevel - 1);
+        const questBonusSP = this.state.bonusSPFromQuests || 0;
+        const totalEarnedSP = levelSP + questBonusSP;
         const spentSP = this.state.allocatedSkillPoints || 0;
         return Math.max(0, totalEarnedSP - spentSP);
     }
 
+    getPerkLevel(perkId) {
+        if (this.state.perkLevels && typeof this.state.perkLevels[perkId] === 'number') {
+            return this.state.perkLevels[perkId];
+        }
+        // Backward compatibility for legacy unlockedPerks array
+        if ((this.state.unlockedPerks || []).includes(perkId)) {
+            return 1;
+        }
+        return 0;
+    }
+
     hasPerk(perkId) {
-        return (this.state.unlockedPerks || []).includes(perkId);
+        return this.getPerkLevel(perkId) > 0;
     }
 
     allocateSkillPoint(perkId) {
         const perk = SKILL_TREE_PERKS.find(p => p.id === perkId);
         if (!perk) return { success: false, message: "ไม่พบทักษะนี้" };
 
-        if (this.hasPerk(perkId)) {
-            return { success: false, message: "คุณปลดล็อกทักษะนี้ไปแล้ว" };
+        const currentLevel = this.getPerkLevel(perkId);
+        const maxLevel = perk.maxLevel || 1;
+
+        if (currentLevel >= maxLevel) {
+            return { success: false, message: "ทักษะนี้พัฒนาถึงระดับสูงสุดแล้ว" };
         }
 
-        if (perk.reqPerk && !this.hasPerk(perk.reqPerk)) {
-            return { success: false, message: `ต้องปลดล็อกทักษะ "${perk.reqName || perk.reqPerk}" ก่อน!` };
-        }
+        const nextLevelDef = perk.levels ? perk.levels.find(l => l.level === currentLevel + 1) : null;
+        const costSP = nextLevelDef ? nextLevelDef.costSP : 1;
 
         const availableSP = this.getAvailableSkillPoints();
-        if (availableSP < perk.costSP) {
+        if (availableSP < costSP) {
             return { success: false, message: "แต้มทักษะ (SP) ไม่เพียงพอ" };
         }
 
+        if (!this.state.perkLevels) this.state.perkLevels = {};
+        this.state.perkLevels[perkId] = currentLevel + 1;
+        this.state.allocatedSkillPoints = (this.state.allocatedSkillPoints || 0) + costSP;
+
         if (!this.state.unlockedPerks) this.state.unlockedPerks = [];
-        this.state.unlockedPerks.push(perkId);
-        this.state.allocatedSkillPoints = (this.state.allocatedSkillPoints || 0) + perk.costSP;
+        if (!this.state.unlockedPerks.includes(perkId)) {
+            this.state.unlockedPerks.push(perkId);
+        }
 
         this.saveState();
-        return { success: true, perk };
+        return { success: true, perk, newLevel: currentLevel + 1 };
+    }
+
+    getBiWeeklyQuestProgress() {
+        const quest = BI_WEEKLY_QUEST;
+        const totalAnswered = this.state.totalQuestionsAnswered || 0;
+        const startQuestions = this.state.biWeeklyStartQuestions || 0;
+        const currentCount = Math.max(0, totalAnswered - startQuestions);
+        const isCompleted = currentCount >= quest.targetCount;
+        const isClaimed = !!this.state.biWeeklyClaimed;
+
+        return {
+            quest,
+            currentCount: Math.min(quest.targetCount, currentCount),
+            targetCount: quest.targetCount,
+            isCompleted,
+            isClaimed
+        };
+    }
+
+    claimBiWeeklyQuestReward() {
+        const progress = this.getBiWeeklyQuestProgress();
+        if (!progress.isCompleted) return { success: false, message: "ยังทำภารกิจไม่ครบถ้วน" };
+        if (progress.isClaimed) return { success: false, message: "คุณรับรางวัลภารกิจนี้ไปแล้ว" };
+
+        this.state.biWeeklyClaimed = Date.now();
+        this.state.bonusSPFromQuests = (this.state.bonusSPFromQuests || 0) + progress.quest.rewardSP;
+        this.addXP(progress.quest.rewardXP, "Bi-Weekly Quest Reward");
+
+        this.saveState();
+        return { success: true, rewardSP: progress.quest.rewardSP, rewardXP: progress.quest.rewardXP };
     }
 }
 
