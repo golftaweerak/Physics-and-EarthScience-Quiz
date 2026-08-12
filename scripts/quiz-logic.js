@@ -3282,9 +3282,20 @@ function startTimer() {
   }
   if (state.timerMode === "perQuestion") {
     // Use custom time if provided, otherwise use default
-    state.timeLeft = (state.customTime && state.customTime > 0)
+    let baseTime = (state.customTime && state.customTime > 0)
       ? state.customTime
       : config.timerDefaults.perQuestion;
+
+    // Apply Time Dilator perk for calculation questions
+    const currentQ = state.shuffledQuestions[state.currentQuestionIndex];
+    if (currentQ && currentQ.category === 'calculation' && state.game && state.game.hasPerk('time_dilator')) {
+      const timePerkLvl = state.game.getPerkLevel('time_dilator');
+      if (timePerkLvl === 1) baseTime += 5;
+      else if (timePerkLvl === 2) baseTime += 10;
+      else if (timePerkLvl >= 3) baseTime += 15;
+    }
+
+    state.timeLeft = baseTime;
     state.initialTime = state.timeLeft;
   }
 

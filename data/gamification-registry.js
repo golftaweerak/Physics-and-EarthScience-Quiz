@@ -364,6 +364,28 @@ export const SKILL_TREE_PERKS = [
       { level: 2, desc: 'ลดราคาซื้อไอเทมในร้านค้าลง 20%', discountPercent: 20, costSP: 2 },
       { level: 3, desc: 'ลดราคาซื้อไอเทมในร้านค้าลง 30% (ขั้นสูงสุด)', discountPercent: 30, costSP: 2 }
     ]
+  },
+  {
+    id: 'time_dilator',
+    name: 'นักขยายเวลาคำนวณ',
+    icon: '⏱️',
+    maxLevel: 3,
+    levels: [
+      { level: 1, desc: 'เพิ่มเวลาทำควิซโจทย์คำนวณ +5 วินาที', bonusSeconds: 5, costSP: 1 },
+      { level: 2, desc: 'เพิ่มเวลาทำควิซโจทย์คำนวณ +10 วินาที', bonusSeconds: 10, costSP: 2 },
+      { level: 3, desc: 'เพิ่มเวลาทำควิซโจทย์คำนวณ +15 วินาที (ขั้นสูงสุด)', bonusSeconds: 15, costSP: 2 }
+    ]
+  },
+  {
+    id: 'raid_veteran',
+    name: 'นักล่าบอสระดับเซียน',
+    icon: '⚔️',
+    maxLevel: 3,
+    levels: [
+      { level: 1, desc: 'ทำความเสียหายใส่บอสเพิ่มขึ้น +1 HP ต่อข้อ (ถูก 1 ข้อ = 6 HP)', bonusDamage: 1, costSP: 1 },
+      { level: 2, desc: 'ทำความเสียหายใส่บอสเพิ่มขึ้น +2 HP ต่อข้อ (ถูก 1 ข้อ = 7 HP)', bonusDamage: 2, costSP: 2 },
+      { level: 3, desc: 'ทำความเสียหายใส่บอสเพิ่มขึ้น +3 HP ต่อข้อ (ถูก 1 ข้อ = 8 HP) (ขั้นสูงสุด)', bonusDamage: 3, costSP: 3 }
+    ]
   }
 ];
 

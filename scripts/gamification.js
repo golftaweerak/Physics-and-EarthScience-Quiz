@@ -2092,7 +2092,18 @@ export class Gamification {
         const boss = this.getCurrentWeeklyBoss();
         if (boss.currentHp <= 0) return { isDefeated: true, bonusAwarded: false };
 
-        const newHp = Math.max(0, boss.currentHp - dmg);
+        // Apply Raid Veteran perk bonus damage if unlocked
+        let actualDmg = dmg;
+        const raidPerkLvl = this.getPerkLevel('raid_veteran');
+        if (raidPerkLvl > 0) {
+            const perkDef = SKILL_TREE_PERKS.find(p => p.id === 'raid_veteran');
+            const lvlDef = perkDef ? perkDef.levels.find(l => l.level === raidPerkLvl) : null;
+            if (lvlDef && lvlDef.bonusDamage) {
+                actualDmg += lvlDef.bonusDamage;
+            }
+        }
+
+        const newHp = Math.max(0, boss.currentHp - actualDmg);
         this.state.bossRaidHp = newHp;
 
         let bonusAwarded = false;
@@ -2106,7 +2117,7 @@ export class Gamification {
         }
 
         this.saveState();
-        return { isDefeated: newHp === 0, bonusAwarded, newHp, dmg };
+        return { isDefeated: newHp === 0, bonusAwarded, newHp, dmg: actualDmg };
     }
 
     // --- FEATURE 3: DAILY MYSTERY CHEST ---
