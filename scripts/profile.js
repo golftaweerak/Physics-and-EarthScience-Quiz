@@ -10,7 +10,8 @@ import {
     SHOP_ITEMS, // Imported for shop display
     XP_THRESHOLDS,
     THEME_DEFINITIONS,
-    SKILL_TREE_PERKS
+    SKILL_TREE_PERKS,
+    WEEKLY_BOSSES
 } from './gamification.js';
 import { openProfileModal } from './profile-modal.js';
 import { getDetailedProgressForAllQuizzes, calculateStrengthsAndWeaknesses } from './data-manager.js';
@@ -461,10 +462,7 @@ function renderWeeklyBossCard(game) {
 
     container.innerHTML = `
         <div class="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-purple-950/40 via-indigo-950/40 to-slate-900/60 border-2 border-purple-500/40 shadow-xl relative overflow-hidden group">
-            <!-- Absolute Top-Right Info Icon (i) Button - Perfect Circle -->
-            <button id="boss-info-btn" type="button" class="absolute top-3.5 right-3.5 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-purple-600 hover:bg-purple-500 border-2 border-purple-300 text-white font-bold font-serif text-xs sm:text-sm flex items-center justify-center shadow-lg transition-transform hover:scale-110 active:scale-95 cursor-pointer z-30 pointer-events-auto" title="รายละเอียดกติกาบอส">
-                i
-            </button>
+            
 
             <!-- Main Info & CTA Layout -->
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-3 relative z-10 pr-10">
@@ -472,9 +470,14 @@ function renderWeeklyBossCard(game) {
                 <div class="flex items-center gap-3">
                     <span class="text-4xl p-2 rounded-xl bg-purple-900/50 border border-purple-500/30 shadow-inner shrink-0">${boss.icon}</span>
                     <div class="min-w-0">
-                        <h4 class="font-extrabold text-base sm:text-lg text-gray-900 dark:text-white font-kanit tracking-wide leading-snug">
-                            ⚔️ บอสประจำสัปดาห์: <span class="text-purple-600 dark:text-purple-300">${escapeHtml(boss.name)}</span>
-                        </h4>
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <h4 class="font-extrabold text-base sm:text-lg text-gray-900 dark:text-white font-kanit tracking-wide leading-snug">
+                                ⚔️ บอสประจำสัปดาห์: <span class="text-purple-600 dark:text-purple-300">${escapeHtml(boss.name)}</span>
+                            </h4>
+                            <button id="boss-info-btn" type="button" title="รายละเอียดกติกาบอส" class="w-5 h-5 rounded-full border border-purple-400/60 bg-purple-500/10 text-purple-600 dark:text-purple-300 font-serif font-bold text-xs flex items-center justify-center hover:bg-purple-600 hover:text-white transition shadow-xs cursor-pointer">
+                                i
+                            </button>
+                        </div>
                         <p class="text-xs text-gray-600 dark:text-purple-300/80 mt-1">
                             ตอบถูก 1 ข้อ = โจมตี 5 HP | รางวัลพิชิต: <span class="text-yellow-600 dark:text-yellow-400 font-extrabold">+${boss.bonusXp} XP</span>
                         </p>
@@ -512,58 +515,119 @@ function renderWeeklyBossCard(game) {
 }
 
 function openBossRulesModal(boss) {
-    let modal = document.getElementById('boss-rules-modal');
-    if (!modal) {
-        modal = document.createElement('div');
-        modal.id = 'boss-rules-modal';
-        modal.className = 'fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs transition-opacity duration-300';
-        document.body.appendChild(modal);
-    }
+    const existing = document.getElementById('boss-rules-modal');
+    if (existing) existing.remove();
 
-    const catName = boss.category === 'physics' ? 'ฟิสิกส์' : boss.category === 'earth' ? 'วิทย์โลก & ธรณีวิทยา' : 'ดาราศาสตร์';
+    const isDark = document.documentElement.classList.contains('dark');
+
+    const modal = document.createElement('div');
+    modal.id = 'boss-rules-modal';
+    modal.className = `fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in ${isDark ? 'dark' : ''}`;
+
+    const cardBg = isDark 
+        ? 'bg-slate-900 text-slate-100 border-purple-500/50 shadow-2xl' 
+        : 'bg-white text-slate-800 border-purple-200 shadow-2xl';
+    const titleColor = isDark ? 'text-white' : 'text-slate-900';
+    const bodyTextColor = isDark ? 'text-slate-300' : 'text-slate-600';
+    const closeBtnBg = isDark ? 'bg-slate-800 text-slate-300 hover:bg-slate-700' : 'bg-slate-100 text-slate-600 hover:bg-slate-200';
+
+    const getCatName = (cat) => cat === 'physics' ? 'ฟิสิกส์' : cat === 'earth' ? 'วิทย์โลก & ธรณีวิทยา' : 'ดาราศาสตร์';
+    const getCatColor = (cat) => {
+        if (cat === 'physics') return isDark ? 'text-blue-300' : 'text-blue-700';
+        if (cat === 'earth') return isDark ? 'text-emerald-300' : 'text-emerald-700';
+        return isDark ? 'text-purple-300' : 'text-purple-700';
+    };
+    const getCatBg = (cat) => {
+        if (cat === 'physics') return isDark ? 'bg-blue-950/60 border-blue-700/50' : 'bg-blue-50 border-blue-200';
+        if (cat === 'earth') return isDark ? 'bg-emerald-950/60 border-emerald-700/50' : 'bg-emerald-50 border-emerald-200';
+        return isDark ? 'bg-purple-950/60 border-purple-700/50' : 'bg-purple-50 border-purple-200';
+    };
+
+    // Build all bosses list
+    const allBossesHtml = (WEEKLY_BOSSES || []).map(b => {
+        const isCurrent = b.id === boss.id;
+        return `
+            <div class="flex items-center gap-3 p-2.5 rounded-xl ${isCurrent ? (isDark ? 'bg-purple-900/40 border border-purple-500/50' : 'bg-purple-50 border border-purple-300') : ''} transition-all">
+                <span class="text-2xl shrink-0">${b.icon}</span>
+                <div class="min-w-0 flex-1">
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <span class="font-extrabold text-sm ${titleColor} font-kanit">${b.name}</span>
+                        ${isCurrent ? `<span class="text-[10px] px-1.5 py-0.5 rounded-full ${isDark ? 'bg-amber-900/60 text-amber-300 border border-amber-600/50' : 'bg-amber-100 text-amber-700 border border-amber-300'} font-bold">ตัวปัจจุบัน</span>` : ''}
+                    </div>
+                    <p class="text-xs ${bodyTextColor}">
+                        หมวด: <span class="font-bold ${getCatColor(b.category)}">${getCatName(b.category)}</span> · HP: ${b.maxHp} · รางวัล: <span class="${isDark ? 'text-amber-300' : 'text-amber-600'} font-bold">+${b.bonusXp} XP</span>
+                    </p>
+                </div>
+            </div>
+        `;
+    }).join('');
 
     modal.innerHTML = `
-        <div class="bg-white dark:bg-gray-900 border-2 border-purple-500/50 rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl relative transform transition-all scale-100 font-kanit">
-            <button id="close-boss-modal-btn" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-white text-xl font-bold p-1 leading-none">&times;</button>
-            <div class="flex items-center gap-3 mb-4">
-                <span class="text-4xl p-2.5 bg-purple-500/10 rounded-xl border border-purple-500/20 shrink-0">${boss.icon}</span>
+        <div class="${cardBg} rounded-3xl max-w-md w-full p-6 sm:p-7 border relative overflow-hidden font-sarabun">
+            <!-- Top Gradient Accent -->
+            <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-red-500 via-purple-500 to-indigo-500"></div>
+
+            <button id="close-boss-modal-btn" class="absolute top-5 right-5 w-8 h-8 rounded-full ${closeBtnBg} flex items-center justify-center transition font-bold cursor-pointer">
+                ✕
+            </button>
+
+            <!-- Header -->
+            <div class="flex items-center gap-3 mb-6">
+                <span class="text-3xl shrink-0">⚔️</span>
                 <div>
-                    <h3 class="text-lg font-bold text-gray-900 dark:text-white">⚔️ กติกาบอสประจำสัปดาห์</h3>
-                    <p class="text-xs text-purple-600 dark:text-purple-400 font-medium">บอส: ${escapeHtml(boss.name)} (${catName})</p>
+                    <h3 class="font-extrabold text-xl ${titleColor} font-kanit leading-tight">กติกาบอสประจำสัปดาห์</h3>
+                    <p class="text-xs ${isDark ? 'text-purple-300' : 'text-purple-600'} font-bold mt-0.5">บอสปัจจุบัน: ${escapeHtml(boss.name)}</p>
                 </div>
             </div>
-            <div class="space-y-3 text-xs sm:text-sm text-gray-700 dark:text-gray-300 leading-relaxed bg-gray-50 dark:bg-gray-800/60 p-4 rounded-xl border border-gray-200 dark:border-gray-700">
-                <div class="flex gap-2.5">
-                    <span class="text-base shrink-0">🎯</span>
-                    <p><strong>เป้าหมายสัปดาห์:</strong> ช่วยกันทำควิซเพื่อลด HP บอสจาก ${boss.maxHp} HP ให้เหลือ 0 HP ก่อนสิ้นสุดสัปดาห์</p>
+
+            <!-- Rules List -->
+            <div class="space-y-5 mb-6 text-xs sm:text-sm">
+                <div class="flex items-start gap-3.5">
+                    <div class="w-9 h-9 rounded-2xl ${isDark ? 'bg-red-950/80 text-red-300 border border-red-700/50' : 'bg-red-100 text-red-700'} flex items-center justify-center font-bold text-base shrink-0 shadow-xs">🎯</div>
+                    <div>
+                        <h4 class="font-extrabold ${titleColor} font-kanit text-sm mb-1">เป้าหมายสัปดาห์</h4>
+                        <p class="${bodyTextColor} leading-relaxed">ช่วยกันทำควิซเพื่อลด HP บอสจาก <span class="${isDark ? 'text-red-300 font-bold' : 'text-red-700 font-bold'}">${boss.maxHp} HP</span> ให้เหลือ 0 ก่อนสิ้นสุดสัปดาห์</p>
+                    </div>
                 </div>
-                <div class="flex gap-2.5">
-                    <span class="text-base shrink-0">💥</span>
-                    <p><strong>พลังโจมตี:</strong> ทุกครั้งที่ตอบคำถามถูก 1 ข้อ จะลด HP บอสลง <strong>5 HP</strong> ทันที</p>
+                <div class="flex items-start gap-3.5">
+                    <div class="w-9 h-9 rounded-2xl ${isDark ? 'bg-orange-950/80 text-orange-300 border border-orange-700/50' : 'bg-orange-100 text-orange-700'} flex items-center justify-center font-bold text-base shrink-0 shadow-xs">💥</div>
+                    <div>
+                        <h4 class="font-extrabold ${titleColor} font-kanit text-sm mb-1">พลังโจมตี</h4>
+                        <p class="${bodyTextColor} leading-relaxed">ตอบคำถามถูก 1 ข้อ = ลด HP บอสลง <span class="${isDark ? 'text-orange-300 font-bold' : 'text-orange-700 font-bold'}">5 HP</span> ทันที</p>
+                    </div>
                 </div>
-                <div class="flex gap-2.5">
-                    <span class="text-base shrink-0">🏆</span>
-                    <p><strong>รางวัลพิชิต:</strong> เมื่อล้มบอสสำเร็จ รับโบนัสคะแนน <span class="text-amber-500 font-bold">+${boss.bonusXp} XP</span> ฟรี!</p>
+                <div class="flex items-start gap-3.5">
+                    <div class="w-9 h-9 rounded-2xl ${isDark ? 'bg-amber-950/80 text-amber-300 border border-amber-700/50' : 'bg-amber-100 text-amber-700'} flex items-center justify-center font-bold text-base shrink-0 shadow-xs">🏆</div>
+                    <div>
+                        <h4 class="font-extrabold ${titleColor} font-kanit text-sm mb-1">รางวัลพิชิต</h4>
+                        <p class="${bodyTextColor} leading-relaxed">ล้มบอสสำเร็จ รับโบนัส <span class="${isDark ? 'text-amber-300 font-bold' : 'text-amber-600 font-bold'}">+${boss.bonusXp} XP</span> ฟรี!</p>
+                    </div>
                 </div>
             </div>
-            <div class="mt-5 flex justify-end">
-                <button id="confirm-boss-modal-btn" class="px-5 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold text-xs rounded-xl shadow-md transition transform hover:scale-105 active:scale-95 cursor-pointer">
-                    รับทราบ & พร้อมลุย! ⚔️
-                </button>
+
+            <!-- All Bosses Section -->
+            <div class="mb-5">
+                <h4 class="font-extrabold text-sm ${titleColor} font-kanit mb-3 flex items-center gap-2">
+                    <span>📋</span> รายชื่อบอสทั้งหมด (สลับทุกสัปดาห์)
+                </h4>
+                <div class="space-y-2 ${isDark ? 'bg-slate-800/60 border-slate-700/60' : 'bg-slate-50 border-slate-200'} border rounded-2xl p-3">
+                    ${allBossesHtml}
+                </div>
             </div>
+
+            <!-- Action Button -->
+            <button id="confirm-boss-modal-btn" class="w-full py-3 bg-gradient-to-r from-red-600 via-purple-600 to-indigo-600 hover:from-red-700 hover:to-indigo-700 text-white font-extrabold font-kanit text-sm rounded-2xl shadow-lg transition active:scale-95 cursor-pointer">
+                รับทราบ & พร้อมลุย! ⚔️
+            </button>
         </div>
     `;
 
-    modal.classList.remove('hidden');
-    const closeBtn = modal.querySelector('#close-boss-modal-btn');
-    const confirmBtn = modal.querySelector('#confirm-boss-modal-btn');
-    const closeModal = () => modal.classList.add('hidden');
+    document.body.appendChild(modal);
 
-    if (closeBtn) closeBtn.onclick = closeModal;
-    if (confirmBtn) confirmBtn.onclick = closeModal;
-    modal.onclick = (e) => {
-        if (e.target === modal) closeModal();
-    };
+    const closeModal = () => modal.remove();
+    modal.querySelector('#close-boss-modal-btn').onclick = closeModal;
+    modal.querySelector('#confirm-boss-modal-btn').onclick = closeModal;
+    modal.onclick = (e) => { if (e.target === modal) closeModal(); };
 }
 
 function openSkillTreeInfoModal() {
@@ -744,7 +808,7 @@ function renderSkillTreeSection(game) {
                     <p class="text-xs text-gray-500 dark:text-gray-400 font-medium">สะสม SP เพื่อพัฒนาความสามารถติดตัวถาวรของผู้เรียน</p>
                 </div>
             </div>
-            <span class="px-4 py-1.5 rounded-full bg-purple-100 dark:bg-purple-950/80 text-purple-700 dark:text-purple-300 text-xs sm:text-sm font-black font-mono border border-purple-300 dark:border-purple-700 shadow-xs">
+            <span class="px-4 py-1.5 rounded-full bg-purple-600 text-white text-xs sm:text-sm font-black font-mono border border-purple-400 shadow-lg">
                 มี ${availableSP} SP
             </span>
         </div>
