@@ -167,15 +167,10 @@
         
         <!-- Profile Header (Neat & Glassmorphic) -->
         <div class="max-w-5xl mx-auto glass-card rounded-2xl shadow-xl overflow-hidden mb-8 relative">
-            <!-- Cover Banner with Mesh Gradient & Quick Badges Badge -->
-            <div class="h-36 sm:h-40 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 relative overflow-hidden flex items-start justify-between p-4 sm:p-6">
+            <!-- Cover Banner with Mesh Gradient -->
+            <div class="h-36 sm:h-40 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 relative overflow-hidden">
                 <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(255,255,255,0.25),_transparent_75%)]"></div>
                 <div class="absolute -bottom-8 -right-8 w-40 h-40 bg-white/10 rounded-full blur-lg pointer-events-none"></div>
-                
-                <!-- Top Right Quick Badges Widget -->
-                <div class="relative z-10 ml-auto flex items-center gap-2">
-                    <div id="recent-badges" class="flex gap-1.5 flex-wrap justify-end"></div>
-                </div>
             </div>
 
             <!-- Profile Info Body -->
@@ -325,17 +320,22 @@
                             
                             <!-- Level-up Quest Display -->
                             <div id="next-level-quest-container"
-                                class="w-full mt-3 p-3 bg-blue-50/90 dark:bg-blue-900/30 rounded-xl border border-blue-200/80 dark:border-blue-800/60 hidden anim-fade-in shadow-xs">
-                                <div class="flex items-center justify-between gap-2">
-                                    <div class="flex items-center gap-2">
-                                        <span class="text-blue-500">📜</span>
-                                        <span id="next-level-quest-desc"
-                                            class="text-xs font-bold text-gray-800 dark:text-gray-200">ภารกิจเลเวลอัพ: ...</span>
-                                    </div>
-                                    <span id="next-level-quest-progress"
-                                        class="text-xs font-black text-blue-600 dark:text-blue-400 bg-white dark:bg-gray-800 px-2.5 py-0.5 rounded-full border border-blue-200 dark:border-blue-700">...</span>
-                                </div>
-                            </div>
+                                 class="w-full mt-3 p-3 bg-blue-50/90 dark:bg-blue-900/30 rounded-xl border border-blue-200/80 dark:border-blue-800/60 hidden anim-fade-in shadow-xs">
+                                 <div class="flex items-center justify-between gap-2">
+                                     <div class="flex items-center gap-2">
+                                         <span class="text-blue-500">📜</span>
+                                         <span id="next-level-quest-desc"
+                                             class="text-xs font-bold text-gray-800 dark:text-gray-200">ภารกิจเลเวลอัพ: ...</span>
+                                     </div>
+                                     <span id="next-level-quest-progress"
+                                         class="text-xs font-black text-blue-600 dark:text-blue-400 bg-white dark:bg-gray-800 px-2.5 py-0.5 rounded-full border border-blue-200 dark:border-blue-700">...</span>
+                                 </div>
+                             </div>
+                        </div>
+
+                        <!-- Right Column (1 Col): Recent Badges Widget -->
+                        <div class="col-span-1 flex flex-col items-center md:items-end justify-center">
+                            <div id="recent-badges" class="flex gap-2 flex-wrap justify-center md:justify-end"></div>
                         </div>
                     </div>
 
