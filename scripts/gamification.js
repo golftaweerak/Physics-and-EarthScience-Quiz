@@ -798,6 +798,29 @@ export class Gamification {
             }
         }
 
+        // Update Header Boss Card
+        const bossCard = document.getElementById('user-hub-boss-card');
+        const bossIcon = document.getElementById('user-hub-boss-icon');
+        const bossName = document.getElementById('user-hub-boss-name');
+        const bossHp = document.getElementById('user-hub-boss-hp');
+        const bossHpFill = document.getElementById('user-hub-boss-hp-fill');
+        const bossLink = document.getElementById('user-hub-boss-link');
+
+        if (bossCard) {
+            const boss = this.getCurrentWeeklyBoss();
+            if (boss) {
+                if (bossIcon) bossIcon.textContent = boss.icon || '⚔️';
+                if (bossName) bossName.textContent = boss.name || 'บอสประจำสัปดาห์';
+                if (bossHp) bossHp.textContent = `HP: ${boss.currentHp} / ${boss.maxHp}`;
+                const hpPercent = Math.min(100, Math.max(0, (boss.currentHp / boss.maxHp) * 100));
+                if (bossHpFill) bossHpFill.style.width = `${hpPercent}%`;
+
+                const isQuizSubdir = window.location.pathname.includes('/quiz/');
+                const basePath = isQuizSubdir ? '../' : './';
+                if (bossLink) bossLink.href = `${basePath}quiz/index.html?id=random&category=${boss.category || 'all'}`;
+            }
+        }
+
         if (profileLink) {
             // ถ้าไม่ได้ล็อกอิน ให้แสดงไอคอน Guest (SVG) แทนอวตาร
             if (!user) {
