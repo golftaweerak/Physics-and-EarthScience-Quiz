@@ -433,6 +433,8 @@ export const BI_WEEKLY_QUEST_POOL = [
   }
 ];
 
+export const BI_WEEKLY_QUEST = BI_WEEKLY_QUEST_POOL[0];
+
 export const WEEKLY_QUEST_POOL = [
   {
     id: 'weekly_astro_30',
