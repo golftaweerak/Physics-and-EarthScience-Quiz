@@ -78,7 +78,7 @@ export async function initializeQuiz() {
 
     const urlParams = new URLSearchParams(window.location.search);
     const seedParam = urlParams.get('seed');
-    const quizId = urlParams.get('id');
+    const quizId = urlParams.get('id') || urlParams.get('mode');
     console.log('[DEBUG] quiz-loader: quizId=', quizId);
     const lobbyId = urlParams.get('lobbyId');
     const action = urlParams.get('action');
@@ -225,37 +225,63 @@ export async function initializeQuiz() {
         }
     }
 
-    // --- NEW: Handle Random Quiz (for Challenge Mode) ---
-    if (quizId === 'random') {
+    // --- NEW: Handle Random / Boss Raid Quiz ---
+    if (quizId === 'random' || quizId === 'boss') {
         try {
             const amount = parseInt(urlParams.get('amount')) || 20;
             const seed = parseInt(urlParams.get('seed')) || Date.now();
-            populatePage("แบบทดสอบสุ่ม (Challenge)", "แบบทดสอบที่สุ่มจากคลังข้อสอบทั้งหมด");
+            const categoryFilter = (urlParams.get('category') || 'all').toLowerCase();
+
+            let titleText = "แบบทดสอบสุ่มท้าทาย (Boss Raid)";
+            let subText = "แบบทดสอบที่สุ่มจากคลังข้อสอบเพื่อท้าทายบอสประจำสัปดาห์";
+
+            if (categoryFilter === 'physics') {
+                titleText = "⚔️ ท้าทายบอสควอนตัม (หมวดฟิสิกส์)";
+                subText = "แบบทดสอบสุ่มในหมวดฟิสิกส์ ทุกคำตอบที่ถูกต้องจะลด HP ของบอสลง 5 HP!";
+            } else if (categoryFilter === 'earth') {
+                titleText = "⚔️ ท้าทายบอสธรณี (หมวดวิทย์โลก)";
+                subText = "แบบทดสอบสุ่มในหมวดวิทย์โลก & ธรณีวิทยา ทุกคำตอบที่ถูกต้องจะลด HP ของบอสลง 5 HP!";
+            } else if (categoryFilter === 'astronomy') {
+                titleText = "⚔️ ท้าทายบอสหลุมดำ (หมวดดาราศาสตร์)";
+                subText = "แบบทดสอบสุ่มในหมวดดาราศาสตร์ ทุกคำตอบที่ถูกต้องจะลด HP ของบอสลง 5 HP!";
+            }
+
+            populatePage(titleText, subText);
 
             const promises = quizList.map(async (q) => {
+                if (!q) return null;
+                // Category Filter
+                if (categoryFilter !== 'all') {
+                    const qCat = (q.category || '').toLowerCase();
+                    const qSub = (q.subCategory || '').toLowerCase();
+                    const qId = (q.id || '').toLowerCase();
+
+                    let isMatch = false;
+                    if (categoryFilter === 'physics' && (qCat.includes('physics') || qId.startsWith('phy_'))) isMatch = true;
+                    else if (categoryFilter === 'earth' && (qCat.includes('earth') || qId.startsWith('ess_'))) isMatch = true;
+                    else if (categoryFilter === 'astronomy' && (qCat.includes('astro') || qSub.includes('ดาราศาสตร์') || qId.includes('astro'))) isMatch = true;
+
+                    if (!isMatch) return null;
+                }
+
                 // Fix for missing path prefixes (matching logic in data-manager.js):
-                const quizId = q.id;
-                const expectedSuffix = `${quizId}-data.js`;
+                const targetQuizId = q.id;
+                const expectedSuffix = `${targetQuizId}-data.js`;
                 const path = Object.keys(dataModules).find(k => {
-                    if (quizId.includes('/')) {
-                        return k.endsWith(`${quizId}-data.js`);
+                    if (targetQuizId.includes('/')) {
+                        return k.endsWith(`${targetQuizId}-data.js`);
                     } else {
-                        // Check if it's in a suspected folder
                         const possibleFolders = ['phy_m4/', 'phy_m5/', 'phy_m6/', 'ess_basic/', 'ess_adv/'];
                         return k.endsWith(expectedSuffix) || possibleFolders.some(f => k.endsWith(`${f}${expectedSuffix}`));
                     }
                 });
 
-                if (!dataModules[path]) {
-                    console.warn(`Random generation: Module not found for ${path}`);
-                    return null;
-                }
+                if (!dataModules[path]) return null;
 
                 try {
                     const m = await dataModules[path]();
                     return { module: m, info: q };
                 } catch (e) {
-                    console.warn(`Failed to load quiz data for random generation: ${q.id}`, e);
                     return null;
                 }
             });
@@ -268,6 +294,26 @@ export async function initializeQuiz() {
                     allQuestions = allQuestions.concat(processQuizData(data, res.info));
                 }
             });
+
+            if (allQuestions.length === 0) {
+                // Fallback: If no category matches, load all questions
+                const fallbackPromises = quizList.map(async (q) => {
+                    if (!q) return null;
+                    const path = Object.keys(dataModules).find(k => k.endsWith(`${q.id}-data.js`));
+                    if (!dataModules[path]) return null;
+                    try {
+                        const m = await dataModules[path]();
+                        return { module: m, info: q };
+                    } catch (e) { return null; }
+                });
+                const fallbackResults = await Promise.all(fallbackPromises);
+                fallbackResults.forEach(res => {
+                    if (res && res.module) {
+                        const data = res.module.quizItems || res.module.quizData || [];
+                        allQuestions = allQuestions.concat(processQuizData(data, res.info));
+                    }
+                });
+            }
 
             const rng = mulberry32(seed);
             for (let i = allQuestions.length - 1; i > 0; i--) {
