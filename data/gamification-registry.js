@@ -321,42 +321,48 @@ export const SKILL_TREE_PERKS = [
     id: 'theory_scholar',
     name: 'นักทฤษฎีรอบรู้',
     icon: '📖',
-    maxLevel: 3,
+    maxLevel: 5,
     levels: [
-      { level: 1, desc: 'ได้รับ XP หมวดทฤษฎีเพิ่มขึ้น +10%', bonusPercent: 10, costSP: 1 },
-      { level: 2, desc: 'ได้รับ XP หมวดทฤษฎีเพิ่มขึ้น +20%', bonusPercent: 20, costSP: 1 },
-      { level: 3, desc: 'ได้รับ XP หมวดทฤษฎีเพิ่มขึ้น +30% (ขั้นสูงสุด)', bonusPercent: 30, costSP: 1 }
+      { level: 1, desc: 'ได้รับ XP หมวดทฤษฎีเพิ่มขึ้น +5%', bonusPercent: 5, costSP: 1 },
+      { level: 2, desc: 'ได้รับ XP หมวดทฤษฎีเพิ่มขึ้น +10%', bonusPercent: 10, costSP: 1 },
+      { level: 3, desc: 'ได้รับ XP หมวดทฤษฎีเพิ่มขึ้น +15%', bonusPercent: 15, costSP: 2 },
+      { level: 4, desc: 'ได้รับ XP หมวดทฤษฎีเพิ่มขึ้น +20%', bonusPercent: 20, costSP: 2 },
+      { level: 5, desc: 'ได้รับ XP หมวดทฤษฎีเพิ่มขึ้น +30% (ขั้นสูงสุด)', bonusPercent: 30, costSP: 3 }
     ]
   },
   {
     id: 'calc_master',
     name: 'จอมคำนวณแม่นยำ',
     icon: '🔢',
-    maxLevel: 3,
+    maxLevel: 5,
     levels: [
-      { level: 1, desc: 'ได้รับ XP หมวดคำนวณเพิ่มขึ้น +10%', bonusPercent: 10, costSP: 1 },
-      { level: 2, desc: 'ได้รับ XP หมวดคำนวณเพิ่มขึ้น +20%', bonusPercent: 20, costSP: 1 },
-      { level: 3, desc: 'ได้รับ XP หมวดคำนวณเพิ่มขึ้น +30% (ขั้นสูงสุด)', bonusPercent: 30, costSP: 1 }
+      { level: 1, desc: 'ได้รับ XP หมวดคำนวณเพิ่มขึ้น +5%', bonusPercent: 5, costSP: 1 },
+      { level: 2, desc: 'ได้รับ XP หมวดคำนวณเพิ่มขึ้น +10%', bonusPercent: 10, costSP: 1 },
+      { level: 3, desc: 'ได้รับ XP หมวดคำนวณเพิ่มขึ้น +15%', bonusPercent: 15, costSP: 2 },
+      { level: 4, desc: 'ได้รับ XP หมวดคำนวณเพิ่มขึ้น +20%', bonusPercent: 20, costSP: 2 },
+      { level: 5, desc: 'ได้รับ XP หมวดคำนวณเพิ่มขึ้น +30% (ขั้นสูงสุด)', bonusPercent: 30, costSP: 3 }
     ]
   },
   {
     id: 'fever_boost',
     name: 'สายเลือดฟีเวอร์',
     icon: '🔥',
-    maxLevel: 2,
+    maxLevel: 3,
     levels: [
       { level: 1, desc: 'เพิ่มตัวคูณ Combo Fever เป็น x2.2', multiplier: 2.2, costSP: 1 },
-      { level: 2, desc: 'เพิ่มตัวคูณ Combo Fever เป็น x2.5 (ขั้นสูงสุด)', multiplier: 2.5, costSP: 1 }
+      { level: 2, desc: 'เพิ่มตัวคูณ Combo Fever เป็น x2.5', multiplier: 2.5, costSP: 2 },
+      { level: 3, desc: 'เพิ่มตัวคูณ Combo Fever เป็น x3.0 (ขั้นสูงสุด)', multiplier: 3.0, costSP: 3 }
     ]
   },
   {
     id: 'discount_shop',
     name: 'นักต่อรองราคา',
     icon: '🏷️',
-    maxLevel: 2,
+    maxLevel: 3,
     levels: [
       { level: 1, desc: 'ลดราคาซื้อไอเทมในร้านค้าลง 10%', discountPercent: 10, costSP: 1 },
-      { level: 2, desc: 'ลดราคาซื้อไอเทมในร้านค้าลง 20% (ขั้นสูงสุด)', discountPercent: 20, costSP: 1 }
+      { level: 2, desc: 'ลดราคาซื้อไอเทมในร้านค้าลง 20%', discountPercent: 20, costSP: 2 },
+      { level: 3, desc: 'ลดราคาซื้อไอเทมในร้านค้าลง 30% (ขั้นสูงสุด)', discountPercent: 30, costSP: 2 }
     ]
   }
 ];

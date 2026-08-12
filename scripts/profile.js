@@ -690,7 +690,7 @@ function openSkillTreeInfoModal() {
                     <div>
                         <h4 class="font-extrabold ${titleColor} font-kanit text-sm mb-1">การอัปทักษะเป็นลำดับขั้น</h4>
                         <p class="${bodyTextColor} leading-relaxed">
-                            อัปเกรดได้หลายระดับ เช่น <span class="${isDark ? 'text-indigo-300 font-bold' : 'text-indigo-700 font-bold'}">Lv.1 (+10%) ➔ Lv.2 (+20%) ➔ Lv.3 (+30%)</span> โดยใช้ 1 SP ต่อ 1 ระดับขั้น
+                            อัปเกรดได้หลายระดับ เช่น <span class="${isDark ? 'text-indigo-300 font-bold' : 'text-indigo-700 font-bold'}">Lv.1 (+5%) ➔ Lv.3 (+15%) ➔ Lv.5 (+30%)</span> โดยระดับที่สูงขึ้นจะใช้ SP เพิ่มขึ้น (1-3 SP)
                         </p>
                     </div>
                 </div>
