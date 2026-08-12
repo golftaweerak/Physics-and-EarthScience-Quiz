@@ -437,63 +437,122 @@ export const BI_WEEKLY_QUEST = BI_WEEKLY_QUEST_POOL[0];
 
 export const WEEKLY_QUEST_POOL = [
   {
-    id: 'weekly_astro_30',
-    title: '🔭 นักสำรวจดาราศาสตร์',
-    desc: 'ทำโจทย์หมวดดาราศาสตร์ครบ 30 ข้อภายในสัปดาห์นี้',
-    targetCount: 30,
+    id: 'weekly_questions_60',
+    title: 'พิชิตโจทย์ 60 ข้อประจำสัปดาห์',
+    desc: 'ทำแบบทดสอบสะสมครบ 60 ข้อภายในสัปดาห์นี้',
+    icon: '📚',
+    targetCount: 60,
+    type: 'total_questions',
+    rewardXP: 300
+  },
+  {
+    id: 'weekly_astro_40',
+    title: 'นักสำรวจดาราศาสตร์ประจำสัปดาห์',
+    desc: 'ทำโจทย์หมวดดาราศาสตร์ครบ 40 ข้อภายในสัปดาห์นี้',
+    icon: '🔭',
+    targetCount: 40,
     type: 'category_questions',
     category: 'Astronomy',
-    rewardXP: 150,
-    rewardSP: 1
+    rewardXP: 250
   },
   {
-    id: 'weekly_perfect_3',
-    title: '💯 เพอร์เฟกต์สตรีค',
-    desc: 'ทำคะแนน 100% เต็มให้ได้ 3 ชุดติดต่อกันภายในสัปดาห์นี้',
-    targetCount: 3,
-    type: 'perfect_streak',
-    rewardXP: 200,
-    rewardSP: 1
-  },
-  {
-    id: 'weekly_physics_30',
-    title: '⚡ จ้าวแห่งกลศาสตร์และฟิสิกส์',
-    desc: 'ทำโจทย์หมวดฟิสิกส์ครบ 30 ข้อภายในสัปดาห์นี้',
-    targetCount: 30,
+    id: 'weekly_physics_40',
+    title: 'จ้าวแห่งกลศาสตร์ฟิสิกส์',
+    desc: 'ทำโจทย์หมวดฟิสิกส์ครบ 40 ข้อภายในสัปดาห์นี้',
+    icon: '⚡',
+    targetCount: 40,
     type: 'category_questions',
     category: 'Physics',
-    rewardXP: 150,
-    rewardSP: 1
+    rewardXP: 250
   },
   {
-    id: 'weekly_boss_50',
-    title: '⚔️ ผู้พิทักษ์จักรวาล',
-    desc: 'ทำความเสียหายใส่ Weekly Boss รวมครบ 50 HP ภายในสัปดาห์นี้',
-    targetCount: 50,
+    id: 'weekly_earth_40',
+    title: 'ผู้สำรวจธรณีภาคและวิทย์โลก',
+    desc: 'ทำโจทย์หมวดวิทย์โลกครบ 40 ข้อภายในสัปดาห์นี้',
+    icon: '🌋',
+    targetCount: 40,
+    type: 'category_questions',
+    category: 'Earth',
+    rewardXP: 250
+  },
+  {
+    id: 'weekly_high_scores_5',
+    title: 'ยอดฝีมือคะแนนสูง (80%+)',
+    desc: 'ทำคะแนนได้ 80% ขึ้นไปจำนวน 5 ชุดภายในสัปดาห์นี้',
+    icon: '🌟',
+    targetCount: 5,
+    type: 'high_scores',
+    rewardXP: 350
+  },
+  {
+    id: 'weekly_boss_damage_80',
+    title: 'ผู้พิทักษ์ถล่มบอสสัปดาห์',
+    desc: 'ทำความเสียหายใส่ Weekly Boss รวมครบ 80 HP ภายในสัปดาห์นี้',
+    icon: '⚔️',
+    targetCount: 80,
     type: 'boss_damage',
-    rewardXP: 180,
-    rewardSP: 1
+    rewardXP: 300
+  },
+  {
+    id: 'weekly_quizzes_8',
+    title: 'นักควิซมาราธอน 8 ชุด',
+    desc: 'ทำแบบทดสอบจนจบครบ 8 ชุดภายในสัปดาห์นี้',
+    icon: '🏃‍♂️',
+    targetCount: 8,
+    type: 'quizzes_completed',
+    rewardXP: 280
   }
 ];
 
 export const MONTHLY_QUEST_POOL = [
   {
-    id: 'monthly_master_100',
-    title: '📜 ปรมาจารย์แห่งการทำโจทย์ประจำเดือน',
-    desc: 'สะสมการทำแบบทดสอบให้ครบ 100 ข้อภายในเดือนนี้',
-    targetCount: 100,
+    id: 'monthly_master_250',
+    title: 'มหาศึก 250 ข้อประจำเดือน',
+    desc: 'สะสมการทำแบบทดสอบให้ครบ 250 ข้อภายในเดือนนี้',
+    icon: '📜',
+    targetCount: 250,
     type: 'total_questions',
-    rewardXP: 500,
+    rewardXP: 800,
     rewardSP: 2
   },
   {
-    id: 'monthly_earth_50',
-    title: '🌋 ผู้เชี่ยวชาญธรณีและวิทย์โลกประจำเดือน',
-    desc: 'ทำโจทย์หมวดวิทย์โลกครบ 50 ข้อภายในเดือนนี้',
-    targetCount: 50,
-    type: 'category_questions',
-    category: 'Earth',
-    rewardXP: 400,
+    id: 'monthly_perfect_6',
+    title: 'เซียนสนามสอบ 100% เต็ม 6 ชุด',
+    desc: 'ทำคะแนนเต็ม 100% ให้ได้ 6 ชุดภายในเดือนนี้',
+    icon: '👑',
+    targetCount: 6,
+    type: 'perfect_scores',
+    rewardXP: 900,
+    rewardSP: 2
+  },
+  {
+    id: 'monthly_boss_damage_250',
+    title: 'จอมทำลายล้างบอสประจำเดือน',
+    desc: 'สร้างความเสียหายใส่ Weekly Boss สะสมครบ 250 HP ภายในเดือนนี้',
+    icon: '💥',
+    targetCount: 250,
+    type: 'boss_damage',
+    rewardXP: 850,
+    rewardSP: 2
+  },
+  {
+    id: 'monthly_quizzes_25',
+    title: 'ผู้พิชิต 25 ชุดทดสอบประจำเดือน',
+    desc: 'ทำแบบทดสอบจนจบครบ 25 ชุดภายในเดือนนี้',
+    icon: '🏆',
+    targetCount: 25,
+    type: 'quizzes_completed',
+    rewardXP: 750,
+    rewardSP: 2
+  },
+  {
+    id: 'monthly_all_round_150',
+    title: 'รอบรู้รอบทิศวิทยาศาสตร์',
+    desc: 'ตอบคำถามทฤษฎีและคำนวณถูกต้องสะสมรวม 150 ข้อภายในเดือนนี้',
+    icon: '🎓',
+    targetCount: 150,
+    type: 'total_questions',
+    rewardXP: 800,
     rewardSP: 2
   }
 ];

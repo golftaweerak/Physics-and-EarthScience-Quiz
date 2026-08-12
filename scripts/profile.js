@@ -914,23 +914,31 @@ function renderWeeklyAndMonthlyQuests(game) {
         const pct = Math.min(100, Math.round((currentCount / targetCount) * 100));
 
         weeklyContainer.innerHTML = `
-            <div class="p-3.5 rounded-2xl bg-gradient-to-r from-blue-500/10 via-indigo-500/10 to-purple-500/10 border border-blue-300/80 dark:border-blue-700/60 shadow-xs">
-                <div class="flex items-center justify-between gap-2 mb-1 flex-wrap">
-                    <div class="flex items-center gap-2">
-                        <span class="text-base">${quest.title.split(' ')[0] || '📅'}</span>
-                        <h4 class="font-extrabold text-xs text-gray-900 dark:text-white font-kanit">${escapeHtml(quest.title)}</h4>
+            <div class="space-y-3">
+                <h4 class="text-xs font-black uppercase text-blue-600 dark:text-blue-400 tracking-widest flex items-center justify-between">
+                    <span class="flex items-center gap-1.5"><span>📅</span> ภารกิจประจำสัปดาห์ (Weekly)</span>
+                    <span class="text-[10px] text-gray-400 font-bold normal-case">รีเซ็ตทุกวันจันทร์</span>
+                </h4>
+                <div class="p-4 rounded-2xl bg-white/70 dark:bg-gray-800/80 border border-blue-200/80 dark:border-blue-800/60 shadow-sm relative overflow-hidden transition hover:shadow-md">
+                    <div class="flex items-start gap-3">
+                        <span class="text-3xl shrink-0 p-2 rounded-xl bg-blue-100 dark:bg-blue-950/70 border border-blue-200 dark:border-blue-800/50">${quest.icon || '📜'}</span>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center justify-between gap-2 mb-0.5">
+                                <h5 class="font-extrabold text-xs sm:text-sm text-gray-900 dark:text-white font-kanit truncate">${escapeHtml(quest.title)}</h5>
+                                <span class="text-xs font-black font-mono text-yellow-600 dark:text-yellow-400 shrink-0">+${quest.rewardXP} XP</span>
+                            </div>
+                            <p class="text-[11px] text-gray-500 dark:text-gray-400 font-medium mb-2.5">${escapeHtml(quest.desc)}</p>
+                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 overflow-hidden mb-1.5">
+                                <div class="bg-gradient-to-r from-blue-500 to-indigo-600 h-full rounded-full transition-all duration-500" style="width: ${pct}%"></div>
+                            </div>
+                            <div class="flex items-center justify-between text-[11px] font-mono font-bold text-gray-500 dark:text-gray-400">
+                                <span>${currentCount} / ${targetCount}</span>
+                                <button id="claim-weekly-btn" ${!isCompleted || isClaimed ? 'disabled' : ''} class="px-3 py-1 rounded-lg text-xs font-bold font-kanit transition-all ${isClaimed ? 'bg-gray-200 dark:bg-gray-700 text-gray-400 cursor-default' : isCompleted ? 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white cursor-pointer shadow-md animate-bounce' : 'bg-blue-100 dark:bg-blue-950/40 text-blue-700 dark:text-blue-400 border border-blue-300/40 cursor-not-allowed'}">
+                                    ${isClaimed ? 'รับแล้ว ✓' : isCompleted ? '🎁 รับรางวัล!' : `${currentCount}/${targetCount}`}
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <span class="px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 text-[10px] font-bold border border-blue-300/40">ภารกิจประจำสัปดาห์</span>
-                </div>
-                <p class="text-[11px] text-gray-600 dark:text-gray-300 mb-2">${escapeHtml(quest.desc)}</p>
-                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 overflow-hidden mb-2">
-                    <div class="bg-gradient-to-r from-blue-500 to-indigo-600 h-full rounded-full transition-all duration-500" style="width: ${pct}%"></div>
-                </div>
-                <div class="flex items-center justify-between text-[10px] font-mono font-bold text-gray-500 dark:text-gray-400">
-                    <span>${currentCount} / ${targetCount}</span>
-                    <button id="claim-weekly-btn" ${!isCompleted || isClaimed ? 'disabled' : ''} class="px-3 py-1 rounded-lg text-[10px] font-black font-kanit transition-all ${isClaimed ? 'bg-gray-200 dark:bg-gray-700 text-gray-400 cursor-default' : isCompleted ? 'bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white cursor-pointer shadow-md animate-bounce' : 'bg-blue-100 dark:bg-blue-950/40 text-blue-700 dark:text-blue-400 border border-blue-300/40 cursor-not-allowed'}">
-                        ${isClaimed ? 'รับแล้ว ✓' : isCompleted ? '🎁 รับรางวัล!' : `+${quest.rewardSP ? quest.rewardSP + ' SP ' : ''}+${quest.rewardXP} XP`}
-                    </button>
                 </div>
             </div>
         `;
@@ -940,7 +948,7 @@ function renderWeeklyAndMonthlyQuests(game) {
             btn.onclick = () => {
                 const res = game.claimWeeklyQuestReward();
                 if (res.success) {
-                    showToast('รับรางวัลประจำสัปดาห์สำเร็จ! 🎁', `ได้รับ +${res.rewardSP ? res.rewardSP + ' SP และ ' : ''}+${res.rewardXP} XP ถาวร!`, '✨', 'gold');
+                    showToast('รับรางวัลสำเร็จ! 🎁', `ได้รับ +${res.rewardXP} XP ถาวร!`, '✨', 'gold');
                     renderUserInfo(game);
                 }
             };
@@ -953,23 +961,31 @@ function renderWeeklyAndMonthlyQuests(game) {
         const pct = Math.min(100, Math.round((currentCount / targetCount) * 100));
 
         monthlyContainer.innerHTML = `
-            <div class="p-3.5 rounded-2xl bg-gradient-to-r from-emerald-500/10 via-teal-500/10 to-cyan-500/10 border border-emerald-300/80 dark:border-emerald-700/60 shadow-xs">
-                <div class="flex items-center justify-between gap-2 mb-1 flex-wrap">
-                    <div class="flex items-center gap-2">
-                        <span class="text-base">${quest.title.split(' ')[0] || '🗓️'}</span>
-                        <h4 class="font-extrabold text-xs text-gray-900 dark:text-white font-kanit">${escapeHtml(quest.title)}</h4>
+            <div class="space-y-3">
+                <h4 class="text-xs font-black uppercase text-emerald-600 dark:text-emerald-400 tracking-widest flex items-center justify-between">
+                    <span class="flex items-center gap-1.5"><span>🗓️</span> ภารกิจประจำเดือน (Monthly)</span>
+                    <span class="text-[10px] text-gray-400 font-bold normal-case">รีเซ็ตทุกวันที่ 1</span>
+                </h4>
+                <div class="p-4 rounded-2xl bg-white/70 dark:bg-gray-800/80 border border-emerald-200/80 dark:border-emerald-800/60 shadow-sm relative overflow-hidden transition hover:shadow-md">
+                    <div class="flex items-start gap-3">
+                        <span class="text-3xl shrink-0 p-2 rounded-xl bg-emerald-100 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-800/50">${quest.icon || '🏆'}</span>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center justify-between gap-2 mb-0.5">
+                                <h5 class="font-extrabold text-xs sm:text-sm text-gray-900 dark:text-white font-kanit truncate">${escapeHtml(quest.title)}</h5>
+                                <span class="text-xs font-black font-mono text-purple-600 dark:text-purple-300 shrink-0">+${quest.rewardSP} SP 🎁 +${quest.rewardXP} XP</span>
+                            </div>
+                            <p class="text-[11px] text-gray-500 dark:text-gray-400 font-medium mb-2.5">${escapeHtml(quest.desc)}</p>
+                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 overflow-hidden mb-1.5">
+                                <div class="bg-gradient-to-r from-emerald-500 to-teal-600 h-full rounded-full transition-all duration-500" style="width: ${pct}%"></div>
+                            </div>
+                            <div class="flex items-center justify-between text-[11px] font-mono font-bold text-gray-500 dark:text-gray-400">
+                                <span>${currentCount} / ${targetCount}</span>
+                                <button id="claim-monthly-btn" ${!isCompleted || isClaimed ? 'disabled' : ''} class="px-3 py-1 rounded-lg text-xs font-bold font-kanit transition-all ${isClaimed ? 'bg-gray-200 dark:bg-gray-700 text-gray-400 cursor-default' : isCompleted ? 'bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white cursor-pointer shadow-md animate-bounce' : 'bg-emerald-100 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-300/40 cursor-not-allowed'}">
+                                    ${isClaimed ? 'รับแล้ว ✓' : isCompleted ? '🎁 รับรางวัล!' : `${currentCount}/${targetCount}`}
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <span class="px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 text-[10px] font-bold border border-emerald-300/40">ภารกิจประจำเดือน</span>
-                </div>
-                <p class="text-[11px] text-gray-600 dark:text-gray-300 mb-2">${escapeHtml(quest.desc)}</p>
-                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 overflow-hidden mb-2">
-                    <div class="bg-gradient-to-r from-emerald-500 to-teal-600 h-full rounded-full transition-all duration-500" style="width: ${pct}%"></div>
-                </div>
-                <div class="flex items-center justify-between text-[10px] font-mono font-bold text-gray-500 dark:text-gray-400">
-                    <span>${currentCount} / ${targetCount}</span>
-                    <button id="claim-monthly-btn" ${!isCompleted || isClaimed ? 'disabled' : ''} class="px-3 py-1 rounded-lg text-[10px] font-black font-kanit transition-all ${isClaimed ? 'bg-gray-200 dark:bg-gray-700 text-gray-400 cursor-default' : isCompleted ? 'bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white cursor-pointer shadow-md animate-bounce' : 'bg-emerald-100 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-300/40 cursor-not-allowed'}">
-                        ${isClaimed ? 'รับแล้ว ✓' : isCompleted ? '🎁 รับรางวัล!' : `+${quest.rewardSP ? quest.rewardSP + ' SP ' : ''}+${quest.rewardXP} XP`}
-                    </button>
                 </div>
             </div>
         `;
@@ -979,7 +995,7 @@ function renderWeeklyAndMonthlyQuests(game) {
             btn.onclick = () => {
                 const res = game.claimMonthlyQuestReward();
                 if (res.success) {
-                    showToast('รับรางวัลประจำเดือนสำเร็จ! 🎁', `ได้รับ +${res.rewardSP ? res.rewardSP + ' SP และ ' : ''}+${res.rewardXP} XP ถาวร!`, '✨', 'gold');
+                    showToast('รับรางวัลสำเร็จ! 🎁', `ได้รับ +${res.rewardSP} SP และ +${res.rewardXP} XP ถาวร!`, '✨', 'gold');
                     renderUserInfo(game);
                 }
             };
