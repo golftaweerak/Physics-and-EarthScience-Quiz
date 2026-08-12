@@ -436,6 +436,8 @@ function renderUserInfo(game) {
     renderBossLeaderboard(game);
     renderSkillTreeSection(game);
     renderWeeklyAndMonthlyQuests(game);
+    renderBadges(game);
+    renderAchievements(game);
 
     previousTitle = currentTitle;
     previousXP = currentXP;
