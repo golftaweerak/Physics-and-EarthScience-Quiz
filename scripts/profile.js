@@ -2097,7 +2097,7 @@ function renderShop(game) {
 
     // 1. Render Tabs
     const tabsHtml = `
-        <div class="flex space-x-3 overflow-x-auto pb-2 no-scrollbar select-none" role="tablist">
+        <div class="flex space-x-3 overflow-x-auto p-1.5 no-scrollbar select-none" role="tablist">
             ${categories.map(cat => {
                 const isActive = cat.type === activeShopTab;
                 const activeClass = isActive
