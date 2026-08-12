@@ -9,7 +9,8 @@ import {
     ACHIEVEMENTS,
     SHOP_ITEMS, // Imported for shop display
     XP_THRESHOLDS,
-    THEME_DEFINITIONS
+    THEME_DEFINITIONS,
+    SKILL_TREE_PERKS
 } from './gamification.js';
 import { openProfileModal } from './profile-modal.js';
 import { getDetailedProgressForAllQuizzes, calculateStrengthsAndWeaknesses } from './data-manager.js';
@@ -567,34 +568,23 @@ function openBossRulesModal(boss) {
 
 function renderSkillTreeSection(game) {
     const availableSP = game.getAvailableSkillPoints();
-    let container = document.getElementById('skill-tree-container');
-
-    if (!container) {
-        const statsSection = document.getElementById('recent-badges-container');
-        if (statsSection && statsSection.parentElement) {
-            container = document.createElement('div');
-            container.id = 'skill-tree-container';
-            container.className = 'mt-6 p-4 rounded-2xl bg-white dark:bg-gray-800/60 border border-gray-200 dark:border-gray-700 shadow-sm';
-            statsSection.parentElement.insertBefore(container, statsSection.nextSibling);
-        }
-    }
+    const container = document.getElementById('skill-tree-container');
     if (!container) return;
 
-    const { SKILL_TREE_PERKS } = game;
     const perkItemsHtml = (SKILL_TREE_PERKS || []).map(perk => {
         const isUnlocked = game.hasPerk(perk.id);
         const canAfford = availableSP >= perk.costSP;
 
         return `
-            <div class="p-3 rounded-xl border ${isUnlocked ? 'bg-purple-50 dark:bg-purple-900/20 border-purple-300 dark:border-purple-700' : 'bg-gray-50 dark:bg-gray-800/40 border-gray-200 dark:border-gray-700'} flex items-center justify-between gap-3">
+            <div class="p-3.5 rounded-xl border ${isUnlocked ? 'bg-purple-50/80 dark:bg-purple-900/30 border-purple-300 dark:border-purple-700' : 'bg-gray-50/80 dark:bg-gray-800/40 border-gray-200 dark:border-gray-700'} flex items-center justify-between gap-3 transition-all">
                 <div class="flex items-center gap-3">
-                    <span class="text-2xl p-2 rounded-lg bg-white dark:bg-gray-700 shadow-sm">${perk.icon}</span>
+                    <span class="text-2xl p-2 rounded-lg bg-white dark:bg-gray-700 shadow-xs shrink-0">${perk.icon}</span>
                     <div>
-                        <p class="font-bold text-sm text-gray-800 dark:text-gray-100 font-kanit">${escapeHtml(perk.name)}</p>
-                        <p class="text-xs text-gray-500 dark:text-gray-400">${escapeHtml(perk.desc)}</p>
+                        <p class="font-bold text-sm text-gray-900 dark:text-gray-100 font-kanit">${escapeHtml(perk.name)}</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${escapeHtml(perk.desc)}</p>
                     </div>
                 </div>
-                <button data-perk-id="${perk.id}" ${isUnlocked || !canAfford ? 'disabled' : ''} class="unlock-perk-btn shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold font-kanit transition-all ${isUnlocked ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 cursor-default' : canAfford ? 'bg-purple-600 hover:bg-purple-700 text-white cursor-pointer shadow-md hover:scale-105' : 'bg-gray-200 dark:bg-gray-700 text-gray-400 cursor-not-allowed'}">
+                <button data-perk-id="${perk.id}" ${isUnlocked || !canAfford ? 'disabled' : ''} class="unlock-perk-btn shrink-0 px-3.5 py-2 rounded-xl text-xs font-extrabold font-kanit transition-all ${isUnlocked ? 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 border border-green-300/40 cursor-default' : canAfford ? 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white cursor-pointer shadow-md hover:scale-105 active:scale-95' : 'bg-gray-200 dark:bg-gray-700 text-gray-400 cursor-not-allowed'}">
                     ${isUnlocked ? 'ปลดล็อกแล้ว ✓' : `ใช้ ${perk.costSP} SP`}
                 </button>
             </div>
@@ -602,16 +592,19 @@ function renderSkillTreeSection(game) {
     }).join('');
 
     container.innerHTML = `
-        <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center justify-between mb-4">
             <div class="flex items-center gap-2">
-                <span class="text-xl">🌳</span>
-                <h3 class="font-bold text-base text-gray-800 dark:text-gray-100 font-kanit">ต้นไม้ทักษะ (Skill Tree Perks)</h3>
+                <span class="text-2xl">🌳</span>
+                <div>
+                    <h3 class="font-extrabold text-lg text-gray-900 dark:text-white font-kanit">ต้นไม้ทักษะ (Skill Tree Perks)</h3>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">นำ Skill Points (SP) จากการเพิ่มเลเวลมาปลดล็อกทักษะพิเศษติดตัว</p>
+                </div>
             </div>
-            <span class="px-2.5 py-1 rounded-full bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 text-xs font-bold font-mono">
+            <span class="px-3 py-1.5 rounded-full bg-purple-100 dark:bg-purple-950/80 text-purple-700 dark:text-purple-300 text-xs font-black font-mono border border-purple-300 dark:border-purple-700 shrink-0">
                 มี ${availableSP} SP
             </span>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
             ${perkItemsHtml}
         </div>
     `;
@@ -628,6 +621,13 @@ function renderSkillTreeSection(game) {
             }
         });
     });
+
+    // If URL contains hash #skill-tree-container, scroll to it smoothly
+    if (window.location.hash === '#skill-tree-container') {
+        setTimeout(() => {
+            container.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 300);
+    }
 }
 
 function renderSyncStatus(game) {
