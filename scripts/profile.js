@@ -830,12 +830,12 @@ function renderSkillTreeSection(game) {
                     <div class="bg-gradient-to-r from-amber-500 to-purple-600 h-full rounded-full transition-all duration-500" style="width: ${progressPercent}%"></div>
                 </div>
                 <div class="flex items-center justify-between text-[11px] font-mono font-bold text-gray-500 dark:text-gray-400 mt-1 max-w-md">
-                    <span>ความคืบหน้า: ${currentCount} / ${targetCount} ข้อ</span>
-                    <span>รางวัล: +1 SP 🎁 +100 XP</span>
+                    <span>ความคืบหน้า: ${currentCount} / ${targetCount} ${quest.type === 'boss_damage' ? 'HP' : quest.type === 'perfect_scores' || quest.type === 'quizzes_completed' ? 'ครั้ง' : 'ข้อ'}</span>
+                    <span>รางวัล: +${quest.rewardSP} SP 🎁 +${quest.rewardXP || 100} XP</span>
                 </div>
             </div>
             <button id="claim-biweekly-btn" ${!isCompleted || isClaimed ? 'disabled' : ''} class="px-4 py-2 rounded-xl text-xs font-black font-kanit transition-all shrink-0 ${isClaimed ? 'bg-gray-200 dark:bg-gray-700 text-gray-400 cursor-default' : isCompleted ? 'bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white cursor-pointer shadow-lg animate-bounce' : 'bg-amber-100 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 border border-amber-300/40 cursor-not-allowed'}">
-                ${isClaimed ? 'รับแล้ว ✓' : isCompleted ? '🎁 รับ 1 SP ฟรี!' : `${currentCount}/${targetCount} ข้อ`}
+                ${isClaimed ? 'รับแล้ว ✓' : isCompleted ? '🎁 รับ 1 SP ฟรี!' : `${currentCount}/${targetCount}`}
             </button>
         </div>
 

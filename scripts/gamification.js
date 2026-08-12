@@ -14,10 +14,11 @@ import {
     WEEKLY_BOSSES,
     MYSTERY_CHEST_REWARDS,
     SKILL_TREE_PERKS,
-    BI_WEEKLY_QUEST
+    BI_WEEKLY_QUEST,
+    BI_WEEKLY_QUEST_POOL
 } from '../data/gamification-registry.js';
 import { quizList } from '../data/quizzes-list.js'; // Import quizList for metadata lookup
-export { BADGES, DAILY_QUESTS, ACHIEVEMENTS, SHOP_ITEMS, XP_THRESHOLDS, THEME_DEFINITIONS, WEEKLY_BOSSES, MYSTERY_CHEST_REWARDS, SKILL_TREE_PERKS, BI_WEEKLY_QUEST };
+export { BADGES, DAILY_QUESTS, ACHIEVEMENTS, SHOP_ITEMS, XP_THRESHOLDS, THEME_DEFINITIONS, WEEKLY_BOSSES, MYSTERY_CHEST_REWARDS, SKILL_TREE_PERKS, BI_WEEKLY_QUEST, BI_WEEKLY_QUEST_POOL };
 
 // ชื่อยศสำหรับแต่ละสาย (Titles)
 // ผู้เล่นจะได้รับฉายาตามเลเวลที่ทำได้ในแต่ละสาย (Overall, Physics, Earth Science)
@@ -2235,10 +2236,46 @@ export class Gamification {
     }
 
     getBiWeeklyQuestProgress() {
-        const quest = BI_WEEKLY_QUEST;
-        const totalAnswered = this.state.totalQuestionsAnswered || 0;
-        const startQuestions = this.state.biWeeklyStartQuestions || 0;
-        const currentCount = Math.max(0, totalAnswered - startQuestions);
+        const now = Date.now();
+        const twoWeeksMs = 14 * 24 * 60 * 60 * 1000;
+        const periodIndex = Math.floor(now / twoWeeksMs);
+        const currentPeriodId = `2W-${periodIndex}`;
+
+        // Select quest from pool based on period index
+        const questIndex = Math.abs(periodIndex) % BI_WEEKLY_QUEST_POOL.length;
+        const quest = BI_WEEKLY_QUEST_POOL[questIndex] || BI_WEEKLY_QUEST_POOL[0];
+
+        // Reset tracking on new 2-week period
+        if (this.state.biWeeklyPeriodId !== currentPeriodId) {
+            this.state.biWeeklyPeriodId = currentPeriodId;
+            this.state.biWeeklyQuestId = quest.id;
+            this.state.biWeeklyClaimed = null;
+            this.state.biWeeklyStartQuestions = this.state.totalQuestionsAnswered || 0;
+            this.state.biWeeklyStartPerfects = this.state.perfectScores || 0;
+            this.state.biWeeklyStartBossDmg = this.state.bossDamageDealt || 0;
+            this.state.biWeeklyStartQuizzes = this.state.quizzesCompleted || 0;
+            this.saveState();
+        }
+
+        // Calculate progress based on quest type
+        let currentCount = 0;
+        if (quest.type === 'total_questions') {
+            const startQuestions = this.state.biWeeklyStartQuestions || 0;
+            currentCount = Math.max(0, (this.state.totalQuestionsAnswered || 0) - startQuestions);
+        } else if (quest.type === 'perfect_scores') {
+            const startPerfects = this.state.biWeeklyStartPerfects || 0;
+            currentCount = Math.max(0, (this.state.perfectScores || 0) - startPerfects);
+        } else if (quest.type === 'boss_damage') {
+            const startDmg = this.state.biWeeklyStartBossDmg || 0;
+            currentCount = Math.max(0, (this.state.bossDamageDealt || 0) - startDmg);
+        } else if (quest.type === 'quizzes_completed') {
+            const startQuizzes = this.state.biWeeklyStartQuizzes || 0;
+            currentCount = Math.max(0, (this.state.quizzesCompleted || 0) - startQuizzes);
+        } else {
+            const startQuestions = this.state.biWeeklyStartQuestions || 0;
+            currentCount = Math.max(0, (this.state.totalQuestionsAnswered || 0) - startQuestions);
+        }
+
         const isCompleted = currentCount >= quest.targetCount;
         const isClaimed = !!this.state.biWeeklyClaimed;
 

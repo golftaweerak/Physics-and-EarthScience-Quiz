@@ -394,12 +394,43 @@ export const SKILL_TREE_PERKS = [
   }
 ];
 
-export const BI_WEEKLY_QUEST = {
-  id: 'biweekly_question_challenge_50',
-  title: 'เควสประจำ 2 สัปดาห์: พิชิตโจทย์ 50 ข้อ',
-  desc: 'ทำแบบทดสอบสะสมให้ครบ 50 ข้อภายใน 2 สัปดาห์นี้ เพื่อรับ 1 SP ฟรี!',
-  targetCount: 50,
-  rewardSP: 1,
-  rewardXP: 100,
-  durationDays: 14
-};
+export const BI_WEEKLY_QUEST_POOL = [
+  {
+    id: 'biweekly_question_50',
+    title: 'เควสประจำ 2 สัปดาห์: พิชิตโจทย์ 50 ข้อ',
+    desc: 'ทำแบบทดสอบสะสมให้ครบ 50 ข้อภายใน 2 สัปดาห์นี้ เพื่อรับ 1 SP ฟรี!',
+    targetCount: 50,
+    type: 'total_questions',
+    rewardSP: 1,
+    rewardXP: 100
+  },
+  {
+    id: 'biweekly_perfect_3',
+    title: 'เควสประจำ 2 สัปดาห์: เซียนสอบ 100% เต็ม 3 ครั้ง',
+    desc: 'ทำคะแนนเต็ม 100% ให้ได้ 3 ครั้งในรอบ 2 สัปดาห์ เพื่อรับ 1 SP ฟรี!',
+    targetCount: 3,
+    type: 'perfect_scores',
+    rewardSP: 1,
+    rewardXP: 150
+  },
+  {
+    id: 'biweekly_boss_damage_100',
+    title: 'เควสประจำ 2 สัปดาห์: ถล่มบอส 100 HP',
+    desc: 'ทำความเสียหายใส่ Weekly Boss รวมครบ 100 HP ในรอบ 2 สัปดาห์ เพื่อรับ 1 SP ฟรี!',
+    targetCount: 100,
+    type: 'boss_damage',
+    rewardSP: 1,
+    rewardXP: 150
+  },
+  {
+    id: 'biweekly_quizzes_10',
+    title: 'เควสประจำ 2 สัปดาห์: นักควิซสายลุย 10 ชุด',
+    desc: 'ทำแบบทดสอบจบครบ 10 ชุดในรอบ 2 สัปดาห์ เพื่อรับ 1 SP ฟรี!',
+    targetCount: 10,
+    type: 'quizzes_completed',
+    rewardSP: 1,
+    rewardXP: 120
+  }
+];
+
+export const BI_WEEKLY_QUEST = BI_WEEKLY_QUEST_POOL[0];
