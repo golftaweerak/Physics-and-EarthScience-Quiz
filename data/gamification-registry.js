@@ -433,4 +433,65 @@ export const BI_WEEKLY_QUEST_POOL = [
   }
 ];
 
-export const BI_WEEKLY_QUEST = BI_WEEKLY_QUEST_POOL[0];
+export const WEEKLY_QUEST_POOL = [
+  {
+    id: 'weekly_astro_30',
+    title: '🔭 นักสำรวจดาราศาสตร์',
+    desc: 'ทำโจทย์หมวดดาราศาสตร์ครบ 30 ข้อภายในสัปดาห์นี้',
+    targetCount: 30,
+    type: 'category_questions',
+    category: 'Astronomy',
+    rewardXP: 150,
+    rewardSP: 1
+  },
+  {
+    id: 'weekly_perfect_3',
+    title: '💯 เพอร์เฟกต์สตรีค',
+    desc: 'ทำคะแนน 100% เต็มให้ได้ 3 ชุดติดต่อกันภายในสัปดาห์นี้',
+    targetCount: 3,
+    type: 'perfect_streak',
+    rewardXP: 200,
+    rewardSP: 1
+  },
+  {
+    id: 'weekly_physics_30',
+    title: '⚡ จ้าวแห่งกลศาสตร์และฟิสิกส์',
+    desc: 'ทำโจทย์หมวดฟิสิกส์ครบ 30 ข้อภายในสัปดาห์นี้',
+    targetCount: 30,
+    type: 'category_questions',
+    category: 'Physics',
+    rewardXP: 150,
+    rewardSP: 1
+  },
+  {
+    id: 'weekly_boss_50',
+    title: '⚔️ ผู้พิทักษ์จักรวาล',
+    desc: 'ทำความเสียหายใส่ Weekly Boss รวมครบ 50 HP ภายในสัปดาห์นี้',
+    targetCount: 50,
+    type: 'boss_damage',
+    rewardXP: 180,
+    rewardSP: 1
+  }
+];
+
+export const MONTHLY_QUEST_POOL = [
+  {
+    id: 'monthly_master_100',
+    title: '📜 ปรมาจารย์แห่งการทำโจทย์ประจำเดือน',
+    desc: 'สะสมการทำแบบทดสอบให้ครบ 100 ข้อภายในเดือนนี้',
+    targetCount: 100,
+    type: 'total_questions',
+    rewardXP: 500,
+    rewardSP: 2
+  },
+  {
+    id: 'monthly_earth_50',
+    title: '🌋 ผู้เชี่ยวชาญธรณีและวิทย์โลกประจำเดือน',
+    desc: 'ทำโจทย์หมวดวิทย์โลกครบ 50 ข้อภายในเดือนนี้',
+    targetCount: 50,
+    type: 'category_questions',
+    category: 'Earth',
+    rewardXP: 400,
+    rewardSP: 2
+  }
+];

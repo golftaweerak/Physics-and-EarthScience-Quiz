@@ -15,10 +15,12 @@ import {
     MYSTERY_CHEST_REWARDS,
     SKILL_TREE_PERKS,
     BI_WEEKLY_QUEST,
-    BI_WEEKLY_QUEST_POOL
+    BI_WEEKLY_QUEST_POOL,
+    WEEKLY_QUEST_POOL,
+    MONTHLY_QUEST_POOL
 } from '../data/gamification-registry.js';
 import { quizList } from '../data/quizzes-list.js'; // Import quizList for metadata lookup
-export { BADGES, DAILY_QUESTS, ACHIEVEMENTS, SHOP_ITEMS, XP_THRESHOLDS, THEME_DEFINITIONS, WEEKLY_BOSSES, MYSTERY_CHEST_REWARDS, SKILL_TREE_PERKS, BI_WEEKLY_QUEST, BI_WEEKLY_QUEST_POOL };
+export { BADGES, DAILY_QUESTS, ACHIEVEMENTS, SHOP_ITEMS, XP_THRESHOLDS, THEME_DEFINITIONS, WEEKLY_BOSSES, MYSTERY_CHEST_REWARDS, SKILL_TREE_PERKS, BI_WEEKLY_QUEST, BI_WEEKLY_QUEST_POOL, WEEKLY_QUEST_POOL, MONTHLY_QUEST_POOL };
 
 // ชื่อยศสำหรับแต่ละสาย (Titles)
 // ผู้เล่นจะได้รับฉายาตามเลเวลที่ทำได้ในแต่ละสาย (Overall, Physics, Earth Science)
@@ -2299,6 +2301,123 @@ export class Gamification {
 
         this.saveState();
         return { success: true, rewardSP: progress.quest.rewardSP, rewardXP: progress.quest.rewardXP };
+    }
+
+    getWeeklyQuestProgress() {
+        const now = Date.now();
+        const oneWeekMs = 7 * 24 * 60 * 60 * 1000;
+        const periodIndex = Math.floor(now / oneWeekMs);
+        const currentPeriodId = `1W-${periodIndex}`;
+
+        const questIndex = Math.abs(periodIndex) % WEEKLY_QUEST_POOL.length;
+        const quest = WEEKLY_QUEST_POOL[questIndex] || WEEKLY_QUEST_POOL[0];
+
+        if (this.state.weeklyPeriodId !== currentPeriodId) {
+            this.state.weeklyPeriodId = currentPeriodId;
+            this.state.weeklyQuestId = quest.id;
+            this.state.weeklyClaimed = null;
+            this.state.weeklyStartAstro = this.state.astronomyXP || 0;
+            this.state.weeklyStartPhysics = this.state.physicsXP || 0;
+            this.state.weeklyStartPerfects = this.state.perfectScores || 0;
+            this.state.weeklyStartBossDmg = this.state.bossDamageDealt || 0;
+            this.saveState();
+        }
+
+        let currentCount = 0;
+        if (quest.type === 'category_questions') {
+            if (quest.category === 'Astronomy') {
+                const startAstro = this.state.weeklyStartAstro || 0;
+                currentCount = Math.max(0, Math.floor(((this.state.astronomyXP || 0) - startAstro) / 10));
+            } else if (quest.category === 'Physics') {
+                const startPhys = this.state.weeklyStartPhysics || 0;
+                currentCount = Math.max(0, Math.floor(((this.state.physicsXP || 0) - startPhys) / 10));
+            }
+        } else if (quest.type === 'perfect_streak') {
+            const startPerfects = this.state.weeklyStartPerfects || 0;
+            currentCount = Math.max(0, (this.state.perfectScores || 0) - startPerfects);
+        } else if (quest.type === 'boss_damage') {
+            const startDmg = this.state.weeklyStartBossDmg || 0;
+            currentCount = Math.max(0, (this.state.bossDamageDealt || 0) - startDmg);
+        }
+
+        const isCompleted = currentCount >= quest.targetCount;
+        const isClaimed = !!this.state.weeklyClaimed;
+
+        return {
+            quest,
+            currentCount: Math.min(quest.targetCount, currentCount),
+            targetCount: quest.targetCount,
+            isCompleted,
+            isClaimed
+        };
+    }
+
+    claimWeeklyQuestReward() {
+        const progress = this.getWeeklyQuestProgress();
+        if (!progress.isCompleted) return { success: false, message: "ยังทำภารกิจไม่ครบถ้วน" };
+        if (progress.isClaimed) return { success: false, message: "คุณรับรางวัลภารกิจนี้ไปแล้ว" };
+
+        this.state.weeklyClaimed = Date.now();
+        if (progress.quest.rewardSP) {
+            this.state.bonusSPFromQuests = (this.state.bonusSPFromQuests || 0) + progress.quest.rewardSP;
+        }
+        this.addXP(progress.quest.rewardXP, "Weekly Quest Reward");
+
+        this.saveState();
+        return { success: true, rewardSP: progress.quest.rewardSP || 0, rewardXP: progress.quest.rewardXP };
+    }
+
+    getMonthlyQuestProgress() {
+        const now = new Date();
+        const currentPeriodId = `1M-${now.getFullYear()}-${now.getMonth()}`;
+        const periodIndex = now.getFullYear() * 12 + now.getMonth();
+
+        const questIndex = Math.abs(periodIndex) % MONTHLY_QUEST_POOL.length;
+        const quest = MONTHLY_QUEST_POOL[questIndex] || MONTHLY_QUEST_POOL[0];
+
+        if (this.state.monthlyPeriodId !== currentPeriodId) {
+            this.state.monthlyPeriodId = currentPeriodId;
+            this.state.monthlyQuestId = quest.id;
+            this.state.monthlyClaimed = null;
+            this.state.monthlyStartQuestions = this.state.totalQuestionsAnswered || 0;
+            this.state.monthlyStartEarth = this.state.earthXP || 0;
+            this.saveState();
+        }
+
+        let currentCount = 0;
+        if (quest.type === 'total_questions') {
+            const startQ = this.state.monthlyStartQuestions || 0;
+            currentCount = Math.max(0, (this.state.totalQuestionsAnswered || 0) - startQ);
+        } else if (quest.type === 'category_questions') {
+            const startEarth = this.state.monthlyStartEarth || 0;
+            currentCount = Math.max(0, Math.floor(((this.state.earthXP || 0) - startEarth) / 10));
+        }
+
+        const isCompleted = currentCount >= quest.targetCount;
+        const isClaimed = !!this.state.monthlyClaimed;
+
+        return {
+            quest,
+            currentCount: Math.min(quest.targetCount, currentCount),
+            targetCount: quest.targetCount,
+            isCompleted,
+            isClaimed
+        };
+    }
+
+    claimMonthlyQuestReward() {
+        const progress = this.getMonthlyQuestProgress();
+        if (!progress.isCompleted) return { success: false, message: "ยังทำภารกิจไม่ครบถ้วน" };
+        if (progress.isClaimed) return { success: false, message: "คุณรับรางวัลภารกิจนี้ไปแล้ว" };
+
+        this.state.monthlyClaimed = Date.now();
+        if (progress.quest.rewardSP) {
+            this.state.bonusSPFromQuests = (this.state.bonusSPFromQuests || 0) + progress.quest.rewardSP;
+        }
+        this.addXP(progress.quest.rewardXP, "Monthly Quest Reward");
+
+        this.saveState();
+        return { success: true, rewardSP: progress.quest.rewardSP || 0, rewardXP: progress.quest.rewardXP };
     }
 }
 
