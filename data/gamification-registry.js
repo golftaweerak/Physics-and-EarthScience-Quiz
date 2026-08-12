@@ -70,7 +70,12 @@ export const BADGES = [
 
   // New Badges
   { id: 'exam_ace', icon: '🎓', name: 'เซียนสนามสอบ', desc: 'ได้คะแนน 80% ขึ้นไปในชุด "แนวข้อสอบ"', tier: 'gold' },
-  { id: 'hard_worker', icon: '🔥', name: 'ขยันหมั่นเพียร', desc: 'ทำแบบทดสอบครบ 5 ชุดใน 1 วัน', tier: 'silver' }
+  { id: 'hard_worker', icon: '🔥', name: 'ขยันหมั่นเพียร', desc: 'ทำแบบทดสอบครบ 5 ชุดใน 1 วัน', tier: 'silver' },
+
+  // Boss Raid Badges
+  { id: 'boss_slayer_geo', icon: '🌋', name: 'ผู้พิชิต Geo-Titan', desc: 'ทำความเสียหายสุดท้ายล้มบอส Geo-Titan สำเร็จ', tier: 'gold' },
+  { id: 'boss_slayer_quantum', icon: '⚛️', name: 'ผู้พิชิต Quantum-Overlord', desc: 'ทำความเสียหายสุดท้ายล้มบอส Quantum-Overlord สำเร็จ', tier: 'gold' },
+  { id: 'boss_slayer_astro', icon: '🌌', name: 'ผู้พิชิต Astro-Behemoth', desc: 'ทำความเสียหายสุดท้ายล้มบอส Astro-Behemoth สำเร็จ', tier: 'gold' }
 ];
 
 export const DAILY_QUESTS = [

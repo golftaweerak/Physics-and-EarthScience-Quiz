@@ -2105,6 +2105,7 @@ export class Gamification {
 
         const newHp = Math.max(0, boss.currentHp - actualDmg);
         this.state.bossRaidHp = newHp;
+        this.state.bossDamageDealt = (this.state.bossDamageDealt || 0) + actualDmg;
 
         let bonusAwarded = false;
         if (newHp === 0 && boss.currentHp > 0) {
@@ -2202,6 +2203,35 @@ export class Gamification {
 
         this.saveState();
         return { success: true, perk, newLevel: currentLevel + 1 };
+    }
+
+    resetSkillPoints() {
+        const spentSP = this.state.allocatedSkillPoints || 0;
+        if (spentSP <= 0) {
+            return { success: false, message: "ยังไม่มีการใช้แต้มทักษะ SP" };
+        }
+
+        const isFree = !this.state.hasUsedFreeRespec;
+        const respecCostXP = 300;
+
+        if (!isFree) {
+            const currentTotalXP = this.calculateTotalXP();
+            if (currentTotalXP < respecCostXP) {
+                return { success: false, message: `ต้องการอย่างน้อย ${respecCostXP} XP เพื่อทำการรีเซ็ตทักษะ` };
+            }
+        }
+
+        // Refund all SP
+        this.state.perkLevels = {};
+        this.state.unlockedPerks = [];
+        this.state.allocatedSkillPoints = 0;
+
+        if (isFree) {
+            this.state.hasUsedFreeRespec = true;
+        }
+
+        this.saveState();
+        return { success: true, refundedSP: spentSP, isFree };
     }
 
     getBiWeeklyQuestProgress() {

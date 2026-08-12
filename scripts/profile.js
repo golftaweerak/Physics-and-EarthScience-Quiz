@@ -599,8 +599,8 @@ function openBossRulesModal(boss) {
                 <div class="flex items-start gap-3.5">
                     <div class="w-9 h-9 rounded-2xl ${isDark ? 'bg-amber-950/80 text-amber-300 border border-amber-700/50' : 'bg-amber-100 text-amber-700'} flex items-center justify-center font-bold text-base shrink-0 shadow-xs">🏆</div>
                     <div>
-                        <h4 class="font-extrabold ${titleColor} font-kanit text-sm mb-1">รางวัลพิชิต</h4>
-                        <p class="${bodyTextColor} leading-relaxed">ล้มบอสสำเร็จ รับโบนัส <span class="${isDark ? 'text-amber-300 font-bold' : 'text-amber-600 font-bold'}">+${boss.bonusXp} XP</span> ฟรี!</p>
+                        <h4 class="font-extrabold ${titleColor} font-kanit text-sm mb-1">รางวัลพิชิต & เหรียญตรา</h4>
+                        <p class="${bodyTextColor} leading-relaxed">ล้มบอสสำเร็จ รับโบนัส <span class="${isDark ? 'text-amber-300 font-bold' : 'text-amber-600 font-bold'}">+${boss.bonusXp} XP</span> และปลดล็อกเหรียญตราเกียรติยศประจำบอสตัวนั้น!</p>
                     </div>
                 </div>
             </div>
@@ -804,6 +804,10 @@ function renderSkillTreeSection(game) {
                         <button id="skill-tree-info-btn" type="button" title="คู่มือ Perks" class="w-5 h-5 rounded-full border border-purple-400/60 bg-purple-500/10 text-purple-600 dark:text-purple-300 font-serif font-bold text-xs flex items-center justify-center hover:bg-purple-600 hover:text-white transition shadow-xs cursor-pointer">
                             i
                         </button>
+                        <!-- Respec / Reset SP Button -->
+                        <button id="respec-sp-btn" type="button" title="รีเซ็ตแต้ม SP ทั้งหมด" class="px-2.5 py-0.5 rounded-full bg-slate-200 dark:bg-slate-700 hover:bg-red-500 hover:text-white text-slate-600 dark:text-slate-300 font-kanit font-bold text-xs transition border border-slate-300 dark:border-slate-600 cursor-pointer flex items-center gap-1">
+                            <span>🔄</span> รีเซ็ต SP
+                        </button>
                     </div>
                     <p class="text-xs text-gray-500 dark:text-gray-400 font-medium">สะสม SP เพื่อพัฒนาความสามารถติดตัวถาวรของผู้เรียน</p>
                 </div>
@@ -846,6 +850,26 @@ function renderSkillTreeSection(game) {
         infoBtn.onclick = () => openSkillTreeInfoModal();
     }
 
+    const respecBtn = container.querySelector('#respec-sp-btn');
+    if (respecBtn) {
+        respecBtn.onclick = () => {
+            const spent = game.state.allocatedSkillPoints || 0;
+            if (spent <= 0) {
+                showToast('ยังไม่ได้ใช้ SP', 'ยังไม่มีการใช้อัปเกรดทักษะใดๆ', 'ℹ️', 'info');
+                return;
+            }
+            if (confirm(`คุณต้องการคืนแต้ม ${spent} SP ทั้งหมดเพื่อจัดสายทักษะใหม่หรือไม่?`)) {
+                const res = game.resetSkillPoints();
+                if (res.success) {
+                    showToast('รีเซ็ตทักษะสำเร็จ! 🔄', `ได้รับคืน ${res.refundedSP} SP เรียบร้อยแล้ว!`, '✨', 'gold');
+                    renderUserInfo(game);
+                } else {
+                    showToast('ไม่สามารถรีเซ็ตได้', res.message, '⚠️', 'error');
+                }
+            }
+        };
+    }
+
     const claimBiWeeklyBtn = container.querySelector('#claim-biweekly-btn');
     if (claimBiWeeklyBtn && isCompleted && !isClaimed) {
         claimBiWeeklyBtn.onclick = () => {
@@ -860,8 +884,10 @@ function renderSkillTreeSection(game) {
     container.querySelectorAll('.unlock-perk-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             const perkId = e.currentTarget.dataset.perkId;
+            const rect = e.currentTarget.getBoundingClientRect();
             const res = game.allocateSkillPoint(perkId);
             if (res.success) {
+                createPurchaseParticles(rect.left + rect.width / 2, rect.top + rect.height / 2);
                 showToast('อัปเกรดทักษะสำเร็จ! 🌳', `ทักษะ "${res.perk.name}" เป็นระดับ ${res.newLevel} แล้ว!`, '✨', 'gold');
                 renderUserInfo(game);
             } else {
