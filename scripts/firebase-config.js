@@ -1,6 +1,6 @@
 // scripts/firebase-config.js
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+import { getAnalytics, isSupported } from "firebase/analytics";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { initializeFirestore, memoryLocalCache, getFirestore, enableNetwork } from "firebase/firestore";
 
@@ -18,7 +18,12 @@ const firebaseConfig = {
 // Initialize Firebase
 const isBrowser = typeof window !== 'undefined';
 const app = initializeApp(firebaseConfig);
-const analytics = isBrowser ? getAnalytics(app) : null;
+let analytics = null;
+if (isBrowser) {
+    isSupported().then(supported => {
+        if (supported) analytics = getAnalytics(app);
+    }).catch(() => {});
+}
 const auth = isBrowser ? getAuth(app) : null;
 
 // Initialize Firestore with persistent cache settings (New API)
