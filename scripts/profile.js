@@ -2085,39 +2085,37 @@ function renderShop(game) {
     const container = document.getElementById('shop-items-grid');
     if (!container) return;
 
-    // Reset container classes
-    container.className = 'flex flex-col gap-4';
-
+    container.className = 'flex flex-col gap-6';
     const inventory = game.getInventory();
 
     const categories = [
-        { type: 'consumable', label: 'ไอเทม', icon: '⚡', desc: 'ตัวช่วยในการทำข้อสอบ' },
-        { type: 'avatar', label: 'อวตาร', icon: '👤', desc: 'รูปโปรไฟล์แสดงตัวตน' },
-        { type: 'theme', label: 'ธีม', icon: '🎨', desc: 'เปลี่ยนสีสันของแอป' },
-        { type: 'title', label: 'ฉายา', icon: '🏷️', desc: 'ยศต่อท้ายชื่อ' }
+        { type: 'consumable', label: 'ไอเทมตัวช่วย', icon: '⚡', desc: 'ตัวช่วยเพิ่มประสิทธิภาพการทำแบบทดสอบ' },
+        { type: 'avatar', label: 'อวตารโปรไฟล์', icon: '👤', desc: 'เปลี่ยนกรอบรูปโปรไฟล์ระดับพิเศษ' },
+        { type: 'theme', label: 'ธีมสีพรีเมียม', icon: '🎨', desc: 'เปลี่ยนธีมสีบรรยากาศเว็บไซต์' },
+        { type: 'title', label: 'ฉายายศพิเศษ', icon: '🏷️', desc: 'ฉายาแสดงความเก่งต่อท้ายชื่อ' }
     ];
 
     // 1. Render Tabs
     const tabsHtml = `
-        <div class="flex space-x-2 overflow-x-auto pb-2 modern-scrollbar select-none" role="tablist">
+        <div class="flex space-x-3 overflow-x-auto pb-2 no-scrollbar select-none" role="tablist">
             ${categories.map(cat => {
-        const isActive = cat.type === activeShopTab;
-        const activeClass = isActive
-            ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-md ring-2 ring-blue-200 dark:ring-blue-900 transform scale-105'
-            : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-700';
+                const isActive = cat.type === activeShopTab;
+                const activeClass = isActive
+                    ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/25 ring-2 ring-blue-400 dark:ring-blue-500 font-extrabold transform scale-105'
+                    : 'bg-white/80 dark:bg-gray-800/80 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/80 border border-gray-200 dark:border-gray-700 font-bold';
 
-        return `
+                return `
                     <button 
-                        class="shop-tab-btn flex-shrink-0 flex items-center gap-2 px-5 py-3 rounded-xl transition-all duration-200 ${activeClass}"
+                        class="shop-tab-btn flex-shrink-0 flex items-center gap-2.5 px-5 py-3 rounded-2xl transition-all duration-200 cursor-pointer ${activeClass}"
                         data-type="${cat.type}"
                         role="tab"
                         aria-selected="${isActive}"
                     >
-                        <span class="text-xl">${cat.icon}</span>
-                        <span class="font-bold text-sm whitespace-nowrap">${cat.label}</span>
+                        <span class="text-xl filter drop-shadow-xs">${cat.icon}</span>
+                        <span class="text-xs sm:text-sm font-kanit whitespace-nowrap">${cat.label}</span>
                     </button>
                 `;
-    }).join('')}
+            }).join('')}
         </div>
     `;
 
@@ -2129,11 +2127,9 @@ function renderShop(game) {
 
     if (items.length === 0) {
         contentHtml = `
-            <div class="flex flex-col items-center justify-center py-12 text-gray-400 dark:text-gray-500 bg-gray-50 dark:bg-gray-800/30 rounded-2xl border border-dashed border-gray-200 dark:border-gray-700">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-3 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
-                </svg>
-                <p>ไม่มีสินค้าในหมวดหมู่นี้</p>
+            <div class="flex flex-col items-center justify-center py-16 text-gray-400 dark:text-gray-500 bg-gray-50/50 dark:bg-gray-800/20 rounded-3xl border border-dashed border-gray-200 dark:border-gray-700">
+                <span class="text-5xl mb-3 opacity-40">🛒</span>
+                <p class="font-bold text-sm font-kanit">ไม่มีสินค้าในหมวดหมู่นี้</p>
             </div>`;
     } else {
         const itemsGridHtml = items.map(item => {
@@ -2143,29 +2139,36 @@ function renderShop(game) {
             const quantity = isConsumable ? game.getItemCount(item.id) : 0;
 
             let statusBadge = '';
-            let cardOpacity = '';
+            let cardBorder = 'border-gray-200/90 dark:border-gray-700/80';
+            let glowEffect = '';
+
+            if (item.cost >= 500) {
+                glowEffect = 'hover:shadow-purple-500/20 hover:border-purple-400/80';
+            } else if (item.cost >= 200) {
+                glowEffect = 'hover:shadow-blue-500/20 hover:border-blue-400/80';
+            }
 
             if (isOwned && !isConsumable) {
-                statusBadge = `<span class="absolute top-2 right-2 bg-green-100 text-green-700 text-[10px] font-bold px-2 py-0.5 rounded-full border border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800 shadow-sm">ครอบครอง</span>`;
+                statusBadge = `<span class="absolute top-3 right-3 bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-500/30">ครอบครองแล้ว ✓</span>`;
+                cardBorder = 'border-emerald-300 dark:border-emerald-800/80 bg-emerald-50/30 dark:bg-emerald-950/20';
             } else if (isConsumable && quantity > 0) {
-                statusBadge = `<span class="absolute top-2 right-2 bg-blue-100 text-blue-700 text-[10px] font-bold px-2 py-0.5 rounded-full border border-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:border-blue-800 shadow-sm">มี ${quantity}</span>`;
+                statusBadge = `<span class="absolute top-3 right-3 bg-blue-500/15 text-blue-700 dark:text-blue-300 text-[10px] font-black px-2.5 py-0.5 rounded-full border border-blue-500/30">มี ${quantity} ชิ้น</span>`;
             }
 
             const priceDisplay = (isOwned && !isConsumable)
-                ? `<span class="text-xs text-green-600 dark:text-green-400 font-bold flex items-center gap-1"><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg> ซื้อแล้ว</span>`
-                : `<div class="flex items-center gap-1 ${canBuy ? 'text-yellow-600 dark:text-yellow-400' : 'text-red-500'} font-bold text-sm bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-lg">
-                     <span>${item.cost}</span> <span class="text-[10px] opacity-80">XP</span>
+                ? `<span class="text-xs text-emerald-600 dark:text-emerald-400 font-extrabold flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg> ได้รับแล้ว</span>`
+                : `<div class="flex items-center gap-1.5 ${canBuy ? 'text-yellow-600 dark:text-yellow-400 bg-yellow-100/80 dark:bg-yellow-950/60 border border-yellow-300/50' : 'text-red-500 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/40'} font-extrabold text-xs px-3 py-1.5 rounded-xl shadow-xs">
+                     <span>🪙 ${item.cost.toLocaleString()}</span> <span class="text-[10px] opacity-80">XP</span>
                    </div>`;
 
             return `
-                <div class="shop-item-card relative bg-white dark:bg-gray-800 p-4 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-lg hover:-translate-y-1 hover:border-blue-300 dark:hover:border-blue-500 transition-all duration-300 cursor-pointer group flex flex-col items-center text-center h-full ${cardOpacity}" data-id="${item.id}">
+                <div class="shop-item-card relative bg-white/90 dark:bg-gray-800/90 p-5 rounded-3xl border ${cardBorder} shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 cursor-pointer group flex flex-col items-center text-center h-full ${glowEffect}" data-id="${item.id}">
                     ${statusBadge}
-                    <div class="w-16 h-16 mb-3 rounded-2xl bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-600 flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform duration-300 relative overflow-hidden">
-                        <div class="text-4xl transform group-hover:rotate-12 transition-transform duration-300 filter drop-shadow-sm relative z-10">${item.icon}</div>
-                        <div class="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="w-20 h-20 mb-3 mt-1 rounded-2xl bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 dark:from-gray-700 dark:via-gray-750 dark:to-gray-800 flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform duration-300 relative overflow-hidden border border-gray-200/60 dark:border-gray-700/60">
+                        <div class="text-5xl transform group-hover:rotate-6 transition-transform duration-300 filter drop-shadow-md relative z-10">${item.icon}</div>
                     </div>
-                    <h4 class="font-bold text-gray-800 dark:text-gray-100 text-sm w-full truncate px-1 mb-1 font-kanit">${item.name}</h4>
-                    <p class="text-xs text-gray-500 dark:text-gray-400 line-clamp-2 mb-3 h-8 leading-tight w-full">${item.desc}</p>
+                    <h4 class="font-extrabold text-gray-900 dark:text-white text-sm sm:text-base w-full truncate px-1 mb-1.5 font-kanit">${escapeHtml(item.name)}</h4>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 font-medium line-clamp-2 mb-4 h-9 leading-relaxed w-full">${escapeHtml(item.desc)}</p>
                     <div class="mt-auto w-full flex justify-center">
                         ${priceDisplay}
                     </div>
@@ -2174,14 +2177,16 @@ function renderShop(game) {
         }).join('');
 
         contentHtml = `
-            <div class="anim-fade-in">
-                <div class="mb-4 px-1 flex items-center justify-between">
-                    <h3 class="text-lg font-bold text-gray-800 dark:text-white flex items-center gap-2 font-kanit">
-                        ${activeCat.label}
-                    </h3>
-                    <span class="text-xs text-gray-500 dark:text-gray-400">${activeCat.desc}</span>
+            <div class="anim-fade-in space-y-4">
+                <div class="px-1 flex items-center justify-between">
+                    <div>
+                        <h3 class="text-lg font-black text-gray-900 dark:text-white flex items-center gap-2 font-kanit tracking-wide">
+                            ${activeCat.label}
+                        </h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 font-medium">${activeCat.desc}</p>
+                    </div>
                 </div>
-                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 pb-2">
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 pb-2">
                     ${itemsGridHtml}
                 </div>
             </div>
