@@ -181,6 +181,25 @@
 
       <!-- Quiz Screen -->
       <div id="quiz-screen" class="hidden">
+        <!-- Real-Time Boss HP Banner (Boss Raid Mode) -->
+        <div id="boss-hp-banner" class="hidden mb-6 p-3 sm:p-4 rounded-2xl bg-gradient-to-r from-purple-950/80 via-indigo-950/80 to-slate-900/90 border-2 border-purple-500/40 shadow-xl relative overflow-hidden">
+            <div class="flex items-center justify-between gap-3 mb-2">
+                <div class="flex items-center gap-2">
+                    <span id="boss-icon-display" class="text-2xl sm:text-3xl p-1 bg-purple-900/50 rounded-lg">⚔️</span>
+                    <div>
+                        <h4 id="boss-name-display" class="font-extrabold text-xs sm:text-sm text-white font-kanit tracking-wide">⚔️ บอสประจำสัปดาห์</h4>
+                        <p class="text-[10px] sm:text-xs text-purple-300">ตอบถูกทุก 1 ข้อ = สร้าง 5 DMG ใส่บอส</p>
+                    </div>
+                </div>
+                <span id="boss-hp-text" class="text-xs sm:text-sm font-mono font-black text-red-400 bg-red-950/80 px-3 py-1 rounded-full border border-red-500/40 shadow-inner">
+                    500 / 500 HP
+                </span>
+            </div>
+            <div class="w-full bg-slate-950 rounded-full h-3.5 overflow-hidden p-0.5 border border-purple-500/30 relative">
+                <div id="boss-hp-fill" class="h-full bg-gradient-to-r from-red-500 via-orange-500 to-amber-400 transition-all duration-500 rounded-full shadow-sm" style="width: 100%"></div>
+            </div>
+        </div>
+
         <!-- Modern Status Bar -->
         <header id="quiz-status-bar" class="mb-10">
           <div class="flex items-center justify-between gap-4 mb-4">

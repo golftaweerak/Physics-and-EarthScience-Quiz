@@ -949,6 +949,7 @@ function showQuestion() {
   }
 
   updateProgressBar();
+  updateBossHpDisplay(0);
 
   // Start per-question timer if the mode is selected
   if (state.timerMode === "perQuestion" && !previousAnswer) {
@@ -1488,6 +1489,7 @@ function selectAnswer(e) {
     // --- FEATURE 1 & 2: Boss Damage & In-Quiz Combo Fever Mode ---
     state.inQuizCombo = (state.inQuizCombo || 0) + 1;
     state.game.dealDamageToBoss(5); // Deal 5 damage to Weekly Boss per correct answer
+    updateBossHpDisplay(5);
 
     if (state.inQuizCombo === 3) {
       showToast('Combo x1.2! ⚡', 'ตอบถูก 3 ข้อติด! (โบนัส XP +20%)', '🔥', 'gold');
@@ -3516,5 +3518,40 @@ function toggleHint() {
         elements.hintBtn.innerHTML = '💡 แสดงคำใบ้ <span class="text-xs ml-1 bg-red-500 text-white px-1 rounded">-10 xp</span>';
       }
     }
+  }
+}
+
+function updateBossHpDisplay(damageDealt = 0) {
+  const bossBanner = document.getElementById('boss-hp-banner');
+  if (!bossBanner || !state.game) return;
+
+  const boss = state.game.getCurrentWeeklyBoss();
+  if (!boss) return;
+
+  // Unhide the real-time boss banner
+  bossBanner.classList.remove('hidden');
+
+  const iconEl = document.getElementById('boss-icon-display');
+  const nameEl = document.getElementById('boss-name-display');
+  const textEl = document.getElementById('boss-hp-text');
+  const fillEl = document.getElementById('boss-hp-fill');
+
+  if (iconEl) iconEl.textContent = boss.icon;
+  if (nameEl) nameEl.textContent = `⚔️ บอสประจำสัปดาห์: ${boss.name}`;
+  if (textEl) textEl.textContent = `${boss.currentHp} / ${boss.maxHp} HP`;
+
+  const hpPercent = Math.min(100, Math.max(0, (boss.currentHp / boss.maxHp) * 100));
+  if (fillEl) fillEl.style.width = `${hpPercent}%`;
+
+  if (damageDealt > 0) {
+    const dmgAnim = document.createElement('div');
+    dmgAnim.className = 'absolute right-4 top-2 text-red-400 font-black font-mono text-xs sm:text-sm animate-bounce pointer-events-none transition-all duration-700 bg-red-950/90 px-2 py-0.5 rounded-full border border-red-500/50 shadow-lg z-20';
+    dmgAnim.innerHTML = `💥 -${damageDealt} HP!`;
+    bossBanner.appendChild(dmgAnim);
+    setTimeout(() => {
+      dmgAnim.style.opacity = '0';
+      dmgAnim.style.transform = 'translateY(-10px)';
+      setTimeout(() => dmgAnim.remove(), 400);
+    }, 800);
   }
 }
