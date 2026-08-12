@@ -73,6 +73,42 @@ export function renderDailyQuests(gameOrId, optionalId) {
         `;
     }).join('');
 
+    // --- FEATURE 3: DAILY MYSTERY CHEST ---
+    const canClaimChest = game.canClaimMysteryChest();
+    const today = new Date().toISOString().split('T')[0];
+    const isAlreadyClaimedToday = game.state.mysteryChestClaimedDate === today;
+
+    if (canClaimChest || isAlreadyClaimedToday) {
+        const chestHtml = `
+            <div class="mt-4 p-3 rounded-xl bg-gradient-to-r from-amber-500/10 via-yellow-500/10 to-amber-500/10 border-2 ${isAlreadyClaimedToday ? 'border-gray-300 dark:border-gray-700 opacity-80' : 'border-amber-400 dark:border-amber-500 animate-pulse'} flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <span class="text-3xl">${isAlreadyClaimedToday ? '🎁' : '✨🎁✨'}</span>
+                    <div>
+                        <p class="font-bold text-sm text-gray-800 dark:text-gray-100 font-kanit">กล่องสุ่มสมบัติรายวัน</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">${isAlreadyClaimedToday ? 'คุณเปิดรับของขวัญวันนี้ไปแล้ว' : 'ภารกิจครบแล้ว! กดเพื่อรับของขวัญฟรี'}</p>
+                    </div>
+                </div>
+                <button id="claim-mystery-chest-btn" ${isAlreadyClaimedToday ? 'disabled' : ''} class="px-4 py-2 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-white font-bold text-xs rounded-lg shadow-md transition-all transform ${isAlreadyClaimedToday ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105 active:scale-95 cursor-pointer'}">
+                    ${isAlreadyClaimedToday ? 'รับแล้ว ✓' : 'เปิดกล่อง! 🎉'}
+                </button>
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', chestHtml);
+
+        const chestBtn = container.querySelector('#claim-mystery-chest-btn');
+        if (chestBtn && !isAlreadyClaimedToday) {
+            chestBtn.addEventListener('click', () => {
+                const res = game.claimMysteryChest();
+                if (res.success) {
+                    showToast('เปิดกล่องสุ่มสมบัติสำเร็จ! 🎁', `คุณได้รับ: ${res.reward.icon} ${res.reward.name}`, '✨', 'gold');
+                    renderDailyQuests(game, containerId);
+                } else {
+                    showToast('ไม่สามารถรับได้', res.message, '⚠️', 'error');
+                }
+            });
+        }
+    }
+
     // Add event listeners for reroll buttons
     container.querySelectorAll('.reroll-quest-btn').forEach(btn => {
         btn.addEventListener('click', () => {

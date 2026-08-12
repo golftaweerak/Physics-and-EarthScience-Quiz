@@ -10,10 +10,13 @@ import {
     ACHIEVEMENTS,
     SHOP_ITEMS,
     XP_THRESHOLDS,
-    THEME_DEFINITIONS
+    THEME_DEFINITIONS,
+    WEEKLY_BOSSES,
+    MYSTERY_CHEST_REWARDS,
+    SKILL_TREE_PERKS
 } from '../data/gamification-registry.js';
 import { quizList } from '../data/quizzes-list.js'; // Import quizList for metadata lookup
-export { BADGES, DAILY_QUESTS, ACHIEVEMENTS, SHOP_ITEMS, XP_THRESHOLDS, THEME_DEFINITIONS };
+export { BADGES, DAILY_QUESTS, ACHIEVEMENTS, SHOP_ITEMS, XP_THRESHOLDS, THEME_DEFINITIONS, WEEKLY_BOSSES, MYSTERY_CHEST_REWARDS, SKILL_TREE_PERKS };
 
 // ชื่อยศสำหรับแต่ละสาย (Titles)
 // ผู้เล่นจะได้รับฉายาตามเลเวลที่ทำได้ในแต่ละสาย (Overall, Physics, Earth Science)
@@ -309,7 +312,12 @@ export class Gamification {
             calculationXP: 0, // NEW: สะสม XP จากข้อคำนวณ
             itemUsageCount: 0, // NEW: จำนวนครั้งที่ใช้ไอเทม
             lastQuizTime: null, // NEW: เก็บเวลาที่ทำชุดโจทย์ล่าสุด
-            totalQuestionsAnswered: 0 // NEW: Track total questions for accuracy calc
+            totalQuestionsAnswered: 0, // NEW: Track total questions for accuracy calc
+            bossRaidHp: 500, // Weekly Boss Current HP
+            bossRaidWeek: null, // Track week for boss reset
+            mysteryChestClaimedDate: null, // Date of last claimed mystery chest
+            unlockedPerks: [], // List of unlocked perk IDs
+            allocatedSkillPoints: 0 // Track spent SP
         };
 
         // Dynamic Categories
@@ -690,18 +698,19 @@ export class Gamification {
     buyItem(itemId) {
         const item = SHOP_ITEMS.find(i => i.id === itemId);
         if (!item) return { success: false, message: "ไม่พบสินค้า" };
-        if (this.state.xp < item.cost) return { success: false, message: "XP ไม่เพียงพอ" };
+        const actualCost = this.hasPerk('discount_shop') ? Math.floor(item.cost * 0.8) : item.cost;
+        if (this.state.xp < actualCost) return { success: false, message: "XP ไม่เพียงพอ" };
 
         if (item.type === 'consumable') {
-            this.state.xp -= item.cost;
-            this.state.totalSpentXP = (this.state.totalSpentXP || 0) + item.cost; // Track spending
+            this.state.xp -= actualCost;
+            this.state.totalSpentXP = (this.state.totalSpentXP || 0) + actualCost; // Track spending
             this.state.consumables[itemId] = (this.state.consumables[itemId] || 0) + 1;
             this.saveState();
             return { success: true, message: `ซื้อ ${item.name} สำเร็จ! (มี: ${this.state.consumables[itemId]})`, item };
         } else {
             if (this.state.inventory.includes(itemId)) return { success: false, message: "คุณมีสินค้านี้แล้ว" };
-            this.state.xp -= item.cost;
-            this.state.totalSpentXP = (this.state.totalSpentXP || 0) + item.cost; // Track spending
+            this.state.xp -= actualCost;
+            this.state.totalSpentXP = (this.state.totalSpentXP || 0) + actualCost; // Track spending
             this.state.inventory.push(itemId);
 
             // Check Shop Badges
@@ -1140,6 +1149,10 @@ export class Gamification {
                 return this.getEarthLevel().level >= quest.target;
             case 'physics_level':
                 return this.getPhysicsLevel().level >= quest.target;
+            case 'posn_earth_level':
+                return this.getPosnEarthLevel().level >= quest.target;
+            case 'posn_astro_level':
+                return this.getPosnAstroLevel().level >= quest.target;
             default:
                 return false; // Unknown quest type
         }
@@ -1248,6 +1261,12 @@ export class Gamification {
                 return this.getAstronomyTrackLevel().level;
             case 'earth_level':
                 return this.getEarthLevel().level;
+            case 'physics_level':
+                return this.getPhysicsLevel().level;
+            case 'posn_earth_level':
+                return this.getPosnEarthLevel().level;
+            case 'posn_astro_level':
+                return this.getPosnAstroLevel().level;
             default:
                 return 0;
         }
@@ -1977,6 +1996,111 @@ export class Gamification {
     // คำนวณ % ความคืบหน้าไปยังเลเวลถัดไป
     getLevelProgressPercent() {
         return this.getCurrentLevel().progressPercent;
+    }
+
+    // --- FEATURE 1: WEEKLY BOSS RAID ---
+    getCurrentWeeklyBoss() {
+        const now = new Date();
+        const startOfYear = new Date(now.getFullYear(), 0, 1);
+        const weekNum = Math.ceil((((now - startOfYear) / 86400000) + startOfYear.getDay() + 1) / 7);
+        const currentWeekId = `${now.getFullYear()}-W${weekNum}`;
+
+        const bossIndex = (weekNum - 1) % WEEKLY_BOSSES.length;
+        const boss = WEEKLY_BOSSES[bossIndex] || WEEKLY_BOSSES[0];
+
+        // Auto reset if new week
+        if (this.state.bossRaidWeek !== currentWeekId) {
+            this.state.bossRaidWeek = currentWeekId;
+            this.state.bossRaidHp = boss.maxHp;
+            this.saveState();
+        }
+
+        return {
+            ...boss,
+            currentHp: this.state.bossRaidHp !== undefined ? this.state.bossRaidHp : boss.maxHp,
+            weekId: currentWeekId
+        };
+    }
+
+    dealDamageToBoss(dmg) {
+        const boss = this.getCurrentWeeklyBoss();
+        if (boss.currentHp <= 0) return { isDefeated: true, bonusAwarded: false };
+
+        const newHp = Math.max(0, boss.currentHp - dmg);
+        this.state.bossRaidHp = newHp;
+
+        let bonusAwarded = false;
+        if (newHp === 0 && boss.currentHp > 0) {
+            // Defeated!
+            this.addXP(boss.bonusXp, boss.category || 'General');
+            if (boss.badgeId && !this.state.badges.includes(boss.badgeId)) {
+                this.state.badges.push(boss.badgeId);
+            }
+            bonusAwarded = true;
+        }
+
+        this.saveState();
+        return { isDefeated: newHp === 0, bonusAwarded, newHp, dmg };
+    }
+
+    // --- FEATURE 3: DAILY MYSTERY CHEST ---
+    canClaimMysteryChest() {
+        if (!this.state.activeQuests || this.state.activeQuests.length === 0) return false;
+        const allQuestsDone = this.state.activeQuests.every(q => q.completed);
+        const today = new Date().toISOString().split('T')[0];
+        return allQuestsDone && this.state.mysteryChestClaimedDate !== today;
+    }
+
+    claimMysteryChest() {
+        if (!this.canClaimMysteryChest()) {
+            return { success: false, message: "ยังทำภารกิจรายวันไม่ครบ หรือเปิดกล่องของวันนี้ไปแล้ว" };
+        }
+
+        const reward = MYSTERY_CHEST_REWARDS[Math.floor(Math.random() * MYSTERY_CHEST_REWARDS.length)];
+        const today = new Date().toISOString().split('T')[0];
+        this.state.mysteryChestClaimedDate = today;
+
+        if (reward.type === 'xp') {
+            this.addXP(reward.value, 'General');
+        } else if (reward.type === 'item') {
+            this.state.consumables[reward.itemId] = (this.state.consumables[reward.itemId] || 0) + 1;
+        }
+
+        this.saveState();
+        return { success: true, reward };
+    }
+
+    // --- FEATURE 4: SKILL TREE & PERKS ---
+    getAvailableSkillPoints() {
+        const overallLevel = this.getCurrentLevel().level;
+        const totalEarnedSP = Math.max(0, overallLevel - 1);
+        const spentSP = this.state.allocatedSkillPoints || 0;
+        return Math.max(0, totalEarnedSP - spentSP);
+    }
+
+    hasPerk(perkId) {
+        return (this.state.unlockedPerks || []).includes(perkId);
+    }
+
+    allocateSkillPoint(perkId) {
+        const perk = SKILL_TREE_PERKS.find(p => p.id === perkId);
+        if (!perk) return { success: false, message: "ไม่พบทักษะนี้" };
+
+        if (this.hasPerk(perkId)) {
+            return { success: false, message: "คุณปลดล็อกทักษะนี้ไปแล้ว" };
+        }
+
+        const availableSP = this.getAvailableSkillPoints();
+        if (availableSP < perk.costSP) {
+            return { success: false, message: "แต้มทักษะ (SP) ไม่เพียงพอ" };
+        }
+
+        if (!this.state.unlockedPerks) this.state.unlockedPerks = [];
+        this.state.unlockedPerks.push(perkId);
+        this.state.allocatedSkillPoints = (this.state.allocatedSkillPoints || 0) + perk.costSP;
+
+        this.saveState();
+        return { success: true, perk };
     }
 }
 

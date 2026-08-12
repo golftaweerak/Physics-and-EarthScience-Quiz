@@ -965,7 +965,7 @@ function showQuestion() {
     // Ensure button is visible and reset state
     if (elements.hintBtn) {
       elements.hintBtn.classList.remove('hidden');
-      elements.hintBtn.innerHTML = '💡 แสดงคำใบ้ <span class="text-xs ml-1 bg-red-500 text-white px-1 rounded">-5 xp</span>';
+      elements.hintBtn.innerHTML = '💡 แสดงคำใบ้ <span class="text-xs ml-1 bg-red-500 text-white px-1 rounded">-10 xp</span>';
       elements.hintBtn.disabled = false;
       elements.hintBtn.classList.remove('cursor-not-allowed', 'opacity-50');
     }
@@ -1458,7 +1458,7 @@ function selectAnswer(e) {
     // SCORING UPDATE: Check if hint was used
     let points = 1;
     if (state.hintUsed) {
-      points = -5; // Penalty for using hint (-5 XP)
+      points = -10; // Penalty for using hint (-10 XP)
       // Wait, user said "score reduced by 2".
       // Usually, a correct answer gives +1 score in this simple counter.
       // If the user means "points for this question", we need to know the base points.
@@ -1484,11 +1484,27 @@ function selectAnswer(e) {
     state.score++; // Still counts as correct
     elements.scoreCounter.textContent = `คะแนน: ${state.score}`;
     state.game.incrementCorrectStreak();
+
+    // --- FEATURE 1 & 2: Boss Damage & In-Quiz Combo Fever Mode ---
+    state.inQuizCombo = (state.inQuizCombo || 0) + 1;
+    state.game.dealDamageToBoss(10); // Deal 10 damage to Weekly Boss per correct answer
+
+    if (state.inQuizCombo === 3) {
+      showToast('Combo x1.2! ⚡', 'ตอบถูก 3 ข้อติด! (โบนัส XP +20%)', '🔥', 'gold');
+    } else if (state.inQuizCombo === 5) {
+      showToast('Combo x1.5! 🚀', 'ตอบถูก 5 ข้อติด! (โบนัส XP +50%)', '✨', 'gold');
+    } else if (state.inQuizCombo >= 8) {
+      const isFeverBoost = state.game.hasPerk('fever_boost');
+      const feverText = isFeverBoost ? 'Super Fever Mode x2.5! 👑 (Perk active)' : 'Super Fever Mode x2.0! 👑';
+      showToast('Fever Mode! 🌟', feverText, '👑', 'gold');
+    }
+
     if (state.isSoundEnabled)
       state.correctSound
         .play()
         .catch((e) => console.error("Error playing sound:", e));
   } else {
+    state.inQuizCombo = 0; // Reset in-quiz combo
     state.game.resetCorrectStreak();
     if (state.isSoundEnabled)
       state.incorrectSound
@@ -3482,7 +3498,7 @@ function toggleHint() {
       state.hintUsed = true;
       // Only toast if it's the first time and answer isn't submitted yet
       if (!state.userAnswers[state.currentQuestionIndex]) {
-        showToast('คำใบ้ถูกเปิดแล้ว', 'คะแนนข้อนี้จะถูกหัก 5 xp หากตอบถูก', '💡', 'warning');
+        showToast('คำใบ้ถูกเปิดแล้ว', 'คะแนนข้อนี้จะถูกหัก 10 xp หากตอบถูก', '💡', 'warning');
       }
     }
 
@@ -3497,7 +3513,7 @@ function toggleHint() {
       if (state.hintUsed) {
         elements.hintBtn.innerHTML = '💡 แสดงคำใบ้ <span class="text-xs ml-1 bg-gray-500 text-white px-1 rounded">เปิดแล้ว</span>';
       } else {
-        elements.hintBtn.innerHTML = '💡 แสดงคำใบ้ <span class="text-xs ml-1 bg-red-500 text-white px-1 rounded">-5 xp</span>';
+        elements.hintBtn.innerHTML = '💡 แสดงคำใบ้ <span class="text-xs ml-1 bg-red-500 text-white px-1 rounded">-10 xp</span>';
       }
     }
   }

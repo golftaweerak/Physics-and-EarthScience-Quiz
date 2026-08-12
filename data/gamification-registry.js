@@ -297,5 +297,28 @@ export const XP_THRESHOLDS = [
   { level: 17, xp: 30000, quest: { type: 'high_scores_80', target: 20, desc: 'ทำคะแนนได้ 80% ขึ้นไป 20 ครั้ง' } },
   { level: 18, xp: 36000, quest: { type: 'quizzes_completed', target: 80, desc: 'ทำแบบทดสอบให้ครบ 80 ครั้ง' } },
   { level: 19, xp: 43000, quest: { type: 'correct_streak', target: 40, desc: 'ตอบคำถามถูกติดต่อกัน 40 ข้อ' } },
-  { level: 20, xp: 50000, quest: { type: 'perfect_scores', target: 10, desc: 'ทำคะแนนเต็ม 100% ให้ได้ 10 ครั้ง' } }
+  { level: 20, xp: 50000, quest: { type: 'perfect_scores', target: 10, desc: 'ทำคะแนนเต็ม 100% ให้ได้ 1 ครั้ง' } }
+];
+
+export const WEEKLY_BOSSES = [
+  { id: 'geo_titan', name: 'มหาบอสธรณีพิบัติภัย (Geo-Titan)', icon: '🌋', maxHp: 500, category: 'earth', bonusXp: 500, badgeId: 'boss_slayer_geo' },
+  { id: 'quantum_overlord', name: 'จอมเวทย์กลศาสตร์ควอนตัม (Quantum-Overlord)', icon: '⚛️', maxHp: 600, category: 'physics', bonusXp: 600, badgeId: 'boss_slayer_quantum' },
+  { id: 'astro_behemoth', name: 'อสูรร้ายแห่งหลุมดำ (Astro-Behemoth)', icon: '🌌', maxHp: 550, category: 'astronomy', bonusXp: 550, badgeId: 'boss_slayer_astro' }
+];
+
+export const MYSTERY_CHEST_REWARDS = [
+  { type: 'xp', value: 150, name: 'โบนัส 150 XP', icon: '✨' },
+  { type: 'xp', value: 300, name: 'แจ็กพอต 300 XP!', icon: '💎' },
+  { type: 'item', itemId: 'item_5050', name: 'ตัวช่วย 50/50 (1 ชิ้น)', icon: '✂️' },
+  { type: 'item', itemId: 'item_cut_1', name: 'ตัวช่วยตัดช้อยส์ (1 ชิ้น)', icon: '🔪' },
+  { type: 'item', itemId: 'item_time_freeze', name: 'ตัวช่วยหยุดเวลา (1 ชิ้น)', icon: '❄️' },
+  { type: 'item', itemId: 'item_range_hint', name: 'ตัวช่วยสโคปคำตอบ (1 ชิ้น)', icon: '🎯' },
+  { type: 'item', itemId: 'item_streak_freeze', name: 'Streak Freeze (1 ชิ้น)', icon: '🧊' }
+];
+
+export const SKILL_TREE_PERKS = [
+  { id: 'discount_shop', name: 'นักต่อรองราคา', desc: 'ลดราคาซื้อไอเทมในร้านค้าลง 20%', icon: '🏷️', costSP: 1, category: 'utility' },
+  { id: 'theory_scholar', name: 'นักทฤษฎีรอบรู้', desc: 'ได้รับ XP เพิ่มขึ้น 15% สำหรับโจทย์หมวดทฤษฎี', icon: '📖', costSP: 1, category: 'general' },
+  { id: 'fever_boost', name: 'สายเลือดฟีเวอร์', desc: 'เพิ่มตัวคูณ Combo Fever Mode จาก x2.0 เป็น x2.5', icon: '🔥', costSP: 2, category: 'combat' },
+  { id: 'calc_master', name: 'จอมคำนวณแม่นยำ', desc: 'ได้รับ XP เพิ่มขึ้น 20% สำหรับโจทย์คำนวณตัวเลข', icon: '🔢', costSP: 2, category: 'physics' }
 ];

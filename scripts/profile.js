@@ -430,11 +430,118 @@ function renderUserInfo(game) {
     }
 
     renderRecentBadges(game);
+    renderWeeklyBossCard(game);
+    renderSkillTreeSection(game);
+
     previousTitle = currentTitle;
     previousXP = currentXP;
 
     // FIX: Force update header avatar to ensure it matches profile
     game.updateHeaderAvatar();
+}
+
+function renderWeeklyBossCard(game) {
+    const boss = game.getCurrentWeeklyBoss();
+    let container = document.getElementById('weekly-boss-card-container');
+
+    if (!container) {
+        const questBox = document.getElementById('next-level-quest-container');
+        if (questBox && questBox.parentElement) {
+            container = document.createElement('div');
+            container.id = 'weekly-boss-card-container';
+            container.className = 'mt-4';
+            questBox.parentElement.insertBefore(container, questBox.nextSibling);
+        }
+    }
+    if (!container) return;
+
+    const hpPercent = Math.min(100, Math.max(0, (boss.currentHp / boss.maxHp) * 100));
+    const isDefeated = boss.currentHp <= 0;
+
+    container.innerHTML = `
+        <div class="p-4 rounded-xl bg-gradient-to-r from-purple-900/20 via-indigo-900/20 to-slate-900/20 border border-purple-500/30 shadow-md">
+            <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl">${boss.icon}</span>
+                    <div>
+                        <h4 class="font-bold text-sm text-gray-800 dark:text-gray-100 font-kanit">⚔️ บอสประจำสัปดาห์: ${escapeHtml(boss.name)}</h4>
+                        <p class="text-[11px] text-purple-600 dark:text-purple-400">ตอบถูกทุก 1 ข้อ = สร้าง 10 DMG ใส่บอส | รางวัล: +${boss.bonusXp} XP</p>
+                    </div>
+                </div>
+                <span class="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full ${isDefeated ? 'bg-green-500/20 text-green-400 border border-green-500/30' : 'bg-red-500/20 text-red-400 border border-red-500/30'}">
+                    ${isDefeated ? 'พิชิตแล้ว 🏆' : `${boss.currentHp} / ${boss.maxHp} HP`}
+                </span>
+            </div>
+            <div class="w-full bg-gray-200 dark:bg-gray-700/60 rounded-full h-3 overflow-hidden">
+                <div class="h-3 bg-gradient-to-r from-red-500 to-amber-500 transition-all duration-500 rounded-full" style="width: ${hpPercent}%"></div>
+            </div>
+        </div>
+    `;
+}
+
+function renderSkillTreeSection(game) {
+    const availableSP = game.getAvailableSkillPoints();
+    let container = document.getElementById('skill-tree-container');
+
+    if (!container) {
+        const statsSection = document.getElementById('recent-badges-container');
+        if (statsSection && statsSection.parentElement) {
+            container = document.createElement('div');
+            container.id = 'skill-tree-container';
+            container.className = 'mt-6 p-4 rounded-2xl bg-white dark:bg-gray-800/60 border border-gray-200 dark:border-gray-700 shadow-sm';
+            statsSection.parentElement.insertBefore(container, statsSection.nextSibling);
+        }
+    }
+    if (!container) return;
+
+    const { SKILL_TREE_PERKS } = game;
+    const perkItemsHtml = (SKILL_TREE_PERKS || []).map(perk => {
+        const isUnlocked = game.hasPerk(perk.id);
+        const canAfford = availableSP >= perk.costSP;
+
+        return `
+            <div class="p-3 rounded-xl border ${isUnlocked ? 'bg-purple-50 dark:bg-purple-900/20 border-purple-300 dark:border-purple-700' : 'bg-gray-50 dark:bg-gray-800/40 border-gray-200 dark:border-gray-700'} flex items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl p-2 rounded-lg bg-white dark:bg-gray-700 shadow-sm">${perk.icon}</span>
+                    <div>
+                        <p class="font-bold text-sm text-gray-800 dark:text-gray-100 font-kanit">${escapeHtml(perk.name)}</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">${escapeHtml(perk.desc)}</p>
+                    </div>
+                </div>
+                <button data-perk-id="${perk.id}" ${isUnlocked || !canAfford ? 'disabled' : ''} class="unlock-perk-btn shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold font-kanit transition-all ${isUnlocked ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 cursor-default' : canAfford ? 'bg-purple-600 hover:bg-purple-700 text-white cursor-pointer shadow-md hover:scale-105' : 'bg-gray-200 dark:bg-gray-700 text-gray-400 cursor-not-allowed'}">
+                    ${isUnlocked ? 'ปลดล็อกแล้ว ✓' : `ใช้ ${perk.costSP} SP`}
+                </button>
+            </div>
+        `;
+    }).join('');
+
+    container.innerHTML = `
+        <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+                <span class="text-xl">🌳</span>
+                <h3 class="font-bold text-base text-gray-800 dark:text-gray-100 font-kanit">ต้นไม้ทักษะ (Skill Tree Perks)</h3>
+            </div>
+            <span class="px-2.5 py-1 rounded-full bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 text-xs font-bold font-mono">
+                มี ${availableSP} SP
+            </span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            ${perkItemsHtml}
+        </div>
+    `;
+
+    container.querySelectorAll('.unlock-perk-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const perkId = e.currentTarget.dataset.perkId;
+            const res = game.allocateSkillPoint(perkId);
+            if (res.success) {
+                showToast('ปลดล็อกทักษะสำเร็จ! 🌳', `ทักษะ: "${res.perk.name}" เปิดใช้งานแล้ว`, '✨', 'gold');
+                renderUserInfo(game);
+            } else {
+                showToast('ไม่สามารถปลดล็อกได้', res.message, '⚠️', 'error');
+            }
+        });
+    });
 }
 
 function renderSyncStatus(game) {
