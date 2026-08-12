@@ -965,7 +965,7 @@ function showQuestion() {
     // Ensure button is visible and reset state
     if (elements.hintBtn) {
       elements.hintBtn.classList.remove('hidden');
-      elements.hintBtn.innerHTML = '💡 แสดงคำใบ้ <span class="text-xs ml-1 bg-red-500 text-white px-1 rounded">-2 xp</span>';
+      elements.hintBtn.innerHTML = '💡 แสดงคำใบ้ <span class="text-xs ml-1 bg-red-500 text-white px-1 rounded">-5 xp</span>';
       elements.hintBtn.disabled = false;
       elements.hintBtn.classList.remove('cursor-not-allowed', 'opacity-50');
     }
@@ -1458,7 +1458,7 @@ function selectAnswer(e) {
     // SCORING UPDATE: Check if hint was used
     let points = 1;
     if (state.hintUsed) {
-      points = -2; // Penalty for using hint (Logic per user request: -2 from score?)
+      points = -5; // Penalty for using hint (-5 XP)
       // Wait, user said "score reduced by 2".
       // Usually, a correct answer gives +1 score in this simple counter.
       // If the user means "points for this question", we need to know the base points.
@@ -3482,7 +3482,7 @@ function toggleHint() {
       state.hintUsed = true;
       // Only toast if it's the first time and answer isn't submitted yet
       if (!state.userAnswers[state.currentQuestionIndex]) {
-        showToast('คำใบ้ถูกเปิดแล้ว', 'คะแนนข้อนี้จะถูกหัก 2 xp หากตอบถูก', '💡', 'warning');
+        showToast('คำใบ้ถูกเปิดแล้ว', 'คะแนนข้อนี้จะถูกหัก 5 xp หากตอบถูก', '💡', 'warning');
       }
     }
 
@@ -3497,7 +3497,7 @@ function toggleHint() {
       if (state.hintUsed) {
         elements.hintBtn.innerHTML = '💡 แสดงคำใบ้ <span class="text-xs ml-1 bg-gray-500 text-white px-1 rounded">เปิดแล้ว</span>';
       } else {
-        elements.hintBtn.innerHTML = '💡 แสดงคำใบ้ <span class="text-xs ml-1 bg-red-500 text-white px-1 rounded">-2 xp</span>';
+        elements.hintBtn.innerHTML = '💡 แสดงคำใบ้ <span class="text-xs ml-1 bg-red-500 text-white px-1 rounded">-5 xp</span>';
       }
     }
   }
