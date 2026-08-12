@@ -570,53 +570,84 @@ function openSkillTreeInfoModal() {
     const existing = document.getElementById('skill-tree-info-modal');
     if (existing) existing.remove();
 
+    const isDark = document.documentElement.classList.contains('dark');
+
     const modal = document.createElement('div');
     modal.id = 'skill-tree-info-modal';
-    modal.className = 'fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-xs animate-fade-in';
+    modal.className = `fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in ${isDark ? 'dark' : ''}`;
+    
+    // Explicit theme colors to prevent fallback glitches
+    const cardBg = isDark 
+        ? 'bg-slate-900 text-slate-100 border-purple-500/70 shadow-2xl shadow-purple-950/60' 
+        : 'bg-white text-slate-900 border-purple-200 shadow-2xl';
+    
+    const closeBtnBg = isDark 
+        ? 'bg-slate-800 text-slate-200 hover:bg-slate-700' 
+        : 'bg-slate-100 text-slate-600 hover:bg-slate-200';
+    
+    const item1Bg = isDark 
+        ? 'bg-slate-800/90 border-purple-500/60 text-slate-100' 
+        : 'bg-purple-50/90 border-purple-200 text-slate-800';
+    const item1Title = isDark ? 'text-purple-300' : 'text-purple-900';
+    const item1Tag = isDark 
+        ? 'bg-purple-950 text-purple-200 border-purple-500/60' 
+        : 'bg-purple-200/80 text-purple-900 border-purple-300';
+
+    const item2Bg = isDark 
+        ? 'bg-slate-800/90 border-indigo-500/60 text-slate-100' 
+        : 'bg-indigo-50/90 border-indigo-200 text-slate-800';
+    const item2Title = isDark ? 'text-indigo-300' : 'text-indigo-900';
+    const item2Highlight = isDark ? 'text-indigo-300 font-extrabold' : 'text-indigo-700 font-extrabold';
+
+    const item3Bg = isDark 
+        ? 'bg-slate-800/90 border-amber-500/60 text-slate-100' 
+        : 'bg-amber-50/90 border-amber-200 text-slate-800';
+    const item3Title = isDark ? 'text-amber-300' : 'text-amber-900';
+
     modal.innerHTML = `
-        <div class="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl max-w-md w-full p-6 border border-purple-200 dark:border-purple-700/80 relative overflow-hidden font-sarabun text-slate-800 dark:text-slate-100">
+        <div class="${cardBg} rounded-3xl max-w-md w-full p-6 border relative overflow-hidden font-sarabun">
             <!-- Header Accent Line -->
             <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-500"></div>
 
-            <button id="close-skill-info-modal" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-300 flex items-center justify-center hover:bg-slate-200 dark:hover:bg-slate-700 transition font-bold cursor-pointer">
+            <button id="close-skill-info-modal" class="absolute top-4 right-4 w-8 h-8 rounded-full ${closeBtnBg} flex items-center justify-center transition font-bold cursor-pointer">
                 ✕
             </button>
 
             <div class="flex items-center gap-3 mb-5">
-                <span class="text-3xl p-2.5 bg-purple-100 dark:bg-purple-950/80 rounded-2xl border border-purple-300/40 shrink-0">🌳</span>
+                <span class="text-3xl p-2.5 ${isDark ? 'bg-purple-950/90 border-purple-500/60' : 'bg-purple-100 border-purple-300'} rounded-2xl border shrink-0">🌳</span>
                 <div>
-                    <h3 class="font-extrabold text-lg text-slate-900 dark:text-white font-kanit leading-tight">คู่มือระบบต้นไม้ทักษะ (Skill Tree)</h3>
-                    <p class="text-xs text-purple-600 dark:text-purple-300 font-bold mt-0.5">การหา SP และการอัปเดตทักษะติดตัว</p>
+                    <h3 class="font-extrabold text-lg ${isDark ? 'text-white' : 'text-slate-900'} font-kanit leading-tight">คู่มือระบบต้นไม้ทักษะ (Skill Tree)</h3>
+                    <p class="text-xs ${isDark ? 'text-purple-300' : 'text-purple-600'} font-bold mt-0.5">การหา SP และการอัปเดตทักษะติดตัว</p>
                 </div>
             </div>
 
             <div class="space-y-3.5 text-xs sm:text-sm font-medium leading-relaxed">
                 <!-- SP Source Card -->
-                <div class="p-3.5 bg-purple-50 dark:bg-slate-800/90 rounded-2xl border border-purple-200 dark:border-purple-700/80 shadow-xs">
-                    <h4 class="font-extrabold text-purple-900 dark:text-purple-300 font-kanit mb-1 flex items-center gap-1.5 text-xs sm:text-sm">
+                <div class="p-3.5 ${item1Bg} rounded-2xl border shadow-xs">
+                    <h4 class="font-extrabold ${item1Title} font-kanit mb-1 flex items-center gap-1.5 text-xs sm:text-sm">
                         <span>🌟</span> แต้มทักษะ (SP) หาจากไหน?
                     </h4>
-                    <p class="text-xs text-slate-700 dark:text-slate-200">
-                        รับทันที <span class="font-black text-purple-700 dark:text-purple-300 bg-purple-200/60 dark:bg-purple-950/80 px-1.5 py-0.5 rounded border border-purple-300/30">+1 SP ทุกครั้งที่เลเวลอัป 1 เลเวล (Level Up)</span> และสามารถรับ +1 SP ฟรี จากเควสประจำ 2 สัปดาห์!
+                    <p class="text-xs ${isDark ? 'text-slate-200' : 'text-slate-700'}">
+                        รับทันที <span class="font-black ${item1Tag} px-1.5 py-0.5 rounded border">+1 SP ทุกครั้งที่เลเวลอัป 1 เลเวล (Level Up)</span> และสามารถรับ +1 SP ฟรี จากเควสประจำ 2 สัปดาห์!
                     </p>
                 </div>
 
                 <!-- Progression Card -->
-                <div class="p-3.5 bg-indigo-50 dark:bg-slate-800/90 rounded-2xl border border-indigo-200 dark:border-indigo-700/80 shadow-xs">
-                    <h4 class="font-extrabold text-indigo-900 dark:text-indigo-300 font-kanit mb-1 flex items-center gap-1.5 text-xs sm:text-sm">
+                <div class="p-3.5 ${item2Bg} rounded-2xl border shadow-xs">
+                    <h4 class="font-extrabold ${item2Title} font-kanit mb-1 flex items-center gap-1.5 text-xs sm:text-sm">
                         <span>📈</span> การอัปทักษะเป็นลำดับขั้น (Multi-Level)
                     </h4>
-                    <p class="text-xs text-slate-700 dark:text-slate-200">
-                        แต่ละทักษะสามารถอัปเกรดได้หลายขั้น เช่น <span class="font-bold text-indigo-700 dark:text-indigo-300">Level 1 (โบนัส +10%) ➔ Level 2 (+20%) ➔ Level 3 (+30%)</span> โดยใช้ 1 SP ต่อการอัปเกรด 1 ขั้น
+                    <p class="text-xs ${isDark ? 'text-slate-200' : 'text-slate-700'}">
+                        แต่ละทักษะสามารถอัปเกรดได้หลายขั้น เช่น <span class="${item2Highlight}">Level 1 (โบนัส +10%) ➔ Level 2 (+20%) ➔ Level 3 (+30%)</span> โดยใช้ 1 SP ต่อการอัปเกรด 1 ขั้น
                     </p>
                 </div>
 
                 <!-- Passive Perks Card -->
-                <div class="p-3.5 bg-amber-50 dark:bg-slate-800/90 rounded-2xl border border-amber-200 dark:border-amber-700/80 shadow-xs">
-                    <h4 class="font-extrabold text-amber-900 dark:text-amber-300 font-kanit mb-1 flex items-center gap-1.5 text-xs sm:text-sm">
+                <div class="p-3.5 ${item3Bg} rounded-2xl border shadow-xs">
+                    <h4 class="font-extrabold ${item3Title} font-kanit mb-1 flex items-center gap-1.5 text-xs sm:text-sm">
                         <span>⚡</span> ผลของทักษะติดตัว (Passive Effects)
                     </h4>
-                    <p class="text-xs text-slate-700 dark:text-slate-200">
+                    <p class="text-xs ${isDark ? 'text-slate-200' : 'text-slate-700'}">
                         ทักษะที่ปลดล็อกแล้วจะทำงานถาวรในทุกการทำแบบทดสอบ ช่วยเพิ่ม XP โบนัส Combo และรับส่วนลดซื้อไอเทมในร้านค้า
                     </p>
                 </div>
