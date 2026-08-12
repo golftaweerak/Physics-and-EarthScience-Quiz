@@ -351,6 +351,23 @@
                         </div>
                     </div>
                 </section>
+
+                <!-- Achievements & Badges Sections -->
+                <div class="max-w-5xl mx-auto space-y-8">
+                    <section class="glass-card rounded-2xl shadow-md p-6">
+                        <h2 class="text-xl font-bold font-kanit mb-4 text-gray-900 dark:text-white flex items-center gap-2">
+                            🏆 ความสำเร็จ (Achievements)
+                        </h2>
+                        <div id="profile-achievements-list" class="grid grid-cols-4 sm:grid-cols-6 gap-4"></div>
+                    </section>
+
+                    <section class="glass-card rounded-2xl shadow-md p-6">
+                        <h2 class="text-xl font-bold font-kanit mb-4 text-gray-900 dark:text-white flex items-center gap-2">
+                            🎖️ เหรียญรางวัล (Badges)
+                        </h2>
+                        <div id="profile-badges-grid" class="grid grid-cols-4 sm:grid-cols-6 gap-4"></div>
+                    </section>
+                </div>
             </div>
 
             <!-- 2. PERKS & RAID PANEL -->
@@ -682,30 +699,14 @@
             <!-- 3. HISTORY PANEL -->
             <div id="panel-history" class="hub-panel hidden space-y-8 max-w-5xl mx-auto pb-12 animate-fade-in">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                    <!-- Left (8 Cols): Achievements & Badges -->
-                    <div class="lg:col-span-8 space-y-8">
-                        <section class="glass-card rounded-2xl shadow-md p-6">
-                            <h2 class="text-xl font-bold font-kanit mb-4 text-gray-900 dark:text-white flex items-center gap-2">
-                                🏆 ความสำเร็จ (Achievements)
-                            </h2>
-                            <div id="profile-achievements-list" class="grid grid-cols-4 sm:grid-cols-6 gap-4"></div>
-                        </section>
-
-                        <section class="glass-card rounded-2xl shadow-md p-6">
-                            <h2 class="text-xl font-bold font-kanit mb-4 text-gray-900 dark:text-white flex items-center gap-2">
-                                🎖️ เหรียญรางวัล (Badges)
-                            </h2>
-                            <div id="profile-badges-grid" class="grid grid-cols-4 sm:grid-cols-6 gap-4"></div>
-                        </section>
-
-                        <div class="space-y-6">
-                            <div class="flex flex-col sm:flex-row justify-between items-center gap-4 glass-card p-4 rounded-xl sticky top-36 z-30 shadow-sm">
-                                <h2 class="text-xl font-bold font-kanit text-gray-900 dark:text-white">📜 ประวัติการเรียนรู้</h2>
-                                <input type="text" id="history-search-input" placeholder="ค้นหาชุดข้อสอบ..."
-                                    class="w-full sm:w-64 px-4 py-2 bg-gray-50 dark:bg-gray-700/60 rounded-xl text-sm outline-none focus:ring-2 ring-blue-500/20 text-gray-900 dark:text-white placeholder-gray-400">
-                            </div>
-                            <div id="detailed-stats-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+                    <!-- Left (8 Cols): Detailed Quiz History -->
+                    <div class="lg:col-span-8 space-y-6">
+                        <div class="flex flex-col sm:flex-row justify-between items-center gap-4 glass-card p-4 rounded-xl sticky top-36 z-30 shadow-sm">
+                            <h2 class="text-xl font-bold font-kanit text-gray-900 dark:text-white">📜 ประวัติการเรียนรู้</h2>
+                            <input type="text" id="history-search-input" placeholder="ค้นหาชุดข้อสอบ..."
+                                class="w-full sm:w-64 px-4 py-2 bg-gray-50 dark:bg-gray-700/60 rounded-xl text-sm outline-none focus:ring-2 ring-blue-500/20 text-gray-900 dark:text-white placeholder-gray-400">
                         </div>
+                        <div id="detailed-stats-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
                     </div>
 
                     <!-- Right (4 Cols): Overall Leaderboard & Quest History -->
