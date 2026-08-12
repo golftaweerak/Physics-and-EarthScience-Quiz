@@ -572,55 +572,57 @@ function openSkillTreeInfoModal() {
 
     const modal = document.createElement('div');
     modal.id = 'skill-tree-info-modal';
-    modal.className = 'fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in';
+    modal.className = 'fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-xs animate-fade-in';
     modal.innerHTML = `
-        <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl max-w-md w-full p-6 border border-purple-200 dark:border-purple-800/60 relative overflow-hidden font-sarabun">
-            <!-- Header Accent -->
+        <div class="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl max-w-md w-full p-6 border border-purple-200 dark:border-purple-700/80 relative overflow-hidden font-sarabun text-slate-800 dark:text-slate-100">
+            <!-- Header Accent Line -->
             <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-500"></div>
 
-            <button id="close-skill-info-modal" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-300 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-600 transition font-bold">
+            <button id="close-skill-info-modal" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-300 flex items-center justify-center hover:bg-slate-200 dark:hover:bg-slate-700 transition font-bold cursor-pointer">
                 ✕
             </button>
 
-            <div class="flex items-center gap-3 mb-4">
-                <span class="text-3xl p-2 bg-purple-100 dark:bg-purple-950/70 rounded-2xl">🌳</span>
+            <div class="flex items-center gap-3 mb-5">
+                <span class="text-3xl p-2.5 bg-purple-100 dark:bg-purple-950/80 rounded-2xl border border-purple-300/40 shrink-0">🌳</span>
                 <div>
-                    <h3 class="font-extrabold text-lg text-gray-900 dark:text-white font-kanit">คู่มือระบบต้นไม้ทักษะ (Skill Tree)</h3>
-                    <p class="text-xs text-purple-600 dark:text-purple-400 font-bold">ทำความเข้าใจการปลดล็อกและหา SP</p>
+                    <h3 class="font-extrabold text-lg text-slate-900 dark:text-white font-kanit leading-tight">คู่มือระบบต้นไม้ทักษะ (Skill Tree)</h3>
+                    <p class="text-xs text-purple-600 dark:text-purple-300 font-bold mt-0.5">การหา SP และการอัปเดตทักษะติดตัว</p>
                 </div>
             </div>
 
-            <div class="space-y-3.5 text-xs sm:text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
-                <div class="p-3 bg-purple-50 dark:bg-purple-950/40 rounded-2xl border border-purple-200/70 dark:border-purple-800/50">
-                    <h4 class="font-extrabold text-purple-800 dark:text-purple-300 font-kanit mb-1 flex items-center gap-1.5 text-xs sm:text-sm">
+            <div class="space-y-3.5 text-xs sm:text-sm font-medium leading-relaxed">
+                <!-- SP Source Card -->
+                <div class="p-3.5 bg-purple-50 dark:bg-slate-800/90 rounded-2xl border border-purple-200 dark:border-purple-700/80 shadow-xs">
+                    <h4 class="font-extrabold text-purple-900 dark:text-purple-300 font-kanit mb-1 flex items-center gap-1.5 text-xs sm:text-sm">
                         <span>🌟</span> แต้มทักษะ (SP) หาจากไหน?
                     </h4>
-                    <p class="text-xs text-gray-600 dark:text-gray-300">
-                        ผู้เรียนจะได้รับ <span class="font-bold text-purple-600 dark:text-purple-400">+1 SP ทุกครั้งที่เลเวลอัป 1 เลเวล (Level Up)</span> เช่น ขึ้นเป็น Level 2 รับทันที 1 SP เพื่อนำมาเลือกปลดล็อกสายทักษะที่ต้องการ
+                    <p class="text-xs text-slate-700 dark:text-slate-200">
+                        รับทันที <span class="font-black text-purple-700 dark:text-purple-300 bg-purple-200/60 dark:bg-purple-950/80 px-1.5 py-0.5 rounded border border-purple-300/30">+1 SP ทุกครั้งที่เลเวลอัป 1 เลเวล (Level Up)</span> และสามารถรับ +1 SP ฟรี จากเควสประจำ 2 สัปดาห์!
                     </p>
                 </div>
 
-                <div class="p-3 bg-blue-50 dark:bg-blue-950/40 rounded-2xl border border-blue-200/70 dark:border-blue-800/50">
-                    <h4 class="font-extrabold text-blue-800 dark:text-blue-300 font-kanit mb-1 flex items-center gap-1.5 text-xs sm:text-sm">
-                        <span>🔒</span> กฎการอัปทักษะเป็นลำดับขั้น (Progression)
+                <!-- Progression Card -->
+                <div class="p-3.5 bg-indigo-50 dark:bg-slate-800/90 rounded-2xl border border-indigo-200 dark:border-indigo-700/80 shadow-xs">
+                    <h4 class="font-extrabold text-indigo-900 dark:text-indigo-300 font-kanit mb-1 flex items-center gap-1.5 text-xs sm:text-sm">
+                        <span>📈</span> การอัปทักษะเป็นลำดับขั้น (Multi-Level)
                     </h4>
-                    <ul class="list-disc list-inside space-y-1 text-xs text-gray-600 dark:text-gray-300">
-                        <li><span class="font-bold">Tier 1 (ทักษะขั้นต้น):</span> ปลดล็อกได้ทันทีเมื่อมี 1 SP</li>
-                        <li><span class="font-bold">Tier 2 (ทักษะขั้นสูง):</span> ต้องทำการปลดล็อกทักษะ Tier 1 ในสายนั้นๆ ก่อน จึงจะสามารถใช้ 2 SP ปลดล็อกขั้นสูงต่อได้</li>
-                    </ul>
+                    <p class="text-xs text-slate-700 dark:text-slate-200">
+                        แต่ละทักษะสามารถอัปเกรดได้หลายขั้น เช่น <span class="font-bold text-indigo-700 dark:text-indigo-300">Level 1 (โบนัส +10%) ➔ Level 2 (+20%) ➔ Level 3 (+30%)</span> โดยใช้ 1 SP ต่อการอัปเกรด 1 ขั้น
+                    </p>
                 </div>
 
-                <div class="p-3 bg-amber-50 dark:bg-amber-950/40 rounded-2xl border border-amber-200/70 dark:border-amber-800/50">
-                    <h4 class="font-extrabold text-amber-800 dark:text-amber-300 font-kanit mb-1 flex items-center gap-1.5 text-xs sm:text-sm">
-                        <span>⚡</span> ผลของทักษะพิเศษติดตัว
+                <!-- Passive Perks Card -->
+                <div class="p-3.5 bg-amber-50 dark:bg-slate-800/90 rounded-2xl border border-amber-200 dark:border-amber-700/80 shadow-xs">
+                    <h4 class="font-extrabold text-amber-900 dark:text-amber-300 font-kanit mb-1 flex items-center gap-1.5 text-xs sm:text-sm">
+                        <span>⚡</span> ผลของทักษะติดตัว (Passive Effects)
                     </h4>
-                    <p class="text-xs text-gray-600 dark:text-gray-300">
-                        เมื่อปลดล็อกแล้ว ทักษะจะมีผลทำงานถาวรทันที เช่น โบนัส XP ควิซ, โบนัส Combo x2.5 และส่วนลดไอเทมในร้านค้า 20%
+                    <p class="text-xs text-slate-700 dark:text-slate-200">
+                        ทักษะที่ปลดล็อกแล้วจะทำงานถาวรในทุกการทำแบบทดสอบ ช่วยเพิ่ม XP โบนัส Combo และรับส่วนลดซื้อไอเทมในร้านค้า
                     </p>
                 </div>
             </div>
 
-            <button id="confirm-close-skill-info" class="w-full mt-5 py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-extrabold font-kanit text-sm rounded-xl shadow-md hover:from-purple-700 hover:to-indigo-700 transition active:scale-95">
+            <button id="confirm-close-skill-info" class="w-full mt-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-extrabold font-kanit text-sm rounded-xl shadow-md transition active:scale-95 cursor-pointer">
                 เข้าใจแล้ว!
             </button>
         </div>
