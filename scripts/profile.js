@@ -460,13 +460,13 @@ function renderWeeklyBossCard(game) {
 
     container.innerHTML = `
         <div class="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-purple-950/40 via-indigo-950/40 to-slate-900/60 border-2 border-purple-500/40 shadow-xl relative overflow-hidden group">
-            <!-- Absolute Top-Right Info Icon (i) Button -->
-            <button id="boss-info-btn" class="absolute top-3.5 right-3.5 w-7 h-7 rounded-full bg-purple-500/20 hover:bg-purple-500/40 text-purple-600 dark:text-purple-300 border border-purple-400/40 flex items-center justify-center text-xs font-bold font-mono transition-transform hover:scale-110 active:scale-95 shadow-sm cursor-pointer z-10" title="รายละเอียดกติกาบอส">
-                ℹ️
+            <!-- Absolute Top-Right Info Icon (i) Button - Perfect Circle -->
+            <button id="boss-info-btn" type="button" class="absolute top-3.5 right-3.5 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-purple-600 hover:bg-purple-500 border-2 border-purple-300 text-white font-bold font-serif text-xs sm:text-sm flex items-center justify-center shadow-lg transition-transform hover:scale-110 active:scale-95 cursor-pointer z-30 pointer-events-auto" title="รายละเอียดกติกาบอส">
+                i
             </button>
 
             <!-- Main Info & CTA Layout -->
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-3 relative z-10 pr-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-3 relative z-10 pr-10">
                 <!-- Boss Icon & Details -->
                 <div class="flex items-center gap-3">
                     <span class="text-4xl p-2 rounded-xl bg-purple-900/50 border border-purple-500/30 shadow-inner shrink-0">${boss.icon}</span>
@@ -502,15 +502,67 @@ function renderWeeklyBossCard(game) {
 
     const infoBtn = container.querySelector('#boss-info-btn');
     if (infoBtn) {
-        infoBtn.addEventListener('click', () => {
-            showToast(
-                `⚔️ กติกาบอสประจำสัปดาห์: ${boss.name}`,
-                `1. สุ่มโจทย์สาย ${boss.category.toUpperCase()} มาให้ท้าทาย\n2. ตอบถูก 1 ข้อ ลด 5 HP บอส\n3. โค่นบอสล้ม รับเพิ่ม +${boss.bonusXp} XP ฟรี!`,
-                'ℹ️',
-                'gold'
-            );
+        infoBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            openBossRulesModal(boss);
         });
     }
+}
+
+function openBossRulesModal(boss) {
+    let modal = document.getElementById('boss-rules-modal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'boss-rules-modal';
+        modal.className = 'fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs transition-opacity duration-300';
+        document.body.appendChild(modal);
+    }
+
+    const catName = boss.category === 'physics' ? 'ฟิสิกส์' : boss.category === 'earth' ? 'วิทย์โลก & ธรณีวิทยา' : 'ดาราศาสตร์';
+
+    modal.innerHTML = `
+        <div class="bg-white dark:bg-gray-900 border-2 border-purple-500/50 rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl relative transform transition-all scale-100 font-kanit">
+            <button id="close-boss-modal-btn" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-white text-xl font-bold p-1 leading-none">&times;</button>
+            <div class="flex items-center gap-3 mb-4">
+                <span class="text-4xl p-2.5 bg-purple-500/10 rounded-xl border border-purple-500/20 shrink-0">${boss.icon}</span>
+                <div>
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-white">⚔️ กติกาบอสประจำสัปดาห์</h3>
+                    <p class="text-xs text-purple-600 dark:text-purple-400 font-medium">บอส: ${escapeHtml(boss.name)} (${catName})</p>
+                </div>
+            </div>
+            <div class="space-y-3 text-xs sm:text-sm text-gray-700 dark:text-gray-300 leading-relaxed bg-gray-50 dark:bg-gray-800/60 p-4 rounded-xl border border-gray-200 dark:border-gray-700">
+                <div class="flex gap-2.5">
+                    <span class="text-base shrink-0">🎯</span>
+                    <p><strong>เป้าหมายสัปดาห์:</strong> ช่วยกันทำควิซเพื่อลด HP บอสจาก ${boss.maxHp} HP ให้เหลือ 0 HP ก่อนสิ้นสุดสัปดาห์</p>
+                </div>
+                <div class="flex gap-2.5">
+                    <span class="text-base shrink-0">💥</span>
+                    <p><strong>พลังโจมตี:</strong> ทุกครั้งที่ตอบคำถามถูก 1 ข้อ จะลด HP บอสลง <strong>5 HP</strong> ทันที</p>
+                </div>
+                <div class="flex gap-2.5">
+                    <span class="text-base shrink-0">🏆</span>
+                    <p><strong>รางวัลพิชิต:</strong> เมื่อล้มบอสสำเร็จ รับโบนัสคะแนน <span class="text-amber-500 font-bold">+${boss.bonusXp} XP</span> ฟรี!</p>
+                </div>
+            </div>
+            <div class="mt-5 flex justify-end">
+                <button id="confirm-boss-modal-btn" class="px-5 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold text-xs rounded-xl shadow-md transition transform hover:scale-105 active:scale-95 cursor-pointer">
+                    รับทราบ & พร้อมลุย! ⚔️
+                </button>
+            </div>
+        </div>
+    `;
+
+    modal.classList.remove('hidden');
+    const closeBtn = modal.querySelector('#close-boss-modal-btn');
+    const confirmBtn = modal.querySelector('#confirm-boss-modal-btn');
+    const closeModal = () => modal.classList.add('hidden');
+
+    if (closeBtn) closeBtn.onclick = closeModal;
+    if (confirmBtn) confirmBtn.onclick = closeModal;
+    modal.onclick = (e) => {
+        if (e.target === modal) closeModal();
+    };
 }
 
 function renderSkillTreeSection(game) {
