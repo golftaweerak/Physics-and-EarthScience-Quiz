@@ -433,6 +433,7 @@ function renderUserInfo(game) {
 
     renderRecentBadges(game);
     renderWeeklyBossCard(game);
+    renderBossLeaderboard(game);
     renderSkillTreeSection(game);
     renderWeeklyAndMonthlyQuests(game);
 
@@ -445,15 +446,20 @@ function renderUserInfo(game) {
 
 function renderWeeklyBossCard(game) {
     const boss = game.getCurrentWeeklyBoss();
-    let container = document.getElementById('weekly-boss-card-container');
+    let container = document.getElementById('boss-card-slot-perks-tab');
 
     if (!container) {
-        const questBox = document.getElementById('next-level-quest-container');
-        if (questBox && questBox.parentElement) {
-            container = document.createElement('div');
-            container.id = 'weekly-boss-card-container';
-            container.className = 'mt-4';
-            questBox.parentElement.insertBefore(container, questBox.nextSibling);
+        let fallbackParent = document.getElementById('weekly-boss-card-container');
+        if (!fallbackParent) {
+            const questBox = document.getElementById('next-level-quest-container');
+            if (questBox && questBox.parentElement) {
+                container = document.createElement('div');
+                container.id = 'weekly-boss-card-container';
+                container.className = 'mt-4';
+                questBox.parentElement.insertBefore(container, questBox.nextSibling);
+            }
+        } else {
+            container = fallbackParent;
         }
     }
     if (!container) return;
@@ -513,6 +519,46 @@ function renderWeeklyBossCard(game) {
             openBossRulesModal(boss);
         });
     }
+}
+
+function renderBossLeaderboard(game) {
+    const listEl = document.getElementById('boss-leaderboard-list');
+    if (!listEl) return;
+
+    const userDmg = game.state.bossDamageDealt || 0;
+    const userName = game.getDisplayName() || 'ผู้เล่น';
+
+    // Mock top slayer leaderboard merged with user's actual progress
+    const mockSlayers = [
+        { name: 'Dr. AstroStar', dmg: Math.max(140, userDmg + 35), title: 'ผู้พิชิต Astro-Behemoth', isUser: false },
+        { name: 'QuantumMaster', dmg: Math.max(110, userDmg + 15), title: 'ผู้พิชิต Quantum-Overlord', isUser: false },
+        { name: userName, dmg: userDmg, title: game.getCurrentTitle() || 'นักต่อสู้บอส', isUser: true }
+    ].sort((a, b) => b.dmg - a.dmg).slice(0, 3);
+
+    const ranks = ['🥇', '🥈', '🥉'];
+    const rankColors = [
+        'border-amber-400/60 bg-amber-500/10 text-amber-600 dark:text-amber-300',
+        'border-slate-400/60 bg-slate-500/10 text-slate-600 dark:text-slate-300',
+        'border-orange-400/60 bg-orange-500/10 text-orange-600 dark:text-orange-300'
+    ];
+
+    listEl.innerHTML = mockSlayers.map((s, idx) => `
+        <div class="p-3 rounded-xl border flex items-center justify-between gap-3 ${s.isUser ? 'bg-purple-50 dark:bg-purple-950/50 border-purple-400 dark:border-purple-600 shadow-sm' : 'bg-white/60 dark:bg-gray-800/60 border-gray-200/80 dark:border-gray-700'} transition">
+            <div class="flex items-center gap-2.5 min-w-0">
+                <span class="text-xl shrink-0">${ranks[idx]}</span>
+                <div class="min-w-0">
+                    <div class="flex items-center gap-1.5 truncate">
+                        <span class="font-extrabold text-xs text-gray-900 dark:text-white font-kanit truncate">${escapeHtml(s.name)}</span>
+                        ${s.isUser ? '<span class="px-1.5 py-0.2 rounded-full bg-purple-600 text-white text-[9px] font-bold shrink-0">คุณ</span>' : ''}
+                    </div>
+                    <span class="text-[10px] text-gray-500 dark:text-gray-400 truncate block">${escapeHtml(s.title)}</span>
+                </div>
+            </div>
+            <span class="text-xs font-extrabold font-mono text-purple-600 dark:text-purple-300 shrink-0">
+                ${s.dmg} HP
+            </span>
+        </div>
+    `).join('');
 }
 
 function openBossRulesModal(boss) {
