@@ -858,7 +858,13 @@ function renderSkillTreeSection(game) {
                 showToast('ยังไม่ได้ใช้ SP', 'ยังไม่มีการใช้อัปเกรดทักษะใดๆ', 'ℹ️', 'info');
                 return;
             }
-            if (confirm(`คุณต้องการคืนแต้ม ${spent} SP ทั้งหมดเพื่อจัดสายทักษะใหม่หรือไม่?`)) {
+
+            const isFree = !game.state.hasUsedFreeRespec;
+            const confirmMsg = isFree
+                ? `คุณต้องการคืนแต้ม ${spent} SP ทั้งหมดเพื่อจัดสายทักษะใหม่หรือไม่?\n\n✨ สิทธิ์รีเซ็ตฟรีครั้งแรก! (ครั้งถัดไปจะใช้ 1,000 XP)`
+                : `คุณต้องการคืนแต้ม ${spent} SP ทั้งหมดเพื่อจัดสายทักษะใหม่หรือไม่?\n\n⚠️ การรีเซ็ตครั้งนี้จะใช้ 1,000 XP`;
+
+            if (confirm(confirmMsg)) {
                 const res = game.resetSkillPoints();
                 if (res.success) {
                     showToast('รีเซ็ตทักษะสำเร็จ! 🔄', `ได้รับคืน ${res.refundedSP} SP เรียบร้อยแล้ว!`, '✨', 'gold');

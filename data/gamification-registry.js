@@ -396,7 +396,7 @@ export const SKILL_TREE_PERKS = [
 
 export const BI_WEEKLY_QUEST = {
   id: 'biweekly_question_challenge_50',
-  title: '🎯 เควสประจำ 2 สัปดาห์: พิชิตโจทย์ 50 ข้อ',
+  title: 'เควสประจำ 2 สัปดาห์: พิชิตโจทย์ 50 ข้อ',
   desc: 'ทำแบบทดสอบสะสมให้ครบ 50 ข้อภายใน 2 สัปดาห์นี้ เพื่อรับ 1 SP ฟรี!',
   targetCount: 50,
   rewardSP: 1,

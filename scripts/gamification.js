@@ -2212,7 +2212,7 @@ export class Gamification {
         }
 
         const isFree = !this.state.hasUsedFreeRespec;
-        const respecCostXP = 300;
+        const respecCostXP = 1000;
 
         if (!isFree) {
             const currentTotalXP = this.calculateTotalXP();
