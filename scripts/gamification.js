@@ -768,16 +768,24 @@ export class Gamification {
         } else {
             if (profileCard) profileCard.classList.remove('hidden');
 
-            const displayName = this.state.displayName || user.displayName || 'ผู้เรียน';
-            const avatar = this.state.avatar || '🧑‍🎓';
+            const displayName = (this.state && this.state.displayName) || user.displayName || 'ผู้เรียน';
+            const avatar = (this.state && this.state.avatar) || '🧑‍🎓';
+            const currentXP = (this.state && typeof this.state.xp === 'number') ? this.state.xp : 0;
             const levelInfo = this.getCurrentLevel();
-            const xpRange = levelInfo.nextThreshold ? (levelInfo.nextThreshold.xp - levelInfo.currentThreshold.xp) : 1;
-            const xpCurrent = this.state.xp - levelInfo.currentThreshold.xp;
+            const currentLevel = (levelInfo && levelInfo.level) || 1;
+
+            const currentThresholdObj = XP_THRESHOLDS.find(t => t.level === currentLevel) || { xp: 0 };
+            const nextThresholdObj = XP_THRESHOLDS.find(t => t.level === currentLevel + 1);
+
+            const currentThresholdXP = currentThresholdObj.xp || 0;
+            const nextThresholdXP = nextThresholdObj ? nextThresholdObj.xp : (currentThresholdXP + 100);
+            const xpRange = Math.max(1, nextThresholdXP - currentThresholdXP);
+            const xpCurrent = Math.max(0, currentXP - currentThresholdXP);
             const xpPercent = Math.min(100, Math.max(0, (xpCurrent / xpRange) * 100));
 
             if (cardName) cardName.textContent = displayName;
-            if (cardLevel) cardLevel.textContent = `Lv.${levelInfo.level}`;
-            if (cardXpText) cardXpText.textContent = `${this.state.xp.toLocaleString()} XP`;
+            if (cardLevel) cardLevel.textContent = `Lv.${currentLevel}`;
+            if (cardXpText) cardXpText.textContent = `${currentXP.toLocaleString()} XP`;
             if (cardXpFill) cardXpFill.style.width = `${xpPercent}%`;
 
             if (cardAvatar) {
