@@ -566,6 +566,74 @@ function openBossRulesModal(boss) {
     };
 }
 
+function openSkillTreeInfoModal() {
+    const existing = document.getElementById('skill-tree-info-modal');
+    if (existing) existing.remove();
+
+    const modal = document.createElement('div');
+    modal.id = 'skill-tree-info-modal';
+    modal.className = 'fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in';
+    modal.innerHTML = `
+        <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl max-w-md w-full p-6 border border-purple-200 dark:border-purple-800/60 relative overflow-hidden font-sarabun">
+            <!-- Header Accent -->
+            <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-500"></div>
+
+            <button id="close-skill-info-modal" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-300 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-600 transition font-bold">
+                ✕
+            </button>
+
+            <div class="flex items-center gap-3 mb-4">
+                <span class="text-3xl p-2 bg-purple-100 dark:bg-purple-950/70 rounded-2xl">🌳</span>
+                <div>
+                    <h3 class="font-extrabold text-lg text-gray-900 dark:text-white font-kanit">คู่มือระบบต้นไม้ทักษะ (Skill Tree)</h3>
+                    <p class="text-xs text-purple-600 dark:text-purple-400 font-bold">ทำความเข้าใจการปลดล็อกและหา SP</p>
+                </div>
+            </div>
+
+            <div class="space-y-3.5 text-xs sm:text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                <div class="p-3 bg-purple-50 dark:bg-purple-950/40 rounded-2xl border border-purple-200/70 dark:border-purple-800/50">
+                    <h4 class="font-extrabold text-purple-800 dark:text-purple-300 font-kanit mb-1 flex items-center gap-1.5 text-xs sm:text-sm">
+                        <span>🌟</span> แต้มทักษะ (SP) หาจากไหน?
+                    </h4>
+                    <p class="text-xs text-gray-600 dark:text-gray-300">
+                        ผู้เรียนจะได้รับ <span class="font-bold text-purple-600 dark:text-purple-400">+1 SP ทุกครั้งที่เลเวลอัป 1 เลเวล (Level Up)</span> เช่น ขึ้นเป็น Level 2 รับทันที 1 SP เพื่อนำมาเลือกปลดล็อกสายทักษะที่ต้องการ
+                    </p>
+                </div>
+
+                <div class="p-3 bg-blue-50 dark:bg-blue-950/40 rounded-2xl border border-blue-200/70 dark:border-blue-800/50">
+                    <h4 class="font-extrabold text-blue-800 dark:text-blue-300 font-kanit mb-1 flex items-center gap-1.5 text-xs sm:text-sm">
+                        <span>🔒</span> กฎการอัปทักษะเป็นลำดับขั้น (Progression)
+                    </h4>
+                    <ul class="list-disc list-inside space-y-1 text-xs text-gray-600 dark:text-gray-300">
+                        <li><span class="font-bold">Tier 1 (ทักษะขั้นต้น):</span> ปลดล็อกได้ทันทีเมื่อมี 1 SP</li>
+                        <li><span class="font-bold">Tier 2 (ทักษะขั้นสูง):</span> ต้องทำการปลดล็อกทักษะ Tier 1 ในสายนั้นๆ ก่อน จึงจะสามารถใช้ 2 SP ปลดล็อกขั้นสูงต่อได้</li>
+                    </ul>
+                </div>
+
+                <div class="p-3 bg-amber-50 dark:bg-amber-950/40 rounded-2xl border border-amber-200/70 dark:border-amber-800/50">
+                    <h4 class="font-extrabold text-amber-800 dark:text-amber-300 font-kanit mb-1 flex items-center gap-1.5 text-xs sm:text-sm">
+                        <span>⚡</span> ผลของทักษะพิเศษติดตัว
+                    </h4>
+                    <p class="text-xs text-gray-600 dark:text-gray-300">
+                        เมื่อปลดล็อกแล้ว ทักษะจะมีผลทำงานถาวรทันที เช่น โบนัส XP ควิซ, โบนัส Combo x2.5 และส่วนลดไอเทมในร้านค้า 20%
+                    </p>
+                </div>
+            </div>
+
+            <button id="confirm-close-skill-info" class="w-full mt-5 py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-extrabold font-kanit text-sm rounded-xl shadow-md hover:from-purple-700 hover:to-indigo-700 transition active:scale-95">
+                เข้าใจแล้ว!
+            </button>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    const closeModal = () => modal.remove();
+    modal.querySelector('#close-skill-info-modal').onclick = closeModal;
+    modal.querySelector('#confirm-close-skill-info').onclick = closeModal;
+    modal.onclick = (e) => { if (e.target === modal) closeModal(); };
+}
+
 function renderSkillTreeSection(game) {
     const availableSP = game.getAvailableSkillPoints();
     const container = document.getElementById('skill-tree-container');
@@ -573,19 +641,32 @@ function renderSkillTreeSection(game) {
 
     const perkItemsHtml = (SKILL_TREE_PERKS || []).map(perk => {
         const isUnlocked = game.hasPerk(perk.id);
-        const canAfford = availableSP >= perk.costSP;
+        const reqUnlocked = !perk.reqPerk || game.hasPerk(perk.reqPerk);
+        const canAfford = availableSP >= perk.costSP && reqUnlocked;
+
+        let statusBadgeHtml = '';
+        if (isUnlocked) {
+            statusBadgeHtml = `<span class="text-[10px] font-bold text-green-700 dark:text-green-300 bg-green-100 dark:bg-green-950/80 px-2 py-0.5 rounded-full border border-green-300/40">เปิดใช้งานแล้ว ✓</span>`;
+        } else if (!reqUnlocked) {
+            statusBadgeHtml = `<span class="text-[10px] font-bold text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-amber-950/80 px-2 py-0.5 rounded-full border border-amber-300/40">🔒 ต้องปลดล็อก "${escapeHtml(perk.reqName)}" ก่อน</span>`;
+        } else {
+            statusBadgeHtml = `<span class="text-[10px] font-bold text-purple-700 dark:text-purple-300 bg-purple-100 dark:bg-purple-950/80 px-2 py-0.5 rounded-full border border-purple-300/40">Tier ${perk.tier || 1} • ใช้ ${perk.costSP} SP</span>`;
+        }
 
         return `
-            <div class="p-3.5 rounded-xl border ${isUnlocked ? 'bg-purple-50/80 dark:bg-purple-900/30 border-purple-300 dark:border-purple-700' : 'bg-gray-50/80 dark:bg-gray-800/40 border-gray-200 dark:border-gray-700'} flex items-center justify-between gap-3 transition-all">
-                <div class="flex items-center gap-3">
-                    <span class="text-2xl p-2 rounded-lg bg-white dark:bg-gray-700 shadow-xs shrink-0">${perk.icon}</span>
-                    <div>
-                        <p class="font-bold text-sm text-gray-900 dark:text-gray-100 font-kanit">${escapeHtml(perk.name)}</p>
-                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${escapeHtml(perk.desc)}</p>
+            <div class="p-3.5 rounded-xl border ${isUnlocked ? 'bg-purple-50/80 dark:bg-purple-900/30 border-purple-300 dark:border-purple-700' : reqUnlocked ? 'bg-white dark:bg-gray-800/80 border-gray-200 dark:border-gray-700 shadow-xs' : 'bg-gray-100/60 dark:bg-gray-900/40 border-gray-200/60 dark:border-gray-800 opacity-85'} flex items-center justify-between gap-3 transition-all">
+                <div class="flex items-center gap-3 min-w-0">
+                    <span class="text-2xl p-2 rounded-xl ${isUnlocked ? 'bg-purple-200 dark:bg-purple-900/60' : 'bg-gray-100 dark:bg-gray-700'} shadow-xs shrink-0">${perk.icon}</span>
+                    <div class="min-w-0">
+                        <div class="flex items-center gap-2 flex-wrap mb-0.5">
+                            <p class="font-extrabold text-sm text-gray-900 dark:text-gray-100 font-kanit truncate">${escapeHtml(perk.name)}</p>
+                            ${statusBadgeHtml}
+                        </div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">${escapeHtml(perk.desc)}</p>
                     </div>
                 </div>
                 <button data-perk-id="${perk.id}" ${isUnlocked || !canAfford ? 'disabled' : ''} class="unlock-perk-btn shrink-0 px-3.5 py-2 rounded-xl text-xs font-extrabold font-kanit transition-all ${isUnlocked ? 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 border border-green-300/40 cursor-default' : canAfford ? 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white cursor-pointer shadow-md hover:scale-105 active:scale-95' : 'bg-gray-200 dark:bg-gray-700 text-gray-400 cursor-not-allowed'}">
-                    ${isUnlocked ? 'ปลดล็อกแล้ว ✓' : `ใช้ ${perk.costSP} SP`}
+                    ${isUnlocked ? 'ปลดล็อกแล้ว ✓' : !reqUnlocked ? '🔒 ล็อกอยู่' : `ใช้ ${perk.costSP} SP`}
                 </button>
             </div>
         `;
@@ -593,21 +674,32 @@ function renderSkillTreeSection(game) {
 
     container.innerHTML = `
         <div class="flex items-center justify-between mb-4">
-            <div class="flex items-center gap-2">
-                <span class="text-2xl">🌳</span>
+            <div class="flex items-center gap-2.5">
+                <span class="text-2xl p-1.5 bg-purple-100 dark:bg-purple-950/60 rounded-xl shrink-0">🌳</span>
                 <div>
-                    <h3 class="font-extrabold text-lg text-gray-900 dark:text-white font-kanit">ต้นไม้ทักษะ (Skill Tree Perks)</h3>
-                    <p class="text-xs text-gray-500 dark:text-gray-400">นำ Skill Points (SP) จากการเพิ่มเลเวลมาปลดล็อกทักษะพิเศษติดตัว</p>
+                    <div class="flex items-center gap-2">
+                        <h3 class="font-extrabold text-lg text-gray-900 dark:text-white font-kanit">ต้นไม้ทักษะ (Skill Tree Perks)</h3>
+                        <!-- Information i Button -->
+                        <button id="skill-tree-info-btn" type="button" title="คู่มือต้นไม้ทักษะ" class="w-5 h-5 rounded-full border border-purple-400/60 bg-purple-500/10 text-purple-600 dark:text-purple-300 font-serif font-bold text-xs flex items-center justify-center hover:bg-purple-600 hover:text-white transition shadow-xs cursor-pointer">
+                            i
+                        </button>
+                    </div>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">ปลดล็อกทักษะขั้นต้น (Tier 1) เพื่อเข้าสู่ทักษะขั้นสูง (Tier 2)</p>
                 </div>
             </div>
-            <span class="px-3 py-1.5 rounded-full bg-purple-100 dark:bg-purple-950/80 text-purple-700 dark:text-purple-300 text-xs font-black font-mono border border-purple-300 dark:border-purple-700 shrink-0">
+            <span class="px-3.5 py-1.5 rounded-full bg-purple-100 dark:bg-purple-950/80 text-purple-700 dark:text-purple-300 text-xs font-black font-mono border border-purple-300 dark:border-purple-700 shrink-0 shadow-xs">
                 มี ${availableSP} SP
             </span>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5 mt-4">
             ${perkItemsHtml}
         </div>
     `;
+
+    const infoBtn = container.querySelector('#skill-tree-info-btn');
+    if (infoBtn) {
+        infoBtn.onclick = () => openSkillTreeInfoModal();
+    }
 
     container.querySelectorAll('.unlock-perk-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
@@ -621,13 +713,6 @@ function renderSkillTreeSection(game) {
             }
         });
     });
-
-    // If URL contains hash #skill-tree-container, scroll to it smoothly
-    if (window.location.hash === '#skill-tree-container') {
-        setTimeout(() => {
-            container.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }, 300);
-    }
 }
 
 function renderSyncStatus(game) {

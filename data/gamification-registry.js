@@ -317,8 +317,11 @@ export const MYSTERY_CHEST_REWARDS = [
 ];
 
 export const SKILL_TREE_PERKS = [
-  { id: 'discount_shop', name: 'นักต่อรองราคา', desc: 'ลดราคาซื้อไอเทมในร้านค้าลง 20%', icon: '🏷️', costSP: 1, category: 'utility' },
-  { id: 'theory_scholar', name: 'นักทฤษฎีรอบรู้', desc: 'ได้รับ XP เพิ่มขึ้น 15% สำหรับโจทย์หมวดทฤษฎี', icon: '📖', costSP: 1, category: 'general' },
-  { id: 'fever_boost', name: 'สายเลือดฟีเวอร์', desc: 'เพิ่มตัวคูณ Combo Fever Mode จาก x2.0 เป็น x2.5', icon: '🔥', costSP: 2, category: 'combat' },
-  { id: 'calc_master', name: 'จอมคำนวณแม่นยำ', desc: 'ได้รับ XP เพิ่มขึ้น 20% สำหรับโจทย์คำนวณตัวเลข', icon: '🔢', costSP: 2, category: 'physics' }
+  // Tier 1 Perks (ทักษะขั้นต้น - ปลดล็อกได้ทันที)
+  { id: 'theory_scholar', tier: 1, name: 'นักทฤษฎีรอบรู้', desc: 'ได้รับ XP เพิ่มขึ้น 15% สำหรับโจทย์หมวดทฤษฎี', icon: '📖', costSP: 1, reqPerk: null },
+  { id: 'fever_boost', tier: 1, name: 'สายเลือดฟีเวอร์', desc: 'เพิ่มตัวคูณ Combo Fever Mode จาก x2.0 เป็น x2.5', icon: '🔥', costSP: 1, reqPerk: null },
+
+  // Tier 2 Perks (ทักษะขั้นสูง - ต้องปลดล็อกทักษะขั้นต้นก่อน!)
+  { id: 'calc_master', tier: 2, name: 'จอมคำนวณแม่นยำ', desc: 'ได้รับ XP เพิ่มขึ้น 20% สำหรับโจทย์คำนวณตัวเลข', icon: '🔢', costSP: 2, reqPerk: 'theory_scholar', reqName: 'นักทฤษฎีรอบรู้' },
+  { id: 'discount_shop', tier: 2, name: 'นักต่อรองราคา', desc: 'ลดราคาซื้อไอเทมในร้านค้าลง 20%', icon: '🏷️', costSP: 2, reqPerk: 'fever_boost', reqName: 'สายเลือดฟีเวอร์' }
 ];

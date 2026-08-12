@@ -2155,6 +2155,10 @@ export class Gamification {
             return { success: false, message: "คุณปลดล็อกทักษะนี้ไปแล้ว" };
         }
 
+        if (perk.reqPerk && !this.hasPerk(perk.reqPerk)) {
+            return { success: false, message: `ต้องปลดล็อกทักษะ "${perk.reqName || perk.reqPerk}" ก่อน!` };
+        }
+
         const availableSP = this.getAvailableSkillPoints();
         if (availableSP < perk.costSP) {
             return { success: false, message: "แต้มทักษะ (SP) ไม่เพียงพอ" };
