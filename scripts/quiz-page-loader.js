@@ -35,40 +35,14 @@ async function main() {
         const loadComponentWithFix = async (selector, path) => {
             const cacheKey = `component_cache_${path}`;
             try {
-                const cachedHtml = sessionStorage.getItem(cacheKey);
-                if (cachedHtml) {
-                    const element = document.querySelector(selector);
-                    if (element) {
-                        let html = cachedHtml;
-                        // Replace ./assets/ with ../assets/ to fix 404s
-                        html = html.replace(/src="\.\/assets\//g, 'src="../assets/');
-                        // Replace other ./ links with ../ to fix navigation
-                        html = html.replace(/href="\.\//g, 'href="../');
-                        element.innerHTML = html;
-                        // Re-execute scripts
-                        Array.from(element.querySelectorAll('script')).forEach(oldScript => {
-                            const newScript = document.createElement('script');
-                            Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
-                            newScript.appendChild(document.createTextNode(oldScript.innerHTML));
-                            oldScript.parentNode.replaceChild(newScript, oldScript);
-                        });
-                        console.log(`⚡ ComponentLoader (Quiz): Loaded ${path} from cache`);
-                        return;
-                    }
-                }
+                sessionStorage.removeItem(cacheKey);
             } catch (e) {
-                console.warn(`⚠️ ComponentLoader (Quiz): sessionStorage access failed:`, e);
+                // Ignore storage errors
             }
 
             try {
                 const response = await fetch(path);
                 const originalHtml = await response.text();
-
-                try {
-                    sessionStorage.setItem(cacheKey, originalHtml);
-                } catch (e) {
-                    console.warn(`⚠️ ComponentLoader (Quiz): Failed to save cache:`, e);
-                }
 
                 let html = originalHtml;
                 // Replace ./assets/ with ../assets/ to fix 404s
