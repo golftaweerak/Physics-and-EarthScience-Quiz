@@ -526,13 +526,13 @@ function renderBossLeaderboard(game) {
     if (!listEl) return;
 
     const userDmg = game.state.bossDamageDealt || 0;
-    const userName = game.getDisplayName() || 'ผู้เล่น';
+    const userName = game.state.displayName || 'ผู้เรียน';
 
     // Mock top slayer leaderboard merged with user's actual progress
     const mockSlayers = [
         { name: 'Dr. AstroStar', dmg: Math.max(140, userDmg + 35), title: 'ผู้พิชิต Astro-Behemoth', isUser: false },
         { name: 'QuantumMaster', dmg: Math.max(110, userDmg + 15), title: 'ผู้พิชิต Quantum-Overlord', isUser: false },
-        { name: userName, dmg: userDmg, title: game.getCurrentTitle() || 'นักต่อสู้บอส', isUser: true }
+        { name: userName, dmg: userDmg, title: game.state.selectedTitle || 'นักต่อสู้บอส', isUser: true }
     ].sort((a, b) => b.dmg - a.dmg).slice(0, 3);
 
     const ranks = ['🥇', '🥈', '🥉'];
