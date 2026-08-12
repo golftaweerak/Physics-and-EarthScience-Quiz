@@ -745,14 +745,48 @@ export class Gamification {
         const profileLink = document.getElementById('main-header-profile-link');
         const user = this.authManager.currentUser;
 
-        // Update Header Email
+        // Update Compact Profile Card
+        const profileCard = document.getElementById('user-hub-profile-card');
+        const cardAvatar = document.getElementById('user-hub-card-avatar');
+        const cardName = document.getElementById('user-hub-card-name');
+        const cardLevel = document.getElementById('user-hub-card-level');
+        const cardXpFill = document.getElementById('user-hub-card-xp-fill');
+        const cardXpText = document.getElementById('user-hub-card-xp-text');
         const headerEmailEl = document.getElementById('user-hub-email');
+
         if (headerEmailEl) {
             if (user && user.email) {
                 headerEmailEl.textContent = user.email;
                 headerEmailEl.classList.remove('hidden');
             } else {
                 headerEmailEl.classList.add('hidden');
+            }
+        }
+
+        if (!user) {
+            if (profileCard) profileCard.classList.add('hidden');
+        } else {
+            if (profileCard) profileCard.classList.remove('hidden');
+
+            const displayName = this.state.displayName || user.displayName || 'ผู้เรียน';
+            const avatar = this.state.avatar || '🧑‍🎓';
+            const levelInfo = this.getCurrentLevel();
+            const xpRange = levelInfo.nextThreshold ? (levelInfo.nextThreshold.xp - levelInfo.currentThreshold.xp) : 1;
+            const xpCurrent = this.state.xp - levelInfo.currentThreshold.xp;
+            const xpPercent = Math.min(100, Math.max(0, (xpCurrent / xpRange) * 100));
+
+            if (cardName) cardName.textContent = displayName;
+            if (cardLevel) cardLevel.textContent = `Lv.${levelInfo.level}`;
+            if (cardXpText) cardXpText.textContent = `${this.state.xp.toLocaleString()} XP`;
+            if (cardXpFill) cardXpFill.style.width = `${xpPercent}%`;
+
+            if (cardAvatar) {
+                const isImage = avatar.includes('/') || avatar.includes('.');
+                if (isImage) {
+                    cardAvatar.innerHTML = `<img src="${escapeHtml(avatar)}" alt="Avatar" class="w-full h-full rounded-full object-cover">`;
+                } else {
+                    cardAvatar.innerHTML = `<span class="text-2xl">${escapeHtml(avatar)}</span>`;
+                }
             }
         }
 
