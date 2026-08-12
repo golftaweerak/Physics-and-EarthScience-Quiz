@@ -325,6 +325,7 @@ function renderUserInfo(game) {
 
     // Update Level Progress Bar & Quest
     const nextLevelTargetXpEl = document.getElementById('next-level-xp');
+    const xpNeededEl = document.getElementById('xp-needed');
     const progressBarEl = document.getElementById('xp-progress-bar');
     const questContainerEl = document.getElementById('next-level-quest-container');
     const questDescEl = document.getElementById('next-level-quest-desc');
@@ -335,21 +336,23 @@ function renderUserInfo(game) {
     const nextThreshold = XP_THRESHOLDS[overall.level]; // level is 1-based, array is 0-based
 
     if (nextThreshold) {
-        const xpRange = nextThreshold.xp - currentThreshold.xp;
-        const xpGained = game.state.xp - currentThreshold.xp;
-        const xpPercent = Math.min(100, Math.max(0, (xpGained / xpRange) * 100));
+        const xpNeededForLevel = nextThreshold.xp - currentThreshold.xp; // Range for this level
+        const xpGainedInLevel = Math.max(0, game.state.xp - currentThreshold.xp);
+        const xpRemaining = Math.max(0, nextThreshold.xp - game.state.xp);
+        const xpPercent = Math.min(100, Math.max(0, (xpGainedInLevel / xpNeededForLevel) * 100));
 
         if (progressBarEl) {
-            // Animate from 0 to target
             progressBarEl.style.width = '0%';
             setTimeout(() => {
                 progressBarEl.style.width = `${xpPercent}%`;
             }, 100);
         }
-        if (nextLevelTargetXpEl) nextLevelTargetXpEl.textContent = xpRange.toLocaleString();
+        if (nextLevelTargetXpEl) nextLevelTargetXpEl.textContent = nextThreshold.xp.toLocaleString();
+        if (xpNeededEl) xpNeededEl.textContent = xpRemaining.toLocaleString();
     } else {
         if (progressBarEl) progressBarEl.style.width = '100%';
         if (nextLevelTargetXpEl) nextLevelTargetXpEl.textContent = 'MAX';
+        if (xpNeededEl) xpNeededEl.textContent = '0';
     }
 
     if (questContainerEl) {
