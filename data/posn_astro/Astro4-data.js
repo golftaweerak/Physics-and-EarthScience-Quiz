@@ -383,7 +383,7 @@ export const quizItems = [
     "options": [
       "0.5 เท่า",
       "1 เท่า",
-      "$\\sqrt{2}$ เท่า",
+      "\(\\sqrt{2}\) เท่า",
       "2 เท่า"
     ],
     "answer": "1 เท่า",

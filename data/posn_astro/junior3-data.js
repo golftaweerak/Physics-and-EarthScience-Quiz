@@ -864,7 +864,7 @@ export const quizItems = [
   {
     "type": "question",
     "number": 53,
-    "question": "ระยะทาง 2.5 ปีแสง มีค่าประมาณกี่กิโลเมตร? (กำหนดให้ 1 ปีแสง $\\approx 9.5 \\times 10^{12}$ km)",
+    "question": "ระยะทาง 2.5 ปีแสง มีค่าประมาณกี่กิโลเมตร? (กำหนดให้ 1 ปีแสง \(\\approx 9.5 \\times 10^{12}\) km)",
     "options": [
       "\\(2.375 \\times 10^{12}\\) km",
       "\\(2.375 \\times 10^{13}\\) km",
@@ -977,7 +977,7 @@ export const quizItems = [
       "12,700 km"
     ],
     "answer": "6,800 km",
-    "explanation": "จากสูตรมุมขนาดเล็ก (Small-angle formula) $D = d \\times \\theta_{rad}$. ก่อนอื่นแปลงหน่วย: ระยะทาง $d = 0.37 \\text{ AU} \\times (1.5 \\times 10^8 \\text{ km/AU}) = 5.55 \\times 10^7$ km. ขนาดเชิงมุม $\\theta_{rad} = 25.1'' / 206265''/\\text{rad} \\approx 0.0001217$ rad. ดังนั้น เส้นผ่านศูนย์กลาง $D = (5.55 \\times 10^7 \\text{ km}) \\times 0.0001217 \\approx 6,755$ km หรือประมาณ 6,800 km.",
+    "explanation": "จากสูตรมุมขนาดเล็ก (Small-angle formula) \(D = d \\times \\theta_{rad}\). ก่อนอื่นแปลงหน่วย: ระยะทาง \(d = 0.37 \\text{ AU} \\times (1.5 \\times 10^8 \\text{ km/AU}) = 5.55 \\times 10^7\) km. ขนาดเชิงมุม \(\\theta_{rad} = 25.1'' / 206265''/\\text{rad} \\approx 0.0001217\) rad. ดังนั้น เส้นผ่านศูนย์กลาง \(D = (5.55 \\times 10^7 \\text{ km}) \\times 0.0001217 \\approx 6,755\) km หรือประมาณ 6,800 km.",
     "subCategory": {
       "main": "POSN_Astronomy",
       "specific": [
@@ -1031,7 +1031,7 @@ export const quizItems = [
       "32 AU"
     ],
     "answer": "32 AU",
-    "explanation": "ความยาวแกนเอก = ระยะใกล้สุด + ระยะไกลสุด = $1 + 31 = 32$ AU.",
+    "explanation": "ความยาวแกนเอก = ระยะใกล้สุด + ระยะไกลสุด = \(1 + 31 = 32\) AU.",
     "subCategory": {
       "main": "POSN_Astronomy",
       "specific": [
@@ -1084,7 +1084,7 @@ export const quizItems = [
       "90°"
     ],
     "answer": "45°",
-    "explanation": "มุมในวงกลมคือ 360°. ดังนั้นแต่ละชิ้นมีมุม $360 / 8 = 45°$.",
+    "explanation": "มุมในวงกลมคือ 360°. ดังนั้นแต่ละชิ้นมีมุม \(360 / 8 = 45°\).",
     "subCategory": {
       "main": "POSN_Astronomy",
       "specific": "คณิตศาสตร์สำหรับดาราศาสตร์ (พีชคณิต, เรขาคณิต, ตรีโกณมิติ)"
@@ -1126,7 +1126,7 @@ export const quizItems = [
   {
     "type": "question",
     "number": 68,
-    "question": "ถ้า $3x + 7 = 22$ แล้ว $x$ มีค่าเท่าใด?",
+    "question": "ถ้า \(3x + 7 = 22\) แล้ว \(x\) มีค่าเท่าใด?",
     "options": [
       "3",
       "5",
@@ -1236,7 +1236,7 @@ export const quizItems = [
       "เท่ากับโลก"
     ],
     "answer": "ประมาณ 1/27 เท่า",
-    "explanation": "ตามกฎส่วนกลับกำลังสอง (Inverse Square Law) พลังงานต่อหน่วยพื้นที่ (Flux) จะแปรผกผันกับกำลังสองของระยะห่าง ($F \\propto 1/r^2$). ดังนั้น อัตราส่วนฟลักซ์ของดาวพฤหัสบดีต่อโลกคือ $(\\frac{r_{Earth}}{r_{Jupiter}})^2 = (\\frac{1}{5.2})^2 \\approx \\frac{1}{27.04}$ หรือประมาณ 1/27 เท่า.",
+    "explanation": "ตามกฎส่วนกลับกำลังสอง (Inverse Square Law) พลังงานต่อหน่วยพื้นที่ (Flux) จะแปรผกผันกับกำลังสองของระยะห่าง (\(F \\propto 1/r^2\)). ดังนั้น อัตราส่วนฟลักซ์ของดาวพฤหัสบดีต่อโลกคือ \((\\frac{r_{Earth}}{r_{Jupiter}})^2 = (\\frac{1}{5.2})^2 \\approx \\frac{1}{27.04}\) หรือประมาณ 1/27 เท่า.",
     "subCategory": {
       "main": "POSN_Astronomy",
       "specific": [
@@ -1830,12 +1830,12 @@ export const quizItems = [
     "type": "question",
     "question": "ผู้สังเกตการณ์ที่ละติจูด 50° ใต้ จะเห็นดาวดวงใดเป็นดาวค้างฟ้า (ไม่เคยตก)?",
     "options": [
-      "ดาวคาโนปุส ($\\delta \\approx -53°$)",
-      "ดาวซิริอุส ($\\delta \\approx -17°$)",
-      "ดาวเหนือ ($\\delta \\approx +90°$)",
-      "ดาวเวกา ($\\delta \\approx +39°$)"
+      "ดาวคาโนปุส (\(\\delta \\approx -53°\))",
+      "ดาวซิริอุส (\(\\delta \\approx -17°\))",
+      "ดาวเหนือ (\(\\delta \\approx +90°\))",
+      "ดาวเวกา (\(\\delta \\approx +39°\))"
     ],
-    "answer": "ดาวคาโนปุส ($\\delta \\approx -53°$)",
+    "answer": "ดาวคาโนปุส (\(\\delta \\approx -53°\))",
     "explanation": "เงื่อนไขของดาวค้างฟ้าในซีกโลกใต้คือ เดคลิเนชันของดาวต้องน้อยกว่า \\(-(90° - L)\\).<br>\\(-(90° - 50°)\\) = -40°. ดาวคาโนปุสมีเดคลิเนชัน -53° ซึ่งน้อยกว่า -40° จึงเป็นดาวค้างฟ้า",
     "subCategory": {
       "main": "POSN_Astronomy",
