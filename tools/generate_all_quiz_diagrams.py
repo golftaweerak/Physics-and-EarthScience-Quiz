@@ -1112,5 +1112,613 @@ create_astro1_q39_rotation_curve()
 create_astro1_q47_light_curve()
 create_astro1_q49_spring_tide()
 
+def text_clean(ax, x, y, s, color='black', fontsize=9.5, ha='center', va='center', fontweight='bold', bg='white', pad=0.25):
+    ax.text(x, y, s, color=color, fontsize=fontsize, ha=ha, va=va, fontweight=fontweight,
+            bbox=dict(boxstyle=f'round,pad={pad}', facecolor=bg, edgecolor='none', alpha=0.92), zorder=10)
+
+# ==========================================
+# DIAGRAMS FOR Astro2-data.js
+# ==========================================
+
+def create_astro2_q5_circumpolar():
+    fig, ax = plt.subplots(figsize=(7.2, 5.6), dpi=150)
+    ax.set_aspect('equal')
+    ax.axis('off')
+
+    R = 3.2
+
+    # 1. Background Sky Arc
+    theta = np.linspace(0, np.pi, 200)
+    ax.plot(R * np.cos(theta), R * np.sin(theta), color='#1E293B', ls='-', lw=2, zorder=1)
+
+    # 2. Horizon Line
+    ax.plot([-R*1.15, R*1.15], [0, 0], color='#334155', lw=2.5, zorder=2)
+    ax.fill_between([-R*1.15, R*1.15], 0, -0.45, color='#F8FAFC', zorder=0)
+
+    # Observer at center O
+    ax.plot(0, 0, 'o', color='#0F172A', markersize=6, zorder=6)
+    text_clean(ax, 0, -0.28, 'O', color='#0F172A', fontsize=11)
+
+    # Cardinal Points & Zenith
+    text_clean(ax, -R*1.08, -0.28, 'N', color='#1E3A8A', fontsize=12)
+    text_clean(ax, R*1.08, -0.28, 'S', color='#1E3A8A', fontsize=12)
+    text_clean(ax, 0, R*1.08, 'Z', color='#065F46', fontsize=12)
+
+    # Latitude L = 30°
+    L = 30
+    ncp_angle_deg = 180 - L  # 150°
+    ncp_rad = np.radians(ncp_angle_deg)
+    ncp_x, ncp_y = R * np.cos(ncp_rad), R * np.sin(ncp_rad)
+
+    # 3. NCP Line
+    ax.plot([0, ncp_x], [0, ncp_y], color='#2563EB', lw=2, zorder=3)
+    ax.plot(ncp_x, ncp_y, 'o', color='#2563EB', markersize=7, zorder=6)
+    text_clean(ax, ncp_x - 0.3, ncp_y + 0.25, 'NCP', color='#1D4ED8', fontsize=11, ha='right')
+
+    # Latitude Arc L
+    arc_l = patches.Arc((0, 0), 1.6, 1.6, angle=0, theta1=150, theta2=180, color='#2563EB', lw=1.5, zorder=3)
+    ax.add_patch(arc_l)
+    text_clean(ax, -1.05, 0.22, r'$L$', color='#1D4ED8', fontsize=10, pad=0.15)
+
+    # 4. Celestial Equator (CE) (Alt = 60° S)
+    ce_angle_deg = 60
+    ce_rad = np.radians(ce_angle_deg)
+    ce_x, ce_y = R * np.cos(ce_rad), R * np.sin(ce_rad)
+    ax.plot([-ce_x, ce_x], [-ce_y, ce_y], color='#DC2626', ls='--', lw=1.8, zorder=2)
+    ax.plot(ce_x, ce_y, 'ro', markersize=5, zorder=5)
+    text_clean(ax, ce_x + 0.35, ce_y + 0.15, r'CE ($\delta = 0^\circ$)', color='#B91C1C', fontsize=10, ha='left')
+
+    # 5. Star with δ = +75° (θ_p = 15°)
+    delta = 75
+    theta_p = 90 - delta  # 15°
+
+    lower_angle_deg = 180 - (L - theta_p)  # 165°
+    upper_angle_deg = 180 - (L + theta_p)  # 135°
+
+    lower_rad = np.radians(lower_angle_deg)
+    upper_rad = np.radians(upper_angle_deg)
+
+    sl_x, sl_y = R * np.cos(lower_rad), R * np.sin(lower_rad)
+    su_x, su_y = R * np.cos(upper_rad), R * np.sin(upper_rad)
+
+    # Plot Star Points
+    ax.plot(sl_x, sl_y, '*', color='#D97706', markersize=14, markeredgecolor='#B45309', zorder=7)
+    ax.plot(su_x, su_y, '*', color='#D97706', markersize=14, markeredgecolor='#B45309', zorder=7)
+
+    # Sight lines to star transits
+    ax.plot([0, sl_x], [0, sl_y], color='#D97706', ls=':', lw=1.2, zorder=2)
+    ax.plot([0, su_x], [0, su_y], color='#D97706', ls=':', lw=1.2, zorder=2)
+
+    # Golden Arc along Meridian
+    star_arc_angles = np.linspace(upper_rad, lower_rad, 100)
+    ax.plot(R * np.cos(star_arc_angles), R * np.sin(star_arc_angles), color='#F59E0B', lw=4.5, zorder=4)
+
+    # Transit Labels
+    text_clean(ax, sl_x - 0.35, sl_y + 0.22, 'Lower Transit', color='#B45309', fontsize=9.5, ha='right')
+    text_clean(ax, su_x - 0.35, su_y + 0.25, 'Upper Transit', color='#B45309', fontsize=9.5, ha='right')
+
+    # Polar distance arcs 90° - δ
+    arc_p1 = patches.Arc((0, 0), 2.2, 2.2, angle=0, theta1=150, theta2=165, color='#D97706', lw=1.5, zorder=3)
+    arc_p2 = patches.Arc((0, 0), 2.2, 2.2, angle=0, theta1=135, theta2=150, color='#D97706', lw=1.5, zorder=3)
+    ax.add_patch(arc_p1)
+    ax.add_patch(arc_p2)
+
+    text_clean(ax, -1.25, 0.52, r'$90^\circ - \delta$', color='#B45309', fontsize=8.5, pad=0.15)
+    text_clean(ax, -0.92, 1.02, r'$90^\circ - \delta$', color='#B45309', fontsize=8.5, pad=0.15)
+
+    # Highlight Minimum Altitude Alt_min = L - (90° - δ) > 0°
+    ax.annotate('', xy=(sl_x, sl_y), xytext=(-R, 0),
+                arrowprops=dict(arrowstyle='<->', color='#059669', lw=2.2))
+    text_clean(ax, sl_x + 0.55, 0.28, r'$Alt_{\min} = L - (90^\circ - \delta) > 0^\circ$', color='#047857', fontsize=9.5, ha='left')
+
+    ax.set_xlim(-R*1.45, R*1.45)
+    ax.set_ylim(-0.6, R*1.22)
+    ax.set_title('Circumpolar Condition on Celestial Meridian', fontsize=11, fontweight='bold', color='#0F172A', pad=12)
+
+    plt.tight_layout()
+    plt.savefig(os.path.join(output_dir, 'astro2_q5_circumpolar.png'), dpi=150)
+    plt.close()
+
+def create_astro2_q7_third_quarter():
+    fig, ax = plt.subplots(figsize=(6, 5.5), dpi=150)
+    ax.set_aspect('equal')
+    ax.axis('off')
+
+    # Sunlight direction
+    ax.text(3.8, 0, 'Sunlight\n➔', ha='center', va='center', fontweight='bold', color='darkorange', fontsize=11)
+
+    # Earth center
+    ax.add_patch(patches.Circle((0, 0), 1.0, color='deepskyblue', ec='navy', lw=2, zorder=5))
+    ax.text(0, 0, 'Earth\n(Rotation ↺)', ha='center', va='center', fontweight='bold', color='white', fontsize=9)
+
+    # Moon Orbit
+    r_moon = 2.5
+    ax.add_patch(patches.Circle((0, 0), r_moon, color='gray', fill=False, ls='--', lw=1.5))
+
+    # Third Quarter Moon (Top) - Ram 8 Kham
+    mq3 = patches.Circle((0, r_moon), 0.3, color='lightgray', ec='black', lw=1.5, zorder=6)
+    ax.add_patch(mq3)
+    wedge = patches.Wedge((0, r_moon), 0.3, 90, 270, color='dimgray', zorder=7)
+    ax.add_patch(wedge)
+    add_label_box(ax, 'Third Quarter (Waning Half)\nRise: Midnight (00:00)\nTransit: 06:00 | Set: 12:00', 0, r_moon + 0.65, color='purple', fontsize=9)
+
+    # First Quarter Moon (Bottom) - Khuen 8 Kham
+    mq1 = patches.Circle((0, -r_moon), 0.3, color='lightgray', ec='black', lw=1.5, zorder=6)
+    ax.add_patch(mq1)
+    wedge1 = patches.Wedge((0, -r_moon), 0.3, 90, 270, color='dimgray', zorder=7)
+    ax.add_patch(wedge1)
+    add_label_box(ax, 'First Quarter (Waxing Half)\nRise: 12:00 | Transit: 18:00\nSet: Midnight (00:00)', 0, -r_moon - 0.65, color='darkblue', fontsize=9)
+
+    # Observer times on Earth surface
+    ax.text(0, 1.2, 'Midnight\n(00:00)', ha='center', va='bottom', fontweight='bold', fontsize=8.5, color='navy')
+    ax.text(0, -1.2, 'Noon\n(12:00)', ha='center', va='top', fontweight='bold', fontsize=8.5, color='darkgoldenrod')
+    ax.text(-1.2, 0, 'Sunrise\n(06:00)', ha='right', va='center', fontweight='bold', fontsize=8.5, color='darkgreen')
+    ax.text(1.2, 0, 'Sunset\n(18:00)', ha='left', va='center', fontweight='bold', fontsize=8.5, color='crimson')
+
+    ax.set_xlim(-3.8, 4.8)
+    ax.set_ylim(-3.8, 3.8)
+    ax.set_title('Moon Phases & Observer Local Times', fontsize=12, fontweight='bold', pad=10)
+
+    plt.tight_layout()
+    plt.savefig(os.path.join(output_dir, 'astro2_q7_third_quarter.png'), dpi=150)
+    plt.close()
+
+def create_astro2_q9_opposition():
+    fig, ax = plt.subplots(figsize=(6.5, 3.5), dpi=150)
+    ax.set_aspect('equal')
+    ax.axis('off')
+
+    # Sun
+    sun = patches.Circle((0, 0), 0.35, color='gold', ec='orange', lw=2, zorder=5)
+    ax.add_patch(sun)
+    ax.text(0, 0, 'Sun', ha='center', va='center', fontweight='bold', fontsize=9)
+
+    # Orbits
+    r_earth = 1.8
+    r_mars = 3.6
+    ax.add_patch(patches.Circle((0, 0), r_earth, color='royalblue', fill=False, ls=':', lw=1.5))
+    ax.add_patch(patches.Circle((0, 0), r_mars, color='crimson', fill=False, ls='--', lw=1.5))
+
+    # Earth
+    ex, ey = r_earth, 0
+    earth = patches.Circle((ex, ey), 0.22, color='deepskyblue', ec='navy', lw=2, zorder=5)
+    ax.add_patch(earth)
+    ax.text(ex, ey - 0.45, 'Earth', ha='center', va='top', fontweight='bold', fontsize=9.5, color='navy')
+
+    # Outer Planet (Opposition)
+    px, py = r_mars, 0
+    planet = patches.Circle((px, py), 0.25, color='coral', ec='firebrick', lw=2, zorder=5)
+    ax.add_patch(planet)
+    add_label_box(ax, 'Outer Planet\n(Opposition)', px, py + 0.65, color='firebrick', fontsize=9.5)
+
+    # Alignment line Sun-Earth-Planet
+    ax.plot([-0.5, r_mars + 0.6], [0, 0], 'r--', lw=1.8, zorder=3)
+
+    # Notes
+    add_label_box(ax, r'$180^\circ$ opposite to Sun' + '\nClosest to Earth & Brightest!\nRises at Sunset, Sets at Sunrise', 1.8, -1.4, color='darkred', fontsize=9)
+
+    ax.set_xlim(-0.8, 4.8)
+    ax.set_ylim(-2.2, 1.8)
+    ax.set_title('Outer Planet at Opposition', fontsize=12, fontweight='bold', pad=10)
+
+    plt.tight_layout()
+    plt.savefig(os.path.join(output_dir, 'astro2_q9_opposition.png'), dpi=150)
+    plt.close()
+
+def create_astro2_q12_eastern_elongation():
+    fig, ax = plt.subplots(figsize=(6, 5), dpi=150)
+    ax.set_aspect('equal')
+    ax.axis('off')
+
+    # Sun
+    sun = patches.Circle((0, 0), 0.35, color='gold', ec='orange', lw=2, zorder=5)
+    ax.add_patch(sun)
+    ax.text(0, 0, 'Sun', ha='center', va='center', fontweight='bold', fontsize=9)
+
+    r_inner = 1.8
+    r_earth = 3.2
+
+    ax.add_patch(patches.Circle((0, 0), r_inner, color='gray', fill=False, ls='--', lw=1.5))
+    ax.add_patch(patches.Circle((0, 0), r_earth, color='royalblue', fill=False, ls=':', lw=1.5))
+
+    # Earth at bottom
+    ex, ey = 0, -r_earth
+    earth = patches.Circle((ex, ey), 0.22, color='deepskyblue', ec='navy', lw=2, zorder=5)
+    ax.add_patch(earth)
+    ax.text(ex, ey - 0.45, 'Earth', ha='center', va='top', fontweight='bold', fontsize=10, color='navy')
+
+    # Greatest Eastern Elongation (Right side / East of Sun)
+    py = -(r_inner**2) / r_earth # -1.8^2 / 3.2 = -1.0125
+    px = np.sqrt(r_inner**2 - py**2) # ~1.488
+
+    venus = patches.Circle((px, py), 0.2, color='sandybrown', ec='saddlebrown', lw=2, zorder=5)
+    ax.add_patch(venus)
+    add_label_box(ax, 'Greatest Eastern Elongation\n(Venus in Evening Sky / West)', px + 0.8, py + 0.3, color='saddlebrown', fontsize=8.5)
+
+    # Tangent line of sight
+    ax.plot([ex, px], [ey, py], 'r-', lw=2, zorder=3)
+    ax.plot([0, px], [0, py], 'k--', lw=1.5, zorder=3)
+    ax.plot([ex, 0], [ey, 0], 'b--', lw=1.5, zorder=3)
+
+    # Evening observer note
+    add_label_box(ax, 'At Sunset (18:00), Sun sets in West,\nVenus remains above Western horizon!', -1.2, -1.8, color='darkgreen', fontsize=8.5)
+
+    ax.set_xlim(-3.2, 4.2)
+    ax.set_ylim(-4.2, 2.5)
+    ax.set_title('Greatest Eastern Elongation (Evening Star)', fontsize=12, fontweight='bold', pad=10)
+
+    plt.tight_layout()
+    plt.savefig(os.path.join(output_dir, 'astro2_q12_eastern_elongation.png'), dpi=150)
+    plt.close()
+
+def create_astro2_q16_conic_sections():
+    fig, ax = plt.subplots(figsize=(6.5, 4.5), dpi=150)
+    ax.set_aspect('equal')
+
+    # Focus (Sun / Earth) at origin
+    sun = patches.Circle((0, 0), 0.2, color='gold', ec='orange', lw=1.5, zorder=6)
+    ax.add_patch(sun)
+    ax.text(0, -0.4, 'Focus ($M$)', ha='center', va='top', fontweight='bold', fontsize=9.5)
+
+    # Periapsis distance rp = 1.0 at x = +1.0, y = 0
+    rp = 1.0
+    ax.plot(rp, 0, 'ko', markersize=5, zorder=6)
+
+    # 1. Circle (e = 0, E < 0)
+    circle = patches.Circle((0, 0), rp, color='blue', fill=False, ls='-', lw=2, label='Circle ($e = 0, E < 0$)')
+    ax.add_patch(circle)
+
+    # 2. Ellipse (e = 0.6, E < 0)
+    ellipse = patches.Ellipse((-1.5, 0), 5.0, 4.0, color='green', fill=False, ls='--', lw=2, label='Ellipse ($0 < e < 1, E < 0$)')
+    ax.add_patch(ellipse)
+
+    # 3. Parabola (e = 1.0, E = 0)
+    y_p = np.linspace(-3.2, 3.2, 100)
+    x_p = 1.0 - (y_p**2)/4.0
+    ax.plot(x_p, y_p, color='crimson', ls='-', lw=2.2, label='Parabola ($e = 1, E = 0$)')
+
+    # 4. Hyperbola (e = 1.5, E > 0)
+    y_h = np.linspace(-3.5, 3.5, 100)
+    x_h = 1.0 - (y_h**2)/2.2
+    ax.plot(x_h, y_h, color='purple', ls=':', lw=2.2, label='Hyperbola ($e > 1, E > 0$)')
+
+    ax.set_xlim(-4.2, 2.2)
+    ax.set_ylim(-3.6, 3.6)
+    ax.set_xlabel('$x$', fontsize=11)
+    ax.set_ylabel('$y$', fontsize=11)
+    ax.set_title('Conic Section Orbits & Energy States', fontsize=12, fontweight='bold', pad=10)
+    ax.grid(True, linestyle=':', alpha=0.5)
+    ax.legend(loc='upper left', fontsize=9)
+
+    plt.tight_layout()
+    plt.savefig(os.path.join(output_dir, 'astro2_q16_conic_sections.png'), dpi=150)
+    plt.close()
+
+def create_astro2_q23_parallax():
+    fig, ax = plt.subplots(figsize=(6, 5), dpi=150)
+    ax.set_aspect('equal')
+    ax.axis('off')
+
+    # Sun
+    sun = patches.Circle((0, 0), 0.25, color='gold', ec='orange', lw=2, zorder=5)
+    ax.add_patch(sun)
+    ax.text(0, 0, 'Sun', ha='center', va='center', fontweight='bold', fontsize=8.5)
+
+    # Earth positions (Jan & July, 6 months apart)
+    r_e = 2.2
+    e1 = patches.Circle((-r_e, 0), 0.18, color='deepskyblue', ec='navy', lw=2, zorder=5)
+    e2 = patches.Circle((r_e, 0), 0.18, color='deepskyblue', ec='navy', lw=2, zorder=5)
+    ax.add_patch(e1)
+    ax.add_patch(e2)
+    ax.text(-r_e, -0.45, 'Earth (Jan)', ha='center', va='top', fontweight='bold', fontsize=9)
+    ax.text(r_e, -0.45, 'Earth (July)', ha='center', va='top', fontweight='bold', fontsize=9)
+    ax.plot([-r_e, r_e], [0, 0], 'k--', lw=1.2)
+    add_label_box(ax, 'Baseline = 2 AU', 0, -0.45, color='black', fontsize=8.5)
+
+    # Target Nearby Star
+    star_y = 3.8
+    star = patches.Circle((0, star_y), 0.15, color='yellow', ec='darkorange', lw=2, zorder=6)
+    ax.add_patch(star)
+    add_label_box(ax, 'Nearby Star', 0.85, star_y, color='darkorange', fontsize=9.5)
+
+    # Sight lines forming triangle
+    ax.plot([-r_e, 0], [0, star_y], 'r-', lw=1.8)
+    ax.plot([r_e, 0], [0, star_y], 'r-', lw=1.8)
+    ax.plot([0, 0], [0, star_y], 'k:', lw=1.2)
+
+    # Parallax angle p
+    arc = patches.Arc((0, star_y), 1.0, 1.0, angle=0, theta1=270 - np.degrees(np.arctan(r_e/star_y)), theta2=270, color='purple', lw=1.5)
+    ax.add_patch(arc)
+    add_label_box(ax, r'$p$ (Parallax Angle)', -0.85, star_y - 0.7, color='purple', fontsize=9)
+
+    # Formula box
+    add_label_box(ax, r'$d = \frac{1}{p\text{ (arcsec)}}\text{ pc}$' + '\n' + r'Larger $p \Rightarrow$ Closer distance!', 0, star_y + 0.8, color='darkblue', fontsize=9.5)
+
+    ax.set_xlim(-3.2, 3.2)
+    ax.set_ylim(-1.0, 5.2)
+    ax.set_title('Stellar Parallax Geometry', fontsize=12, fontweight='bold', pad=10)
+
+    plt.tight_layout()
+    plt.savefig(os.path.join(output_dir, 'astro2_q23_parallax.png'), dpi=150)
+    plt.close()
+
+def create_astro2_q46_orbit_change():
+    fig, ax = plt.subplots(figsize=(6, 5), dpi=150)
+    ax.set_aspect('equal')
+    ax.axis('off')
+
+    earth = patches.Circle((0, 0), 1.0, color='deepskyblue', ec='navy', lw=2, zorder=5)
+    ax.add_patch(earth)
+    ax.text(0, 0, 'Earth', ha='center', va='center', fontweight='bold', color='white', fontsize=10)
+
+    r_circ = 2.5
+    circ_orbit = patches.Circle((0, 0), r_circ, color='blue', fill=False, ls='--', lw=1.8)
+    ax.add_patch(circ_orbit)
+    ax.text(-r_circ - 0.2, 0, 'Initial Circular Orbit', color='blue', ha='right', fontweight='bold', fontsize=8.5)
+
+    sat_x, sat_y = 0, r_circ
+    sat = patches.Rectangle((sat_x - 0.2, sat_y - 0.15), 0.4, 0.3, color='orange', ec='darkred', lw=1.5, zorder=6)
+    ax.add_patch(sat)
+
+    ax.annotate('', xy=(-0.8, sat_y), xytext=(0, sat_y),
+                arrowprops=dict(arrowstyle="->", color="crimson", lw=2.5))
+    add_label_box(ax, r'Retrograde Burn ($\Delta v < 0$)', 0.8, sat_y + 0.4, color='crimson', fontsize=8.5)
+
+    ellipse_new = patches.Ellipse((0, 0.6), 2 * 1.8028, 2 * 1.9, color='crimson', fill=False, ls='-', lw=2.2, zorder=4)
+    ax.add_patch(ellipse_new)
+
+    add_label_box(ax, 'Burn Point becomes APOGEE!\nNew Elliptical Orbit (Smaller)', 0, -1.8, color='darkred', fontsize=9)
+
+    ax.set_xlim(-3.2, 3.2)
+    ax.set_ylim(-2.5, 3.8)
+    ax.set_title('Effect of Velocity Reduction in Orbit', fontsize=12, fontweight='bold', pad=10)
+
+    plt.tight_layout()
+    plt.savefig(os.path.join(output_dir, 'astro2_q46_orbit_change.png'), dpi=150)
+    plt.close()
+
+# ==========================================
+# DIAGRAMS FOR Astro3-data.js
+# ==========================================
+
+def create_astro3_q6_visibility():
+    fig, ax = plt.subplots(figsize=(7, 5.2), dpi=150)
+    ax.set_aspect('equal')
+    ax.axis('off')
+    R = 3.2
+    theta = np.linspace(0, np.pi, 200)
+    ax.plot(R * np.cos(theta), R * np.sin(theta), color='#1E293B', ls='-', lw=2, zorder=1)
+    ax.plot([-R*1.15, R*1.15], [0, 0], color='#334155', lw=2.5, zorder=2)
+    ax.fill_between([-R*1.15, R*1.15], 0, -0.6, color='#F8FAFC', zorder=0)
+
+    text_clean(ax, 0, -0.28, 'O', color='#0F172A', fontsize=11)
+    text_clean(ax, -R*1.08, -0.28, 'N', color='#1E3A8A', fontsize=12)
+    text_clean(ax, R*1.08, -0.28, 'S', color='#1E3A8A', fontsize=12)
+    text_clean(ax, 0, R*1.08, 'Z', color='#065F46', fontsize=12)
+
+    L = 34
+    ncp_rad = np.radians(180 - L)
+    ncp_x, ncp_y = R * np.cos(ncp_rad), R * np.sin(ncp_rad)
+    ax.plot([0, ncp_x], [0, ncp_y], color='#2563EB', lw=2, zorder=3)
+    ax.plot(ncp_x, ncp_y, 'o', color='#2563EB', markersize=7, zorder=6)
+    text_clean(ax, ncp_x - 0.3, ncp_y + 0.25, r'NCP ($Alt = 34^\circ$)', color='#1D4ED8', fontsize=10, ha='right')
+
+    ce_rad = np.radians(90 - L)  # 56° S
+    ce_x, ce_y = R * np.cos(ce_rad), R * np.sin(ce_rad)
+    ax.plot([-ce_x, ce_x], [-ce_y, ce_y], color='#DC2626', ls='--', lw=1.8, zorder=2)
+    text_clean(ax, ce_x + 0.35, ce_y + 0.15, r'CE ($Alt = 56^\circ\text{ S}$)', color='#B91C1C', fontsize=10, ha='left')
+
+    # Star Achernar (dec = -57°) -> Max Alt = 90 - 34 - 57 = -1° (Below horizon!)
+    star_rad = np.radians(-(57 - (90 - L)))
+    star_x, star_y = R * np.cos(star_rad), R * np.sin(star_rad)
+    ax.plot(star_x, star_y, '*', color='#7C3AED', markersize=14, markeredgecolor='#5B21B6', zorder=7)
+    text_clean(ax, star_x + 0.3, star_y - 0.25, r'Achernar ($\delta = -57^\circ$)' + '\n' + r'$Alt_{\max} = -1^\circ$ (Below Horizon!)', color='#6D28D9', fontsize=9.5, ha='center')
+
+    ax.set_xlim(-R*1.45, R*1.45)
+    ax.set_ylim(-0.8, R*1.22)
+    ax.set_title(r'Celestial Meridian Geometry: Star Below Horizon (Lat $34^\circ$ N)', fontsize=11, fontweight='bold', pad=12)
+    plt.tight_layout()
+    plt.savefig(os.path.join(output_dir, 'astro3_q6_visibility.png'), dpi=150)
+    plt.close()
+
+def create_astro3_q8_ellipse_velocities():
+    fig, ax = plt.subplots(figsize=(7.2, 4.8), dpi=150)
+    ax.set_aspect('equal')
+    ax.axis('off')
+
+    a, e = 3.0, 0.5
+    b = a * np.sqrt(1 - e**2)
+    c = a * e
+    t = np.linspace(0, 2*np.pi, 200)
+
+    # Ellipse path
+    ax.plot(a*np.cos(t), b*np.sin(t), color='#2563EB', lw=2, zorder=2)
+
+    # Major axis line
+    ax.plot([-a, a], [0, 0], color='#94A3B8', ls='--', lw=1.2, zorder=1)
+
+    # Sun at focus (-c, 0)
+    ax.plot(-c, 0, 'o', color='#F59E0B', markersize=14, markeredgecolor='#B45309', zorder=6)
+    text_clean(ax, -c, -0.55, 'Sun', color='#B45309', fontsize=10)
+
+    # Perihelion & Aphelion points
+    rp_x, rp_y = -a, 0
+    ra_x, ra_y = a, 0
+    ax.plot(rp_x, rp_y, 'ro', markersize=7, zorder=6)
+    ax.plot(ra_x, ra_y, 'go', markersize=7, zorder=6)
+
+    # Clean short labels outside the ellipse
+    text_clean(ax, rp_x - 0.7, 0, 'Perihelion\n($r_p$)', color='#B91C1C', fontsize=10, ha='right')
+    text_clean(ax, ra_x + 0.7, 0, 'Aphelion\n($r_a$)', color='#047857', fontsize=10, ha='left')
+
+    # Arrows showing r_p and r_a distances
+    ax.annotate('', xy=(-c, 0.5), xytext=(rp_x, 0.5), arrowprops=dict(arrowstyle='<->', color='#B91C1C', lw=1.5))
+    text_clean(ax, (-c + rp_x)/2, 0.9, '$r_p$', color='#B91C1C', fontsize=9.5, pad=0.15)
+
+    ax.annotate('', xy=(-c, 0.5), xytext=(ra_x, 0.5), arrowprops=dict(arrowstyle='<->', color='#047857', lw=1.5))
+    text_clean(ax, (-c + ra_x)/2, 0.9, '$r_a$', color='#047857', fontsize=9.5, pad=0.15)
+
+    ax.set_xlim(-a*1.55, a*1.55)
+    ax.set_ylim(-b*1.5, b*1.5)
+    ax.set_title('Elliptical Orbit Geometry: Perihelion ($r_p$) & Aphelion ($r_a$)', fontsize=11, fontweight='bold', color='#0F172A', pad=12)
+
+    plt.tight_layout()
+    plt.savefig(os.path.join(output_dir, 'astro3_q8_ellipse_velocities.png'), dpi=150)
+    plt.close()
+
+def create_astro3_q11_redshift():
+    fig, ax = plt.subplots(figsize=(7.5, 4.2), dpi=150)
+    ax.axis('off')
+    ax.add_patch(patches.Rectangle((0, 2.2), 10, 0.8, color='#0284C7', alpha=0.35))
+    ax.plot([0, 10], [2.2, 2.2], 'k-', lw=1)
+    ax.plot([0, 10], [3.0, 3.0], 'k-', lw=1)
+    ax.plot([2.0, 2.0], [2.2, 3.0], color='#0F172A', lw=3.5, zorder=5)
+    text_clean(ax, -0.3, 2.6, 'Laboratory Rest Spectrum', color='#0369A1', fontsize=9.5, ha='right')
+    text_clean(ax, 2.0, 3.3, r'$\lambda_0 = 486\text{ nm}$ (Cyan)', color='#0F172A', fontsize=9, ha='center')
+
+    ax.add_patch(patches.Rectangle((0, 0.5), 10, 0.8, color='#DC2626', alpha=0.35))
+    ax.plot([0, 10], [0.5, 0.5], 'k-', lw=1)
+    ax.plot([0, 10], [1.3, 1.3], 'k-', lw=1)
+    ax.plot([8.0, 8.0], [0.5, 1.3], color='#0F172A', lw=3.5, zorder=5)
+    text_clean(ax, -0.3, 0.9, 'Distant Galaxy Spectrum', color='#B91C1C', fontsize=9.5, ha='right')
+    text_clean(ax, 8.0, 0.2, r'$\lambda = 1944\text{ nm}$ (Redshifted)', color='#0F172A', fontsize=9, ha='center')
+
+    ax.annotate('', xy=(8.0, 1.3), xytext=(2.0, 2.2),
+                arrowprops=dict(arrowstyle='->', color='#DC2626', lw=2.5, ls='--'))
+    text_clean(ax, 5.0, 1.8, r'Redshift $z = \frac{\lambda - \lambda_0}{\lambda_0} = \frac{1944 - 486}{486} = 3$', color='#991B1B', fontsize=9.5)
+
+    ax.set_xlim(-3.2, 11)
+    ax.set_ylim(-0.2, 3.8)
+    ax.set_title('Cosmological Redshift of Galaxy Absorption Line', fontsize=11, fontweight='bold', pad=12)
+    plt.tight_layout()
+    plt.savefig(os.path.join(output_dir, 'astro3_q11_redshift.png'), dpi=150)
+    plt.close()
+
+def create_astro3_q23_prograde_burn():
+    fig, ax = plt.subplots(figsize=(7, 5), dpi=150)
+    ax.set_aspect('equal')
+    ax.axis('off')
+
+    ax.plot(0, 0, 'o', color='#0284C7', markersize=14, markeredgecolor='#0369A1', zorder=6)
+    text_clean(ax, 0, -0.4, 'Earth', color='#0369A1', fontsize=9.5)
+
+    r_c = 2.0
+    circle = patches.Circle((0, 0), r_c, color='#0284C7', fill=False, ls='--', lw=1.8, zorder=2)
+    ax.add_patch(circle)
+
+    burn_x, burn_y = r_c, 0
+    ax.plot(burn_x, burn_y, '*', color='#F59E0B', markersize=14, markeredgecolor='#B45309', zorder=7)
+    text_clean(ax, burn_x + 0.35, burn_y + 0.45, 'Perigee (Burn Point)\n' + r'Prograde Boost ($+\Delta v$)', color='#B45309', fontsize=9.5, ha='left')
+
+    a_new = (r_c + 3.8) / 2
+    c_new = a_new - r_c
+    b_new = np.sqrt(a_new**2 - c_new**2)
+    t = np.linspace(0, 2*np.pi, 200)
+    ax.plot(-c_new + a_new*np.cos(t), b_new*np.sin(t), color='#DC2626', lw=2.2, zorder=3)
+
+    apogee_x = -3.8
+    ax.plot(apogee_x, 0, 'ro', markersize=6, zorder=6)
+    text_clean(ax, apogee_x - 0.35, 0.45, 'New Apogee (Higher!)', color='#B91C1C', fontsize=9.5, ha='right')
+
+    ax.set_xlim(-4.8, 3.8)
+    ax.set_ylim(-2.8, 2.8)
+    ax.set_title('Orbit Transfer: Prograde Burn at Perigee Raises Apogee', fontsize=11, fontweight='bold', pad=12)
+    plt.tight_layout()
+    plt.savefig(os.path.join(output_dir, 'astro3_q23_prograde_burn.png'), dpi=150)
+    plt.close()
+
+def create_astro3_q25_q35_stellar_interiors():
+    fig, ax = plt.subplots(figsize=(8.2, 4.2), dpi=150)
+    ax.set_aspect('equal')
+    ax.axis('off')
+
+    c1 = patches.Circle((-3.0, 0), 1.0, color='#FCA5A5', ec='#DC2626', lw=2)
+    ax.add_patch(c1)
+    text_clean(ax, -3.0, -1.45, r'Low-Mass Star ($M < 0.35 M_\odot$)' + '\n' + r'Fully Convective Core & Envelope' + '\n' + r'(p-p chain)', color='#B91C1C', fontsize=8.5)
+
+    c2_out = patches.Circle((0, 0), 1.0, color='#FEF08A', ec='#CA8A04', lw=2)
+    c2_in = patches.Circle((0, 0), 0.55, color='#FACC15', ec='#854D0E', lw=1.5)
+    ax.add_patch(c2_out)
+    ax.add_patch(c2_in)
+    text_clean(ax, 0, -1.45, r'Sun-like Star ($0.35 - 1.3 M_\odot$)' + '\n' + r'Radiative Core + Convective Envelope' + '\n' + r'(p-p chain)', color='#854D0E', fontsize=8.5)
+
+    c3_out = patches.Circle((3.0, 0), 1.0, color='#BAE6FD', ec='#0284C7', lw=2)
+    c3_in = patches.Circle((3.0, 0), 0.55, color='#38BDF8', ec='#0369A1', lw=1.5)
+    ax.add_patch(c3_out)
+    ax.add_patch(c3_in)
+    text_clean(ax, 3.0, -1.45, r'High-Mass Star ($M > 1.3 M_\odot$)' + '\n' + r'Convective Core + Radiative Envelope' + '\n' + r'(CNO Cycle)', color='#0369A1', fontsize=8.5)
+
+    ax.set_xlim(-4.6, 4.6)
+    ax.set_ylim(-2.2, 1.6)
+    ax.set_title('Internal Energy Transport Structures by Stellar Mass', fontsize=11, fontweight='bold', pad=12)
+    plt.tight_layout()
+    plt.savefig(os.path.join(output_dir, 'astro3_q25_q35_stellar_interiors.png'), dpi=150)
+    plt.close()
+
+def create_astro3_q38_luminosity_radius_temp():
+    fig, ax = plt.subplots(figsize=(7.5, 4.5), dpi=150)
+    ax.set_aspect('equal')
+    ax.axis('off')
+
+    cA = patches.Circle((-2.0, 0), 1.2, color='#60A5FA', ec='#1D4ED8', lw=2)
+    ax.add_patch(cA)
+    text_clean(ax, -2.0, 0, r'Star A' + '\n' + r'$L_A = 100 L_\odot$' + '\n' + r'$T_A = 10,000\text{ K}$', color='#1E3A8A', fontsize=9.5)
+
+    cB = patches.Circle((2.5, 0), 0.35, color='#FCA5A5', ec='#B91C1C', lw=2)
+    ax.add_patch(cB)
+    text_clean(ax, 2.5, 0.7, r'Star B' + '\n' + r'$L_B = 0.01 L_\odot$' + '\n' + r'$T_B = 3,000\text{ K}$', color='#991B1B', fontsize=9)
+
+    text_clean(ax, 0.2, -1.6, r'Stefan-Boltzmann Law: $L \propto R^2 T^4 \Rightarrow R \propto \frac{\sqrt{L}}{T^2}$' + '\n' + r'$\frac{R_A}{R_B} = \sqrt{\frac{L_A}{L_B}} \times \left(\frac{T_B}{T_A}\right)^2 = 100 \times 0.09 = 9$', color='#0F172A', fontsize=9.5, pad=0.35)
+
+    ax.set_xlim(-3.8, 3.8)
+    ax.set_ylim(-2.2, 1.6)
+    ax.set_title('Stellar Radii Comparison via Stefan-Boltzmann Law', fontsize=11, fontweight='bold', pad=12)
+    plt.tight_layout()
+    plt.savefig(os.path.join(output_dir, 'astro3_q38_luminosity_radius_temp.png'), dpi=150)
+    plt.close()
+
+def create_astro3_q50_stellar_fate():
+    fig, ax = plt.subplots(figsize=(8.2, 4.6), dpi=150)
+    ax.axis('off')
+
+    text_clean(ax, -3.2, 1.2, r'Initial Mass' + '\n' + r'$M < 8 M_\odot$', color='#1E3A8A', fontsize=9.5)
+    text_clean(ax, 0, 1.2, r'Initial Mass' + '\n' + r'$8 M_\odot \leq M \leq 25 M_\odot$', color='#065F46', fontsize=9.5)
+    text_clean(ax, 3.2, 1.2, r'Initial Mass' + '\n' + r'$M > 25 M_\odot$', color='#7C3AED', fontsize=9.5)
+
+    ax.annotate('', xy=(-3.2, -0.4), xytext=(-3.2, 0.7), arrowprops=dict(arrowstyle='->', lw=2, color='#2563EB'))
+    ax.annotate('', xy=(0, -0.4), xytext=(0, 0.7), arrowprops=dict(arrowstyle='->', lw=2, color='#059669'))
+    ax.annotate('', xy=(3.2, -0.4), xytext=(3.2, 0.7), arrowprops=dict(arrowstyle='->', lw=2, color='#8B5CF6'))
+
+    text_clean(ax, -3.2, -0.8, r'Planetary Nebula' + '\n+\n' + r'White Dwarf ($M_{\text{core}} < 1.4 M_\odot$)', color='#1D4ED8', fontsize=9)
+    text_clean(ax, 0, -0.8, r'Supernova (Type II)' + '\n+\n' + r'Neutron Star ($1.4 - 3 M_\odot$)', color='#047857', fontsize=9)
+    text_clean(ax, 3.2, -0.8, r'Supernova / Hypernova' + '\n+\n' + r'Stellar Black Hole ($> 3 M_\odot$)', color='#6D28D9', fontsize=9)
+
+    ax.set_xlim(-4.8, 4.8)
+    ax.set_ylim(-1.6, 2.0)
+    ax.set_title('Stellar End States & Remnants by Initial Mass', fontsize=11, fontweight='bold', pad=12)
+    plt.tight_layout()
+    plt.savefig(os.path.join(output_dir, 'astro3_q50_stellar_fate.png'), dpi=150)
+    plt.close()
+
+# Generate Astro2 diagrams!
+create_astro2_q5_circumpolar()
+create_astro2_q7_third_quarter()
+create_astro2_q9_opposition()
+create_astro2_q12_eastern_elongation()
+create_astro2_q16_conic_sections()
+create_astro2_q23_parallax()
+# create_astro2_q43_winter_triangle()  # Removed per user request
+create_astro2_q46_orbit_change()
+
+# Generate Astro3 diagrams!
+create_astro3_q6_visibility()
+create_astro3_q8_ellipse_velocities()
+create_astro3_q11_redshift()
+create_astro3_q23_prograde_burn()
+create_astro3_q25_q35_stellar_interiors()
+create_astro3_q38_luminosity_radius_temp()
+create_astro3_q50_stellar_fate()
+
 print("ALL DIAGRAMS PERFECTLY GENERATED!")
+
 

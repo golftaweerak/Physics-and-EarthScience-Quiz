@@ -73,7 +73,7 @@ export const quizItems = [
       "ไม่สามารถมองเห็นดาวดวงนี้ได้"
     ],
     "answer": "เป็นดาวค้างฟ้า",
-    "explanation": "ดาวจะเป็นดาวค้างฟ้าถ้าเดคลิเนชันของมัน \\(\\delta\\) มากกว่า \\(90° - L\\) \nเมื่อ \\(L\\) คือ ละติจูด\nในกรณีนี้ \\(90° - 30° = 60°\\) เนื่องจากเดคลิเนชันของดาว (+75°) มากกว่า 60° ดาวดวงนี้จึงเป็นดาวค้างฟ้า",
+    "explanation": "ดาวจะเป็นดาวค้างฟ้าถ้าเดคลิเนชันของมัน \\(\\delta\\) มากกว่า \\(90° - L\\) \nเมื่อ \\(L\\) คือ ละติจูด\nในกรณีนี้ \\(90° - 30° = 60°\\) เนื่องจากเดคลิเนชันของดาว (+75°) มากกว่า 60° ดาวดวงนี้จึงเป็นดาวค้างฟ้า<br><br><div class='flex justify-center my-4'><img src='../assets/images/astro2_q5_circumpolar.png' alt='เงื่อนไขดาวค้างฟ้า (Circumpolar Star)' class='max-w-md rounded-lg shadow'></div>",
     "subCategory": {
       "main": "POSN_Astronomy",
       "specific": "ทรงกลมท้องฟ้าและระบบพิกัด"
@@ -105,7 +105,7 @@ export const quizItems = [
       "06:00 น."
     ],
     "answer": "เที่ยงคืน",
-    "explanation": "ดวงจันทร์แรม 8 ค่ำ (Third Quarter) จะขึ้นตอนประมาณเที่ยงคืน อยู่สูงสุดทางทิศใต้ตอนเช้ามืด (06:00 น.) และตกตอนประมาณเที่ยงวัน",
+    "explanation": "ดวงจันทร์แรม 8 ค่ำ (Third Quarter) จะขึ้นตอนประมาณเที่ยงคืน อยู่สูงสุดทางทิศใต้ตอนเช้ามืด (06:00 น.) และตกตอนประมาณเที่ยงวัน<br><br><div class='flex justify-center my-4'><img src='../assets/images/astro2_q7_third_quarter.png' alt='เฟสดวงจันทร์และเวลาผู้สังเกต' class='max-w-md rounded-lg shadow'></div>",
     "subCategory": {
       "main": "POSN_Astronomy",
       "specific": "ทรงกลมท้องฟ้าและระบบพิกัด"
@@ -137,7 +137,7 @@ export const quizItems = [
       "ตำแหน่งมุมห่างมากที่สุด (Greatest Elongation)"
     ],
     "answer": "ตำแหน่งตรงข้าม (Opposition)",
-    "explanation": "ตำแหน่งตรงข้ามคือตำแหน่งที่ดาวเคราะห์วงนอกอยู่ตรงข้ามกับดวงอาทิตย์โดยมีโลกคั่นกลาง ทำให้มันอยู่ใกล้โลกที่สุด สว่างที่สุด และจะขึ้นตอนดวงอาทิตย์ตกและตกตอนดวงอาทิตย์ขึ้นพอดี",
+    "explanation": "ตำแหน่งตรงข้ามคือตำแหน่งที่ดาวเคราะห์วงนอกอยู่ตรงข้ามกับดวงอาทิตย์โดยมีโลกคั่นกลาง ทำให้มันอยู่ใกล้โลกที่สุด สว่างที่สุด และจะขึ้นตอนดวงอาทิตย์ตกและตกตอนดวงอาทิตย์ขึ้นพอดี<br><br><div class='flex justify-center my-4'><img src='../assets/images/astro2_q9_opposition.png' alt='ตำแหน่งตรงข้าม (Opposition)' class='max-w-md rounded-lg shadow'></div>",
     "subCategory": {
       "main": "POSN_Astronomy",
       "specific": "ระบบสุริยะและองค์ประกอบ"
@@ -185,7 +185,7 @@ export const quizItems = [
       "Greatest Western Elongation"
     ],
     "answer": "Greatest Eastern Elongation",
-    "explanation": "เมื่อดาวศุกร์อยู่ที่มุมห่างทางตะวันออก (Eastern Elongation) มันจะปรากฏอยู่ทางทิศตะวันออกของดวงอาทิตย์บนท้องฟ้า ทำให้เราเห็นมันตามหลังดวงอาทิตย์ตกไปทางทิศตะวันตกในเวลาหัวค่ำ",
+    "explanation": "เมื่อดาวศุกร์อยู่ที่มุมห่างทางตะวันออก (Eastern Elongation) มันจะปรากฏอยู่ทางทิศตะวันออกของดวงอาทิตย์บนท้องฟ้า ทำให้เราเห็นมันตามหลังดวงอาทิตย์ตกไปทางทิศตะวันตกในเวลาหัวค่ำ<br><br><div class='flex justify-center my-4'><img src='../assets/images/astro2_q12_eastern_elongation.png' alt='ตำแหน่งมุมห่างตะวันออกมากที่สุด (Greatest Eastern Elongation)' class='max-w-md rounded-lg shadow'></div>",
     "subCategory": {
       "main": "POSN_Astronomy",
       "specific": "ระบบสุริยะและองค์ประกอบ"
@@ -249,7 +249,7 @@ export const quizItems = [
       "ไฮเพอร์โบลา"
     ],
     "answer": "พาราโบลา",
-    "explanation": "วงโคจรแบบพาราโบลาคือเส้นทางของวัตถุที่มีพลังงานพอดีที่จะหลุดพ้นจากสนามโน้มถ่วง (อัตราเร็วเท่ากับอัตราเร็วหลุดพ้น) ซึ่งมีพลังงานรวมเป็นศูนย์และค่าความรีเป็น 1",
+    "explanation": "วงโคจรแบบพาราโบลาคือเส้นทางของวัตถุที่มีพลังงานพอดีที่จะหลุดพ้นจากสนามโน้มถ่วง (อัตราเร็วเท่ากับอัตราเร็วหลุดพ้น) ซึ่งมีพลังงานรวมเป็นศูนย์และค่าความรีเป็น 1<br><br><div class='flex justify-center my-4'><img src='../assets/images/astro2_q16_conic_sections.png' alt='รูปแบบวงโคจรภาคตัดกรวย' class='max-w-md rounded-lg shadow'></div>",
     "subCategory": {
       "main": "POSN_Astronomy",
       "specific": "กลศาสตร์ท้องฟ้าและกฎของเคปเลอร์"
@@ -361,7 +361,7 @@ export const quizItems = [
       "การวิเคราะห์การแผ่รังสีของวัตถุดำ"
     ],
     "answer": "การวัดมุมแพรัลแลกซ์ดาวฤกษ์",
-    "explanation": "วิธีพารัลแลกซ์คือการวัดมุมที่ตำแหน่งปรากฏของดาวฤกษ์ขยับไปเมื่อเทียบกับดาวฉากหลัง โดยอาศัยการสังเกตจากสองตำแหน่งที่ต่างกันในวงโคจรของโลก (ซึ่งมักจะสังเกตห่างกัน 6 เดือนเพื่อให้ได้เส้นฐานที่ยาวที่สุด)",
+    "explanation": "วิธีพารัลแลกซ์คือการวัดมุมที่ตำแหน่งปรากฏของดาวฤกษ์ขยับไปเมื่อเทียบกับดาวฉากหลัง โดยอาศัยการสังเกตจากสองตำแหน่งที่ต่างกันในวงโคจรของโลก (ซึ่งมักจะสังเกตห่างกัน 6 เดือนเพื่อให้ได้เส้นฐานที่ยาวที่สุด)<br><br><div class='flex justify-center my-4'><img src='../assets/images/astro2_q23_parallax.png' alt='มุมแพรัลแลกซ์ดาวฤกษ์ (Stellar Parallax)' class='max-w-md rounded-lg shadow'></div>",
     "subCategory": {
       "main": "POSN_Astronomy",
       "specific": "สมบัติและวิวัฒนาการของดาวฤกษ์"
@@ -729,7 +729,7 @@ export const quizItems = [
       "หลุดออกจากวงโคจรของโลกไปในที่สุด"
     ],
     "answer": "กลายเป็นวงรี โดยจุดที่เกิดเหตุเป็นจุดไกลโลกที่สุด",
-    "explanation": "การลดความเร็ว (Retrograde burn) จะทำให้พลังงานของวงโคจรลดลง ดาวเทียมจะตกลงสู่วงโคจรที่ต่ำลง โดยจุดที่เกิดเหตุ (ซึ่งมีความเร็วต่ำที่สุด) จะกลายเป็นจุดที่ไกลที่สุด (Apogee) ของวงโคจรวงรีใหม่",
+    "explanation": "การลดความเร็ว (Retrograde burn) จะทำให้พลังงานของวงโคจรลดลง ดาวเทียมจะตกลงสู่วงโคจรที่ต่ำลง โดยจุดที่เกิดเหตุ (ซึ่งมีความเร็วต่ำที่สุด) จะกลายเป็นจุดที่ไกลที่สุด (Apogee) ของวงโคจรวงรีใหม่<br><br><div class='flex justify-center my-4'><img src='../assets/images/astro2_q46_orbit_change.png' alt='การเปลี่ยนวงโคจรจากการลดความเร็ว' class='max-w-md rounded-lg shadow'></div>",
     "subCategory": {
       "main": "POSN_Astronomy",
       "specific": "กลศาสตร์ท้องฟ้าและกฎของเคปเลอร์"
@@ -777,7 +777,7 @@ export const quizItems = [
       "เที่ยงวัน"
     ],
     "answer": "เที่ยงคืน",
-    "explanation": "ดวงจันทร์ขึ้น 8 ค่ำ (First Quarter) จะขึ้นตอนประมาณเที่ยงวัน อยู่สูงสุดทางทิศใต้ตอนประมาณ 18:00 น. และตกทางทิศตะวันตกในเวลาประมาณเที่ยงคืน",
+    "explanation": "ดวงจันทร์ขึ้น 8 ค่ำ (First Quarter) จะขึ้นตอนประมาณเที่ยงวัน อยู่สูงสุดทางทิศใต้ตอนประมาณ 18:00 น. และตกทางทิศตะวันตกในเวลาประมาณเที่ยงคืน<br><br><div class='flex justify-center my-4'><img src='../assets/images/astro2_q7_third_quarter.png' alt='เฟสดวงจันทร์และเวลาผู้สังเกต' class='max-w-md rounded-lg shadow'></div>",
     "subCategory": {
       "main": "POSN_Astronomy",
       "specific": "ทรงกลมท้องฟ้าและระบบพิกัด"
@@ -793,7 +793,7 @@ export const quizItems = [
       "+40°"
     ],
     "answer": "+40°",
-    "explanation": "ดาวที่จะไม่ขึ้นเลยสำหรับผู้สังเกตในซีกโลกใต้ คือดาวที่มีเดคลิเนชันเป็นบวกและมีค่ามากกว่า \(90° - |L|\). ในกรณีนี้ \(90° - 60° = 30°\). ดังนั้นดาวที่มีเดคลิเนชันมากกว่า +30° (เช่น +40°) จะไม่ขึ้นเหนือขอบฟ้าเลย",
+    "explanation": "ดาวที่จะไม่ขึ้นเลยสำหรับผู้สังเกตในซีกโลกใต้ คือดาวที่มีเดคลิเนชันเป็นบวกและมีค่ามากกว่า \(90° - |L|\). ในกรณีนี้ \(90° - 60° = 30°\). ดังนั้นดาวที่มีเดคลิเนชันมากกว่า +30° (เช่น +40°) จะไม่ขึ้นเหนือขอบฟ้าเลย<br><br><div class='flex justify-center my-4'><img src='../assets/images/astro2_q5_circumpolar.png' alt='เงื่อนไขดาวที่ไม่ขึ้นเหนือขอบฟ้า' class='max-w-md rounded-lg shadow'></div>",
     "subCategory": {
       "main": "POSN_Astronomy",
       "specific": "ทรงกลมท้องฟ้าและระบบพิกัด"

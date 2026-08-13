@@ -97,7 +97,7 @@ export const quizItems = [
       "เห็นได้ แต่จะปรากฏเฉพาะช่วงฤดูร้อน"
     ],
     "answer": "ไม่เห็น เพราะจะอยู่ใต้ขอบฟ้าเสมอ",
-    "explanation": "มุมเงยสูงสุดของดาว = \\(90° - L - |\\delta| = 90° - 34° - |-57°| = 56° - 57° = -1°\\). เนื่องจากมุมเงยสูงสุดติดลบ แสดงว่าดาวไม่ขึ้นพ้นขอบฟ้า",
+    "explanation": "มุมเงยสูงสุดของดาว = \\(90° - L - |\\delta| = 90° - 34° - |-57°| = 56° - 57° = -1°\\). เนื่องจากมุมเงยสูงสุดติดลบ แสดงว่าดาวไม่ขึ้นพ้นขอบฟ้า<br><br><div class='flex justify-center my-4'><img src='../assets/images/astro3_q6_visibility.png' alt='Celestial Meridian Visibility Geometry' class='max-w-md rounded-lg shadow'></div>",
     "subCategory": {
       "main": "POSN_Astronomy",
       "specific": "ทรงกลมท้องฟ้าและระบบพิกัด"
@@ -131,7 +131,7 @@ export const quizItems = [
       "9.4 km/s"
     ],
     "answer": "5.4 km/s",
-    "explanation": "ระยะ Aphelion, \\(r = a(1+e) = 10(1.5) = 15\\) AU. จากสมการ Vis-viva: \\(v^2 = GM(\\frac{2}{r} - \\frac{1}{a})\\). \\(v = \\sqrt{GM(\\frac{2}{15} - \\frac{1}{10})} = \\sqrt{GM(\\frac{4-3}{30})} = \\sqrt{GM/30}\\). เทียบกับโลก (\\(v_{earth} = \\sqrt{GM/1 AU}\\)), \\(v = v_{earth} / \\sqrt{30} \\approx 29.8 / 5.47 \\approx 5.4\\) km/s.",
+    "explanation": "ระยะ Aphelion, \\(r = a(1+e) = 10(1.5) = 15\\) AU. จากสมการ Vis-viva: \\(v^2 = GM(\\frac{2}{r} - \\frac{1}{a})\\). \\(v = \\sqrt{GM(\\frac{2}{15} - \\frac{1}{10})} = \\sqrt{GM(\\frac{4-3}{30})} = \\sqrt{GM/30}\\). เทียบกับโลก (\\(v_{earth} = \\sqrt{GM/1 AU}\\)), \\(v = v_{earth} / \\sqrt{30} \\approx 29.8 / 5.47 \\approx 5.4\\) km/s.<br><br><div class='flex justify-center my-4'><img src='../assets/images/astro3_q8_ellipse_velocities.png' alt='Elliptical Orbit Velocity Geometry' class='max-w-md rounded-lg shadow'></div>",
     "subCategory": {
       "main": "POSN_Astronomy",
       "specific": "กลศาสตร์ท้องฟ้าและกฎของเคปเลอร์"
@@ -182,7 +182,7 @@ export const quizItems = [
       "z = 4"
     ],
     "answer": "z = 3",
-    "explanation": "จากสูตร \\(z = (\\lambda - \\lambda_0)/\\lambda_0 = (1944 - 486) / 486 = 1458 / 486 = 3\\).",
+    "explanation": "จากสูตร \\(z = (\\lambda - \\lambda_0)/\\lambda_0 = (1944 - 486) / 486 = 1458 / 486 = 3\\).<br><br><div class='flex justify-center my-4'><img src='../assets/images/astro3_q11_redshift.png' alt='Cosmological Redshift of Spectral Lines' class='max-w-md rounded-lg shadow'></div>",
     "subCategory": {
       "main": "POSN_Astronomy",
       "specific": "กาแล็กซีและเอกภพวิทยา"
@@ -386,7 +386,7 @@ export const quizItems = [
       "เพิ่มความเร็วที่ apogee"
     ],
     "answer": "เพิ่มความเร็วที่ perigee",
-    "explanation": "การเพิ่มความเร็วที่ perigee จะทำให้ยานมีพลังงานสูงขึ้นและเหวี่ยงตัวออกไปได้ไกลขึ้น ทำให้ apogee สูงขึ้น",
+    "explanation": "การเพิ่มความเร็วที่ perigee จะทำให้ยานมีพลังงานสูงขึ้นและเหวี่ยงตัวออกไปได้ไกลขึ้น ทำให้ apogee สูงขึ้น<br><br><div class='flex justify-center my-4'><img src='../assets/images/astro3_q23_prograde_burn.png' alt='Prograde Burn at Perigee Orbit Maneuver' class='max-w-md rounded-lg shadow'></div>",
     "subCategory": {
       "main": "POSN_Astronomy",
       "specific": "กลศาสตร์ท้องฟ้าและกฎของเคปเลอร์"
@@ -420,7 +420,7 @@ export const quizItems = [
       "มีการแผ่รังสีเกิดขึ้นทั่วทั้งดวง"
     ],
     "answer": "มีการพาความร้อนเกิดขึ้นทั่วทั้งดวง",
-    "explanation": "\n      ดาวฤกษ์มวลน้อยมาก (ดาวแคระแดง) เปรียบเสมือน 'หม้อซุปที่อุ่นด้วยไฟอ่อนๆ' พลังงานที่ผลิตได้ไม่รุนแรง ทำให้การแผ่รังสีไม่สามารถระบายความร้อนออกไปได้ดีพอ ส่งผลให้พลาสมาทั้งดวงเกิดการไหลเวียนพาความร้อนอย่างช้าๆ ทั่วถึงกัน (เหมือนน้ำซุปอุ่นๆ ที่ไหลเวียนในหม้อ) การไหลเวียนนี้ช่วย 'คน' เชื้อเพลิงไฮโดรเจนจากทั่วทั้งดวงมาใช้ที่แกนกลาง ทำให้ดาวสามารถใช้เชื้อเพลิงได้อย่างมีประสิทธิภาพและมีอายุขัยยาวนานมหาศาล\n    ",
+    "explanation": "\n      ดาวฤกษ์มวลน้อยมาก (ดาวแคระแดง) เปรียบเสมือน 'หม้อซุปที่อุ่นด้วยไฟอ่อนๆ' พลังงานที่ผลิตได้ไม่รุนแรง ทำให้การแผ่รังสีไม่สามารถระบายความร้อนออกไปได้ดีพอ ส่งผลให้พลาสมาทั้งดวงเกิดการไหลเวียนพาความร้อนอย่างช้าๆ ทั่วถึงกัน (เหมือนน้ำซุปอุ่นๆ ที่ไหลเวียนในหม้อ) การไหลเวียนนี้ช่วย 'คน' เชื้อเพลิงไฮโดรเจนจากทั่วทั้งดวงมาใช้ที่แกนกลาง ทำให้ดาวสามารถใช้เชื้อเพลิงได้อย่างมีประสิทธิภาพและมีอายุขัยยาวนานมหาศาล<br><br><div class='flex justify-center my-4'><img src='../assets/images/astro3_q25_q35_stellar_interiors.png' alt='Stellar Interior Structures by Mass' class='max-w-md rounded-lg shadow'></div>\n    ",
     "subCategory": {
       "main": "POSN_Astronomy",
       "specific": "สมบัติและวิวัฒนาการของดาวฤกษ์"
@@ -590,7 +590,7 @@ export const quizItems = [
       "เพราะเปลือกนอกของดาวมีความทึบแสงสูงมาก ทำให้ความร้อนจากแกนกลางถูกกักไว้"
     ],
     "answer": "เพราะวัฏจักร CNO ที่โดดเด่นในแกนกลาง มีอัตราการผลิตพลังงานที่ไวต่ออุณหภูมิสูงมาก",
-    "explanation": "\n      ในดาวฤกษ์มวลสูง แกนกลางเปรียบเสมือน 'เตาปฏิกรณ์นิวเคลียร์ที่ร้อนจัด' ซึ่งใช้ปฏิกิริยา CNO ที่ไวต่ออุณหภูมิมาก ทำให้เกิดพลังงานมหาศาลกระจุกตัวอยู่ที่ใจกลาง พลังงานที่รุนแรงนี้ทำให้เกิดการ 'เดือดพล่าน' ของพลาสมา เกิดเป็นการพาความร้อน (Convection) เพื่อขนส่งพลังงานออกมาอย่างรวดเร็ว คล้ายกับการต้มน้ำด้วยไฟแรงจัดที่ก้นหม้อ ส่วนเปลือกนอกที่พลังงานเบาบางลง จะใช้วิธีแผ่รังสี (Radiation) ในการส่งต่อพลังงานออกไป\n      <div class=\"mt-3 overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm\">\n        <table class=\"w-full text-sm text-left text-gray-800 dark:text-gray-200\">\n          <thead class=\"bg-gray-100 text-xs uppercase text-gray-700 dark:bg-gray-800 dark:text-gray-100\">\n            <tr><th scope=\"col\" class=\"px-4 py-2\">ประเภทดาว (ตามมวล)</th><th scope=\"col\" class=\"px-4 py-2\">แกนกลาง (Core)</th><th scope=\"col\" class=\"px-4 py-2\">เปลือก (Envelope)</th><th scope=\"col\" class=\"px-4 py-2\">ปฏิกิริยาหลัก</th></tr>\n          </thead>\n          <tbody>\n            <tr class=\"border-b bg-white dark:border-gray-700 dark:bg-gray-900\"><td class=\"px-4 py-2 font-medium\">มวลน้อยมาก (&lt; 0.8 M☉)</td><td class=\"px-4 py-2\">พาความร้อน</td><td class=\"px-4 py-2\">พาความร้อน</td><td class=\"px-4 py-2\">p-p chain</td></tr>\n            <tr class=\"border-b bg-white dark:border-gray-700 dark:bg-gray-900\"><td class=\"px-4 py-2 font-medium\">คล้ายดวงอาทิตย์ (0.8-1.5 M☉)</td><td class=\"px-4 py-2\">แผ่รังสี</td><td class=\"px-4 py-2\">พาความร้อน</td><td class=\"px-4 py-2\">p-p chain</td></tr>\n            <tr class=\"bg-white dark:bg-gray-900\"><td class=\"px-4 py-2 font-medium\">มวลสูง (&gt; 1.5 M☉)</td><td class=\"px-4 py-2 font-bold text-sky-600 dark:text-sky-400\">พาความร้อน</td><td class=\"px-4 py-2 font-bold text-sky-600 dark:text-sky-400\">แผ่รังสี</td><td class=\"px-4 py-2\">CNO cycle</td></tr>\n          </tbody>\n        </table>\n      </div>\n    ",
+    "explanation": "\n      ในดาวฤกษ์มวลสูง แกนกลางเปรียบเสมือน 'เตาปฏิกรณ์นิวเคลียร์ที่ร้อนจัด' ซึ่งใช้ปฏิกิริยา CNO ที่ไวต่ออุณหภูมิมาก ทำให้เกิดพลังงานมหาศาลกระจุกตัวอยู่ที่ใจกลาง พลังงานที่รุนแรงนี้ทำให้เกิดการ 'เดือดพล่าน' ของพลาสมา เกิดเป็นการพาความร้อน (Convection) เพื่อขนส่งพลังงานออกมาอย่างรวดเร็ว คล้ายกับการต้มน้ำด้วยไฟแรงจัดที่ก้นหม้อ ส่วนเปลือกนอกที่พลังงานเบาบางลง จะใช้วิธีแผ่รังสี (Radiation) ในการส่งต่อพลังงานออกไป<br><br><div class='flex justify-center my-4'><img src='../assets/images/astro3_q25_q35_stellar_interiors.png' alt='Stellar Interior Structures by Mass' class='max-w-md rounded-lg shadow'></div>\n      <div class=\"mt-3 overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm\">\n        <table class=\"w-full text-sm text-left text-gray-800 dark:text-gray-200\">\n          <thead class=\"bg-gray-100 text-xs uppercase text-gray-700 dark:bg-gray-800 dark:text-gray-100\">\n            <tr><th scope=\"col\" class=\"px-4 py-2\">ประเภทดาว (ตามมวล)</th><th scope=\"col\" class=\"px-4 py-2\">แกนกลาง (Core)</th><th scope=\"col\" class=\"px-4 py-2\">เปลือก (Envelope)</th><th scope=\"col\" class=\"px-4 py-2\">ปฏิกิริยาหลัก</th></tr>\n          </thead>\n          <tbody>\n            <tr class=\"border-b bg-white dark:border-gray-700 dark:bg-gray-900\"><td class=\"px-4 py-2 font-medium\">มวลน้อยมาก (&lt; 0.8 M☉)</td><td class=\"px-4 py-2\">พาความร้อน</td><td class=\"px-4 py-2\">พาความร้อน</td><td class=\"px-4 py-2\">p-p chain</td></tr>\n            <tr class=\"border-b bg-white dark:border-gray-700 dark:bg-gray-900\"><td class=\"px-4 py-2 font-medium\">คล้ายดวงอาทิตย์ (0.8-1.5 M☉)</td><td class=\"px-4 py-2\">แผ่รังสี</td><td class=\"px-4 py-2\">พาความร้อน</td><td class=\"px-4 py-2\">p-p chain</td></tr>\n            <tr class=\"bg-white dark:bg-gray-900\"><td class=\"px-4 py-2 font-medium\">มวลสูง (&gt; 1.5 M☉)</td><td class=\"px-4 py-2 font-bold text-sky-600 dark:text-sky-400\">พาความร้อน</td><td class=\"px-4 py-2 font-bold text-sky-600 dark:text-sky-400\">แผ่รังสี</td><td class=\"px-4 py-2\">CNO cycle</td></tr>\n          </tbody>\n        </table>\n      </div>\n    ",
     "subCategory": {
       "main": "POSN_Astronomy",
       "specific": "สมบัติและวิวัฒนาการของดาวฤกษ์"
@@ -641,7 +641,7 @@ export const quizItems = [
       "100"
     ],
     "answer": "9",
-    "explanation": "จากกฎของสเตฟาน-โบลซ์มานน์ \\(L \\propto R^2 T^4\\), เราสามารถจัดรูปได้เป็น \\(R \\propto \\frac{\\sqrt{L}}{T^2}\\). ดังนั้น \\(\\frac{R_A}{R_B} = \\frac{\\sqrt{L_A}/T_A^2}{\\sqrt{L_B}/T_B^2} = \\sqrt{\\frac{L_A}{L_B}} \\left(\\frac{T_B}{T_A}\\right)^2 = \\sqrt{\\frac{100}{0.01}} \\left(\\frac{3000}{10000}\\right)^2 = \\sqrt{10000} \\left(\\frac{3}{10}\\right)^2 = 100 \\times \\frac{9}{100} = 9\\).",
+    "explanation": "จากกฎของสเตฟาน-โบลซ์มานน์ \\(L \\propto R^2 T^4\\), เราสามารถจัดรูปได้เป็น \\(R \\propto \\frac{\\sqrt{L}}{T^2}\\). ดังนั้น \\(\\frac{R_A}{R_B} = \\frac{\\sqrt{L_A}/T_A^2}{\\sqrt{L_B}/T_B^2} = \\sqrt{\\frac{L_A}{L_B}} \\left(\\frac{T_B}{T_A}\\right)^2 = \\sqrt{\\frac{100}{0.01}} \\left(\\frac{3000}{10000}\\right)^2 = \\sqrt{10000} \\left(\\frac{3}{10}\\right)^2 = 100 \\times \\frac{9}{100} = 9\\).<br><br><div class='flex justify-center my-4'><img src='../assets/images/astro3_q38_luminosity_radius_temp.png' alt='Stellar Radius Stefan Boltzmann Ratio' class='max-w-md rounded-lg shadow'></div>",
     "subCategory": {
       "main": "POSN_Astronomy",
       "specific": "สมบัติและวิวัฒนาการของดาวฤกษ์"
@@ -845,7 +845,7 @@ export const quizItems = [
       "ข้อมูลไม่เพียงพอที่จะสรุปได้"
     ],
     "answer": "ยุบตัวเป็นดาวนิวตรอน",
-    "explanation": "ดาวฤกษ์ที่มีมวลตั้งต้นระหว่างประมาณ 8 ถึง 25 เท่าของดวงอาทิตย์ จะจบชีวิตลงด้วยการระเบิดเป็นซูเปอร์โนวาและเหลือแกนกลางเป็นดาวนิวตรอน",
+    "explanation": "ดาวฤกษ์ที่มีมวลตั้งต้นระหว่างประมาณ 8 ถึง 25 เท่าของดวงอาทิตย์ จะจบชีวิตลงด้วยการระเบิดเป็นซูเปอร์โนวาและเหลือแกนกลางเป็นดาวนิวตรอน<br><br><div class='flex justify-center my-4'><img src='../assets/images/astro3_q50_stellar_fate.png' alt='Stellar End States Flowchart' class='max-w-md rounded-lg shadow'></div>",
     "subCategory": {
       "main": "POSN_Astronomy",
       "specific": "สมบัติและวิวัฒนาการของดาวฤกษ์"
