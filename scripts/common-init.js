@@ -3,6 +3,7 @@ import { initializeDropdown } from './dropdown.js';
 import { initializeMenu } from './menu-handler.js';
 import { initializeDevTools } from './dev-tools-handler.js';
 import { authManager } from './auth-manager.js';
+import { initCosmicStarfield } from './cosmic-starfield.js';
 
 /**
  * Sets up the dynamic header height adjustment.
@@ -105,6 +106,9 @@ function initializeAuthUI() {
  */
 export async function initializeCommonComponents() {
     console.log("🔄 common-init: Starting initializeCommonComponents...");
+
+    // Initialize 3D Cosmic Starfield Background Canvas on all pages
+    initCosmicStarfield();
 
     initializeDarkMode();
     console.log("🔄 common-init: DarkMode initialized.");
