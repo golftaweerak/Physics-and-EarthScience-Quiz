@@ -30,25 +30,26 @@ try {
     process.exit(1);
 }
 
-console.log('🌐 Step 5: Publishing dist to gh-pages branch cleanly...');
+console.log('🌐 Step 5: Publishing dist directly to gh-pages branch...');
 try {
-    const cacheDir = path.join(process.cwd(), 'node_modules', '.cache', 'gh-pages');
-    if (fs.existsSync(cacheDir)) {
-        fs.emptyDirSync(cacheDir);
-        fs.removeSync(cacheDir);
-    }
+    execSync('git add dist -f', { stdio: 'inherit' });
+    const tree = execSync('git write-tree --prefix=dist').toString().trim();
+    
+    let parentCommit = '';
+    try {
+        parentCommit = execSync('git rev-parse origin/gh-pages').toString().trim();
+    } catch (e) {}
 
-    await new Promise((resolve, reject) => {
-        ghpages.publish('dist', {
-            dotfiles: true,
-            message: 'Deploy production dist build'
-        }, (err) => {
-            if (err) reject(err);
-            else resolve();
-        });
-    });
+    const commitCmd = parentCommit 
+        ? `git commit-tree ${tree} -p ${parentCommit} -m "Deploy production dist build"`
+        : `git commit-tree ${tree} -m "Deploy production dist build"`;
+        
+    const newCommit = execSync(commitCmd).toString().trim();
+    execSync(`git update-ref refs/heads/gh-pages ${newCommit}`, { stdio: 'inherit' });
+    execSync('git push origin gh-pages', { stdio: 'inherit' });
+    execSync('git reset HEAD dist', { stdio: 'ignore' });
 
-    console.log('🎉 GitHub Pages published successfully!');
+    console.log('🎉 GitHub Pages branch deployed successfully!');
 } catch (e) {
     console.error('❌ Deployment error:', e.message);
 }
