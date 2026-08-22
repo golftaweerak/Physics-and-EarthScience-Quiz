@@ -1819,10 +1819,11 @@ def create_phy_m6_ch16_phase_change():
     ax.axhline(0, color='gray', linestyle='--', alpha=0.5)
     ax.axhline(100, color='gray', linestyle='--', alpha=0.5)
     
-    add_label_box(ax, r'Ice Warming' + '\n' + r'$Q_1 = m c_{\text{ice}} \Delta T$', 1.0, -5, color='#1D4ED8', fontsize=8.5)
-    add_label_box(ax, r'Melting (0°C)' + '\n' + r'$Q_2 = m L_f$', 5.0, 8, color='#047857', fontsize=8.5)
-    add_label_box(ax, r'Water Heating' + '\n' + r'$Q_3 = m c_{\text{water}} \Delta T$', 11.0, 50, color='#B45309', fontsize=8.5)
-    add_label_box(ax, r'Boiling (100°C)' + '\n' + r'$Q_4 = m L_v$', 17.0, 108, color='#B91C1C', fontsize=8.5)
+    # Show only process names and temperatures, NO equations (let students deduce formulas)
+    add_label_box(ax, r'Ice (-10°C → 0°C)', 1.0, -5, color='#1D4ED8', fontsize=8.5)
+    add_label_box(ax, r'Melting (0°C)', 5.0, 8, color='#047857', fontsize=8.5)
+    add_label_box(ax, r'Water Heating (0°C → 100°C)', 11.0, 50, color='#B45309', fontsize=8.5)
+    add_label_box(ax, r'Boiling / Vaporization (100°C)', 17.0, 108, color='#B91C1C', fontsize=8.5)
     
     ax.set_xlabel('Heat Added / Time', fontsize=11, fontweight='bold')
     ax.set_ylabel('Temperature (°C)', fontsize=11, fontweight='bold')
