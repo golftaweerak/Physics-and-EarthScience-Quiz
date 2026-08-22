@@ -16,7 +16,7 @@ export class ModalHandler {
         this.modalId = modalId;
         this.modal = document.getElementById(modalId);
         if (!this.modal) {
-            console.error(`Modal with id "${modalId}" not found.`);
+            console.warn(`[ModalHandler] Modal element "#${modalId}" is not present on this page.`);
             return;
         }
 
