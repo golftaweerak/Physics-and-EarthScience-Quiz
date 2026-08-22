@@ -35,7 +35,7 @@ try {
 } finally {
     console.log('🔄 Step 6: Ensuring workspace is back on main branch...');
     try {
-        execSync('git checkout main', { stdio: 'inherit' });
+        execSync('git checkout main -f', { stdio: 'inherit' });
         console.log('✅ Successfully back on main branch!');
     } catch (e) {
         console.error('❌ Could not checkout main:', e.message);
