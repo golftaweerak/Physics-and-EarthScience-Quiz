@@ -1,6 +1,7 @@
 import { execSync } from 'child_process';
 import path from 'path';
 import fs from 'fs-extra';
+import ghpages from 'gh-pages';
 
 console.log('🚀 Step 1: Staging files on main...');
 try {
@@ -31,9 +32,23 @@ try {
 
 console.log('🌐 Step 5: Publishing dist to gh-pages branch cleanly...');
 try {
-    execSync('npx rimraf node_modules/.cache/gh-pages', { stdio: 'inherit' });
-    execSync('npx gh-pages -d dist --dotfiles -m "Deploy production dist build"', { stdio: 'inherit' });
-    console.log('🎉 GitHub Pages branch published successfully!');
+    const cacheDir = path.join(process.cwd(), 'node_modules', '.cache', 'gh-pages');
+    if (fs.existsSync(cacheDir)) {
+        fs.emptyDirSync(cacheDir);
+        fs.removeSync(cacheDir);
+    }
+
+    await new Promise((resolve, reject) => {
+        ghpages.publish('dist', {
+            dotfiles: true,
+            message: 'Deploy production dist build'
+        }, (err) => {
+            if (err) reject(err);
+            else resolve();
+        });
+    });
+
+    console.log('🎉 GitHub Pages published successfully!');
 } catch (e) {
     console.error('❌ Deployment error:', e.message);
 }
