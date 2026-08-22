@@ -220,7 +220,14 @@ export function initCosmicStarfield(canvasId = 'cosmic-canvas') {
   if (!canvas) {
     canvas = document.createElement('canvas');
     canvas.id = canvasId;
-    canvas.className = 'fixed inset-0 w-full h-full pointer-events-none -z-10';
+    canvas.style.position = 'fixed';
+    canvas.style.top = '0';
+    canvas.style.left = '0';
+    canvas.style.width = '100vw';
+    canvas.style.height = '100vh';
+    canvas.style.pointerEvents = 'none';
+    canvas.style.zIndex = '-1';
+    canvas.className = 'fixed inset-0 w-full h-full pointer-events-none';
     document.body.prepend(canvas);
   }
   return new CosmicStarfield(canvasId);

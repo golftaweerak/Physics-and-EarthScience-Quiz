@@ -10,6 +10,16 @@
 /* === BASE STYLES === */
 /* Ensure dropdown options are readable in dark mode on supported browsers */
 @layer base {
+  #cosmic-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: -1 !important;
+  }
+
   option {
     background-color: white;
     color: #1f2937;
