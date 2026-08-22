@@ -31,6 +31,7 @@ try {
 
 console.log('🌐 Step 5: Publishing dist to gh-pages branch cleanly...');
 try {
+    execSync('npx rimraf node_modules/.cache/gh-pages', { stdio: 'inherit' });
     execSync('npx gh-pages -d dist --dotfiles -m "Deploy production dist build"', { stdio: 'inherit' });
     console.log('🎉 GitHub Pages branch published successfully!');
 } catch (e) {
