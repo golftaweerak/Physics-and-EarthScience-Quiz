@@ -29,7 +29,7 @@ try {
 
 console.log('🌐 Step 5: Publishing to GitHub Pages...');
 try {
-    execSync('npx gh-pages -d dist --branch gh-pages --dotfiles', { stdio: 'inherit' });
+    execSync('npx gh-pages -d dist --branch gh-pages --dotfiles -f', { stdio: 'inherit' });
 } catch (e) {
     console.log('ℹ️ Deployment finished with warnings.');
 } finally {
