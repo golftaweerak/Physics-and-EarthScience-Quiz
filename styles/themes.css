@@ -93,6 +93,73 @@
   --quiz-gradient-end: #db2777;
 }
 
+/* Cosmic Dynamic Starfield Theme Tokens */
+:root {
+  --bg-deep-space: #060919;
+  --bg-nebula: #0f1638;
+  --cosmic-card-bg: rgba(20, 27, 65, 0.72);
+  --cosmic-card-border: rgba(116, 185, 255, 0.2);
+  --cosmic-card-glow: rgba(0, 240, 255, 0.15);
+
+  --accent-cyan: #00F0FF;
+  --accent-gold: #FFD700;
+  --accent-purple: #9D4EDD;
+  --accent-pink: #FD79A8;
+  --accent-green: #00E676;
+  --accent-coral: #FF7675;
+
+  --shadow-glow-cyan: 0 0 20px rgba(0, 240, 255, 0.35);
+  --shadow-glow-gold: 0 0 20px rgba(255, 215, 0, 0.4);
+  --shadow-card: 0 12px 40px rgba(0, 0, 0, 0.45);
+}
+
+/* Glassmorphism Cosmic Cards */
+.glass-panel,
+.dark .glass-panel {
+  background: var(--cosmic-card-bg) !important;
+  backdrop-filter: blur(18px) !important;
+  -webkit-backdrop-filter: blur(18px) !important;
+  border: 1px solid var(--cosmic-card-border) !important;
+  border-radius: 20px;
+  box-shadow: var(--shadow-card) !important;
+}
+
+/* Cosmic Gradient Title */
+.cosmic-title {
+  font-family: 'Kanit', 'Mali', sans-serif;
+  background: linear-gradient(135deg, #FFFFFF 30%, var(--accent-cyan) 80%, var(--accent-gold) 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 4px 15px rgba(0, 240, 255, 0.25));
+}
+
+/* Interactive Option Button Glow & Slide Effect */
+.option-btn-cosmic {
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.option-btn-cosmic:hover:not(:disabled) {
+  background: rgba(0, 240, 255, 0.15) !important;
+  border-color: var(--accent-cyan) !important;
+  transform: translateX(6px);
+  box-shadow: 0 4px 18px rgba(0, 240, 255, 0.3) !important;
+}
+
+/* Pulse Glow Keyframes */
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+  }
+}
+
+.glow-gold-pulse {
+  animation: pulseGlow 2.5s infinite;
+}
+
 /* --- Utility Classes using Variables --- */
 
 .theme-bg-gradient {
