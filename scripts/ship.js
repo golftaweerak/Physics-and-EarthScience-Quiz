@@ -31,20 +31,8 @@ try {
 
 console.log('🌐 Step 5: Publishing dist to gh-pages branch cleanly...');
 try {
-    execSync('git checkout -B gh-pages', { stdio: 'inherit' });
-    execSync('git rm -rf --cached .', { stdio: 'inherit' });
-    execSync('git add dist/* -f', { stdio: 'inherit' });
-    execSync('git commit -m "Deploy production dist build"', { stdio: 'inherit' });
-    execSync('git push -u origin gh-pages -f', { stdio: 'inherit' });
+    execSync('npx gh-pages -d dist --dotfiles -m "Deploy production dist build"', { stdio: 'inherit' });
     console.log('🎉 GitHub Pages branch published successfully!');
 } catch (e) {
     console.error('❌ Deployment error:', e.message);
-} finally {
-    console.log('🔄 Step 6: Switching workspace back to main branch...');
-    try {
-        execSync('git checkout main -f', { stdio: 'inherit' });
-        console.log('✅ Workspace is cleanly on main branch!');
-    } catch (e) {
-        console.error('❌ Could not checkout main:', e.message);
-    }
 }
