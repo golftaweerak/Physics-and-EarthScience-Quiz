@@ -771,7 +771,7 @@ export const quizList = [
     "description": "บทที่ 15: ของแข็งและของไหล (เน้นเฉพาะเรื่องของไหล: ความดัน, แรงพยุง, ความตึงผิว, ความหนืด, สมการความต่อเนื่อง และสมการแบร์นูลลี)",
     "url": "./quiz/index.html?id=phy_m6/phy_m6_ch15-1",
     "storageKey": "quizState-phy_m6_ch15-1",
-    "icon": "./assets/icons/fluid.png",
+    "icon": "./assets/icons/flow.png",
     "altText": "ไอคอนสำหรับ phy_m6_ch15-1",
     "category": "PhysicsM6",
     "subCategory": "บทที่ 15: ของแข็งและของไหล"
@@ -783,10 +783,34 @@ export const quizList = [
     "description": "บทที่ 15: ของแข็งและของไหล (เน้นเฉพาะเรื่องของไหล: ความดันบรรยากาศ, ไฮโดรลิก, อาร์คิมีดีส, กฎของสโตกส์ และพลศาสตร์ของไหล)",
     "url": "./quiz/index.html?id=phy_m6/phy_m6_ch15-2",
     "storageKey": "quizState-phy_m6_ch15-2",
-    "icon": "./assets/icons/fluid.png",
+    "icon": "./assets/icons/flow.png",
     "altText": "ไอคอนสำหรับ phy_m6_ch15-2",
     "category": "PhysicsM6",
     "subCategory": "บทที่ 15: ของแข็งและของไหล"
+  },
+  {
+    "id": "phy_m6/phy_m6_ch16-1",
+    "title": "ความร้อน (ชุดที่ 1)",
+    "amount": 30,
+    "description": "บทที่ 16: ความร้อนและทฤษฎีจลน์ของแก๊ส (เน้นเฉพาะเรื่องความร้อน: อุณหภูมิ, สเกลอุณหภูมิ, ความร้อนจำเพาะ, ความร้อนแฝง, สมดุลความร้อน และการถ่ายโอนความร้อน)",
+    "url": "./quiz/index.html?id=phy_m6/phy_m6_ch16-1",
+    "storageKey": "quizState-phy_m6_ch16-1",
+    "icon": "./assets/icons/fire.png",
+    "altText": "ไอคอนสำหรับ phy_m6_ch16-1",
+    "category": "PhysicsM6",
+    "subCategory": "บทที่ 16: ความร้อนและทฤษฎีจลน์ของแก๊ส"
+  },
+  {
+    "id": "phy_m6/phy_m6_ch16-2",
+    "title": "ความร้อน (ชุดที่ 2)",
+    "amount": 30,
+    "description": "บทที่ 16: ความร้อนและทฤษฎีจลน์ของแก๊ส (เน้นเฉพาะเรื่องความร้อน: การเปรียบเทียบสเกลอุณหภูมิ, การนำ/พา/แผ่รังสีความร้อน, สมดุลความร้อนซับซ้อน และการขยายตัวทางความร้อน)",
+    "url": "./quiz/index.html?id=phy_m6/phy_m6_ch16-2",
+    "storageKey": "quizState-phy_m6_ch16-2",
+    "icon": "./assets/icons/fire.png",
+    "altText": "ไอคอนสำหรับ phy_m6_ch16-2",
+    "category": "PhysicsM6",
+    "subCategory": "บทที่ 16: ความร้อนและทฤษฎีจลน์ของแก๊ส"
   },
   {
     "id": "phy_m6/phy_m6_ch18-1",
