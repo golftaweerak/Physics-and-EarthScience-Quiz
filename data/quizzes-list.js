@@ -368,6 +368,19 @@ export const quizList = [
     "isRemedialOnly": true
   },
   {
+    "id": "phy_m4/phy_m4_ch3-re2",
+    "title": "ซ่อม บทที่ 3 ครั้งที่ 2",
+    "amount": 60,
+    "description": "บทที่ 3: แรงและกฎการเคลื่อนที่ (สอบซ่อมครั้งที่ 2 - ระบบมวล รอก ลิฟต์ และแรงดึงดูดระหว่างมวล)",
+    "url": "./quiz/index.html?id=phy_m4/phy_m4_ch3-re2",
+    "storageKey": "quizState-phy_m4_ch3-re2",
+    "icon": "./assets/icons/exam-time.png",
+    "altText": "ไอคอนสำหรับ phy_m4_ch3-re2",
+    "category": "PhysicsM4",
+    "subCategory": "บทที่ 3: แรงและกฎการเคลื่อนที่",
+    "isRemedialOnly": true
+  },
+  {
     "id": "phy_m4/phy_m4_ch6-1",
     "title": "โมเมนตัมและการชน (ชุดที่ 1)",
     "amount": 30,
