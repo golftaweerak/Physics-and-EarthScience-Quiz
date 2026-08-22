@@ -570,7 +570,9 @@ export function initializeCustomQuizHandler() {
             `;
             fragment.appendChild(quizItemEl);
         });
-        customQuizListContainer.appendChild(fragment);
+        if (customQuizListContainer) {
+            customQuizListContainer.appendChild(fragment);
+        }
 
         // Hide the loader after the list has been rendered.
         if (listLoader) listLoader.classList.add('hidden');
