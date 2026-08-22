@@ -23,6 +23,34 @@ if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir, { recursive: true });
 }
 
+// ตรวจสอบไฟล์ใน OneDrive เครื่องท้องถิ่นก่อน
+const localOneDriveCandidates = [
+    path.join(process.env.USERPROFILE || '', 'OneDrive - Prommanusorn Phetchaburi School/PB/ppt วิทย์โลก/69-EarthScience.xlsx'),
+    path.join(process.env.USERPROFILE || '', 'OneDrive/PB/ppt วิทย์โลก/69-EarthScience.xlsx'),
+];
+
+const foundLocalPath = localOneDriveCandidates.find(p => fs.existsSync(p));
+
+if (foundLocalPath) {
+    console.log(`📁 พบไฟล์คะแนนในเครื่อง OneDrive: ${foundLocalPath}`);
+    try {
+        fs.copyFileSync(foundLocalPath, outputPath);
+        console.log(`✅ คัดลอกไฟล์มายัง: ${outputPath} เรียบร้อยแล้ว`);
+        console.log('\n--- ขั้นตอนที่ 2: เริ่มการแปลงข้อมูลเป็นไฟล์ JavaScript ---');
+        convertTerm1Scores();
+        console.log('\n--- ขั้นตอนที่ 3: อัปโหลดข้อมูลขึ้น Firestore ---');
+        try {
+            execSync('node tools/upload-scores-firestore.js --semester 1-2569', { stdio: 'inherit' });
+            console.log('✅ อัปโหลดคะแนนขึ้น Firestore สำเร็จ!');
+        } catch (err) {
+            console.error('❌ เกิดข้อผิดพลาดในการอัปโหลดขึ้น Firestore (ตรวจสอบสิทธิ์การเขียนบน Rules):', err);
+        }
+        process.exit(0);
+    } catch (err) {
+        console.warn(`⚠️ ไม่สามารถคัดลอกไฟล์จากเครื่องได้ (${err.message}) จะพยายามดาวน์โหลดจาก SharePoint แทน...`);
+    }
+}
+
 console.log(`กำลังดาวน์โหลดไฟล์ Excel จาก SharePoint...`);
 console.log(`URL: ${sharepointLink}`);
 
