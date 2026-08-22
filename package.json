@@ -21,7 +21,7 @@
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "clear-cache": "rimraf node_modules/.cache/gh-pages",
-    "ship": "git add . && (git commit -m \"Update and deploy web app\" || echo Nothing to commit) && git push && npx gh-pages -d dist --branch gh-pages --dotfiles && git checkout main"
+    "ship": "node scripts/ship.js"
   },
   "author": "",
   "license": "ISC",
