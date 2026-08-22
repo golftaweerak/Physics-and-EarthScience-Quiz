@@ -30,6 +30,10 @@ async function main() {
         const componentLoaderPromise = import('./component-loader.js');
         const commonInitPromise = import('./common-init.js');
         const quizLoaderPromise = import('./quiz-loader.js');
+        const cosmicPromise = import('./cosmic-starfield.js');
+
+        // Init Cosmic Starfield Background Effect
+        cosmicPromise.then(({ initCosmicStarfield }) => initCosmicStarfield());
 
         // Custom loader to fix paths BEFORE injection to prevent 404s in the quiz subdirectory
         const loadComponentWithFix = async (selector, path) => {

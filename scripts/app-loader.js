@@ -2,6 +2,7 @@ import { loadComponent } from './component-loader.js';
 import { initializeCommonComponents } from './common-init.js';
 import { initializeDarkMode } from './dark-mode.js';
 import { SiteConfig } from './site-config.js';
+import { initCosmicStarfield } from './cosmic-starfield.js';
 
 let isAnchorScrollInitialized = false;
 
@@ -69,6 +70,9 @@ async function main() {
 
         initializeDarkMode();
         // Defer Gamification to after UI loads to prevent thread blocking
+
+        // Initialize Cosmic Starfield Background Effect
+        initCosmicStarfield();
 
         // 2. Load Shared Components in Parallel
         console.log("🚀 App Loader: Loading components in parallel...");
