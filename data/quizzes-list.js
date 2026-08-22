@@ -795,7 +795,7 @@ export const quizList = [
     "description": "บทที่ 16: ความร้อนและทฤษฎีจลน์ของแก๊ส (เน้นเฉพาะเรื่องความร้อน: อุณหภูมิ, สเกลอุณหภูมิ, ความร้อนจำเพาะ, ความร้อนแฝง, สมดุลความร้อน และการถ่ายโอนความร้อน)",
     "url": "./quiz/index.html?id=phy_m6/phy_m6_ch16-1",
     "storageKey": "quizState-phy_m6_ch16-1",
-    "icon": "./assets/icons/fire.png",
+    "icon": "./assets/icons/temperature.png",
     "altText": "ไอคอนสำหรับ phy_m6_ch16-1",
     "category": "PhysicsM6",
     "subCategory": "บทที่ 16: ความร้อนและทฤษฎีจลน์ของแก๊ส"
@@ -807,7 +807,7 @@ export const quizList = [
     "description": "บทที่ 16: ความร้อนและทฤษฎีจลน์ของแก๊ส (เน้นเฉพาะเรื่องความร้อน: การเปรียบเทียบสเกลอุณหภูมิ, การนำ/พา/แผ่รังสีความร้อน, สมดุลความร้อนซับซ้อน และการขยายตัวทางความร้อน)",
     "url": "./quiz/index.html?id=phy_m6/phy_m6_ch16-2",
     "storageKey": "quizState-phy_m6_ch16-2",
-    "icon": "./assets/icons/fire.png",
+    "icon": "./assets/icons/temperature.png",
     "altText": "ไอคอนสำหรับ phy_m6_ch16-2",
     "category": "PhysicsM6",
     "subCategory": "บทที่ 16: ความร้อนและทฤษฎีจลน์ของแก๊ส"
