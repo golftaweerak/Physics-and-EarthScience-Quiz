@@ -1708,32 +1708,43 @@ def create_phy_m6_ch15_hydraulic():
     fig, ax = plt.subplots(figsize=(6.5, 4.2), dpi=150)
     ax.axis('off')
     
-    # Hydraulic fluid
-    fluid = patches.Polygon([(-2.5, -0.8), (2.5, -0.8), (2.5, -1.8), (-2.5, -1.8)], color='#60A5FA', alpha=0.75, zorder=1)
-    ax.add_patch(fluid)
+    # Outer U-Tube Wall Frame
+    wall_x = [-2.8, -2.8, -1.8, -1.8, 0.8, 0.8, 2.5, 2.5]
+    wall_y = [1.2, -1.2, -1.2, -1.2, -1.2, -1.2, -1.2, 1.2]
     
-    # Pistons
-    piston1 = patches.Rectangle((-2.5, -0.2), 0.8, 0.25, color='#475569', zorder=3)
-    piston2 = patches.Rectangle((0.8, -0.2), 1.7, 0.35, color='#334155', zorder=3)
+    # Hydraulic fluid polygon with proper connected U-pipe shape
+    fluid_path = patches.Polygon([
+        (-2.8, 0.0), (-2.8, -1.2), (2.5, -1.2), (2.5, 0.0),
+        (0.8, 0.0), (0.8, -0.6), (-1.8, -0.6), (-1.8, 0.0)
+    ], color='#60A5FA', alpha=0.75, zorder=1)
+    ax.add_patch(fluid_path)
+    
+    # Pipe Outer Outlines
+    ax.plot([-2.8, -2.8, 2.5, 2.5], [1.2, -1.2, -1.2, 1.2], 'k-', lw=2.2, zorder=3)
+    ax.plot([-1.8, -1.8, 0.8, 0.8], [1.2, -0.6, -0.6, 1.2], 'k-', lw=2.2, zorder=3)
+    
+    # Pistons inside the tubes
+    piston1 = patches.Rectangle((-2.8, 0.0), 1.0, 0.25, color='#475569', zorder=4)
+    piston2 = patches.Rectangle((0.8, 0.0), 1.7, 0.30, color='#334155', zorder=4)
     ax.add_patch(piston1)
     ax.add_patch(piston2)
     
-    # Force Arrows & Labels (Show only given initial values, no solution answers)
-    ax.annotate('', xy=(-2.1, -0.2), xytext=(-2.1, 1.2),
+    # Force Arrows & Labels
+    ax.annotate('', xy=(-2.3, 0.25), xytext=(-2.3, 1.4),
                 arrowprops=dict(arrowstyle='->', lw=2.5, color='#DC2626'))
-    add_label_box(ax, r'Input Force $F_1$', -2.1, 1.4, color='#DC2626', fontsize=10)
-    add_label_box(ax, r'Small Piston Area $A_1 = 0.02\text{ m}^2$', -2.1, -0.5, color='white', fontsize=9)
+    add_label_box(ax, r'Input Force $F_1 = ?$', -2.3, 1.6, color='#DC2626', fontsize=9.5)
+    add_label_box(ax, r'$A_1 = 0.02\text{ m}^2$', -2.3, -0.3, color='black', fontsize=9)
     
-    ax.annotate('', xy=(1.65, 1.4), xytext=(1.65, 0.15),
+    ax.annotate('', xy=(1.65, 1.4), xytext=(1.65, 0.3),
                 arrowprops=dict(arrowstyle='->', lw=2.5, color='#2563EB'))
-    add_label_box(ax, r'Car Mass $M = 1,600\text{ kg}$', 1.65, 1.7, color='#1E40AF', fontsize=10)
-    add_label_box(ax, r'Large Piston Area $A_2 = 0.8\text{ m}^2$', 1.65, -0.5, color='white', fontsize=9)
+    add_label_box(ax, r'Car Mass $M = 1,600\text{ kg}$', 1.65, 1.6, color='#1E40AF', fontsize=9.5)
+    add_label_box(ax, r'$A_2 = 0.8\text{ m}^2$', 1.65, -0.3, color='black', fontsize=9)
     
     # Fluid Label
-    add_label_box(ax, r'Hydraulic Oil ($\rho = 800\text{ kg/m}^3$)', 0, -1.3, color='#1E3A8A', fontsize=9.5)
+    add_label_box(ax, r'Hydraulic Oil ($\rho = 800\text{ kg/m}^3$)', 0, -0.9, color='#1E3A8A', fontsize=9.5)
     
-    ax.set_xlim(-3.4, 3.4)
-    ax.set_ylim(-2.2, 2.2)
+    ax.set_xlim(-3.6, 3.6)
+    ax.set_ylim(-1.6, 2.2)
     ax.set_title('Hydraulic Press System (Pascal\'s Law)', fontsize=12, fontweight='bold', pad=10)
     plt.tight_layout()
     plt.savefig(os.path.join(output_dir, 'phy_m6_ch15_hydraulic.png'), dpi=150)
@@ -1743,37 +1754,39 @@ def create_phy_m6_ch15_utube():
     fig, ax = plt.subplots(figsize=(6.0, 4.5), dpi=150)
     ax.axis('off')
     
-    # Left column (Oil), Right column (Water)
-    ax.plot([-1.5, -1.5, -0.5, -0.5], [2.2, -1.0, -1.0, -1.5], 'k-', lw=2)
-    ax.plot([0.5, 0.5, 1.5, 1.5], [-1.5, -1.0, -1.0, 2.2], 'k-', lw=2)
-    ax.plot([-0.5, 0.5], [-1.5, -1.5], 'k-', lw=2)
-    ax.plot([-1.5, -0.5], [-1.0, -1.0], 'k-', lw=2)
-    ax.plot([0.5, 1.5], [-1.0, -1.0], 'k-', lw=2)
+    # Outer U-Tube Wall Frame (Continuous U-pipe)
+    ax.plot([-1.6, -1.6, 1.6, 1.6], [2.2, -1.2, -1.2, 2.2], 'k-', lw=2.5, zorder=4)
+    ax.plot([-0.6, -0.6, 0.6, 0.6], [2.2, -0.4, -0.4, 2.2], 'k-', lw=2.5, zorder=4)
     
-    # Water bottom & right column
-    water = patches.Polygon([(-1.5, -1.0), (1.5, -1.0), (1.5, 0.8), (0.5, 0.8), (0.5, -0.5), (-0.5, -0.5), (-0.5, -1.0)], color='#3B82F6', alpha=0.7, zorder=1)
-    ax.add_patch(water)
+    # Water filling (Bottom U and Right column up to y=0.8)
+    water_polygon = patches.Polygon([
+        (-1.6, -0.4), (-1.6, -1.2), (1.6, -1.2), (1.6, 0.8),
+        (0.6, 0.8), (0.6, -0.4)
+    ], color='#3B82F6', alpha=0.75, zorder=1)
+    ax.add_patch(water_polygon)
     
-    # Oil left column
-    oil = patches.Polygon([(-1.5, -0.5), (-0.5, -0.5), (-0.5, 1.4), (-1.5, 1.4)], color='#F59E0B', alpha=0.8, zorder=2)
-    ax.add_patch(oil)
+    # Oil filling (Left column from y=-0.4 up to y=1.4)
+    oil_polygon = patches.Polygon([
+        (-1.6, -0.4), (-1.6, 1.4), (-0.6, 1.4), (-0.6, -0.4)
+    ], color='#F59E0B', alpha=0.85, zorder=2)
+    ax.add_patch(oil_polygon)
     
-    # Interface line
-    ax.plot([-1.6, 1.6], [-0.5, -0.5], 'r--', lw=1.5, zorder=4)
-    add_label_box(ax, 'Interface Reference Level', 0, -0.5, color='#DC2626', fontsize=8.5)
+    # Interface Reference Level at y = -0.4
+    ax.plot([-2.0, 2.0], [-0.4, -0.4], 'r--', lw=1.5, zorder=5)
+    add_label_box(ax, 'Interface Reference Level', 0.0, -0.4, color='#DC2626', fontsize=8.5)
     
     # Height indicators
-    ax.annotate('', xy=(-1.8, 1.4), xytext=(-1.8, -0.5), arrowprops=dict(arrowstyle='<->', lw=1.5, color='#B45309'))
-    add_label_box(ax, r'$h_{\text{oil}} = 15\text{ cm}$', -2.5, 0.45, color='#B45309', fontsize=9)
+    ax.annotate('', xy=(-1.9, 1.4), xytext=(-1.9, -0.4), arrowprops=dict(arrowstyle='<->', lw=1.5, color='#B45309'))
+    add_label_box(ax, r'$h_{\text{oil}} = 15\text{ cm}$', -2.7, 0.5, color='#B45309', fontsize=9)
     
-    ax.annotate('', xy=(1.8, 0.8), xytext=(1.8, -0.5), arrowprops=dict(arrowstyle='<->', lw=1.5, color='#1D4ED8'))
-    add_label_box(ax, r'$h_{\text{water}} = 12\text{ cm}$', 2.5, 0.15, color='#1D4ED8', fontsize=9)
+    ax.annotate('', xy=(1.9, 0.8), xytext=(1.9, -0.4), arrowprops=dict(arrowstyle='<->', lw=1.5, color='#1D4ED8'))
+    add_label_box(ax, r'$h_{\text{water}} = 12\text{ cm}$', 2.7, 0.2, color='#1D4ED8', fontsize=9)
     
-    add_label_box(ax, r'Oil Column ($\rho_{\text{oil}} = ?$)', -1.0, 1.7, color='#92400E', fontsize=9.5)
-    add_label_box(ax, r'Water Column ($\rho_{\text{water}} = 1000\text{ kg/m}^3$)', 1.0, 1.1, color='#1E40AF', fontsize=9)
+    add_label_box(ax, r'Oil ($\rho_{\text{oil}} = ?$)', -1.1, 1.7, color='#92400E', fontsize=9.5)
+    add_label_box(ax, r'Water ($\rho = 1000\text{ kg/m}^3$)', 1.1, 1.1, color='#1E40AF', fontsize=9)
     
-    ax.set_xlim(-3.2, 3.2)
-    ax.set_ylim(-1.8, 2.5)
+    ax.set_xlim(-3.5, 3.5)
+    ax.set_ylim(-1.6, 2.5)
     ax.set_title('U-Tube Manometer with Immiscible Liquids', fontsize=12, fontweight='bold', pad=10)
     plt.tight_layout()
     plt.savefig(os.path.join(output_dir, 'phy_m6_ch15_utube.png'), dpi=150)
