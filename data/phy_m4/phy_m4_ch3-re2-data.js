@@ -9,7 +9,7 @@ export const quizItems = [
   {
     "type": "scenario",
     "title": "สถานการณ์: ระบบมวล 3 ก้อนบนพื้นราบลื่น",
-    "description": "วัตถุมวล \\(m_1 = 4\\text{ kg}\\), \\(m_2 = 6\\text{ kg}\\) และ \\(m_3 = 10\\text{ kg}\\) วางบนพื้นราบลื่น ผูกต่อกันด้วยเชือกเบาเรียงตามลำดับ ออกแรงดึง \\(F = 100\\text{ N}\\) ที่มวล \\(m_3\\) ไปทางขวาในแนวราบ",
+    "description": "วัตถุมวล \\(m_1 = 4\\text{ kg}\\), \\(m_2 = 6\\text{ kg}\\) และ \\(m_3 = 10\\text{ kg}\\) วางบนพื้นราบลื่น ผูกต่อกันด้วยเชือกเบาเรียงตามลำดับ ออกแรงดึง \\(F = 100\\text{ N}\\) ที่มวล \\(m_3\\) ไปทางขวาในแนวราบ<br><br><div class='flex justify-center my-4'><img src='../assets/images/phy_m4_ch3-re2_scenario1.png' alt='ระบบมวล 3 ก้อนบนพื้นราบลื่น' class='max-w-md rounded-lg shadow'></div>",
     "questions": [
       {
         "number": 1,
@@ -55,7 +55,7 @@ export const quizItems = [
   {
     "type": "scenario",
     "title": "สถานการณ์: การชั่งน้ำหนักในลิฟต์",
-    "description": "ชายคนหนึ่งมวล \\(60\\text{ kg}\\) ยืนอยู่บนเครื่องชั่งน้ำหนักสปริงซึ่งวางอยู่บนพื้นลิฟต์ (กำหนดค่าความเร่งโน้มถ่วง \\(g = 10\\text{ m/s}^2\\))",
+    "description": "ชายคนหนึ่งมวล \\(60\\text{ kg}\\) ยืนอยู่บนเครื่องชั่งน้ำหนักสปริงซึ่งวางอยู่บนพื้นลิฟต์ (กำหนดค่าความเร่งโน้มถ่วง \\(g = 10\\text{ m/s}^2\\))<br><br><div class='flex justify-center my-4'><img src='../assets/images/phy_m4_ch3-re2_scenario2.png' alt='การชั่งน้ำหนักในลิฟต์' class='max-w-xs rounded-lg shadow'></div>",
     "questions": [
       {
         "number": 4,
@@ -101,7 +101,7 @@ export const quizItems = [
   {
     "type": "scenario",
     "title": "สถานการณ์: เครื่องกลแอตวูด (ระบบรอกเบาในแนวดิ่ง)",
-    "description": "วัตถุสองก้อนมวล \\(m_1 = 3\\text{ kg}\\) และ \\(m_2 = 7\\text{ kg}\\) แขวนอยู่ที่ปลายทั้งสองข้างของเชือกเบาไร้น้ำหนัก ซึ่งพาดผ่านรอกเดี่ยวตายตัวที่ลื่นและเบามาก (กำหนด \\(g = 10\\text{ m/s}^2\\))",
+    "description": "วัตถุสองก้อนมวล \\(m_1 = 3\\text{ kg}\\) และ \\(m_2 = 7\\text{ kg}\\) แขวนอยู่ที่ปลายทั้งสองข้างของเชือกเบาไร้น้ำหนัก ซึ่งพาดผ่านรอกเดี่ยวตายตัวที่ลื่นและเบามาก (กำหนด \\(g = 10\\text{ m/s}^2\\))<br><br><div class='flex justify-center my-4'><img src='../assets/images/phy_m4_ch3-re2_scenario3.png' alt='เครื่องกลแอตวูด' class='max-w-xs rounded-lg shadow'></div>",
     "questions": [
       {
         "number": 7,
@@ -147,7 +147,7 @@ export const quizItems = [
   {
     "type": "scenario",
     "title": "สถานการณ์: ระบบมวลบนพื้นราบต่อกับมวลแขวนผ่านรอก",
-    "description": "กล่องมวล \\(m_1 = 8\\text{ kg}\\) วางอยู่บนพื้นโต๊ะราบที่มีสัมประสิทธิ์ความเสียดทานจลน์ \\(\\mu_k = 0.25\\) ผูกเชือกติดกับมวล \\(m_2 = 12\\text{ kg}\\) ที่ห้อยอยู่ในแนวดิ่งผ่านรอกเบาลื่นที่ขอบโต๊ะ (กำหนด \\(g = 10\\text{ m/s}^2\\))",
+    "description": "กล่องมวล \\(m_1 = 8\\text{ kg}\\) วางอยู่บนพื้นโต๊ะราบที่มีสัมประสิทธิ์ความเสียดทานจลน์ \\(\\mu_k = 0.25\\) ผูกเชือกติดกับมวล \\(m_2 = 12\\text{ kg}\\) ที่ห้อยอยู่ในแนวดิ่งผ่านรอกเบาลื่นที่ขอบโต๊ะ (กำหนด \\(g = 10\\text{ m/s}^2\\))<br><br><div class='flex justify-center my-4'><img src='../assets/images/phy_m4_ch3-re2_scenario4.png' alt='ระบบมวลบนโต๊ะต่อมวลแขวน' class='max-w-xs rounded-lg shadow'></div>",
     "questions": [
       {
         "number": 10,
