@@ -1708,10 +1708,6 @@ def create_phy_m6_ch15_hydraulic():
     fig, ax = plt.subplots(figsize=(6.5, 4.2), dpi=150)
     ax.axis('off')
     
-    # Fluid U-body
-    u_x = [-2.5, -2.5, -0.8, -0.8, 0.8, 0.8, 2.5, 2.5]
-    u_y = [1.2, -0.8, -0.8, -1.8, -1.8, -0.8, -0.8, 1.2]
-    
     # Hydraulic fluid
     fluid = patches.Polygon([(-2.5, -0.8), (2.5, -0.8), (2.5, -1.8), (-2.5, -1.8)], color='#60A5FA', alpha=0.75, zorder=1)
     ax.add_patch(fluid)
@@ -1722,21 +1718,21 @@ def create_phy_m6_ch15_hydraulic():
     ax.add_patch(piston1)
     ax.add_patch(piston2)
     
-    # Force Arrows & Labels
+    # Force Arrows & Labels (Show only given initial values, no solution answers)
     ax.annotate('', xy=(-2.1, -0.2), xytext=(-2.1, 1.2),
                 arrowprops=dict(arrowstyle='->', lw=2.5, color='#DC2626'))
-    add_label_box(ax, r'Input Force $F_1 = 400\text{ N}$', -2.1, 1.4, color='#DC2626', fontsize=10)
-    add_label_box(ax, r'$A_1 = 0.02\text{ m}^2$', -2.1, -0.5, color='white', fontsize=9.5)
+    add_label_box(ax, r'Input Force $F_1$', -2.1, 1.4, color='#DC2626', fontsize=10)
+    add_label_box(ax, r'Small Piston Area $A_1 = 0.02\text{ m}^2$', -2.1, -0.5, color='white', fontsize=9)
     
     ax.annotate('', xy=(1.65, 1.4), xytext=(1.65, 0.15),
                 arrowprops=dict(arrowstyle='->', lw=2.5, color='#2563EB'))
-    add_label_box(ax, r'Output Force $F_2 = 16,000\text{ N}$' + '\n' + r'(Car Weight $1,600\text{ kg}$)', 1.65, 1.7, color='#1E40AF', fontsize=10)
-    add_label_box(ax, r'$A_2 = 0.8\text{ m}^2$', 1.65, -0.5, color='white', fontsize=9.5)
+    add_label_box(ax, r'Car Mass $M = 1,600\text{ kg}$', 1.65, 1.7, color='#1E40AF', fontsize=10)
+    add_label_box(ax, r'Large Piston Area $A_2 = 0.8\text{ m}^2$', 1.65, -0.5, color='white', fontsize=9)
     
     # Fluid Label
     add_label_box(ax, r'Hydraulic Oil ($\rho = 800\text{ kg/m}^3$)', 0, -1.3, color='#1E3A8A', fontsize=9.5)
     
-    ax.set_xlim(-3.2, 3.2)
+    ax.set_xlim(-3.4, 3.4)
     ax.set_ylim(-2.2, 2.2)
     ax.set_title('Hydraulic Press System (Pascal\'s Law)', fontsize=12, fontweight='bold', pad=10)
     plt.tight_layout()
@@ -1773,8 +1769,8 @@ def create_phy_m6_ch15_utube():
     ax.annotate('', xy=(1.8, 0.8), xytext=(1.8, -0.5), arrowprops=dict(arrowstyle='<->', lw=1.5, color='#1D4ED8'))
     add_label_box(ax, r'$h_{\text{water}} = 12\text{ cm}$', 2.5, 0.15, color='#1D4ED8', fontsize=9)
     
-    add_label_box(ax, 'Oil Column', -1.0, 1.7, color='#92400E', fontsize=9.5)
-    add_label_box(ax, 'Water Column', 1.0, 1.1, color='#1E40AF', fontsize=9.5)
+    add_label_box(ax, r'Oil Column ($\rho_{\text{oil}} = ?$)', -1.0, 1.7, color='#92400E', fontsize=9.5)
+    add_label_box(ax, r'Water Column ($\rho_{\text{water}} = 1000\text{ kg/m}^3$)', 1.0, 1.1, color='#1E40AF', fontsize=9)
     
     ax.set_xlim(-3.2, 3.2)
     ax.set_ylim(-1.8, 2.5)
@@ -1799,14 +1795,14 @@ def create_phy_m6_ch15_venturi():
     ax.annotate('', xy=(-0.5, 0), xytext=(-2.5, 0), arrowprops=dict(arrowstyle='->', lw=2, color='#2563EB'))
     ax.annotate('', xy=(2.5, 0), xytext=(0.5, 0), arrowprops=dict(arrowstyle='->', lw=2.5, color='#DC2626'))
     
-    add_label_box(ax, r'Wide Pipe $A_1$' + '\n' + r'$v_1 = 3\text{ m/s}, P_1 = 150\text{ kPa}$', -2.0, 1.6, color='#1E40AF', fontsize=9)
-    add_label_box(ax, r'Narrow Constriction $A_2$' + '\n' + r'$v_2 = 12\text{ m/s}, P_2 = 83\text{ kPa}$', 0.0, -1.6, color='#991B1B', fontsize=9)
-    add_label_box(ax, r'High Pressure' + '\n' + r'Low Velocity', -2.0, -0.6, color='#1E3A8A', fontsize=8.5)
-    add_label_box(ax, r'Low Pressure' + '\n' + r'High Velocity', 0.0, 0.5, color='#991B1B', fontsize=8.5)
+    add_label_box(ax, r'Inlet Flow Rate $Q = 0.04\text{ m}^3/\text{s}$' + '\n' + r'Oil Density $\rho = 800\text{ kg/m}^3$', -2.0, 1.6, color='#1E40AF', fontsize=8.5)
+    add_label_box(ax, r'Exit Area $A_2 = 0.01\text{ m}^2$' + '\n' + r'Exit Velocity $v_2 = ?$', 0.0, -1.6, color='#991B1B', fontsize=9)
+    add_label_box(ax, r'Wide Section $A_1$', -2.0, -0.6, color='#1E3A8A', fontsize=8.5)
+    add_label_box(ax, r'Narrow Section $A_2$', 0.0, 0.5, color='#991B1B', fontsize=8.5)
     
     ax.set_xlim(-3.4, 3.4)
     ax.set_ylim(-2.2, 2.2)
-    ax.set_title('Fluid Dynamics: Continuity & Bernoulli Effect', fontsize=12, fontweight='bold', pad=10)
+    ax.set_title('Fluid Dynamics: Continuity in Pipe Flow', fontsize=12, fontweight='bold', pad=10)
     plt.tight_layout()
     plt.savefig(os.path.join(output_dir, 'phy_m6_ch15_venturi.png'), dpi=150)
     plt.close()
@@ -1823,14 +1819,14 @@ def create_phy_m6_ch16_phase_change():
     ax.axhline(0, color='gray', linestyle='--', alpha=0.5)
     ax.axhline(100, color='gray', linestyle='--', alpha=0.5)
     
-    add_label_box(ax, r'Ice Heating' + '\n' + r'$Q_1 = m c_{\text{ice}} \Delta T$', 1.0, -5, color='#1D4ED8', fontsize=8.5)
+    add_label_box(ax, r'Ice Warming' + '\n' + r'$Q_1 = m c_{\text{ice}} \Delta T$', 1.0, -5, color='#1D4ED8', fontsize=8.5)
     add_label_box(ax, r'Melting (0°C)' + '\n' + r'$Q_2 = m L_f$', 5.0, 8, color='#047857', fontsize=8.5)
     add_label_box(ax, r'Water Heating' + '\n' + r'$Q_3 = m c_{\text{water}} \Delta T$', 11.0, 50, color='#B45309', fontsize=8.5)
     add_label_box(ax, r'Boiling (100°C)' + '\n' + r'$Q_4 = m L_v$', 17.0, 108, color='#B91C1C', fontsize=8.5)
     
-    ax.set_xlabel('Heat Added / Time (Arbitrary Units)', fontsize=11, fontweight='bold')
+    ax.set_xlabel('Heat Added / Time', fontsize=11, fontweight='bold')
     ax.set_ylabel('Temperature (°C)', fontsize=11, fontweight='bold')
-    ax.set_title('Heating Curve & Phase Change of Water', fontsize=12, fontweight='bold', pad=10)
+    ax.set_title('Heating Curve & Phase Change Stages', fontsize=12, fontweight='bold', pad=10)
     ax.set_xlim(-0.5, 21.5)
     ax.set_ylim(-20, 125)
     ax.grid(True, linestyle=':', alpha=0.6)
@@ -1852,20 +1848,20 @@ def create_phy_m6_ch16_solar_collector():
         ax.annotate('', xy=(dx, 0.4), xytext=(dx + 0.3, 1.8),
                     arrowprops=dict(arrowstyle='->', lw=2, color='#F59E0B'))
         
-    add_label_box(ax, r'Solar Radiation $800\text{ W/m}^2$' + '\n' + r'Area $A = 4\text{ m}^2$', 0.5, 2.0, color='#B45309', fontsize=9.5)
+    add_label_box(ax, r'Solar Intensity $800\text{ W/m}^2$' + '\n' + r'Panel Area $A = 4\text{ m}^2$', 0.5, 2.0, color='#B45309', fontsize=9.5)
     
-    # Pipe in & out
-    add_label_box(ax, r'Cold Water In' + '\n' + r'$25^\circ\text{C}$', -2.7, -0.8, color='#1D4ED8', fontsize=9)
+    # Pipe in & out (Show input parameters, omit answer output temperature)
+    add_label_box(ax, r'Inlet Water ($25^\circ\text{C}$)' + '\n' + r'Flow $1.6\text{ kg/min}$', -2.7, -0.8, color='#1D4ED8', fontsize=8.5)
     ax.annotate('', xy=(-1.5, -0.4), xytext=(-2.5, -0.8), arrowprops=dict(arrowstyle='->', lw=2, color='#2563EB'))
     
-    add_label_box(ax, r'Hot Water Out' + '\n' + r'$45^\circ\text{C}$', 2.7, 0.6, color='#DC2626', fontsize=9)
+    add_label_box(ax, r'Outlet Water' + '\n' + r'$T_{\text{out}} = ?$', 2.7, 0.6, color='#DC2626', fontsize=9)
     ax.annotate('', xy=(2.5, 0.6), xytext=(1.5, 0.2), arrowprops=dict(arrowstyle='->', lw=2, color='#DC2626'))
     
-    add_label_box(ax, r'Efficiency $\eta = 70\%$', 0, -1.4, color='#047857', fontsize=10)
+    add_label_box(ax, r'System Efficiency $\eta = 70\%$', 0, -1.4, color='#047857', fontsize=9.5)
     
     ax.set_xlim(-3.5, 3.5)
     ax.set_ylim(-1.8, 2.4)
-    ax.set_title('Solar Thermal Collector System', fontsize=12, fontweight='bold', pad=10)
+    ax.set_title('Solar Thermal Collector System Diagram', fontsize=12, fontweight='bold', pad=10)
     plt.tight_layout()
     plt.savefig(os.path.join(output_dir, 'phy_m6_ch16_solar_collector.png'), dpi=150)
     plt.close()
