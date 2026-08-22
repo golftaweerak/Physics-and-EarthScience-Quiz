@@ -1832,15 +1832,10 @@ def create_phy_m6_ch16_phase_change():
     ax.axhline(0, color='gray', linestyle='--', alpha=0.5)
     ax.axhline(100, color='gray', linestyle='--', alpha=0.5)
     
-    # Show only process names and temperatures, NO equations (let students deduce formulas)
-    add_label_box(ax, r'Ice (-10°C → 0°C)', 1.0, -5, color='#1D4ED8', fontsize=8.5)
-    add_label_box(ax, r'Melting (0°C)', 5.0, 8, color='#047857', fontsize=8.5)
-    add_label_box(ax, r'Water Heating (0°C → 100°C)', 11.0, 50, color='#B45309', fontsize=8.5)
-    add_label_box(ax, r'Boiling / Vaporization (100°C)', 17.0, 108, color='#B91C1C', fontsize=8.5)
-    
-    ax.set_xlabel('Heat Added / Time', fontsize=11, fontweight='bold')
+    # Pure clean graph: NO text labels for phases or temperatures inside the plot area
+    ax.set_xlabel('Time / Heat Added', fontsize=11, fontweight='bold')
     ax.set_ylabel('Temperature (°C)', fontsize=11, fontweight='bold')
-    ax.set_title('Heating Curve & Phase Change Stages', fontsize=12, fontweight='bold', pad=10)
+    ax.set_title('Heating Curve (Temperature vs Heat Added)', fontsize=12, fontweight='bold', pad=10)
     ax.set_xlim(-0.5, 21.5)
     ax.set_ylim(-20, 125)
     ax.grid(True, linestyle=':', alpha=0.6)
