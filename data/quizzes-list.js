@@ -765,6 +765,30 @@ export const quizList = [
     "subCategory": "บทที่ 10: เสียง"
   },
   {
+    "id": "phy_m6/phy_m6_ch15-1",
+    "title": "ของไหล (ชุดที่ 1)",
+    "amount": 30,
+    "description": "บทที่ 15: ของแข็งและของไหล (เน้นเฉพาะเรื่องของไหล: ความดัน, แรงพยุง, ความตึงผิว, ความหนืด, สมการความต่อเนื่อง และสมการแบร์นูลลี)",
+    "url": "./quiz/index.html?id=phy_m6/phy_m6_ch15-1",
+    "storageKey": "quizState-phy_m6_ch15-1",
+    "icon": "./assets/icons/fluid.png",
+    "altText": "ไอคอนสำหรับ phy_m6_ch15-1",
+    "category": "PhysicsM6",
+    "subCategory": "บทที่ 15: ของแข็งและของไหล"
+  },
+  {
+    "id": "phy_m6/phy_m6_ch15-2",
+    "title": "ของไหล (ชุดที่ 2)",
+    "amount": 30,
+    "description": "บทที่ 15: ของแข็งและของไหล (เน้นเฉพาะเรื่องของไหล: ความดันบรรยากาศ, ไฮโดรลิก, อาร์คิมีดีส, กฎของสโตกส์ และพลศาสตร์ของไหล)",
+    "url": "./quiz/index.html?id=phy_m6/phy_m6_ch15-2",
+    "storageKey": "quizState-phy_m6_ch15-2",
+    "icon": "./assets/icons/fluid.png",
+    "altText": "ไอคอนสำหรับ phy_m6_ch15-2",
+    "category": "PhysicsM6",
+    "subCategory": "บทที่ 15: ของแข็งและของไหล"
+  },
+  {
     "id": "phy_m6/phy_m6_ch18-1",
     "title": "ฟิสิกส์อะตอม (ชุดที่ 1)",
     "amount": 30,
