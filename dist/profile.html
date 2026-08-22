@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="th" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>โปรไฟล์ผู้เรียน - Physics & Earth Science Quiz</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;700;800&family=Sarabun:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"
+        crossorigin="anonymous"></script>
+    <link rel="icon" href="./assets/icons/exam.png" type="image/png">
+    <style>
+        .collapsible-content {
+            transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            overflow: hidden;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 15px rgba(59, 130, 246, 0.3); }
+            50% { box-shadow: 0 0 25px rgba(96, 165, 250, 0.5); }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .animate-pulse-glow {
+            animation: pulseGlow 3s ease-in-out infinite;
+        }
+
+        /* Glassmorphism Design Token System */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(229, 231, 235, 0.8);
+        }
+
+        .dark .glass-card {
+            background: rgba(30, 41, 59, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(229, 231, 235, 0.8);
+        }
+
+        .dark .glass-nav {
+            background: rgba(30, 41, 59, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .level-aura-ring {
+            box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.8), 0 0 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .dark .level-aura-ring {
+            box-shadow: 0 0 0 4px rgba(30, 41, 59, 0.8), 0 0 22px rgba(96, 165, 250, 0.35);
+        }
+
+        .hub-panel {
+            transition: opacity 0.3s ease;
+        }
+
+        .primary-tab-btn.active {
+            color: #3b82f6;
+        }
+
+        .dark .primary-tab-btn.active {
+            color: #60a5fa;
+        }
+
+        .tab-indicator {
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .primary-tab-btn:hover span:first-child {
+            transform: translateY(-2px) scale(1.1);
+        }
+
+        .primary-tab-btn span:first-child {
+            transition: transform 0.25s ease;
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Streak Heatmap Grid */
+        .heatmap-grid {
+            display: grid;
+            grid-template-rows: repeat(7, minmax(0, 1fr));
+            grid-auto-flow: column;
+            gap: 3px;
+        }
+
+        .heatmap-cell {
+            width: 11px;
+            height: 11px;
+            border-radius: 2px;
+            transition: transform 0.15s ease, filter 0.15s ease;
+        }
+
+        .heatmap-cell:hover {
+            transform: scale(1.35);
+            z-index: 10;
+            filter: brightness(1.2);
+        }
+
+        /* Heatmap Gradient Levels */
+        .hm-lvl-0 { background-color: rgba(229, 231, 235, 0.8); border: 1px solid rgba(209, 213, 219, 0.5); }
+        .dark .hm-lvl-0 { background-color: rgba(30, 41, 59, 0.9); border: 1px solid rgba(51, 65, 85, 0.6); }
+
+        .hm-lvl-1 { background-color: #a7f3d0; }
+        .dark .hm-lvl-1 { background-color: #064e3b; }
+
+        .hm-lvl-2 { background-color: #34d399; }
+        .dark .hm-lvl-2 { background-color: #047857; }
+
+        .hm-lvl-3 { background-color: #10b981; }
+        .dark .hm-lvl-3 { background-color: #10b981; }
+
+        .hm-lvl-4 { background-color: #34d399; box-shadow: 0 0 8px rgba(52, 211, 153, 0.8); }
+        .dark .hm-lvl-4 { background-color: #34d399; box-shadow: 0 0 10px rgba(52, 211, 153, 0.9); }
+    </style>
+  <script type="module" crossorigin src="/Physics-and-EarthScience-Quiz/assets/profile-Bgoer5Gj.js"></script>
+  <link rel="modulepreload" crossorigin href="/Physics-and-EarthScience-Quiz/assets/modulepreload-polyfill-B5Qt9EMX.js">
+  <link rel="modulepreload" crossorigin href="/Physics-and-EarthScience-Quiz/assets/physics_syllabus_data-Mnn3TXVG.js">
+  <link rel="modulepreload" crossorigin href="/Physics-and-EarthScience-Quiz/assets/firebase-config-L8WamaTR.js">
+  <link rel="modulepreload" crossorigin href="/Physics-and-EarthScience-Quiz/assets/auth-manager-DxJDYVU6.js">
+  <link rel="modulepreload" crossorigin href="/Physics-and-EarthScience-Quiz/assets/site-config-I-RQ9TTj.js">
+  <link rel="modulepreload" crossorigin href="/Physics-and-EarthScience-Quiz/assets/gamification-registry-DzpjLHof.js">
+  <link rel="modulepreload" crossorigin href="/Physics-and-EarthScience-Quiz/assets/gamification-C8MQJVpH.js">
+  <link rel="stylesheet" crossorigin href="/Physics-and-EarthScience-Quiz/assets/bundle-4FX2L4Fd.css">
+</head>
+
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 font-sarabun selection:bg-blue-500 selection:text-white">
+
+    <div id="main_header-placeholder" class="fixed top-0 left-0 right-0 z-50"></div>
+
+    <main class="container mx-auto px-4 pb-12" style="padding-top: var(--header-height-offset, 5rem);">
+        
+        <!-- Profile Header (Two-Tone Elegant Glassmorphic Layout - Exact Match) -->
+        <div class="max-w-5xl mx-auto glass-card rounded-2xl shadow-xl overflow-hidden mb-8 relative">
+            <!-- Top Half: Colorful Gradient Banner -->
+            <div class="h-12 sm:h-16 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 relative overflow-hidden">
+                <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(255,255,255,0.25),_transparent_75%)]"></div>
+                <div class="absolute -bottom-8 -right-8 w-40 h-40 bg-white/10 rounded-full blur-lg pointer-events-none"></div>
+            </div>
+
+            <!-- Bottom Half: Profile Info & Actions Body -->
+            <div class="px-6 pb-6 pt-2 relative bg-white/50 dark:bg-gray-800/60 backdrop-blur-md">
+                <div class="flex flex-col md:flex-row items-center md:items-start gap-6 -mt-16 sm:-mt-20 mb-2">
+                    <!-- Avatar Container (Large & Prominent like original) -->
+                    <div class="w-32 h-32 sm:w-36 sm:h-36 rounded-full bg-white dark:bg-gray-800 level-aura-ring z-10 relative group flex-shrink-0 shadow-2xl p-1">
+                        <div id="level-frame-container" class="w-full h-full aspect-square flex-shrink-0 rounded-full p-0.5 transition-all duration-300">
+                            <div id="profile-avatar-display"
+                                class="w-full h-full rounded-full bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-gray-700 dark:to-gray-800 flex items-center justify-center text-5xl cursor-pointer transition-transform transform group-hover:scale-105 shadow-inner">
+                            </div>
+                        </div>
+                        <button id="edit-avatar-btn"
+                            class="absolute bottom-2 right-2 bg-blue-600 text-white p-2 rounded-full shadow-md hover:bg-blue-700 hover:scale-110 transition-all focus:outline-none ring-2 ring-white dark:ring-gray-800 z-20 cursor-pointer"
+                            title="เปลี่ยนรูปโปรไฟล์">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- User Name & Meta (Aligned to Avatar Top) -->
+                    <div class="flex flex-col items-left md:items-start text-center md:text-left flex-grow space-y-2 pt-2 md:pt-18">
+                        <div class="flex items-center justify-center md:justify-start gap-2 group">
+                            <h1 id="profile-display-name"
+                                class="text-2xl sm:text-3xl font-extrabold font-kanit text-gray-900 dark:text-white tracking-tight">
+                                ผู้เรียน (Guest)
+                            </h1>
+                            <button id="edit-name-btn"
+                                class="text-gray-400 hover:text-blue-600 dark:text-gray-500 dark:hover:text-blue-400 transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100 p-1"
+                                title="แก้ไขชื่อ">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div class="w-full flex justify-center md:justify-start max-w-full min-w-0">
+                            <p id="profile-email-display"
+                                class="text-xs font-semibold text-gray-700 dark:text-gray-200 bg-gray-100/90 dark:bg-gray-700/80 px-4 py-1.5 rounded-full inline-flex items-center gap-2 hidden border border-gray-200 dark:border-gray-600 shadow-sm max-w-full truncate">
+                            </p>
+                        </div>
+
+                        <!-- Action & Status Row -->
+                        <div class="flex flex-wrap items-center justify-center md:justify-start gap-3 pt-2">
+                            <div id="sync-status-wrapper"
+                                class="hidden flex items-center gap-1.5 text-xs font-medium transition-all duration-300">
+                                <div id="connection-status"
+                                    class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-100/90 dark:bg-emerald-950/80 border border-emerald-300 dark:border-emerald-700 text-emerald-800 dark:text-emerald-300 font-bold shadow-xs">
+                                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                                    <span class="text-emerald-800 dark:text-emerald-300 font-bold">Cloud Synced</span>
+                                </div>
+                                <div id="last-sync-display" class="text-gray-600 dark:text-gray-300 font-semibold hidden sm:block"></div>
+                                <button id="manual-sync-btn"
+                                    class="text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 transition-colors p-1.5 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"
+                                    title="ซิงค์ข้อมูลล่าสุด">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <button id="edit-title-btn"
+                                class="text-xs font-extrabold bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 px-4 py-2 rounded-full text-gray-800 dark:text-gray-100 transition-all border border-gray-200 dark:border-gray-700 shadow-sm flex items-center gap-1.5 active:scale-95 cursor-pointer">
+                                🏷️ เปลี่ยนฉายา
+                            </button>
+                            <button id="edit-theme-btn"
+                                class="text-xs font-extrabold bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 px-4 py-2 rounded-full text-gray-800 dark:text-gray-100 transition-all border border-gray-200 dark:border-gray-700 shadow-sm flex items-center gap-1.5 active:scale-95 cursor-pointer">
+                                🎨 ธีม: มาตรฐาน
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sticky Primary Hub Navigation -->
+        <div class="max-w-5xl mx-auto mb-10 sticky top-20 z-40 px-2 sm:px-0">
+            <nav class="relative glass-nav rounded-2xl p-1.5 shadow-xl shadow-blue-500/5 flex items-center justify-between overflow-hidden group">
+                <!-- Sliding Indicator (Pill) -->
+                <div id="tab-sliding-indicator"
+                    class="tab-indicator absolute top-1.5 bottom-1.5 bg-gradient-to-r from-blue-600/15 to-indigo-600/15 dark:from-blue-500/25 dark:to-indigo-500/25 rounded-xl z-0 pointer-events-none transition-all duration-300 ease-out border border-blue-500/30 dark:border-blue-400/30"
+                    style="width: 0; left: 0; opacity: 0; display: none;"></div>
+
+                <div class="flex w-full relative z-10 overflow-x-auto no-scrollbar">
+                    <button data-tab-target="dashboard"
+                        class="primary-tab-btn flex-1 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-extrabold transition-all duration-300 active text-blue-600 dark:text-blue-400 shrink-0">
+                        <span class="text-lg sm:text-xl filter drop-shadow-sm">🏠</span>
+                        <span class="tracking-tight">หน้าหลัก</span>
+                    </button>
+                    <button data-tab-target="perks"
+                        class="primary-tab-btn flex-1 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-extrabold transition-all duration-300 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white shrink-0">
+                        <span class="text-lg sm:text-xl filter drop-shadow-sm">🌳</span>
+                        <span class="tracking-tight">Perks</span>
+                    </button>
+                    <button data-tab-target="analysis"
+                        class="primary-tab-btn flex-1 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-extrabold transition-all duration-300 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white shrink-0">
+                        <span class="text-lg sm:text-xl filter drop-shadow-sm">📊</span>
+                        <span class="tracking-tight">รายงาน</span>
+                    </button>
+                    <button data-tab-target="history"
+                        class="primary-tab-btn flex-1 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-extrabold transition-all duration-300 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white shrink-0">
+                        <span class="text-lg sm:text-xl filter drop-shadow-sm">📜</span>
+                        <span class="tracking-tight">ประวัติ</span>
+                    </button>
+                    <button data-tab-target="shop"
+                        class="primary-tab-btn flex-1 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-extrabold transition-all duration-300 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white shrink-0">
+                        <span class="text-lg sm:text-xl filter drop-shadow-sm">🛒</span>
+                        <span class="tracking-tight">ร้านค้า</span>
+                    </button>
+                </div>
+            </nav>
+        </div>
+
+        <div id="hub-panels-container">
+            <!-- 1. DASHBOARD PANEL -->
+            <div id="panel-dashboard" class="hub-panel animate-fade-in space-y-8">
+                
+                <!-- Gamification Snapshot -->
+                <section id="gamification-dashboard"
+                    class="max-w-5xl mx-auto glass-card p-4 sm:p-6 rounded-2xl shadow-lg relative overflow-hidden mb-8">
+                    <div class="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+                        <div class="col-span-2">
+                            <div class="flex items-center gap-4 mb-4">
+                                <div style="width: 80px !important; height: 80px !important; min-width: 80px !important; min-height: 80px !important; aspect-ratio: 1/1 !important; flex-shrink: 0 !important; display: flex !important; align-items: center !important; justify-content: center !important; border-radius: 9999px !important;"
+                                    class="w-20 h-20 min-w-[5rem] min-h-[5rem] aspect-square flex-shrink-0 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-extrabold text-3xl shadow-xl relative animate-pulse-glow">
+                                    <span id="user-level">?</span>
+                                </div>
+                                <div class="flex-grow">
+                                    <h3 id="user-rank-title" class="text-2xl font-extrabold font-kanit mb-1 text-gray-900 dark:text-white">...</h3>
+                                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 overflow-hidden shadow-inner p-0.5">
+                                        <div id="xp-progress-bar"
+                                            class="bg-gradient-to-r from-blue-500 to-indigo-500 h-full rounded-full transition-all duration-1000" style="width: 0%">
+                                        </div>
+                                    </div>
+                                    <div class="flex justify-between items-center text-[11px] font-bold text-gray-500 dark:text-gray-400 mt-1.5 font-kanit">
+                                        <span>Current XP: <span id="current-xp" class="text-blue-600 dark:text-blue-400 font-extrabold">0</span> XP</span>
+                                        <span class="flex items-center gap-2">
+                                            <span>ขาดอีก: <span id="xp-needed" class="text-amber-600 dark:text-amber-400 font-black">0</span> XP</span>
+                                            <span class="text-gray-300 dark:text-gray-600">|</span>
+                                            <span>Goal: <span id="next-level-xp" class="text-purple-600 dark:text-purple-400 font-extrabold">0</span> XP</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Level-up Quest Display -->
+                            <div id="next-level-quest-container"
+                                 class="w-full mt-3 p-3 bg-blue-50/90 dark:bg-blue-900/30 rounded-xl border border-blue-200/80 dark:border-blue-800/60 hidden anim-fade-in shadow-xs">
+                                 <div class="flex items-center justify-between gap-2">
+                                     <div class="flex items-center gap-2">
+                                         <span class="text-blue-500">📜</span>
+                                         <span id="next-level-quest-desc"
+                                             class="text-xs font-bold text-gray-800 dark:text-gray-200">ภารกิจเลเวลอัพ: ...</span>
+                                     </div>
+                                     <span id="next-level-quest-progress"
+                                         class="text-xs font-black text-blue-600 dark:text-blue-400 bg-white dark:bg-gray-800 px-2.5 py-0.5 rounded-full border border-blue-200 dark:border-blue-700">...</span>
+                                 </div>
+                             </div>
+                        </div>
+
+                        <!-- Right Column (1 Col): Recent Badges Widget -->
+                        <div class="col-span-1 flex flex-col items-center md:items-end justify-center">
+                            <div id="recent-badges" class="flex gap-2 flex-wrap justify-center md:justify-end"></div>
+                        </div>
+                    </div>
+
+                    <div class="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-8 pt-6 mt-6 border-t border-gray-200/60 dark:border-gray-700/60">
+                        <div class="space-y-4">
+                            <h4 class="text-xs font-black uppercase text-blue-600 dark:text-blue-400 tracking-widest flex items-center gap-1.5">
+                                <span>🚀</span> ความก้าวหน้าแต่ละสายวิชา
+                            </h4>
+                            <div id="track-progress-container" class="space-y-4"></div>
+                        </div>
+                        <div class="space-y-4">
+                            <h4 class="text-xs font-black uppercase text-yellow-600 dark:text-yellow-400 tracking-widest flex items-center gap-1.5">
+                                <span>🎯</span> ภารกิจประจำวัน (Daily Quests)
+                            </h4>
+                            <div id="profile-daily-quests-container" class="space-y-4"></div>
+
+                            <!-- Weekly & Monthly Quests Containers -->
+                            <div id="profile-weekly-quest-container" class="pt-2"></div>
+                            <div id="profile-monthly-quest-container"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Achievements & Badges Sections -->
+                <div class="max-w-5xl mx-auto space-y-8">
+                    <section class="glass-card rounded-2xl shadow-md p-6">
+                        <h2 class="text-xl font-bold font-kanit mb-4 text-gray-900 dark:text-white flex items-center gap-2">
+                            🏆 ความสำเร็จ (Achievements)
+                        </h2>
+                        <div id="profile-achievements-list" class="grid grid-cols-4 sm:grid-cols-6 gap-4"></div>
+                    </section>
+
+                    <section class="glass-card rounded-2xl shadow-md p-6">
+                        <h2 class="text-xl font-bold font-kanit mb-4 text-gray-900 dark:text-white flex items-center gap-2">
+                            🎖️ เหรียญรางวัล (Badges)
+                        </h2>
+                        <div id="profile-badges-grid" class="grid grid-cols-4 sm:grid-cols-6 gap-4"></div>
+                    </section>
+                </div>
+            </div>
+
+            <!-- 2. PERKS & RAID PANEL -->
+            <div id="panel-perks" class="hub-panel hidden space-y-8 max-w-5xl mx-auto pb-12 animate-fade-in">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <!-- Left Column (8 Cols): Boss Card & Skill Tree Perks -->
+                    <div class="lg:col-span-8 space-y-8">
+                        <div id="boss-card-slot-perks-tab"></div>
+                        <section id="skill-tree-container" class="glass-card rounded-2xl shadow-md p-6">
+                        </section>
+                    </div>
+
+                    <!-- Right Column (4 Cols): Boss Leaderboard -->
+                    <div class="lg:col-span-4 space-y-8">
+                        <section class="glass-card rounded-2xl shadow-md p-6">
+                            <h3 class="text-lg font-extrabold font-kanit mb-4 flex items-center justify-between text-gray-900 dark:text-white">
+                                <span class="flex items-center gap-2"><span>🏆</span> อันดับพิชิตบอส</span>
+                                <span class="text-[10px] font-black uppercase text-purple-600 dark:text-purple-300 bg-purple-100 dark:bg-purple-950/80 px-2 py-0.5 rounded-full border border-purple-300/40">Top 3</span>
+                            </h3>
+                            <div id="boss-leaderboard-list" class="space-y-3"></div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. ANALYSIS PANEL -->
+            <div id="panel-analysis" class="hub-panel hidden space-y-8 max-w-5xl mx-auto pb-12 animate-fade-in">
+                <div id="analysis-summary-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-4"></div>
+                
+                <!-- RPG Character Stats & Streak Grid Section -->
+                <section class="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <!-- RPG Stats Card (5 Cols) -->
+                    <div class="lg:col-span-5 glass-card p-6 rounded-2xl shadow-md flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <h3 class="text-lg font-extrabold font-kanit flex items-center gap-2 text-gray-900 dark:text-white">
+                                    <span>🛡️</span> ค่าพลังผู้เรียน (RPG Stats)
+                                </h3>
+                                <span class="text-[10px] font-black uppercase tracking-widest text-indigo-600 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/80 px-2.5 py-1 rounded-full border border-indigo-200 dark:border-indigo-700/80">Card Sheet</span>
+                            </div>
+                            <p class="text-xs text-gray-600 dark:text-gray-300 font-medium mb-4">ประเมินความสามารถและวินัยการทำโจทย์ 4 ด้านหลัก</p>
+
+                            <div class="grid grid-cols-2 gap-3">
+                                <div class="p-3 bg-white dark:bg-gray-800/90 rounded-xl border border-gray-200/90 dark:border-gray-700 flex items-center gap-3 shadow-xs">
+                                    <div class="w-9 h-9 rounded-lg bg-blue-100 dark:bg-blue-900/60 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-base flex-shrink-0">🎯</div>
+                                    <div>
+                                        <div class="text-[10px] font-extrabold text-gray-500 dark:text-gray-300 uppercase tracking-tight">ACC (ความแม่นยำ)</div>
+                                        <div id="rpg-stat-acc" class="text-sm font-extrabold text-gray-900 dark:text-white">--%</div>
+                                    </div>
+                                </div>
+                                <div class="p-3 bg-white dark:bg-gray-800/90 rounded-xl border border-gray-200/90 dark:border-gray-700 flex items-center gap-3 shadow-xs">
+                                    <div class="w-9 h-9 rounded-lg bg-emerald-100 dark:bg-emerald-900/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold text-base flex-shrink-0">⚡</div>
+                                    <div>
+                                        <div class="text-[10px] font-extrabold text-gray-500 dark:text-gray-300 uppercase tracking-tight">SPD (ความเร็ว)</div>
+                                        <div id="rpg-stat-spd" class="text-sm font-extrabold text-gray-900 dark:text-white">45s/ข้อ</div>
+                                    </div>
+                                </div>
+                                <div class="p-3 bg-white dark:bg-gray-800/90 rounded-xl border border-gray-200/90 dark:border-gray-700 flex items-center gap-3 shadow-xs">
+                                    <div class="w-9 h-9 rounded-lg bg-orange-100 dark:bg-orange-900/60 text-orange-600 dark:text-orange-400 flex items-center justify-center font-bold text-base flex-shrink-0">🔥</div>
+                                    <div>
+                                        <div class="text-[10px] font-extrabold text-gray-500 dark:text-gray-300 uppercase tracking-tight">STR (ความต่อเนื่อง)</div>
+                                        <div id="rpg-stat-str" class="text-sm font-extrabold text-gray-900 dark:text-white">0 วัน</div>
+                                    </div>
+                                </div>
+                                <div class="p-3 bg-white dark:bg-gray-800/90 rounded-xl border border-gray-200/90 dark:border-gray-700 flex items-center gap-3 shadow-xs">
+                                    <div class="w-9 h-9 rounded-lg bg-purple-100 dark:bg-purple-900/60 text-purple-600 dark:text-purple-400 flex items-center justify-center font-bold text-base flex-shrink-0">🧠</div>
+                                    <div>
+                                        <div class="text-[10px] font-extrabold text-gray-500 dark:text-gray-300 uppercase tracking-tight">INT (ความยากโจทย์)</div>
+                                        <div id="rpg-stat-int" class="text-sm font-extrabold text-gray-900 dark:text-white">ระดับท้าทาย</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 pt-3 border-t border-gray-200/60 dark:border-gray-700/60 text-right">
+                            <span class="text-[11px] font-semibold text-gray-500 dark:text-gray-400 italic">* อัปเดตอัตโนมัติจากสถิติการตอบข้อสอบ</span>
+                        </div>
+                    </div>
+
+                    <!-- Learning Streak Heatmap Widget (7 Cols) -->
+                    <div class="lg:col-span-7 glass-card p-6 rounded-2xl shadow-md flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <h3 class="text-lg font-extrabold font-kanit flex items-center gap-2 text-gray-900 dark:text-white">
+                                    <span>📅</span> ตารางการฝึกฝนต่อเนื่อง (Learning Activity)
+                                </h3>
+                                <span class="text-[10px] font-black uppercase tracking-widest text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/80 px-2.5 py-1 rounded-full border border-emerald-200 dark:border-emerald-700/80">Streak Grid</span>
+                            </div>
+                            <p class="text-xs text-gray-600 dark:text-gray-300 font-medium mb-4">แสดงสถิติการเข้าทำข้อสอบในแต่ละวันของสัปดาห์</p>
+
+                            <!-- Heatmap Visual Grid with Y-Axis Day Labels -->
+                            <div class="overflow-x-auto pb-2 no-scrollbar">
+                                <div class="min-w-[420px]">
+                                    <!-- X-Axis Months -->
+                                    <div class="flex text-[10px] text-gray-500 dark:text-gray-400 font-bold justify-between mb-1.5 pl-6 pr-1">
+                                        <span>ม.ค.</span><span>ก.พ.</span><span>มี.ค.</span><span>เม.ย.</span><span>พ.ค.</span><span>มิ.ย.</span><span>ก.ค.</span><span>ส.ค.</span>
+                                    </div>
+                                    
+                                    <div class="flex gap-2 items-center">
+                                        <!-- Y-Axis Day Labels -->
+                                        <div class="flex flex-col justify-between text-[10px] font-bold text-gray-500 dark:text-gray-400 select-none text-right w-4 h-28 py-0.5 flex-shrink-0">
+                                            <span>อา</span>
+                                            <span>จ</span>
+                                            <span>อ</span>
+                                            <span>พ</span>
+                                            <span>พฤ</span>
+                                            <span>ศ</span>
+                                            <span>ส</span>
+                                        </div>
+                                        
+                                        <!-- Grid Cells -->
+                                        <div class="heatmap-grid h-28 flex-grow">
+                                            <script>
+                                                document.write(Array.from({length: 140}, (_, i) => {
+                                                    const levels = ['hm-lvl-0', 'hm-lvl-1', 'hm-lvl-2', 'hm-lvl-3', 'hm-lvl-4'];
+                                                    const lvl = Math.random() > 0.6 ? Math.floor(Math.random() * 4) + 1 : 0;
+                                                    return `<div class="heatmap-cell ${levels[lvl]}" title="บันทึกกิจกรรมประจำวัน"></div>`;
+                                                }).join(''));
+                                            </script>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between pt-3 border-t border-gray-200/60 dark:border-gray-700/60 text-xs text-gray-600 dark:text-gray-300 font-bold">
+                            <span>น้อย (ทำโจทย์น้อย)</span>
+                            <div class="flex items-center gap-1.5">
+                                <div class="w-3 h-3 rounded-xs hm-lvl-0" title="0 ข้อ"></div>
+                                <div class="w-3 h-3 rounded-xs hm-lvl-1" title="1-3 ข้อ"></div>
+                                <div class="w-3 h-3 rounded-xs hm-lvl-2" title="4-8 ข้อ"></div>
+                                <div class="w-3 h-3 rounded-xs hm-lvl-3" title="9-15 ข้อ"></div>
+                                <div class="w-3 h-3 rounded-xs hm-lvl-4" title="16+ ข้อ"></div>
+                            </div>
+                            <span>มาก (ขยันมาก 🔥)</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Radar Chart & Smart Focus Section -->
+                <section class="glass-card rounded-2xl shadow-md p-6 overflow-hidden relative">
+                    <!-- Background Accent -->
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-full -mr-16 -mt-16 blur-2xl pointer-events-none"></div>
+
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 relative z-10">
+                        <div>
+                            <h2 class="text-xl font-extrabold font-kanit flex items-center gap-2 text-gray-900 dark:text-white">
+                                <span class="text-blue-500">🎯</span> ความถนัดรายด้าน
+                            </h2>
+                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mt-0.5">
+                                Proficiency Analysis</p>
+                        </div>
+
+                        <!-- Track Selector Toggle -->
+                        <div class="flex bg-gray-100/90 dark:bg-gray-700/60 p-1 rounded-xl border border-gray-200 dark:border-gray-600">
+                            <button id="track-toggle-highschool"
+                                class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 bg-white dark:bg-blue-600 text-blue-600 dark:text-white shadow-sm">
+                                ม.ปลาย
+                            </button>
+                            <button id="track-toggle-posn"
+                                class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
+                                สอวน.
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Subject Selector -->
+                    <div class="mb-6 relative z-10 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                        <div class="relative w-full sm:w-64 transition-all duration-300">
+                            <select id="proficiency-mode-select"
+                                class="w-full text-xs font-bold bg-white/90 dark:bg-gray-700/60 text-gray-800 dark:text-gray-200 px-4 py-2.5 rounded-xl outline-none cursor-pointer border border-gray-200 dark:border-gray-600 appearance-none hover:border-blue-500/50 transition-colors shadow-xs">
+                                <option value="overall">📊 ภาพรวมสายวิชา</option>
+                            </select>
+                            <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <p class="text-[10px] text-gray-400 font-medium italic">* เลือกเพื่อดูรายละเอียดแยกตามบทเรียน</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 relative z-10">
+                        <!-- Radar Chart Area -->
+                        <div class="lg:col-span-7">
+                            <div class="h-80 relative flex items-center justify-center">
+                                <canvas id="skills-radar-chart"></canvas>
+                                <!-- Loader Overlay -->
+                                <div id="radar-chart-loader"
+                                    class="absolute inset-0 flex items-center justify-center bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-xl hidden">
+                                    <div class="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mastery & Action Area -->
+                        <div class="lg:col-span-5 flex flex-col justify-between space-y-4">
+                            <!-- Mastery Rank Display -->
+                            <div id="mastery-tier-container"
+                                class="bg-white/90 dark:bg-gray-800/90 p-4 rounded-2xl border border-gray-200/80 dark:border-gray-700 shadow-xs flex items-center gap-4">
+                                <div id="mastery-rank-icon"
+                                    class="w-16 h-16 rounded-2xl bg-gray-100 dark:bg-gray-700/80 shadow-inner flex items-center justify-center text-3xl flex-shrink-0">
+                                    ⏳
+                                </div>
+                                <div>
+                                    <div class="text-[10px] text-gray-500 dark:text-gray-400 font-bold uppercase tracking-widest mb-0.5">Mastery Rank</div>
+                                    <div id="mastery-rank-name" class="text-lg font-black text-gray-800 dark:text-gray-100 leading-tight">กำลังคำนวณ...</div>
+                                    <div id="mastery-rank-subtitle" class="text-xs text-blue-600 dark:text-blue-400 font-bold mt-0.5">ทำโจทย์เพื่อเพิ่มระดับ</div>
+                                </div>
+                            </div>
+
+                            <!-- Smart Focus Recommendation -->
+                            <div id="smart-focus-container"
+                                class="bg-blue-50/80 dark:bg-gray-800/90 p-4 rounded-2xl border border-blue-200/80 dark:border-gray-700 shadow-xs">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <span class="text-sm">💡</span>
+                                    <span class="text-xs font-bold text-blue-700 dark:text-blue-400">จุดที่ควรพัฒนา</span>
+                                </div>
+                                <div id="weakest-area-name" class="text-sm font-bold text-gray-900 dark:text-gray-100 mb-3">...</div>
+                                <button id="smart-focus-btn"
+                                    class="w-full py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl text-xs font-bold transition-all duration-200 shadow-md shadow-blue-500/20 flex items-center justify-center gap-2 active:scale-95">
+                                    <span>เริ่มฝึกฝนตอนนี้</span>
+                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- 2. PERKS & RAID PANEL -->
+            <div id="panel-perks" class="hub-panel hidden space-y-8 max-w-5xl mx-auto pb-12 animate-fade-in">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <!-- Left Column (8 Cols): Boss Card & Skill Tree Perks -->
+                    <div class="lg:col-span-8 space-y-8">
+                        <div id="boss-card-slot-perks-tab"></div>
+                        <section id="skill-tree-container" class="glass-card rounded-2xl shadow-md p-6">
+                        </section>
+                    </div>
+
+                    <!-- Right Column (4 Cols): Boss Leaderboard & Bi-Weekly Quest -->
+                    <div class="lg:col-span-4 space-y-8">
+                        <!-- Top 3 Boss Damage Leaderboard Widget -->
+                        <section class="glass-card rounded-2xl shadow-md p-6">
+                            <h3 class="text-lg font-extrabold font-kanit mb-4 flex items-center justify-between text-gray-900 dark:text-white">
+                                <span class="flex items-center gap-2"><span>🏆</span> อันดับพิชิตบอส</span>
+                                <span class="text-[10px] font-black uppercase text-purple-600 dark:text-purple-300 bg-purple-100 dark:bg-purple-950/80 px-2 py-0.5 rounded-full border border-purple-300/40">Top 3</span>
+                            </h3>
+                            <div id="boss-leaderboard-list" class="space-y-3"></div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. ANALYSIS PANEL -->
+            <div id="panel-analysis" class="hub-panel hidden space-y-8 max-w-5xl mx-auto pb-12 animate-fade-in">
+                <div id="analysis-summary-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-4"></div>
+                <!-- Insights -->
+                <section id="insight-cards-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></section>
+                <!-- Charts -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <section class="glass-card rounded-2xl p-6 shadow-md">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="font-bold font-kanit text-gray-900 dark:text-white">📈 แนวโน้มคะแนน</h2>
+                            <div class="flex gap-1 bg-gray-100 dark:bg-gray-700/60 p-1 rounded-lg border border-gray-200 dark:border-gray-600">
+                                <button class="trend-range-btn text-[10px] font-bold px-2 py-1 rounded active" data-range="7">7d</button>
+                                <button class="trend-range-btn text-[10px] font-bold px-2 py-1 rounded" data-range="all">all</button>
+                            </div>
+                        </div>
+                        <div class="h-64"><canvas id="score-trend-chart"></canvas></div>
+                    </section>
+
+                    <section class="glass-card rounded-2xl p-6 shadow-md">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="font-bold font-kanit text-gray-900 dark:text-white">💹 พัฒนาการสะสม</h2>
+                            <div class="flex gap-1 bg-gray-100 dark:bg-gray-700/60 p-1 rounded-lg border border-gray-200 dark:border-gray-600">
+                                <button class="history-range-btn text-[10px] font-bold px-2 py-1 rounded active" data-range="7">7d</button>
+                                <button class="history-range-btn text-[10px] font-bold px-2 py-1 rounded" data-range="all">all</button>
+                            </div>
+                        </div>
+                        <div class="h-64"><canvas id="proficiency-history-chart"></canvas></div>
+                    </section>
+                </div>
+
+                <!-- Middle Stats -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+                    <section class="glass-card rounded-2xl p-6 shadow-md">
+                        <h2 class="font-bold font-kanit mb-6 text-center text-gray-900 dark:text-white">คะแนนเฉลี่ยรายวิชา</h2>
+                        <div class="h-64"><canvas id="subject-performance-chart"></canvas></div>
+                    </section>
+
+                    <section class="glass-card rounded-2xl p-6 h-full">
+                        <h2 class="font-bold font-kanit mb-4 text-gray-900 dark:text-white">จุดแข็งและควรทบทวน</h2>
+                        <div class="space-y-6">
+                            <div>
+                                <h3 class="font-black text-[10px] uppercase text-green-500 mb-2 tracking-widest">จุดแข็ง (Strengths)</h3>
+                                <ul id="strengths-list" class="space-y-1 text-sm italic"></ul>
+                            </div>
+                            <div>
+                                <h3 class="font-black text-[10px] uppercase text-yellow-500 mb-2 tracking-widest">ควรทบทวน (Weaknesses)</h3>
+                                <ul id="weaknesses-list" class="space-y-1 text-sm italic"></ul>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Topics -->
+                <section class="space-y-6">
+                    <div class="flex justify-between items-center glass-card p-4 rounded-xl shadow-sm">
+                        <h2 class="text-xl font-bold font-kanit text-gray-900 dark:text-white">วิเคราะห์รายบทเรียน</h2>
+                        <select id="topic-syllabus-select"
+                            class="text-sm font-bold bg-transparent outline-none cursor-pointer text-gray-800 dark:text-gray-200">
+                            <option value="overall">ภาพรวมทั้งหมด</option>
+                            <option value="physics_m4">ม.4</option>
+                            <option value="physics_m5">ม.5</option>
+                            <option value="physics_m6">ม.6</option>
+                            <option value="earth_basic">วิทย์โลกฯ พื้นฐาน</option>
+                            <option value="earth_adv">วิทย์โลกฯ เพิ่มเติม</option>
+                            <option value="posn_earth">สอวน. วิทย์โลกฯ</option>
+                            <option value="posn_astro">สอวน. ดาราศาสตร์</option>
+                        </select>
+                    </div>
+                    <div id="subject-performance-container" class="space-y-4"></div>
+                </section>
+            </div>
+
+            <!-- 3. HISTORY PANEL -->
+            <div id="panel-history" class="hub-panel hidden space-y-8 max-w-5xl mx-auto pb-12 animate-fade-in">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <!-- Left (8 Cols): Detailed Quiz History -->
+                    <div class="lg:col-span-8 space-y-6">
+                        <div class="flex flex-col sm:flex-row justify-between items-center gap-4 glass-card p-4 rounded-xl sticky top-36 z-30 shadow-sm">
+                            <h2 class="text-xl font-bold font-kanit text-gray-900 dark:text-white">📜 ประวัติการเรียนรู้</h2>
+                            <input type="text" id="history-search-input" placeholder="ค้นหาชุดข้อสอบ..."
+                                class="w-full sm:w-64 px-4 py-2 bg-gray-50 dark:bg-gray-700/60 rounded-xl text-sm outline-none focus:ring-2 ring-blue-500/20 text-gray-900 dark:text-white placeholder-gray-400">
+                        </div>
+                        <div id="detailed-stats-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+                    </div>
+
+                    <!-- Right (4 Cols): Overall Leaderboard & Quest History -->
+                    <div class="lg:col-span-4 space-y-8">
+                        <section class="glass-card rounded-2xl shadow-sm p-6">
+                            <h2 class="text-lg font-bold font-kanit mb-4 flex items-center justify-between text-gray-900 dark:text-white">
+                                <span>👑 อันดับคะแนนรวม</span>
+                                <a href="leaderboard.html" class="text-[10px] text-blue-500 font-bold hover:underline">ดูทั้งหมด →</a>
+                            </h2>
+                            <div id="leaderboard-list" class="space-y-2 snippet"></div>
+                        </section>
+
+                        <section class="glass-card rounded-2xl shadow-sm p-6">
+                            <h2 class="text-lg font-bold font-kanit mb-4 text-gray-900 dark:text-white flex items-center gap-2">
+                                📅 ประวัติภารกิจ
+                            </h2>
+                            <div id="profile-quest-history" class="space-y-2 max-h-60 overflow-y-auto pr-2 modern-scrollbar"></div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. SHOP PANEL -->
+            <div id="panel-shop" class="hub-panel hidden animate-fade-in max-w-5xl mx-auto pb-12">
+                <section id="shop-section"
+                    class="glass-card shadow-xl rounded-2xl overflow-hidden">
+                    <div class="p-8 pb-4 flex justify-between items-center">
+                        <h2 class="text-2xl font-bold font-kanit text-gray-900 dark:text-white flex items-center gap-3">🛒 ร้านค้าแลก XP</h2>
+                        <div class="bg-blue-50 dark:bg-blue-900/30 px-4 py-2 rounded-xl text-blue-600 dark:text-blue-300 font-black border border-blue-100 dark:border-blue-800">
+                            XP: <span id="shop-user-xp">0</span></div>
+                    </div>
+                    <div id="shop-items-grid" class="p-8 space-y-6"></div>
+                </section>
+            </div>
+        </div>
+
+        <!-- Utility Buttons -->
+        <div class="max-w-5xl mx-auto mb-4 mt-8 flex justify-end gap-3">
+            <button id="refresh-charts-btn"
+                class="text-xs font-bold text-green-600 dark:text-green-400 hover:opacity-80 transition-opacity flex items-center gap-1">🔄
+                รีเฟรชกราฟ</button>
+        </div>
+    </main>
+
+    <!-- Settings / Danger Zone -->
+    <div class="max-w-5xl mx-auto mb-12 px-4">
+        <div class="glass-card rounded-2xl shadow-sm overflow-hidden">
+            <div class="p-6">
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white font-kanit mb-4 flex items-center gap-2">⚙️
+                    การจัดการข้อมูล</h3>
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 bg-red-50 dark:bg-red-900/10 rounded-xl border border-red-100 dark:border-red-900/30">
+                    <div class="text-sm">
+                        <h4 class="font-bold text-red-700 dark:text-red-400">พื้นที่อันตราย (Danger Zone)</h4>
+                        <p class="text-gray-600 dark:text-gray-400 mt-1">ลบข้อมูลจะทำให้ XP และประวัติทั้งหมดหายไป (สำหรับ Guest ข้อมูลในเครื่องจะถูกล้าง)</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <button id="recalculate-xp-btn"
+                            class="px-4 py-2 bg-white dark:bg-gray-800 text-yellow-600 border border-yellow-200 dark:border-yellow-800 rounded-lg text-xs font-bold shadow-sm">คำนวณใหม่</button>
+                        <button id="reset-gamification-btn"
+                            class="px-4 py-2 bg-white dark:bg-gray-800 text-red-600 border border-red-200 dark:border-red-800 rounded-lg text-xs font-bold shadow-sm">ล้างข้อมูล</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+    <div id="modals-placeholder"></div>
+
+    <!-- Modals -->
+    <div id="avatar-modal"
+        class="modal hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 transition-all backdrop-blur-sm">
+        <div class="modal-container glass-card rounded-2xl w-full max-w-md p-6">
+            <h3 class="text-xl font-bold mb-4 font-kanit text-gray-900 dark:text-white">เลือกรูปโปรไฟล์</h3>
+            <div id="avatar-grid" class="grid grid-cols-5 gap-3 max-h-80 overflow-y-auto pr-1 modern-scrollbar"></div>
+        </div>
+    </div>
+    <div id="name-edit-modal" class="modal hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
+        <div class="modal-container glass-card rounded-2xl w-full max-w-md p-6">
+            <h3 class="text-xl font-bold mb-4 font-kanit text-gray-900 dark:text-white">แก้ไขชื่อที่แสดง</h3>
+            <input type="text" id="new-display-name"
+                class="w-full p-2.5 border rounded-xl bg-gray-50 dark:bg-gray-700 dark:border-gray-600 text-gray-900 dark:text-white mb-4 text-sm font-semibold outline-none focus:ring-2 ring-blue-500/30"
+                maxlength="30">
+            <div class="flex justify-end gap-2">
+                <button data-modal-close class="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-lg text-xs font-bold">ยกเลิก</button>
+                <button id="save-name-btn" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-bold shadow-sm">บันทึก</button>
+            </div>
+        </div>
+    </div>
+    <div id="title-modal" class="modal hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
+        <div class="modal-container glass-card rounded-2xl w-full max-w-md p-6">
+            <h3 class="text-xl font-bold mb-4 font-kanit text-gray-900 dark:text-white">เลือกฉายา</h3>
+            <div id="title-grid" class="space-y-2 max-h-80 overflow-y-auto modern-scrollbar"></div>
+        </div>
+    </div>
+    <div id="theme-modal" class="modal hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
+        <div class="modal-container glass-card rounded-2xl w-full max-w-md p-6">
+            <h3 class="text-xl font-bold mb-4 font-kanit text-gray-900 dark:text-white">เลือกธีมสี</h3>
+            <div id="theme-grid" class="space-y-2"></div>
+        </div>
+    </div>
+    <div id="shop-details-modal"
+        class="modal hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
+        <div class="modal-container glass-card rounded-2xl w-full max-w-sm p-6 text-center flex flex-col items-center">
+            <div id="shop-modal-icon" class="text-6xl mb-3"></div>
+            <span id="shop-modal-type" class="text-xs font-bold text-blue-500 tracking-wider uppercase mb-1"></span>
+            <h3 id="shop-modal-title" class="text-2xl font-bold mb-2 font-kanit text-gray-900 dark:text-white"></h3>
+            <p id="shop-modal-desc" class="text-sm text-gray-500 dark:text-gray-400 mb-4"></p>
+            <div id="shop-modal-status" class="mb-4 text-sm font-medium hidden"></div>
+            <button id="shop-modal-buy-btn"
+                class="w-full py-3 bg-blue-600 text-white rounded-xl font-bold shadow-md">ยืนยันการแลก</button>
+        </div>
+    </div>
+    <div id="proficiency-modal"
+        class="modal hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
+        <div
+            class="modal-container glass-card rounded-2xl w-full max-w-lg p-6 max-h-[80vh] flex flex-col">
+            <h3 id="proficiency-modal-title" class="text-xl font-bold mb-4 font-kanit border-b border-gray-200 dark:border-gray-700 pb-2 text-gray-900 dark:text-white"></h3>
+            <div id="proficiency-modal-content" class="overflow-y-auto modern-scrollbar"></div>
+        </div>
+    </div>
+    <div id="badge-details-modal"
+        class="modal hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
+        <div class="modal-container glass-card rounded-2xl w-full max-w-sm p-6 text-center">
+            <div id="badge-modal-icon" class="text-6xl mb-4"></div>
+            <h3 id="badge-modal-name" class="text-2xl font-bold mb-2 text-gray-900 dark:text-white font-kanit"></h3>
+            <p id="badge-modal-desc" class="text-gray-500 dark:text-gray-400 text-sm mb-4"></p>
+            <div id="badge-modal-status"></div>
+        </div>
+    </div>
+
+    <div id="achievement-details-modal"
+        class="modal hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
+        <div class="modal-container glass-card rounded-2xl w-full max-w-sm p-6 text-center">
+            <div id="achievement-modal-icon" class="text-6xl mb-4"></div>
+            <h3 id="achievement-modal-name" class="text-2xl font-bold mb-2 text-gray-900 dark:text-white font-kanit"></h3>
+            <p id="achievement-modal-desc" class="text-gray-500 dark:text-gray-400 text-sm mb-4"></p>
+            <div id="achievement-modal-status"></div>
+        </div>
+    </div>
+
+</body>
+
+</html>
