@@ -9,6 +9,7 @@ export const quizItems = [
   {
     "type": "scenario",
     "title": "สถานการณ์: การละลายของน้ำแข็งและการทำให้น้ำเดือด",
+    "image": "./assets/images/phy_m6_ch16_phase_change.png",
     "description": "ก้อนน้ำแข็งมวล 200 กรัม อุณหภูมิ \\(-10^\\circ\\text{C}\\) ถูกให้ความร้อนจนกลายเป็นน้ำเดือดที่อุณหภูมิ \\(100^\\circ\\text{C}\\) ทั้งหมด (กำหนดความร้อนจำเพาะของน้ำแข็ง \\(c_{\\text{ice}} = 2.1\\text{ kJ/kg}\\cdot^\\circ\\text{C}\\), ความร้อนจำเพาะของน้ำ \\(c_{\\text{water}} = 4.2\\text{ kJ/kg}\\cdot^\\circ\\text{C}\\), และความร้อนแฝงจำเพาะของการหลอมเหลวของน้ำแข็ง \\(L_f = 333\\text{ kJ/kg}\\))",
     "questions": [
       {

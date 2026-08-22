@@ -1700,6 +1700,176 @@ def create_astro3_q50_stellar_fate():
     plt.savefig(os.path.join(output_dir, 'astro3_q50_stellar_fate.png'), dpi=150)
     plt.close()
 
+# ==========================================
+# DIAGRAMS FOR Physics M.6 Chapter 15 & 16
+# ==========================================
+
+def create_phy_m6_ch15_hydraulic():
+    fig, ax = plt.subplots(figsize=(6.5, 4.2), dpi=150)
+    ax.axis('off')
+    
+    # Fluid U-body
+    u_x = [-2.5, -2.5, -0.8, -0.8, 0.8, 0.8, 2.5, 2.5]
+    u_y = [1.2, -0.8, -0.8, -1.8, -1.8, -0.8, -0.8, 1.2]
+    
+    # Hydraulic fluid
+    fluid = patches.Polygon([(-2.5, -0.8), (2.5, -0.8), (2.5, -1.8), (-2.5, -1.8)], color='#60A5FA', alpha=0.75, zorder=1)
+    ax.add_patch(fluid)
+    
+    # Pistons
+    piston1 = patches.Rectangle((-2.5, -0.2), 0.8, 0.25, color='#475569', zorder=3)
+    piston2 = patches.Rectangle((0.8, -0.2), 1.7, 0.35, color='#334155', zorder=3)
+    ax.add_patch(piston1)
+    ax.add_patch(piston2)
+    
+    # Force Arrows & Labels
+    ax.annotate('', xy=(-2.1, -0.2), xytext=(-2.1, 1.2),
+                arrowprops=dict(arrowstyle='->', lw=2.5, color='#DC2626'))
+    add_label_box(ax, r'Input Force $F_1 = 400\text{ N}$', -2.1, 1.4, color='#DC2626', fontsize=10)
+    add_label_box(ax, r'$A_1 = 0.02\text{ m}^2$', -2.1, -0.5, color='white', fontsize=9.5)
+    
+    ax.annotate('', xy=(1.65, 1.4), xytext=(1.65, 0.15),
+                arrowprops=dict(arrowstyle='->', lw=2.5, color='#2563EB'))
+    add_label_box(ax, r'Output Force $F_2 = 16,000\text{ N}$' + '\n' + r'(Car Weight $1,600\text{ kg}$)', 1.65, 1.7, color='#1E40AF', fontsize=10)
+    add_label_box(ax, r'$A_2 = 0.8\text{ m}^2$', 1.65, -0.5, color='white', fontsize=9.5)
+    
+    # Fluid Label
+    add_label_box(ax, r'Hydraulic Oil ($\rho = 800\text{ kg/m}^3$)', 0, -1.3, color='#1E3A8A', fontsize=9.5)
+    
+    ax.set_xlim(-3.2, 3.2)
+    ax.set_ylim(-2.2, 2.2)
+    ax.set_title('Hydraulic Press System (Pascal\'s Law)', fontsize=12, fontweight='bold', pad=10)
+    plt.tight_layout()
+    plt.savefig(os.path.join(output_dir, 'phy_m6_ch15_hydraulic.png'), dpi=150)
+    plt.close()
+
+def create_phy_m6_ch15_utube():
+    fig, ax = plt.subplots(figsize=(6.0, 4.5), dpi=150)
+    ax.axis('off')
+    
+    # Left column (Oil), Right column (Water)
+    ax.plot([-1.5, -1.5, -0.5, -0.5], [2.2, -1.0, -1.0, -1.5], 'k-', lw=2)
+    ax.plot([0.5, 0.5, 1.5, 1.5], [-1.5, -1.0, -1.0, 2.2], 'k-', lw=2)
+    ax.plot([-0.5, 0.5], [-1.5, -1.5], 'k-', lw=2)
+    ax.plot([-1.5, -0.5], [-1.0, -1.0], 'k-', lw=2)
+    ax.plot([0.5, 1.5], [-1.0, -1.0], 'k-', lw=2)
+    
+    # Water bottom & right column
+    water = patches.Polygon([(-1.5, -1.0), (1.5, -1.0), (1.5, 0.8), (0.5, 0.8), (0.5, -0.5), (-0.5, -0.5), (-0.5, -1.0)], color='#3B82F6', alpha=0.7, zorder=1)
+    ax.add_patch(water)
+    
+    # Oil left column
+    oil = patches.Polygon([(-1.5, -0.5), (-0.5, -0.5), (-0.5, 1.4), (-1.5, 1.4)], color='#F59E0B', alpha=0.8, zorder=2)
+    ax.add_patch(oil)
+    
+    # Interface line
+    ax.plot([-1.6, 1.6], [-0.5, -0.5], 'r--', lw=1.5, zorder=4)
+    add_label_box(ax, 'Interface Reference Level', 0, -0.5, color='#DC2626', fontsize=8.5)
+    
+    # Height indicators
+    ax.annotate('', xy=(-1.8, 1.4), xytext=(-1.8, -0.5), arrowprops=dict(arrowstyle='<->', lw=1.5, color='#B45309'))
+    add_label_box(ax, r'$h_{\text{oil}} = 15\text{ cm}$', -2.5, 0.45, color='#B45309', fontsize=9)
+    
+    ax.annotate('', xy=(1.8, 0.8), xytext=(1.8, -0.5), arrowprops=dict(arrowstyle='<->', lw=1.5, color='#1D4ED8'))
+    add_label_box(ax, r'$h_{\text{water}} = 12\text{ cm}$', 2.5, 0.15, color='#1D4ED8', fontsize=9)
+    
+    add_label_box(ax, 'Oil Column', -1.0, 1.7, color='#92400E', fontsize=9.5)
+    add_label_box(ax, 'Water Column', 1.0, 1.1, color='#1E40AF', fontsize=9.5)
+    
+    ax.set_xlim(-3.2, 3.2)
+    ax.set_ylim(-1.8, 2.5)
+    ax.set_title('U-Tube Manometer with Immiscible Liquids', fontsize=12, fontweight='bold', pad=10)
+    plt.tight_layout()
+    plt.savefig(os.path.join(output_dir, 'phy_m6_ch15_utube.png'), dpi=150)
+    plt.close()
+
+def create_phy_m6_ch15_venturi():
+    fig, ax = plt.subplots(figsize=(6.5, 3.8), dpi=150)
+    ax.axis('off')
+    
+    # Pipe contour
+    x = np.linspace(-3, 3, 200)
+    y_top = 1.2 - 0.5 * np.exp(-x**2 / 0.8)
+    y_bot = -1.2 + 0.5 * np.exp(-x**2 / 0.8)
+    
+    ax.plot(x, y_top, 'k-', lw=2.2)
+    ax.plot(x, y_bot, 'k-', lw=2.2)
+    
+    # Streamlines
+    ax.annotate('', xy=(-0.5, 0), xytext=(-2.5, 0), arrowprops=dict(arrowstyle='->', lw=2, color='#2563EB'))
+    ax.annotate('', xy=(2.5, 0), xytext=(0.5, 0), arrowprops=dict(arrowstyle='->', lw=2.5, color='#DC2626'))
+    
+    add_label_box(ax, r'Wide Pipe $A_1$' + '\n' + r'$v_1 = 3\text{ m/s}, P_1 = 150\text{ kPa}$', -2.0, 1.6, color='#1E40AF', fontsize=9)
+    add_label_box(ax, r'Narrow Constriction $A_2$' + '\n' + r'$v_2 = 12\text{ m/s}, P_2 = 83\text{ kPa}$', 0.0, -1.6, color='#991B1B', fontsize=9)
+    add_label_box(ax, r'High Pressure' + '\n' + r'Low Velocity', -2.0, -0.6, color='#1E3A8A', fontsize=8.5)
+    add_label_box(ax, r'Low Pressure' + '\n' + r'High Velocity', 0.0, 0.5, color='#991B1B', fontsize=8.5)
+    
+    ax.set_xlim(-3.4, 3.4)
+    ax.set_ylim(-2.2, 2.2)
+    ax.set_title('Fluid Dynamics: Continuity & Bernoulli Effect', fontsize=12, fontweight='bold', pad=10)
+    plt.tight_layout()
+    plt.savefig(os.path.join(output_dir, 'phy_m6_ch15_venturi.png'), dpi=150)
+    plt.close()
+
+def create_phy_m6_ch16_phase_change():
+    fig, ax = plt.subplots(figsize=(6.5, 4.2), dpi=150)
+    
+    # Time vs Temperature
+    t = [0, 2, 8, 14, 20]
+    T = [-10, 0, 0, 100, 100]
+    
+    ax.plot(t, T, 'b-o', lw=2.5, markersize=6)
+    
+    ax.axhline(0, color='gray', linestyle='--', alpha=0.5)
+    ax.axhline(100, color='gray', linestyle='--', alpha=0.5)
+    
+    add_label_box(ax, r'Ice Heating' + '\n' + r'$Q_1 = m c_{\text{ice}} \Delta T$', 1.0, -5, color='#1D4ED8', fontsize=8.5)
+    add_label_box(ax, r'Melting (0°C)' + '\n' + r'$Q_2 = m L_f$', 5.0, 8, color='#047857', fontsize=8.5)
+    add_label_box(ax, r'Water Heating' + '\n' + r'$Q_3 = m c_{\text{water}} \Delta T$', 11.0, 50, color='#B45309', fontsize=8.5)
+    add_label_box(ax, r'Boiling (100°C)' + '\n' + r'$Q_4 = m L_v$', 17.0, 108, color='#B91C1C', fontsize=8.5)
+    
+    ax.set_xlabel('Heat Added / Time (Arbitrary Units)', fontsize=11, fontweight='bold')
+    ax.set_ylabel('Temperature (°C)', fontsize=11, fontweight='bold')
+    ax.set_title('Heating Curve & Phase Change of Water', fontsize=12, fontweight='bold', pad=10)
+    ax.set_xlim(-0.5, 21.5)
+    ax.set_ylim(-20, 125)
+    ax.grid(True, linestyle=':', alpha=0.6)
+    
+    plt.tight_layout()
+    plt.savefig(os.path.join(output_dir, 'phy_m6_ch16_phase_change.png'), dpi=150)
+    plt.close()
+
+def create_phy_m6_ch16_solar_collector():
+    fig, ax = plt.subplots(figsize=(6.5, 4.0), dpi=150)
+    ax.axis('off')
+    
+    # Solar panel box
+    panel = patches.Rectangle((-1.8, -0.6), 3.6, 1.2, angle=15, color='#1E293B', ec='#38BDF8', lw=2, zorder=2)
+    ax.add_patch(panel)
+    
+    # Sunlight rays
+    for dx in [-1.2, -0.4, 0.4, 1.2]:
+        ax.annotate('', xy=(dx, 0.4), xytext=(dx + 0.3, 1.8),
+                    arrowprops=dict(arrowstyle='->', lw=2, color='#F59E0B'))
+        
+    add_label_box(ax, r'Solar Radiation $800\text{ W/m}^2$' + '\n' + r'Area $A = 4\text{ m}^2$', 0.5, 2.0, color='#B45309', fontsize=9.5)
+    
+    # Pipe in & out
+    add_label_box(ax, r'Cold Water In' + '\n' + r'$25^\circ\text{C}$', -2.7, -0.8, color='#1D4ED8', fontsize=9)
+    ax.annotate('', xy=(-1.5, -0.4), xytext=(-2.5, -0.8), arrowprops=dict(arrowstyle='->', lw=2, color='#2563EB'))
+    
+    add_label_box(ax, r'Hot Water Out' + '\n' + r'$45^\circ\text{C}$', 2.7, 0.6, color='#DC2626', fontsize=9)
+    ax.annotate('', xy=(2.5, 0.6), xytext=(1.5, 0.2), arrowprops=dict(arrowstyle='->', lw=2, color='#DC2626'))
+    
+    add_label_box(ax, r'Efficiency $\eta = 70\%$', 0, -1.4, color='#047857', fontsize=10)
+    
+    ax.set_xlim(-3.5, 3.5)
+    ax.set_ylim(-1.8, 2.4)
+    ax.set_title('Solar Thermal Collector System', fontsize=12, fontweight='bold', pad=10)
+    plt.tight_layout()
+    plt.savefig(os.path.join(output_dir, 'phy_m6_ch16_solar_collector.png'), dpi=150)
+    plt.close()
+
 # Generate Astro2 diagrams!
 create_astro2_q5_circumpolar()
 create_astro2_q7_third_quarter()
@@ -1718,6 +1888,13 @@ create_astro3_q23_prograde_burn()
 create_astro3_q25_q35_stellar_interiors()
 create_astro3_q38_luminosity_radius_temp()
 create_astro3_q50_stellar_fate()
+
+# Generate Physics M.6 Chapter 15 & 16 diagrams!
+create_phy_m6_ch15_hydraulic()
+create_phy_m6_ch15_utube()
+create_phy_m6_ch15_venturi()
+create_phy_m6_ch16_phase_change()
+create_phy_m6_ch16_solar_collector()
 
 print("ALL DIAGRAMS PERFECTLY GENERATED!")
 
