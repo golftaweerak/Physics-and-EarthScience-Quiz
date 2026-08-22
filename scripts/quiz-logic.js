@@ -3539,8 +3539,14 @@ function updateBossHpDisplay(damageDealt = 0) {
   const boss = state.game.getCurrentWeeklyBoss();
   if (!boss) return;
 
-  // Unhide the real-time boss banner
-  bossBanner.classList.remove('hidden');
+  // Unhide the real-time boss banner only if in dedicated Boss Raid mode
+  const urlParams = new URLSearchParams(window.location.search);
+  const isBossMode = urlParams.get('mode') === 'boss' || urlParams.get('id') === 'boss';
+  if (isBossMode) {
+    bossBanner.classList.remove('hidden');
+  } else {
+    bossBanner.classList.add('hidden');
+  }
 
   const iconEl = document.getElementById('boss-icon-display');
   const nameEl = document.getElementById('boss-name-display');

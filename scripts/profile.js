@@ -507,7 +507,7 @@ function renderWeeklyBossCard(game) {
                         ${isDefeated ? 'พิชิตแล้ว 🏆' : `HP: ${boss.currentHp} / ${boss.maxHp}`}
                     </span>
                     <!-- Prominent Challenge Button -->
-                    <a href="./quiz/index.html?id=random&category=${boss.category || 'all'}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2 bg-gradient-to-r from-red-600 via-rose-600 to-amber-600 hover:from-red-700 hover:to-amber-700 text-white text-xs sm:text-sm font-extrabold font-kanit rounded-xl shadow-lg shadow-red-500/30 transition transform hover:scale-105 active:scale-95 border border-red-300/30 tracking-wide animate-pulse hover:animate-none">
+                    <a href="./quiz/index.html?id=random&category=${boss.category || 'all'}&mode=boss" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2 bg-gradient-to-r from-red-600 via-rose-600 to-amber-600 hover:from-red-700 hover:to-amber-700 text-white text-xs sm:text-sm font-extrabold font-kanit rounded-xl shadow-lg shadow-red-500/30 transition transform hover:scale-105 active:scale-95 border border-red-300/30 tracking-wide animate-pulse hover:animate-none">
                         ⚔️ ลุยบอสตัวนี้!
                     </a>
                 </div>
