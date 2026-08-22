@@ -471,13 +471,14 @@ export function initializeCustomQuizHandler() {
         });
 
 
-        // Ensure the container is a grid for proper alignment and equal-height cards.
         if (customQuizListContainer) {
             customQuizListContainer.className = "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6";
+            customQuizListContainer.innerHTML = "";
         }
 
-        noCustomQuizzesMsg.classList.toggle("hidden", savedQuizzes.length > 0);
-        customQuizListContainer.innerHTML = "";
+        if (noCustomQuizzesMsg) {
+            noCustomQuizzesMsg.classList.toggle("hidden", savedQuizzes.length > 0);
+        }
         const fragment = document.createDocumentFragment();
 
         savedQuizzes.forEach((quiz, index) => {

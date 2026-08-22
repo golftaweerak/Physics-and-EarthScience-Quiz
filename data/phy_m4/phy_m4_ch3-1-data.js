@@ -1,6 +1,6 @@
 /**
  * @fileoverview ชุดข้อสอบวิชาฟิสิกส์
- * @id phy_m4_Ch3-1
+ * @id phy_m4_ch3-1
  * @description บทที่ 3: แรงและกฎการเคลื่อนที่ (ชุดที่ 1)
  * @version 1.2.0
  */
