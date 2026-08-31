@@ -1058,6 +1058,11 @@ export function initializePage() {
 
         if (currentProgress.isFinished) {
           event.preventDefault();
+          const modalTitleEl = document.getElementById("completed-modal-title");
+          const cardTitleEl = card.querySelector("h3");
+          if (modalTitleEl && cardTitleEl) {
+            modalTitleEl.textContent = cardTitleEl.textContent.trim();
+          }
           pageState.activeQuizUrl = card.href;
           pageState.activeStorageKey = storageKey;
           completedModal.open(card);

@@ -6,43 +6,43 @@
 
 <!-- Generic Confirmation Modal (for clearing stats, etc.) -->
 <div id="confirm-action-modal"
-    class="modal hidden fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-[60] p-4 font-sarabun"
+    class="modal hidden fixed inset-0 bg-black/75 backdrop-blur-sm flex items-center justify-center z-[60] p-4 font-sarabun"
     role="dialog" aria-modal="true" aria-labelledby="confirm-modal-title">
-    <div class="modal-container relative bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 sm:p-8 max-w-md w-full">
+    <div class="modal-container relative bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-6 sm:p-7 max-w-md w-full border border-gray-100 dark:border-gray-700/80 transition-all duration-300">
         <button data-modal-close aria-label="ปิด"
-            class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition">
-            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+            class="absolute top-4 right-4 p-2 rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors">
+            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                 stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
         </button>
-        <div class="flex items-start gap-4">
-            <div class="mx-auto shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 dark:bg-red-900/50 sm:mx-0 sm:h-10 sm:w-10 min-w-[2.5rem] min-h-[2.5rem]"
-                <svg class="h-6 w-6 text-red-600 dark:text-red-400" xmlns="http://www.w3.org/2000/svg" fill="none"
-                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        <div class="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-4">
+            <div class="shrink-0 flex items-center justify-center h-14 w-14 rounded-2xl bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 shadow-inner">
+                <svg class="h-7 w-7" xmlns="http://www.w3.org/2000/svg" fill="none"
+                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                 </svg>
             </div>
-            <div class="mt-3 text-center sm:mt-0 sm:text-left">
+            <div class="mt-1 sm:mt-0">
                 <h3 id="confirm-modal-title"
                     class="text-lg leading-6 font-bold text-gray-900 dark:text-gray-100 font-kanit">
                     ยืนยันการกระทำ</h3>
                 <div class="mt-2">
-                    <p id="confirm-modal-description" class="text-sm text-gray-600 dark:text-gray-400">
+                    <p id="confirm-modal-description" class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
                         คุณแน่ใจหรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้
                     </p>
                 </div>
             </div>
         </div>
-        <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse gap-3">
-            <button id="confirm-action-btn" type="button" data-modal-confirm data-modal-autofocus
-                class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:w-auto sm:text-sm transition-all btn-press-anim">
-                ยืนยัน
-            </button>
+        <div class="mt-6 flex flex-col-reverse sm:flex-row gap-2.5 sm:justify-end">
             <button id="confirm-cancel-btn" data-modal-close type="button"
-                class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-white dark:bg-gray-700 text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm transition-all btn-press-anim">
+                class="w-full sm:w-auto px-5 py-2.5 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm font-bold text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all btn-press-anim">
                 ยกเลิก
+            </button>
+            <button id="confirm-action-btn" type="button" data-modal-confirm data-modal-autofocus
+                class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 text-white text-sm font-bold shadow-lg shadow-red-600/20 transition-all btn-press-anim">
+                ยืนยัน
             </button>
         </div>
     </div>
@@ -59,41 +59,61 @@
 
 <!-- Completed Quiz Action Modal -->
 <div id="completed-quiz-modal"
-    class="modal hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-75" role="dialog"
+    class="modal hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm font-sarabun" role="dialog"
     aria-modal="true" aria-labelledby="completed-modal-title">
-    <div class="modal-container bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-md m-4 p-6 text-center">
-        <div
-            class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 dark:bg-blue-900/50 mb-4">
-            <svg class="h-6 w-6 text-blue-600 dark:text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none"
-                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+    <div class="modal-container relative bg-white dark:bg-gray-800 rounded-3xl shadow-2xl w-full max-w-md m-4 p-6 sm:p-7 text-center border border-gray-100 dark:border-gray-700/80 transition-all duration-300">
+        <!-- Close Button -->
+        <button data-modal-close aria-label="ปิด"
+            class="absolute top-4 right-4 p-2 rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors">
+            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+
+        <!-- Icon Header -->
+        <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-400 text-white shadow-lg shadow-emerald-500/25 mb-4">
+            <svg class="h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="none"
+                viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
         </div>
-        <h3 id="completed-modal-title" class="text-lg font-bold text-gray-900 dark:text-gray-100 font-kanit">
+
+        <span class="inline-block px-3 py-1 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 text-xs font-semibold rounded-full mb-2">
+            ทำเสร็จสิ้นแล้ว
+        </span>
+
+        <h3 id="completed-modal-title" class="text-xl font-bold text-gray-900 dark:text-gray-100 font-kanit leading-snug">
             <!-- Title will be set dynamically by JS -->
         </h3>
-        <p id="completed-modal-description" class="text-sm text-gray-600 dark:text-gray-400 mt-2">
-            คุณต้องการเริ่มทำแบบทดสอบใหม่อีกครั้ง หรือดูผลคะแนนครั้งก่อน?
+        <p id="completed-modal-description" class="text-sm text-gray-600 dark:text-gray-400 mt-2 leading-relaxed">
+            คุณได้ทำแบบทดสอบชุดนี้เรียบร้อยแล้ว<br class="hidden sm:inline">ต้องการดูเฉลย/ผลคะแนน หรือเริ่มทำใหม่อีกครั้ง?
         </p>
-        <div class="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
+
+        <!-- Action Buttons (Vertical Stack for clarity & mobile friendliness) -->
+        <div class="mt-6 space-y-2.5">
+            <!-- Primary Action 1: View Results -->
             <button id="completed-view-results-btn"
-                class="w-full sm:w-auto px-4 py-2.5 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-all duration-200 font-bold btn-press-anim flex-1">
-                ดูผลคะแนน
-            </button>
-            <button id="completed-start-over-btn"
-                class="w-full sm:w-auto px-4 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all duration-200 font-bold btn-press-anim flex-1">
-                เริ่มใหม่
-            </button>
-            <a href="./index.html" id="completed-home-btn"
-                class="w-full sm:w-auto px-4 py-2.5 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-all duration-200 font-bold btn-press-anim flex-1 flex items-center justify-center gap-1.5 no-underline">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                class="w-full py-3 px-4 bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 text-white rounded-xl shadow-lg shadow-teal-600/20 font-bold text-sm sm:text-base transition-all duration-200 btn-press-anim flex items-center justify-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                 </svg>
-                <span>หน้าแรก</span>
-            </a>
+                <span>ดูผลคะแนน & เฉลย</span>
+            </button>
+
+            <!-- Primary Action 2: Start Over -->
+            <button id="completed-start-over-btn"
+                class="w-full py-2.5 px-4 bg-gray-100 dark:bg-gray-700/70 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-xl font-bold text-sm sm:text-base border border-gray-200 dark:border-gray-600/60 transition-all duration-200 btn-press-anim flex items-center justify-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                <span>เริ่มทำใหม่อีกครั้ง</span>
+            </button>
+
+            <!-- Tertiary Action: Cancel -->
             <button id="completed-cancel-btn" data-modal-close
-                class="w-full sm:w-auto px-4 py-2.5 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-all duration-200 font-bold btn-press-anim flex-1">
+                class="w-full py-2 text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 font-medium transition-colors">
                 ยกเลิก
             </button>
         </div>
@@ -430,27 +450,37 @@
 
 <!-- Resume Quiz Modal (for quiz page) -->
 <div id="resume-modal"
-    class="modal hidden fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4 font-sarabun"
+    class="modal hidden fixed inset-0 bg-black/75 backdrop-blur-sm flex items-center justify-center z-50 p-4 font-sarabun"
     role="dialog" aria-modal="true" aria-labelledby="resume-modal-title">
-    <div class="modal-container bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 sm:p-8 max-w-sm w-full text-center">
+    <div class="modal-container relative bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-6 sm:p-7 max-w-md w-full text-center border border-gray-100 dark:border-gray-700/80 transition-all duration-300">
+        <button data-modal-close aria-label="ปิด"
+            class="absolute top-4 right-4 p-2 rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors">
+            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
         <div
-            class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 dark:bg-blue-900/50 mb-4">
-            <svg class="h-6 w-6 text-blue-600 dark:text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none"
-                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            class="mx-auto flex items-center justify-center h-16 w-16 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-500 text-white shadow-lg shadow-blue-500/25 mb-4">
+            <svg class="h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="none"
+                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                    d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
         </div>
-        <h3 id="resume-modal-title" class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">พบข้อมูลที่บันทึกไว้
-        </h3>
-        <p class="text-gray-600 dark:text-gray-400 mb-6">คุณต้องการทำแบบทดสอบต่อจากครั้งก่อนหรือไม่?</p>
-        <div class="flex flex-col sm:flex-row-reverse gap-3">
+        <h3 id="resume-modal-title" class="text-xl font-bold text-gray-900 dark:text-gray-100 font-kanit">พบข้อมูลที่บันทึกไว้</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mt-2 mb-6 leading-relaxed">คุณต้องการทำแบบทดสอบต่อจากจุดเดิม หรือเริ่มต้นใหม่ทั้งหมด?</p>
+        <div class="flex flex-col sm:flex-row gap-2.5">
             <button id="resume-confirm-btn" data-modal-confirm data-modal-autofocus
-                class="w-full sm:w-auto flex-1 bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 btn-press-anim">
-                ทำต่อ
+                class="flex-1 py-3 px-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl shadow-lg shadow-blue-500/25 font-bold text-sm sm:text-base transition-all duration-200 btn-press-anim flex items-center justify-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>ทำต่อจากเดิม</span>
             </button>
             <button id="resume-reject-btn" data-modal-close
-                class="w-full sm:w-auto flex-1 bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 text-gray-800 dark:text-gray-200 font-bold py-2 px-4 rounded-lg transition-all duration-300 btn-press-anim">
+                class="flex-1 py-3 px-4 bg-gray-100 dark:bg-gray-700/70 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-xl font-bold text-sm sm:text-base border border-gray-200 dark:border-gray-600/60 transition-all duration-200 btn-press-anim">
                 เริ่มใหม่
             </button>
         </div>
