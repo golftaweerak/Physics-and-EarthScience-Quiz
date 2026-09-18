@@ -40,7 +40,8 @@ if (foundLocalPath) {
         convertTerm1Scores();
         console.log('\n--- ขั้นตอนที่ 3: อัปโหลดข้อมูลขึ้น Firestore ---');
         try {
-            execSync('node tools/upload-scores-firestore.js --semester 1-2569', { stdio: 'inherit' });
+            const forceFlag = process.argv.includes('--force') ? ' --force' : '';
+            execSync(`node tools/upload-scores-firestore.js --semester 1-2569${forceFlag}`, { stdio: 'inherit' });
             console.log('✅ อัปโหลดคะแนนขึ้น Firestore สำเร็จ!');
         } catch (err) {
             console.error('❌ เกิดข้อผิดพลาดในการอัปโหลดขึ้น Firestore (ตรวจสอบสิทธิ์การเขียนบน Rules):', err);
@@ -98,7 +99,8 @@ const downloadFile = (url, dest, cookies = []) => {
             convertTerm1Scores();
             console.log('\n--- ขั้นตอนที่ 3: อัปโหลดข้อมูลขึ้น Firestore ---');
             try {
-                execSync('node tools/upload-scores-firestore.js --semester 1-2569', { stdio: 'inherit' });
+                const forceFlag = process.argv.includes('--force') ? ' --force' : '';
+                execSync(`node tools/upload-scores-firestore.js --semester 1-2569${forceFlag}`, { stdio: 'inherit' });
                 console.log('✅ อัปโหลดคะแนนขึ้น Firestore สำเร็จ!');
             } catch (err) {
                 console.error('❌ เกิดข้อผิดพลาดในการอัปโหลดขึ้น Firestore (ตรวจสอบสิทธิ์การเขียนบน Rules):', err);

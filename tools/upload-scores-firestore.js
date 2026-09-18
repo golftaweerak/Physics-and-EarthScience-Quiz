@@ -34,10 +34,13 @@ const db = getFirestore(firebaseApp);
 // Retrieve command-line arguments
 const args = process.argv.slice(2);
 let semesterArg = '';
+let isForce = false;
 for (let i = 0; i < args.length; i++) {
     if (args[i] === '--semester' && args[i + 1]) {
         semesterArg = args[i + 1].trim();
-        break;
+    }
+    if (args[i] === '--force') {
+        isForce = true;
     }
 }
 
@@ -352,14 +355,14 @@ function calculateOverallSummary(scores, currentSemester) {
     };
 }
 
-async function uploadSemester(semesterKey) {
+function prepareSemesterData(semesterKey) {
     const semConfig = CONFIG[semesterKey];
     if (!semConfig) {
         throw new Error(`Unsupported semester "${semesterKey}".`);
     }
 
     const xlsxFilePath = path.join(__dirname, '..', 'xlsx', semConfig.inputFile);
-    console.log(`\n🚀 Starting Firestore uploader for Semester ${semConfig.semesterKey}...`);
+    console.log(`\n🔍 Checking semester data for ${semConfig.semesterKey}...`);
     console.log(`📂 Excel File: ${xlsxFilePath}`);
 
     if (!fs.existsSync(xlsxFilePath)) {
@@ -445,17 +448,26 @@ async function uploadSemester(semesterKey) {
     }
 
     console.log(`✅ Parsed ${studentsList.length} valid student records.`);
-    console.log('📈 Calculating summary statistics...');
     const summaries = calculateOverallSummary(studentsList, semConfig.semesterKey);
 
-    console.log('☁️ Uploading student records to Firestore...');
-    let batch = writeBatch(db);
-    let count = 0;
-    let batchIndex = 1;
+    // Prepare docData for each student and check against cache
+    const cacheSafeKey = semesterKey.replace(/[^a-zA-Z0-9_-]/g, '_');
+    const cacheFilePath = path.join(__dirname, '..', 'xlsx', `.cache-scores-${cacheSafeKey}.json`);
+    let cachedData = { students: {} };
+    if (fs.existsSync(cacheFilePath)) {
+        try {
+            cachedData = JSON.parse(fs.readFileSync(cacheFilePath, 'utf8'));
+            if (!cachedData.students) cachedData.students = {};
+        } catch (e) {
+            console.warn(`⚠️ Could not read cache file (${e.message}), will re-upload all.`);
+            cachedData = { students: {} };
+        }
+    }
+
+    const newStudentsMap = {};
+    const changedStudents = [];
 
     for (const student of studentsList) {
-        const studentDocRef = doc(db, 'student_scores', student.id);
-
         const semesterPayload = {};
         for (const key in student) {
             if (!['id', 'name', 'firstName', 'lastName', 'room', 'ordinal', 'assignments'].includes(key)) {
@@ -489,7 +501,45 @@ async function uploadSemester(semesterKey) {
             }
         };
 
-        // Using setDoc(merge: true) to avoid overwriting other semesters if they exist in the DB!
+        newStudentsMap[student.id] = docData;
+
+        const cachedDoc = cachedData.students[student.id];
+        const isStudentChanged = isForce || !cachedDoc || JSON.stringify(cachedDoc) !== JSON.stringify(docData);
+        if (isStudentChanged) {
+            changedStudents.push(docData);
+        }
+    }
+
+    return {
+        semesterKey,
+        semConfig,
+        totalStudents: studentsList.length,
+        changedStudents,
+        summaries,
+        cacheFilePath,
+        newCacheContent: {
+            lastUpdated: new Date().toISOString(),
+            students: newStudentsMap
+        }
+    };
+}
+
+async function uploadPreparedSemester(prepared) {
+    const { semesterKey, semConfig, totalStudents, changedStudents, summaries, cacheFilePath, newCacheContent } = prepared;
+
+    if (changedStudents.length === 0 && !isForce) {
+        console.log(`⚡ [Semester ${semConfig.semesterKey}] ข้อมูลตรงกับ Firestore แล้ว ข้ามการเขียน (${totalStudents} รายการ)`);
+        return;
+    }
+
+    console.log(`☁️ [Semester ${semConfig.semesterKey}] กำลังอัปโหลดนักเรียนที่มีข้อมูลเปลี่ยน: ${changedStudents.length} คน (จากทั้งหมด ${totalStudents} คน)...`);
+
+    let batch = writeBatch(db);
+    let count = 0;
+    let batchIndex = 1;
+
+    for (const docData of changedStudents) {
+        const studentDocRef = doc(db, 'student_scores', docData.id);
         batch.set(studentDocRef, docData, { merge: true });
         count++;
 
@@ -506,10 +556,10 @@ async function uploadSemester(semesterKey) {
         console.log(`   Committing batch #${batchIndex}...`);
         await batch.commit();
     }
-    console.log(`✅ Uploaded all student records successfully.`);
+    console.log(`✅ บันทึกข้อมูลนักเรียน ${changedStudents.length} รายการขึ้น Firestore สำเร็จ`);
 
     // Upload statistical summaries document
-    console.log('☁️ Uploading pre-computed statistics summaries to Firestore...');
+    console.log(`☁️ อัปเดตสถิติภาพรวม (scores_summaries) สำหรับเทอม ${semConfig.semesterKey}...`);
     const summaryDocRef = doc(db, 'scores_summaries', semesterKey);
     const summaryPayload = {
         lastUpdated: new Date().toISOString(),
@@ -517,7 +567,15 @@ async function uploadSemester(semesterKey) {
     };
 
     await setDoc(summaryDocRef, summaryPayload);
-    console.log(`✅ Uploaded statistical summary for Semester ${semesterKey} successfully.`);
+    console.log(`✅ อัปเดตข้อมูลสรุปสถิติสำหรับเทอม ${semConfig.semesterKey} สำเร็จ`);
+
+    // Save cache after successful upload
+    try {
+        fs.writeFileSync(cacheFilePath, JSON.stringify(newCacheContent, null, 2), 'utf8');
+        console.log(`💾 บันทึกแคช ${path.basename(cacheFilePath)} เรียบร้อย`);
+    } catch (e) {
+        console.warn(`⚠️ ไม่สามารถบันทึกแคชได้: ${e.message}`);
+    }
 }
 
 const rulesPath = path.join(__dirname, '..', 'firestore.rules');
@@ -543,6 +601,11 @@ function openRules() {
       allow read: if true;
       allow write: if true;
     }`);
+
+        if (openedRules === originalRules) {
+            console.log('ℹ️ Firestore Rules are already open for write access. Skipping rules deployment.');
+            return false;
+        }
 
         fs.writeFileSync(rulesPath, openedRules, 'utf8');
         execSync('npx firebase deploy --only firestore:rules', { stdio: 'inherit' });
@@ -572,17 +635,39 @@ function closeRules() {
 async function run() {
     let rulesOpened = false;
     try {
+        const targetSemesters = semesterArg ? [semesterArg] : Object.keys(CONFIG);
+        const preparedList = [];
+
+        console.log('🔍 [Smart Diff] กำลังตรวจสอบความเปลี่ยนแปลงของข้อมูลกับ Cache...');
+        for (const semKey of targetSemesters) {
+            const prepared = prepareSemesterData(semKey);
+            preparedList.push(prepared);
+        }
+
+        const totalChanges = preparedList.reduce((sum, p) => sum + p.changedStudents.length, 0);
+        const totalAllStudents = preparedList.reduce((sum, p) => sum + p.totalStudents, 0);
+
+        if (totalChanges === 0 && !isForce) {
+            console.log('\n========================================================');
+            console.log('✨ [Smart Diff] ข้อมูลคะแนนทั้งหมดตรงกับ Firestore อยู่แล้ว!');
+            console.log(`⚡ ไม่พบข้อมูลใหม่ จึงไม่ต้องเปิด Rules และไม่เสีย Write Quota (0 writes)`);
+            console.log(`🛡️ ประหยัดโควตา Firestore ได้ ${totalAllStudents} writes ในรอบนี้`);
+            console.log('========================================================\n');
+            return;
+        }
+
+        console.log('\n========================================================');
+        console.log(`📝 [Smart Diff] ตรวจพบข้อมูลเปลี่ยนแปลง ${totalChanges} รายการ (จากทั้งหมด ${totalAllStudents} คน)`);
+        console.log(`🔥 ประหยัดโควตา Firestore ได้ ${totalAllStudents - totalChanges} writes!`);
+        console.log('========================================================\n');
+
         rulesOpened = openRules();
 
-        if (semesterArg) {
-            await uploadSemester(semesterArg);
-        } else {
-            console.log('ℹ️ No semester specified via --semester. Automatically uploading all configured semesters...');
-            for (const sem of Object.keys(CONFIG)) {
-                await uploadSemester(sem);
-            }
+        for (const prepared of preparedList) {
+            await uploadPreparedSemester(prepared);
         }
-        console.log('\n🎉 All Firestore Migrations Completed Successfully!');
+
+        console.log('\n🎉 ดำเนินการอัปเดตข้อมูลขึ้น Cloud Firestore เรียบร้อยแล้ว!');
     } catch (err) {
         console.error('❌ Error uploading scores:', err);
         process.exit(1);
