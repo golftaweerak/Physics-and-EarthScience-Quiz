@@ -11,8 +11,23 @@ import { convertTerm2Scores } from './convert-scores-term2.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-// ลิงก์ SharePoint (เติม &download=1 เพื่อบังคับดาวน์โหลด)
-const googleSheetLink = "https://prommaacth-my.sharepoint.com/:x:/g/personal/taweerak_t_promma_ac_th/IQAFBGdGpXSPTo7eli_ghxWmAQWeBF5CLhSO3DbgO7ojVWM?e=Bk4o42&download=1";
+// โหลดค่า Environment จาก .env ถ้ามี
+const envPath = path.join(__dirname, '../.env');
+if (fs.existsSync(envPath)) {
+    fs.readFileSync(envPath, 'utf8').split(/\r?\n/).forEach(line => {
+        const m = line.match(/^\s*([\w.-]+)\s*=\s*(.*)?\s*$/);
+        if (m) {
+            let v = (m[2] || '').trim();
+            if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) {
+                v = v.slice(1, -1);
+            }
+            process.env[m[1]] = v;
+        }
+    });
+}
+
+// ลิงก์ SharePoint สำหรับเทอม 2 ปี 2568 (ดึงจาก .env เพื่อความปลอดภัย)
+const googleSheetLink = process.env.SHAREPOINT_LINK_TERM2_2568 || "";
 
 // เปลี่ยนตำแหน่งบันทึกเป็นโฟลเดอร์ xlsx และนามสกุล .xlsx
 const outputDir = path.join(__dirname, '../xlsx');
@@ -40,7 +55,8 @@ if (foundLocalPath) {
         convertTerm2Scores();
         console.log('\n--- ขั้นตอนที่ 3: อัปโหลดข้อมูลขึ้น Firestore ---');
         try {
-            execSync('node tools/upload-scores-firestore.js --semester 2-2568', { stdio: 'inherit' });
+            const forceFlag = process.argv.includes('--force') ? ' --force' : '';
+            execSync(`node tools/upload-scores-firestore.js --semester 2-2568${forceFlag}`, { stdio: 'inherit' });
             console.log('✅ อัปโหลดคะแนนขึ้น Firestore สำเร็จ!');
         } catch (err) {
             console.error('❌ เกิดข้อผิดพลาดในการอัปโหลดขึ้น Firestore (ตรวจสอบสิทธิ์การเขียนบน Rules):', err);
@@ -49,6 +65,11 @@ if (foundLocalPath) {
     } catch (err) {
         console.warn(`⚠️ ไม่สามารถคัดลอกไฟล์จากเครื่องได้ (${err.message}) จะพยายามดาวน์โหลดจาก SharePoint แทน...`);
     }
+}
+
+if (!googleSheetLink) {
+    console.error('❌ ไม่พบไฟล์คะแนนในเครื่อง และไม่มีการระบุ SHAREPOINT_LINK_TERM2_2568 ใน .env');
+    process.exit(1);
 }
 
 console.log(`กำลังดาวน์โหลดไฟล์ Excel จาก SharePoint...`);
@@ -99,7 +120,8 @@ const downloadFile = (url, dest, cookies = []) => {
             convertTerm2Scores();
             console.log('\n--- ขั้นตอนที่ 3: อัปโหลดข้อมูลขึ้น Firestore ---');
             try {
-                execSync('node tools/upload-scores-firestore.js --semester 2-2568', { stdio: 'inherit' });
+                const forceFlag = process.argv.includes('--force') ? ' --force' : '';
+                execSync(`node tools/upload-scores-firestore.js --semester 2-2568${forceFlag}`, { stdio: 'inherit' });
                 console.log('✅ อัปโหลดคะแนนขึ้น Firestore สำเร็จ!');
             } catch (err) {
                 console.error('❌ เกิดข้อผิดพลาดในการอัปโหลดขึ้น Firestore (ตรวจสอบสิทธิ์การเขียนบน Rules):', err);

@@ -11,8 +11,23 @@ import { convertTerm1Scores } from './convert-scores.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-// ลิงก์ SharePoint สำหรับเทอม 1 ปี 2569 (เติม &download=1 เพื่อบังคับดาวน์โหลด)
-const sharepointLink = "https://prommaacth-my.sharepoint.com/:x:/g/personal/taweerak_t_promma_ac_th/IQAeB8Mb8dbeRa6YjaQwFHhGAUj9KgGA9y9zsEpQGeMAHxE?e=bUgwpy&download=1";
+// โหลดค่า Environment จาก .env ถ้ามี
+const envPath = path.join(__dirname, '../.env');
+if (fs.existsSync(envPath)) {
+    fs.readFileSync(envPath, 'utf8').split(/\r?\n/).forEach(line => {
+        const m = line.match(/^\s*([\w.-]+)\s*=\s*(.*)?\s*$/);
+        if (m) {
+            let v = (m[2] || '').trim();
+            if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) {
+                v = v.slice(1, -1);
+            }
+            process.env[m[1]] = v;
+        }
+    });
+}
+
+// ลิงก์ SharePoint สำหรับเทอม 1 ปี 2569 (ดึงจาก .env เพื่อความปลอดภัย)
+const sharepointLink = process.env.SHAREPOINT_LINK_TERM1_2569 || "";
 
 // ตำแหน่งที่จะบันทึกไฟล์
 const outputDir = path.join(__dirname, '../xlsx');
@@ -50,6 +65,11 @@ if (foundLocalPath) {
     } catch (err) {
         console.warn(`⚠️ ไม่สามารถคัดลอกไฟล์จากเครื่องได้ (${err.message}) จะพยายามดาวน์โหลดจาก SharePoint แทน...`);
     }
+}
+
+if (!sharepointLink) {
+    console.error('❌ ไม่พบไฟล์คะแนนในเครื่อง และไม่มีการระบุ SHAREPOINT_LINK_TERM1_2569 ใน .env');
+    process.exit(1);
 }
 
 console.log(`กำลังดาวน์โหลดไฟล์ Excel จาก SharePoint...`);
