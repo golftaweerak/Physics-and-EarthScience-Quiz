@@ -73,13 +73,13 @@ service cloud.firestore {
     // Student Scores — read-only (นักเรียนค้นหาด้วยรหัส 5 หลัก)
     match /student_scores/{studentId} {
       allow read: if true;
-      allow write: if true;
+      allow write: if false;
     }
 
     // Pre-computed summary statistics — read-only (หน้าสรุปสถิติ)
     match /scores_summaries/{semesterId} {
       allow read: if true;
-      allow write: if true;
+      allow write: if false;
     }
   }
 }

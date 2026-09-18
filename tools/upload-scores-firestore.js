@@ -12,24 +12,68 @@ import { execSync } from 'child_process';
 import xlsx from 'xlsx';
 import { initializeApp } from 'firebase/app';
 import { getFirestore, doc, setDoc, writeBatch } from 'firebase/firestore';
+import { initializeApp as initAdminApp, cert } from 'firebase-admin/app';
+import { getFirestore as getAdminFirestore } from 'firebase-admin/firestore';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Firebase Configuration (from scripts/firebase-config.js)
-const firebaseConfig = {
-    apiKey: "AIzaSyBwfM8-ksMj17-K5fWMjn83U9MRO0ZvL2Y",
-    authDomain: "physics-and-earthscience-quiz.firebaseapp.com",
-    projectId: "physics-and-earthscience-quiz",
-    storageBucket: "physics-and-earthscience-quiz.firebasestorage.app",
-    messagingSenderId: "306857385894",
-    appId: "1:306857385894:web:b4179e9f8818d80b53f967",
-    measurementId: "G-QWQGBGNPDJ"
-};
+// โหลดค่า Environment จาก .env ถ้ามี
+const envPath = path.join(__dirname, '../.env');
+if (fs.existsSync(envPath)) {
+    fs.readFileSync(envPath, 'utf8').split(/\r?\n/).forEach(line => {
+        const m = line.match(/^\s*([\w.-]+)\s*=\s*(.*)?\s*$/);
+        if (m) {
+            let v = (m[2] || '').trim();
+            if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) {
+                v = v.slice(1, -1);
+            }
+            process.env[m[1]] = v;
+        }
+    });
+}
 
-// Initialize Firebase Client (runs unauthenticated — requires open Firestore rules during upload)
-const firebaseApp = initializeApp(firebaseConfig);
-const db = getFirestore(firebaseApp);
+// ตรวจสอบ Private Service Account Key สำหรับ Admin SDK
+const serviceAccountCandidates = [
+    process.env.FIREBASE_SERVICE_ACCOUNT_KEY,
+    path.join(process.env.USERPROFILE || '', 'OneDrive - Prommanusorn Phetchaburi School/physics-and-earthscience-quiz-firebase-adminsdk-fbsvc-d814d28a38.json'),
+    path.join(process.env.USERPROFILE || '', 'OneDrive/Documents/physics-and-earthscience-quiz-firebase-adminsdk-fbsvc-d814d28a38.json'),
+    path.join(process.env.USERPROFILE || '', 'OneDrive/physics-and-earthscience-quiz-firebase-adminsdk-fbsvc-d814d28a38.json'),
+    path.join(__dirname, '../serviceAccountKey.json')
+].filter(Boolean);
+
+const foundKeyPath = serviceAccountCandidates.find(p => fs.existsSync(p));
+let db;
+let isAdmin = false;
+
+if (foundKeyPath) {
+    try {
+        const serviceAccount = JSON.parse(fs.readFileSync(foundKeyPath, 'utf8'));
+        const adminApp = initAdminApp({
+            credential: cert(serviceAccount)
+        });
+        db = getAdminFirestore(adminApp);
+        isAdmin = true;
+        console.log(`🔐 ใช้งาน Firebase Admin SDK (Privileged Mode) จาก:\n   ${foundKeyPath}`);
+    } catch (e) {
+        console.warn(`⚠️ ไม่สามารถโหลด Service Account ได้ (${e.message}) จะใช้ Client SDK แทน...`);
+    }
+}
+
+if (!isAdmin) {
+    console.log('🌐 ใช้งาน Firebase Client SDK (ต้องการเปิด-ปิด Rules ชั่วคราว)');
+    const firebaseConfig = {
+        apiKey: "AIzaSyBwfM8-ksMj17-K5fWMjn83U9MRO0ZvL2Y",
+        authDomain: "physics-and-earthscience-quiz.firebaseapp.com",
+        projectId: "physics-and-earthscience-quiz",
+        storageBucket: "physics-and-earthscience-quiz.firebasestorage.app",
+        messagingSenderId: "306857385894",
+        appId: "1:306857385894:web:b4179e9f8818d80b53f967",
+        measurementId: "G-QWQGBGNPDJ"
+    };
+    const firebaseApp = initializeApp(firebaseConfig);
+    db = getFirestore(firebaseApp);
+}
 
 // Retrieve command-line arguments
 const args = process.argv.slice(2);
@@ -534,40 +578,75 @@ async function uploadPreparedSemester(prepared) {
 
     console.log(`☁️ [Semester ${semConfig.semesterKey}] กำลังอัปโหลดนักเรียนที่มีข้อมูลเปลี่ยน: ${changedStudents.length} คน (จากทั้งหมด ${totalStudents} คน)...`);
 
-    let batch = writeBatch(db);
-    let count = 0;
-    let batchIndex = 1;
+    if (isAdmin) {
+        let batch = db.batch();
+        let count = 0;
+        let batchIndex = 1;
 
-    for (const docData of changedStudents) {
-        const studentDocRef = doc(db, 'student_scores', docData.id);
-        batch.set(studentDocRef, docData, { merge: true });
-        count++;
+        for (const docData of changedStudents) {
+            const studentDocRef = db.collection('student_scores').doc(docData.id);
+            batch.set(studentDocRef, docData, { merge: true });
+            count++;
 
-        if (count === 500) {
+            if (count === 500) {
+                console.log(`   Committing batch #${batchIndex}...`);
+                await batch.commit();
+                batch = db.batch();
+                count = 0;
+                batchIndex++;
+            }
+        }
+
+        if (count > 0) {
             console.log(`   Committing batch #${batchIndex}...`);
             await batch.commit();
-            batch = writeBatch(db);
-            count = 0;
-            batchIndex++;
         }
+        console.log(`✅ บันทึกข้อมูลนักเรียน ${changedStudents.length} รายการขึ้น Firestore สำเร็จ (Admin SDK)`);
+
+        console.log(`☁️ อัปเดตสถิติภาพรวม (scores_summaries) สำหรับเทอม ${semConfig.semesterKey}...`);
+        const summaryDocRef = db.collection('scores_summaries').doc(semesterKey);
+        const summaryPayload = {
+            lastUpdated: new Date().toISOString(),
+            ...summaries
+        };
+
+        await summaryDocRef.set(summaryPayload);
+        console.log(`✅ อัปเดตข้อมูลสรุปสถิติสำหรับเทอม ${semConfig.semesterKey} สำเร็จ`);
+    } else {
+        let batch = writeBatch(db);
+        let count = 0;
+        let batchIndex = 1;
+
+        for (const docData of changedStudents) {
+            const studentDocRef = doc(db, 'student_scores', docData.id);
+            batch.set(studentDocRef, docData, { merge: true });
+            count++;
+
+            if (count === 500) {
+                console.log(`   Committing batch #${batchIndex}...`);
+                await batch.commit();
+                batch = writeBatch(db);
+                count = 0;
+                batchIndex++;
+            }
+        }
+
+        if (count > 0) {
+            console.log(`   Committing batch #${batchIndex}...`);
+            await batch.commit();
+        }
+        console.log(`✅ บันทึกข้อมูลนักเรียน ${changedStudents.length} รายการขึ้น Firestore สำเร็จ`);
+
+        console.log(`☁️ อัปเดตสถิติภาพรวม (scores_summaries) สำหรับเทอม ${semConfig.semesterKey}...`);
+        const summaryDocRef = doc(db, 'scores_summaries', semesterKey);
+        const summaryPayload = {
+            lastUpdated: new Date().toISOString(),
+            ...summaries
+        };
+
+        await setDoc(summaryDocRef, summaryPayload);
+        console.log(`✅ อัปเดตข้อมูลสรุปสถิติสำหรับเทอม ${semConfig.semesterKey} สำเร็จ`);
     }
-
-    if (count > 0) {
-        console.log(`   Committing batch #${batchIndex}...`);
-        await batch.commit();
-    }
-    console.log(`✅ บันทึกข้อมูลนักเรียน ${changedStudents.length} รายการขึ้น Firestore สำเร็จ`);
-
-    // Upload statistical summaries document
-    console.log(`☁️ อัปเดตสถิติภาพรวม (scores_summaries) สำหรับเทอม ${semConfig.semesterKey}...`);
-    const summaryDocRef = doc(db, 'scores_summaries', semesterKey);
-    const summaryPayload = {
-        lastUpdated: new Date().toISOString(),
-        ...summaries
-    };
-
-    await setDoc(summaryDocRef, summaryPayload);
-    console.log(`✅ อัปเดตข้อมูลสรุปสถิติสำหรับเทอม ${semConfig.semesterKey} สำเร็จ`);
 
     // Save cache after successful upload
     try {
@@ -661,7 +740,11 @@ async function run() {
         console.log(`🔥 ประหยัดโควตา Firestore ได้ ${totalAllStudents - totalChanges} writes!`);
         console.log('========================================================\n');
 
-        rulesOpened = openRules();
+        if (!isAdmin) {
+            rulesOpened = openRules();
+        } else {
+            console.log('🛡️ ใช้สิทธิ์ Admin SDK: ข้ามการเปิด-ปิด Rules (Rules ยังคงล็อกปลอดภัย 100% และรวดเร็ว)');
+        }
 
         for (const prepared of preparedList) {
             await uploadPreparedSemester(prepared);
