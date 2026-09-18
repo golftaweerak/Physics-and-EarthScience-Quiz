@@ -28,6 +28,8 @@ data/scores*
 data/score*
 data/scores-data*.js
 data/edit_log*
+*.cache-scores*.json
+*.cache*.json
 
 # Credentials & Environment Variables (ความปลอดภัยและ Keys)
 .env
@@ -35,6 +37,7 @@ data/edit_log*
 !.env.example
 *serviceAccount*.json
 *firebase-adminsdk*.json
+*-adminsdk-*.json
 google-services.json
 GoogleService-Info.plist
 *.pem
