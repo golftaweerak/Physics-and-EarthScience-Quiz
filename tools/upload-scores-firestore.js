@@ -105,6 +105,7 @@ const CONFIG = {
             'ก่อนกลางภาค [25]': 'ก่อนกลางภาค [25]',
             'กลางภาค [20]': 'กลางภาค [20]',
             'หลังกลางภาค [25]': 'หลังกลางภาค [25]',
+            'ปลายภาค [30]': 'ปลายภาค [30]',
             'ปลายภาค': 'ปลายภาค [30]',
             'Grade': 'เกรด',
             'ซ่อมมั้ย': 'ซ่อมมั้ย',
@@ -182,6 +183,34 @@ function calculateStudentCompletion(student) {
 
 // Local implementation of calculateOverallSummary
 function calculateOverallSummary(scores, currentSemester) {
+    if (!scores || scores.length === 0) {
+        return {
+            totalStudents: 0,
+            averageScore: 0,
+            completionPercentage: 0,
+            highestScore: 0,
+            lowestScore: 0,
+            highestMidtermScore: 0,
+            lowestMidtermScore: 0,
+            gradeDistribution: {},
+            averageMidtermScore: 0,
+            midtermPassPercentage: 0,
+            midtermSD: 0,
+            midtermPassCount: 0,
+            midtermFailCount: 0,
+            highestFinalScore: 0,
+            lowestFinalScore: 0,
+            averageFinalScore: 0,
+            finalPassPercentage: 0,
+            finalSD: 0,
+            finalPassCount: 0,
+            finalFailCount: 0,
+            studentsWithMissing: 0,
+            studentsWithNoMissing: 0,
+            summaryByRoom: {}
+        };
+    }
+
     const totalStudents = scores.length;
     let totalScoreSum = 0;
     let validScoresCount = 0;
@@ -194,6 +223,11 @@ function calculateOverallSummary(scores, currentSemester) {
     let lowestMidtermScore = Infinity;
     let totalMidtermScoreSum = 0, validMidtermScoresCount = 0, totalPassCount = 0, totalFailCount = 0;
     const allMidtermScores = [];
+
+    let highestFinalScore = -Infinity;
+    let lowestFinalScore = Infinity;
+    let totalFinalScoreSum = 0, validFinalScoresCount = 0, totalPassCountFinal = 0, totalFailCountFinal = 0;
+    const allFinalScores = [];
 
     let totalTrackableAssignments = 0;
     let totalSubmittedAssignments = 0;
@@ -236,10 +270,21 @@ function calculateOverallSummary(scores, currentSemester) {
             let remedial = findScore(['ซ่อมแล้ว', 'ซ่อมกลางภาค']);
             if (remedial === '-' || remedial === '') remedial = findScore('ซ่อมมั้ย');
             student['การซ่อมกลางภาค'] = remedial;
-            student['คะแนนปลายภาค'] = findScore(['ปลายภาค', 'Final']);
+
+            let finalExamScore = findScore(['ปลายภาค', 'Final']);
+            if (finalExamScore === '-' || finalExamScore === '') {
+                if (student['ปลายภาค [30]'] !== undefined) finalExamScore = student['ปลายภาค [30]'];
+                else if (student['ปลายภาค'] !== undefined) finalExamScore = student['ปลายภาค'];
+            }
+            student['คะแนนปลายภาค'] = finalExamScore;
         } else {
             if (student['กลางภาค [20]'] !== undefined) {
                 student['คะแนนกลางภาค'] = student['กลางภาค [20]'];
+            }
+            if (student['ปลายภาค [30]'] !== undefined) {
+                student['คะแนนปลายภาค'] = student['ปลายภาค [30]'];
+            } else if (student['ปลายภาค'] !== undefined) {
+                student['คะแนนปลายภาค'] = student['ปลายภาค'];
             }
         }
 
@@ -273,6 +318,13 @@ function calculateOverallSummary(scores, currentSemester) {
                 passCountTerm2: 0,
                 failCountTerm2: 0,
                 midtermScoresList: [],
+                totalFinalScore: 0,
+                validFinalScoresCount: 0,
+                highestFinalScore: -Infinity,
+                lowestFinalScore: Infinity,
+                passCountFinal: 0,
+                failCountFinal: 0,
+                finalScoresList: [],
                 gradeDistribution: {}
             };
         }
@@ -323,6 +375,35 @@ function calculateOverallSummary(scores, currentSemester) {
             else totalFailCount++;
         }
 
+        const finalScore = parseFloat(student['คะแนนปลายภาค']);
+        if (!isNaN(finalScore)) {
+            summaryByRoom[room].totalFinalScore += finalScore;
+            summaryByRoom[room].validFinalScoresCount++;
+            summaryByRoom[room].finalScoresList.push(finalScore);
+
+            if (finalScore > summaryByRoom[room].highestFinalScore) {
+                summaryByRoom[room].highestFinalScore = finalScore;
+            }
+            if (finalScore < summaryByRoom[room].lowestFinalScore) {
+                summaryByRoom[room].lowestFinalScore = finalScore;
+            }
+
+            if (finalScore >= 15) {
+                summaryByRoom[room].passCountFinal++;
+            } else {
+                summaryByRoom[room].failCountFinal++;
+            }
+
+            totalFinalScoreSum += finalScore;
+            validFinalScoresCount++;
+            allFinalScores.push(finalScore);
+            if (finalScore > highestFinalScore) highestFinalScore = finalScore;
+            if (finalScore < lowestFinalScore) lowestFinalScore = finalScore;
+
+            if (finalScore >= 15) totalPassCountFinal++;
+            else totalFailCountFinal++;
+        }
+
         totalTrackableAssignments += completion.total;
         totalSubmittedAssignments += completion.submitted;
 
@@ -360,8 +441,25 @@ function calculateOverallSummary(scores, currentSemester) {
         roomData.highestMidtermScore = roomData.highestMidtermScore === -Infinity ? 'N/A' : roomData.highestMidtermScore;
         roomData.lowestMidtermScore = roomData.lowestMidtermScore === Infinity ? 'N/A' : roomData.lowestMidtermScore;
 
+        // Calculate Final Exam for Room
+        roomData.averageFinalScore = roomData.validFinalScoresCount > 0
+            ? parseFloat((roomData.totalFinalScore / roomData.validFinalScoresCount).toFixed(2))
+            : 'N/A';
+
+        if (roomData.validFinalScoresCount > 0) {
+            const avgFinal = roomData.totalFinalScore / roomData.validFinalScoresCount;
+            const sumOfSquares = roomData.finalScoresList.reduce((sum, val) => sum + Math.pow(val - avgFinal, 2), 0);
+            roomData.finalSD = parseFloat(Math.sqrt(sumOfSquares / roomData.validFinalScoresCount).toFixed(2));
+        } else {
+            roomData.finalSD = 'N/A';
+        }
+
+        roomData.highestFinalScore = roomData.highestFinalScore === -Infinity ? 'N/A' : roomData.highestFinalScore;
+        roomData.lowestFinalScore = roomData.lowestFinalScore === Infinity ? 'N/A' : roomData.lowestFinalScore;
+
         // Clean up list and internal sums to save space in summary document
         delete roomData.midtermScoresList;
+        delete roomData.finalScoresList;
     }
 
     const overallAverageScore = validScoresCount > 0 ? parseFloat((totalScoreSum / validScoresCount).toFixed(2)) : 0;
@@ -373,6 +471,17 @@ function calculateOverallSummary(scores, currentSemester) {
         const avgMidterm = totalMidtermScoreSum / validMidtermScoresCount;
         const sumOfSquares = allMidtermScores.reduce((sum, val) => sum + Math.pow(val - avgMidterm, 2), 0);
         overallMidtermSD = parseFloat(Math.sqrt(sumOfSquares / validMidtermScoresCount).toFixed(2));
+    }
+
+    // Calculate Overall Final Stats
+    const overallAverageFinalScore = validFinalScoresCount > 0 ? parseFloat((totalFinalScoreSum / validFinalScoresCount).toFixed(2)) : 'N/A';
+    const overallFinalPassPercentage = (totalPassCountFinal + totalFailCountFinal) > 0 ? parseFloat(((totalPassCountFinal / (totalPassCountFinal + totalFailCountFinal)) * 100).toFixed(0)) : 'N/A';
+
+    let overallFinalSD = 'N/A';
+    if (validFinalScoresCount > 0) {
+        const avgFinal = totalFinalScoreSum / validFinalScoresCount;
+        const sumOfSquares = allFinalScores.reduce((sum, val) => sum + Math.pow(val - avgFinal, 2), 0);
+        overallFinalSD = parseFloat(Math.sqrt(sumOfSquares / validFinalScoresCount).toFixed(2));
     }
 
     const completionPercentage = totalTrackableAssignments > 0
@@ -393,6 +502,13 @@ function calculateOverallSummary(scores, currentSemester) {
         midtermSD: overallMidtermSD,
         midtermPassCount: totalPassCount,
         midtermFailCount: totalFailCount,
+        highestFinalScore: highestFinalScore === -Infinity ? 0 : highestFinalScore,
+        lowestFinalScore: lowestFinalScore === Infinity ? 0 : lowestFinalScore,
+        averageFinalScore: overallAverageFinalScore,
+        finalPassPercentage: overallFinalPassPercentage,
+        finalSD: overallFinalSD,
+        finalPassCount: totalPassCountFinal,
+        finalFailCount: totalFailCountFinal,
         studentsWithMissing,
         studentsWithNoMissing,
         summaryByRoom
@@ -571,45 +687,71 @@ function prepareSemesterData(semesterKey) {
 async function uploadPreparedSemester(prepared) {
     const { semesterKey, semConfig, totalStudents, changedStudents, summaries, cacheFilePath, newCacheContent } = prepared;
 
-    if (changedStudents.length === 0 && !isForce) {
-        console.log(`⚡ [Semester ${semConfig.semesterKey}] ข้อมูลตรงกับ Firestore แล้ว ข้ามการเขียน (${totalStudents} รายการ)`);
-        return;
-    }
+    if (changedStudents.length > 0) {
+        console.log(`☁️ [Semester ${semConfig.semesterKey}] กำลังอัปโหลดนักเรียนที่มีข้อมูลเปลี่ยน: ${changedStudents.length} คน (จากทั้งหมด ${totalStudents} คน)...`);
 
-    console.log(`☁️ [Semester ${semConfig.semesterKey}] กำลังอัปโหลดนักเรียนที่มีข้อมูลเปลี่ยน: ${changedStudents.length} คน (จากทั้งหมด ${totalStudents} คน)...`);
+        if (isAdmin) {
+            let batch = db.batch();
+            let count = 0;
+            let batchIndex = 1;
 
-    if (isAdmin) {
-        let batch = db.batch();
-        let count = 0;
-        let batchIndex = 1;
+            for (const docData of changedStudents) {
+                const studentDocRef = db.collection('student_scores').doc(docData.id);
+                batch.set(studentDocRef, docData, { merge: true });
+                count++;
 
-        for (const docData of changedStudents) {
-            const studentDocRef = db.collection('student_scores').doc(docData.id);
-            batch.set(studentDocRef, docData, { merge: true });
-            count++;
+                if (count === 500) {
+                    console.log(`   Committing batch #${batchIndex}...`);
+                    await batch.commit();
+                    batch = db.batch();
+                    count = 0;
+                    batchIndex++;
+                }
+            }
 
-            if (count === 500) {
+            if (count > 0) {
                 console.log(`   Committing batch #${batchIndex}...`);
                 await batch.commit();
-                batch = db.batch();
-                count = 0;
-                batchIndex++;
             }
-        }
+            console.log(`✅ บันทึกข้อมูลนักเรียน ${changedStudents.length} รายการขึ้น Firestore สำเร็จ (Admin SDK)`);
+        } else {
+            let batch = writeBatch(db);
+            let count = 0;
+            let batchIndex = 1;
 
-        if (count > 0) {
-            console.log(`   Committing batch #${batchIndex}...`);
-            await batch.commit();
-        }
-        console.log(`✅ บันทึกข้อมูลนักเรียน ${changedStudents.length} รายการขึ้น Firestore สำเร็จ (Admin SDK)`);
+            for (const docData of changedStudents) {
+                const studentDocRef = doc(db, 'student_scores', docData.id);
+                batch.set(studentDocRef, docData, { merge: true });
+                count++;
 
-        console.log(`☁️ อัปเดตสถิติภาพรวม (scores_summaries) สำหรับเทอม ${semConfig.semesterKey}...`);
+                if (count === 500) {
+                    console.log(`   Committing batch #${batchIndex}...`);
+                    await batch.commit();
+                    batch = writeBatch(db);
+                    count = 0;
+                    batchIndex++;
+                }
+            }
+
+            if (count > 0) {
+                console.log(`   Committing batch #${batchIndex}...`);
+                await batch.commit();
+            }
+            console.log(`✅ บันทึกข้อมูลนักเรียน ${changedStudents.length} รายการขึ้น Firestore สำเร็จ (Client SDK)`);
+        }
+    } else {
+        console.log(`⚡ [Semester ${semConfig.semesterKey}] ข้อมูลนักเรียนตรงกับ Firestore แล้ว ข้ามการเขียน (${totalStudents} รายการ)`);
+    }
+
+    // Always update overall summary in Firestore
+    console.log(`☁️ อัปเดตสถิติภาพรวม (scores_summaries) สำหรับเทอม ${semConfig.semesterKey}...`);
+    const summaryPayload = {
+        lastUpdated: new Date().toISOString(),
+        ...summaries
+    };
+
+    if (isAdmin) {
         const summaryDocRef = db.collection('scores_summaries').doc(semesterKey);
-        const summaryPayload = {
-            lastUpdated: new Date().toISOString(),
-            ...summaries
-        };
-
         await summaryDocRef.set(summaryPayload);
         console.log(`✅ อัปเดตข้อมูลสรุปสถิติสำหรับเทอม ${semConfig.semesterKey} สำเร็จ`);
     } else {

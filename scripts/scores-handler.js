@@ -125,6 +125,42 @@ export async function initializeScoreSearch() {
         return;
     }
 
+    // --- Quick Student Shortcut for Logged-in Users ---
+    const quickUserContainer = document.getElementById('quick-user-container');
+    const updateQuickUserButton = (user) => {
+        if (!quickUserContainer) return;
+        if (!user || !user.email) {
+            quickUserContainer.classList.add('hidden');
+            quickUserContainer.innerHTML = '';
+            return;
+        }
+        const match = user.email.trim().toLowerCase().match(/^(\d{5})@promma\.ac\.th$/);
+        if (match) {
+            const studentId = match[1];
+            quickUserContainer.innerHTML = `
+                <span class="text-xs text-gray-500 dark:text-gray-400">เข้าสู่ระบบด้วย:</span>
+                <button type="button" id="quick-my-score-btn" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/40 dark:hover:bg-blue-900/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-700 transition shadow-sm cursor-pointer">
+                    <span>👤 ดูคะแนนของฉัน (${studentId})</span>
+                </button>
+            `;
+            quickUserContainer.classList.remove('hidden');
+            const quickBtn = document.getElementById('quick-my-score-btn');
+            quickBtn?.addEventListener('click', () => {
+                studentIdInput.value = studentId;
+                clearBtn.classList.remove('hidden');
+                searchScores();
+            });
+        } else {
+            quickUserContainer.classList.add('hidden');
+            quickUserContainer.innerHTML = '';
+        }
+    };
+
+    if (authManager.currentUser) {
+        updateQuickUserButton(authManager.currentUser);
+    }
+    authManager.onUserChange(updateQuickUserButton);
+
     // --- Edit Mode Logic ---
     function enableEditMode() {
         isEditMode = true;
@@ -180,8 +216,6 @@ export async function initializeScoreSearch() {
         });
     }
 
-
-
     resultContainer.addEventListener('click', async (event) => {
         const card = event.target.closest('.student-card-btn');
         if (!card) return;
@@ -189,27 +223,9 @@ export async function initializeScoreSearch() {
         const studentId = card.dataset.studentId;
         if (!studentId) return;
 
-        // Security check: Only allow teacher or the student with matching ID to load detailed score
-        const currentUser = authManager.currentUser;
-        const isTeacher = currentUser && currentUser.email && TEACHER_EMAILS.includes(currentUser.email.trim().toLowerCase());
-
-        let loggedInStudentId = null;
-        if (currentUser && currentUser.email) {
-            const match = currentUser.email.trim().toLowerCase().match(/^(\d{5})@promma\.ac\.th$/);
-            if (match) {
-                loggedInStudentId = match[1];
-            }
-        }
-
-        if (!isTeacher && (!loggedInStudentId || studentId !== loggedInStudentId)) {
-            displayMessage('คุณไม่มีสิทธิ์เข้าถึงข้อมูลคะแนนของนักเรียนคนอื่นเพื่อความเป็นส่วนตัว', 'error');
-            return;
-        }
-
         displayMessage('กำลังโหลดข้อมูล...', 'info');
 
         // Priority 1: Search local studentScores first to avoid unnecessary cloud fetches
-        // and bypass permission issues if the data is already available locally.
         const localStudent = studentScores.find(s => s.id === studentId);
 
         if (localStudent) {
@@ -250,7 +266,7 @@ export async function initializeScoreSearch() {
         return null;
     }
 
-    const searchScores = async () => {
+    async function searchScores() {
         const queryVal = studentIdInput.value.trim();
         if (queryVal.length === 0) {
             displayMessage('กรุณากรอกรหัสนักเรียนหรือห้องเรียนเพื่อค้นหา', 'error');
@@ -296,27 +312,10 @@ export async function initializeScoreSearch() {
                     // Clear previous result display if any
                     resultContainer.innerHTML = '';
 
-                    // Check if current user is the teacher or a logged-in student
-                    const currentUser = authManager.currentUser;
-                    const isTeacher = currentUser && currentUser.email && TEACHER_EMAILS.includes(currentUser.email.trim().toLowerCase());
-
-                    // Parse student ID from logged-in email if matching 5 digits (e.g. 41234@promma.ac.th)
-                    let loggedInStudentId = null;
-                    if (currentUser && currentUser.email) {
-                        const match = currentUser.email.trim().toLowerCase().match(/^(\d{5})@promma\.ac\.th$/);
-                        if (match) {
-                            loggedInStudentId = match[1];
-                        }
-                    }
-
-                    // Options for search results cards
+                    // Options for search results cards - allow clicking in room view for Peer Assist Mode
                     const options = {
                         cardType: 'button',
-                        isClickable: (student) => {
-                            if (isTeacher) return true;
-                            if (loggedInStudentId && student.id === loggedInStudentId) return true;
-                            return false;
-                        }
+                        isClickable: () => true
                     };
 
                     // Header for room listing
@@ -324,7 +323,7 @@ export async function initializeScoreSearch() {
                     headerHtml.className = 'mb-4 text-left border-b border-gray-200 dark:border-gray-700 pb-2';
                     headerHtml.innerHTML = `
                         <h3 class="text-lg font-bold text-gray-800 dark:text-white font-kanit">รายชื่อนักเรียน ห้อง ม.4/${parsedRoom}</h3>
-                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">พบนักเรียนทั้งหมด ${students.length} คน ${isTeacher ? '(คุณอยู่ในสิทธิ์ครู: สามารถคลิกดูคะแนนรายบุคคลได้)' : (loggedInStudentId ? '(คุณสามารถคลิกดูคะแนนเฉพาะของตัวคุณเองได้)' : '(ไม่อนุญาตให้คลิกดูคะแนนรายบุคคล เพื่อความเป็นส่วนตัว)')}</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">พบนักเรียนทั้งหมด ${students.length} คน (คลิกที่ชื่อเพื่อดูคะแนนเก็บและสถานะการส่งงาน)</p>
                     `;
                     resultContainer.appendChild(headerHtml);
 
@@ -342,7 +341,7 @@ export async function initializeScoreSearch() {
             searchBtn.disabled = false;
             searchBtn.innerHTML = originalBtnHtml;
         }
-    };
+    }
 
 
     searchBtn.addEventListener('click', searchScores);
@@ -412,6 +411,24 @@ export async function initializeScoreSearch() {
     }
 
     /**
+     * Helper to get high-contrast grade visual styles (text color, hero gradient, chip).
+     */
+    function getGradeVisual(grade) {
+        const num = parseFloat(grade);
+        if (grade === '4' || grade === '4.0' || num === 4) {
+            return { textClass: 'grade-text-4', heroClass: 'grade-hero-4', chipClass: 'chip-grade-4' };
+        } else if (num >= 3) {
+            return { textClass: 'grade-text-3', heroClass: 'grade-hero-3', chipClass: 'chip-grade-3' };
+        } else if (num >= 2) {
+            return { textClass: 'grade-text-2', heroClass: 'grade-hero-2', chipClass: 'chip-grade-2' };
+        } else if (num >= 1) {
+            return { textClass: 'grade-text-1', heroClass: 'grade-hero-1', chipClass: 'chip-grade-1' };
+        } else {
+            return { textClass: 'grade-text-0', heroClass: 'grade-hero-0', chipClass: 'chip-grade-0' };
+        }
+    }
+
+    /**
      * Creates the HTML for a score breakdown row.
      * @param {object} student - The student data object.
      * @param {string} label - The display label for the row.
@@ -430,12 +447,14 @@ export async function initializeScoreSearch() {
         }
 
         return `
-        <tr class="bg-gray-50 dark:bg-gray-800/50">
-                <td class="py-2 px-4 pl-10 text-sm text-gray-500 dark:text-gray-400 flex items-center">
-                    <svg class="h-3 w-3 mr-2 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
-                    </svg>
-                    <span class="italic">${label}</span>
+            <tr class="bg-gray-50/70 dark:bg-gray-850 border-b border-gray-100 dark:border-gray-750/50">
+                <td class="py-2 px-4 pl-8 sm:pl-10 text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+                    <div class="flex items-center gap-1.5">
+                        <svg class="h-3 w-3 text-gray-400 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
+                        </svg>
+                        <span class="italic">${label}</span>
+                    </div>
                 </td>
                 <td class="py-2 px-4 text-right">
                     ${scoreDisplay}
@@ -448,6 +467,18 @@ export async function initializeScoreSearch() {
 
     function displayResult(student) {
         if (defaultMessage) defaultMessage.classList.add('hidden');
+
+        // Check ownership & teacher privileges for Peer Assist Mode
+        const currentUser = authManager.currentUser;
+        const isTeacher = Boolean(currentUser && currentUser.email && TEACHER_EMAILS.includes(currentUser.email.trim().toLowerCase()));
+        let loggedInStudentId = null;
+        if (currentUser && currentUser.email) {
+            const match = currentUser.email.trim().toLowerCase().match(/^(\d{5})@promma\.ac\.th$/);
+            if (match) {
+                loggedInStudentId = match[1];
+            }
+        }
+        const isOwnerOrTeacher = Boolean(isTeacher || (loggedInStudentId && loggedInStudentId === student.id));
 
         // Promote all assignment scores to root properties of the student object unconditionally.
         // This ensures they are available for hasOwnProperty checks and rendering across all semesters.
@@ -481,7 +512,6 @@ export async function initializeScoreSearch() {
             'เกรด'
         ];
 
-
         const breakdownMap = isTerm2 ? {
             'ก่อนกลางภาค [25]': [
                 { label: 'บทที่ 6', key: 'บท 6 [10]' },
@@ -492,9 +522,7 @@ export async function initializeScoreSearch() {
                 { label: 'บทที่ 8', key: 'บท 8 [10]' },
                 { label: 'บทที่ 9', key: 'บท 9 [5]' },
                 { label: 'บทที่ 10', key: 'บท 10 [10]' },
-
-            ],
-            'รวม [100]': [{ label: 'คะแนนก่อนสอบกลางภาค', key: 'ก่อนกลางภาค [25]' }, { label: 'คะแนนสอบกลางภาค', key: 'กลางภาค [20]' }, { label: 'คะแนนก่อนสอบปลายภาค', key: 'ก่อนปลายภาค [70]' }, { label: 'คะแนนสอบปลายภาค', key: 'ปลายภาค [30]' }]
+            ]
         } : {
             'ก่อนกลางภาค [25]': [
                 { label: 'บทที่ 1', key: 'บท 1 [10]' },
@@ -505,8 +533,7 @@ export async function initializeScoreSearch() {
                 { label: 'บทที่ 4', key: 'บท 4 [10]' },
                 { label: 'บทที่ 5', key: 'บท 5 [10]' },
                 { label: 'นำเสนอ', key: 'นำเสนอ [5]' }
-            ],
-            'รวม [100]': [{ label: 'คะแนนก่อนสอบกลางภาค', key: 'ก่อนกลางภาค [25]' }, { label: 'คะแนนสอบกลางภาค', key: 'กลางภาค [20]' }, { label: 'คะแนนก่อนสอบปลายภาค', key: 'ก่อนปลายภาค [70]' }, { label: 'คะแนนสอบปลายภาค', key: 'ปลายภาค [30]' }]
+            ]
         };
 
         const scoreRows = summaryOrder.map(key => {
@@ -519,48 +546,47 @@ export async function initializeScoreSearch() {
                 const isImportant = isGrade || isTotal || isMidterm || isFinal;
 
                 // Define classes based on importance
-                const rowClass = isImportant ? 'bg-blue-50 dark:bg-gray-800/60' : '';
+                const rowClass = isImportant ? 'bg-blue-50/70 dark:bg-gray-800/60' : '';
                 const labelClass = isImportant ? 'font-bold text-blue-900 dark:text-blue-300' : 'font-medium text-gray-700 dark:text-gray-300';
                 let valueClass = isImportant ? 'font-bold' : 'font-semibold';
-                if (isGrade) {
-                    valueClass += ' text-2xl ';
-                    const numericGrade = parseFloat(value);
-                    if (value === '4' || value === '4.0' || numericGrade === 4) {
-                        valueClass += 'text-green-600 dark:text-green-400';
-                    } else if (numericGrade >= 3) {
-                        valueClass += 'text-blue-600 dark:text-blue-400';
-                    } else if (numericGrade >= 2) {
-                        valueClass += 'text-yellow-600 dark:text-yellow-400';
-                    } else if (numericGrade >= 1) {
-                        valueClass += 'text-orange-500 dark:text-orange-400';
-                    } else {
-                        valueClass += 'text-red-600 dark:text-red-400';
-                    }
-                }
-                else if (isTotal) valueClass += ' text-xl text-green-600 dark:text-green-400';
-                else if (isMidterm) {
-                    const numericVal = parseFloat(value);
-                    if (!isNaN(numericVal)) {
-                        valueClass += numericVal >= 12 ? ' text-lg text-green-600 dark:text-green-400' : ' text-lg text-red-600 dark:text-red-400';
-                    } else {
-                        valueClass += ' text-lg text-gray-900 dark:text-white';
-                    }
-                }
-                else if (isFinal) {
-                    const numericVal = parseFloat(value);
-                    if (!isNaN(numericVal)) {
-                        valueClass += numericVal >= 18 ? ' text-lg text-green-600 dark:text-green-400' : ' text-lg text-red-600 dark:text-red-400';
-                    } else {
-                        valueClass += ' text-lg text-gray-900 dark:text-white';
-                    }
-                }
-                else valueClass += ' text-gray-900 dark:text-white';
 
-                let valueDisplay;
-                if (isEditMode) {
+                let valueDisplay = '';
+
+                // Privacy check for Peer Assist View
+                if (!isOwnerOrTeacher && (isGrade || isMidterm || isFinal)) {
+                    if (isGrade) {
+                        valueDisplay = `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-600">🔒 เจ้าของบัญชีเท่านั้น</span>`;
+                    } else {
+                        valueDisplay = `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-600">🔒 ข้อมูลส่วนบุคคล</span>`;
+                    }
+                } else if (isEditMode) {
                     const inputType = (typeof value === 'number' && !isGrade) ? 'number' : 'text';
                     valueDisplay = `<input type="${inputType}" data-key="${key}" class="score-input w-24 text-right p-1 rounded bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600" value="${value ?? ''}">`;
                 } else {
+                    if (isGrade) {
+                        valueClass += ' text-2xl ';
+                        const gradeVisual = getGradeVisual(value);
+                        valueClass += ` ${gradeVisual.textClass} `;
+                    } else if (isTotal) {
+                        valueClass += ' text-xl text-green-600 dark:text-green-400';
+                    } else if (isMidterm) {
+                        const numericVal = parseFloat(value);
+                        if (!isNaN(numericVal)) {
+                            valueClass += numericVal >= 12 ? ' text-lg text-green-600 dark:text-green-400' : ' text-lg text-red-600 dark:text-red-400';
+                        } else {
+                            valueClass += ' text-lg text-gray-900 dark:text-white';
+                        }
+                    } else if (isFinal) {
+                        const numericVal = parseFloat(value);
+                        if (!isNaN(numericVal)) {
+                            valueClass += numericVal >= 15 ? ' text-lg text-green-600 dark:text-green-400' : ' text-lg text-red-600 dark:text-red-400';
+                        } else {
+                            valueClass += ' text-lg text-gray-900 dark:text-white';
+                        }
+                    } else {
+                        valueClass += ' text-gray-900 dark:text-white';
+                    }
+
                     let displayValue = (value !== null && value !== undefined) ? value : '-';
                     if (typeof value === 'number' && !isGrade) {
                         displayValue = Math.round(value);
@@ -568,6 +594,7 @@ export async function initializeScoreSearch() {
                     valueDisplay = `<span class="${valueClass}">${displayValue}</span>`;
                 }
 
+                // Retest status is helpful for both the student and peers!
                 let retestStatusHtml = '';
                 const retestData = student.ซ่อมมั้ย || student.ซ่อมกลางภาค;
                 if (key === 'กลางภาค [20]' && retestData && retestData.trim() !== '-') {
@@ -576,21 +603,32 @@ export async function initializeScoreSearch() {
                     const badgeColor = isPositiveStatus
                         ? 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300 border-green-200 dark:border-green-800'
                         : 'bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300 border-red-200 dark:border-red-800';
-                    retestStatusHtml = `<div class="pt-1.5"><span class="inline-block px-2.5 py-0.5 text-xs font-semibold rounded-full border ${badgeColor}">ซ่อมมั้ย?: ${retestStatus}</span></div>`;
+                    retestStatusHtml = `<div class="mt-1"><span class="inline-block px-2 py-0.5 text-[11px] font-semibold rounded-full border ${badgeColor}">ซ่อมมั้ย: ${retestStatus}</span></div>`;
                 }
 
                 let mainRowHtml = `
-        <tr class="border-b border-gray-200 dark:border-gray-700 last:border-b-0 ${rowClass}">
-                        <td class="py-3 px-4 ${labelClass}">${key}</td>
-                        <td class="py-3 px-4 text-right">
-                            ${valueDisplay}
+                    <tr class="border-b border-gray-200 dark:border-gray-700 last:border-b-0 ${rowClass}">
+                        <td class="py-3 px-4 align-middle ${labelClass}">
+                            <div>${key}</div>
                             ${retestStatusHtml}
                         </td>
+                        <td class="py-3 px-4 text-right align-middle">
+                            ${valueDisplay}
+                        </td>
                     </tr>
-        `;
+                `;
 
+                // If not owner/teacher, only show breakdown rows for coursework (before/after midterm)
                 if (breakdownMap[key]) {
-                    mainRowHtml += breakdownMap[key].map(item => createBreakdownRow(student, item.label, item.key)).join('');
+                    if (isOwnerOrTeacher || key.includes('กลางภาค') || key === 'รวม [100]') {
+                        mainRowHtml += breakdownMap[key].map(item => {
+                            // In peer view, hide exam sub-keys inside รวม [100]
+                            if (!isOwnerOrTeacher && (item.key.includes('กลางภาค [20]') || item.key.includes('ปลายภาค [30]'))) {
+                                return '';
+                            }
+                            return createBreakdownRow(student, item.label, item.key);
+                        }).join('');
+                    }
                 }
 
                 return mainRowHtml;
@@ -598,54 +636,102 @@ export async function initializeScoreSearch() {
             return '';
         }).join('');
 
+        // Prepare Quick Header Summary Pills for Accordion
+        const totalScoreVal = student['รวม [100]'] !== undefined && student['รวม [100]'] !== null ? Math.round(Number(student['รวม [100]'])) : '-';
+        const gradeVal = student['เกรด'] !== undefined && student['เกรด'] !== null ? student['เกรด'] : '-';
+        const gradeVisual = getGradeVisual(gradeVal);
+
+        const quickSummaryPills = isOwnerOrTeacher ? `
+            <div class="flex items-center gap-1.5 sm:gap-2">
+                <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs sm:text-sm font-bold chip-total font-kanit shadow-xs">
+                    รวม: ${totalScoreVal}
+                </span>
+                <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs sm:text-sm font-bold ${gradeVisual.chipClass} font-kanit shadow-xs">
+                    เกรด: ${gradeVal}
+                </span>
+            </div>
+        ` : `
+            <div class="flex items-center gap-1.5 sm:gap-2">
+                <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs sm:text-sm font-bold chip-total font-kanit shadow-xs">
+                    รวม: ${totalScoreVal}
+                </span>
+                <span class="inline-flex items-center px-2 py-1 rounded-lg text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-600">
+                    🔒 โหมดเพื่อนดู
+                </span>
+            </div>
+        `;
+
         const summaryScoreSection = `
-        <figure class="mb-6">
-                <figcaption class="p-3 text-lg font-semibold text-left text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-800 rounded-t-lg border-x border-t border-gray-200 dark:border-gray-700">
-                    สรุปคะแนน
-                </figcaption>
-                <div class="border border-gray-200 dark:border-gray-700 rounded-b-lg overflow-hidden">
-                    <table class="w-full text-base">
+            <details class="summary-score-accordion group bg-white dark:bg-gray-800/80 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden mb-6 transition-all duration-200">
+                <summary class="p-3.5 sm:p-4 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-750 transition-colors cursor-pointer list-none flex items-center justify-between select-none">
+                    <div class="flex items-center gap-2 sm:gap-3">
+                        <div class="p-1.5 sm:p-2 bg-blue-50 dark:bg-blue-950/50 rounded-xl text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-900/40">
+                            <svg class="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <span class="text-sm sm:text-base font-bold text-gray-900 dark:text-white font-kanit">สรุปคะแนนรายวิชา</span>
+                            <span class="text-[11px] text-gray-400 dark:text-gray-500 block sm:hidden">แตะเพื่อย่อ/ขยายตาราง</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 sm:gap-3">
+                        ${quickSummaryPills}
+                        <div class="w-7 h-7 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-400 transition-transform duration-300 group-open:rotate-180">
+                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </div>
+                    </div>
+                </summary>
+                <div class="border-t border-gray-200 dark:border-gray-700 overflow-hidden bg-white dark:bg-gray-800/40">
+                    <table class="w-full text-sm sm:text-base">
                         <tbody>
                             ${scoreRows}
                         </tbody>
                     </table>
                 </div>
-            </figure>
+            </details>
         `;
 
         // 1. Filter out non-trackable assignments and calculate stats
         const TRACKABLE_KEYWORDS = ['กิจกรรม', 'แบบฝึก', 'quiz', 'ท้ายบท', 'ใบงาน'];
-        const trackableAssignments = student.assignments.filter(assignment =>
-            TRACKABLE_KEYWORDS.some(keyword => assignment.name.toLowerCase().includes(keyword))
+        const trackableAssignments = (student.assignments || []).filter(assignment =>
+            assignment && assignment.name && TRACKABLE_KEYWORDS.some(keyword => assignment.name.toLowerCase().includes(keyword))
         );
 
-        const submittedCount = trackableAssignments.filter(a => a.score && a.score.toLowerCase() !== 'ยังไม่ส่ง').length;
+        const submittedCount = trackableAssignments.filter(a => {
+            const s = a.score;
+            if (s === null || s === undefined) return false;
+            const str = String(s).trim().toLowerCase();
+            return str !== '' && str !== '-' && str !== 'ยังไม่ส่ง';
+        }).length;
         const missingCount = trackableAssignments.length - submittedCount;
         const completionPercentage = trackableAssignments.length > 0 ? (submittedCount / trackableAssignments.length) * 100 : 0;
 
         // 2. Group assignments for display
         const groupedAssignments = groupAssignments(trackableAssignments);
 
-        // 3. Build the HTML
+        // 3. Build the KPI Summary Cards
         const summaryCardsHtml = `
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-                <button id="show-submitted-btn" class="p-4 bg-green-100 dark:bg-green-900/50 rounded-lg text-center border border-green-200 dark:border-green-700 transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
-                    <div class="text-4xl font-bold text-green-600 dark:text-green-400">${submittedCount}</div>
-                    <div class="text-sm font-medium text-green-800 dark:text-green-300">งานที่ส่งแล้ว</div>
+            <div class="grid grid-cols-3 gap-2.5 sm:gap-4 mb-4">
+                <button type="button" id="show-submitted-btn" class="p-3 sm:p-4 bg-green-50/80 dark:bg-green-950/30 rounded-xl text-center border border-green-200 dark:border-green-800 transition-transform transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-green-500 cursor-pointer shadow-sm hover:shadow">
+                    <div class="text-2xl sm:text-4xl font-extrabold text-green-600 dark:text-green-400 font-kanit">${submittedCount}</div>
+                    <div class="text-xs sm:text-sm font-medium text-green-800 dark:text-green-300 mt-1">งานที่ส่งแล้ว</div>
                 </button>
-                <button id="show-missing-btn" class="p-4 bg-red-100 dark:bg-red-900/50 rounded-lg text-center border border-red-200 dark:border-red-700 transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
-                    <div class="text-4xl font-bold text-red-600 dark:text-red-400">${missingCount}</div>
-                    <div class="text-sm font-medium text-red-800 dark:text-red-300">งานที่ค้างส่ง</div>
+                <button type="button" id="show-missing-btn" class="p-3 sm:p-4 bg-red-50/80 dark:bg-red-950/30 rounded-xl text-center border ${missingCount > 0 ? 'border-red-300 dark:border-red-700' : 'border-red-200 dark:border-red-800'} transition-transform transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-red-500 cursor-pointer shadow-sm hover:shadow">
+                    <div class="text-2xl sm:text-4xl font-extrabold text-red-600 dark:text-red-400 font-kanit">${missingCount}</div>
+                    <div class="text-xs sm:text-sm font-medium text-red-800 dark:text-red-300 mt-1">งานที่ค้างส่ง</div>
                 </button>
-                <div class="p-4 bg-blue-100 dark:bg-blue-900/50 rounded-lg text-center border border-blue-200 dark:border-blue-700">
-                    <div class="text-3xl font-bold text-blue-600 dark:text-blue-400">${completionPercentage.toFixed(0)}%</div>
-                    <div class="text-sm font-medium text-blue-800 dark:text-blue-300">ความสมบูรณ์</div>
+                <div class="p-3 sm:p-4 bg-blue-50/80 dark:bg-blue-950/30 rounded-xl text-center border border-blue-200 dark:border-blue-800 shadow-sm">
+                    <div class="text-2xl sm:text-4xl font-extrabold text-blue-600 dark:text-blue-400 font-kanit">${completionPercentage.toFixed(0)}%</div>
+                    <div class="text-xs sm:text-sm font-medium text-blue-800 dark:text-blue-300 mt-1">ความสมบูรณ์</div>
                 </div>
             </div>
-        <div class="w-full bg-gray-200 rounded-full h-3 dark:bg-gray-700 mb-8 overflow-hidden">
-            <div class="bg-gradient-to-r from-blue-400 to-blue-600 h-3 rounded-full transition-all duration-500" style="width: ${completionPercentage}%"></div>
-        </div>
-    `;
+            <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 mb-6 overflow-hidden shadow-inner">
+                <div class="bg-gradient-to-r from-blue-500 to-indigo-600 h-2.5 rounded-full transition-all duration-700" style="width: ${completionPercentage}%"></div>
+            </div>
+        `;
 
         // 2.5 Build Quiz Shortcut Cards Section (sorted numerically by Quiz number)
         const quizAssignments = trackableAssignments.filter(a => a.name.toLowerCase().includes('quiz'));
@@ -654,110 +740,221 @@ export async function initializeScoreSearch() {
             const numB = parseInt(b.name.match(/\d+/)?.[0] || 0, 10);
             return numA - numB;
         });
+
         let quizCardsSection = '';
         if (quizAssignments.length > 0) {
             const quizCardsHtml = quizAssignments.map(quiz => {
                 const url = ASSIGNMENT_URL_MAP[quiz.name] || '#';
                 const score = quiz.score;
-                const isSubmitted = score && score.toLowerCase() !== 'ยังไม่ส่ง' && !isNaN(parseFloat(score));
+                const isSubmitted = score && score.toString().trim() !== '' && score.toString().trim() !== '-' && score.toString().toLowerCase() !== 'ยังไม่ส่ง' && !isNaN(parseFloat(score));
+                const numScore = parseFloat(score);
+                const isHighAchievement = isSubmitted && !isNaN(numScore) && numScore >= 8;
 
                 let statusBadge;
                 let cardStyle;
                 let iconColor;
+                let iconSvg;
                 if (isSubmitted) {
-                    statusBadge = `<span class="px-2.5 py-1 text-xs font-bold text-green-700 bg-green-100 dark:text-green-300 dark:bg-green-900/50 rounded-full border border-green-200 dark:border-green-800">${score}</span>`;
-                    cardStyle = 'border-green-200 dark:border-green-800 bg-green-50/30 dark:bg-green-900/10 hover:bg-green-50 dark:hover:bg-green-900/20';
-                    iconColor = 'text-green-500';
+                    if (isHighAchievement) {
+                        const scoreText = isOwnerOrTeacher ? `⭐ ${score} คะแนน` : '⭐ ดีเยี่ยม';
+                        statusBadge = `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 text-xs font-bold quiz-badge-gold rounded-full shadow-xs whitespace-nowrap">${scoreText}</span>`;
+                        cardStyle = 'quiz-card-gold hover:shadow-amber-500/10 hover:border-amber-400';
+                        iconColor = 'quiz-text-gold';
+                        iconSvg = `
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                        `;
+                    } else {
+                        const scoreText = isOwnerOrTeacher ? `${score} คะแนน` : 'ส่งแล้ว ✓';
+                        statusBadge = `<span class="px-2.5 py-0.5 text-xs font-bold text-green-700 bg-green-100 dark:text-green-300 dark:bg-green-900/50 rounded-full border border-green-200 dark:border-green-800 whitespace-nowrap">${scoreText}</span>`;
+                        cardStyle = 'border-green-200 dark:border-green-800/80 bg-green-50/40 dark:bg-green-950/20 hover:bg-green-50 dark:hover:bg-green-900/30';
+                        iconColor = 'text-green-600 dark:text-green-400';
+                        iconSvg = `
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                            </svg>
+                        `;
+                    }
                 } else {
-                    statusBadge = `<span class="px-2.5 py-1 text-xs font-bold text-red-700 bg-red-100 dark:text-red-300 dark:bg-red-900/50 rounded-full border border-red-200 dark:border-red-800">ขาด</span>`;
-                    cardStyle = 'border-red-200 dark:border-red-800 bg-red-50/30 dark:bg-red-900/10 hover:bg-red-50 dark:hover:bg-red-900/20';
-                    iconColor = 'text-red-500';
+                    statusBadge = `<span class="px-2.5 py-0.5 text-xs font-bold text-red-700 bg-red-100 dark:text-red-300 dark:bg-red-900/50 rounded-full border border-red-200 dark:border-red-800 whitespace-nowrap">ยังไม่ทำ</span>`;
+                    cardStyle = 'border-red-200 dark:border-red-800/80 bg-red-50/40 dark:bg-red-950/20 hover:bg-red-50 dark:hover:bg-red-900/30';
+                    iconColor = 'text-red-600 dark:text-red-400';
+                    iconSvg = `
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                        </svg>
+                    `;
                 }
 
+                const subtextHtml = isSubmitted
+                    ? (isHighAchievement ? '<span class="quiz-text-gold font-semibold">ยอดเยี่ยม!</span>' : 'คลิกดูแบบทดสอบ')
+                    : '<span class="text-blue-600 dark:text-blue-400 font-bold">คลิกทำแบบทดสอบ ↗</span>';
+
                 return `
-        <a href="${url}" target="_blank" rel="noopener noreferrer" class="group flex flex-col justify-between p-4 rounded-xl border ${cardStyle} transition-all duration-300 hover:shadow-md hover:-translate-y-1">
-                        <div class="flex justify-between items-start mb-3">
-                            <div class="p-2 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 ${iconColor}">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-                                </svg>
+                    <a href="${url}" target="_blank" rel="noopener noreferrer" class="group flex items-center justify-between p-3 sm:p-3.5 rounded-xl border ${cardStyle} transition-all duration-200 hover:shadow-md hover:-translate-y-0.5">
+                        <div class="flex items-center gap-2.5 sm:gap-3 min-w-0 pr-2">
+                            <div class="p-2 bg-white dark:bg-gray-800 rounded-xl shadow-xs border border-gray-100 dark:border-gray-700 ${iconColor} shrink-0">
+                                ${iconSvg}
                             </div>
+                            <div class="min-w-0">
+                                <h4 class="font-bold text-gray-900 dark:text-white font-kanit group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors text-sm sm:text-base truncate">${quiz.name}</h4>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 font-medium">
+                                    ${subtextHtml}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="shrink-0 flex items-center">
                             ${statusBadge}
                         </div>
-                        <div>
-                            <h4 class="font-bold text-gray-900 dark:text-white font-kanit group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">${quiz.name}</h4>
-                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 flex items-center gap-1">คลิกเพื่อทำแบบทดสอบ <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg></p>
-                        </div>
                     </a>
-        `;
+                `;
             }).join('');
 
             quizCardsSection = `
-        <figure class="mb-8">
-                    <figcaption class="p-3 text-lg font-semibold text-left text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-800 rounded-t-lg border-x border-t border-gray-200 dark:border-gray-700 font-kanit flex items-center gap-2">
+                <figure class="mb-8">
+                    <figcaption class="p-3.5 text-base sm:text-lg font-bold text-left text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-800 rounded-t-xl border-x border-t border-gray-200 dark:border-gray-700 font-kanit flex items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-500" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd" />
                         </svg>
-                        Quiz
+                        แบบทดสอบท้ายบท (Quiz)
                     </figcaption>
-                    <div class="p-4 sm:p-5 bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-b-lg shadow-inner">
-                        <div class="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
+                    <div class="p-3 sm:p-4 bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-b-xl shadow-sm">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-3">
                             ${quizCardsHtml}
                         </div>
                     </div>
                 </figure>
-        `;
+            `;
         }
 
-        const assignmentsSection = Object.keys(groupedAssignments).length > 0 ? `
-        <figure>
-                <figcaption class="p-4 text-lg font-semibold text-left text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-800">
-                    รายการงานที่ต้องส่ง
-                </figcaption>
-                <div class="space-y-2 p-4 bg-gray-50 dark:bg-gray-900/30">
-                    ${Object.entries(groupedAssignments).map(([chapter, chapterAssignments]) => `
-                        <details class="group bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden transition-all duration-300 open:ring-2 open:ring-blue-500 open:shadow-lg">
-                            <summary class="flex justify-between items-center p-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
-                                <h4 class="font-bold text-gray-800 dark:text-gray-200 font-kanit">${chapter}</h4>
-                                <svg class="h-5 w-5 text-gray-500 dark:text-gray-400 transition-transform duration-300 group-open:rotate-90" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>
-                            </summary>
-                            <div class="border-t border-gray-200 dark:border-gray-700">
-                                <ul class="divide-y divide-gray-200 dark:divide-gray-700">
-                                    ${chapterAssignments.map(createAssignmentItemHTML).join('')}
-                                </ul>
+        let assignmentsSection = '';
+        if (Object.keys(groupedAssignments).length > 0) {
+            const chaptersHtml = Object.entries(groupedAssignments).map(([chapter, chapterAssignments]) => {
+                const chapterMissingCount = chapterAssignments.filter(a => {
+                    const score = a.score;
+                    if (score === null || score === undefined) return true;
+                    const str = String(score).trim().toLowerCase();
+                    return str === '' || str === '-' || str === 'ยังไม่ส่ง';
+                }).length;
+
+                const chapterBadge = chapterMissingCount > 0
+                    ? `<span class="chapter-badge px-2 py-0.5 text-xs font-bold bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300 rounded-full border border-red-200 dark:border-red-800">ค้าง ${chapterMissingCount} งาน</span>`
+                    : `<span class="chapter-badge px-2 py-0.5 text-xs font-semibold bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300 rounded-full border border-green-200 dark:border-green-800">ครบแล้ว ✓</span>`;
+
+                return `
+                    <details class="chapter-details group bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden transition-all duration-300 open:ring-2 open:ring-blue-500/50 open:shadow-md" data-has-missing="${chapterMissingCount > 0}">
+                        <summary class="flex justify-between items-center p-3.5 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                            <div class="flex items-center gap-2.5">
+                                <h4 class="font-bold text-gray-800 dark:text-gray-200 font-kanit text-sm sm:text-base">${chapter}</h4>
+                                ${chapterBadge}
                             </div>
-                        </details>
-                    `).join('')}
+                            <svg class="h-5 w-5 text-gray-400 transition-transform duration-300 group-open:rotate-90" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                            </svg>
+                        </summary>
+                        <div class="border-t border-gray-200 dark:border-gray-700">
+                            <ul class="divide-y divide-gray-200 dark:divide-gray-700/60">
+                                ${chapterAssignments.map(createAssignmentItemHTML).join('')}
+                            </ul>
+                        </div>
+                    </details>
+                `;
+            }).join('');
+
+            assignmentsSection = `
+                <figure class="mt-8">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+                        <figcaption class="text-base sm:text-lg font-bold text-gray-900 dark:text-white font-kanit flex items-center gap-2">
+                            <svg class="h-5 w-5 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                            </svg>
+                            <span>รายการงานที่ต้องส่ง</span>
+                        </figcaption>
+                        <!-- Filter Tabs -->
+                        <div class="inline-flex items-center p-1 bg-gray-100 dark:bg-gray-800 rounded-xl text-xs font-semibold self-start sm:self-auto">
+                            <button type="button" class="assignment-filter-btn px-3 py-1.5 rounded-lg transition active bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm cursor-pointer" data-filter="all">
+                                ทั้งหมด (${trackableAssignments.length})
+                            </button>
+                            <button type="button" class="assignment-filter-btn px-3 py-1.5 rounded-lg transition text-gray-600 dark:text-gray-400 hover:text-red-600 cursor-pointer" data-filter="missing">
+                                ค้างส่ง (${missingCount})
+                            </button>
+                            <button type="button" class="assignment-filter-btn px-3 py-1.5 rounded-lg transition text-gray-600 dark:text-gray-400 hover:text-green-600 cursor-pointer" data-filter="submitted">
+                                ส่งแล้ว (${submittedCount})
+                            </button>
+                        </div>
+                    </div>
+                    <div id="assignment-accordion-list" class="space-y-3">
+                        ${chaptersHtml}
+                    </div>
+                </figure>
+            `;
+        }
+
+        // Hero GPA badge (Owner / Teacher only)
+        let gradeBadgeHtml = '';
+        if (isOwnerOrTeacher && student.hasOwnProperty('เกรด')) {
+            const gradeVal = student['เกรด'];
+            const gradeInfo = getGradeVisual(gradeVal);
+            gradeBadgeHtml = `
+                <div class="flex-shrink-0 flex items-center gap-1.5 sm:flex-col sm:justify-center px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl ${gradeInfo.heroClass} text-center self-start sm:self-auto shadow-md">
+                    <span class="text-[11px] font-medium opacity-90">เกรดเฉลี่ย</span>
+                    <span class="text-xl sm:text-2xl font-extrabold font-kanit leading-none">${gradeVal}</span>
                 </div>
-            </figure>
+            `;
+        } else if (!isOwnerOrTeacher) {
+            gradeBadgeHtml = `
+                <div class="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-300 text-xs font-semibold border border-gray-200 dark:border-gray-600 shadow-sm self-start sm:self-auto">
+                    <span>🤝 โหมดเพื่อนดู</span>
+                </div>
+            `;
+        }
+
+        // Peer Assist Notice banner
+        const peerAssistNoticeHtml = !isOwnerOrTeacher ? `
+            <div class="p-4 rounded-xl bg-blue-50/80 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 text-blue-900 dark:text-blue-200 flex items-start gap-3 shadow-sm">
+                <div class="text-2xl select-none">🤝</div>
+                <div class="text-xs sm:text-sm">
+                    <div class="font-bold flex items-center gap-2">
+                        <span>โหมดเพื่อนช่วยเช็คงาน (Peer Assist View)</span>
+                        <span class="px-2 py-0.5 text-[10px] font-semibold bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 rounded-full">ปกป้องข้อมูลส่วนตัว</span>
+                    </div>
+                    <p class="text-blue-700 dark:text-blue-300 mt-1 leading-relaxed">
+                        ระบบแสดงคะแนนเก็บ รายการงานค้าง และสถานะการสอบซ่อม เพื่อให้เพื่อนช่วยเตือนกันได้สะดวก<br class="hidden sm:inline">
+                        <span class="opacity-80">เกรดและคะแนนสอบทางการจะแสดงเมื่อเจ้าตัวเข้าสู่ระบบด้วยอีเมลโรงเรียน</span>
+                    </p>
+                </div>
+            </div>
         ` : '';
 
         resultContainer.innerHTML = `
-        <div class="student-card-container bg-white dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden anim-card-pop-in" data-student-id="${student.id}">
-                <div class="p-6 bg-gradient-to-br from-blue-50 to-gray-100 dark:from-gray-900 dark:to-gray-800/50 border-b border-gray-200 dark:border-gray-700 flex items-center gap-4">
-                    <div class="flex-shrink-0 h-16 w-16 rounded-full flex items-center justify-center bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 border-4 border-white dark:border-gray-800 shadow-md">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
-                    </div>
-                    <div class="min-w-0">
-                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white font-kanit truncate">${student.name}</h2>
-                        <div class="text-sm text-gray-600 dark:text-gray-400 mt-1 flex flex-wrap items-center gap-x-4 gap-y-1 font-medium">
-                            <span>รหัสนักเรียน: <strong class="font-semibold text-blue-600 dark:text-blue-400">${student.id}</strong></span>
-                            ${student.room ? `<span class="border-l border-gray-300 dark:border-gray-600 pl-4">ห้อง: <strong class="font-semibold text-blue-600 dark:text-blue-400">${student.room}</strong></span>` : ''}
-                            ${student.ordinal ? `<span class="border-l border-gray-300 dark:border-gray-600 pl-4">เลขที่: <strong class="font-semibold text-blue-600 dark:text-blue-400">${student.ordinal}</strong></span>` : ''}
+            <div class="student-card-container bg-white dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden anim-card-pop-in" data-student-id="${student.id}">
+                <!-- Student Card Header -->
+                <div class="p-4 sm:p-6 bg-gradient-to-br from-blue-50/80 via-white to-indigo-50/50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 border-b border-gray-200 dark:border-gray-700 flex items-start sm:items-center justify-between gap-3">
+                    <div class="flex items-center gap-3 sm:gap-4 min-w-0">
+                        <div class="flex-shrink-0 h-12 w-12 sm:h-16 sm:w-16 rounded-2xl flex items-center justify-center bg-gradient-to-tr from-blue-600 to-indigo-500 text-white shadow-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 sm:h-8 sm:w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                        </div>
+                        <div class="min-w-0">
+                            <h2 class="text-lg sm:text-2xl font-bold text-gray-900 dark:text-white font-kanit truncate">${student.name}</h2>
+                            <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1 flex flex-wrap items-center gap-1.5 sm:gap-2 font-medium">
+                                <span class="inline-flex items-center gap-1 bg-white dark:bg-gray-700 px-2 py-0.5 rounded border border-gray-200 dark:border-gray-600">รหัส: <strong class="text-blue-600 dark:text-blue-400 font-mono">${student.id}</strong></span>
+                                ${student.room ? `<span class="inline-flex items-center gap-1 bg-white dark:bg-gray-700 px-2 py-0.5 rounded border border-gray-200 dark:border-gray-600">ห้อง: <strong class="text-blue-600 dark:text-blue-400">${student.room}</strong></span>` : ''}
+                                ${student.ordinal ? `<span class="inline-flex items-center gap-1 bg-white dark:bg-gray-700 px-2 py-0.5 rounded border border-gray-200 dark:border-gray-600">เลขที่: <strong class="text-blue-600 dark:text-blue-400">${student.ordinal}</strong></span>` : ''}
+                            </div>
                         </div>
                     </div>
-                    <!-- <div class="ml-auto">
-                        <button id="edit-mode-btn" class="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-bold py-2 px-4 rounded-lg transition-colors duration-200 hover:bg-gray-300 dark:hover:bg-gray-600">
-                            แก้ไขคะแนน
-                        </button>
-                    </div> -->
+                    ${gradeBadgeHtml}
                 </div>
-                <div class="p-6 space-y-8">
+
+                <div class="p-5 sm:p-6 space-y-6">
+                    ${peerAssistNoticeHtml}
+                    ${summaryCardsHtml}
                     ${summaryScoreSection}
                     ${quizCardsSection}
-                    ${summaryCardsHtml}
                     ${assignmentsSection}
                 </div>
+
                 <div id="edit-controls-container" class="p-4 bg-gray-100 dark:bg-gray-900/50 border-t border-gray-200 dark:border-gray-700 ${isEditMode ? '' : 'hidden'}">
                     <button id="save-overrides-btn" data-studentid="${student.id}" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg transition-transform transform hover:scale-105">
                         สร้างโค้ดสำหรับบันทึกการแก้ไข
@@ -766,14 +963,75 @@ export async function initializeScoreSearch() {
             </div>
         `;
 
-        // Attach event listeners for the new modal buttons
+        // Attach event listeners for the modal buttons
         document.getElementById('show-submitted-btn')?.addEventListener('click', () => {
-            const submittedAssignments = trackableAssignments.filter(a => a.score && a.score.toLowerCase() !== 'ยังไม่ส่ง');
-            createInteractiveAssignmentModal('submitted', `งานที่ส่งแล้ว(${submittedAssignments.length} รายการ)`, submittedAssignments);
+            const submittedAssignments = trackableAssignments.filter(a => {
+                const s = a.score;
+                if (s === null || s === undefined) return false;
+                const str = String(s).trim().toLowerCase();
+                return str !== '' && str !== '-' && str !== 'ยังไม่ส่ง';
+            });
+            createInteractiveAssignmentModal('submitted', `งานที่ส่งแล้ว (${submittedAssignments.length} รายการ)`, submittedAssignments);
         });
+
         document.getElementById('show-missing-btn')?.addEventListener('click', () => {
-            const missingAssignments = trackableAssignments.filter(a => !a.score || a.score.toLowerCase() === 'ยังไม่ส่ง');
-            createInteractiveAssignmentModal('missing', `งานที่ค้างส่ง(${missingAssignments.length} รายการ)`, missingAssignments);
+            const missingAssignments = trackableAssignments.filter(a => {
+                const s = a.score;
+                if (s === null || s === undefined) return true;
+                const str = String(s).trim().toLowerCase();
+                return str === '' || str === '-' || str === 'ยังไม่ส่ง';
+            });
+            createInteractiveAssignmentModal('missing', `งานที่ค้างส่ง (${missingAssignments.length} รายการ)`, missingAssignments);
+        });
+
+        // Filter tabs logic
+        const filterButtons = document.querySelectorAll('.assignment-filter-btn');
+        const chapterDetails = document.querySelectorAll('.chapter-details');
+
+        filterButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const filter = btn.dataset.filter;
+                // Update active classes on buttons
+                filterButtons.forEach(b => {
+                    b.classList.remove('bg-white', 'dark:bg-gray-700', 'text-blue-600', 'dark:text-blue-400', 'shadow-sm');
+                    b.classList.add('text-gray-600', 'dark:text-gray-400');
+                });
+                btn.classList.add('bg-white', 'dark:bg-gray-700', 'text-blue-600', 'dark:text-blue-400', 'shadow-sm');
+                btn.classList.remove('text-gray-600', 'dark:text-gray-400');
+
+                chapterDetails.forEach(details => {
+                    const hasMissing = details.dataset.hasMissing === 'true';
+                    const items = details.querySelectorAll('.assignment-item');
+
+                    if (filter === 'missing') {
+                        if (!hasMissing) {
+                            details.classList.add('hidden');
+                        } else {
+                            details.classList.remove('hidden');
+                            details.open = true; // Auto open chapters with missing work
+                            items.forEach(item => {
+                                item.classList.toggle('hidden', item.dataset.status !== 'missing');
+                            });
+                        }
+                    } else if (filter === 'submitted') {
+                        let visibleCount = 0;
+                        items.forEach(item => {
+                            const isSub = item.dataset.status === 'submitted';
+                            item.classList.toggle('hidden', !isSub);
+                            if (isSub) visibleCount++;
+                        });
+                        if (visibleCount === 0) {
+                            details.classList.add('hidden');
+                        } else {
+                            details.classList.remove('hidden');
+                        }
+                    } else {
+                        // 'all'
+                        details.classList.remove('hidden');
+                        items.forEach(item => item.classList.remove('hidden'));
+                    }
+                });
+            });
         });
 
         document.getElementById('edit-mode-btn')?.addEventListener('click', () => {
@@ -866,12 +1124,6 @@ export async function initializeScoreSearch() {
             }
         });
     }
-
-    /**
-     * Groups and orders assignments by chapter for display.
-     * @param {Array<object>} assignments - The list of assignment objects for a student.
-     * @returns {object} An object with chapter names as keys and arrays of assignments as values.
-     */
 }
 
 /**
@@ -885,37 +1137,51 @@ function createAssignmentItemHTML(assignment) {
     const displayName = ASSIGNMENT_DISPLAY_NAME_MAP[lowerCaseName] || assignment.name;
     const score = assignment.score;
     let statusHtml;
+    let isSubmitted = false;
 
     if (isNaN(parseFloat(score))) {
         // Handle text-based scores like "ส่งแล้ว", "ยังไม่ส่ง"
-        const isSubmitted = score && score.toLowerCase() !== 'ยังไม่ส่ง';
+        isSubmitted = Boolean(score && score.toString().trim() !== '' && score.toString().trim() !== '-' && score.toString().toLowerCase() !== 'ยังไม่ส่ง');
         const colorClass = isSubmitted
-            ? 'text-green-800 bg-green-100 dark:text-green-200 dark:bg-green-900/50'
-            : 'text-red-800 bg-red-100 dark:text-red-200 dark:bg-red-900/50';
+            ? 'text-green-800 bg-green-100 dark:text-green-200 dark:bg-green-900/50 border border-green-200 dark:border-green-800'
+            : 'text-red-800 bg-red-100 dark:text-red-200 dark:bg-red-900/50 border border-red-200 dark:border-red-800';
 
         let displayScore = score || 'ยังไม่ส่ง';
         if (!isSubmitted && lowerCaseName.includes('quiz')) {
             displayScore = 'ขาด';
         }
-        statusHtml = `<span class="px-2 py-1 text-xs font-semibold ${colorClass} rounded-full">${displayScore}</span>`;
+        statusHtml = `<span class="px-2.5 py-0.5 text-xs font-semibold ${colorClass} rounded-full">${displayScore}</span>`;
     } else {
         // Handle numeric scores
-        statusHtml = `<span class="font-mono font-bold text-gray-800 dark:text-gray-200">${score}</span>`;
+        isSubmitted = true;
+        const num = parseFloat(score);
+        if (num >= 8 && lowerCaseName.includes('quiz')) {
+            statusHtml = `<span class="inline-flex items-center gap-1 font-mono font-bold quiz-badge-gold px-2 py-0.5 rounded-full text-xs">⭐ ${score}</span>`;
+        } else {
+            statusHtml = `<span class="font-mono font-bold text-gray-800 dark:text-gray-200 px-2 py-0.5 rounded bg-gray-100 dark:bg-gray-700">${score}</span>`;
+        }
     }
+
+    const statusType = isSubmitted ? 'submitted' : 'missing';
 
     const contentHtml = `
     <div class="flex-grow min-w-0 pr-4">
-        <span class="text-gray-700 dark:text-gray-300 text-sm font-medium">${displayName}</span>
-        </div>
-    <div class="flex items-center gap-3 flex-shrink-0">
-        ${statusHtml}
-        ${url ? `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400 group-hover:text-blue-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>` : '<div class="w-4 h-4"></div>'}
+        <span class="text-gray-800 dark:text-gray-200 text-sm font-medium">${displayName}</span>
     </div>
-`;
+    <div class="flex items-center gap-2.5 flex-shrink-0">
+        ${statusHtml}
+        ${url ? `
+            <span class="inline-flex items-center gap-1 text-xs text-blue-600 dark:text-blue-400 font-semibold px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-900/40 border border-blue-200 dark:border-blue-800 group-hover:bg-blue-100 dark:group-hover:bg-blue-900/60 transition-colors">
+                ทำทันที ↗
+            </span>
+        ` : ''}
+    </div>
+    `;
+
     if (url) {
-        return `<li class="block"><a href="${url}" target="_blank" rel="noopener noreferrer" class="group flex justify-between items-center py-3 px-4 hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors duration-200">${contentHtml}</a></li>`;
+        return `<li class="assignment-item block" data-status="${statusType}"><a href="${url}" target="_blank" rel="noopener noreferrer" class="group flex justify-between items-center py-3 px-4 hover:bg-blue-50/50 dark:hover:bg-gray-700/50 transition-colors duration-200">${contentHtml}</a></li>`;
     } else {
-        return `<li class="flex justify-between items-center py-3 px-4 opacity-75">${contentHtml}</li>`;
+        return `<li class="assignment-item flex justify-between items-center py-3 px-4 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors duration-200" data-status="${statusType}">${contentHtml}</li>`;
     }
 }
 

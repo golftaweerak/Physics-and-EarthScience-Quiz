@@ -20,7 +20,7 @@ let roomSortConfig = {
 };
 let selectedRoomForDetails = null;
 let currentStudentScores = [];
-let displayMode = 'overall'; // 'overall' or 'midterm'
+let displayMode = 'overall'; // 'overall', 'midterm', or 'final'
 
 // Centralized theme for grades to ensure consistency between chart and chips
 const GRADE_THEME = {
@@ -59,6 +59,13 @@ export function calculateOverallSummary(scores) {
             midtermSD: 0,
             midtermPassCount: 0,
             midtermFailCount: 0,
+            highestFinalScore: 0,
+            lowestFinalScore: 0,
+            averageFinalScore: 0,
+            finalPassPercentage: 0,
+            finalSD: 0,
+            finalPassCount: 0,
+            finalFailCount: 0,
             summaryByRoom: {}
         };
     }
@@ -75,6 +82,11 @@ export function calculateOverallSummary(scores) {
     let lowestMidtermScore = Infinity;
     let totalMidtermScoreSum = 0, validMidtermScoresCount = 0, totalPassCount = 0, totalFailCount = 0;
     const allMidtermScores = [];
+
+    let highestFinalScore = -Infinity;
+    let lowestFinalScore = Infinity;
+    let totalFinalScoreSum = 0, validFinalScoresCount = 0, totalPassCountFinal = 0, totalFailCountFinal = 0;
+    const allFinalScores = [];
 
     // For overall completion percentage
     let totalTrackableAssignments = 0;
@@ -127,11 +139,21 @@ export function calculateOverallSummary(scores) {
             });
             student['จำนวน Quiz'] = `${quizCount}/${quizTargets.length}`;
 
-            student['คะแนนปลายภาค'] = findScore(['ปลายภาค', 'Final']);
+            let finalExamScore = findScore(['ปลายภาค', 'Final']);
+            if (finalExamScore === '-' || finalExamScore === '') {
+                if (student['ปลายภาค [30]'] !== undefined) finalExamScore = student['ปลายภาค [30]'];
+                else if (student['ปลายภาค'] !== undefined) finalExamScore = student['ปลายภาค'];
+            }
+            student['คะแนนปลายภาค'] = finalExamScore;
         } else {
-            // Normalize midterm for other semesters (1/2568, 1/2569)
+            // Normalize midterm and final for other semesters (1/2568, 1/2569)
             if (student['กลางภาค [20]'] !== undefined) {
                 student['คะแนนกลางภาค'] = student['กลางภาค [20]'];
+            }
+            if (student['ปลายภาค [30]'] !== undefined) {
+                student['คะแนนปลายภาค'] = student['ปลายภาค [30]'];
+            } else if (student['ปลายภาค'] !== undefined) {
+                student['คะแนนปลายภาค'] = student['ปลายภาค'];
             }
         }
 
@@ -162,7 +184,12 @@ export function calculateOverallSummary(scores) {
                 validMidtermScoresCountTerm2: 0,
                 passCountTerm2: 0,
                 failCountTerm2: 0,
-                midtermScoresList: []
+                midtermScoresList: [],
+                totalFinalScore: 0,
+                validFinalScoresCount: 0,
+                passCountFinal: 0,
+                failCountFinal: 0,
+                finalScoresList: []
             };
         }
         summaryByRoom[room].studentCount++;
@@ -207,6 +234,33 @@ export function calculateOverallSummary(scores) {
             else totalFailCount++;
         }
 
+        // Add logic for final scores (threshold >= 15 out of 30)
+        const finalScore = parseFloat(student['คะแนนปลายภาค']);
+        if (!isNaN(finalScore)) {
+            // Per-room final stats
+            summaryByRoom[room].totalFinalScore += finalScore;
+            summaryByRoom[room].validFinalScoresCount++;
+            summaryByRoom[room].finalScoresList.push(finalScore);
+
+            // Room-specific final pass/fail (threshold >= 15)
+            if (finalScore >= 15) {
+                summaryByRoom[room].passCountFinal++;
+            } else {
+                summaryByRoom[room].failCountFinal++;
+            }
+
+            // Overall final stats
+            totalFinalScoreSum += finalScore;
+            validFinalScoresCount++;
+            allFinalScores.push(finalScore);
+            if (finalScore > highestFinalScore) highestFinalScore = finalScore;
+            if (finalScore < lowestFinalScore) lowestFinalScore = finalScore;
+
+            // Overall final pass/fail
+            if (finalScore >= 15) totalPassCountFinal++;
+            else totalFailCountFinal++;
+        }
+
         totalTrackableAssignments += completion.total;
         totalSubmittedAssignments += completion.submitted;
 
@@ -241,6 +295,19 @@ export function calculateOverallSummary(scores) {
         } else {
             roomData.midtermSD = 'N/A';
         }
+
+        // Calculate Final Exam Averages and SD
+        roomData.averageFinalScore = roomData.validFinalScoresCount > 0
+            ? (roomData.totalFinalScore / roomData.validFinalScoresCount).toFixed(2)
+            : 'N/A';
+
+        if (roomData.validFinalScoresCount > 0) {
+            const avgFinal = roomData.totalFinalScore / roomData.validFinalScoresCount;
+            const sumOfSquares = roomData.finalScoresList.reduce((sum, val) => sum + Math.pow(val - avgFinal, 2), 0);
+            roomData.finalSD = Math.sqrt(sumOfSquares / roomData.validFinalScoresCount).toFixed(2);
+        } else {
+            roomData.finalSD = 'N/A';
+        }
     }
 
     const overallAverageScore = validScoresCount > 0 ? (totalScoreSum / validScoresCount).toFixed(2) : 0;
@@ -255,6 +322,17 @@ export function calculateOverallSummary(scores) {
         overallMidtermSD = Math.sqrt(sumOfSquares / validMidtermScoresCount).toFixed(2);
     }
 
+    // Calculate Overall Final Stats
+    const overallAverageFinalScore = validFinalScoresCount > 0 ? (totalFinalScoreSum / validFinalScoresCount).toFixed(2) : 'N/A';
+    const overallFinalPassPercentage = (totalPassCountFinal + totalFailCountFinal) > 0 ? ((totalPassCountFinal / (totalPassCountFinal + totalFailCountFinal)) * 100).toFixed(0) : 'N/A';
+
+    let overallFinalSD = 'N/A';
+    if (validFinalScoresCount > 0) {
+        const avgFinal = totalFinalScoreSum / validFinalScoresCount;
+        const sumOfSquares = allFinalScores.reduce((sum, val) => sum + Math.pow(val - avgFinal, 2), 0);
+        overallFinalSD = Math.sqrt(sumOfSquares / validFinalScoresCount).toFixed(2);
+    }
+
     const completionPercentage = totalTrackableAssignments > 0
         ? ((totalSubmittedAssignments / totalTrackableAssignments) * 100).toFixed(0)
         : 0;
@@ -263,6 +341,8 @@ export function calculateOverallSummary(scores) {
     const finalLowestScore = lowestScore === Infinity ? 'N/A' : lowestScore;
     const finalHighestMidtermScore = highestMidtermScore === -Infinity ? 'N/A' : highestMidtermScore;
     const finalLowestMidtermScore = lowestMidtermScore === Infinity ? 'N/A' : lowestMidtermScore;
+    const finalHighestFinalScore = highestFinalScore === -Infinity ? 'N/A' : highestFinalScore;
+    const finalLowestFinalScore = lowestFinalScore === Infinity ? 'N/A' : lowestFinalScore;
 
     return {
         totalStudents,
@@ -278,6 +358,13 @@ export function calculateOverallSummary(scores) {
         midtermSD: overallMidtermSD,
         midtermPassCount: totalPassCount,
         midtermFailCount: totalFailCount,
+        highestFinalScore: finalHighestFinalScore,
+        lowestFinalScore: finalLowestFinalScore,
+        averageFinalScore: overallAverageFinalScore,
+        finalPassPercentage: overallFinalPassPercentage,
+        finalSD: overallFinalSD,
+        finalPassCount: totalPassCountFinal,
+        finalFailCount: totalFailCountFinal,
         studentsWithMissing,
         studentsWithNoMissing,
         summaryByRoom
@@ -625,6 +712,18 @@ function getMidtermTerm2ScoreTextColor(score) {
     return getDynamicTextColor(score, MIDTERM_TERM2_THRESHOLDS);
 }
 
+// Thresholds for Final Exam average score (out of 30)
+const FINAL_SCORE_THRESHOLDS = [
+    { limit: 24, colorClass: 'text-teal-500 dark:text-teal-400' },    // >= 80% (24/30)
+    { limit: 21, colorClass: 'text-sky-500 dark:text-sky-400' },      // >= 70% (21/30)
+    { limit: 18, colorClass: 'text-green-500 dark:text-green-400' },  // >= 60% (18/30)
+    { limit: 15, colorClass: 'text-amber-500 dark:text-amber-400' },  // >= 50% (15/30)
+];
+
+function getFinalScoreTextColor(score) {
+    return getDynamicTextColor(score, FINAL_SCORE_THRESHOLDS);
+}
+
 /**
  * Determines the Tailwind CSS text color class for a completion percentage.
  * @param {number} percentage - The completion percentage (0-100).
@@ -645,6 +744,7 @@ function updateRoomSummaryTable() {
     const sortIndicatorGrade = document.getElementById('sort-indicator-grade');
     const sortIndicatorCompletion = document.getElementById('sort-indicator-completion');
     const sortIndicatorMidterm = document.getElementById('sort-indicator-midterm');
+    const sortIndicatorFinal = document.getElementById('sort-indicator-final');
     if (!tbody || !summaryDataStore) return;
 
     // Sort the room keys based on the current sortConfig
@@ -710,6 +810,46 @@ function updateRoomSummaryTable() {
                 </tr>
             `;
         }).join('');
+    } else if (displayMode === 'final') {
+        tbody.innerHTML = sortedRooms.map(room => {
+            const roomData = summaryDataStore.summaryByRoom[room];
+            const avgFinal = parseFloat(roomData.averageFinalScore);
+            const scoreTextColorClass = getFinalScoreTextColor(avgFinal);
+            const passCount = roomData.passCountFinal ?? 0;
+            const failCount = roomData.failCountFinal ?? 0;
+            const passPercentage = (roomData.passCountFinal !== undefined && (passCount + failCount) > 0)
+                ? (((passCount / (passCount + failCount))) * 100).toFixed(0)
+                : 'N/A';
+            const passBarColorClass = passPercentage >= 80 ? 'bg-teal-500' :
+                passPercentage >= 60 ? 'bg-sky-500' :
+                    passPercentage >= 50 ? 'bg-amber-500' : 'bg-red-500';
+
+            return `
+                <tr data-room="${room}" class="border-b dark:border-gray-700 last:border-b-0">
+                    <td class="px-4 py-3 align-middle">
+                        <div class="font-bold text-lg text-gray-900 dark:text-white">ห้อง ${room}</div>
+                        <div class="text-sm text-gray-500 dark:text-gray-400">${roomData.studentCount} คน</div>
+                    </td>
+                    <td class="px-4 py-3 text-center align-middle">
+                        <div class="font-bold text-xl ${scoreTextColorClass}">${roomData.averageFinalScore ?? 'N/A'}</div>
+                    </td>
+                    <td class="px-4 py-3 text-center align-middle">
+                        <div class="font-bold text-xl text-gray-800 dark:text-gray-100">${roomData.finalSD ?? 'N/A'}</div>
+                    </td>
+                    <td class="px-4 py-3 align-middle">
+                        <div class="flex items-center justify-between text-xs mb-1">
+                            <span class="font-semibold text-gray-600 dark:text-gray-300">ผ่าน ${passPercentage === 'N/A' ? 'N/A' : `${passPercentage}%`}</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                            <div class="${passBarColorClass} h-2.5 rounded-full" style="width: ${passPercentage === 'N/A' ? 0 : passPercentage}%"></div>
+                        </div>
+                    </td>
+                    <td class="px-4 py-3 text-center align-middle">
+                        <div class="text-sm"><span class="font-bold text-green-500">${roomData.passCountFinal ?? '-'}</span> ผ่าน / <span class="font-bold text-red-500">${roomData.failCountFinal ?? '-'}</span> ไม่ผ่าน</div>
+                    </td>
+                </tr>
+            `;
+        }).join('');
     } else {
         // Generate and inject the table rows for 'overall' mode
         tbody.innerHTML = sortedRooms.map(room => {
@@ -760,9 +900,9 @@ function updateRoomSummaryTable() {
         }).join('');
     }
 
-    // Attach click listeners to rows to open detailed rendering (only in midterm mode)
+    // Attach click listeners to rows to open detailed rendering (in midterm or final mode)
     tbody.querySelectorAll('tr[data-room]').forEach(row => {
-        if (displayMode === 'midterm') {
+        if (displayMode === 'midterm' || displayMode === 'final') {
             row.style.cursor = 'pointer';
             row.classList.add('hover:bg-gray-50', 'dark:hover:bg-gray-700/30', 'transition-colors');
             row.addEventListener('click', () => {
@@ -786,6 +926,7 @@ function updateRoomSummaryTable() {
     if (sortIndicatorGrade) sortIndicatorGrade.innerHTML = '';
     if (sortIndicatorCompletion) sortIndicatorCompletion.innerHTML = '';
     if (sortIndicatorMidterm) sortIndicatorMidterm.innerHTML = '';
+    if (sortIndicatorFinal) sortIndicatorFinal.innerHTML = '';
 
     // Set the indicator on the active column
     if (roomSortConfig.key === 'room' && sortIndicatorRoom) {
@@ -798,6 +939,8 @@ function updateRoomSummaryTable() {
         sortIndicatorCompletion.innerHTML = sortArrow;
     } else if (roomSortConfig.key === 'averageMidtermTerm2' && sortIndicatorMidterm) {
         sortIndicatorMidterm.innerHTML = sortArrow;
+    } else if (roomSortConfig.key === 'averageFinalScore' && sortIndicatorFinal) {
+        sortIndicatorFinal.innerHTML = sortArrow;
     }
 }
 
@@ -810,6 +953,7 @@ function initializeTableSorting() {
     const sortGradeBtn = document.getElementById('sort-avg-grade-btn');
     const sortCompletionBtn = document.getElementById('sort-completion-btn');
     const sortMidtermBtn = document.getElementById('sort-avg-midterm-btn');
+    const sortFinalBtn = document.getElementById('sort-avg-final-btn');
 
     if (sortScoreBtn) {
         sortScoreBtn.addEventListener('click', () => {
@@ -865,6 +1009,18 @@ function initializeTableSorting() {
                 roomSortConfig.direction = roomSortConfig.direction === 'desc' ? 'asc' : 'desc';
             } else {
                 roomSortConfig.key = 'averageMidtermTerm2';
+                roomSortConfig.direction = 'desc'; // Default to descending
+            }
+            updateRoomSummaryTable();
+        });
+    }
+
+    if (sortFinalBtn) {
+        sortFinalBtn.addEventListener('click', () => {
+            if (roomSortConfig.key === 'averageFinalScore') {
+                roomSortConfig.direction = roomSortConfig.direction === 'desc' ? 'asc' : 'desc';
+            } else {
+                roomSortConfig.key = 'averageFinalScore';
                 roomSortConfig.direction = 'desc'; // Default to descending
             }
             updateRoomSummaryTable();
@@ -952,7 +1108,33 @@ function renderSummary(summaryData, studentScores, lastUpdatedTimestamp) {
         </tr>
     `;
 
-    const tableHeaderHtml = (displayMode === 'midterm') ? midtermTableHeader : overallTableHeader;
+    const finalTableHeader = `
+        <tr>
+            <th scope="col" class="px-4 py-3 text-left">
+                <button id="sort-room-btn" class="inline-flex items-center gap-1 group font-bold focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-md px-1">
+                    <span>ห้องเรียน</span>
+                    <span id="sort-indicator-room" class="text-gray-500 dark:text-gray-400 transition-opacity"></span>
+                </button>
+            </th>
+            <th scope="col" class="px-4 py-3 text-center">
+                <button id="sort-avg-final-btn" class="inline-flex items-center gap-1 group font-bold focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-md px-1">
+                    <span>คะแนนปลายภาคเฉลี่ย</span>
+                    <span id="sort-indicator-final" class="text-gray-500 dark:text-gray-400 transition-opacity"></span>
+                </button>
+            </th>
+            <th scope="col" class="px-4 py-3 text-center">
+                <span>ส่วนเบี่ยงเบนมาตรฐาน (SD)</span>
+            </th>
+            <th scope="col" class="px-4 py-3 text-center w-1/4">
+                <span>อัตราการผ่าน</span>
+            </th>
+            <th scope="col" class="px-4 py-3 text-center">
+                <span>จำนวนคน (ผ่าน/ไม่ผ่าน)</span>
+            </th>
+        </tr>
+    `;
+
+    const tableHeaderHtml = (displayMode === 'midterm') ? midtermTableHeader : (displayMode === 'final' ? finalTableHeader : overallTableHeader);
 
     const summaryHtml = `
         <!-- Student Search Section -->
@@ -988,6 +1170,10 @@ function renderSummary(summaryData, studentScores, lastUpdatedTimestamp) {
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                     <span>สถิติกลางภาค</span>
                 </button>
+                <button id="btn-mode-final" class="px-5 py-2 rounded-lg font-kanit font-bold text-sm transition-all duration-200 flex items-center gap-2 ${displayMode === 'final' ? 'bg-blue-600 text-white shadow-md' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg>
+                    <span>สถิติปลายภาค</span>
+                </button>
             </div>
         </div>
 
@@ -1014,8 +1200,8 @@ function renderSummary(summaryData, studentScores, lastUpdatedTimestamp) {
 
             <!-- Other Stats Box -->
             <div class="bg-white dark:bg-gray-800/50 p-4 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 col-span-2">
-                <h3 class="text-lg font-bold text-gray-800 dark:text-white font-kanit mb-4">${displayMode === 'midterm' ? 'ภาพรวมคะแนนสอบกลางภาค' : 'ภาพรวมคะแนนและงาน'}</h3>
-                <div class="grid ${displayMode === 'midterm' ? 'grid-cols-2 sm:grid-cols-3' : 'grid-cols-2 sm:grid-cols-4'} gap-4">
+                <h3 class="text-lg font-bold text-gray-800 dark:text-white font-kanit mb-4">${displayMode === 'midterm' ? 'ภาพรวมคะแนนสอบกลางภาค' : (displayMode === 'final' ? 'ภาพรวมคะแนนสอบปลายภาค' : 'ภาพรวมคะแนนและงาน')}</h3>
+                <div class="grid ${displayMode === 'overall' ? 'grid-cols-2 sm:grid-cols-4' : 'grid-cols-2 sm:grid-cols-3'} gap-4">
                     ${(displayMode === 'midterm') ? `
                         <div class="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg text-center">
                             <div class="text-2xl font-bold text-gray-800 dark:text-gray-100 font-kanit">${summaryData.averageMidtermScore}</div>
@@ -1041,6 +1227,31 @@ function renderSummary(summaryData, studentScores, lastUpdatedTimestamp) {
                             <div class="text-2xl font-bold text-rose-600 dark:text-rose-400 font-kanit">${summaryData.midtermFailCount} คน</div>
                             <div class="text-xs font-medium text-gray-500 dark:text-gray-400 mt-1">จำนวนคนตก (< 12)</div>
                         </div>
+                    ` : (displayMode === 'final') ? `
+                        <div class="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg text-center">
+                            <div class="text-2xl font-bold text-gray-800 dark:text-gray-100 font-kanit">${summaryData.averageFinalScore ?? 'N/A'}</div>
+                            <div class="text-xs font-medium text-gray-500 dark:text-gray-400 mt-1">คะแนนเฉลี่ย</div>
+                        </div>
+                        <div class="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg text-center">
+                            <div class="text-2xl font-bold text-gray-800 dark:text-gray-100 font-kanit">${summaryData.finalSD ?? 'N/A'}</div>
+                            <div class="text-xs font-medium text-gray-500 dark:text-gray-400 mt-1">ส่วนเบี่ยงเบนมาตรฐาน (SD)</div>
+                        </div>
+                        <div class="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg text-center">
+                            <div class="text-2xl font-bold text-green-600 dark:text-green-400 font-kanit">${summaryData.highestFinalScore ?? 'N/A'}</div>
+                            <div class="text-xs font-medium text-gray-500 dark:text-gray-400 mt-1">คะแนนสูงสุด</div>
+                        </div>
+                        <div class="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg text-center">
+                            <div class="text-2xl font-bold text-red-600 dark:text-red-400 font-kanit">${summaryData.lowestFinalScore ?? 'N/A'}</div>
+                            <div class="text-xs font-medium text-gray-500 dark:text-gray-400 mt-1">คะแนนต่ำสุด</div>
+                        </div>
+                        <div class="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg text-center">
+                            <div class="text-2xl font-bold text-teal-600 dark:text-teal-400 font-kanit">${summaryData.finalPassCount !== undefined ? `${summaryData.finalPassCount} คน` : '-'}</div>
+                            <div class="text-xs font-medium text-gray-500 dark:text-gray-400 mt-1">จำนวนคนผ่าน (>= 15)</div>
+                        </div>
+                        <div class="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg text-center">
+                            <div class="text-2xl font-bold text-rose-600 dark:text-rose-400 font-kanit">${summaryData.finalFailCount !== undefined ? `${summaryData.finalFailCount} คน` : '-'}</div>
+                            <div class="text-xs font-medium text-gray-500 dark:text-gray-400 mt-1">จำนวนคนตก (< 15)</div>
+                        </div>
                     ` : `
                         <div class="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg text-center">
                             <div class="text-2xl font-bold text-gray-800 dark:text-gray-100 font-kanit">${summaryData.averageScore}</div>
@@ -1064,7 +1275,7 @@ function renderSummary(summaryData, studentScores, lastUpdatedTimestamp) {
         </div>
 
         <!-- Grade Distribution Chart -->
-        <div class="mt-8 bg-white dark:bg-gray-800/80 backdrop-blur-sm p-4 sm:p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700/60 ${displayMode === 'midterm' ? 'hidden' : ''}">
+        <div class="mt-8 bg-white dark:bg-gray-800/80 backdrop-blur-sm p-4 sm:p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700/60 ${(displayMode === 'midterm' || displayMode === 'final') ? 'hidden' : ''}">
             <div class="flex flex-wrap justify-between items-center gap-4 mb-4">
                 <h3 id="grade-chart-title" class="text-lg font-bold text-gray-800 dark:text-white font-kanit">การกระจายของเกรด</h3>
                 <div class="relative">
@@ -1119,7 +1330,8 @@ function renderSummary(summaryData, studentScores, lastUpdatedTimestamp) {
         // --- Toggle Mode Event Listeners ---
         const btnOverall = document.getElementById('btn-mode-overall');
         const btnMidterm = document.getElementById('btn-mode-midterm');
-        if (btnOverall && btnMidterm) {
+        const btnFinal = document.getElementById('btn-mode-final');
+        if (btnOverall && btnMidterm && btnFinal) {
             btnOverall.addEventListener('click', () => {
                 if (displayMode !== 'overall') {
                     displayMode = 'overall';
@@ -1130,6 +1342,14 @@ function renderSummary(summaryData, studentScores, lastUpdatedTimestamp) {
             btnMidterm.addEventListener('click', () => {
                 if (displayMode !== 'midterm') {
                     displayMode = 'midterm';
+                    selectedRoomForDetails = null;
+                    renderSummary(summary, scores, lastUpdated);
+                }
+            });
+            btnFinal.addEventListener('click', () => {
+                if (displayMode !== 'final') {
+                    displayMode = 'final';
+                    selectedRoomForDetails = null;
                     renderSummary(summary, scores, lastUpdated);
                 }
             });
@@ -1143,7 +1363,7 @@ function renderSummary(summaryData, studentScores, lastUpdatedTimestamp) {
             });
         }
         // Initial render of the chart for all students
-        if (displayMode !== 'midterm') {
+        if (displayMode === 'overall') {
             updateAndRenderGradeChart('all');
         }
     };
@@ -1518,7 +1738,7 @@ function renderStudentTableForRoom(room, studentScores) {
     const container = document.getElementById('room-detail-container');
     if (!container) return;
 
-    if (!room || displayMode !== 'midterm') {
+    if (!room || (displayMode !== 'midterm' && displayMode !== 'final')) {
         container.innerHTML = '';
         return;
     }
@@ -1532,30 +1752,33 @@ function renderStudentTableForRoom(room, studentScores) {
 
     // --- Calculate Room-Specific Statistics ---
     const roomStudentsCount = studentsInRoom.length;
+    const isFinal = displayMode === 'final';
+    const scoreKey = isFinal ? 'คะแนนปลายภาค' : 'คะแนนกลางภาค';
+    const passThreshold = isFinal ? 15 : 12;
+    const examName = isFinal ? 'ปลายภาค' : 'กลางภาค';
 
-    // Midterm score stats
-    const midtermScores = studentsInRoom.map(s => parseFloat(s['คะแนนกลางภาค'])).filter(v => !isNaN(v));
-    const roomAvgMidterm = midtermScores.length > 0 ? (midtermScores.reduce((a, b) => a + b, 0) / midtermScores.length).toFixed(2) : 'N/A';
+    const examScores = studentsInRoom.map(s => parseFloat(s[scoreKey])).filter(v => !isNaN(v));
+    const roomAvgScore = examScores.length > 0 ? (examScores.reduce((a, b) => a + b, 0) / examScores.length).toFixed(2) : 'N/A';
 
-    let roomSDMidterm = 'N/A';
-    if (midtermScores.length > 0) {
-        const avg = midtermScores.reduce((a, b) => a + b, 0) / midtermScores.length;
-        const sumSquares = midtermScores.reduce((sum, val) => sum + Math.pow(val - avg, 2), 0);
-        roomSDMidterm = Math.sqrt(sumSquares / midtermScores.length).toFixed(2);
+    let roomSD = 'N/A';
+    if (examScores.length > 0) {
+        const avg = examScores.reduce((a, b) => a + b, 0) / examScores.length;
+        const sumSquares = examScores.reduce((sum, val) => sum + Math.pow(val - avg, 2), 0);
+        roomSD = Math.sqrt(sumSquares / examScores.length).toFixed(2);
     }
 
-    const roomMaxMidterm = midtermScores.length > 0 ? Math.max(...midtermScores) : 'N/A';
-    const roomMinMidterm = midtermScores.length > 0 ? Math.min(...midtermScores) : 'N/A';
-    const roomPassMidterm = midtermScores.filter(v => v >= 12).length;
-    const roomFailMidterm = midtermScores.filter(v => v < 12).length;
-    const roomPassPercentage = midtermScores.length > 0 ? ((roomPassMidterm / midtermScores.length) * 100).toFixed(0) : '0';
+    const roomMaxScore = examScores.length > 0 ? Math.max(...examScores) : 'N/A';
+    const roomMinScore = examScores.length > 0 ? Math.min(...examScores) : 'N/A';
+    const roomPassCount = examScores.filter(v => v >= passThreshold).length;
+    const roomFailCount = examScores.filter(v => v < passThreshold).length;
+    const roomPassPercentage = examScores.length > 0 ? ((roomPassCount / examScores.length) * 100).toFixed(0) : '0';
 
     const statsHtml = `
         <div class="bg-white dark:bg-gray-800/80 backdrop-blur-sm p-5 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700/60 mb-6">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
                 <div>
-                    <h3 class="text-xl font-bold text-gray-800 dark:text-white font-kanit">สถิติการสอบกลางภาค ห้อง ${room}</h3>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">จำนวนนักเรียนที่เข้าสอบ: ${midtermScores.length} จาก ${roomStudentsCount} คน</p>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white font-kanit">สถิติการสอบ${examName} ห้อง ${room}</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">จำนวนนักเรียนที่เข้าสอบ: ${examScores.length} จาก ${roomStudentsCount} คน</p>
                 </div>
                 <button id="close-room-detail-btn" class="self-start sm:self-center px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 font-bold rounded-lg text-sm transition-colors flex items-center gap-1">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
@@ -1565,28 +1788,28 @@ function renderStudentTableForRoom(room, studentScores) {
             
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
                 <div class="p-3 bg-blue-50/50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-900/30 rounded-xl text-center">
-                    <div class="text-xl font-bold text-blue-600 dark:text-blue-400 font-kanit">${roomAvgMidterm}</div>
+                    <div class="text-xl font-bold text-blue-600 dark:text-blue-400 font-kanit">${roomAvgScore}</div>
                     <div class="text-xs font-semibold text-gray-500 dark:text-gray-400 mt-1">คะแนนเฉลี่ย</div>
                 </div>
                 <div class="p-3 bg-gray-50 dark:bg-gray-700/30 border border-gray-100 dark:border-gray-700/40 rounded-xl text-center">
-                    <div class="text-xl font-bold text-gray-800 dark:text-gray-100 font-kanit">${roomSDMidterm}</div>
+                    <div class="text-xl font-bold text-gray-800 dark:text-gray-100 font-kanit">${roomSD}</div>
                     <div class="text-xs font-semibold text-gray-500 dark:text-gray-400 mt-1">ส่วนเบี่ยงเบนมาตรฐาน (SD)</div>
                 </div>
                 <div class="p-3 bg-green-50/50 dark:bg-green-900/10 border border-green-100 dark:border-green-900/30 rounded-xl text-center">
-                    <div class="text-xl font-bold text-green-600 dark:text-green-400 font-kanit">${roomMaxMidterm}</div>
+                    <div class="text-xl font-bold text-green-600 dark:text-green-400 font-kanit">${roomMaxScore}</div>
                     <div class="text-xs font-semibold text-gray-500 dark:text-gray-400 mt-1">คะแนนสูงสุด</div>
                 </div>
                 <div class="p-3 bg-red-50/50 dark:bg-red-900/10 border border-red-100 dark:border-red-900/30 rounded-xl text-center">
-                    <div class="text-xl font-bold text-red-600 dark:text-red-400 font-kanit">${roomMinMidterm}</div>
+                    <div class="text-xl font-bold text-red-600 dark:text-red-400 font-kanit">${roomMinScore}</div>
                     <div class="text-xs font-semibold text-gray-500 dark:text-gray-400 mt-1">คะแนนต่ำสุด</div>
                 </div>
                 <div class="p-3 bg-teal-50/50 dark:bg-teal-900/10 border border-teal-100 dark:border-teal-900/30 rounded-xl text-center">
-                    <div class="text-xl font-bold text-teal-600 dark:text-teal-400 font-kanit">${roomPassMidterm} คน (${roomPassPercentage}%)</div>
-                    <div class="text-xs font-semibold text-gray-500 dark:text-gray-400 mt-1">จำนวนคนผ่าน (>= 12)</div>
+                    <div class="text-xl font-bold text-teal-600 dark:text-teal-400 font-kanit">${roomPassCount} คน (${roomPassPercentage}%)</div>
+                    <div class="text-xs font-semibold text-gray-500 dark:text-gray-400 mt-1">จำนวนคนผ่าน (>= ${passThreshold})</div>
                 </div>
                 <div class="p-3 bg-rose-50/50 dark:bg-rose-900/10 border border-rose-100 dark:border-rose-900/30 rounded-xl text-center">
-                    <div class="text-xl font-bold text-rose-600 dark:text-rose-400 font-kanit">${roomFailMidterm} คน</div>
-                    <div class="text-xs font-semibold text-gray-500 dark:text-gray-400 mt-1">จำนวนคนตก (< 12)</div>
+                    <div class="text-xl font-bold text-rose-600 dark:text-rose-400 font-kanit">${roomFailCount} คน</div>
+                    <div class="text-xs font-semibold text-gray-500 dark:text-gray-400 mt-1">จำนวนคนตก (< ${passThreshold})</div>
                 </div>
             </div>
         </div>
@@ -1604,9 +1827,6 @@ function renderStudentTableForRoom(room, studentScores) {
     }
 
     // Scroll to the newly created stats card deck
-    container.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-    // Scroll to the newly created table
     container.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 

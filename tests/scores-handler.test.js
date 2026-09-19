@@ -43,4 +43,15 @@ describe('groupAssignments', () => {
         const grouped = groupAssignments(otherAssignments);
         expect(grouped['อื่นๆ']).toHaveLength(1);
     });
+
+    it('should correctly preserve chapter ordering for multiple chapters', () => {
+        const multiChapter = [
+            { name: 'กิจกรรม 4.1', score: 10 },
+            { name: 'กิจกรรม 1.1', score: 10 },
+            { name: 'กิจกรรม 2.1', score: 10 },
+            { name: 'กิจกรรม 3.1', score: 10 }
+        ];
+        const grouped = groupAssignments(multiChapter);
+        expect(Object.keys(grouped)).toEqual(['บทที่ 1', 'บทที่ 2', 'บทที่ 3', 'บทที่ 4']);
+    });
 });

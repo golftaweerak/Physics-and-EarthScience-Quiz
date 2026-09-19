@@ -157,4 +157,79 @@ describe('calculateOverallSummary (Term 2 - 2/2568)', () => {
         expect(summary.midtermFailCount).toBe(1);
         expect(summary.averageMidtermScore).toBe('12.50');
     });
+
+    it('should calculate final exam averages and pass/fail counts correctly in Term 2', () => {
+        const scoresWithFinal = [
+            {
+                id: '001',
+                name: 'A',
+                room: '1',
+                assignments: [
+                    { name: 'รวม [100]', score: '80' },
+                    { name: 'ปลายภาค', score: '24' } // Pass (>= 15)
+                ]
+            },
+            {
+                id: '002',
+                name: 'B',
+                room: '1',
+                assignments: [
+                    { name: 'รวม [100]', score: '50' },
+                    { name: 'ปลายภาค', score: '10' } // Fail (< 15)
+                ]
+            }
+        ];
+
+        const summary = calculateOverallSummary(scoresWithFinal);
+        const room1 = summary.summaryByRoom['1'];
+
+        // Room 1 stats: average (24 + 10) / 2 = 17.00
+        expect(room1.averageFinalScore).toBe('17.00');
+        expect(room1.passCountFinal).toBe(1);
+        expect(room1.failCountFinal).toBe(1);
+        // SD: sqrt(((24-17)^2 + (10-17)^2)/2) = sqrt((49 + 49)/2) = 7.00
+        expect(room1.finalSD).toBe('7.00');
+
+        // Overall final stats
+        expect(summary.averageFinalScore).toBe('17.00');
+        expect(summary.highestFinalScore).toBe(24);
+        expect(summary.lowestFinalScore).toBe(10);
+        expect(summary.finalSD).toBe('7.00');
+        expect(summary.finalPassCount).toBe(1);
+        expect(summary.finalFailCount).toBe(1);
+        expect(summary.finalPassPercentage).toBe('50');
+    });
 });
+
+describe('calculateOverallSummary (Final Exam in Term 1 / standard format)', () => {
+    it('should calculate final exam stats when ปลายภาค [30] is provided directly', () => {
+        const standardScores = [
+            { id: '101', name: 'Std 1', room: '1', 'รวม [100]': 70, 'ปลายภาค [30]': 20, assignments: [] },
+            { id: '102', name: 'Std 2', room: '1', 'รวม [100]': 80, 'ปลายภาค [30]': 26, assignments: [] },
+            { id: '103', name: 'Std 3', room: '2', 'รวม [100]': 45, 'ปลายภาค [30]': 12, assignments: [] },
+        ];
+
+        const summary = calculateOverallSummary(standardScores);
+
+        // Room 1: 20 and 26 -> avg 23.00, pass 2, fail 0
+        const room1 = summary.summaryByRoom['1'];
+        expect(room1.averageFinalScore).toBe('23.00');
+        expect(room1.passCountFinal).toBe(2);
+        expect(room1.failCountFinal).toBe(0);
+
+        // Room 2: 12 -> avg 12.00, pass 0, fail 1 (< 15)
+        const room2 = summary.summaryByRoom['2'];
+        expect(room2.averageFinalScore).toBe('12.00');
+        expect(room2.passCountFinal).toBe(0);
+        expect(room2.failCountFinal).toBe(1);
+
+        // Overall: (20 + 26 + 12) / 3 = 19.33
+        expect(summary.averageFinalScore).toBe('19.33');
+        expect(summary.highestFinalScore).toBe(26);
+        expect(summary.lowestFinalScore).toBe(12);
+        expect(summary.finalPassCount).toBe(2);
+        expect(summary.finalFailCount).toBe(1);
+        expect(summary.finalPassPercentage).toBe('67');
+    });
+});
+
