@@ -118,9 +118,199 @@
             border: 1px solid #ef4444 !important;
         }
 
-        /* Summary Score Accordion */
+        /* Summary Score Accordion & Layout Spacing */
         .summary-score-accordion summary::-webkit-details-marker {
             display: none;
+        }
+        .summary-score-accordion summary {
+            padding: 0.875rem 1.25rem !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            gap: 0.75rem !important;
+        }
+        @media (min-width: 640px) {
+            .summary-score-accordion summary {
+                padding: 1rem 1.5rem !important;
+                gap: 1rem !important;
+            }
+        }
+
+        .summary-pill {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            min-width: 62px !important;
+            padding: 0.25rem 0.65rem !important;
+            border-radius: 0.625rem !important;
+            font-size: 0.8rem !important;
+            font-weight: 700 !important;
+            font-family: 'Kanit', sans-serif !important;
+            text-align: center !important;
+            line-height: 1.2 !important;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+        }
+        @media (min-width: 640px) {
+            .summary-pill {
+                min-width: 76px !important;
+                padding: 0.35rem 0.85rem !important;
+                font-size: 0.875rem !important;
+            }
+        }
+
+        .quiz-section-header {
+            padding: 0.875rem 1.25rem !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 0.625rem !important;
+        }
+        @media (min-width: 640px) {
+            .quiz-section-header {
+                padding: 1rem 1.5rem !important;
+                gap: 0.75rem !important;
+            }
+        }
+
+        .quiz-item-card {
+            padding: 0.45rem 0.65rem !important;
+            min-height: 44px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+        }
+        @media (min-width: 640px) {
+            .quiz-item-card {
+                padding: 0.55rem 0.85rem !important;
+                min-height: 48px !important;
+            }
+        }
+
+        .quiz-score-badge {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            min-width: 36px !important;
+            padding: 0.15rem 0.5rem !important;
+            font-size: 0.75rem !important;
+            font-weight: 700 !important;
+            font-family: 'Kanit', sans-serif !important;
+            border-radius: 9999px !important;
+            white-space: nowrap !important;
+            text-align: center !important;
+        }
+
+        .quiz-grid {
+            display: grid !important;
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 0.625rem !important;
+        }
+        @media (min-width: 768px) {
+            .quiz-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+                gap: 0.75rem !important;
+            }
+        }
+        .summary-header-icon {
+            width: 38px !important;
+            height: 38px !important;
+            border-radius: 0.75rem !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            flex-shrink: 0 !important;
+            margin-right: 0.75rem !important;
+            background: #eff6ff !important;
+            border: 1px solid #bfdbfe !important;
+            color: #2563eb !important;
+        }
+        .dark .summary-header-icon {
+            background: rgba(30, 58, 138, 0.4) !important;
+            border: 1px solid rgba(59, 130, 246, 0.4) !important;
+            color: #60a5fa !important;
+        }
+
+        .student-card-header {
+            padding: 1.25rem !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 1rem !important;
+        }
+        @media (min-width: 640px) {
+            .student-card-header {
+                padding: 1.5rem 1.75rem !important;
+                gap: 1.25rem !important;
+            }
+        }
+
+        .student-meta-row {
+            display: flex !important;
+            flex-wrap: wrap !important;
+            align-items: center !important;
+            gap: 0.5rem !important;
+            margin-top: 0.5rem !important;
+        }
+
+        .student-card-body {
+            padding: 1.25rem !important;
+        }
+        @media (min-width: 640px) {
+            .student-card-body {
+                padding: 1.5rem 1.75rem !important;
+            }
+        }
+
+        .kpi-grid {
+            display: grid !important;
+            grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+            gap: 0.75rem !important;
+            margin-bottom: 1.25rem !important;
+        }
+        @media (min-width: 640px) {
+            .kpi-grid {
+                gap: 1rem !important;
+                margin-bottom: 1.5rem !important;
+            }
+        }
+
+        .kpi-card {
+            padding: 0.875rem 0.5rem !important;
+            border-radius: 0.875rem !important;
+            text-align: center !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: center !important;
+            min-height: 84px !important;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+        }
+        @media (min-width: 640px) {
+            .kpi-card {
+                padding: 1rem 0.75rem !important;
+                min-height: 96px !important;
+            }
+        }
+
+        .chapter-details summary {
+            padding: 0.875rem 1.25rem !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            cursor: pointer !important;
+            list-style: none !important;
+        }
+        .chapter-details summary::-webkit-details-marker {
+            display: none !important;
+        }
+        @media (min-width: 640px) {
+            .chapter-details summary {
+                padding: 1rem 1.5rem !important;
+            }
+        }
+
+        .chapter-header-left {
+            display: flex !important;
+            align-items: center !important;
+            gap: 0.75rem !important;
         }
     </style>
 </head>

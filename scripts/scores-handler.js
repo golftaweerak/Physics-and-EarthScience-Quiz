@@ -642,44 +642,47 @@ export async function initializeScoreSearch() {
         const gradeVisual = getGradeVisual(gradeVal);
 
         const quickSummaryPills = isOwnerOrTeacher ? `
-            <div class="flex items-center gap-1.5 sm:gap-2">
-                <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs sm:text-sm font-bold chip-total font-kanit shadow-xs">
+            <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+                <span class="summary-pill chip-total">
                     รวม: ${totalScoreVal}
                 </span>
-                <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs sm:text-sm font-bold ${gradeVisual.chipClass} font-kanit shadow-xs">
+                <span class="summary-pill ${gradeVisual.chipClass}">
                     เกรด: ${gradeVal}
                 </span>
             </div>
         ` : `
-            <div class="flex items-center gap-1.5 sm:gap-2">
-                <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs sm:text-sm font-bold chip-total font-kanit shadow-xs">
+            <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+                <span class="summary-pill chip-total">
                     รวม: ${totalScoreVal}
                 </span>
-                <span class="inline-flex items-center px-2 py-1 rounded-lg text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-600">
-                    🔒 โหมดเพื่อนดู
+                <span class="inline-flex items-center justify-center px-2 py-1 rounded-lg text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-600">
+                    🔒 เพื่อนดู
                 </span>
             </div>
         `;
 
         const summaryScoreSection = `
-            <details class="summary-score-accordion group bg-white dark:bg-gray-800/80 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden mb-6 transition-all duration-200">
-                <summary class="p-3.5 sm:p-4 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-750 transition-colors cursor-pointer list-none flex items-center justify-between select-none">
-                    <div class="flex items-center gap-2 sm:gap-3">
-                        <div class="p-1.5 sm:p-2 bg-blue-50 dark:bg-blue-950/50 rounded-xl text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-900/40">
+            <details class="summary-score-accordion group bg-white dark:bg-gray-800/80 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden my-6 transition-all duration-200">
+                <summary class="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-750 transition-colors cursor-pointer list-none select-none">
+                    <div class="flex items-center min-w-0 pr-1 sm:pr-2">
+                        <div class="summary-header-icon shrink-0">
                             <svg class="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                             </svg>
                         </div>
-                        <div>
-                            <span class="text-sm sm:text-base font-bold text-gray-900 dark:text-white font-kanit">สรุปคะแนนรายวิชา</span>
-                            <span class="text-[11px] text-gray-400 dark:text-gray-500 block sm:hidden">แตะเพื่อย่อ/ขยายตาราง</span>
+                        <div class="min-w-0">
+                            <span class="text-sm sm:text-base font-bold text-gray-900 dark:text-white font-kanit block leading-tight">
+                                <span class="sm:hidden">สรุปคะแนน</span>
+                                <span class="hidden sm:inline">สรุปคะแนนรายวิชา</span>
+                            </span>
+                            <span class="text-[10px] sm:text-[11px] text-gray-400 dark:text-gray-500 block leading-tight mt-0.5 truncate">แตะเพื่อดูรายละเอียด</span>
                         </div>
                     </div>
-                    <div class="flex items-center gap-2 sm:gap-3">
+                    <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
                         ${quickSummaryPills}
-                        <div class="w-7 h-7 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-400 transition-transform duration-300 group-open:rotate-180">
-                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        <div class="p-1 text-gray-400 dark:text-gray-500 transition-transform duration-300 group-open:rotate-180 shrink-0">
+                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                             </svg>
                         </div>
                     </div>
@@ -714,16 +717,16 @@ export async function initializeScoreSearch() {
 
         // 3. Build the KPI Summary Cards
         const summaryCardsHtml = `
-            <div class="grid grid-cols-3 gap-2.5 sm:gap-4 mb-4">
-                <button type="button" id="show-submitted-btn" class="p-3 sm:p-4 bg-green-50/80 dark:bg-green-950/30 rounded-xl text-center border border-green-200 dark:border-green-800 transition-transform transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-green-500 cursor-pointer shadow-sm hover:shadow">
+            <div class="kpi-grid">
+                <button type="button" id="show-submitted-btn" class="kpi-card bg-green-50/80 dark:bg-green-950/30 border border-green-200 dark:border-green-800 transition-transform transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-green-500 cursor-pointer shadow-sm hover:shadow">
                     <div class="text-2xl sm:text-4xl font-extrabold text-green-600 dark:text-green-400 font-kanit">${submittedCount}</div>
                     <div class="text-xs sm:text-sm font-medium text-green-800 dark:text-green-300 mt-1">งานที่ส่งแล้ว</div>
                 </button>
-                <button type="button" id="show-missing-btn" class="p-3 sm:p-4 bg-red-50/80 dark:bg-red-950/30 rounded-xl text-center border ${missingCount > 0 ? 'border-red-300 dark:border-red-700' : 'border-red-200 dark:border-red-800'} transition-transform transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-red-500 cursor-pointer shadow-sm hover:shadow">
+                <button type="button" id="show-missing-btn" class="kpi-card bg-red-50/80 dark:bg-red-950/30 border ${missingCount > 0 ? 'border-red-300 dark:border-red-700' : 'border-red-200 dark:border-red-800'} transition-transform transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-red-500 cursor-pointer shadow-sm hover:shadow">
                     <div class="text-2xl sm:text-4xl font-extrabold text-red-600 dark:text-red-400 font-kanit">${missingCount}</div>
                     <div class="text-xs sm:text-sm font-medium text-red-800 dark:text-red-300 mt-1">งานที่ค้างส่ง</div>
                 </button>
-                <div class="p-3 sm:p-4 bg-blue-50/80 dark:bg-blue-950/30 rounded-xl text-center border border-blue-200 dark:border-blue-800 shadow-sm">
+                <div class="kpi-card bg-blue-50/80 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 shadow-sm">
                     <div class="text-2xl sm:text-4xl font-extrabold text-blue-600 dark:text-blue-400 font-kanit">${completionPercentage.toFixed(0)}%</div>
                     <div class="text-xs sm:text-sm font-medium text-blue-800 dark:text-blue-300 mt-1">ความสมบูรณ์</div>
                 </div>
@@ -756,32 +759,32 @@ export async function initializeScoreSearch() {
                 let iconSvg;
                 if (isSubmitted) {
                     if (isHighAchievement) {
-                        const scoreText = isOwnerOrTeacher ? `⭐ ${score} คะแนน` : '⭐ ดีเยี่ยม';
-                        statusBadge = `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 text-xs font-bold quiz-badge-gold rounded-full shadow-xs whitespace-nowrap">${scoreText}</span>`;
+                        const scoreText = isOwnerOrTeacher ? `⭐ ${score}` : '⭐ ดีเยี่ยม';
+                        statusBadge = `<span class="quiz-score-badge quiz-badge-gold shadow-xs">${scoreText}</span>`;
                         cardStyle = 'quiz-card-gold hover:shadow-amber-500/10 hover:border-amber-400';
                         iconColor = 'quiz-text-gold';
                         iconSvg = `
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" viewBox="0 0 20 20" fill="currentColor">
                                 <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                             </svg>
                         `;
                     } else {
-                        const scoreText = isOwnerOrTeacher ? `${score} คะแนน` : 'ส่งแล้ว ✓';
-                        statusBadge = `<span class="px-2.5 py-0.5 text-xs font-bold text-green-700 bg-green-100 dark:text-green-300 dark:bg-green-900/50 rounded-full border border-green-200 dark:border-green-800 whitespace-nowrap">${scoreText}</span>`;
+                        const scoreText = isOwnerOrTeacher ? `${score}` : 'ส่งแล้ว ✓';
+                        statusBadge = `<span class="quiz-score-badge text-green-700 bg-green-100 dark:text-green-300 dark:bg-green-900/50 border border-green-200 dark:border-green-800">${scoreText}</span>`;
                         cardStyle = 'border-green-200 dark:border-green-800/80 bg-green-50/40 dark:bg-green-950/20 hover:bg-green-50 dark:hover:bg-green-900/30';
                         iconColor = 'text-green-600 dark:text-green-400';
                         iconSvg = `
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
                             </svg>
                         `;
                     }
                 } else {
-                    statusBadge = `<span class="px-2.5 py-0.5 text-xs font-bold text-red-700 bg-red-100 dark:text-red-300 dark:bg-red-900/50 rounded-full border border-red-200 dark:border-red-800 whitespace-nowrap">ยังไม่ทำ</span>`;
+                    statusBadge = `<span class="quiz-score-badge text-red-700 bg-red-100 dark:text-red-300 dark:bg-red-900/50 border border-red-200 dark:border-red-800">ยังไม่ทำ</span>`;
                     cardStyle = 'border-red-200 dark:border-red-800/80 bg-red-50/40 dark:bg-red-950/20 hover:bg-red-50 dark:hover:bg-red-900/30';
                     iconColor = 'text-red-600 dark:text-red-400';
                     iconSvg = `
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
                         </svg>
                     `;
@@ -789,22 +792,17 @@ export async function initializeScoreSearch() {
 
                 const subtextHtml = isSubmitted
                     ? (isHighAchievement ? '<span class="quiz-text-gold font-semibold">ยอดเยี่ยม!</span>' : 'คลิกดูแบบทดสอบ')
-                    : '<span class="text-blue-600 dark:text-blue-400 font-bold">คลิกทำแบบทดสอบ ↗</span>';
+                    : '<span class="text-blue-600 dark:text-blue-400 font-bold">ทำแบบทดสอบ ↗</span>';
 
                 return `
-                    <a href="${url}" target="_blank" rel="noopener noreferrer" class="group flex items-center justify-between p-3 sm:p-3.5 rounded-xl border ${cardStyle} transition-all duration-200 hover:shadow-md hover:-translate-y-0.5">
-                        <div class="flex items-center gap-2.5 sm:gap-3 min-w-0 pr-2">
-                            <div class="p-2 bg-white dark:bg-gray-800 rounded-xl shadow-xs border border-gray-100 dark:border-gray-700 ${iconColor} shrink-0">
+                    <a href="${url}" target="_blank" rel="noopener noreferrer" class="quiz-item-card group rounded-xl border ${cardStyle} transition-all duration-200 hover:shadow-md hover:-translate-y-0.5">
+                        <div class="flex items-center gap-2 min-w-0 pr-1">
+                            <div class="p-1 bg-white dark:bg-gray-800 rounded-lg shadow-2xs border border-gray-100 dark:border-gray-700 ${iconColor} shrink-0">
                                 ${iconSvg}
                             </div>
-                            <div class="min-w-0">
-                                <h4 class="font-bold text-gray-900 dark:text-white font-kanit group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors text-sm sm:text-base truncate">${quiz.name}</h4>
-                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 font-medium">
-                                    ${subtextHtml}
-                                </p>
-                            </div>
+                            <span class="font-bold text-gray-900 dark:text-white font-kanit group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors text-xs sm:text-sm truncate leading-tight">${quiz.name}</span>
                         </div>
-                        <div class="shrink-0 flex items-center">
+                        <div class="shrink-0 ml-1">
                             ${statusBadge}
                         </div>
                     </a>
@@ -813,14 +811,14 @@ export async function initializeScoreSearch() {
 
             quizCardsSection = `
                 <figure class="mb-8">
-                    <figcaption class="p-3.5 text-base sm:text-lg font-bold text-left text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-800 rounded-t-xl border-x border-t border-gray-200 dark:border-gray-700 font-kanit flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-500" viewBox="0 0 20 20" fill="currentColor">
+                    <figcaption class="quiz-section-header text-base sm:text-lg font-bold text-left text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-800 rounded-t-xl border-x border-t border-gray-200 dark:border-gray-700 font-kanit">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-500 shrink-0" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd" />
                         </svg>
-                        แบบทดสอบท้ายบท (Quiz)
+                        <span>แบบทดสอบท้ายบท (Quiz)</span>
                     </figcaption>
-                    <div class="p-3 sm:p-4 bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-b-xl shadow-sm">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-3">
+                    <div class="p-4 sm:p-6 bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-b-xl shadow-sm">
+                        <div class="quiz-grid">
                             ${quizCardsHtml}
                         </div>
                     </div>
@@ -844,12 +842,12 @@ export async function initializeScoreSearch() {
 
                 return `
                     <details class="chapter-details group bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden transition-all duration-300 open:ring-2 open:ring-blue-500/50 open:shadow-md" data-has-missing="${chapterMissingCount > 0}">
-                        <summary class="flex justify-between items-center p-3.5 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
-                            <div class="flex items-center gap-2.5">
+                        <summary class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                            <div class="chapter-header-left">
                                 <h4 class="font-bold text-gray-800 dark:text-gray-200 font-kanit text-sm sm:text-base">${chapter}</h4>
                                 ${chapterBadge}
                             </div>
-                            <svg class="h-5 w-5 text-gray-400 transition-transform duration-300 group-open:rotate-90" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <svg class="h-5 w-5 text-gray-400 transition-transform duration-300 group-open:rotate-90 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
                             </svg>
                         </summary>
@@ -891,22 +889,22 @@ export async function initializeScoreSearch() {
             `;
         }
 
-        // Hero GPA badge (Owner / Teacher only)
+        // GPA badge in metadata row (Owner / Teacher only)
         let gradeBadgeHtml = '';
         if (isOwnerOrTeacher && student.hasOwnProperty('เกรด')) {
             const gradeVal = student['เกรด'];
             const gradeInfo = getGradeVisual(gradeVal);
             gradeBadgeHtml = `
-                <div class="flex-shrink-0 flex items-center gap-1.5 sm:flex-col sm:justify-center px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl ${gradeInfo.heroClass} text-center self-start sm:self-auto shadow-md">
-                    <span class="text-[11px] font-medium opacity-90">เกรดเฉลี่ย</span>
-                    <span class="text-xl sm:text-2xl font-extrabold font-kanit leading-none">${gradeVal}</span>
-                </div>
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg ${gradeInfo.heroClass} text-white font-bold shadow-xs">
+                    <span class="text-[11px] font-medium opacity-90">เกรดเฉลี่ย:</span>
+                    <strong class="font-kanit text-sm sm:text-base leading-none">${gradeVal}</strong>
+                </span>
             `;
         } else if (!isOwnerOrTeacher) {
             gradeBadgeHtml = `
-                <div class="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-300 text-xs font-semibold border border-gray-200 dark:border-gray-600 shadow-sm self-start sm:self-auto">
+                <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-300 text-xs font-semibold border border-gray-200 dark:border-gray-600 shadow-2xs">
                     <span>🤝 โหมดเพื่อนดู</span>
-                </div>
+                </span>
             `;
         }
 
@@ -930,24 +928,22 @@ export async function initializeScoreSearch() {
         resultContainer.innerHTML = `
             <div class="student-card-container bg-white dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden anim-card-pop-in" data-student-id="${student.id}">
                 <!-- Student Card Header -->
-                <div class="p-4 sm:p-6 bg-gradient-to-br from-blue-50/80 via-white to-indigo-50/50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 border-b border-gray-200 dark:border-gray-700 flex items-start sm:items-center justify-between gap-3">
-                    <div class="flex items-center gap-3 sm:gap-4 min-w-0">
-                        <div class="flex-shrink-0 h-12 w-12 sm:h-16 sm:w-16 rounded-2xl flex items-center justify-center bg-gradient-to-tr from-blue-600 to-indigo-500 text-white shadow-md">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 sm:h-8 sm:w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
-                        </div>
-                        <div class="min-w-0">
-                            <h2 class="text-lg sm:text-2xl font-bold text-gray-900 dark:text-white font-kanit truncate">${student.name}</h2>
-                            <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1 flex flex-wrap items-center gap-1.5 sm:gap-2 font-medium">
-                                <span class="inline-flex items-center gap-1 bg-white dark:bg-gray-700 px-2 py-0.5 rounded border border-gray-200 dark:border-gray-600">รหัส: <strong class="text-blue-600 dark:text-blue-400 font-mono">${student.id}</strong></span>
-                                ${student.room ? `<span class="inline-flex items-center gap-1 bg-white dark:bg-gray-700 px-2 py-0.5 rounded border border-gray-200 dark:border-gray-600">ห้อง: <strong class="text-blue-600 dark:text-blue-400">${student.room}</strong></span>` : ''}
-                                ${student.ordinal ? `<span class="inline-flex items-center gap-1 bg-white dark:bg-gray-700 px-2 py-0.5 rounded border border-gray-200 dark:border-gray-600">เลขที่: <strong class="text-blue-600 dark:text-blue-400">${student.ordinal}</strong></span>` : ''}
-                            </div>
+                <div class="student-card-header bg-gradient-to-br from-blue-50/80 via-white to-indigo-50/50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 border-b border-gray-200 dark:border-gray-700">
+                    <div class="flex-shrink-0 h-12 w-12 sm:h-14 sm:w-14 rounded-2xl flex items-center justify-center bg-gradient-to-tr from-blue-600 to-indigo-500 text-white shadow-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 sm:h-7 sm:w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h2 class="text-lg sm:text-2xl font-bold text-gray-900 dark:text-white font-kanit break-words leading-tight">${student.name}</h2>
+                        <div class="student-meta-row text-xs sm:text-sm text-gray-600 dark:text-gray-400 font-medium">
+                            <span class="inline-flex items-center gap-1 bg-white dark:bg-gray-700 px-2.5 py-0.5 rounded-lg border border-gray-200 dark:border-gray-600 shadow-2xs">รหัส: <strong class="text-blue-600 dark:text-blue-400 font-mono">${student.id}</strong></span>
+                            ${student.room ? `<span class="inline-flex items-center gap-1 bg-white dark:bg-gray-700 px-2.5 py-0.5 rounded-lg border border-gray-200 dark:border-gray-600 shadow-2xs">ห้อง: <strong class="text-blue-600 dark:text-blue-400">${student.room}</strong></span>` : ''}
+                            ${student.ordinal ? `<span class="inline-flex items-center gap-1 bg-white dark:bg-gray-700 px-2.5 py-0.5 rounded-lg border border-gray-200 dark:border-gray-600 shadow-2xs">เลขที่: <strong class="text-blue-600 dark:text-blue-400">${student.ordinal}</strong></span>` : ''}
+                            ${gradeBadgeHtml}
                         </div>
                     </div>
-                    ${gradeBadgeHtml}
                 </div>
 
-                <div class="p-5 sm:p-6 space-y-6">
+                <div class="student-card-body space-y-6">
                     ${peerAssistNoticeHtml}
                     ${summaryCardsHtml}
                     ${summaryScoreSection}
