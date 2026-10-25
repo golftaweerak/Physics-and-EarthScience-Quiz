@@ -79,3 +79,8 @@ Desktop.ini
 *.njsproj
 *.sln
 *.sw?
+
+# AI Agent Workspaces & Skills
+.agents/
+skills-lock.json
+
