@@ -80,7 +80,13 @@ Desktop.ini
 *.sln
 *.sw?
 
-# AI Agent Workspaces & Skills
+# AI Agent Workspaces, Skills & Guidelines
 .agents/
+.agent/
+_agents/
+_agent/
 skills-lock.json
+AGENTS.md
+GEMINI.md
+
 
