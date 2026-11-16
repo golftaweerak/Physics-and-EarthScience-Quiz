@@ -3,6 +3,8 @@
  * ปรับขนาดอัตโนมัติตามหน้าจอ มีดาวระยิบระยับ ฝุ่นเนบิวลา และดาวตก
  */
 
+let activeInstance = null;
+
 export class CosmicStarfield {
   constructor(canvasId) {
     this.canvas = document.getElementById(canvasId);
@@ -10,22 +12,32 @@ export class CosmicStarfield {
     this.ctx = this.canvas.getContext('2d');
     this.stars = [];
     this.shootingStars = [];
-    this.numStars = 220;
+    this.isMobile = window.innerWidth < 768;
+    this.prefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches || false;
+    this.numStars = this.prefersReducedMotion ? 60 : (this.isMobile ? 90 : 180);
     this.mouseX = 0;
     this.mouseY = 0;
     this.targetMouseX = 0;
     this.targetMouseY = 0;
     this.dustParticles = [];
+    this.isPaused = document.hidden;
+    this.rafId = null;
 
     this.resize();
     this.initStars();
     this.bindEvents();
-    this.animate();
+    if (!this.isPaused) {
+      this.animate();
+    } else {
+      this.renderFrame();
+    }
   }
 
   resize() {
     this.width = window.innerWidth;
     this.height = window.innerHeight;
+    this.isMobile = this.width < 768;
+    this.numStars = this.prefersReducedMotion ? 60 : (this.isMobile ? 90 : 180);
     this.canvas.width = this.width;
     this.canvas.height = this.height;
   }
@@ -58,11 +70,11 @@ export class CosmicStarfield {
       this.targetMouseX = (e.clientX - this.width / 2) * 0.03;
       this.targetMouseY = (e.clientY - this.height / 2) * 0.03;
 
-      // Add gentle stardust on mouse movement
-      if (Math.random() < 0.3) {
+      // Add gentle stardust on mouse movement (desktop only, not reduced motion)
+      if (!this.isMobile && !this.prefersReducedMotion && Math.random() < 0.3) {
         this.addDust(e.clientX, e.clientY);
       }
-    });
+    }, { passive: true });
 
     // Touch support for mobile/tablets
     window.addEventListener('touchmove', (e) => {
@@ -70,6 +82,16 @@ export class CosmicStarfield {
         const t = e.touches[0];
         this.targetMouseX = (t.clientX - this.width / 2) * 0.03;
         this.targetMouseY = (t.clientY - this.height / 2) * 0.03;
+      }
+    }, { passive: true });
+
+    document.addEventListener('visibilitychange', () => {
+      this.isPaused = document.hidden;
+      if (!this.isPaused) {
+        if (!this.rafId) this.animate();
+      } else if (this.rafId) {
+        cancelAnimationFrame(this.rafId);
+        this.rafId = null;
       }
     });
   }
@@ -109,7 +131,7 @@ export class CosmicStarfield {
     });
   }
 
-  animate() {
+  renderFrame() {
     this.ctx.clearRect(0, 0, this.width, this.height);
 
     // Smooth mouse parallax interpolation
@@ -139,8 +161,10 @@ export class CosmicStarfield {
       this.ctx.save();
       this.ctx.globalAlpha = currentAlpha;
       this.ctx.fillStyle = s.color;
-      this.ctx.shadowBlur = s.radius > 1.5 ? 8 : 2;
-      this.ctx.shadowColor = s.color;
+      if (!this.isMobile) {
+        this.ctx.shadowBlur = s.radius > 1.5 ? 8 : 2;
+        this.ctx.shadowColor = s.color;
+      }
 
       this.ctx.beginPath();
       this.ctx.arc(s.x + offsetX, s.y + offsetY, s.radius, 0, Math.PI * 2);
@@ -163,8 +187,10 @@ export class CosmicStarfield {
       this.ctx.save();
       this.ctx.globalAlpha = p.life * 0.8;
       this.ctx.fillStyle = p.color;
-      this.ctx.shadowBlur = 6;
-      this.ctx.shadowColor = p.color;
+      if (!this.isMobile) {
+        this.ctx.shadowBlur = 6;
+        this.ctx.shadowColor = p.color;
+      }
       this.ctx.beginPath();
       this.ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
       this.ctx.fill();
@@ -172,7 +198,7 @@ export class CosmicStarfield {
     }
 
     // Spawn shooting stars randomly
-    if (Math.random() < 0.012) {
+    if (!this.prefersReducedMotion && Math.random() < 0.012) {
       this.spawnShootingStar();
     }
 
@@ -200,8 +226,10 @@ export class CosmicStarfield {
       this.ctx.strokeStyle = starGrad;
       this.ctx.lineWidth = s.thickness;
       this.ctx.lineCap = 'round';
-      this.ctx.shadowBlur = 10;
-      this.ctx.shadowColor = '#00F0FF';
+      if (!this.isMobile) {
+        this.ctx.shadowBlur = 10;
+        this.ctx.shadowColor = '#00F0FF';
+      }
 
       this.ctx.beginPath();
       this.ctx.moveTo(s.x, s.y);
@@ -209,14 +237,24 @@ export class CosmicStarfield {
       this.ctx.stroke();
       this.ctx.restore();
     }
+  }
 
-    requestAnimationFrame(() => this.animate());
+  animate() {
+    if (this.isPaused) {
+      this.rafId = null;
+      return;
+    }
+    this.renderFrame();
+    this.rafId = requestAnimationFrame(() => this.animate());
   }
 }
 
-// Auto init helper if canvas exists globally
+// Auto init helper if canvas exists globally (singleton per canvas element)
 export function initCosmicStarfield(canvasId = 'cosmic-canvas') {
   let canvas = document.getElementById(canvasId);
+  if (activeInstance && activeInstance.canvas === canvas && document.body.contains(canvas)) {
+    return activeInstance;
+  }
   if (!canvas) {
     canvas = document.createElement('canvas');
     canvas.id = canvasId;
@@ -230,5 +268,6 @@ export function initCosmicStarfield(canvasId = 'cosmic-canvas') {
     canvas.className = 'fixed inset-0 w-full h-full pointer-events-none';
     document.body.prepend(canvas);
   }
-  return new CosmicStarfield(canvasId);
+  activeInstance = new CosmicStarfield(canvasId);
+  return activeInstance;
 }

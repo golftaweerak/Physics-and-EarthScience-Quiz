@@ -2159,17 +2159,49 @@ function createStatItem(value, label, icon, theme) {
   return item;
 }
 
+let chartJsLoadPromise = null;
+
+function ensureChartJsLoaded() {
+  if (typeof Chart !== 'undefined') return Promise.resolve(window.Chart);
+  if (!chartJsLoadPromise) {
+    chartJsLoadPromise = new Promise((resolve, reject) => {
+      const existing = document.querySelector('script[data-chartjs-loader="true"]');
+      if (existing) {
+        existing.addEventListener('load', () => resolve(window.Chart), { once: true });
+        existing.addEventListener('error', reject, { once: true });
+        return;
+      }
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js';
+      script.crossOrigin = 'anonymous';
+      script.referrerPolicy = 'no-referrer';
+      script.dataset.chartjsLoader = 'true';
+      script.onload = () => resolve(window.Chart);
+      script.onerror = (err) => reject(err);
+      document.head.appendChild(script);
+    });
+  }
+  return chartJsLoadPromise;
+}
+
 /**
  * Renders a horizontal bar chart showing the score for each main category in the results.
  * @param {object} categoryStats - The stats object grouped by category.
  */
-function renderResultCategoryChart(categoryStats) {
+async function renderResultCategoryChart(categoryStats) {
   const chartCanvas = document.getElementById('result-category-chart');
   if (!chartCanvas) return;
 
-  // Check if Chart.js is loaded to prevent crash
   if (typeof Chart === 'undefined') {
-    console.warn("Chart.js is not loaded. Skipping chart rendering.");
+    try {
+      await ensureChartJsLoaded();
+    } catch (e) {
+      console.warn("Chart.js failed to load. Skipping chart rendering.", e);
+      return;
+    }
+  }
+
+  if (typeof Chart === 'undefined' || !document.body.contains(chartCanvas)) {
     return;
   }
 

@@ -2,7 +2,6 @@ import { loadComponent } from './component-loader.js';
 import { initializeCommonComponents } from './common-init.js';
 import { initializeDarkMode } from './dark-mode.js';
 import { SiteConfig } from './site-config.js';
-import { initCosmicStarfield } from './cosmic-starfield.js';
 
 let isAnchorScrollInitialized = false;
 
@@ -69,10 +68,7 @@ async function main() {
         document.querySelector('meta[name="author"]')?.setAttribute("content", SiteConfig.author);
 
         initializeDarkMode();
-        // Defer Gamification to after UI loads to prevent thread blocking
-
-        // Initialize Cosmic Starfield Background Effect
-        initCosmicStarfield();
+        // Defer Gamification and Starfield to initializeCommonComponents to avoid duplicate initialization
 
         // 2. Load Shared Components in Parallel
         console.log("🚀 App Loader: Loading components in parallel...");
@@ -123,15 +119,7 @@ async function main() {
 
         console.log("✅ App Loader: UI Initialized.");
 
-        // 4. Initialize Challenge Manager (Dynamic Import)
-        try {
-            const { challengeManager } = await import('./challenge-manager.js');
-            challengeManager.init();
-        } catch (err) {
-            console.error("🚀 App Loader: Challenge Manager init failed:", err);
-        }
-
-        // 5. Page-Specific Logic
+        // 4. Page-Specific Logic
         console.log("🚀 App Loader: Loading page scripts...");
 
         if (document.getElementById('landing-page-container')) {
@@ -160,7 +148,7 @@ async function main() {
                 console.log("✅ App Loader: main.js imported. Initializing...");
 
                 // Ensure DOM has caught up with component injections
-                await new Promise(r => setTimeout(r, 50));
+                await new Promise(r => requestAnimationFrame(r));
 
                 if (mainMod && typeof mainMod.initializePage === 'function') {
                     mainMod.initializePage();

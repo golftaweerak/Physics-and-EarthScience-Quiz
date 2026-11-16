@@ -381,6 +381,19 @@ export const quizList = [
     "isRemedialOnly": true
   },
   {
+    "id": "phy_m4/phy_m4_ch4-re1",
+    "title": "ซ่อม บทที่ 4 ครั้งที่ 1",
+    "amount": 60,
+    "description": "บทที่ 4: สมดุลกล (สอบซ่อมครั้งที่ 1 - สมดุลต่อการเลื่อนที่ สมดุลต่อการหมุน เสถียรภาพ และจุด CM/CG)",
+    "url": "./quiz/index.html?id=phy_m4/phy_m4_ch4-re1",
+    "storageKey": "quizState-phy_m4_ch4-re1",
+    "icon": "./assets/icons/exam-time.png",
+    "altText": "ไอคอนสำหรับ phy_m4_ch4-re1",
+    "category": "PhysicsM4",
+    "subCategory": "บทที่ 4: สมดุลกล",
+    "isRemedialOnly": true
+  },
+  {
     "id": "phy_m4/phy_m4_ch6-1",
     "title": "โมเมนตัมและการชน (ชุดที่ 1)",
     "amount": 30,

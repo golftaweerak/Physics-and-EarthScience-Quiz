@@ -125,6 +125,11 @@ export async function initializeCommonComponents() {
     initializeAuthUI(); // Initialize authentication UI globally
     console.log("🔄 common-init: AuthUI initialized.");
 
+    // Initialize Challenge Manager in background so header challenge button works on every page without blocking critical UI
+    import('./challenge-manager.js')
+        .then(({ challengeManager }) => challengeManager.init())
+        .catch(err => console.warn("common-init: Challenge Manager init skipped:", err));
+
     // Setup header height adjustment globally for all pages
     setupHeaderHeightAdjustment();
     console.log("🔄 common-init: Header height adjustment set.");

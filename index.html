@@ -15,10 +15,7 @@
         rel="stylesheet">
     <link rel="stylesheet" href="./styles/input.css">
     <link rel="icon" href="./assets/icons/exam.png" type="image/png">
-
-    <!-- MathLive for Natural Display Calculator -->
-    <script defer type="module" src="https://cdn.jsdelivr.net/npm/mathlive/dist/mathlive.min.js"></script>
-    <!-- MathJS for Calculator Evaluation is now bundled in JS -->
+    <!-- MathJS for Calculator Evaluation is loaded on demand on the quiz page -->
 </head>
 
 
@@ -86,8 +83,29 @@
 
             <main id="quiz-categories-container" class="max-w-4xl mx-auto space-y-6 mb-12">
                 <!-- Placeholder for loading, error, or empty states. JS will replace this. -->
-                <div id="categories-placeholder" class="text-center py-16 text-gray-600 dark:text-gray-400">
-                    <p>กำลังโหลดรายการแบบทดสอบ...</p>
+                <div id="categories-placeholder" class="space-y-4 py-4" aria-busy="true" aria-label="กำลังโหลดรายการแบบทดสอบ">
+                    <div class="animate-pulse rounded-2xl bg-white/80 dark:bg-gray-800/60 border border-gray-200/70 dark:border-gray-700/60 p-5 flex items-center gap-4 shadow-sm">
+                        <div class="h-12 w-12 rounded-xl bg-gray-200 dark:bg-gray-700 shrink-0"></div>
+                        <div class="flex-1 space-y-2">
+                            <div class="h-4 w-44 rounded bg-gray-200 dark:bg-gray-700"></div>
+                            <div class="h-3 w-28 rounded bg-gray-200/80 dark:bg-gray-700/70"></div>
+                        </div>
+                    </div>
+                    <div class="animate-pulse rounded-2xl bg-white/80 dark:bg-gray-800/60 border border-gray-200/70 dark:border-gray-700/60 p-5 flex items-center gap-4 shadow-sm">
+                        <div class="h-12 w-12 rounded-xl bg-gray-200 dark:bg-gray-700 shrink-0"></div>
+                        <div class="flex-1 space-y-2">
+                            <div class="h-4 w-52 rounded bg-gray-200 dark:bg-gray-700"></div>
+                            <div class="h-3 w-32 rounded bg-gray-200/80 dark:bg-gray-700/70"></div>
+                        </div>
+                    </div>
+                    <div class="animate-pulse rounded-2xl bg-white/80 dark:bg-gray-800/60 border border-gray-200/70 dark:border-gray-700/60 p-5 flex items-center gap-4 shadow-sm">
+                        <div class="h-12 w-12 rounded-xl bg-gray-200 dark:bg-gray-700 shrink-0"></div>
+                        <div class="flex-1 space-y-2">
+                            <div class="h-4 w-40 rounded bg-gray-200 dark:bg-gray-700"></div>
+                            <div class="h-3 w-24 rounded bg-gray-200/80 dark:bg-gray-700/70"></div>
+                        </div>
+                    </div>
+                    <p class="text-center text-sm text-gray-500 dark:text-gray-400">กำลังโหลดรายการแบบทดสอบ...</p>
                 </div>
             </main>
 

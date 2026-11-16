@@ -9,6 +9,7 @@ import {
   PHYSICS_SYLLABUS,
   EARTH_SCIENCE_BASIC_SYLLABUS,
   EARTH_SCIENCE_ADVANCE_SYLLABUS,
+  subCategoryData,
 } from "../data/sub-category-data.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -83,6 +84,20 @@ function preprocessValidationData() {
     validationMap.set(categoryKey, syllabusMap);
   });
 
+  // Allow legacy M.4 final exam files (บทที่ 8 migrated to M.5) and M.4 midterm exam category
+  const physicsM4Map = validationMap.get('PhysicsM4');
+  const physicsM5Map = validationMap.get('PhysicsM5');
+  if (physicsM4Map && physicsM5Map) {
+    const ch8Topics = physicsM5Map.get('บทที่ 8: การเคลื่อนที่แบบฮาร์มอนิกอย่างง่าย');
+    if (ch8Topics) {
+      physicsM4Map.set('บทที่ 8: การเคลื่อนที่แบบฮาร์มอนิกอย่างง่าย', new Set(ch8Topics));
+    }
+    const m4AllOutcomes = new Set(
+      (PHYSICS_SYLLABUS.m4?.chapters || []).flatMap(chapter => chapter.learningOutcomes || [])
+    );
+    physicsM4Map.set('แนวข้อสอบกลางภาคเรียนที่ 1', m4AllOutcomes);
+  }
+
   // Process Basic Earth Science Syllabus
   const basicEarthMap = new Map();
   // The basic syllabus is nested under a single grade key (e.g., 'm6') which contains 'units'.
@@ -93,6 +108,10 @@ function preprocessValidationData() {
         basicEarthMap.set(chapter.title, new Set(chapter.learningOutcomes || []));
       });
     });
+  }
+  const solarSystemTopics = basicEarthMap.get('ระบบสุริยะ');
+  if (solarSystemTopics) {
+    solarSystemTopics.add('ว 3.1 ม.6/10 สืบค้นข้อมูล อธิบายการสำรวจอวกาศ และนำเสนอแนวคิดการนำความรู้มาประยุกต์ใช้');
   }
   validationMap.set('EarthSpaceScienceBasic', basicEarthMap);
 
@@ -106,6 +125,28 @@ function preprocessValidationData() {
   }
   validationMap.set('EarthSpaceScienceAdvance', advanceEarthMap);
 
+  // Process POSN / Challenge Earth & Astronomy categories
+  const astroPosnTopics = (subCategoryData?.ASTRONOMY_POSN || []).map(item => item.topic);
+  const earthAndSpace = subCategoryData?.EarthAndSpace || {};
+  const geologySet = new Set(earthAndSpace.Geology || []);
+  const meteorologySet = new Set(earthAndSpace.Meteorology || []);
+  const oceanographySet = new Set(earthAndSpace.Oceanography || []);
+  const astronomySet = new Set([...(earthAndSpace.Astronomy || []), ...astroPosnTopics]);
+
+  const posnMap = new Map([
+    ['POSN_Geology', geologySet],
+    ['Geology', geologySet],
+    ['POSN_Meteorology', meteorologySet],
+    ['Meteorology', meteorologySet],
+    ['POSN_Oceanography', oceanographySet],
+    ['Oceanography', oceanographySet],
+    ['POSN_Astronomy', astronomySet],
+    ['Astronomy', astronomySet],
+  ]);
+  ['PosnEarthScience', 'PosnAstroJunior', 'PosnAstroSenior', 'AstronomyReview', 'ChallengePOSN'].forEach(key => {
+    validationMap.set(key, posnMap);
+  });
+
   return validationMap;
 }
 
@@ -115,7 +156,7 @@ function normalizeTopic(topic) {
   // Normalize by removing extra whitespace, newlines, and standardizing spaces.
   // This handles both "1. Topic" and "ว 3.1 ม.6/1 Topic" formats by cleaning them up
   // for a more reliable comparison.
-  return topic.replace(/\s+/g, ' ').trim();
+  return topic.replace(/ต่าง\s+ๆ/g, 'ต่างๆ').replace(/\s+/g, ' ').trim();
 }
 
 /**
@@ -219,7 +260,6 @@ async function main() {
         }
 
         const chapterTitle = subCategory.main.trim();
-        const specificTopic = normalizeTopic(subCategory.specific);
 
         // Step 1: Validate the chapter (subCategory.main)
         if (!validChapters.has(chapterTitle)) {
@@ -230,29 +270,40 @@ async function main() {
         // Step 2: Validate the specific topic (subCategory.specific)
         const validTopicsRaw = validChapters.get(chapterTitle);
         const validTopicsNormalized = new Set(Array.from(validTopicsRaw).map(normalizeTopic));
+        const rawSpecificList = Array.isArray(subCategory.specific)
+          ? subCategory.specific
+          : [subCategory.specific];
 
-        if (validTopicsNormalized.size > 0 && !validTopicsNormalized.has(specificTopic)) {
-          // Only report error if there are specific topics defined for this chapter.
-          // If validTopics is empty, it means any specific topic is acceptable (or not defined).
+        for (const rawSpecific of rawSpecificList) {
+          const specificTopic = normalizeTopic(rawSpecific);
 
-          // Check for auto-correction
-          const rawSpecific = question.subCategory.specific;
-          const correction = correctionMap[mainCategoryKey]?.[rawSpecific];
+          // Skip remedial quiz tags like "ซ่อมบทที่ 3 ครั้งที่ 1"
+          if (mainCategoryKey.startsWith('Physics') && /^ซ่อมบทที่\s*\d+\s*ครั้งที่\s*\d+$/.test(specificTopic)) {
+            continue;
+          }
 
-          if (correction) {
-            if (!fileContent) fileContent = fs.readFileSync(filePath, "utf-8");
-            const escapedOldCat = escapeRegExp(rawSpecific);
-            const oldCategoryRegex = new RegExp(`(['"])${escapedOldCat}(['"])`);
+          if (validTopicsNormalized.size > 0 && !validTopicsNormalized.has(specificTopic)) {
+            // Only report error if there are specific topics defined for this chapter.
+            // If validTopics is empty, it means any specific topic is acceptable (or not defined).
 
-            if (oldCategoryRegex.test(fileContent)) {
-              fileContent = fileContent.replace(oldCategoryRegex, `$1${correction}$2`);
-              fileModified = true;
-              fileCorrections.push({ File: relativePath, ID: questionIdForTable, Change: `"${rawSpecific}" -> "${correction}"` });
+            // Check for auto-correction
+            const correction = correctionMap[mainCategoryKey]?.[rawSpecific];
+
+            if (correction) {
+              if (!fileContent) fileContent = fs.readFileSync(filePath, "utf-8");
+              const escapedOldCat = escapeRegExp(rawSpecific);
+              const oldCategoryRegex = new RegExp(`(['"])${escapedOldCat}(['"])`);
+
+              if (oldCategoryRegex.test(fileContent)) {
+                fileContent = fileContent.replace(oldCategoryRegex, `$1${correction}$2`);
+                fileModified = true;
+                fileCorrections.push({ File: relativePath, ID: questionIdForTable, Change: `"${rawSpecific}" -> "${correction}"` });
+              } else {
+                fileErrors.push({ File: relativePath, ID: questionIdForTable, Error: `Invalid Topic (specific): "${specificTopic}"`, Details: 'Auto-correction target found in data but replacement failed (check escaping).' });
+              }
             } else {
-              fileErrors.push({ File: relativePath, ID: questionIdForTable, Error: `Invalid Topic (specific): "${specificTopic}"`, Details: 'Auto-correction target found in data but replacement failed (check escaping).' });
+              fileErrors.push({ File: relativePath, ID: questionIdForTable, Error: `Invalid Topic (specific): "${specificTopic}" for chapter "${chapterTitle}"` });
             }
-          } else {
-            fileErrors.push({ File: relativePath, ID: questionIdForTable, Error: `Invalid Topic (specific): "${specificTopic}" for chapter "${chapterTitle}"` });
           }
         }
       }

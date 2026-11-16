@@ -30,54 +30,16 @@ async function main() {
         const componentLoaderPromise = import('./component-loader.js');
         const commonInitPromise = import('./common-init.js');
         const quizLoaderPromise = import('./quiz-loader.js');
-        const cosmicPromise = import('./cosmic-starfield.js');
 
-        // Init Cosmic Starfield Background Effect
-        cosmicPromise.then(({ initCosmicStarfield }) => initCosmicStarfield());
-
-        // Custom loader to fix paths BEFORE injection to prevent 404s in the quiz subdirectory
-        const loadComponentWithFix = async (selector, path) => {
-            const cacheKey = `component_cache_${path}`;
-            try {
-                sessionStorage.removeItem(cacheKey);
-            } catch (e) {
-                // Ignore storage errors
-            }
-
-            try {
-                const response = await fetch(path);
-                const originalHtml = await response.text();
-
-                let html = originalHtml;
-                // Replace ./assets/ with ../assets/ to fix 404s
-                html = html.replace(/src="\.\/assets\//g, 'src="../assets/');
-                // Replace other ./ links with ../ to fix navigation
-                html = html.replace(/href="\.\//g, 'href="../');
-
-                const element = document.querySelector(selector);
-                if (element) {
-                    element.innerHTML = html;
-                    // Re-execute scripts since innerHTML doesn't run them
-                    Array.from(element.querySelectorAll('script')).forEach(oldScript => {
-                        const newScript = document.createElement('script');
-                        Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
-                        newScript.appendChild(document.createTextNode(oldScript.innerHTML));
-                        oldScript.parentNode.replaceChild(newScript, oldScript);
-                    });
-                }
-            } catch (e) {
-                console.error(`Error loading ${path}`, e);
-            }
-        };
-
-        // Load shared components first
+        // Load shared components first (bundled via Vite ?raw, zero network fetch)
+        const { loadComponent } = await componentLoaderPromise;
         await Promise.all([
-            loadComponentWithFix('#main_header-placeholder', '../components/main_header.html'),
-            loadComponentWithFix('#footer-placeholder', '../components/footer.html'),
-            loadComponentWithFix('#modals-placeholder', '../components/modals_common.html')
+            loadComponent('#main_header-placeholder', '../components/main_header.html'),
+            loadComponent('#footer-placeholder', '../components/footer.html'),
+            loadComponent('#modals-placeholder', '../components/modals_common.html')
         ]);
 
-        const { initializeCommonComponents } = await import('./common-init.js');
+        const { initializeCommonComponents } = await commonInitPromise;
         // Initialize common UI components like header, menu, and footer scripts.
         // This must run BEFORE fixing paths, as it populates the menu with links.
         await initializeCommonComponents();
@@ -110,19 +72,53 @@ async function main() {
         const { initializeQuiz } = await quizLoaderPromise;
         await initializeQuiz();
 
-        // --- Initialize Scientific Calculator (Deferred to background to speed up startup) ---
-        setTimeout(async () => {
-            try {
-                const { ScientificCalculator } = await import('./calculator.js');
-                if (window.scientificCalculator && typeof window.scientificCalculator.destroy === 'function') {
-                    window.scientificCalculator.destroy();
-                }
-                window.scientificCalculator = new ScientificCalculator();
-                console.log("⚡ Scientific Calculator loaded in background.");
-            } catch (calcError) {
-                console.error("Failed to initialize calculator:", calcError);
+        // --- Scientific Calculator: On-Demand Lazy Loader (avoids 772 kB mathjs load on startup) ---
+        let calculatorLoadPromise = null;
+        const ensureCalculatorLoaded = () => {
+            if (window.scientificCalculator) return Promise.resolve(window.scientificCalculator);
+            if (!calculatorLoadPromise) {
+                calculatorLoadPromise = (async () => {
+                    if (window.customElements && !customElements.get('math-field')) {
+                        if (!document.querySelector('script[data-mathlive-loader="true"]')) {
+                            const script = document.createElement('script');
+                            script.type = 'module';
+                            script.src = 'https://cdn.jsdelivr.net/npm/mathlive/dist/mathlive.min.js';
+                            script.dataset.mathliveLoader = 'true';
+                            document.head.appendChild(script);
+                        }
+                    }
+                    const { ScientificCalculator } = await import('./calculator.js');
+                    if (window.scientificCalculator && typeof window.scientificCalculator.destroy === 'function') {
+                        window.scientificCalculator.destroy();
+                    }
+                    window.scientificCalculator = new ScientificCalculator();
+                    console.log("⚡ Scientific Calculator loaded on demand.");
+                    return window.scientificCalculator;
+                })();
             }
-        }, 100);
+            return calculatorLoadPromise;
+        };
+
+        const calcToggleBtn = document.getElementById('calculator-toggle-btn');
+        if (calcToggleBtn) {
+            const preloadCalc = () => { ensureCalculatorLoaded().catch(() => {}); };
+            calcToggleBtn.addEventListener('mouseenter', preloadCalc, { once: true, passive: true });
+            calcToggleBtn.addEventListener('focus', preloadCalc, { once: true, passive: true });
+            calcToggleBtn.addEventListener('click', async () => {
+                if (window.scientificCalculator) return;
+                calcToggleBtn.disabled = true;
+                try {
+                    const calc = await ensureCalculatorLoaded();
+                    if (calc && !calc.isOpen) {
+                        calc.open();
+                    }
+                } catch (calcError) {
+                    console.error("Failed to initialize calculator:", calcError);
+                } finally {
+                    calcToggleBtn.disabled = false;
+                }
+            });
+        }
 
         document.body.dataset.appInitialized = 'true';
         console.log("🚀 Quiz Page fully initialized");

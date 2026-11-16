@@ -517,8 +517,8 @@ export async function fetchAllQuizData() {
 
   // Filter out any potential empty/falsy entries from the list to prevent errors.
   const validQuizList = Array.isArray(quizList) ? quizList.filter((quiz) => quiz) : [];
-  // Use import.meta.glob to allow Vite to bundle these files
-  const dataModules = import.meta.glob('../data/**/*.js');
+  // Use centralized data loader to allow Vite to bundle only quiz data files
+  const dataModules = getDataModules();
   const processedScriptPaths = new Set();
 
   const promises = validQuizList.map(async (quiz) => {

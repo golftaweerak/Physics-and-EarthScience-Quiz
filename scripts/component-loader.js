@@ -1,12 +1,13 @@
+const memoryCache = new Map();
+
 /**
- * Fetches HTML content from a file and injects it into a specified element.
- * Includes robust error handling for network issues or missing elements.
+ * Fetches HTML content from a file (with in-memory caching) and injects it into a specified element.
+ * Includes robust error handling and subdirectory path rewriting for /quiz/ pages.
  * @param {string} selector - The CSS selector for the target placeholder element.
  * @param {string} filePath - The path to the HTML component file.
  * @returns {Promise<void>} A promise that resolves when the component is loaded or fails.
  */
 export async function loadComponent(selector, filePath) {
-    console.log(`⏳ ComponentLoader: Requesting ${filePath} into ${selector}...`);
     const element = document.querySelector(selector);
     if (!element) {
         console.warn(`⚠️ ComponentLoader: Target element '${selector}' not found.`);
@@ -21,9 +22,26 @@ export async function loadComponent(selector, filePath) {
         // Ignore storage errors
     }
 
+    const applyHtml = (rawHtml) => {
+        let html = rawHtml;
+        const isSubdirectory = filePath.startsWith('../') || window.location.pathname.includes('/quiz/');
+        if (isSubdirectory) {
+            html = html
+                .replace(/src="\.\/assets\//g, 'src="../assets/')
+                .replace(/href="\.\//g, 'href="../');
+        }
+        element.innerHTML = html;
+    };
+
+    if (memoryCache.has(filePath)) {
+        applyHtml(memoryCache.get(filePath));
+        return;
+    }
+
+    console.log(`⏳ ComponentLoader: Requesting ${filePath} into ${selector}...`);
     try {
         const controller = new AbortController();
-        const timeoutDuration = 1500; // Reduced to 1.5 seconds for debugging
+        const timeoutDuration = 5000;
         const timeoutPromise = new Promise((_, reject) =>
             setTimeout(() => {
                 controller.abort();
@@ -42,7 +60,8 @@ export async function loadComponent(selector, filePath) {
         }
 
         const html = await response.text();
-        element.innerHTML = html;
+        memoryCache.set(filePath, html);
+        applyHtml(html);
         console.log(`✅ ComponentLoader: Successfully loaded ${filePath}`);
     } catch (error) {
         console.error(`❌ ComponentLoader: Error loading ${filePath}:`, error);
