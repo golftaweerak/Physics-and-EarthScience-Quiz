@@ -6,6 +6,7 @@
   "scripts": {
     "update:term1": "node tools/convert-scores.js",
     "update:term2": "node tools/fetch-term2.js",
+    "update:term2-69": "node tools/fetch-term2-2569.js",
     "update:list": "node tools/update-quiz-list.js",
     "validate:duplicates": "node tools/check-duplicates.js",
     "validate:subcategories": "node tools/validate-subcategories.js",

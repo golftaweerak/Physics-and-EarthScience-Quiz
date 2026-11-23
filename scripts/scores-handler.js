@@ -29,11 +29,30 @@ const ASSIGNMENT_URL_MAP = {
     'แบบฝึก 5.2': 'https://forms.cloud.microsoft/r/mmB2LXmSNn',
     'ท้ายบท 5': 'https://forms.cloud.microsoft/r/1uf2B3y7sM',
     'Quiz 5': 'https://forms.cloud.microsoft/r/gMTxMUjiT6',
-    'Quiz 6': 'https://forms.office.com/r/dAs6nwpZ9e',
-    'Quiz 7': 'https://forms.office.com/r/x6XEYgXLMG',
-    'Quiz 8': 'https://forms.office.com/r/LmJASCtdX2',
-    'Quiz 9': 'https://forms.office.com/r/jiUCum58kV',
-    'Quiz 10': 'https://forms.office.com/r/ZcvePkp98p'
+    'กิจกรรม 6.1': 'https://forms.cloud.microsoft/r/NfU1LhDHqm',
+    'ใบงาน 6.1': 'https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=L1AzCCO-V0ms61pFZ_-G0Q9rqbywYjRCuIvOn_dVzCNUNDdRUzEwTDVQMlVITE5RRkdON0tNNjNFQSQlQCNjPTEu',
+    'ใบงาน 6.2': 'https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=L1AzCCO-V0ms61pFZ_-G0Q9rqbywYjRCuIvOn_dVzCNUMUFLVlY3TjBDQTkzTUxGUVQ5MUVaNEs1NiQlQCNjPTEu',
+    'ท้ายบท 6': 'https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=L1AzCCO-V0ms61pFZ_-G0Q9rqbywYjRCuIvOn_dVzCNUMEw0MUVUNTVGME5KWElPWjhNWVM3MkdQSSQlQCNjPTEu',
+    'Quiz 6': 'https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=L1AzCCO-V0ms61pFZ_-G0Q9rqbywYjRCuIvOn_dVzCNURUFQMFJNNjZKTlNESElOTFM4Q0dFWjdNUCQlQCNjPTEu',
+    'กิจกรรม 7.1': 'https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=L1AzCCO-V0ms61pFZ_-G0Q9rqbywYjRCuIvOn_dVzCNUM0RONlhITFc4RkE2VjEyRFVKTDU3NVhaWiQlQCNjPTEu',
+    'ใบงาน 7.1': 'https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=L1AzCCO-V0ms61pFZ_-G0Q9rqbywYjRCuIvOn_dVzCNUNU00VkhCREk1STdSV0JGNExWU0ZXQ1ZRSCQlQCNjPTEu',
+    'ใบงาน 7.2': 'https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=L1AzCCO-V0ms61pFZ_-G0Q9rqbywYjRCuIvOn_dVzCNUOEo1SFhaVlJEUVZRODJZVE0wVzVaMzc3QiQlQCNjPTEu',
+    'ใบงาน 7.3': 'https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=L1AzCCO-V0ms61pFZ_-G0Q9rqbywYjRCuIvOn_dVzCNUQ05FOFdVQTlVNFNGTUdKVU5ZUDJMMFgwUSQlQCNjPTEu',
+    'ท้ายบท 7': 'https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=L1AzCCO-V0ms61pFZ_-G0Q9rqbywYjRCuIvOn_dVzCNUMElKRjA2NERPTUkwQ1AzRUdYRDRBMlUxVCQlQCNjPTEu',
+    'Quiz 7': 'https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=L1AzCCO-V0ms61pFZ_-G0Q9rqbywYjRCuIvOn_dVzCNUM0pZVE9BU1dWQlBIRDlLV0QyMkJGOThJOSQlQCNjPTEu',
+    'ใบงาน 8.1': 'https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=L1AzCCO-V0ms61pFZ_-G0Q9rqbywYjRCuIvOn_dVzCNUMEdRTVBEOTk3TFdPR1ZHRkZHV1BMTFExWiQlQCNjPTEu',
+    'ใบงาน 8.2': 'https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=L1AzCCO-V0ms61pFZ_-G0Q9rqbywYjRCuIvOn_dVzCNUN09HMExBMldXUks3MUw0Q1FPNVFLQzNRWCQlQCNjPTEu',
+    'ใบงาน 8.3': 'https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=L1AzCCO-V0ms61pFZ_-G0Q9rqbywYjRCuIvOn_dVzCNURUdTNzlTSzEwRkkxRUpUWDlPQzFPUUxZRSQlQCNjPTEu',
+    'ท้ายบท 8': 'https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=L1AzCCO-V0ms61pFZ_-G0Q9rqbywYjRCuIvOn_dVzCNUQjJYMjZZTjdBQUFLQ1dVTEtVT0s0UlpGOCQlQCNjPTEu',
+    'Quiz 8': 'https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=L1AzCCO-V0ms61pFZ_-G0Q9rqbywYjRCuIvOn_dVzCNUOTc0VFlNQjJEUE9IMTlLN0NWSVo4UTNISiQlQCNjPTEu',
+    'ใบงาน 9.1': 'https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=L1AzCCO-V0ms61pFZ_-G0Q9rqbywYjRCuIvOn_dVzCNUQ0s0UlRIMkVKRDFLVzdZTFU3U0o3RVVMNCQlQCNjPTEu',
+    'ท้ายบท 9': 'https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=L1AzCCO-V0ms61pFZ_-G0Q9rqbywYjRCuIvOn_dVzCNUREpCS0VWVkIxVU44Q0cxS1NYU1dVRElWMyQlQCNjPTEu',
+    'Quiz 9': 'https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=L1AzCCO-V0ms61pFZ_-G0Q9rqbywYjRCuIvOn_dVzCNUN1k2VkdPU0U5VzUxOTQ2UUtLVkhSUjA0SiQlQCNjPTEu',
+    'ใบงาน 10.1': 'https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=L1AzCCO-V0ms61pFZ_-G0Q9rqbywYjRCuIvOn_dVzCNURTY4NDBYUkk2TkQxSU5MUEs4N1pMOUhXUCQlQCNjPTEu',
+    'ใบงาน 10.2': 'https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=L1AzCCO-V0ms61pFZ_-G0Q9rqbywYjRCuIvOn_dVzCNUN1pTQzI5UjcwWjk2R1RZVElOQzJRUkRLMiQlQCNjPTEu',
+    'ใบงาน 10.3': 'https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=L1AzCCO-V0ms61pFZ_-G0Q9rqbywYjRCuIvOn_dVzCNUMk1KSVpINTVWSDlLVDlXVEFHQ0FHUlFITSQlQCNjPTEu',
+    'ท้ายบท 10': 'https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=L1AzCCO-V0ms61pFZ_-G0Q9rqbywYjRCuIvOn_dVzCNUNU9MNzVDWkJDUzlIVzZJUkFUTjhOSlc0NyQlQCNjPTEu',
+    'Quiz 10': 'https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=L1AzCCO-V0ms61pFZ_-G0Q9rqbywYjRCuIvOn_dVzCNURExFNlRIRDdTRUQ5ODhVQ1RaMkZBQjBZTyQlQCNjPTEu'
 };
 
 /** A map for renaming specific assignment names for display. */
@@ -45,7 +64,7 @@ const ASSIGNMENT_DISPLAY_NAME_MAP = {
 
 /** Regex patterns to identify assignments that are summaries and should not be in the detailed list. */
 const SUMMARY_ASSIGNMENT_PATTERNS = [
-    /^บท\s\d+\s\[\d+\]$/, // e.g., "บท 1 [10]"
+    /^บท(ที่)?\s*\d+\s*\[\d+\]$/, // e.g., "บท 1 [10]", "บทที่ 9 [5]"
     /ก่อนปลายภาค/,
     /นำเสนอ/
 ];
@@ -443,12 +462,12 @@ export async function initializeScoreSearch() {
         if (isEditMode) {
             scoreDisplay = `<input type="number" data-key="${scoreKey}" class="score-input w-20 text-right p-1 rounded bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600" value="${scoreValue ?? ''}">`;
         } else {
-            scoreDisplay = `<span class="font-mono text-sm text-gray-700 dark:text-gray-300">${Math.round(scoreValue)}</span>`;
+            scoreDisplay = `<span class="font-mono text-sm text-gray-700 dark:text-gray-200">${Math.round(scoreValue)}</span>`;
         }
 
         return `
-            <tr class="bg-gray-50/70 dark:bg-gray-850 border-b border-gray-100 dark:border-gray-750/50">
-                <td class="py-2 px-4 pl-8 sm:pl-10 text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+            <tr class="bg-gray-50/70 dark:bg-gray-900/50 border-b border-gray-100 dark:border-gray-700/50">
+                <td class="py-2 px-4 pl-8 sm:pl-10 text-xs sm:text-sm text-gray-600 dark:text-gray-300">
                     <div class="flex items-center gap-1.5">
                         <svg class="h-3 w-3 text-gray-400 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
@@ -492,7 +511,8 @@ export async function initializeScoreSearch() {
         }
 
         // Map root properties that have different names in Term 2
-        const isTerm2 = getCurrentSemester() === '2/2568';
+        const currentSem = getCurrentSemester();
+        const isTerm2 = currentSem?.startsWith('2/');
         if (isTerm2) {
             if (student.hasOwnProperty('กลางภาค') && !student.hasOwnProperty('กลางภาค [20]')) {
                 student['กลางภาค [20]'] = student['กลางภาค'];
@@ -516,10 +536,12 @@ export async function initializeScoreSearch() {
             'ก่อนกลางภาค [25]': [
                 { label: 'บทที่ 6', key: 'บท 6 [10]' },
                 { label: 'บทที่ 7', key: 'บท 7 [10]' },
+                { label: 'นำเสนอ บทที่ 7', key: 'บท 7 นำเสนอ [5]' },
                 { label: 'กิจกรรม ธรณีพิบัติภัย', key: 'กิจกรรม [5]' }
             ],
             'หลังกลางภาค [25]': [
                 { label: 'บทที่ 8', key: 'บท 8 [10]' },
+                { label: 'บทที่ 9', key: 'บทที่ 9 [5]' },
                 { label: 'บทที่ 9', key: 'บท 9 [5]' },
                 { label: 'บทที่ 10', key: 'บท 10 [10]' },
             ]
@@ -663,7 +685,7 @@ export async function initializeScoreSearch() {
 
         const summaryScoreSection = `
             <details class="summary-score-accordion group bg-white dark:bg-gray-800/80 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden my-6 transition-all duration-200">
-                <summary class="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-750 transition-colors cursor-pointer list-none select-none">
+                <summary class="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700/80 transition-colors cursor-pointer list-none select-none">
                     <div class="flex items-center min-w-0 pr-1 sm:pr-2">
                         <div class="summary-header-icon shrink-0">
                             <svg class="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -699,8 +721,10 @@ export async function initializeScoreSearch() {
 
         // 1. Filter out non-trackable assignments and calculate stats
         const TRACKABLE_KEYWORDS = ['กิจกรรม', 'แบบฝึก', 'quiz', 'ท้ายบท', 'ใบงาน'];
-        const trackableAssignments = (student.assignments || []).filter(assignment =>
-            assignment && assignment.name && TRACKABLE_KEYWORDS.some(keyword => assignment.name.toLowerCase().includes(keyword))
+        const trackableAssignments = sortAssignments(
+            (student.assignments || []).filter(assignment =>
+                assignment && assignment.name && TRACKABLE_KEYWORDS.some(keyword => assignment.name.toLowerCase().includes(keyword))
+            )
         );
 
         const submittedCount = trackableAssignments.filter(a => {
@@ -1253,6 +1277,45 @@ function createInteractiveAssignmentModal(modalIdentifier, title, assignments) {
 
 
 /**
+ * Sorts assignments in curriculum order: Chapter -> Type (กิจกรรม -> ใบงาน/แบบฝึก -> ท้ายบท -> Quiz -> อื่นๆ) -> Sub-number.
+ * @param {Array<object>} assignments - The list of assignment objects.
+ * @returns {Array<object>} A new sorted array of assignment objects.
+ */
+export function sortAssignments(assignments) {
+    if (!Array.isArray(assignments) || assignments.length === 0) return [];
+
+    const getSortMeta = (name = '') => {
+        const lower = name.toLowerCase();
+        const isMidterm = lower.includes('mid') || lower.includes('ซ่อมแล้วกลางภาค');
+        const chapterMatch = lower.match(/(\d+)/);
+        const chapterNum = isMidterm ? 998 : (chapterMatch ? parseInt(chapterMatch[1], 10) : 999);
+
+        let typeOrder = 5;
+        if (lower.includes('กิจกรรม')) typeOrder = 1;
+        else if (lower.includes('ใบงาน') || lower.includes('แบบฝึก')) typeOrder = 2;
+        else if (lower.includes('ท้ายบท')) typeOrder = 3;
+        else if (lower.includes('quiz')) typeOrder = 4;
+
+        const subMatch = lower.match(/\d+\.(\d+)/);
+        const subNum = subMatch ? parseInt(subMatch[1], 10) : 0;
+
+        return { chapterNum, typeOrder, subNum };
+    };
+
+    return [...assignments].sort((a, b) => {
+        const nameA = a?.name || '';
+        const nameB = b?.name || '';
+        const metaA = getSortMeta(nameA);
+        const metaB = getSortMeta(nameB);
+
+        if (metaA.chapterNum !== metaB.chapterNum) return metaA.chapterNum - metaB.chapterNum;
+        if (metaA.typeOrder !== metaB.typeOrder) return metaA.typeOrder - metaB.typeOrder;
+        if (metaA.subNum !== metaB.subNum) return metaA.subNum - metaB.subNum;
+        return nameA.localeCompare(nameB, 'th', { numeric: true });
+    });
+}
+
+/**
  * Groups and orders assignments by chapter for display.
  * @param {Array<object>} assignments - The list of assignment objects for a student.
  * @returns {object} An object with chapter names as keys and arrays of assignments as values.
@@ -1289,19 +1352,19 @@ export function groupAssignments(assignments) {
     const orderedGroups = {};
     CHAPTER_ORDER.forEach(key => {
         if (groups[key]) {
-            orderedGroups[key] = groups[key];
+            orderedGroups[key] = sortAssignments(groups[key]);
         }
     });
 
     // Add any other groups that weren't in the predefined order
     Object.keys(groups).forEach(key => {
         if (!orderedGroups[key]) {
-            orderedGroups[key] = groups[key];
+            orderedGroups[key] = sortAssignments(groups[key]);
         }
     });
 
     // Specific request: Remove "บทที่ 5" (Term 2 only) and "แบบทดสอบท้ายบท (Quiz)" (always, as it's now in shortcuts)
-    if (getCurrentSemester() === '2/2568') {
+    if (getCurrentSemester()?.startsWith('2/')) {
         delete orderedGroups['บทที่ 5'];
     }
     delete orderedGroups['แบบทดสอบท้ายบท (Quiz)'];

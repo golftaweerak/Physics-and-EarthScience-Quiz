@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { groupAssignments } from '../scripts/scores-handler.js';
+import { groupAssignments, sortAssignments } from '../scripts/scores-handler.js';
 
 // Mock data-manager
 vi.mock('../scripts/data-manager.js', () => ({
@@ -53,5 +53,55 @@ describe('groupAssignments', () => {
         ];
         const grouped = groupAssignments(multiChapter);
         expect(Object.keys(grouped)).toEqual(['บทที่ 1', 'บทที่ 2', 'บทที่ 3', 'บทที่ 4']);
+    });
+
+    it('should sort assignments within a chapter by type and sub-number', () => {
+        const scrambledCh7 = [
+            { name: 'ท้ายบท 7', score: 'ยังไม่ส่ง' },
+            { name: 'ใบงาน 7.3', score: 'ยังไม่ส่ง' },
+            { name: 'กิจกรรม 7.1', score: 'ส่งแล้ว' },
+            { name: 'ใบงาน 7.2', score: 'ยังไม่ส่ง' },
+            { name: 'ใบงาน 7.1', score: 'ส่งแล้ว' },
+        ];
+        const grouped = groupAssignments(scrambledCh7);
+        expect(grouped['บทที่ 7'].map(a => a.name)).toEqual([
+            'กิจกรรม 7.1',
+            'ใบงาน 7.1',
+            'ใบงาน 7.2',
+            'ใบงาน 7.3',
+            'ท้ายบท 7',
+        ]);
+    });
+});
+
+describe('sortAssignments', () => {
+    it('should sort mixed-chapter Term 2 assignments by chapter, type, and sub-number', () => {
+        const scrambled = [
+            { name: 'Quiz 10', score: 'ยังไม่ส่ง' },
+            { name: 'ใบงาน 10.2', score: 'ยังไม่ส่ง' },
+            { name: 'ท้ายบท 6', score: 'ยังไม่ส่ง' },
+            { name: 'Quiz 6', score: 'ยังไม่ส่ง' },
+            { name: 'ใบงาน 6.1', score: 15 },
+            { name: 'กิจกรรม 6.1', score: 'ส่งแล้ว' },
+            { name: 'ใบงาน 10.1', score: 'ยังไม่ส่ง' },
+            { name: 'ใบงาน 6.2', score: 'ยังไม่ส่ง' },
+            { name: 'ท้ายบท 10', score: 'ยังไม่ส่ง' },
+            { name: 'ใบงาน 10.3', score: 'ยังไม่ส่ง' },
+            { name: 'Quiz 7', score: 'ยังไม่ส่ง' },
+        ];
+        const sorted = sortAssignments(scrambled);
+        expect(sorted.map(a => a.name)).toEqual([
+            'กิจกรรม 6.1',
+            'ใบงาน 6.1',
+            'ใบงาน 6.2',
+            'ท้ายบท 6',
+            'Quiz 6',
+            'Quiz 7',
+            'ใบงาน 10.1',
+            'ใบงาน 10.2',
+            'ใบงาน 10.3',
+            'ท้ายบท 10',
+            'Quiz 10',
+        ]);
     });
 });

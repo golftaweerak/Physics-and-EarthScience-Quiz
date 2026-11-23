@@ -145,6 +145,39 @@ const CONFIG = {
         baseInfoColumns: [
             'id', 'room', 'ordinal', 'title', 'names', 'surname',
         ]
+    },
+    '2-2569': {
+        inputFile: '69-EarthScience-Term2.xlsx',
+        collectionName: 'student_scores',
+        semesterKey: '2/2569',
+        sheetName: ['SUMMARY', 'Sheet1'],
+        columnMapping: {
+            'id': 'id',
+            'room': 'room',
+            'ordinal': 'ordinal',
+            'title': 'title',
+            'names': 'firstName',
+            'surname': 'lastName',
+            'บท 6 [10]': 'บท 6 [10]',
+            'บท 7 [10]': 'บท 7 [10]',
+            'บท 7 นำเสนอ [5]': 'บท 7 นำเสนอ [5]',
+            'ก่อนกลางภาค [25]': 'ก่อนกลางภาค [25]',
+            'กลางภาค [20]': 'กลางภาค [20]',
+            'บท 8 [10]': 'บท 8 [10]',
+            'บทที่ 9 [5]': 'บทที่ 9 [5]',
+            'บท 10 [10]': 'บท 10 [10]',
+            'หลังกลางภาค [25]': 'หลังกลางภาค [25]',
+            'ก่อนปลายภาค [70]': 'ก่อนปลายภาค [70]',
+            'ปลายภาค [30]': 'ปลายภาค [30]',
+            'ปลายภาค': 'ปลายภาค [30]',
+            'รวม [100]': 'รวม [100]',
+            'Grade': 'เกรด',
+            'ซ่อมมั้ย': 'ซ่อมมั้ย',
+        },
+        baseInfoColumns: [
+            'sorder', 'room', 'ordinal', 'id', 'title', 'names', 'surname', 'email', 'ซ่อมมั้ย',
+            'ห้อง', 'n', 'ข้อกา [30]', 'ข้อเขียน [10]', 'ตก (คน)', 'ผ่าน (คน)',
+        ]
     }
 };
 
@@ -530,14 +563,19 @@ function prepareSemesterData(semesterKey) {
     }
 
     const workbook = xlsx.readFile(xlsxFilePath);
-    const actualSheetName = workbook.SheetNames.find(name => name.toLowerCase() === semConfig.sheetName.toLowerCase());
+    const candidateSheets = Array.isArray(semConfig.sheetName) ? semConfig.sheetName : [semConfig.sheetName];
+    let actualSheetName = null;
+    for (const candidate of candidateSheets) {
+        actualSheetName = workbook.SheetNames.find(name => name.toLowerCase() === candidate.toLowerCase());
+        if (actualSheetName) break;
+    }
 
     if (!actualSheetName) {
-        throw new Error(`Sheet "${semConfig.sheetName}" not found in Excel workbook.`);
+        throw new Error(`Sheet "${candidateSheets.join('" or "')}" not found in Excel workbook.`);
     }
 
     const worksheet = workbook.Sheets[actualSheetName];
-    const rows = xlsx.utils.sheet_to_json(worksheet);
+    const rows = xlsx.utils.sheet_to_json(worksheet, { defval: '' });
 
     if (rows.length === 0) {
         throw new Error('Workbook sheet is empty.');
@@ -556,6 +594,7 @@ function prepareSemesterData(semesterKey) {
         const lowerH = h.toLowerCase().trim();
         return (
             lowerH !== '' &&
+            !lowerH.startsWith('__empty') &&
             !semConfig.baseInfoColumns.includes(lowerH) &&
             !lowerCaseSummaryKeys.has(lowerH)
         );

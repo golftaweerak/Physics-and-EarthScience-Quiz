@@ -2168,7 +2168,7 @@ function renderShop(game) {
             return `
                 <div class="shop-item-card relative bg-white/90 dark:bg-gray-800/90 p-5 rounded-3xl border ${cardBorder} shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 cursor-pointer group flex flex-col items-center text-center h-full ${glowEffect}" data-id="${item.id}">
                     ${statusBadge}
-                    <div class="w-20 h-20 mb-3 mt-1 rounded-2xl bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 dark:from-gray-700 dark:via-gray-750 dark:to-gray-800 flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform duration-300 relative overflow-hidden border border-gray-200/60 dark:border-gray-700/60">
+                    <div class="w-20 h-20 mb-3 mt-1 rounded-2xl bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 dark:from-gray-700 dark:via-gray-800 dark:to-gray-800 flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform duration-300 relative overflow-hidden border border-gray-200/60 dark:border-gray-700/60">
                         <div class="text-5xl transform group-hover:rotate-6 transition-transform duration-300 filter drop-shadow-md relative z-10">${item.icon}</div>
                     </div>
                     <h4 class="font-extrabold text-gray-900 dark:text-white text-sm sm:text-base w-full truncate px-1 mb-1.5 font-kanit">${escapeHtml(item.name)}</h4>

@@ -1392,6 +1392,11 @@ export async function initializeSummaryPage() {
             const container = document.getElementById('summary-container');
             if (!container) return;
 
+            // Update course code display when semester changes
+            const updatedCourseCode = getCurrentCourseCode();
+            if (courseDisplay) courseDisplay.textContent = updatedCourseCode;
+            if (titleCourseDisplay) titleCourseDisplay.textContent = updatedCourseCode;
+
             // Update selector to match state
             const semesterSelector = document.getElementById('semester-selector');
             if (semesterSelector) semesterSelector.value = semester;
@@ -1400,7 +1405,7 @@ export async function initializeSummaryPage() {
             const SESSION_KEY = 'summary_session_semester_selected';
 
 
-            const validSemesters = ['1/2568', '2/2568', '1/2569'];
+            const validSemesters = ['1/2568', '2/2568', '1/2569', '2/2569'];
             if (validSemesters.includes(semester)) {
                 sessionStorage.setItem(SESSION_KEY, semester);
 

@@ -162,7 +162,7 @@ export function getCategoryDisplayName(categoryKey) {
 
 
 const SEMESTER_STORAGE_KEY = 'current_semester';
-const DEFAULT_SEMESTER = '1/2569';
+const DEFAULT_SEMESTER = '2/2569';
 
 /**
  * Gets the current active semester from localStorage.
@@ -798,7 +798,7 @@ export async function calculateStrengthsAndWeaknesses() {
  * @returns {string} The course code ('ว30161' or 'ว30162').
  */
 export function getCurrentCourseCode() {
-  return getCurrentSemester() === '2/2568' ? 'ว30162' : 'ว30161';
+  return getCurrentSemester().startsWith('2/') ? 'ว30162' : 'ว30161';
 }
 
 /**
