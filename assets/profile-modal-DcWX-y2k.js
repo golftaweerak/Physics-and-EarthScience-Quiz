@@ -1,4 +1,4 @@
-import{T as d,A as c,B as g,g as u,a as b}from"./gamification-AwTfHTr6.js";function T(e){const t=v(),r=x();setTimeout(()=>{r.classList.remove("scale-95","opacity-0"),r.classList.add("scale-100","opacity-100")},10);const a=p(e);r.innerHTML=`
+import{T as d,A as c,B as g,g as u,a as b}from"./gamification-B9RwJqPQ.js";function T(e){const t=v(),r=x();setTimeout(()=>{r.classList.remove("scale-95","opacity-0"),r.classList.add("scale-100","opacity-100")},10);const a=p(e);r.innerHTML=`
         ${f(a)}
         <div class="flex-grow overflow-y-auto modern-scrollbar bg-gray-50 dark:bg-gray-900 relative z-10 flex flex-col">
             <div class="px-5 sm:px-8 pb-8 text-center flex-grow flex flex-col pt-6">
