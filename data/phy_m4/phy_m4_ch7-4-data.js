@@ -113,7 +113,7 @@ export const quizItems = [
     "unit": "m/s",
     "tolerance": 0.1,
     "hint": "แตกความเร็วหา \\(u_x = u\\cos 45°\\), \\(u_y = u\\sin 45°\\) หาเวลาลอยในอากาศจากแนวดิ่ง \\(t = \\frac{2u_y}{g}\\) แล้วตั้งสมการแนวราบ \\(s_x = u_x t\\)",
-    "explanation": "1. แตกความเร็วต้น: \\(u_x = u \\cos(45°)\\), \\(u_y = u \\sin(45°)\\).<br>2. หาเวลาในการตกถึงพื้นจากแนวดิ่ง (\(s_y = 0\)): \\(s_y = u_y t - \\frac{1}{2}gt^2 \\Rightarrow 0 = u \\sin(45°) t - 5t^2 \\Rightarrow t = \\frac{u \\sin(45°)}{5}\\).<br>3. คำนวณระยะทางแนวราบ: \\(s_x = u_x t \\Rightarrow 80 = (u \\cos 45°) \\left(\\frac{u \\sin 45°}{5}\\right) = \\frac{u^2 (0.707)^2}{5} = \\frac{u^2 (0.5)}{5} = \\frac{u^2}{10} \\Rightarrow u^2 = 800 \\Rightarrow u = \\sqrt{800} \\approx 28.28\\) m/s.",
+    "explanation": "1. แตกความเร็วต้น: \\(u_x = u \\cos(45°)\\), \\(u_y = u \\sin(45°)\\).<br>2. หาเวลาในการตกถึงพื้นจากแนวดิ่ง (\\(s_y = 0\\)): \\(s_y = u_y t - \\frac{1}{2}gt^2 \\Rightarrow 0 = u \\sin(45°) t - 5t^2 \\Rightarrow t = \\frac{u \\sin(45°)}{5}\\).<br>3. คำนวณระยะทางแนวราบ: \\(s_x = u_x t \\Rightarrow 80 = (u \\cos 45°) \\left(\\frac{u \\sin 45°}{5}\\right) = \\frac{u^2 (0.707)^2}{5} = \\frac{u^2 (0.5)}{5} = \\frac{u^2}{10} \\Rightarrow u^2 = 800 \\Rightarrow u = \\sqrt{800} \\approx 28.28\\) m/s.",
     "subCategory": {
       "main": "บทที่ 7: การเคลื่อนที่แนวโค้ง",
       "specific": "16. อธิบาย วิเคราะห์ และคำนวณปริมาณต่างๆ ที่เกี่ยวข้องกับการเคลื่อนที่แบบโพรเจกไทล์"
@@ -340,7 +340,7 @@ export const quizItems = [
     "unit": "m/s",
     "tolerance": 0.1,
     "hint": "แตกความเร็วหา \\(u_x = u\\cos 45°\\), \\(u_y = u\\sin 45°\\) หาเวลาลอยในอากาศจากแนวดิ่ง \\(t = \\frac{2u_y}{g}\\) แล้วตั้งสมการแนวราบ \\(s_x = u_x t\\)",
-    "explanation": "1. แตกความเร็วต้น: \\(u_x = u \\cos(45°)\\), \\(u_y = u \\sin(45°)\\).<br>2. หาเวลาตกลงพื้นจากแนวดิ่ง (\(s_y = 0\)): \\(s_y = u_y t - \\frac{1}{2}gt^2 \\Rightarrow 0 = u(0.707)t - 5t^2 \\Rightarrow t = \\frac{u(0.707)}{5}\\).<br>3. คำนวณระยะทางแนวราบ: \\(s_x = u_x t \\Rightarrow 50 = (u \\cos 45°) \\left(\\frac{u \\sin 45°}{5}\\right) = \\frac{u^2}{10} \\Rightarrow u^2 = 500 \\Rightarrow u = \\sqrt{500} \\approx 22.36\\) m/s.",
+    "explanation": "1. แตกความเร็วต้น: \\(u_x = u \\cos(45°)\\), \\(u_y = u \\sin(45°)\\).<br>2. หาเวลาตกลงพื้นจากแนวดิ่ง (\\(s_y = 0\\)): \\(s_y = u_y t - \\frac{1}{2}gt^2 \\Rightarrow 0 = u(0.707)t - 5t^2 \\Rightarrow t = \\frac{u(0.707)}{5}\\).<br>3. คำนวณระยะทางแนวราบ: \\(s_x = u_x t \\Rightarrow 50 = (u \\cos 45°) \\left(\\frac{u \\sin 45°}{5}\\right) = \\frac{u^2}{10} \\Rightarrow u^2 = 500 \\Rightarrow u = \\sqrt{500} \\approx 22.36\\) m/s.",
     "subCategory": {
       "main": "บทที่ 7: การเคลื่อนที่แนวโค้ง",
       "specific": "16. อธิบาย วิเคราะห์ และคำนวณปริมาณต่างๆ ที่เกี่ยวข้องกับการเคลื่อนที่แบบโพรเจกไทล์"
@@ -410,7 +410,7 @@ export const quizItems = [
     "answer": 40,
     "unit": "m/s",
     "hint": "แตกความเร็วหา \\(u_x = u\\cos 45°\\), \\(u_y = u\\sin 45°\\) หาเวลาลอยในอากาศจากแนวดิ่ง \\(t = \\frac{2u_y}{g}\\) แล้วตั้งสมการแนวราบ \\(s_x = u_x t\\)",
-    "explanation": "1. แตกความเร็วต้น: \\(u_x = u \\cos(45°)\\), \\(u_y = u \\sin(45°)\\).<br>2. หาเวลาตกลงพื้นจากแนวดิ่ง (\(s_y = 0\)): \\(s_y = u_y t - \\frac{1}{2}gt^2 \\Rightarrow 0 = u(0.707)t - 5t^2 \\Rightarrow t = \\frac{u(0.707)}{5}\\).<br>3. คำนวณระยะทางแนวราบ: \\(s_x = u_x t \\Rightarrow 160 = (u \\cos 45°) \\left(\\frac{u \\sin 45°}{5}\\right) = \\frac{u^2}{10} \\Rightarrow u^2 = 1600 \\Rightarrow u = 40\\) m/s.",
+    "explanation": "1. แตกความเร็วต้น: \\(u_x = u \\cos(45°)\\), \\(u_y = u \\sin(45°)\\).<br>2. หาเวลาตกลงพื้นจากแนวดิ่ง (\\(s_y = 0\\)): \\(s_y = u_y t - \\frac{1}{2}gt^2 \\Rightarrow 0 = u(0.707)t - 5t^2 \\Rightarrow t = \\frac{u(0.707)}{5}\\).<br>3. คำนวณระยะทางแนวราบ: \\(s_x = u_x t \\Rightarrow 160 = (u \\cos 45°) \\left(\\frac{u \\sin 45°}{5}\\right) = \\frac{u^2}{10} \\Rightarrow u^2 = 1600 \\Rightarrow u = 40\\) m/s.",
     "subCategory": {
       "main": "บทที่ 7: การเคลื่อนที่แนวโค้ง",
       "specific": "16. อธิบาย วิเคราะห์ และคำนวณปริมาณต่างๆ ที่เกี่ยวข้องกับการเคลื่อนที่แบบโพรเจกไทล์"

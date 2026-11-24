@@ -83,7 +83,7 @@ export async function getAllStats(customQuizzes = []) {
     const allStats = [];
 
     for (const quiz of allQuizzes) {
-        const storageKey = quiz.storageKey || `quizState - ${quiz.id || quiz.customId} `;
+        const storageKey = quiz.storageKey || `quizState-${quiz.id || quiz.customId}`;
         const data = localStorage.getItem(storageKey);
         if (data) {
             try { // Wrap the entire processing of a single item in a try-catch
@@ -106,7 +106,7 @@ export async function getAllStats(customQuizzes = []) {
 
                 let finalUrl = quiz.url;
                 if (!finalUrl && quiz.customId) {
-                    finalUrl = `./ quiz / index.html ? id = ${quiz.customId}`;
+                    finalUrl = `./quiz/index.html?id=${quiz.customId}`;
                 }
 
                 allStats.push({
@@ -310,7 +310,7 @@ function createInsightCard(title, value, score, icon, theme) {
  * @param {Array<object>} allStats - The array of all quiz progress data.
  */
 export function renderInDepthStats(allStats) {
-    const summaryGrid = document.getElementById('summary-cards-grid');
+    const summaryGrid = document.getElementById('analysis-summary-grid') || document.getElementById('summary-cards-grid');
     const insightContainer = document.getElementById('insight-cards-container');
     if (!summaryGrid || !insightContainer) return;
 
@@ -331,7 +331,7 @@ export function renderInDepthStats(allStats) {
     const averageTimePerQuestion = totalQuestionsAnswered > 0
         ? (totalTimeSpentSeconds / totalQuestionsAnswered)
         : 0;
-    const timeIcon = `<svg xmlns = "http://www.w3.org/2000/svg" class="h-6 w-6" viewBox = "0 0 20 20" fill = "currentColor" > <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" /></svg>`;
+    const timeIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" /></svg>`;
 
     if (totalQuestionsAnswered > 0) {
         const avgTimeCard = createStatCard(
@@ -346,20 +346,20 @@ export function renderInDepthStats(allStats) {
     // --- 2. Calculate and Render Best/Worst Topics (New Design) ---
     const topicPerformance = calculateTopicPerformance(allStats);
     if (topicPerformance.best) {
-        const bestTopicIcon = `<svg xmlns = "http://www.w3.org/2000/svg" class="h-8 w-8" viewBox = "0 0 20 20" fill = "currentColor" > <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>`;
+        const bestTopicIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>`;
         const bestTopicCard = createInsightCard('หัวข้อที่ถนัดที่สุด', topicPerformance.best.name, topicPerformance.best.score.toFixed(0), bestTopicIcon, 'green');
         insightContainer.appendChild(bestTopicCard);
     }
     if (topicPerformance.worst) {
-        const worstTopicIcon = `<svg xmlns = "http://www.w3.org/2000/svg" class="h-8 w-8" viewBox = "0 0 20 20" fill = "currentColor" > <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" /></svg>`;
+        const worstTopicIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" /></svg>`;
         const worstTopicCard = createInsightCard('หัวข้อที่ควรทบทวน', topicPerformance.worst.name, topicPerformance.worst.score.toFixed(0), worstTopicIcon, 'red');
         insightContainer.appendChild(worstTopicCard);
     }
 
     // --- 3. Calculate and Render Question Type Performance ---
     const typePerformance = calculateQuestionTypePerformance(allStats);
-    const theoryIcon = `<svg xmlns = "http://www.w3.org/2000/svg" class="h-6 w-6" viewBox = "0 0 20 20" fill = "currentColor" ><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" /><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd" /></svg>`;
-    const calcIcon = `<svg xmlns = "http://www.w3.org/2000/svg" class="h-6 w-6" viewBox = "0 0 20 20" fill = "currentColor" > <path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2H6zm1 2a1 1 0 000 2h6a1 1 0 100-2H7zM6 7a1 1 0 011-1h4a1 1 0 110 2H7a1 1 0 01-1-1zm0 3a1 1 0 100 2h4a1 1 0 100-2H6z" clip-rule="evenodd" /></svg>`;
+    const theoryIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" /><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd" /></svg>`;
+    const calcIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2H6zm1 2a1 1 0 000 2h6a1 1 0 100-2H7zM6 7a1 1 0 011-1h4a1 1 0 110 2H7a1 1 0 01-1-1zm0 3a1 1 0 100 2h4a1 1 0 100-2H6z" clip-rule="evenodd" /></svg>`;
 
     if (typePerformance.theory.total > 0) {
         const theoryCard = createStatCard(`${typePerformance.theory.score.toFixed(0)}% `, `ความแม่นยำ(ทฤษฎี)`, theoryIcon, 'blue');

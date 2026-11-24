@@ -429,7 +429,7 @@
                                     <div class="w-9 h-9 rounded-lg bg-emerald-100 dark:bg-emerald-900/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold text-base flex-shrink-0">⚡</div>
                                     <div>
                                         <div class="text-[10px] font-extrabold text-gray-500 dark:text-gray-300 uppercase tracking-tight">SPD (ความเร็ว)</div>
-                                        <div id="rpg-stat-spd" class="text-sm font-extrabold text-gray-900 dark:text-white">45s/ข้อ</div>
+                                        <div id="rpg-stat-spd" class="text-sm font-extrabold text-gray-900 dark:text-white">--</div>
                                     </div>
                                 </div>
                                 <div class="p-3 bg-white dark:bg-gray-800/90 rounded-xl border border-gray-200/90 dark:border-gray-700 flex items-center gap-3 shadow-xs">
@@ -443,7 +443,7 @@
                                     <div class="w-9 h-9 rounded-lg bg-purple-100 dark:bg-purple-900/60 text-purple-600 dark:text-purple-400 flex items-center justify-center font-bold text-base flex-shrink-0">🧠</div>
                                     <div>
                                         <div class="text-[10px] font-extrabold text-gray-500 dark:text-gray-300 uppercase tracking-tight">INT (ความยากโจทย์)</div>
-                                        <div id="rpg-stat-int" class="text-sm font-extrabold text-gray-900 dark:text-white">ระดับท้าทาย</div>
+                                        <div id="rpg-stat-int" class="text-sm font-extrabold text-gray-900 dark:text-white">--</div>
                                     </div>
                                 </div>
                             </div>
@@ -469,9 +469,7 @@
                             <div class="overflow-x-auto pb-2 no-scrollbar">
                                 <div class="min-w-[420px]">
                                     <!-- X-Axis Months -->
-                                    <div class="flex text-[10px] text-gray-500 dark:text-gray-400 font-bold justify-between mb-1.5 pl-6 pr-1">
-                                        <span>ม.ค.</span><span>ก.พ.</span><span>มี.ค.</span><span>เม.ย.</span><span>พ.ค.</span><span>มิ.ย.</span><span>ก.ค.</span><span>ส.ค.</span>
-                                    </div>
+                                    <div id="learning-heatmap-months" class="flex text-[10px] text-gray-500 dark:text-gray-400 font-bold justify-between mb-1.5 pl-6 pr-1"></div>
                                     
                                     <div class="flex gap-2 items-center">
                                         <!-- Y-Axis Day Labels -->
@@ -486,15 +484,7 @@
                                         </div>
                                         
                                         <!-- Grid Cells -->
-                                        <div class="heatmap-grid h-28 flex-grow">
-                                            <script>
-                                                document.write(Array.from({length: 140}, (_, i) => {
-                                                    const levels = ['hm-lvl-0', 'hm-lvl-1', 'hm-lvl-2', 'hm-lvl-3', 'hm-lvl-4'];
-                                                    const lvl = Math.random() > 0.6 ? Math.floor(Math.random() * 4) + 1 : 0;
-                                                    return `<div class="heatmap-cell ${levels[lvl]}" title="บันทึกกิจกรรมประจำวัน"></div>`;
-                                                }).join(''));
-                                            </script>
-                                        </div>
+                                        <div id="learning-heatmap-grid" class="heatmap-grid h-28 flex-grow"></div>
                                     </div>
                                 </div>
                             </div>
@@ -605,35 +595,7 @@
                         </div>
                     </div>
                 </section>
-            </div>
 
-            <!-- 2. PERKS & RAID PANEL -->
-            <div id="panel-perks" class="hub-panel hidden space-y-8 max-w-5xl mx-auto pb-12 animate-fade-in">
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                    <!-- Left Column (8 Cols): Boss Card & Skill Tree Perks -->
-                    <div class="lg:col-span-8 space-y-8">
-                        <div id="boss-card-slot-perks-tab"></div>
-                        <section id="skill-tree-container" class="glass-card rounded-2xl shadow-md p-6">
-                        </section>
-                    </div>
-
-                    <!-- Right Column (4 Cols): Boss Leaderboard & Bi-Weekly Quest -->
-                    <div class="lg:col-span-4 space-y-8">
-                        <!-- Top 3 Boss Damage Leaderboard Widget -->
-                        <section class="glass-card rounded-2xl shadow-md p-6">
-                            <h3 class="text-lg font-extrabold font-kanit mb-4 flex items-center justify-between text-gray-900 dark:text-white">
-                                <span class="flex items-center gap-2"><span>🏆</span> อันดับพิชิตบอส</span>
-                                <span class="text-[10px] font-black uppercase text-purple-600 dark:text-purple-300 bg-purple-100 dark:bg-purple-950/80 px-2 py-0.5 rounded-full border border-purple-300/40">Top 3</span>
-                            </h3>
-                            <div id="boss-leaderboard-list" class="space-y-3"></div>
-                        </section>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 2. ANALYSIS PANEL -->
-            <div id="panel-analysis" class="hub-panel hidden space-y-8 max-w-5xl mx-auto pb-12 animate-fade-in">
-                <div id="analysis-summary-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-4"></div>
                 <!-- Insights -->
                 <section id="insight-cards-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></section>
                 <!-- Charts -->

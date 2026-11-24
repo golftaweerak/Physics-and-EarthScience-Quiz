@@ -14,7 +14,7 @@ import {
     WEEKLY_BOSSES
 } from './gamification.js';
 import { openProfileModal } from './profile-modal.js';
-import { getDetailedProgressForAllQuizzes, calculateStrengthsAndWeaknesses } from './data-manager.js';
+import { getDetailedProgressForAllQuizzes, calculateStrengthsAndWeaknesses, getCategoryDisplayName } from './data-manager.js';
 import { renderDailyQuests } from './daily-quests-renderer.js';
 import { ModalHandler } from './modal-handler.js';
 import { showToast } from './toast.js';
@@ -59,8 +59,6 @@ export async function initializeProfile(gameInstance) {
     // 1. เรนเดอร์ UI ทั่วไปทันที (รวดเร็ว)
     renderUserInfo(game);
     renderTrackProgress(game);
-    renderBadges(game);
-    renderAchievements(game);
     renderQuestHistory(game);
     renderShop(game);
     renderDailyQuests(game, 'profile-daily-quests-container');
@@ -92,6 +90,7 @@ export async function initializeProfile(gameInstance) {
     const allProgress = await getDetailedProgressForAllQuizzes();
     setupHistoryRangeSystem(game, allProgress); // NEW: Add history range selector setup
     setupProficiencyModeSystem(game, allProgress); // NEW: Add proficiency mode selector setup
+    renderLearningHeatmap(allProgress);
 
     const chartsRendered = await Promise.all([
         renderRadarChart(game, allProgress),
@@ -112,8 +111,6 @@ export async function initializeProfile(gameInstance) {
         // Update UI elements
         renderUserInfo(game);
         renderTrackProgress(game);
-        renderBadges(game);
-        renderAchievements(game);
         renderQuestHistory(game);
         renderShop(game);
         renderDailyQuests(game, 'profile-daily-quests-container');
@@ -121,6 +118,7 @@ export async function initializeProfile(gameInstance) {
 
         // Re-render charts to reflect merged data
         const updatedProgress = await getDetailedProgressForAllQuizzes();
+        renderLearningHeatmap(updatedProgress);
         await Promise.all([
             renderRadarChart(game, updatedProgress),
             renderProficiencyHistoryChart(game, updatedProgress),
@@ -205,8 +203,32 @@ async function renderAnalysisTab(game) {
     const customQuizzes = await getSavedCustomQuizzes();
     const allStats = await getAllStats(customQuizzes);
 
+    const strStatEl = document.getElementById('rpg-stat-str');
+    if (strStatEl) {
+        strStatEl.textContent = `${game?.state?.streak || 0} วัน`;
+    }
+
+    const spdStatEl = document.getElementById('rpg-stat-spd');
+    let totalTimeSpentSeconds = 0;
+    let totalQuestionsAnswered = 0;
+    allStats.forEach(quiz => {
+        const answeredCount = Array.isArray(quiz.userAnswers) ? quiz.userAnswers.filter(a => a !== null).length : 0;
+        if (quiz.totalTimeSpent && answeredCount > 0) {
+            totalTimeSpentSeconds += quiz.totalTimeSpent;
+            totalQuestionsAnswered += quiz.shuffledQuestions?.length || answeredCount;
+        }
+    });
+    if (spdStatEl) {
+        spdStatEl.textContent = totalQuestionsAnswered > 0
+            ? `${(totalTimeSpentSeconds / totalQuestionsAnswered).toFixed(1)}s/ข้อ`
+            : '--';
+    }
+
     if (allStats.length === 0) {
-        container.innerHTML = `<div class="text-center py-20 text-gray-500">ไม่มีสถิติสำหรับวิเคราะห์</div>`;
+        const summaryGrid = document.getElementById('analysis-summary-grid');
+        if (summaryGrid) {
+            summaryGrid.innerHTML = `<div class="col-span-full glass-card rounded-2xl p-8 text-center text-gray-500 dark:text-gray-400">ยังไม่มีสถิติการทำแบบทดสอบสำหรับวิเคราะห์</div>`;
+        }
         return;
     }
 
@@ -1210,13 +1232,15 @@ function setupResetSystem(game) {
 
     // Reuse the common confirmation modal
     const confirmModal = new ModalHandler('confirm-action-modal');
-    const confirmBtn = document.getElementById('confirm-action-btn');
     const titleEl = document.getElementById('confirm-modal-title');
     const descEl = document.getElementById('confirm-modal-description');
 
     resetBtn.addEventListener('click', () => {
         if (titleEl) titleEl.textContent = 'รีเซ็ตข้อมูลความคืบหน้า?';
         if (descEl) descEl.innerHTML = 'คุณแน่ใจหรือไม่ที่จะลบข้อมูลเลเวล, XP, และเหรียญรางวัลทั้งหมด? <br><strong class="text-red-600 dark:text-red-500">การกระทำนี้ไม่สามารถย้อนกลับได้</strong>';
+
+        const confirmBtn = document.getElementById('confirm-action-btn');
+        if (!confirmBtn) return;
 
         // Clone button to remove old listeners
         const newConfirmBtn = confirmBtn.cloneNode(true);
@@ -2811,7 +2835,7 @@ async function renderRadarChart(game, allProgress = null, mode = 'overall') {
         });
 
         // --- NEW: Mastery Tiers & Smart Focus ---
-        updateMasteryTiers(stats, track);
+        updateMasteryTiers(stats, track, game);
         updateSmartFocus(stats, track);
 
         return true;
@@ -2824,9 +2848,87 @@ async function renderRadarChart(game, allProgress = null, mode = 'overall') {
 }
 
 /**
+ * Renders the 20-week learning activity heatmap from real quiz progress timestamps.
+ * @param {Array<object>} allProgress - Detailed progress list from getDetailedProgressForAllQuizzes().
+ */
+function renderLearningHeatmap(allProgress) {
+    const gridEl = document.getElementById('learning-heatmap-grid');
+    const monthsEl = document.getElementById('learning-heatmap-months');
+    if (!gridEl) return;
+
+    const toLocalDateKey = (date) => {
+        const y = date.getFullYear();
+        const m = String(date.getMonth() + 1).padStart(2, '0');
+        const d = String(date.getDate()).padStart(2, '0');
+        return `${y}-${m}-${d}`;
+    };
+
+    const countsByDate = {};
+    if (Array.isArray(allProgress)) {
+        allProgress.forEach(item => {
+            const ts = item.lastAttemptTimestamp;
+            if (!ts) return;
+            const dateObj = new Date(ts);
+            if (isNaN(dateObj.getTime())) return;
+            const answeredCount = Array.isArray(item.userAnswers)
+                ? item.userAnswers.filter(a => a !== null).length
+                : 0;
+            if (answeredCount <= 0) return;
+            const key = toLocalDateKey(dateObj);
+            countsByDate[key] = (countsByDate[key] || 0) + answeredCount;
+        });
+    }
+
+    const WEEKS = 20;
+    const TOTAL_DAYS = WEEKS * 7;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    // Align grid so the last column ends on Saturday of the current week
+    const endDate = new Date(today);
+    endDate.setDate(today.getDate() + (6 - today.getDay()));
+    const startDate = new Date(endDate);
+    startDate.setDate(endDate.getDate() - (TOTAL_DAYS - 1));
+
+    const thaiMonths = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+    if (monthsEl) {
+        const monthLabels = [];
+        let lastMonth = -1;
+        for (let w = 0; w < WEEKS; w++) {
+            const colDate = new Date(startDate);
+            colDate.setDate(startDate.getDate() + w * 7);
+            const m = colDate.getMonth();
+            if (m !== lastMonth) {
+                monthLabels.push(`<span>${thaiMonths[m]}</span>`);
+                lastMonth = m;
+            }
+        }
+        monthsEl.innerHTML = monthLabels.join('');
+    }
+
+    const cellsHtml = [];
+    for (let i = 0; i < TOTAL_DAYS; i++) {
+        const cellDate = new Date(startDate);
+        cellDate.setDate(startDate.getDate() + i);
+        const key = toLocalDateKey(cellDate);
+        const count = cellDate > today ? 0 : (countsByDate[key] || 0);
+
+        let levelClass = 'hm-lvl-0';
+        if (count >= 16) levelClass = 'hm-lvl-4';
+        else if (count >= 9) levelClass = 'hm-lvl-3';
+        else if (count >= 4) levelClass = 'hm-lvl-2';
+        else if (count >= 1) levelClass = 'hm-lvl-1';
+
+        const dateLabel = `${cellDate.getDate()} ${thaiMonths[cellDate.getMonth()]}`;
+        const opacityClass = cellDate > today ? ' opacity-30' : '';
+        cellsHtml.push(`<div class="heatmap-cell ${levelClass}${opacityClass}" title="${dateLabel}: ${count} ข้อ"></div>`);
+    }
+    gridEl.innerHTML = cellsHtml.join('');
+}
+
+/**
  * Calculates and updates the Mastery Rank UI based on total accuracy and question counts.
  */
-function updateMasteryTiers(stats, track) {
+function updateMasteryTiers(stats, track, game) {
     const iconEl = document.getElementById('mastery-rank-icon');
     const nameEl = document.getElementById('mastery-rank-name');
     const subEl = document.getElementById('mastery-rank-subtitle');
@@ -2872,8 +2974,8 @@ function updateMasteryTiers(stats, track) {
     if (accStatEl) {
         accStatEl.textContent = totalAnswered > 0 ? `${avg.toFixed(1)}%` : '0%';
     }
-    if (strStatEl && window.quizAppInstance?.state) {
-        strStatEl.textContent = `${window.quizAppInstance.state.streakDays || 0} วัน`;
+    if (strStatEl && game?.state) {
+        strStatEl.textContent = `${game.state.streak || 0} วัน`;
     }
     if (intStatEl) {
         if (totalAnswered === 0) intStatEl.textContent = "เริ่มต้น";

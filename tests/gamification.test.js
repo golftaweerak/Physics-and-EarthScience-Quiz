@@ -207,4 +207,72 @@ describe('Gamification System', () => {
       expect(game.state.quizPlayHistory.plays['q_rapid']).toBe(1); // Play history shouldn't increment
     });
   });
+
+  describe('Bug Fixes Regression (Skill Tree, Theme, Mystery Chest, Weekly Quest)', () => {
+    it('should allow free first respec and paid second respec without crashing', () => {
+      game.state.xp = 2000;
+      game.state.level = 5;
+      game.state.allocatedSkillPoints = 2;
+      game.state.perkLevels = { xp_boost: 2 };
+      game.state.unlockedPerks = ['xp_boost'];
+      game.state.hasUsedFreeRespec = false;
+
+      // 1st respec (free)
+      const firstRespec = game.resetSkillPoints();
+      expect(firstRespec.success).toBe(true);
+      expect(firstRespec.isFree).toBe(true);
+      expect(game.state.xp).toBe(2000);
+
+      // Re-allocate and try 2nd respec (costs 1000 XP)
+      game.state.allocatedSkillPoints = 1;
+      game.state.perkLevels = { xp_boost: 1 };
+      game.state.unlockedPerks = ['xp_boost'];
+      const secondRespec = game.resetSkillPoints();
+      expect(secondRespec.success).toBe(true);
+      expect(secondRespec.isFree).toBe(false);
+      expect(game.state.xp).toBe(1000);
+      expect(game.state.totalSpentXP).toBe(1000);
+
+      // 3rd respec with insufficient XP (< 1000)
+      game.state.xp = 500;
+      game.state.allocatedSkillPoints = 1;
+      const failRespec = game.resetSkillPoints();
+      expect(failRespec.success).toBe(false);
+    });
+
+    it('should remove theme-sakura when switching themes', () => {
+      game.applyTheme('theme-sakura');
+      expect(document.documentElement.classList.contains('theme-sakura')).toBe(true);
+
+      game.applyTheme('theme-ocean');
+      expect(document.documentElement.classList.contains('theme-sakura')).toBe(false);
+      expect(document.documentElement.classList.contains('theme-ocean')).toBe(true);
+    });
+
+    it('should use local date for Mystery Chest eligibility and claiming', () => {
+      game.state.activeQuests = [{ id: 'q1', completed: true }];
+      game.state.mysteryChestClaimedDate = null;
+      expect(game.canClaimMysteryChest()).toBe(true);
+
+      const claimRes = game.claimMysteryChest();
+      expect(claimRes.success).toBe(true);
+      expect(game.state.mysteryChestClaimedDate).toBe(game._getLocalDateStr());
+      expect(game.canClaimMysteryChest()).toBe(false);
+    });
+
+    it('should track physics category weekly quest progress via SiteConfig track field', () => {
+      const oneWeekMs = 7 * 24 * 60 * 60 * 1000;
+      // Pick a period index that lands on index 2 (weekly_physics_40)
+      const periodIndex = 2919 + ((2 - (2919 % 7) + 7) % 7);
+      vi.setSystemTime(new Date(periodIndex * oneWeekMs + 3600 * 1000));
+
+      const initial = game.getWeeklyQuestProgress();
+      expect(initial.quest.category).toBe('Physics');
+      expect(initial.currentCount).toBe(0);
+
+      game.addXP(150, 'physics', { shouldSave: false });
+      const updated = game.getWeeklyQuestProgress();
+      expect(updated.currentCount).toBe(15);
+    });
+  });
 });

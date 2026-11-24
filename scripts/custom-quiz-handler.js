@@ -4,6 +4,9 @@ import { fetchAllQuizData, getQuizProgress, categoryDetails as allCategoryDetail
 import { getSyllabusForCategory } from "./syllabus-manager.js";
 import { authManager } from './auth-manager.js'; // authManager now handles db operations
 import { showToast } from './toast.js';
+import { escapeHtml } from './utils.js';
+
+const getQuizBasePath = () => (window.location.pathname.includes('/quiz/') ? '../' : './');
 
 /**
  * Safely retrieves and parses the list of custom quizzes from localStorage.
@@ -675,7 +678,7 @@ export function initializeCustomQuizHandler() {
             const totalQuestions = quiz.questions.length;
             const progress = getQuizProgress(quiz.storageKey, totalQuestions);
             const buttonText = progress.hasProgress ? "ทำต่อ" : "เริ่มทำ";
-            const quizUrl = `./quiz/index.html?id=${quiz.customId}`;
+            const quizUrl = `${getQuizBasePath()}quiz/index.html?id=${quiz.customId}`;
 
             const timerDescription = getTimerDescription(quiz.timerMode, quiz.customTime);
             const timestamp = parseInt(quiz.customId.split('_')[1], 10);
@@ -687,7 +690,7 @@ export function initializeCustomQuizHandler() {
                 <div class="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-600 dark:text-gray-400">
                     <div class="flex items-start" title="หมวดหมู่">
                         <svg class="h-3.5 w-3.5 mr-1.5 flex-shrink-0 text-gray-400 dark:text-gray-500" width="14" height="14" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 12V7a4 4 0 014-4z" /></svg>
-                        <span class="truncate">${quiz.categoryDisplay || 'ทั่วไป'}</span>
+                        <span class="truncate">${escapeHtml(quiz.categoryDisplay || 'ทั่วไป')}</span>
                     </div>
                     <div class="flex items-center" title="รูปแบบการจับเวลา">
                         <svg class="h-3.5 w-3.5 mr-1.5 flex-shrink-0 text-gray-400 dark:text-gray-500" width="14" height="14" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -702,7 +705,7 @@ export function initializeCustomQuizHandler() {
                         <span>${creationDate}</span>
                     </div>
                 </div>
-                ${quiz.description ? `<p class="mt-2 text-xs text-gray-500 dark:text-gray-400 italic border-l-2 border-gray-300 dark:border-gray-600 pl-2">"${quiz.description}"</p>` : ''}
+                ${quiz.description ? `<p class="mt-2 text-xs text-gray-500 dark:text-gray-400 italic border-l-2 border-gray-300 dark:border-gray-600 pl-2">"${escapeHtml(quiz.description)}"</p>` : ''}
             `;
 
             let footerHtml;
@@ -735,12 +738,12 @@ export function initializeCustomQuizHandler() {
                 <div class="flex-grow">
                     <div class="flex items-start gap-4">
                         <div class="flex-shrink-0 h-12 w-12 rounded-lg flex items-center justify-center bg-gray-100 dark:bg-gray-700 p-2 overflow-hidden">
-                            <img src="${iconUrl}" alt="${iconAlt}" ${index > 6 ? 'loading="lazy"' : ''} class="h-full w-full object-contain">
+                            <img src="${escapeHtml(iconUrl)}" alt="${escapeHtml(iconAlt)}" ${index > 6 ? 'loading="lazy"' : ''} class="h-full w-full object-contain">
                         </div>
                         <div class="flex-grow min-w-0">
                             <div data-title-display class="flex justify-between items-start gap-2">
                                 <div class="flex-grow min-w-0">
-                                    <p class="font-bold text-gray-800 dark:text-gray-100 truncate">${quiz.title}</p>
+                                    <p class="font-bold text-gray-800 dark:text-gray-100 truncate">${escapeHtml(quiz.title || '')}</p>
                                 </div>
                                 <div data-view-controls class="flex items-center gap-1 flex-shrink-0">
                                     <button data-action="edit" aria-label="แก้ไขชื่อ" class="p-2 text-gray-500 hover:bg-yellow-100 hover:text-yellow-600 dark:hover:bg-yellow-900/50 dark:hover:text-yellow-400 rounded-full transition"><svg class="h-5 w-5 pointer-events-none" width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg></button>
@@ -1984,7 +1987,7 @@ export function initializeCustomQuizHandler() {
                 showToast('สร้างสำเร็จ', 'เลือกแบบทดสอบเรียบร้อยแล้ว', '✅');
             } else {
                 // Default behavior: Redirect to the quiz
-                window.location.href = `./quiz/index.html?id=${customQuiz.customId}`;
+                window.location.href = `${getQuizBasePath()}quiz/index.html?id=${customQuiz.customId}`;
             }
         } catch (error) {
             console.error("Error starting custom quiz:", error);
@@ -2078,7 +2081,7 @@ export function initializeCustomQuizHandler() {
             });
 
             customQuizModal.close();
-            window.location.href = `./quiz/index.html?id=${remedialQuiz.customId}`;
+            window.location.href = `${getQuizBasePath()}quiz/index.html?id=${remedialQuiz.customId}`;
         } catch (error) {
             console.error("Error starting remedial quiz:", error);
             showToast("เกิดข้อผิดพลาด", "ไม่สามารถเริ่มสอบซ่อมได้: " + error.message, "❌", "error");
@@ -2193,7 +2196,16 @@ export function initializeCustomQuizHandler() {
                         if (confirmModalTitle) confirmModalTitle.textContent = 'ยืนยันการลบแบบทดสอบ';
                         if (confirmModalDescription) confirmModalDescription.textContent = 'คุณแน่ใจหรือไม่ว่าต้องการลบแบบทดสอบนี้? ข้อมูลความคืบหน้าทั้งหมดที่เกี่ยวข้องจะถูกลบไปด้วยและไม่สามารถย้อนกลับได้';
 
-                        onConfirmAction = () => deleteCustomQuiz(customId);
+                        // Dynamically look up confirm button to stay resilient if another handler replaced it
+                        const currentConfirmBtn = document.getElementById("confirm-action-btn");
+                        if (currentConfirmBtn) {
+                            const newConfirmBtn = currentConfirmBtn.cloneNode(true);
+                            currentConfirmBtn.parentNode.replaceChild(newConfirmBtn, currentConfirmBtn);
+                            newConfirmBtn.addEventListener('click', () => {
+                                deleteCustomQuiz(customId);
+                                confirmModal.close();
+                            });
+                        }
                         // Use inline style for z-index to ensure it's applied over other modals.
                         if (confirmModalEl) confirmModalEl.style.zIndex = '99';
 
@@ -2266,16 +2278,7 @@ export function initializeCustomQuizHandler() {
         });
     }
 
-    // --- Confirmation Modal Action Listener ---
-    if (confirmActionBtn) {
-        confirmActionBtn.addEventListener('click', () => {
-            if (typeof onConfirmAction === 'function') {
-                onConfirmAction();
-            }
-            onConfirmAction = null; // Reset after use
-            confirmModal.close();
-        });
-    }
+    // --- Confirmation Modal Action Listener (fallback cleanup) ---
     if (confirmCancelBtn) {
         confirmCancelBtn.addEventListener('click', () => {
             onConfirmAction = null; // Clear action if user cancels

@@ -192,7 +192,7 @@ export const quizItems = [
         answer: 20,
         unit: "m",
         hint: "หาความเร็วต้นในแนวดิ่ง ($u_y$) ก่อน แล้วใช้สูตร $v_y^2 = u_y^2 + 2as$ ที่จุดสูงสุด $v_y=0$",
-        explanation: "หาความเร็วต้นในแนวดิ่ง:\\(u_y = u \\sin\\theta\\) \\implies u_y = 40 \\sin(30^\\circ) = 20$ m/s. <br>ที่จุดสูงสุด $v_y = 0$. จากสูตร $v_y^2 = u_y^2 + 2g s_y$. <br>แทนค่า $0 = 20^2 + 2(-10)s \\implies 20s = 400 \\implies s = 20$ เมตร",
+        explanation: "หาความเร็วต้นในแนวดิ่ง: $u_y = u \\sin\\theta \\implies u_y = 40 \\sin(30^\\circ) = 20$ m/s. <br>ที่จุดสูงสุด $v_y = 0$. จากสูตร $v_y^2 = u_y^2 + 2g s_y$. <br>แทนค่า $0 = 20^2 + 2(-10)s \\implies 20s = 400 \\implies s = 20$ เมตร",
         subCategory: {
           main: MAIN_CATEGORY,
           specific: LO_16

@@ -42,7 +42,7 @@ async function checkAnswers() {
 
     const files = await getFiles(dataDir);
     // กรองเฉพาะไฟล์ข้อมูลข้อสอบ
-    const dataFiles = files.filter(f => f.endsWith('-data.js') && !f.endsWith('sub-category-data.js') && !f.endsWith('scores-data.js'));
+    const dataFiles = files.filter(f => f.endsWith('-data.js') && !f.endsWith('sub-category-data.js') && !f.endsWith('template-data.js') && !path.basename(f).startsWith('scores-data'));
 
     let mismatchCount = 0;
 
@@ -73,7 +73,7 @@ async function checkAnswers() {
 
             items.forEach(item => {
                 // ตรวจสอบเฉพาะข้อสอบปรนัยที่มีตัวเลือก
-                if ((item.type === 'question' || item.type === 'multiple-select') && Array.isArray(item.options)) {
+                if ((!item.type || item.type === 'question' || item.type === 'multiple-select') && Array.isArray(item.options)) {
                     const answers = Array.isArray(item.answer) ? item.answer : [item.answer];
                     
                     answers.forEach(ans => {

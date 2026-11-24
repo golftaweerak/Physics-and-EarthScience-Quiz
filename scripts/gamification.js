@@ -85,14 +85,10 @@ export class Gamification {
         // NEW: ตรวจสอบความถูกต้องของข้อมูลทันทีที่โหลดจาก LocalStorage
         // ฟังก์ชันนี้จะช่วยแก้ปัญหา Data Inconsistency เช่น XP รวมน้อยกว่า XP ย่อย
         // ซึ่งอาจเกิดจากการซิงค์ข้อมูลผิดพลาดในเวอร์ชันก่อนหน้า
-        if (this.ensureConsistency()) {
-            this.saveState();
-        }
+        this.ensureConsistency();
 
         // ใช้ ISO string (YYYY-MM-DD) ที่อ้างอิงตาม local time เพื่อความเสถียรข้ามเบราว์เซอร์
-        const now = new Date();
-        const offset = now.getTimezoneOffset() * 60000;
-        const today = (new Date(now - offset)).toISOString().split('T')[0];
+        const today = this._getLocalDateStr();
         
         if (this.state.lastQuestDate !== today || !this.state.activeQuests || this.state.activeQuests.length === 0) {
             this.state.activeQuests = this.generateDailyQuests();
@@ -141,7 +137,8 @@ export class Gamification {
                     // --- Data Consistency Check & Correction ---
                     // เรียกใช้ฟังก์ชันตรวจสอบความถูกต้องที่สร้างขึ้นใหม่
                     // เพื่อให้มั่นใจว่าข้อมูลจาก Cloud ถูกต้องก่อนนำไปใช้งาน
-                    let needsSave = this.ensureConsistency();
+                    const consistencySaved = this.ensureConsistency();
+                    let needsSave = false;
 
                     // Auto-update name from Google account on first login (if still default)
                     if (user) {
@@ -152,8 +149,10 @@ export class Gamification {
                         }
                     }
 
-                    if (needsSave) {
+                    if (needsSave && !consistencySaved) {
                         this.saveState(); // Save corrected data back to the cloud
+                    } else if (needsSave) {
+                        this.saveState();
                     }
 
                     // Check Streak and update UI
@@ -183,6 +182,17 @@ export class Gamification {
             this.headerObserver = null;
         }
         instance = null;
+    }
+
+    _getLocalDateStr() {
+        const now = new Date();
+        const offset = now.getTimezoneOffset() * 60000;
+        return (new Date(now - offset)).toISOString().split('T')[0];
+    }
+
+    _getTrackXP(track) {
+        const cat = SiteConfig.categories.find(c => c.track === track);
+        return cat ? (Number(this.state[cat.id]) || 0) : 0;
     }
 
     // เพิ่มฟังก์ชันใหม่สำหรับตรวจสอบความถูกต้องของข้อมูล XP
@@ -281,6 +291,7 @@ export class Gamification {
         if (needsSave) {
             this.saveState();
         }
+        return needsSave;
     }
 
     getDefaultState() {
@@ -309,9 +320,6 @@ export class Gamification {
             weekendQuizzesCompleted: 0,
             freeNameChangeAvailable: true, generalXP: 0, accumulatedQuestionsForBonus: 0,
             totalSpentXP: 0, // NEW: ติดตามยอด XP ที่ใช้ไปทั้งหมด (ป้องกันการคืน XP จากไอเทมที่ใช้แล้ว)
-            theoryXP: 0, // NEW: สะสม XP จากข้อทฤษฎี
-            calculationXP: 0, // NEW: สะสม XP จากข้อคำนวณ
-            itemUsageCount: 0, // NEW: จำนวนครั้งที่ใช้ไอเทม
             theoryXP: 0, // NEW: สะสม XP จากข้อทฤษฎี
             calculationXP: 0, // NEW: สะสม XP จากข้อคำนวณ
             itemUsageCount: 0, // NEW: จำนวนครั้งที่ใช้ไอเทม
@@ -896,7 +904,7 @@ export class Gamification {
 
     applyTheme(theme) {
         // Remove existing theme classes
-        document.documentElement.classList.remove('theme-forest', 'theme-sunset', 'theme-ocean', 'theme-berry', 'theme-midnight');
+        document.documentElement.classList.remove('theme-forest', 'theme-sunset', 'theme-ocean', 'theme-berry', 'theme-midnight', 'theme-sakura');
 
         if (theme) {
             document.documentElement.classList.add(theme);
@@ -2113,7 +2121,7 @@ export class Gamification {
         let bonusAwarded = false;
         if (newHp === 0 && boss.currentHp > 0) {
             // Defeated!
-            this.addXP(boss.bonusXp, boss.category || 'General');
+            this.addXP(boss.bonusXp, boss.category || 'General', { shouldSave: false });
             if (boss.badgeId && !this.state.badges.includes(boss.badgeId)) {
                 this.state.badges.push(boss.badgeId);
             }
@@ -2128,7 +2136,7 @@ export class Gamification {
     canClaimMysteryChest() {
         if (!this.state.activeQuests || this.state.activeQuests.length === 0) return false;
         const allQuestsDone = this.state.activeQuests.every(q => q.completed);
-        const today = new Date().toISOString().split('T')[0];
+        const today = this._getLocalDateStr();
         return allQuestsDone && this.state.mysteryChestClaimedDate !== today;
     }
 
@@ -2138,11 +2146,11 @@ export class Gamification {
         }
 
         const reward = MYSTERY_CHEST_REWARDS[Math.floor(Math.random() * MYSTERY_CHEST_REWARDS.length)];
-        const today = new Date().toISOString().split('T')[0];
+        const today = this._getLocalDateStr();
         this.state.mysteryChestClaimedDate = today;
 
         if (reward.type === 'xp') {
-            this.addXP(reward.value, 'General');
+            this.addXP(reward.value, 'General', { shouldSave: false });
         } else if (reward.type === 'item') {
             this.state.consumables[reward.itemId] = (this.state.consumables[reward.itemId] || 0) + 1;
         }
@@ -2218,10 +2226,12 @@ export class Gamification {
         const respecCostXP = 1000;
 
         if (!isFree) {
-            const currentTotalXP = this.calculateTotalXP();
-            if (currentTotalXP < respecCostXP) {
+            const currentXP = Number(this.state.xp) || 0;
+            if (currentXP < respecCostXP) {
                 return { success: false, message: `ต้องการอย่างน้อย ${respecCostXP} XP เพื่อทำการรีเซ็ตทักษะ` };
             }
+            this.state.xp -= respecCostXP;
+            this.state.totalSpentXP = (this.state.totalSpentXP || 0) + respecCostXP;
         }
 
         // Refund all SP
@@ -2297,7 +2307,7 @@ export class Gamification {
 
         this.state.biWeeklyClaimed = Date.now();
         this.state.bonusSPFromQuests = (this.state.bonusSPFromQuests || 0) + progress.quest.rewardSP;
-        this.addXP(progress.quest.rewardXP, "Bi-Weekly Quest Reward");
+        this.addXP(progress.quest.rewardXP, "Bi-Weekly Quest Reward", { shouldSave: false });
 
         this.saveState();
         return { success: true, rewardSP: progress.quest.rewardSP, rewardXP: progress.quest.rewardXP };
@@ -2312,12 +2322,17 @@ export class Gamification {
         const questIndex = Math.abs(periodIndex) % WEEKLY_QUEST_POOL.length;
         const quest = WEEKLY_QUEST_POOL[questIndex] || WEEKLY_QUEST_POOL[0];
 
+        const currentAstroXP = this._getTrackXP('posn_astro') + (this.state.astronomyXP || 0);
+        const currentPhysicsXP = this._getTrackXP('physics');
+        const currentEarthXP = this._getTrackXP('earth') + this._getTrackXP('posn_earth');
+
         if (this.state.weeklyPeriodId !== currentPeriodId) {
             this.state.weeklyPeriodId = currentPeriodId;
             this.state.weeklyQuestId = quest.id;
             this.state.weeklyClaimed = null;
-            this.state.weeklyStartAstro = this.state.astronomyXP || 0;
-            this.state.weeklyStartPhysics = this.state.physicsXP || 0;
+            this.state.weeklyStartAstro = currentAstroXP;
+            this.state.weeklyStartPhysics = currentPhysicsXP;
+            this.state.weeklyStartEarth = currentEarthXP;
             this.state.weeklyStartPerfects = this.state.perfectScores || 0;
             this.state.weeklyStartBossDmg = this.state.bossDamageDealt || 0;
             this.saveState();
@@ -2327,10 +2342,13 @@ export class Gamification {
         if (quest.type === 'category_questions') {
             if (quest.category === 'Astronomy') {
                 const startAstro = this.state.weeklyStartAstro || 0;
-                currentCount = Math.max(0, Math.floor(((this.state.astronomyXP || 0) - startAstro) / 10));
+                currentCount = Math.max(0, Math.floor((currentAstroXP - startAstro) / 10));
             } else if (quest.category === 'Physics') {
                 const startPhys = this.state.weeklyStartPhysics || 0;
-                currentCount = Math.max(0, Math.floor(((this.state.physicsXP || 0) - startPhys) / 10));
+                currentCount = Math.max(0, Math.floor((currentPhysicsXP - startPhys) / 10));
+            } else if (quest.category === 'Earth') {
+                const startEarth = this.state.weeklyStartEarth || 0;
+                currentCount = Math.max(0, Math.floor((currentEarthXP - startEarth) / 10));
             }
         } else if (quest.type === 'perfect_streak') {
             const startPerfects = this.state.weeklyStartPerfects || 0;
@@ -2361,7 +2379,7 @@ export class Gamification {
         if (progress.quest.rewardSP) {
             this.state.bonusSPFromQuests = (this.state.bonusSPFromQuests || 0) + progress.quest.rewardSP;
         }
-        this.addXP(progress.quest.rewardXP, "Weekly Quest Reward");
+        this.addXP(progress.quest.rewardXP, "Weekly Quest Reward", { shouldSave: false });
 
         this.saveState();
         return { success: true, rewardSP: progress.quest.rewardSP || 0, rewardXP: progress.quest.rewardXP };
@@ -2374,13 +2392,14 @@ export class Gamification {
 
         const questIndex = Math.abs(periodIndex) % MONTHLY_QUEST_POOL.length;
         const quest = MONTHLY_QUEST_POOL[questIndex] || MONTHLY_QUEST_POOL[0];
+        const currentEarthXP = this._getTrackXP('earth') + this._getTrackXP('posn_earth');
 
         if (this.state.monthlyPeriodId !== currentPeriodId) {
             this.state.monthlyPeriodId = currentPeriodId;
             this.state.monthlyQuestId = quest.id;
             this.state.monthlyClaimed = null;
             this.state.monthlyStartQuestions = this.state.totalQuestionsAnswered || 0;
-            this.state.monthlyStartEarth = this.state.earthXP || 0;
+            this.state.monthlyStartEarth = currentEarthXP;
             this.saveState();
         }
 
@@ -2390,7 +2409,7 @@ export class Gamification {
             currentCount = Math.max(0, (this.state.totalQuestionsAnswered || 0) - startQ);
         } else if (quest.type === 'category_questions') {
             const startEarth = this.state.monthlyStartEarth || 0;
-            currentCount = Math.max(0, Math.floor(((this.state.earthXP || 0) - startEarth) / 10));
+            currentCount = Math.max(0, Math.floor((currentEarthXP - startEarth) / 10));
         }
 
         const isCompleted = currentCount >= quest.targetCount;
@@ -2414,7 +2433,7 @@ export class Gamification {
         if (progress.quest.rewardSP) {
             this.state.bonusSPFromQuests = (this.state.bonusSPFromQuests || 0) + progress.quest.rewardSP;
         }
-        this.addXP(progress.quest.rewardXP, "Monthly Quest Reward");
+        this.addXP(progress.quest.rewardXP, "Monthly Quest Reward", { shouldSave: false });
 
         this.saveState();
         return { success: true, rewardSP: progress.quest.rewardSP || 0, rewardXP: progress.quest.rewardXP };

@@ -429,7 +429,7 @@ export const quizItems = [
     question: "ลวดตัวนำมีพื้นที่หน้าตัด $2 \\, \\text{mm}^2$ มีอิเล็กตรอนอิสระ $5 \\times 10^{28} \\, \\text{ตัว/m}^3$ ถ้ากระแสไฟฟ้าไหลผ่าน $1.6 \\, \\text{A}$ ความเร็วลอยเลื่อนของอิเล็กตรอนเป็นกี่ mm/s (กำหนด $e = 1.6 \\times 10^{-19} \\text{ C}$) (ตอบเป็นทศนิยม 1 ตำแหน่ง)",
     answer: 0.1,
     unit: "mm/s",
-    hint: "$I = nqv_d A \Rightarrow v_d = I / (nqA)$",
+    hint: "$I = nqv_d A \\Rightarrow v_d = I / (nqA)$",
     explanation: "$v_d = 1.6 / (5 \\times 10^{28} \\times 1.6 \\times 10^{-19} \\times 2 \\times 10^{-6}) = 1.6 / (16 \\times 10^3) = 0.1 \\times 10^{-3} \\text{ m/s} = 0.1 \\text{ mm/s}$",
     subCategory: {
       main: "บทที่ 13: ไฟฟ้ากระแส",
@@ -442,8 +442,8 @@ export const quizItems = [
     question: "ตัวต้านทาน $10 \\, \\Omega$ ทนกำลังไฟฟ้าได้สูงสุด $40 \\, \\text{W}$ ความต่างศักย์สูงสุดที่สามารถต่อคร่อมตัวต้านทานนี้ได้คือเท่าใด (ตอบเป็นจำนวนเต็มในหน่วย V)",
     answer: 20,
     unit: "V",
-    hint: "$P = V^2/R \Rightarrow V = \sqrt{PR}$",
-    explanation: "$V = \sqrt{40 \\times 10} = \sqrt{400} = 20 \\text{ V}$",
+    hint: "$P = V^2/R \\Rightarrow V = \\sqrt{PR}$",
+    explanation: "$V = \\sqrt{40 \\times 10} = \\sqrt{400} = 20 \\text{ V}$",
     subCategory: {
       main: "บทที่ 13: ไฟฟ้ากระแส",
       specific: "9. ทดลอง อธิบาย และคำนวณอีเอ็มเอฟ พลังงานไฟฟ้า และกำลังไฟฟ้า"

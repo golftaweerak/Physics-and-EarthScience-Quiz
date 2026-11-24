@@ -39,7 +39,7 @@ export class ChallengeManager {
     this.onOnline = null;
 
     const basePath = window.location.pathname.includes('/quiz/') ? '../' : './';
-    this.notificationSound = new Audio('./assets/audio/notification.mp3');
+    this.notificationSound = new Audio(`${basePath}assets/audio/notification.mp3`);
   }
 
   init() {
@@ -107,7 +107,6 @@ export class ChallengeManager {
     this.dom.challengeTimerModes = document.querySelectorAll('input[name="challenge-timer-mode"]');
     this.dom.challengeTimerInputContainer = document.getElementById('challenge-timer-input-container');
     this.dom.challengeTimerInput = document.getElementById('challenge-timer-input');
-    this.dom.challengeTimerUnit = document.getElementById('challenge-timer-unit');
     this.dom.challengeTimerUnit = document.getElementById('challenge-timer-unit');
     this.dom.createCustomQuizBtn = document.getElementById('quiz-select-create-custom');
 
@@ -254,7 +253,7 @@ export class ChallengeManager {
       }
     });
 
-    this.dom.createCustomQuizBtn?.addEventListener('click', () => {
+    this._safeBind(this.dom.createCustomQuizBtn, 'click', () => {
       this.quizModal.close();
 
       // Setup context for custom quiz handler to intercept the creation
@@ -278,31 +277,32 @@ export class ChallengeManager {
     });
 
     // NEW: Edit Button Listeners
-    this.dom.editQuizBtn?.addEventListener('click', () => {
+    this._safeBind(this.dom.editQuizBtn, 'click', () => {
       this.openQuizSelection(this.currentMode || 'classic', this.selectedLives);
     });
 
-    this.dom.editModeBtn?.addEventListener('click', () => {
+    this._safeBind(this.dom.editModeBtn, 'click', () => {
       this.openModeSelection();
     });
 
     // Event delegation for the players list to handle kick buttons
-    this.dom.playersListContainer?.addEventListener('click', (e) => {
+    this._safeBind(this.dom.playersListContainer, 'click', (e) => {
       const kickBtn = e.target.closest('.kick-player-btn');
-      if (this.isHost && kickBtn && this.dom.confirmActionBtn) {
+      const currentConfirmBtn = document.getElementById('confirm-action-btn');
+      if (this.isHost && kickBtn && currentConfirmBtn) {
         e.stopPropagation();
         const targetUid = kickBtn.dataset.uid;
         const playerName = kickBtn.dataset.name;
 
         if (this.dom.confirmModalTitle) this.dom.confirmModalTitle.textContent = 'ยืนยันการเชิญออก';
-        if (this.dom.confirmModalDesc) this.dom.confirmModalDesc.innerHTML = `คุณต้องการเชิญ "<strong>${playerName}</strong>" ออกจากห้องใช่หรือไม่?`;
+        if (this.dom.confirmModalDesc) this.dom.confirmModalDesc.innerHTML = `คุณต้องการเชิญ "<strong>${escapeHtml(playerName || '')}</strong>" ออกจากห้องใช่หรือไม่?`;
 
         // Clone button to remove old listeners
-        const newConfirmBtn = this.dom.confirmActionBtn.cloneNode(true);
-        this.dom.confirmActionBtn.parentNode.replaceChild(newConfirmBtn, this.dom.confirmActionBtn);
+        const newConfirmBtn = currentConfirmBtn.cloneNode(true);
+        currentConfirmBtn.parentNode.replaceChild(newConfirmBtn, currentConfirmBtn);
         this.dom.confirmActionBtn = newConfirmBtn;
 
-        this.dom.confirmActionBtn.addEventListener('click', () => {
+        newConfirmBtn.addEventListener('click', () => {
           this.kickPlayer(targetUid);
           this.confirmModal.close();
         });
@@ -311,25 +311,28 @@ export class ChallengeManager {
       }
     });
 
-    // Handle network status changes
-    this.onOffline = () => {
-      if (this.currentLobbyId && !this.isTransitioning) {
-        showToast('ขาดการเชื่อมต่อ', 'คุณกำลังออฟไลน์ ระบบอาจไม่ทำงาน', '⚠️', 'error');
-        if (this.dom.startBtn) this.dom.startBtn.disabled = true;
-      }
-    };
-    this.onOnline = () => {
-      if (this.currentLobbyId) {
-        showToast('เชื่อมต่อสำเร็จ', 'กลับมาออนไลน์แล้ว', '✅', 'success');
-        if (this.dom.startBtn) this.dom.startBtn.disabled = false;
-      }
-    };
+    // Handle network status changes (bind once)
+    if (!this._networkListenersBound) {
+      this._networkListenersBound = true;
+      this.onOffline = () => {
+        if (this.currentLobbyId && !this.isTransitioning) {
+          showToast('ขาดการเชื่อมต่อ', 'คุณกำลังออฟไลน์ ระบบอาจไม่ทำงาน', '⚠️', 'error');
+          if (this.dom.startBtn) this.dom.startBtn.disabled = true;
+        }
+      };
+      this.onOnline = () => {
+        if (this.currentLobbyId) {
+          showToast('เชื่อมต่อสำเร็จ', 'กลับมาออนไลน์แล้ว', '✅', 'success');
+          if (this.dom.startBtn) this.dom.startBtn.disabled = false;
+        }
+      };
 
-    window.addEventListener('offline', this.onOffline);
-    window.addEventListener('online', this.onOnline);
+      window.addEventListener('offline', this.onOffline);
+      window.addEventListener('online', this.onOnline);
+    }
 
     // NEW: Watch for lobby modal closing to ensure we leave the lobby if the user closes it manually (e.g. backdrop click)
-    if (this.lobbyModal && this.lobbyModal.modal) {
+    if (!this.modalObserver && this.lobbyModal && this.lobbyModal.modal) {
       this.modalObserver = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
           if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
@@ -419,20 +422,22 @@ export class ChallengeManager {
         quizzes.sort((a, b) => a.title.localeCompare(b.title, 'th', { numeric: true }));
 
         const quizzesHtml = quizzes.map(q => {
+          const quizId = q.id || q.customId || '';
+          const quizAmount = q.amount || q.questions?.length || '';
           const iconSrc = q.icon || './assets/icons/study.png';
           const isImage = iconSrc.includes('/') || iconSrc.includes('.');
           const iconDisplay = isImage
-            ? `<img src="${iconSrc}" class="w-full h-full object-contain">`
-            : `<span class="text-xl">${iconSrc}</span>`;
+            ? `<img src="${escapeHtml(iconSrc)}" class="w-full h-full object-contain">`
+            : `<span class="text-xl">${escapeHtml(iconSrc)}</span>`;
 
           return `
-                                    <button data-quiz-id="${q.id}" data-quiz-title="${q.title}" data-quiz-desc="${q.description || ''}" data-quiz-amount="${q.amount || ''}" class="quiz-select-item w-full flex items-center gap-3 p-3 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-gray-700 transition-all text-left group bg-white dark:bg-gray-800">
+                                    <button data-quiz-id="${escapeHtml(String(quizId))}" data-quiz-title="${escapeHtml(q.title || '')}" data-quiz-desc="${escapeHtml(q.description || '')}" data-quiz-amount="${escapeHtml(String(quizAmount))}" class="quiz-select-item w-full flex items-center gap-3 p-3 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-gray-700 transition-all text-left group bg-white dark:bg-gray-800">
                                         <div class="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center justify-center flex-shrink-0 group-hover:bg-white dark:group-hover:bg-gray-600 transition-colors overflow-hidden p-1">
                                             ${iconDisplay}
                                         </div>
                                         <div class="min-w-0">
-                                            <div class="font-bold text-gray-800 dark:text-gray-100 truncate text-sm">${q.title}</div>
-                                            <div class="text-xs text-gray-500 dark:text-gray-400 truncate">${q.description || q.category}</div>
+                                            <div class="font-bold text-gray-800 dark:text-gray-100 truncate text-sm">${escapeHtml(q.title || '')}</div>
+                                            <div class="text-xs text-gray-500 dark:text-gray-400 truncate">${escapeHtml(q.description || q.category || '')}</div>
                                         </div>
                                     </button>
                                 `;
@@ -1772,7 +1777,8 @@ export class ChallengeManager {
       params.set('seed', config.seed);
     }
 
-    window.location.href = `./quiz/index.html?${params.toString()}`;
+    const basePath = window.location.pathname.includes('/quiz/') ? '../' : './';
+    window.location.href = `${basePath}quiz/index.html?${params.toString()}`;
   }
 
 
