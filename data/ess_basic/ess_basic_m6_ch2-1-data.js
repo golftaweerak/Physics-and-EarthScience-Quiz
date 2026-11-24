@@ -361,10 +361,10 @@ export const quizItems = [
     "type": "question",
     "question": "แผนภาพเฮิรตซ์ปรุง-รัสเซลล์ (H-R Diagram) แสดงความสัมพันธ์ระหว่างสิ่งใด",
     "options": [
-      "มวลกับอายุ (Mass and Age) ของดาว",
+      "มวลกับอายุขัยเฉลี่ยของดาวฤกษ์ (Stellar Mass and Lifespan)",
       "ความส่องสว่างกับอุณหภูมิผิว (Luminosity and Surface Temperature)",
-      "ระยะทางกับโชติมาตร (Distance and Magnitude)",
-      "ขนาดกับความหนาแน่น (Size and Density)"
+      "ระยะทางกับโชติมาตรปรากฏของดาว (Distance and Apparent Magnitude)",
+      "รัศมีกับความหนาแน่นแก่นดาว (Stellar Radius and Core Density)"
     ],
     "answer": "ความส่องสว่างกับอุณหภูมิผิว (Luminosity and Surface Temperature)",
     "explanation": "แผนภาพ H-R เป็นเครื่องมือพื้นฐานสำคัญในดาราศาสตร์ฟิสิกส์ โดยแกนตั้งแสดงความส่องสว่าง (หรือโชติมาตรสัมบูรณ์) และแกนนอนแสดงอุณหภูมิพื้นผิว (หรือชนิดสเปกตรัม/สี) ใช้ในการจำแนกประเภทและทำความเข้าใจวิวัฒนาการของดาวฤกษ์",

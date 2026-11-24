@@ -356,10 +356,10 @@ export const quizItems = [
     type: "question",
     question: "มาตราวัดขนาดแผ่นดินไหวที่นิยมใช้ในปัจจุบันสำหรับแผ่นดินไหวขนาดใหญ่ และมีความแม่นยำกว่าริกเตอร์ คือมาตราใด",
     options: [
-      "มาตราเมอร์คัลลี (Mercalli)",
+      "มาตราเมอร์คัลลีปรับปรุง (Modified Mercalli Scale - MMI)",
       "มาตราโมเมนต์แมกนิจูด (Moment Magnitude Scale - Mw)",
-      "มาตราเคลวิน (Kelvin)",
-      "มาตราโมห์ (Mohs scale)"
+      "มาตราอุณหภูมิเคลวิน (Kelvin Temperature Scale - K)",
+      "มาตราความแข็งแร่ของโมห์ (Mohs Hardness Scale)"
     ],
     answer: "มาตราโมเมนต์แมกนิจูด (Moment Magnitude Scale - Mw)",
     explanation: "Moment Magnitude คำนวณจากสภาพทางกายภาพจริงของรอยเลื่อน (พื้นที่การเลื่อน x ระยะการเลื่อน x ความแข็งของหิน) จึงแม่นยำกว่าริกเตอร์สำหรับแผ่นดินไหวขนาดใหญ่",
