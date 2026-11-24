@@ -3,6 +3,8 @@ import { getQuizProgress, categoryDetails as allCategoryDetails, getQuizzesList 
 // Removed static import of quizList here
 import { getSavedCustomQuizzes } from './custom-quiz-handler.js';
 import { getSyllabusForCategory } from './syllabus-manager.js';
+import { authManager } from './auth-manager.js';
+import { openCompletedQuizModal } from './ui-utils.js';
 
 /**
  * Creates the HTML string for a single quiz menu item, including progress.
@@ -86,10 +88,6 @@ export async function initializeMenu() {
 
         // --- Modal Setup & State ---
         const completedModal = new ModalHandler('completed-quiz-modal');
-        const viewResultsBtn = document.getElementById('completed-view-results-btn');
-        const startOverBtn = document.getElementById('completed-start-over-btn');
-        let activeQuizUrl = '';
-        let activeStorageKey = '';
         const urlParams = new URLSearchParams(window.location.search);
         const currentQuizId = urlParams.get('id');
 
@@ -198,9 +196,18 @@ export async function initializeMenu() {
                 : syllabus?.chapters;
 
             if (Array.isArray(chapters)) {
+                const specialCategoryName = 'แนวข้อสอบ';
+                const specialQuizzes = quizzesInCategory.filter(q => q.subCategory === specialCategoryName);
+                const regularQuizzes = quizzesInCategory.filter(q => q.subCategory !== specialCategoryName);
+                const matchedIds = new Set();
+
                 chapters.forEach(chapter => {
                     const chapterTitleFromSyllabus = chapter.title;
-                    const chapterQuizzes = quizzesInCategory.filter(quiz => quiz.subCategory === chapterTitleFromSyllabus);
+                    const chapterQuizzes = regularQuizzes.filter(quiz => {
+                        const isMatch = quiz.subCategory === chapterTitleFromSyllabus;
+                        if (isMatch) matchedIds.add(quiz.id);
+                        return isMatch;
+                    });
 
                     if (chapterQuizzes.length > 0) {
                         let displayTitle = chapterTitleFromSyllabus;
@@ -220,6 +227,32 @@ export async function initializeMenu() {
                         menuHTML += `<div class="space-y-px pl-2">${quizLinksContainerHTML}</div>`;
                     }
                 });
+
+                const unmatchedQuizzes = regularQuizzes.filter(quiz => !matchedIds.has(quiz.id));
+                if (unmatchedQuizzes.length > 0) {
+                    unmatchedQuizzes.sort((a, b) => a.title.localeCompare(b.title, 'th', { numeric: true }));
+                    menuHTML += `<p class="px-2 pt-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">ชุดข้อสอบทั่วไป</p>`;
+                    menuHTML += `<div class="space-y-px pl-2">${unmatchedQuizzes.map(quiz => createMenuItemHTML(quiz, getQuizUrl, currentQuizId, basePath)).join('')}</div>`;
+                }
+
+                if (specialQuizzes.length > 0) {
+                    const getSortKey = (quiz) => {
+                        const title = quiz.title || '';
+                        let term = 99;
+                        let examType = 99;
+                        let set = 99;
+                        if (title.includes('เทอม 1') || title.includes('ภาค 1')) term = 1;
+                        else if (title.includes('เทอม 2') || title.includes('ภาค 2')) term = 2;
+                        if (title.includes('กลางภาค')) examType = 1;
+                        else if (title.includes('ปลายภาค')) examType = 2;
+                        const setMatch = title.match(/ชุดที่\s*(\d+)/);
+                        if (setMatch) set = parseInt(setMatch[1], 10);
+                        return `${String(term).padStart(2, '0')}-${String(examType).padStart(2, '0')}-${String(set).padStart(2, '0')}`;
+                    };
+                    specialQuizzes.sort((a, b) => getSortKey(a).localeCompare(getSortKey(b)));
+                    menuHTML += `<p class="px-2 pt-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">${specialCategoryName}</p>`;
+                    menuHTML += `<div class="space-y-px pl-2">${specialQuizzes.map(quiz => createMenuItemHTML(quiz, getQuizUrl, currentQuizId, basePath)).join('')}</div>`;
+                }
             } else { // Fallback for non-syllabus categories
                 quizzesInCategory.forEach(quiz => {
                     menuHTML += createMenuItemHTML(quiz, getQuizUrl, currentQuizId, basePath);
@@ -266,37 +299,18 @@ export async function initializeMenu() {
                     if (progress.isFinished) {
                         event.preventDefault();
                         const quizTitle = link.dataset.quizTitle || 'แบบทดสอบ';
-                        const modalTitleEl = document.getElementById('completed-modal-title');
-                        if (modalTitleEl) {
-                            modalTitleEl.textContent = quizTitle;
-                        }
-                        activeQuizUrl = link.href;
-                        activeStorageKey = storageKey;
-                        completedModal.open(link);
+                        openCompletedQuizModal({
+                            title: quizTitle,
+                            url: link.href,
+                            storageKey,
+                            triggerElement: link,
+                            modal: completedModal,
+                            onStartOver: (k) => authManager.deleteQuizHistoryItem(k),
+                        });
                     }
                 }
             });
             menuDropdown.dataset.hasListener = 'true';
-        }
-
-        // --- Modal Button Listeners ---
-        if (viewResultsBtn && !viewResultsBtn.dataset.hasListener) {
-            viewResultsBtn.addEventListener('click', () => {
-                if (activeQuizUrl) {
-                    const separator = activeQuizUrl.includes('?') ? '&' : '?';
-                    window.location.href = `${activeQuizUrl}${separator}action=view_results`;
-                }
-                completedModal.close();
-            });
-            viewResultsBtn.dataset.hasListener = 'true';
-        }
-        if (startOverBtn && !startOverBtn.dataset.hasListener) {
-            startOverBtn.addEventListener('click', () => {
-                if (activeStorageKey) localStorage.removeItem(activeStorageKey);
-                if (activeQuizUrl) window.location.href = activeQuizUrl;
-                completedModal.close();
-            });
-            startOverBtn.dataset.hasListener = 'true';
         }
 
         return true;

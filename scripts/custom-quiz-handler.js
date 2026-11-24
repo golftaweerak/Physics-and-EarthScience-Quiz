@@ -5,6 +5,25 @@ import { getSyllabusForCategory } from "./syllabus-manager.js";
 import { authManager } from './auth-manager.js'; // authManager now handles db operations
 import { showToast } from './toast.js';
 import { escapeHtml } from './utils.js';
+import { bindConfirmModalAction, openCompletedQuizModal } from './ui-utils.js';
+
+const RANDOM_ROW_COLORS = {
+    red: { quickHover: 'hover:bg-red-100 hover:text-red-700 dark:hover:bg-red-900/50 dark:hover:text-red-300', input: 'text-red-600 dark:text-red-400 focus:ring-red-500 focus:border-red-500', btn: 'bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-300 hover:bg-red-200 dark:hover:bg-red-800' },
+    orange: { quickHover: 'hover:bg-orange-100 hover:text-orange-700 dark:hover:bg-orange-900/50 dark:hover:text-orange-300', input: 'text-orange-600 dark:text-orange-400 focus:ring-orange-500 focus:border-orange-500', btn: 'bg-orange-100 text-orange-700 dark:bg-orange-900/50 dark:text-orange-300 hover:bg-orange-200 dark:hover:bg-orange-800' },
+    amber: { quickHover: 'hover:bg-amber-100 hover:text-amber-700 dark:hover:bg-amber-900/50 dark:hover:text-amber-300', input: 'text-amber-600 dark:text-amber-400 focus:ring-amber-500 focus:border-amber-500', btn: 'bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300 hover:bg-amber-200 dark:hover:bg-amber-800' },
+    yellow: { quickHover: 'hover:bg-yellow-100 hover:text-yellow-700 dark:hover:bg-yellow-900/50 dark:hover:text-yellow-300', input: 'text-yellow-600 dark:text-yellow-400 focus:ring-yellow-500 focus:border-yellow-500', btn: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/50 dark:text-yellow-300 hover:bg-yellow-200 dark:hover:bg-yellow-800' },
+    green: { quickHover: 'hover:bg-green-100 hover:text-green-700 dark:hover:bg-green-900/50 dark:hover:text-green-300', input: 'text-green-600 dark:text-green-400 focus:ring-green-500 focus:border-green-500', btn: 'bg-green-100 text-green-700 dark:bg-green-900/50 dark:text-green-300 hover:bg-green-200 dark:hover:bg-green-800' },
+    emerald: { quickHover: 'hover:bg-emerald-100 hover:text-emerald-700 dark:hover:bg-emerald-900/50 dark:hover:text-emerald-300', input: 'text-emerald-600 dark:text-emerald-400 focus:ring-emerald-500 focus:border-emerald-500', btn: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300 hover:bg-emerald-200 dark:hover:bg-emerald-800' },
+    teal: { quickHover: 'hover:bg-teal-100 hover:text-teal-700 dark:hover:bg-teal-900/50 dark:hover:text-teal-300', input: 'text-teal-600 dark:text-teal-400 focus:ring-teal-500 focus:border-teal-500', btn: 'bg-teal-100 text-teal-700 dark:bg-teal-900/50 dark:text-teal-300 hover:bg-teal-200 dark:hover:bg-teal-800' },
+    cyan: { quickHover: 'hover:bg-cyan-100 hover:text-cyan-700 dark:hover:bg-cyan-900/50 dark:hover:text-cyan-300', input: 'text-cyan-600 dark:text-cyan-400 focus:ring-cyan-500 focus:border-cyan-500', btn: 'bg-cyan-100 text-cyan-700 dark:bg-cyan-900/50 dark:text-cyan-300 hover:bg-cyan-200 dark:hover:bg-cyan-800' },
+    sky: { quickHover: 'hover:bg-sky-100 hover:text-sky-700 dark:hover:bg-sky-900/50 dark:hover:text-sky-300', input: 'text-sky-600 dark:text-sky-400 focus:ring-sky-500 focus:border-sky-500', btn: 'bg-sky-100 text-sky-700 dark:bg-sky-900/50 dark:text-sky-300 hover:bg-sky-200 dark:hover:bg-sky-800' },
+    blue: { quickHover: 'hover:bg-blue-100 hover:text-blue-700 dark:hover:bg-blue-900/50 dark:hover:text-blue-300', input: 'text-blue-600 dark:text-blue-400 focus:ring-blue-500 focus:border-blue-500', btn: 'bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-800' },
+    indigo: { quickHover: 'hover:bg-indigo-100 hover:text-indigo-700 dark:hover:bg-indigo-900/50 dark:hover:text-indigo-300', input: 'text-indigo-600 dark:text-indigo-400 focus:ring-indigo-500 focus:border-indigo-500', btn: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300 hover:bg-indigo-200 dark:hover:bg-indigo-800' },
+    purple: { quickHover: 'hover:bg-purple-100 hover:text-purple-700 dark:hover:bg-purple-900/50 dark:hover:text-purple-300', input: 'text-purple-600 dark:text-purple-400 focus:ring-purple-500 focus:border-purple-500', btn: 'bg-purple-100 text-purple-700 dark:bg-purple-900/50 dark:text-purple-300 hover:bg-purple-200 dark:hover:bg-purple-800' },
+    pink: { quickHover: 'hover:bg-pink-100 hover:text-pink-700 dark:hover:bg-pink-900/50 dark:hover:text-pink-300', input: 'text-pink-600 dark:text-pink-400 focus:ring-pink-500 focus:border-pink-500', btn: 'bg-pink-100 text-pink-700 dark:bg-pink-900/50 dark:text-pink-300 hover:bg-pink-200 dark:hover:bg-pink-800' },
+    rose: { quickHover: 'hover:bg-rose-100 hover:text-rose-700 dark:hover:bg-rose-900/50 dark:hover:text-rose-300', input: 'text-rose-600 dark:text-rose-400 focus:ring-rose-500 focus:border-rose-500', btn: 'bg-rose-100 text-rose-700 dark:bg-rose-900/50 dark:text-rose-300 hover:bg-rose-200 dark:hover:bg-rose-800' },
+    gray: { quickHover: 'hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-900/50 dark:hover:text-gray-300', input: 'text-gray-600 dark:text-gray-400 focus:ring-gray-500 focus:border-gray-500', btn: 'bg-gray-100 text-gray-700 dark:bg-gray-900/50 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800' },
+};
 
 const getQuizBasePath = () => (window.location.pathname.includes('/quiz/') ? '../' : './');
 
@@ -351,7 +370,6 @@ export function initializeCustomQuizHandler() {
     const confirmModal = new ModalHandler("confirm-action-modal");
     const confirmModalTitle = document.getElementById("confirm-modal-title");
     const confirmModalDescription = document.getElementById("confirm-modal-description");
-    const confirmActionBtn = document.getElementById("confirm-action-btn");
     const confirmCancelBtn = document.getElementById("confirm-cancel-btn");
     const confirmModalEl = document.getElementById("confirm-action-modal");
     const randomAllModal = new ModalHandler("random-all-modal");
@@ -377,8 +395,6 @@ export function initializeCustomQuizHandler() {
     const openCreateQuizModalBtn = document.getElementById("open-create-quiz-modal-btn");
     const customQuizListContainer = document.getElementById("custom-quiz-list-container");
     const noCustomQuizzesMsg = document.getElementById("no-custom-quizzes-msg");
-    const viewResultsBtn = document.getElementById('completed-view-results-btn');
-    const startOverBtn = document.getElementById('completed-start-over-btn');
 
     // Create and inject the loader for the custom quiz list
     let listLoader = null;
@@ -397,9 +413,6 @@ export function initializeCustomQuizHandler() {
     }
 
     // --- State Management ---
-    let activeQuizUrl = '';
-    let activeStorageKey = '';
-    let onConfirmAction = null;
     let isBadgeDismissed = false;
     let hasShownSuccess = false;
     let isRemedialMode = false;
@@ -1660,6 +1673,7 @@ export function initializeCustomQuizHandler() {
             const createRandomRow = (label, groupType, color) => {
                 const available = getAvailableCount(groupType);
                 const disabled = available === 0;
+                const c = RANDOM_ROW_COLORS[color] || RANDOM_ROW_COLORS.gray;
 
                 return `
                 <div class="specific-topic-control py-3 px-4 border-t border-gray-200 dark:border-gray-700/50 ${disabled ? 'opacity-50 pointer-events-none' : ''}">
@@ -1673,10 +1687,10 @@ export function initializeCustomQuizHandler() {
                         <div class="flex items-center justify-between gap-2">
                             <span class="text-xs text-gray-500 dark:text-gray-400 w-20">สุ่มด่วน<br>(รวม)</span>
                             <div class="flex-grow flex flex-wrap justify-end gap-1">
-                                <button data-action="random-group-quick" data-group="${groupType}" data-value="5" class="px-2 py-0.5 text-xs font-medium text-gray-600 bg-gray-100 dark:text-gray-300 dark:bg-gray-700/60 rounded-full hover:bg-${color}-100 hover:text-${color}-700 dark:hover:bg-${color}-900/50 dark:hover:text-${color}-300 transition-colors">5</button>
-                                <button data-action="random-group-quick" data-group="${groupType}" data-value="10" class="px-2 py-0.5 text-xs font-medium text-gray-600 bg-gray-100 dark:text-gray-300 dark:bg-gray-700/60 rounded-full hover:bg-${color}-100 hover:text-${color}-700 dark:hover:bg-${color}-900/50 dark:hover:text-${color}-300 transition-colors">10</button>
-                                <button data-action="random-group-quick" data-group="${groupType}" data-value="20" class="px-2 py-0.5 text-xs font-medium text-gray-600 bg-gray-100 dark:text-gray-300 dark:bg-gray-700/60 rounded-full hover:bg-${color}-100 hover:text-${color}-700 dark:hover:bg-${color}-900/50 dark:hover:text-${color}-300 transition-colors">20</button>
-                                <button data-action="random-group-quick" data-group="${groupType}" data-value="30" class="px-2 py-0.5 text-xs font-medium text-gray-600 bg-gray-100 dark:text-gray-300 dark:bg-gray-700/60 rounded-full hover:bg-${color}-100 hover:text-${color}-700 dark:hover:bg-${color}-900/50 dark:hover:text-${color}-300 transition-colors">30</button>
+                                <button data-action="random-group-quick" data-group="${groupType}" data-value="5" class="px-2 py-0.5 text-xs font-medium text-gray-600 bg-gray-100 dark:text-gray-300 dark:bg-gray-700/60 rounded-full ${c.quickHover} transition-colors">5</button>
+                                <button data-action="random-group-quick" data-group="${groupType}" data-value="10" class="px-2 py-0.5 text-xs font-medium text-gray-600 bg-gray-100 dark:text-gray-300 dark:bg-gray-700/60 rounded-full ${c.quickHover} transition-colors">10</button>
+                                <button data-action="random-group-quick" data-group="${groupType}" data-value="20" class="px-2 py-0.5 text-xs font-medium text-gray-600 bg-gray-100 dark:text-gray-300 dark:bg-gray-700/60 rounded-full ${c.quickHover} transition-colors">20</button>
+                                <button data-action="random-group-quick" data-group="${groupType}" data-value="30" class="px-2 py-0.5 text-xs font-medium text-gray-600 bg-gray-100 dark:text-gray-300 dark:bg-gray-700/60 rounded-full ${c.quickHover} transition-colors">30</button>
                             </div>
                         </div>
                         
@@ -1684,8 +1698,8 @@ export function initializeCustomQuizHandler() {
                         <div class="flex items-center justify-between gap-2">
                              <span class="text-xs text-gray-500 dark:text-gray-400 w-20">เฉลี่ย<br>(ต่อบท)</span>
                              <div class="flex items-center gap-2 justify-end flex-grow">
-                                <input type="number" min="1" max="20" value="2" class="random-per-chapter-input w-14 py-1 px-1 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900/50 text-center font-semibold text-sm text-${color}-600 dark:text-${color}-400 focus:ring-${color}-500 focus:border-${color}-500" placeholder="ข้อ">
-                                <button data-action="random-group" data-group="${groupType}" class="px-3 py-1 bg-${color}-100 text-${color}-700 dark:bg-${color}-900/50 dark:text-${color}-300 rounded-full text-xs font-bold hover:bg-${color}-200 dark:hover:bg-${color}-800 transition-colors">
+                                <input type="number" min="1" max="20" value="2" class="random-per-chapter-input w-14 py-1 px-1 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900/50 text-center font-semibold text-sm ${c.input}" placeholder="ข้อ">
+                                <button data-action="random-group" data-group="${groupType}" class="px-3 py-1 ${c.btn} rounded-full text-xs font-bold transition-colors">
                                     สุ่ม
                                 </button>
                              </div>
@@ -2196,16 +2210,7 @@ export function initializeCustomQuizHandler() {
                         if (confirmModalTitle) confirmModalTitle.textContent = 'ยืนยันการลบแบบทดสอบ';
                         if (confirmModalDescription) confirmModalDescription.textContent = 'คุณแน่ใจหรือไม่ว่าต้องการลบแบบทดสอบนี้? ข้อมูลความคืบหน้าทั้งหมดที่เกี่ยวข้องจะถูกลบไปด้วยและไม่สามารถย้อนกลับได้';
 
-                        // Dynamically look up confirm button to stay resilient if another handler replaced it
-                        const currentConfirmBtn = document.getElementById("confirm-action-btn");
-                        if (currentConfirmBtn) {
-                            const newConfirmBtn = currentConfirmBtn.cloneNode(true);
-                            currentConfirmBtn.parentNode.replaceChild(newConfirmBtn, currentConfirmBtn);
-                            newConfirmBtn.addEventListener('click', () => {
-                                deleteCustomQuiz(customId);
-                                confirmModal.close();
-                            });
-                        }
+                        bindConfirmModalAction(() => deleteCustomQuiz(customId), () => confirmModal.close());
                         // Use inline style for z-index to ensure it's applied over other modals.
                         if (confirmModalEl) confirmModalEl.style.zIndex = '99';
 
@@ -2244,44 +2249,25 @@ export function initializeCustomQuizHandler() {
 
                 if (progress.isFinished) {
                     event.preventDefault();
-                    activeQuizUrl = startLink.href;
-                    activeStorageKey = quiz.storageKey;
-
-                    // NEW: Set the modal title to provide context
-                    const modalTitleEl = document.getElementById('completed-modal-title');
-                    if (modalTitleEl) {
-                        modalTitleEl.textContent = `แบบทดสอบ: "${quiz.title}"`;
-                    }
-
-                    completedModal.open(startLink);
+                    openCompletedQuizModal({
+                        title: `แบบทดสอบ: "${quiz.title}"`,
+                        url: startLink.href,
+                        storageKey: quiz.storageKey,
+                        triggerElement: startLink,
+                        modal: completedModal,
+                        onStartOver: (k) => authManager.deleteQuizHistoryItem(k),
+                    });
                 }
                 // If not finished, the default 'a' tag behavior will handle navigation.
             }
         });
     }
 
-    // --- Completed Quiz Modal Button Listeners ---
-    if (viewResultsBtn) {
-        viewResultsBtn.addEventListener('click', () => {
-            if (activeQuizUrl) {
-                const separator = activeQuizUrl.includes('?') ? '&' : '?';
-                window.location.href = `${activeQuizUrl}${separator}action=view_results`;
-            }
-            completedModal.close();
-        });
-    }
-    if (startOverBtn) {
-        startOverBtn.addEventListener('click', () => {
-            if (activeStorageKey) localStorage.removeItem(activeStorageKey);
-            if (activeQuizUrl) window.location.href = activeQuizUrl;
-            completedModal.close();
-        });
-    }
-
     // --- Confirmation Modal Action Listener (fallback cleanup) ---
     if (confirmCancelBtn) {
         confirmCancelBtn.addEventListener('click', () => {
-            onConfirmAction = null; // Clear action if user cancels
+            const confirmBtn = document.getElementById('confirm-action-btn');
+            if (confirmBtn) confirmBtn._confirmAction = null;
         });
     }
 
@@ -2573,21 +2559,7 @@ export function initializeCustomQuizHandler() {
             return;
         }
 
-        // 3. Completed Modal: View Results
-        if (target.closest('#completed-view-results-btn')) {
-            completedModal.close();
-            // Handle results view if applicable
-            return;
-        }
-
-        // 4. Completed Modal: Start Over
-        if (target.closest('#completed-start-over-btn')) {
-            completedModal.close();
-            location.reload();
-            return;
-        }
-
-        // 5. Completed Modal: Cancel
+        // 3. Completed Modal: Cancel
         if (target.closest('#completed-cancel-btn')) {
             completedModal.close();
             return;

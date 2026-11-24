@@ -271,7 +271,7 @@ export async function initializeQuiz() {
                     if (targetQuizId.includes('/')) {
                         return k.endsWith(`${targetQuizId}-data.js`);
                     } else {
-                        const possibleFolders = ['phy_m4/', 'phy_m5/', 'phy_m6/', 'ess_basic/', 'ess_adv/'];
+                        const possibleFolders = ['phy_m4/', 'phy_m5/', 'phy_m6/', 'ess_basic/', 'ess_adv/', 'posn_astro/', 'posn_earth/'];
                         return k.endsWith(expectedSuffix) || possibleFolders.some(f => k.endsWith(`${f}${expectedSuffix}`));
                     }
                 });
@@ -332,7 +332,7 @@ export async function initializeQuiz() {
                 lives = lobbyConfig.lives || 1;
             }
 
-            initQuizApp(selectedQuestions, `quizState-challenge-${seed}`, "Challenge Mode", customTime, action, true, lives, timerMode);
+            initQuizApp(selectedQuestions, `quizState-challenge-${seed}`, titleText, customTime, action, true, lives, timerMode);
             return;
         } catch (error) {
             console.error("Error generating random quiz:", error);
@@ -360,7 +360,7 @@ export async function initializeQuiz() {
                 return k.endsWith(`${quizId}-data.js`);
             } else {
                 // Check if it's in a suspected folder
-                const possibleFolders = ['phy_m4/', 'phy_m5/', 'phy_m6/', 'ess_basic/', 'ess_adv/'];
+                const possibleFolders = ['phy_m4/', 'phy_m5/', 'phy_m6/', 'ess_basic/', 'ess_adv/', 'posn_astro/', 'posn_earth/'];
                 return k.endsWith(expectedSuffix) || possibleFolders.some(f => k.endsWith(`${f}${expectedSuffix}`));
             }
         });

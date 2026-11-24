@@ -211,9 +211,6 @@ export function init(quizData, storageKey, quizTitle, customTime, action, isChal
     powerupModalDesc: document.getElementById("powerup-modal-desc"),
     powerupUserXp: document.getElementById("powerup-user-xp"),
     powerupItemCost: document.getElementById("powerup-item-cost"),
-    powerupModalDesc: document.getElementById("powerup-modal-desc"),
-    powerupUserXp: document.getElementById("powerup-user-xp"),
-    powerupItemCost: document.getElementById("powerup-item-cost"),
     powerupConfirmBtn: document.getElementById("powerup-confirm-buy-btn"),
     // New: Back to Lobby Button
     backToLobbyBtn: document.getElementById("back-to-lobby-btn"),
@@ -239,6 +236,8 @@ export function init(quizData, storageKey, quizTitle, customTime, action, isChal
     timerMode: timerMode || "none", // Initialize with passed mode or default
     timeLeft: 0,
     timerId: null,
+    freezeTimeoutId: null,
+    isTimeFrozen: false,
     initialTime: 0,
     activeScreen: null,
     isFloatingNav: false, // To track the nav state
@@ -3255,6 +3254,14 @@ function stopTimer() {
     clearInterval(state.timerId);
     state.timerId = null;
   }
+  if (state.freezeTimeoutId) {
+    clearTimeout(state.freezeTimeoutId);
+    state.freezeTimeoutId = null;
+  }
+  state.isTimeFrozen = false;
+  if (elements.timerDisplay) {
+    elements.timerDisplay.classList.remove('text-blue-500', 'animate-pulse');
+  }
 }
 
 function updateTimerDisplay() {
@@ -3341,10 +3348,14 @@ function freezeTime() {
   state.isTimeFrozen = true;
   if (elements.timerDisplay) elements.timerDisplay.classList.add('text-blue-500', 'animate-pulse');
 
-  setTimeout(() => {
+  state.freezeTimeoutId = setTimeout(() => {
+    state.freezeTimeoutId = null;
     state.isTimeFrozen = false;
     if (elements.timerDisplay) elements.timerDisplay.classList.remove('text-blue-500', 'animate-pulse');
-    state.timerId = setInterval(tick, 1000); // Resume timer
+    if (state.activeScreen === elements.quizScreen && state.timerMode !== 'none') {
+      stopTimer();
+      state.timerId = setInterval(tick, 1000); // Resume timer
+    }
   }, 30000);
 }
 

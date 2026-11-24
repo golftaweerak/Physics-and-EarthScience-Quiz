@@ -125,3 +125,77 @@ export function initializeScrollToTop() {
     });
   }
 }
+
+/**
+ * Safely binds a single shared confirmation callback onto `#confirm-action-btn` without cloning the DOM node.
+ * @param {Function} onConfirm
+ * @param {Function} [closeFn]
+ */
+export function bindConfirmModalAction(onConfirm, closeFn) {
+  const btn = document.getElementById('confirm-action-btn');
+  if (!btn) return;
+  btn._confirmAction = { onConfirm, closeFn };
+  if (!btn.dataset.confirmActionBound) {
+    btn.dataset.confirmActionBound = 'true';
+    btn.addEventListener('click', () => {
+      const action = btn._confirmAction;
+      btn._confirmAction = null;
+      if (action && typeof action.onConfirm === 'function') {
+        action.onConfirm();
+      }
+      if (action && typeof action.closeFn === 'function') {
+        action.closeFn();
+      }
+    });
+  }
+}
+
+/**
+ * Opens `#completed-quiz-modal` using shared single-bound action handlers so cards, menu items, and stats don't collide.
+ * @param {object} options
+ */
+export function openCompletedQuizModal({ title, url, storageKey, triggerElement = null, modal, onStartOver }) {
+  const modalTitleEl = document.getElementById('completed-modal-title');
+  if (modalTitleEl && title) {
+    modalTitleEl.textContent = title;
+  }
+
+  const modalEl = document.getElementById('completed-quiz-modal');
+  if (modalEl) {
+    modalEl._completedQuizAction = { url, storageKey, modal, onStartOver };
+  }
+
+  const viewResultsBtn = document.getElementById('completed-view-results-btn');
+  if (viewResultsBtn && !viewResultsBtn.dataset.completedActionBound) {
+    viewResultsBtn.dataset.completedActionBound = 'true';
+    viewResultsBtn.addEventListener('click', () => {
+      const action = document.getElementById('completed-quiz-modal')?._completedQuizAction;
+      if (action?.url) {
+        const separator = action.url.includes('?') ? '&' : '?';
+        window.location.href = `${action.url}${separator}action=view_results`;
+      }
+      action?.modal?.close();
+    });
+  }
+
+  const startOverBtn = document.getElementById('completed-start-over-btn');
+  if (startOverBtn && !startOverBtn.dataset.completedActionBound) {
+    startOverBtn.dataset.completedActionBound = 'true';
+    startOverBtn.addEventListener('click', async () => {
+      const action = document.getElementById('completed-quiz-modal')?._completedQuizAction;
+      if (action?.storageKey) {
+        if (typeof action.onStartOver === 'function') {
+          await action.onStartOver(action.storageKey);
+        } else {
+          localStorage.removeItem(action.storageKey);
+        }
+      }
+      if (action?.url) {
+        window.location.href = action.url;
+      }
+      action?.modal?.close();
+    });
+  }
+
+  modal?.open(triggerElement);
+}

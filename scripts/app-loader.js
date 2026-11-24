@@ -1,52 +1,6 @@
 import { loadComponent } from './component-loader.js';
 import { initializeCommonComponents } from './common-init.js';
-import { initializeDarkMode } from './dark-mode.js';
 import { SiteConfig } from './site-config.js';
-
-let isAnchorScrollInitialized = false;
-
-/**
- * Handles anchor link clicks from the page header to ensure smooth scrolling
- * after accordion animations complete.
- */
-function initializeAnchorScrollFix(toggleAccordion, getSectionToggles) {
-    if (isAnchorScrollInitialized) return;
-    const headerPlaceholder = document.getElementById('main_header-placeholder'); // Updated ID
-    if (!headerPlaceholder) return;
-
-    // Use event delegation on the container for the links
-    headerPlaceholder.addEventListener('click', (event) => {
-        const link = event.target.closest('a[href^="#category-"]');
-        if (!link) return;
-
-        event.preventDefault(); // Stop the browser's default immediate jump
-
-        const targetId = link.getAttribute('href').substring(1);
-        const targetElement = document.getElementById(targetId);
-
-        if (targetElement) {
-            const sectionToggles = getSectionToggles();
-            const targetToggle = targetElement.querySelector('.section-toggle');
-
-            if (targetToggle) {
-                // Close all other accordions first for a cleaner UX
-                sectionToggles.forEach(otherToggle => {
-                    if (otherToggle !== targetToggle) {
-                        toggleAccordion(otherToggle, 'close');
-                    }
-                });
-                // Then, ensure the target accordion is open.
-                toggleAccordion(targetToggle, 'open');
-            }
-
-            // We just need to wait for the collapse/expand animation to finish before scrolling.
-            setTimeout(() => {
-                targetElement.scrollIntoView(); // This respects the `scroll-padding-top` on <html>
-            }, 550); // Adjust duration to be slightly longer than the CSS animation.
-        }
-    });
-    isAnchorScrollInitialized = true;
-}
 
 /**
  * Initializes the application by loading shared components and then running page-specific scripts.
@@ -67,8 +21,7 @@ async function main() {
         document.querySelector('meta[name="keywords"]')?.setAttribute("content", SiteConfig.appKeywords);
         document.querySelector('meta[name="author"]')?.setAttribute("content", SiteConfig.author);
 
-        initializeDarkMode();
-        // Defer Gamification and Starfield to initializeCommonComponents to avoid duplicate initialization
+        // Dark mode is initialized via dark-mode.js early init and common-init.js
 
         // 2. Load Shared Components in Parallel
         console.log("🚀 App Loader: Loading components in parallel...");
@@ -112,10 +65,10 @@ async function main() {
         console.log("🚀 App Loader: Initializing UI...");
         await initializeCommonComponents();
 
-        // Initialize Gamification LATE (Dynamic Import)
+        // Initialize Gamification LATE (Dynamic Import, shared singleton)
         console.log("🚀 App Loader: Initializing Gamification...");
-        const { Gamification } = await import('./gamification.js');
-        new Gamification();
+        const { getGamification } = await import('./gamification.js');
+        getGamification();
 
         console.log("✅ App Loader: UI Initialized.");
 
@@ -152,7 +105,6 @@ async function main() {
 
                 if (mainMod && typeof mainMod.initializePage === 'function') {
                     mainMod.initializePage();
-                    initializeAnchorScrollFix(mainMod.toggleAccordion, mainMod.getSectionToggles);
                 } else {
                     console.error("❌ App Loader: main.js loaded but initializePage not found.");
                 }

@@ -2441,6 +2441,10 @@ export class Gamification {
 }
 
 
+export function getGamification() {
+    return instance || new Gamification();
+}
+
 export function initializeGamification() {
-    return new Gamification();
+    return getGamification();
 }

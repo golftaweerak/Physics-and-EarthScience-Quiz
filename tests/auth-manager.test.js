@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { authManager } from '../scripts/auth-manager.js';
 import { signInWithPopup, signOut, onAuthStateChanged } from 'firebase/auth';
 import { getDoc, setDoc, deleteDoc, writeBatch, getDocs } from 'firebase/firestore';
+import { showToast } from '../scripts/toast.js';
 
 // Mock dependencies
 vi.mock('../scripts/firebase-config.js', () => ({
@@ -64,7 +65,8 @@ describe('AuthManager', () => {
     delete window.location;
     window.location = { href: '', reload: vi.fn(), pathname: '/' };
 
-    // Default mock for getDocs to prevent TypeError: forEach not found
+    // Default mocks to prevent stale return values leaking across tests
+    getDoc.mockResolvedValue({ exists: () => false });
     getDocs.mockResolvedValue({ forEach: vi.fn() });
   });
 
@@ -143,5 +145,43 @@ describe('AuthManager', () => {
 
     // Should have cleared User A's data
     expect(localStorage.getItem('app_gamification_data')).toBeNull();
+  });
+
+  it('should download cloud data even when localStorage is initially empty (new device)', async () => {
+    const cloudData = { level: 7, xp: 1450, totalXP: 1450 };
+    const mockUser = { uid: 'new-device-user' };
+    getDoc.mockResolvedValue({
+      exists: () => true,
+      data: () => cloudData
+    });
+
+    expect(localStorage.getItem('app_gamification_data')).toBeNull();
+
+    await authManager.syncLocalToCloud(mockUser);
+
+    expect(JSON.parse(localStorage.getItem('app_gamification_data'))).toEqual(cloudData);
+    expect(localStorage.getItem('last_cloud_sync')).toBeTruthy();
+  });
+
+  it('should use showToast (never blocking alert) when migrating local data on first login', async () => {
+    const alertSpy = vi.spyOn(window, 'alert').mockImplementation(() => {});
+    localStorage.setItem('app_gamification_data', JSON.stringify({ level: 3, totalXP: 400 }));
+    getDoc.mockResolvedValue({ exists: () => false });
+
+    await authManager.syncLocalToCloud({ uid: 'first-login', displayName: 'Student', photoURL: '' });
+
+    expect(setDoc).toHaveBeenCalled();
+    expect(showToast).toHaveBeenCalled();
+    expect(alertSpy).not.toHaveBeenCalled();
+    alertSpy.mockRestore();
+  });
+
+  it('should clear customQuizzesList on logout', async () => {
+    authManager.currentUser = { uid: 'user123' };
+    localStorage.setItem('customQuizzesList', JSON.stringify([{ customId: 'custom_1' }]));
+
+    await authManager.logout();
+
+    expect(localStorage.getItem('customQuizzesList')).toBeNull();
   });
 });

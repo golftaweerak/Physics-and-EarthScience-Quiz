@@ -7,6 +7,7 @@ import { categoryDetails } from './data-manager.js';
 import { getSavedCustomQuizzes } from './custom-quiz-handler.js';
 import { escapeHtml } from './utils.js';
 import { getLevelBorderClass, getAvatarFrameClass } from './gamification.js';
+import { bindConfirmModalAction } from './ui-utils.js';
 
 export class ChallengeManager {
   constructor() {
@@ -288,8 +289,7 @@ export class ChallengeManager {
     // Event delegation for the players list to handle kick buttons
     this._safeBind(this.dom.playersListContainer, 'click', (e) => {
       const kickBtn = e.target.closest('.kick-player-btn');
-      const currentConfirmBtn = document.getElementById('confirm-action-btn');
-      if (this.isHost && kickBtn && currentConfirmBtn) {
+      if (this.isHost && kickBtn) {
         e.stopPropagation();
         const targetUid = kickBtn.dataset.uid;
         const playerName = kickBtn.dataset.name;
@@ -297,16 +297,7 @@ export class ChallengeManager {
         if (this.dom.confirmModalTitle) this.dom.confirmModalTitle.textContent = 'ยืนยันการเชิญออก';
         if (this.dom.confirmModalDesc) this.dom.confirmModalDesc.innerHTML = `คุณต้องการเชิญ "<strong>${escapeHtml(playerName || '')}</strong>" ออกจากห้องใช่หรือไม่?`;
 
-        // Clone button to remove old listeners
-        const newConfirmBtn = currentConfirmBtn.cloneNode(true);
-        currentConfirmBtn.parentNode.replaceChild(newConfirmBtn, currentConfirmBtn);
-        this.dom.confirmActionBtn = newConfirmBtn;
-
-        newConfirmBtn.addEventListener('click', () => {
-          this.kickPlayer(targetUid);
-          this.confirmModal.close();
-        });
-
+        bindConfirmModalAction(() => this.kickPlayer(targetUid), () => this.confirmModal.close());
         this.confirmModal.open();
       }
     });

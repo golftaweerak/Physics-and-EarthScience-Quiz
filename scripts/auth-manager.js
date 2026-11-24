@@ -162,12 +162,14 @@ class AuthManagerInternal {
         window.addEventListener('online', updateStatus);
         window.addEventListener('offline', updateStatus);
 
-        // Check periodically for header element injection
+        // Check periodically for header element injection (bounded so pages without header stop polling)
+        let checkAttempts = 0;
         const checkHeader = setInterval(() => {
             const statusEl = document.getElementById('header-network-status');
-            if (statusEl) {
+            checkAttempts++;
+            if (statusEl || checkAttempts >= 15) {
                 clearInterval(checkHeader);
-                if (!navigator.onLine) updateStatus();
+                if (statusEl && !navigator.onLine) updateStatus();
             }
         }, 1000);
     }
@@ -225,6 +227,7 @@ class AuthManagerInternal {
             // Clear main gamification data to prevent data leakage
             localStorage.removeItem(this.LOCAL_STORAGE_KEY);
             localStorage.removeItem('last_cloud_sync');
+            localStorage.removeItem('customQuizzesList');
 
             // Clear quiz history items
             const keysToRemove = [];
@@ -378,44 +381,52 @@ class AuthManagerInternal {
         }
     }
 
-    // ฟังก์ชัน Sync ข้อมูลเก่าขึ้น Cloud เมื่อล็อกอินครั้งแรก
+    // ฟังก์ชัน Sync ข้อมูลกับ Cloud เมื่อล็อกอิน
     async syncLocalToCloud(user) {
+        if (!user) return;
         const localDataString = localStorage.getItem(this.LOCAL_STORAGE_KEY);
-        if (!localDataString) return; // ไม่มีข้อมูลเก่า ไม่ต้องทำอะไร
-
-        const localData = JSON.parse(localDataString);
         const userRef = doc(db, "users", user.uid);
         const docSnap = await this.retryOperation(() => getDoc(userRef));
+        if (!docSnap) return;
 
-        if (!docSnap.exists()) {
-            // กรณี: ผู้ใช้ใหม่บน Cloud แต่มีข้อมูลในเครื่อง (ผู้เรียนเก่าเพิ่งล็อกอิน)
-            // ให้อัปโหลดข้อมูลในเครื่องขึ้น Cloud ทันที
-            console.log("Migrating local data to cloud...");
-            await this.retryOperation(() => setDoc(userRef, localData));
-
-            // สร้าง Leaderboard entry ด้วย
-            if (localData.totalXP) {
-                await this.retryOperation(() => setDoc(doc(db, "leaderboard", user.uid), {
-                    displayName: user.displayName,
-                    photoURL: user.photoURL,
-                    totalXP: localData.totalXP,
-                    level: localData.level || 1,
-                    lastUpdated: new Date()
-                }));
-            }
-            alert("ซิงค์ข้อมูลเก่าของคุณขึ้นระบบเรียบร้อยแล้ว!");
-        } else {
-            // กรณี: มีข้อมูลบน Cloud อยู่แล้ว (อาจจะเล่นเครื่องอื่นมา)
+        if (docSnap.exists()) {
+            // กรณี: มีข้อมูลบน Cloud อยู่แล้ว (อาจจะเล่นเครื่องอื่นหรือล็อกอินเครื่องใหม่)
             // กลยุทธ์: ใช้ข้อมูลบน Cloud เป็นหลัก (Overwrite Local)
-            // หรือถ้าคุณต้องการ Logic ที่ซับซ้อนกว่านี้ (เช่น เอา XP ที่มากกว่า) ก็แก้ตรงนี้ได้
             console.log("Found cloud data, syncing to local...");
             const cloudData = docSnap.data();
             try {
                 localStorage.setItem(this.LOCAL_STORAGE_KEY, JSON.stringify(cloudData));
+                this.updateLastSyncTime();
             } catch (e) {
                 console.warn("AuthManager: Failed to sync cloud data to local storage:", e);
             }
+            return;
         }
+
+        // กรณี: ผู้ใช้ใหม่บน Cloud แต่มีข้อมูลในเครื่อง (ผู้เรียนเก่าเพิ่งล็อกอิน)
+        if (!localDataString) return;
+        let localData;
+        try {
+            localData = JSON.parse(localDataString);
+        } catch (e) {
+            console.warn("AuthManager: Failed to parse local data for cloud migration:", e);
+            return;
+        }
+
+        console.log("Migrating local data to cloud...");
+        await this.retryOperation(() => setDoc(userRef, localData));
+
+        if (localData.totalXP) {
+            await this.retryOperation(() => setDoc(doc(db, "leaderboard", user.uid), {
+                displayName: user.displayName,
+                photoURL: user.photoURL,
+                totalXP: localData.totalXP,
+                level: localData.level || 1,
+                lastUpdated: new Date()
+            }));
+        }
+        this.updateLastSyncTime();
+        showToast('ซิงค์ข้อมูลสำเร็จ', 'ซิงค์ข้อมูลเก่าของคุณขึ้นระบบเรียบร้อยแล้ว!', '☁️', 'success');
     }
 
     // บันทึกเวลาซิงค์ล่าสุดและแจ้งเตือน UI

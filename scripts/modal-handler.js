@@ -10,15 +10,24 @@
  * - Restores focus to the trigger element on close.
  * - Prevents state issues from rapid clicks.
  */
+const modalRegistry = new Map();
+
 export class ModalHandler {
     /** @param {string} modalId The ID of the modal element. */
     constructor(modalId) {
+        const existing = modalRegistry.get(modalId);
+        if (existing && existing.modal && existing.modal.isConnected) {
+            return existing;
+        }
+
         this.modalId = modalId;
         this.modal = document.getElementById(modalId);
         if (!this.modal) {
             console.warn(`[ModalHandler] Modal element "#${modalId}" is not present on this page.`);
             return;
         }
+
+        modalRegistry.set(modalId, this);
 
         // Find the container that has the transition classes
         this.modalContainer = this.modal.querySelector('.modal-container');
@@ -36,16 +45,19 @@ export class ModalHandler {
         this.open = this.open.bind(this);
         this.close = this.close.bind(this);
 
-        // Add event listeners
-        const closeButtons = this.modal.querySelectorAll("[data-modal-close]");
-        closeButtons.forEach((btn) => btn.addEventListener("click", this.close));
-        // Updated to handle a separate overlay div for backdrop clicks
-        this.modal.addEventListener("click", (e) => {
-            // Close if the click is on the modal's immediate background (the flex container) or on a specific overlay element.
-            if (e.target === this.modal || e.target.hasAttribute('data-modal-overlay')) {
-                this.close();
-            }
-        });
+        if (!this.modal.dataset.modalHandlerBound) {
+            this.modal.dataset.modalHandlerBound = 'true';
+            // Add event listeners
+            const closeButtons = this.modal.querySelectorAll("[data-modal-close]");
+            closeButtons.forEach((btn) => btn.addEventListener("click", this.close));
+            // Updated to handle a separate overlay div for backdrop clicks
+            this.modal.addEventListener("click", (e) => {
+                // Close if the click is on the modal's immediate background (the flex container) or on a specific overlay element.
+                if (e.target === this.modal || e.target.hasAttribute('data-modal-overlay')) {
+                    this.close();
+                }
+            });
+        }
     }
 
     /**
@@ -57,15 +69,19 @@ export class ModalHandler {
         if (!this.modal) {
             this.modal = document.getElementById(this.modalId);
             if (this.modal) {
+                modalRegistry.set(this.modalId, this);
                 // Re-initialize relevant parts
                 this.modalContainer = this.modal.querySelector('.modal-container') || this.modal;
-                const closeButtons = this.modal.querySelectorAll("[data-modal-close]");
-                closeButtons.forEach((btn) => btn.addEventListener("click", this.close));
-                this.modal.addEventListener("click", (e) => {
-                    if (e.target === this.modal || e.target.hasAttribute('data-modal-overlay')) {
-                        this.close();
-                    }
-                });
+                if (!this.modal.dataset.modalHandlerBound) {
+                    this.modal.dataset.modalHandlerBound = 'true';
+                    const closeButtons = this.modal.querySelectorAll("[data-modal-close]");
+                    closeButtons.forEach((btn) => btn.addEventListener("click", this.close));
+                    this.modal.addEventListener("click", (e) => {
+                        if (e.target === this.modal || e.target.hasAttribute('data-modal-overlay')) {
+                            this.close();
+                        }
+                    });
+                }
             }
         }
 

@@ -1,5 +1,5 @@
 import { authManager } from './auth-manager.js';
-import { Gamification } from './gamification.js';
+import { getGamification } from './gamification.js';
 
 // Use Vite's base path for assets
 const BASE_URL = import.meta.env.BASE_URL || '/';
@@ -21,11 +21,14 @@ export async function initializeLandingPage() {
         return `${normalizedBase}${cleanPath}`;
     };
 
-    const gamification = new Gamification();
+    const gamification = getGamification();
 
     const updateProfileUI = (user) => {
         console.log("👤 Landing Page: Updating Profile UI for", user ? user.displayName : "Guest");
         if (user) {
+            if (typeof gamification.loadState === 'function') {
+                gamification.state = gamification.loadState();
+            }
             const state = gamification.state;
             const levelInfo = gamification.getCurrentLevel();
 
@@ -88,8 +91,13 @@ export async function initializeLandingPage() {
         }
     };
 
-    // Listen for auth changes
+    // Listen for auth changes and cloud sync updates
     authManager.onUserChange(updateProfileUI);
+    window.addEventListener('auth-synced', () => {
+        if (authManager.currentUser) {
+            updateProfileUI(authManager.currentUser);
+        }
+    });
 
     // Fallback if auth is already initialized but callback wasn't fired yet
     const currentUser = await authManager.waitForAuthReady();

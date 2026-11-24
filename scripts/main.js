@@ -2,6 +2,176 @@ import { ModalHandler } from "./modal-handler.js";
 import { getQuizProgress, categoryDetails } from "./data-manager.js";
 import { quizList } from "../data/quizzes-list.js";
 import { getSyllabusForCategory } from "./syllabus-manager.js";
+import { authManager } from "./auth-manager.js";
+import { bindConfirmModalAction, openCompletedQuizModal } from "./ui-utils.js";
+
+// Complete literal Tailwind class map so Tailwind v4 JIT emits all category theme utilities.
+const COLOR_THEMES = {
+  red: {
+    cardBorder: "hover:border-red-400 dark:hover:border-red-500",
+    cardIconBg: "bg-red-100 dark:bg-red-900/30",
+    cardIconShadow: "group-hover:shadow-red-500/20",
+    cardTitleHover: "group-hover:text-red-600 dark:group-hover:text-red-300",
+    subHeader: "bg-red-100/40 dark:bg-red-900/20 hover:bg-red-100/70 dark:hover:bg-red-900/40",
+    subTitle: "text-red-800 dark:text-red-300",
+    subBadge: "text-red-700 bg-red-200/80 dark:text-red-200 dark:bg-red-800/60",
+    sectionHeader: "bg-red-50/30 dark:bg-red-900/10 hover:bg-red-100/50 dark:hover:bg-red-900/20",
+    iconBg: "bg-red-100 dark:bg-red-400/20",
+    iconBorder: "border-red-300 dark:border-red-400",
+    iconShadow: "shadow-red-400/30",
+    navContainer: "bg-red-50/80 dark:bg-red-950/70 border-red-200 dark:border-red-800",
+    navBtn: "bg-red-100/80 dark:bg-red-900/60 hover:bg-red-200/90 dark:hover:bg-red-800/70 border-red-300 dark:border-red-600 text-red-800 dark:text-red-200",
+    ringClass: "ring-red-500",
+  },
+  orange: {
+    cardBorder: "hover:border-orange-400 dark:hover:border-orange-500",
+    cardIconBg: "bg-orange-100 dark:bg-orange-900/30",
+    cardIconShadow: "group-hover:shadow-orange-500/20",
+    cardTitleHover: "group-hover:text-orange-600 dark:group-hover:text-orange-300",
+    subHeader: "bg-orange-100/40 dark:bg-orange-900/20 hover:bg-orange-100/70 dark:hover:bg-orange-900/40",
+    subTitle: "text-orange-800 dark:text-orange-300",
+    subBadge: "text-orange-700 bg-orange-200/80 dark:text-orange-200 dark:bg-orange-800/60",
+    sectionHeader: "bg-orange-50/30 dark:bg-orange-900/10 hover:bg-orange-100/50 dark:hover:bg-orange-900/20",
+    iconBg: "bg-orange-100 dark:bg-orange-400/20",
+    iconBorder: "border-orange-300 dark:border-orange-400",
+    iconShadow: "shadow-orange-400/30",
+    navContainer: "bg-orange-50/80 dark:bg-orange-950/70 border-orange-200 dark:border-orange-800",
+    navBtn: "bg-orange-100/80 dark:bg-orange-900/60 hover:bg-orange-200/90 dark:hover:bg-orange-800/70 border-orange-300 dark:border-orange-600 text-orange-800 dark:text-orange-200",
+    ringClass: "ring-orange-500",
+  },
+  amber: {
+    cardBorder: "hover:border-amber-400 dark:hover:border-amber-500",
+    cardIconBg: "bg-amber-100 dark:bg-amber-900/30",
+    cardIconShadow: "group-hover:shadow-amber-500/20",
+    cardTitleHover: "group-hover:text-amber-600 dark:group-hover:text-amber-300",
+    subHeader: "bg-amber-100/40 dark:bg-amber-900/20 hover:bg-amber-100/70 dark:hover:bg-amber-900/40",
+    subTitle: "text-amber-800 dark:text-amber-300",
+    subBadge: "text-amber-700 bg-amber-200/80 dark:text-amber-200 dark:bg-amber-800/60",
+    sectionHeader: "bg-amber-50/30 dark:bg-amber-900/10 hover:bg-amber-100/50 dark:hover:bg-amber-900/20",
+    iconBg: "bg-amber-100 dark:bg-amber-400/20",
+    iconBorder: "border-amber-300 dark:border-amber-400",
+    iconShadow: "shadow-amber-400/30",
+    navContainer: "bg-amber-50/80 dark:bg-amber-950/70 border-amber-200 dark:border-amber-800",
+    navBtn: "bg-amber-100/80 dark:bg-amber-900/60 hover:bg-amber-200/90 dark:hover:bg-amber-800/70 border-amber-300 dark:border-amber-600 text-amber-800 dark:text-amber-200",
+    ringClass: "ring-amber-500",
+  },
+  green: {
+    cardBorder: "hover:border-green-400 dark:hover:border-green-500",
+    cardIconBg: "bg-green-100 dark:bg-green-900/30",
+    cardIconShadow: "group-hover:shadow-green-500/20",
+    cardTitleHover: "group-hover:text-green-600 dark:group-hover:text-green-300",
+    subHeader: "bg-green-100/40 dark:bg-green-900/20 hover:bg-green-100/70 dark:hover:bg-green-900/40",
+    subTitle: "text-green-800 dark:text-green-300",
+    subBadge: "text-green-700 bg-green-200/80 dark:text-green-200 dark:bg-green-800/60",
+    sectionHeader: "bg-green-50/30 dark:bg-green-900/10 hover:bg-green-100/50 dark:hover:bg-green-900/20",
+    iconBg: "bg-green-100 dark:bg-green-400/20",
+    iconBorder: "border-green-300 dark:border-green-400",
+    iconShadow: "shadow-green-400/30",
+    navContainer: "bg-green-50/80 dark:bg-green-950/70 border-green-200 dark:border-green-800",
+    navBtn: "bg-green-100/80 dark:bg-green-900/60 hover:bg-green-200/90 dark:hover:bg-green-800/70 border-green-300 dark:border-green-600 text-green-800 dark:text-green-200",
+    ringClass: "ring-green-500",
+  },
+  indigo: {
+    cardBorder: "hover:border-indigo-400 dark:hover:border-indigo-500",
+    cardIconBg: "bg-indigo-100 dark:bg-indigo-900/30",
+    cardIconShadow: "group-hover:shadow-indigo-500/20",
+    cardTitleHover: "group-hover:text-indigo-600 dark:group-hover:text-indigo-300",
+    subHeader: "bg-indigo-100/40 dark:bg-indigo-900/20 hover:bg-indigo-100/70 dark:hover:bg-indigo-900/40",
+    subTitle: "text-indigo-800 dark:text-indigo-300",
+    subBadge: "text-indigo-700 bg-indigo-200/80 dark:text-indigo-200 dark:bg-indigo-800/60",
+    sectionHeader: "bg-indigo-50/30 dark:bg-indigo-900/10 hover:bg-indigo-100/50 dark:hover:bg-indigo-900/20",
+    iconBg: "bg-indigo-100 dark:bg-indigo-400/20",
+    iconBorder: "border-indigo-300 dark:border-indigo-400",
+    iconShadow: "shadow-indigo-400/30",
+    navContainer: "bg-indigo-50/80 dark:bg-indigo-950/70 border-indigo-200 dark:border-indigo-800",
+    navBtn: "bg-indigo-100/80 dark:bg-indigo-900/60 hover:bg-indigo-200/90 dark:hover:bg-indigo-800/70 border-indigo-300 dark:border-indigo-600 text-indigo-800 dark:text-indigo-200",
+    ringClass: "ring-indigo-500",
+  },
+  teal: {
+    cardBorder: "hover:border-teal-400 dark:hover:border-teal-500",
+    cardIconBg: "bg-teal-100 dark:bg-teal-900/30",
+    cardIconShadow: "group-hover:shadow-teal-500/20",
+    cardTitleHover: "group-hover:text-teal-600 dark:group-hover:text-teal-300",
+    subHeader: "bg-teal-100/40 dark:bg-teal-900/20 hover:bg-teal-100/70 dark:hover:bg-teal-900/40",
+    subTitle: "text-teal-800 dark:text-teal-300",
+    subBadge: "text-teal-700 bg-teal-200/80 dark:text-teal-200 dark:bg-teal-800/60",
+    sectionHeader: "bg-teal-50/30 dark:bg-teal-900/10 hover:bg-teal-100/50 dark:hover:bg-teal-900/20",
+    iconBg: "bg-teal-100 dark:bg-teal-400/20",
+    iconBorder: "border-teal-300 dark:border-teal-400",
+    iconShadow: "shadow-teal-400/30",
+    navContainer: "bg-teal-50/80 dark:bg-teal-950/70 border-teal-200 dark:border-teal-800",
+    navBtn: "bg-teal-100/80 dark:bg-teal-900/60 hover:bg-teal-200/90 dark:hover:bg-teal-800/70 border-teal-300 dark:border-teal-600 text-teal-800 dark:text-teal-200",
+    ringClass: "ring-teal-500",
+  },
+  purple: {
+    cardBorder: "hover:border-purple-400 dark:hover:border-purple-500",
+    cardIconBg: "bg-purple-100 dark:bg-purple-900/30",
+    cardIconShadow: "group-hover:shadow-purple-500/20",
+    cardTitleHover: "group-hover:text-purple-600 dark:group-hover:text-purple-300",
+    subHeader: "bg-purple-100/40 dark:bg-purple-900/20 hover:bg-purple-100/70 dark:hover:bg-purple-900/40",
+    subTitle: "text-purple-800 dark:text-purple-300",
+    subBadge: "text-purple-700 bg-purple-200/80 dark:text-purple-200 dark:bg-purple-800/60",
+    sectionHeader: "bg-purple-50/30 dark:bg-purple-900/10 hover:bg-purple-100/50 dark:hover:bg-purple-900/20",
+    iconBg: "bg-purple-100 dark:bg-purple-400/20",
+    iconBorder: "border-purple-300 dark:border-purple-400",
+    iconShadow: "shadow-purple-400/30",
+    navContainer: "bg-purple-50/80 dark:bg-purple-950/70 border-purple-200 dark:border-purple-800",
+    navBtn: "bg-purple-100/80 dark:bg-purple-900/60 hover:bg-purple-200/90 dark:hover:bg-purple-800/70 border-purple-300 dark:border-purple-600 text-purple-800 dark:text-purple-200",
+    ringClass: "ring-purple-500",
+  },
+  pink: {
+    cardBorder: "hover:border-pink-400 dark:hover:border-pink-500",
+    cardIconBg: "bg-pink-100 dark:bg-pink-900/30",
+    cardIconShadow: "group-hover:shadow-pink-500/20",
+    cardTitleHover: "group-hover:text-pink-600 dark:group-hover:text-pink-300",
+    subHeader: "bg-pink-100/40 dark:bg-pink-900/20 hover:bg-pink-100/70 dark:hover:bg-pink-900/40",
+    subTitle: "text-pink-800 dark:text-pink-300",
+    subBadge: "text-pink-700 bg-pink-200/80 dark:text-pink-200 dark:bg-pink-800/60",
+    sectionHeader: "bg-pink-50/30 dark:bg-pink-900/10 hover:bg-pink-100/50 dark:hover:bg-pink-900/20",
+    iconBg: "bg-pink-100 dark:bg-pink-400/20",
+    iconBorder: "border-pink-300 dark:border-pink-400",
+    iconShadow: "shadow-pink-400/30",
+    navContainer: "bg-pink-50/80 dark:bg-pink-950/70 border-pink-200 dark:border-pink-800",
+    navBtn: "bg-pink-100/80 dark:bg-pink-900/60 hover:bg-pink-200/90 dark:hover:bg-pink-800/70 border-pink-300 dark:border-pink-600 text-pink-800 dark:text-pink-200",
+    ringClass: "ring-pink-500",
+  },
+  yellow: {
+    cardBorder: "hover:border-yellow-400 dark:hover:border-yellow-500",
+    cardIconBg: "bg-yellow-100 dark:bg-yellow-900/30",
+    cardIconShadow: "group-hover:shadow-yellow-500/20",
+    cardTitleHover: "group-hover:text-yellow-600 dark:group-hover:text-yellow-300",
+    subHeader: "bg-yellow-100/40 dark:bg-yellow-900/20 hover:bg-yellow-100/70 dark:hover:bg-yellow-900/40",
+    subTitle: "text-yellow-800 dark:text-yellow-300",
+    subBadge: "text-yellow-700 bg-yellow-200/80 dark:text-yellow-200 dark:bg-yellow-800/60",
+    sectionHeader: "bg-yellow-50/30 dark:bg-yellow-900/10 hover:bg-yellow-100/50 dark:hover:bg-yellow-900/20",
+    iconBg: "bg-yellow-100 dark:bg-yellow-400/20",
+    iconBorder: "border-yellow-300 dark:border-yellow-400",
+    iconShadow: "shadow-yellow-400/30",
+    navContainer: "bg-yellow-50/80 dark:bg-yellow-950/70 border-yellow-200 dark:border-yellow-800",
+    navBtn: "bg-yellow-100/80 dark:bg-yellow-900/60 hover:bg-yellow-200/90 dark:hover:bg-yellow-800/70 border-yellow-300 dark:border-yellow-600 text-yellow-800 dark:text-yellow-200",
+    ringClass: "ring-yellow-500",
+  },
+  default: {
+    cardBorder: "hover:border-gray-400 dark:hover:border-gray-500",
+    cardIconBg: "bg-gray-100 dark:bg-gray-900/30",
+    cardIconShadow: "group-hover:shadow-gray-500/20",
+    cardTitleHover: "group-hover:text-gray-600 dark:group-hover:text-gray-300",
+    subHeader: "bg-gray-100/40 dark:bg-gray-900/20 hover:bg-gray-100/70 dark:hover:bg-gray-900/40",
+    subTitle: "text-gray-800 dark:text-gray-300",
+    subBadge: "text-gray-700 bg-gray-200/80 dark:text-gray-200 dark:bg-gray-800/60",
+    sectionHeader: "bg-gray-50/30 dark:bg-gray-900/10 hover:bg-gray-100/50 dark:hover:bg-gray-900/20",
+    iconBg: "bg-gray-100 dark:bg-gray-400/20",
+    iconBorder: "border-gray-300 dark:border-gray-400",
+    iconShadow: "shadow-gray-400/30",
+    navContainer: "bg-white/60 dark:bg-gray-900/60 border-gray-200 dark:border-gray-700",
+    navBtn: "bg-gray-200/80 dark:bg-gray-800/90 hover:bg-gray-300 dark:hover:bg-gray-700/90 border-gray-300 dark:border-gray-700 text-gray-800 dark:text-gray-200",
+    ringClass: "ring-blue-500",
+  },
+};
+
+function getColorTheme(colorName) {
+  return COLOR_THEMES[colorName] || COLOR_THEMES.default;
+}
 
 /**
  * Toggles the state of an accordion section (expands or collapses it).
@@ -212,20 +382,9 @@ export function initializePage() {
     const confirmModal = new ModalHandler("confirm-action-modal");
     const completedModal = new ModalHandler("completed-quiz-modal");
 
-    // Cache buttons that trigger actions other than just closing the modal.
-    const confirmActionBtn = document.getElementById("confirm-action-btn");
-    const viewResultsBtn = document.getElementById("completed-view-results-btn");
-    const startOverBtn = document.getElementById("completed-start-over-btn");
-    // Cache modal text elements for dynamic content
+    // Confirm modal & completed modal action bindings use shared helpers in ui-utils.js.
     const confirmModalTitle = document.getElementById("confirm-modal-title");
     const confirmModalDesc = document.getElementById("confirm-modal-description");
-
-    // State variables to hold context for the active modal.
-    const pageState = {
-      activeQuizUrl: "", // To store the quiz URL for the 'completed' modal actions.
-      activeStorageKey: "", // To store the storage key for the modal actions
-      confirmCallback: null, // To store the action to perform on confirmation
-    };
 
     /**
      * Creates the HTML for the progress bar section of a quiz card.
@@ -294,6 +453,7 @@ export function initializePage() {
       const categoryDetail = categoryDetails[quiz.category];
       const borderColorClass = (categoryDetail && categoryDetail.color) || "border-gray-400";
       const colorName = borderColorClass.split('-')[1] || 'gray';
+      const theme = getColorTheme(colorName);
 
       const card = document.createElement("a");
       card.href = quiz.url;
@@ -302,15 +462,15 @@ export function initializePage() {
       card.dataset.storageKey = quiz.storageKey;
       card.dataset.totalQuestions = totalQuestions;
 
-      // NEW: More modern card styling
-      card.className = `quiz-card group flex flex-col h-full bg-white dark:bg-gray-800/50 p-4 rounded-xl border border-gray-200 dark:border-gray-700/60 shadow-sm hover:shadow-lg hover:border-${colorName}-400 dark:hover:border-${colorName}-500 transition-all duration-300 transform hover:-translate-y-1 anim-card-pop-in overflow-hidden`;
+      // NEW: More modern card styling using static theme lookup
+      card.className = `quiz-card group flex flex-col h-full bg-white dark:bg-gray-800/50 p-4 rounded-xl border border-gray-200 dark:border-gray-700/60 shadow-sm hover:shadow-lg ${theme.cardBorder} transition-all duration-300 transform hover:-translate-y-1 anim-card-pop-in overflow-hidden`;
       card.style.animationDelay = `${index * 50}ms`;
 
       const progress = getQuizProgress(quiz.storageKey, totalQuestions);
       const progressHTML = createProgressHTML(progress, quiz);
 
-      const iconBgClass = `bg-${colorName}-100 dark:bg-${colorName}-900/30`;
-      const titleHoverClass = `group-hover:text-${colorName}-600 dark:group-hover:text-${colorName}-300`;
+      const iconBgClass = theme.cardIconBg;
+      const titleHoverClass = theme.cardTitleHover;
 
       // Generate Badges based on title keywords
       const badges = [];
@@ -323,7 +483,7 @@ export function initializePage() {
 
       card.innerHTML = `
        <div class="flex-grow flex items-start gap-4">
-         <div class="shrink-0 h-12 w-12 rounded-lg flex items-center justify-center ${iconBgClass} p-2 transition-all duration-300 group-hover:shadow-lg group-hover:shadow-${colorName}-500/20 overflow-hidden" 
+         <div class="shrink-0 h-12 w-12 rounded-lg flex items-center justify-center ${iconBgClass} p-2 transition-all duration-300 group-hover:shadow-lg ${theme.cardIconShadow} overflow-hidden" 
               style="height: 3rem; width: 3rem; min-width: 3rem; min-height: 3rem; flex: 0 0 auto;">
            <img src="${quiz.icon}" alt="${quiz.altText}" ${index > 6 ? 'loading="lazy"' : ''} decoding="async"
                 class="h-full w-full object-contain transition-transform duration-300 group-hover:scale-110 shrink-0"
@@ -355,21 +515,22 @@ export function initializePage() {
      * @param {object} groupData - The group object containing title, quizzes, level, and shortTitle.
      */
     function createSubCategoryAccordion(groupData, colorName, categoryKey) {
+      const theme = getColorTheme(colorName);
       const accordion = document.createElement('div');
       accordion.className = 'sub-accordion py-1';
 
       const toggleHeader = document.createElement('div');
       // A slightly different style for the sub-header
-      toggleHeader.className = `sub-section-toggle flex justify-between items-center cursor-pointer p-3 rounded-lg bg-${colorName}-100/40 dark:bg-${colorName}-900/20 hover:bg-${colorName}-100/70 dark:hover:bg-${colorName}-900/40 transition-colors`;
+      toggleHeader.className = `sub-section-toggle flex justify-between items-center cursor-pointer p-3 rounded-lg ${theme.subHeader} transition-colors`;
       toggleHeader.setAttribute('aria-expanded', 'false');
       toggleHeader.dataset.level = groupData.level;
       toggleHeader.dataset.shortTitle = groupData.shortTitle; // Add short title to dataset
       toggleHeader.innerHTML = `
         <div class="flex-grow min-w-0">
-            <h4 class="font-bold text-sm text-${colorName}-800 dark:text-${colorName}-300 truncate pr-2">${groupData.title}</h4>
+            <h4 class="font-bold text-sm ${theme.subTitle} truncate pr-2">${groupData.title}</h4>
         </div>
         <div class="flex items-center gap-2 flex-shrink-0">
-            <span class="px-2 py-0.5 text-xs font-semibold text-${colorName}-700 bg-${colorName}-200/80 dark:text-${colorName}-200 dark:bg-${colorName}-800/60 rounded-full">${groupData.quizzes.length} ชุด</span>
+            <span class="px-2 py-0.5 text-xs font-semibold ${theme.subBadge} rounded-full">${groupData.quizzes.length} ชุด</span>
             <svg class="chevron-icon h-5 w-5 text-gray-500 dark:text-gray-400 transition-transform duration-300 flex-shrink-0" width="20" height="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
         </div>
     `;
@@ -425,6 +586,7 @@ export function initializePage() {
 
       const sectionBorderColor = details.color || "border-blue-600";
       const colorName = sectionBorderColor.split('-')[1] || 'gray';
+      const theme = getColorTheme(colorName);
 
       const section = document.createElement("section");
       section.id = `category-${categoryKey}`;
@@ -434,7 +596,7 @@ export function initializePage() {
       const toggleHeader = document.createElement("div");
       toggleHeader.id = `toggle-${categoryKey}`; // Add unique ID for targeting
       // Dynamic background color for header based on category, with even more subtle opacity in dark mode.
-      toggleHeader.className = `section-toggle flex justify-between items-center cursor-pointer p-4 bg-${colorName}-50/30 dark:bg-${colorName}-900/10 hover:bg-${colorName}-100/50 dark:hover:bg-${colorName}-900/20 transition-colors duration-200`;
+      toggleHeader.className = `section-toggle flex justify-between items-center cursor-pointer p-4 ${theme.sectionHeader} transition-colors duration-200`;
 
       // Handle titles with parentheses for better wrapping on small screens.
       const titleMatch = details.title.match(/(.+)\s+\((.+)\)/);
@@ -453,12 +615,12 @@ export function initializePage() {
         titleContent = `<h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 font-kanit">${details.title}</h2>`;
       }
 
-      const iconBgClass = `bg-${colorName}-100 dark:bg-${colorName}-400/20`; // Lighter, glowing background for dark mode
-      const iconBorderClass = `border-${colorName}-300 dark:border-${colorName}-400`;
+      const iconBgClass = theme.iconBg; // Lighter, glowing background for dark mode
+      const iconBorderClass = theme.iconBorder;
 
       toggleHeader.innerHTML = `
       <div class="flex items-center min-w-0 gap-4">
-        <div class="section-icon-container shrink-0 h-12 w-12 rounded-full flex items-center justify-center border-2 ${iconBorderClass} ${iconBgClass} transition-all duration-300 shadow-md shadow-${colorName}-400/30 overflow-hidden" style="height: 3rem; width: 3rem; min-width: 3rem; min-height: 3rem; flex: 0 0 auto;">
+        <div class="section-icon-container shrink-0 h-12 w-12 rounded-full flex items-center justify-center border-2 ${iconBorderClass} ${iconBgClass} transition-all duration-300 shadow-md ${theme.iconShadow} overflow-hidden" style="height: 3rem; width: 3rem; min-width: 3rem; min-height: 3rem; flex: 0 0 auto;">
           <img src="${details.icon}" alt="${details.title} Icon" class="section-main-icon h-8 w-8 transition-transform duration-300 ease-in-out" style="height: 2rem; width: 2rem; display: block;">
         </div>
         <div class="min-w-0">
@@ -482,7 +644,7 @@ export function initializePage() {
       contentDiv.id = `content-${categoryKey}`;
       contentDiv.setAttribute("role", "region");
 
-      const hasSubCategories = ['AstronomyPOSN', 'ChallengePOSN', 'AstronomyReview', 'PhysicsM4', 'PhysicsM5', 'PhysicsM6', 'EarthSpaceScienceBasic', 'EarthSpaceScienceAdvance'].includes(categoryKey);
+      const hasSubCategories = ['PosnEarthScience', 'PosnAstroJunior', 'PosnAstroSenior', 'ChallengePOSN', 'AstronomyReview', 'PhysicsM4', 'PhysicsM5', 'PhysicsM6', 'EarthSpaceScienceBasic', 'EarthSpaceScienceAdvance'].includes(categoryKey);
 
       if (hasSubCategories) {
         const groupedData = groupQuizzesForCategory(quizzes, categoryKey);
@@ -573,16 +735,13 @@ export function initializePage() {
       }
 
       if (previousColor !== colorName) {
-        // Remove old container colors. The spread syntax (...) is used to pass multiple arguments.
-        const oldContainerBg = previousColor === 'default' ? 'bg-white/60 dark:bg-gray-900/60' : `bg-${previousColor}-50/80 dark:bg-${previousColor}-950/70`;
-        const oldContainerBorder = previousColor === 'default' ? 'border-gray-200 dark:border-gray-700' : `border-${previousColor}-200 dark:border-${previousColor}-800`;
-        floatingNavContainer.classList.remove(...oldContainerBg.split(' '), ...oldContainerBorder.split(' '));
+        const oldTheme = getColorTheme(previousColor);
+        floatingNavContainer.classList.remove(...oldTheme.navContainer.split(' '));
       }
 
       // --- 2. Define and apply new theme classes to the container ---
-      const containerBg = colorName === 'default' ? 'bg-white/60 dark:bg-gray-900/60' : `bg-${colorName}-50/80 dark:bg-${colorName}-950/70`;
-      const containerBorder = colorName === 'default' ? 'border-gray-200 dark:border-gray-700' : `border-${colorName}-200 dark:border-${colorName}-800`;
-      floatingNavContainer.classList.add(...containerBg.split(' '), ...containerBorder.split(' '));
+      const theme = getColorTheme(colorName);
+      floatingNavContainer.classList.add(...theme.navContainer.split(' '));
       floatingNavContainer.dataset.themeColor = colorName;
 
       // --- 3. Handle visibility and button generation ---
@@ -591,11 +750,7 @@ export function initializePage() {
         return;
       }
 
-      // Define button colors based on the same theme
-      const bgColor = colorName === 'default' ? 'bg-gray-200/80 dark:bg-gray-800/90' : `bg-${colorName}-100/80 dark:bg-${colorName}-900/60`;
-      const hoverBgColor = colorName === 'default' ? 'hover:bg-gray-300 dark:hover:bg-gray-700/90' : `hover:bg-${colorName}-200/90 dark:hover:bg-${colorName}-800/70`;
-      const borderColor = colorName === 'default' ? 'border-gray-300 dark:border-gray-700' : `border-${colorName}-300 dark:border-${colorName}-600`;
-      const textColor = colorName === 'default' ? 'text-gray-800 dark:text-gray-200' : `text-${colorName}-800 dark:text-${colorName}-200`;
+      const btnThemeClasses = theme.navBtn;
       // --- 4. Rebuild buttons with the new theme ---
       floatingNavButtons.innerHTML = ''; // Clear old buttons first
       const fragment = document.createDocumentFragment();
@@ -605,7 +760,7 @@ export function initializePage() {
       const createFloatingButton = (options) => {
         const button = document.createElement("button");
         const baseClasses = 'floating-nav-btn-base anim-nav-btn-pop-in transform transition-all duration-200 hover:scale-110';
-        const layoutClasses = options.classList || `flex items-center justify-center h-8 w-8 rounded-full flex-shrink-0 ${bgColor} ${hoverBgColor} ${textColor} shadow-md border ${borderColor} overflow-hidden`;
+        const layoutClasses = options.classList || `flex items-center justify-center h-8 w-8 rounded-full flex-shrink-0 ${btnThemeClasses} shadow-md border overflow-hidden`;
 
         button.className = `${baseClasses} ${layoutClasses}`;
         button.setAttribute("aria-label", options.ariaLabel);
@@ -670,7 +825,7 @@ export function initializePage() {
 
       // --- NEW: Add Sub-category buttons if applicable, AFTER main category buttons ---
       const activeCategoryKey = activeSection ? activeSection.id.replace('category-', '') : null;
-      if (['AstronomyPOSN', 'ChallengePOSN', 'AstronomyReview', 'PhysicsM4', 'PhysicsM5', 'PhysicsM6', 'EarthSpaceScienceBasic', 'EarthSpaceScienceAdvance'].includes(activeCategoryKey) && activeSection) {
+      if (['PosnEarthScience', 'PosnAstroJunior', 'PosnAstroSenior', 'ChallengePOSN', 'AstronomyReview', 'PhysicsM4', 'PhysicsM5', 'PhysicsM6', 'EarthSpaceScienceBasic', 'EarthSpaceScienceAdvance'].includes(activeCategoryKey) && activeSection) {
         const subToggles = activeSection.querySelectorAll('.sub-section-toggle[data-level="1"]');
         if (subToggles.length > 0) {
           const subSeparator = document.createElement("div");
@@ -692,7 +847,7 @@ export function initializePage() {
             const subButton = createFloatingButton({
               ariaLabel: `ไปที่ ${subTitle}`,
               innerHTML: `<span class="text-xs font-bold whitespace-nowrap">${buttonText}</span>`,
-              classList: `flex items-center justify-center h-7 px-3 rounded-lg ${bgColor} ${hoverBgColor} ${textColor} shadow-sm border ${borderColor}`,
+              classList: `flex items-center justify-center h-7 px-3 rounded-lg ${btnThemeClasses} shadow-sm border`,
               onClick: () => {
                 const isAlreadyOpen = subToggle.getAttribute('aria-expanded') === 'true';
                 if (!isAlreadyOpen) {
@@ -700,8 +855,8 @@ export function initializePage() {
                 }
                 setTimeout(() => {
                   scrollToElement(subToggle); // Use the consistent scroll function
-                  subToggle.classList.add('ring-2', 'ring-offset-2', `ring-${colorName}-500`, `dark:ring-offset-gray-900`);
-                  setTimeout(() => subToggle.classList.remove('ring-2', 'ring-offset-2', `ring-${colorName}-500`, `dark:ring-offset-gray-900`), 2000);
+                  subToggle.classList.add('ring-2', 'ring-offset-2', theme.ringClass, 'dark:ring-offset-gray-900');
+                  setTimeout(() => subToggle.classList.remove('ring-2', 'ring-offset-2', theme.ringClass, 'dark:ring-offset-gray-900'), 2000);
                 }, isAlreadyOpen ? 0 : 150); // No delay if already open, small delay if just opened.
               }
             });
@@ -723,6 +878,20 @@ export function initializePage() {
     const quizListHeader = document.getElementById("quiz-list-header");
     const quizCountDisplay = document.getElementById("quiz-count-display");
 
+    const TRACK_MAPPING = {
+      'high_school': [
+        'PhysicsM4', 'PhysicsM5', 'PhysicsM6',
+        'EarthSpaceScienceBasic', 'EarthSpaceScienceAdvance'
+      ],
+      'posn': [
+        'PosnEarthScience',
+        'PosnAstroJunior',
+        'PosnAstroSenior',
+        'AstronomyReview',
+        'ChallengePOSN'
+      ]
+    };
+
     // NEW: Function to update stats based on selected track
     function updateHeaderStats(track) {
       if (!quizListHeader || !quizCountDisplay) return;
@@ -741,8 +910,8 @@ export function initializePage() {
       if (totalQuizCount > 0) {
         quizCountDisplay.innerHTML = `
         <div>
-            <span class="text-base text-xs font-bold">แบบฝึกหัดทั้งหมด</span> 
-            <span class="text-base text-xs font-bold text-teal-600 dark:text-teal-400 ml-2">${totalQuizCount} ชุด</span>
+            <span class="text-sm font-bold">แบบฝึกหัดทั้งหมด</span> 
+            <span class="text-sm font-bold text-teal-600 dark:text-teal-400 ml-2">${totalQuizCount} ชุด</span>
         </div>
         <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">จำนวนคำถามทั้งหมด ${totalQuestionsCount.toLocaleString()} ข้อ</div>
       `;
@@ -757,20 +926,6 @@ export function initializePage() {
     const container = document.getElementById("quiz-categories-container");
     let currentlyOpenSectionToggle = null;
     let currentTrack = localStorage.getItem('selectedTrack') || 'high_school';
-
-    const TRACK_MAPPING = {
-      'high_school': [
-        'PhysicsM4', 'PhysicsM5', 'PhysicsM6',
-        'EarthSpaceScienceBasic', 'EarthSpaceScienceAdvance'
-      ],
-      'posn': [
-        'PosnEarthScience',
-        'PosnAstroJunior',
-        'PosnAstroSenior',
-        'AstronomyReview',
-        'ChallengePOSN'
-      ]
-    };
 
     function updateTrackButtonStyles() {
       const btnHighSchool = document.getElementById('track-btn-high-school');
@@ -848,6 +1003,7 @@ export function initializePage() {
     function renderCategories() {
       const container = document.getElementById("quiz-categories-container");
       if (!container) return;
+      currentlyOpenSectionToggle = null;
 
       // Filter and Sort Logic
       const groupedQuizzes = quizList.reduce((acc, quiz) => {
@@ -953,8 +1109,23 @@ export function initializePage() {
 
       event.preventDefault();
       const targetId = navLink.hash;
-      const targetSection = document.querySelector(targetId);
-      if (!targetSection) return;
+      let targetSection = document.querySelector(targetId);
+
+      // If category belongs to the inactive track, switch tracks first before opening
+      if (!targetSection) {
+        const categoryKey = targetId.replace(/^#category-/, '');
+        const targetTrack = Object.keys(TRACK_MAPPING).find(t => TRACK_MAPPING[t].includes(categoryKey));
+        if (targetTrack && targetTrack !== currentTrack && typeof window.switchTrack === 'function') {
+          window.switchTrack(targetTrack);
+          setTimeout(() => {
+            const newSection = document.querySelector(targetId);
+            const newToggle = newSection?.querySelector('.section-toggle');
+            if (newToggle) newToggle.click();
+            if (newSection) setTimeout(() => scrollToElement(newSection), SCROLL_DELAY);
+          }, 80);
+        }
+        return;
+      }
 
       const targetToggle = targetSection.querySelector('.section-toggle');
       if (targetToggle) {
@@ -966,7 +1137,7 @@ export function initializePage() {
         } else {
           // If the section is already open, the click won't change the state,
           // so we need to manually ensure the floating nav is visible and updated.
-          updateFloatingNav(targetToggle, sectionToggles);
+          updateFloatingNav(targetToggle, getSectionToggles());
         }
         // Use a longer timeout here as well to ensure any closing animation has finished
         // before scrolling, which gives a more stable final position. The animation
@@ -990,7 +1161,7 @@ export function initializePage() {
       const quiz = quizList.find(q => q.storageKey === key);
 
       const onConfirm = () => {
-        localStorage.removeItem(key);
+        authManager.deleteQuizHistoryItem(key);
         const progressWrapper = card.querySelector(".progress-footer-wrapper");
         if (!progressWrapper) return;
         const newProgress = getQuizProgress(key, totalQuestions);
@@ -1033,7 +1204,7 @@ export function initializePage() {
     function showConfirmModal(title, description, onConfirm, triggerElement) {
       if (confirmModalTitle) confirmModalTitle.textContent = title;
       if (confirmModalDesc) confirmModalDesc.innerHTML = description;
-      pageState.confirmCallback = onConfirm;
+      bindConfirmModalAction(onConfirm, () => confirmModal.close());
       confirmModal.open(triggerElement);
     }
 
@@ -1058,44 +1229,16 @@ export function initializePage() {
 
         if (currentProgress.isFinished) {
           event.preventDefault();
-          const modalTitleEl = document.getElementById("completed-modal-title");
           const cardTitleEl = card.querySelector("h3");
-          if (modalTitleEl && cardTitleEl) {
-            modalTitleEl.textContent = cardTitleEl.textContent.trim();
-          }
-          pageState.activeQuizUrl = card.href;
-          pageState.activeStorageKey = storageKey;
-          completedModal.open(card);
+          openCompletedQuizModal({
+            title: cardTitleEl ? cardTitleEl.textContent.trim() : "แบบทดสอบ",
+            url: card.href,
+            storageKey,
+            triggerElement: card,
+            modal: completedModal,
+            onStartOver: (k) => authManager.deleteQuizHistoryItem(k),
+          });
         }
-      });
-    }
-
-    // This single listener handles all confirmation actions for the generic modal.
-    if (confirmActionBtn) {
-      confirmActionBtn.addEventListener("click", () => {
-        if (typeof pageState.confirmCallback === "function") {
-          pageState.confirmCallback();
-        }
-        confirmModal.close();
-        pageState.confirmCallback = null; // Clean up callback after use.
-      });
-    }
-
-    // --- Completed Quiz Modal Actions ---
-    if (viewResultsBtn) {
-      viewResultsBtn.addEventListener("click", () => {
-        if (pageState.activeQuizUrl) {
-          const separator = pageState.activeQuizUrl.includes("?") ? "&" : "?";
-          window.location.href = `${pageState.activeQuizUrl}${separator}action=view_results`;
-        }
-        completedModal.close();
-      });
-    }
-    if (startOverBtn) {
-      startOverBtn.addEventListener("click", () => {
-        if (pageState.activeStorageKey) localStorage.removeItem(pageState.activeStorageKey);
-        if (pageState.activeQuizUrl) window.location.href = pageState.activeQuizUrl;
-        completedModal.close();
       });
     }
 
